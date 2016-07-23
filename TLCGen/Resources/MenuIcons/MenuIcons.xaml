@@ -1,0 +1,190 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Color x:Key="Color1">#FF666666</Color>
+  <Color x:Key="Color2">#FF000000</Color>
+  <Color x:Key="Color3">#FFFFFF00</Color>
+  <Color x:Key="Color4">#FFB3B3B3</Color>
+  <SolidColorBrush x:Key="Color1Brush" Color="{DynamicResource Color1}" />
+  <SolidColorBrush x:Key="Color2Brush" Color="{DynamicResource Color2}" />
+  <SolidColorBrush x:Key="Color3Brush" Color="{DynamicResource Color3}" />
+  <SolidColorBrush x:Key="Color4Brush" Color="{DynamicResource Color4}" />
+  <Geometry x:Key="CloseFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.53375L346,505.53375 350,501.53375 356,501.53375 356,515.53375z</Geometry>
+  <Geometry x:Key="CloseFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M350.18447,514.45361L355.19874,509.43933</Geometry>
+  <Geometry x:Key="CloseFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M350.18446,509.43933L355.19874,514.45361</Geometry>
+  <SolidColorBrush x:Key="CloseFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <SolidColorBrush x:Key="CloseFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="CloseFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="CloseFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <DrawingGroup x:Key="CloseFileIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.53375">
+      <GeometryDrawing Brush="{DynamicResource CloseFileIconColor1Brush}" Geometry="{StaticResource CloseFileIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource CloseFileIconColor2Brush}" Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="1,0,0,1,-1.05274,0.17154161" />
+      <GeometryDrawing Geometry="{StaticResource CloseFileIconGeometry2}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource CloseFileIconColor3Brush}" Thickness="1.41825151" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource CloseFileIconGeometry3}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource CloseFileIconColor4Brush}" Thickness="1.41825151" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="CloseFileIconDrawingImage" Drawing="{StaticResource CloseFileIconDrawingGroup}" />
+  <Geometry x:Key="ExitApplicationIconGeometry1">F0 M15.999999,15.999999z M0,0z M350.78447,506.04834L350.78447,502.99109 357.30685,502.99109 357.30685,513.99109 350.78447,513.99109 350.78447,510.87271</Geometry>
+  <Geometry x:Key="ExitApplicationIconGeometry2">F0 M15.999999,15.999999z M0,0z M357.13545,521.73586L357.17295,512.15909</Geometry>
+  <Geometry x:Key="ExitApplicationIconGeometry3">F0 M15.999999,15.999999z M0,0z M348.63761,510.83867L348.67171,506.08239 344.04168,508.46053z</Geometry>
+  <SolidColorBrush x:Key="ExitApplicationIconColor1Brush" Color="{Binding Color, Source={StaticResource Color4Brush}}" />
+  <SolidColorBrush x:Key="ExitApplicationIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="ExitApplicationIconColor3Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="ExitApplicationIconColor4Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="ExitApplicationIconColor5Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="ExitApplicationIconColor6Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <DrawingGroup x:Key="ExitApplicationIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.53375">
+      <DrawingGroup Transform="1,0,0,1,-1.05274,0.17154161" />
+      <GeometryDrawing Brush="{DynamicResource ExitApplicationIconColor1Brush}" Geometry="{StaticResource ExitApplicationIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource ExitApplicationIconColor2Brush}" Thickness="1.99395883" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="0,-0.5,0.49698399,0,93.904314,687.03763">
+        <GeometryDrawing Brush="{DynamicResource ExitApplicationIconColor3Brush}" Geometry="{StaticResource ExitApplicationIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="{DynamicResource ExitApplicationIconColor4Brush}" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Brush="{DynamicResource ExitApplicationIconColor5Brush}" Geometry="{StaticResource ExitApplicationIconGeometry3}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource ExitApplicationIconColor6Brush}" Thickness="0.99697942" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="ExitApplicationIconDrawingImage" Drawing="{StaticResource ExitApplicationIconDrawingGroup}" />
+  <Geometry x:Key="SaveAsFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.36221L346,505.36221 350,501.36221 356,501.36221 356,515.36221z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M357.13545,521.73586L357.17295,512.15909</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M353.37814,510.42815L348.62186,510.39385 351,515.05198z</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry4">F0 M15.999999,15.999999z M0,0z M350.66798,504.5412L354.98698,504.5412</Geometry>
+  <Geometry x:Key="SaveAsFileIconGeometry5">F0 M15.999999,15.999999z M0,0z M352.82747,502.38171L352.82747,506.70071</Geometry>
+  <SolidColorBrush x:Key="SaveAsFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor6Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveAsFileIconColor7Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <DrawingGroup x:Key="SaveAsFileIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.36221">
+      <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor1Brush}" Geometry="{StaticResource SaveAsFileIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource SaveAsFileIconColor2Brush}" Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="-0.5,0,0,-0.5,529.5771,766.70731">
+        <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor3Brush}" Geometry="{StaticResource SaveAsFileIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="{DynamicResource SaveAsFileIconColor4Brush}" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Brush="{DynamicResource SaveAsFileIconColor5Brush}" Geometry="{StaticResource SaveAsFileIconGeometry3}" />
+      <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry4}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource SaveAsFileIconColor6Brush}" Thickness="0.86380053" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource SaveAsFileIconGeometry5}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource SaveAsFileIconColor7Brush}" Thickness="0.86380053" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="SaveAsFileIconDrawingImage" Drawing="{StaticResource SaveAsFileIconDrawingGroup}" />
+  <Geometry x:Key="SaveFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.36221L346,505.36221 350,501.36221 356,501.36221 356,515.36221z</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M357.13545,521.73586L357.17295,512.15909</Geometry>
+  <Geometry x:Key="SaveFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M353.37814,510.42815L348.62186,510.39385 351,515.05198z</Geometry>
+  <SolidColorBrush x:Key="SaveFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <SolidColorBrush x:Key="SaveFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="SaveFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="SaveFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <DrawingGroup x:Key="SaveFileIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.36221">
+      <GeometryDrawing Brush="{DynamicResource SaveFileIconColor1Brush}" Geometry="{StaticResource SaveFileIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource SaveFileIconColor2Brush}" Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="-0.5,0,0,-0.5,529.5771,766.70731">
+        <GeometryDrawing Brush="{DynamicResource SaveFileIconColor3Brush}" Geometry="{StaticResource SaveFileIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="{DynamicResource SaveFileIconColor4Brush}" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Brush="{DynamicResource SaveFileIconColor5Brush}" Geometry="{StaticResource SaveFileIconGeometry3}" />
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="SaveFileIconDrawingImage" Drawing="{StaticResource SaveFileIconDrawingGroup}" />
+  <Geometry x:Key="OpenFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.36221L346,505.36221 350,501.36221 356,501.36221 356,515.36221z</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M357.13545,521.73586L357.17295,512.15909</Geometry>
+  <Geometry x:Key="OpenFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M348.62186,510.46027L353.37814,510.49457 351,505.83644z</Geometry>
+  <SolidColorBrush x:Key="OpenFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <SolidColorBrush x:Key="OpenFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="OpenFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="OpenFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="OpenFileIconColor5Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <DrawingGroup x:Key="OpenFileIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.36221">
+      <GeometryDrawing Brush="{DynamicResource OpenFileIconColor1Brush}" Geometry="{StaticResource OpenFileIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource OpenFileIconColor2Brush}" Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="0.5,0,0,0.5,172.4229,254.18111">
+        <GeometryDrawing Brush="{DynamicResource OpenFileIconColor3Brush}" Geometry="{StaticResource OpenFileIconGeometry2}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="{DynamicResource OpenFileIconColor4Brush}" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Brush="{DynamicResource OpenFileIconColor5Brush}" Geometry="{StaticResource OpenFileIconGeometry3}" />
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="OpenFileIconDrawingImage" Drawing="{StaticResource OpenFileIconDrawingGroup}" />
+  <Geometry x:Key="NewFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.53375L346,505.53375 350,501.53375 356,501.53375 356,515.53375z</Geometry>
+  <Geometry x:Key="NewFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M349.14598,511.94647L356.23723,511.94647</Geometry>
+  <Geometry x:Key="NewFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M352.6916,508.40084L352.6916,515.4921</Geometry>
+  <SolidColorBrush x:Key="NewFileIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
+  <SolidColorBrush x:Key="NewFileIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="NewFileIconColor3Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <SolidColorBrush x:Key="NewFileIconColor4Brush" Color="{Binding Color, Source={StaticResource Color3Brush}}" />
+  <DrawingGroup x:Key="NewFileIconDrawingGroup" ClipGeometry="M0,0 V15,999999 H15,999999 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-343,-500.53375">
+      <GeometryDrawing Brush="{DynamicResource NewFileIconColor1Brush}" Geometry="{StaticResource NewFileIconGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource NewFileIconColor2Brush}" Thickness="1.5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <DrawingGroup Transform="1,0,0,1,-1.05274,0.17154161" />
+      <GeometryDrawing Geometry="{StaticResource NewFileIconGeometry2}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource NewFileIconColor3Brush}" Thickness="1.41825151" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource NewFileIconGeometry3}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="{DynamicResource NewFileIconColor4Brush}" Thickness="1.41825151" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="NewFileIconDrawingImage" Drawing="{StaticResource NewFileIconDrawingGroup}" />
+</ResourceDictionary>

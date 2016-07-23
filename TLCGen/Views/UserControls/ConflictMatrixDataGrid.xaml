@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="TLCGen.Views.ConflictMatrixDataGrid"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             xmlns:dg2d="http://gu.se/DataGrid2D"
+             x:Name="root"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
+    </UserControl.InputBindings>
+    <UserControl.Resources>
+        <local:BackgroundConverter x:Key="backgroundConverter" />
+        <DataTemplate x:Key="ConflictMatrixCellTemplate">
+            <TextBlock 
+                Margin="0"
+                Padding="2"
+                TextAlignment="Center"
+                Background="{Binding Path=DisplayWaarde, Converter={StaticResource backgroundConverter}}"
+                Text="{Binding Path=DisplayWaarde}" />
+        </DataTemplate>
+        <DataTemplate x:Key="ConflictMatrixCellEditingTemplate">
+            <Grid>
+                <TextBox 
+                    Margin="0"
+                    Padding="0"
+                    TextAlignment="Center"
+                    FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                    Text="{Binding Path=DisplayWaarde,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+
+        <DataGrid
+                    dg2d:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=root}" 
+                    dg2d:ItemsSource.CellTemplate="{StaticResource ConflictMatrixCellTemplate}"
+                    dg2d:ItemsSource.CellEditingTemplate="{StaticResource ConflictMatrixCellEditingTemplate}"
+                    dg2d:ItemsSource.RowHeadersSource="{Binding FasenNames}"
+                    dg2d:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
+                    SelectedItem="{Binding Path=SelectedConflict,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    AutoGenerateColumns="True"
+                    EnableColumnVirtualization="False"
+                    EnableRowVirtualization="False"
+                    HorizontalGridLinesBrush="LightGray"
+                    VerticalGridLinesBrush="LightGray"
+                    SelectionUnit="Cell"
+                    Loaded="DataGrid2D_Loaded"
+                    PreviewKeyDown="DataGrid_PreviewKeyDown"
+                    BeginningEdit="DataGrid_BeginningEdit"
+                    SelectedCellsChanged="DataGrid_SelectedCellsChanged" >
+            
+        </DataGrid>
+    </Grid>
+</UserControl>

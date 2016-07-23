@@ -1,0 +1,91 @@
+﻿<Window x:Class="TLCGen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TLCGen"
+        xmlns:vm="clr-namespace:TLCGen.ViewModels"
+        xmlns:vw="clr-namespace:TLCGen.Views"
+        mc:Ignorable="d"
+        DataContext="{DynamicResource MainWindowViewModel}"
+        Title="{Binding Path=ProgramTitle}" Height="350" Width="525">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/MenuIcons.xaml" />
+                <ResourceDictionary>
+                    <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Path=NewFileCommand}" Gesture="Ctrl+N" />
+        <KeyBinding Command="{Binding Path=OpenFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding Path=SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding Path=SaveAsFileCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding Path=CloseFileCommand}" Gesture="Ctrl+F4" />
+    </Window.InputBindings>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" InputGestureText="Ctrl+N">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource NewFileIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" InputGestureText="Ctrl+O" >
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                    </MenuItem.Icon>-->
+                </MenuItem>
+                <MenuItem Header="_Save" Command="{Binding Path=SaveFileCommand}" InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource SaveFileIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Save _As" Command="{Binding Path=SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" >
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource SaveAsFileIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="Transparent" Header="Close" Command="{Binding Path=CloseFileCommand}" InputGestureText="Ctrl+F4" >
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource CloseFileIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="Transparent" Header="Exit" Command="{Binding Path=ExitApplicationCommand}" InputGestureText="Alt+F4" >
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource ExitApplicationIconDrawingImage}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <ToolBarTray Grid.Row="1">
+            <ToolBar>
+                <Button Command="{Binding Path=NewFileCommand}" ToolTip="Nieuwe regeling (Ctrl-N)">
+                    <Image Source="{StaticResource NewFileIconDrawingImage}" />
+                </Button>
+                <Button Command="{Binding Path=OpenFileCommand}" ToolTip="Openen regeling (Ctrl-O)">
+                    <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                </Button>
+                <Button Command="{Binding Path=SaveFileCommand}" ToolTip="Opslaan regeling (Ctrl-S)">
+                    <Image Source="{StaticResource SaveFileIconDrawingImage}" />
+                </Button>
+                <Button Command="{Binding Path=CloseFileCommand}" ToolTip="Sluiten regeling (Ctrl-F4)">
+                    <Image Source="{StaticResource CloseFileIconDrawingImage}" />
+                </Button>
+
+            </ToolBar>
+        </ToolBarTray>
+        <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}">
+            <vw:ControllerView DataContext="{Binding Path=ControllerVM}" />
+        </Grid>
+    </Grid>
+</Window>
