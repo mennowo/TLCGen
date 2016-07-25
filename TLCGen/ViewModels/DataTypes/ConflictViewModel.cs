@@ -88,9 +88,14 @@ namespace TLCGen.ViewModels
                             _Conflict.Waarde = -1;
                         break;
                 }
+                // Set the value of the 'opposite' conflict 
+                // (= the conflict whose from/to phasecycles are the inverse of this one)
                 _ControllerVM.ConflictMatrixVM.SetOppositeConflict(this);
+                // If this conflict is black, set its value from it's opposite
+                // We set property 'Waarde', to avoid a loop caused by instances of 
+                // ConflictViewModel setting each other's DisplayWaarde property.
                 if (_Conflict.Waarde == -1)
-                    _Conflict.Waarde = _ControllerVM.ConflictMatrixVM.SetFromOppositeConflict(this);
+                    _Conflict.Waarde = _ControllerVM.ConflictMatrixVM.SetBlankConflictFromOppositeConflict(this);
                 OnMonitoredPropertyChanged("DisplayWaarde", _ControllerVM);
                 _ControllerVM.ConflictMatrixVM.MatrixChanged = true;
             }

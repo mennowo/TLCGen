@@ -10,7 +10,6 @@
         <!-- check later: -->
         <!-- http://paulstovell.com/blog/dynamic-datagrid -->
         <local:ConflictMatrixDataGrid
-            ConflictMatrix="{Binding Path=ConflictMatrix}"
-            MatrixChanged="{Binding Path=MatrixChanged,Mode=TwoWay}" />
+            ConflictMatrix="{Binding Path=ConflictMatrix}" />
     </Grid>
 </UserControl>

@@ -24,7 +24,7 @@
         </DataTemplate>
         <DataTemplate x:Key="ConflictMatrixCellEditingTemplate">
             <Grid>
-                <TextBox 
+                <local:AutoSelectTextBox
                     Margin="0"
                     Padding="0"
                     TextAlignment="Center"

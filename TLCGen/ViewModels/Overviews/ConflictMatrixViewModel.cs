@@ -19,11 +19,13 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _FasenNames;
         private bool _MatrixChanged;
         
-
         #endregion // Fields
 
         #region Properties
 
+        /// <summary>
+        /// Collection of strings used to display matrix column and row headers
+        /// </summary>
         public ObservableCollection<string> FasenNames
         {
             get
@@ -34,6 +36,9 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Returns the collection of FaseCyclusViewModel from the main ControllerViewModel
+        /// </summary>
         public ObservableCollection<FaseCyclusViewModel> Fasen
         {
             get
@@ -55,8 +60,17 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("SelectedConflict");
             }
         }
+
+        /// <summary>
+        /// Symmetrical, two dimensional matrix used to display phasecycle conflicts.
+        /// </summary>
         public ConflictViewModel[,] ConflictMatrix { get; set; }
 
+        /// <summary>
+        /// Boolean set by instances of ConflictViewModel when their DisplayWaarde property is 
+        /// set by the user. We use this to monitor changes to the model, and to check if we need
+        /// to check the matrix for symmetry if the user changes tabs, or tries to save the model.
+        /// </summary>
         public bool MatrixChanged
         {
             get { return _MatrixChanged; }
@@ -109,32 +123,51 @@ namespace TLCGen.ViewModels
 
         #region Public methods
 
-        public int SetFromOppositeConflict(ConflictViewModel cvm)
+        /// <summary>
+        /// Returns an int to set the value of property Waarde of an instance of
+        /// ConflictViewModel, based on the value of the opposite of the parsed instance of 
+        /// ConflictViewModel.
+        /// This method is designed to be called by an instance of ConflictViewModel.
+        /// </summary>
+        /// <param name="cvm">Instance of ConflictViewModel that calls the method</param>
+        /// <returns>A value to be used to set property Waarde of the parsed instance of ConflictViewModel</returns>
+        public int SetBlankConflictFromOppositeConflict(ConflictViewModel cvm)
         {
             foreach (ConflictViewModel cvm2 in ConflictMatrix)
             {
                 if (cvm2.FaseVan == cvm.FaseNaar &&
                    cvm2.FaseNaar == cvm.FaseVan)
                 {
+                    // If the opposite conflict is numeric, we return -6, indicating that the parsed 
+                    // instance of ConflictViewModel should also be numeric.
                     int i;
                     if (Int32.TryParse(cvm2.DisplayWaarde, out i))
                     {
                         return -6;
                     }
+                    // Otherwise, the SetOppositeConflict() method has already taken care of things.
                     else
                     {
                         return -1;
                     }
                 }
             }
-            return -1;
+            // If the opposite is not found, something is seriously wrong.
+            throw new NotImplementedException();
         }
 
-        public void SetOppositeConflict(ConflictViewModel cvm)
+        /// <summary>
+        /// Sets the value of the DisplayWaarde property of the ConflictViewModel instance
+        /// that is 'opposite' of the one in the argument. Opposite means: the FaseCyclus from
+        /// and FaseCyclus to are inversed.
+        /// This method is designed to be called by an instance of ConflictViewModel.
+        /// </summary>
+        /// <param name="cvm">Instance of ConflictViewModel whose opposite should be set</param>
+        public bool SetOppositeConflict(ConflictViewModel cvm)
         {
             if(cvm.DisplayWaarde == "*")
             {
-                return;
+                return true;
             }
 
             foreach(ConflictViewModel cvm2 in ConflictMatrix)
@@ -172,9 +205,11 @@ namespace TLCGen.ViewModels
                             }
                             break;
                     }
-                    break;
+                    return true;
                 }
             }
+            // If the opposite is not found, something is seriously wrong.
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -243,7 +278,7 @@ namespace TLCGen.ViewModels
 
             int fccount = Fasen.Count;
 
-            FasenNames.Clear();
+            _FasenNames = new ObservableCollection<string>();
             foreach (FaseCyclusViewModel fcvm in Fasen)
             {
                 FasenNames.Add(fcvm.Naam);
@@ -322,7 +357,6 @@ namespace TLCGen.ViewModels
             _ControllerVM = controllervm;
             BuildConflictMatrix();
         }
-
 
         #endregion // Constructor
     }

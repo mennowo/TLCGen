@@ -27,16 +27,6 @@ namespace TLCGen.Views
         private Style styleSelectedC;
         private Style styleSelectedR;
 
-        public bool MatrixChanged
-        {
-            get { return (bool)GetValue(MatrixChangedProperty); }
-            set { SetValue(MatrixChangedProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for MatrixChanged.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MatrixChangedProperty =
-            DependencyProperty.Register("MatrixChanged", typeof(bool), typeof(ConflictMatrixDataGrid), new PropertyMetadata(false));
-
         // Using a DependencyProperty as the backing store for ConflictMatrix.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ConflictMatrixProperty =
             DependencyProperty.Register("ConflictMatrix", typeof(Array), typeof(ConflictMatrixDataGrid), new PropertyMetadata(default(Array)));
@@ -133,7 +123,6 @@ namespace TLCGen.Views
                 e.Key == Key.Right ||
                 e.Key == Key.Tab ||
                 e.Key == Key.Enter ||
-                e.Key == Key.Delete ||
                 e.Key == Key.Escape
                 ))
             {
@@ -152,6 +141,40 @@ namespace TLCGen.Views
         private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             editing = true;
+        }
+    }
+
+    class AutoSelectTextBox : TextBox
+    {
+        private bool _autoSelectAll = true;
+
+        protected override void OnInitialized(EventArgs e)
+        {
+            // This will cause the cursor to enter the text box ready to
+            // type even when there is no content.
+            Focus();
+            base.OnInitialized(e);
+        }
+
+        protected override void OnKeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            // This is here to handle the case of an empty text box.  If
+            // omitted then the first character would be auto selected when
+            // the user starts typing.
+            _autoSelectAll = false;
+            base.OnKeyDown(e);
+        }
+
+
+        protected override void OnTextChanged(TextChangedEventArgs e)
+        {
+            if (_autoSelectAll)
+            {
+                SelectAll();
+                Focus();
+                _autoSelectAll = false;
+            }
+            base.OnTextChanged(e);
         }
     }
 
