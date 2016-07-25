@@ -182,6 +182,20 @@ namespace TLCGen.ViewModels
 
         void SaveFileCommand_Executed(object prm)
         {
+            // Save the conflict matrix if needed
+            if (ControllerVM.SelectedTab != null &&
+                ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
+                ControllerVM.ConflictMatrixVM.MatrixChanged)
+            {
+                string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
+                if (!string.IsNullOrEmpty(s))
+                {
+                    System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
+                    return;
+                }
+                ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
+            }
+
             if (string.IsNullOrWhiteSpace(MyDataProvider.FileName))
                 SaveAsFileCommand.Execute(null);
             else
@@ -193,11 +207,26 @@ namespace TLCGen.ViewModels
 
         bool SaveFileCommand_CanExecute(object prm)
         {
-            return true;
+            return ControllerVM != null && ControllerVM.HasChanged;
         }
 
         void SaveAsFileCommand_Executed(object prm)
         {
+
+            // Save the conflict matrix if needed
+            if (ControllerVM.SelectedTab != null &&
+                ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
+                ControllerVM.ConflictMatrixVM.MatrixChanged)
+            {
+                string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
+                if (!string.IsNullOrEmpty(s))
+                {
+                    System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
+                    return;
+                }
+                ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
+            }
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.OverwritePrompt = true;
             saveFileDialog.Filter = "TLCGen files|*.tlcgen";
@@ -214,7 +243,7 @@ namespace TLCGen.ViewModels
 
         bool SaveAsFileCommand_CanExecute(object prm)
         {
-            return true;
+            return ControllerVM != null;
         }
 
         void CloseFileCommand_Executed(object prm)
@@ -229,7 +258,7 @@ namespace TLCGen.ViewModels
 
         bool CloseFileCommand_CanExecute(object prm)
         {
-            return true;
+            return ControllerVM != null;
         }
 
         void ExitApplicationCommand_Executed(object prm)

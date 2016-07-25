@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
             get { return _SelectedTab; }
             set
             {
-                // Save the conflict matrix if 
+                // Save the conflict matrix if needed
                 if (_SelectedTab != null && 
                     _SelectedTab.Header.ToString() == "Conflicten" &&
                     _ConflictMatrixVM.MatrixChanged)
