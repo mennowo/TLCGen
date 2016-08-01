@@ -27,8 +27,9 @@ namespace TLCGen.Models
         public int TGL { get; set; }
         public int TGL_min { get; set; }
 
-        public bool VasteAanvraag { get; set; }
-        public bool Meeverlengen { get; set; }
+        public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
+        public NooitAltijdAanUitEnum Wachtgroen { get; set; }
+        public NooitAltijdAanUitEnum Meeverlengen { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }

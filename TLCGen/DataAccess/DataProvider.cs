@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,14 +53,26 @@ namespace TLCGen.DataAccess
             FileName = null;
         }
 
-        public void LoadController()
+        public bool LoadController()
         {
             if (!string.IsNullOrWhiteSpace(FileName))
             {
                 DeserializeT<ControllerModel> deserializer = new DeserializeT<ControllerModel>();
-                Controller = deserializer.DeSerializeGZip(FileName);
-                IDProvider.Controller = Controller;
+                if(Path.GetExtension(FileName) == ".tlcgz")
+                    Controller = deserializer.DeSerializeGZip(FileName);
+                else
+                    Controller = deserializer.DeSerialize(FileName);
+                if (Controller != null)
+                {
+                    IDProvider.Controller = Controller;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
+            return false;
         }
 
         public void SaveController()
@@ -67,7 +80,10 @@ namespace TLCGen.DataAccess
             if (!string.IsNullOrWhiteSpace(FileName))
             {
                 SerializeT<ControllerModel> serializer = new SerializeT<ControllerModel>();
-                serializer.SerializeGZip(FileName, Controller);
+                if (Path.GetExtension(FileName) == ".tlcgz")
+                    serializer.SerializeGZip(FileName, Controller);
+                else
+                    serializer.Serialize(FileName, Controller);
             }
         }
 

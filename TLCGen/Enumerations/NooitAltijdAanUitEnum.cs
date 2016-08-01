@@ -9,15 +9,16 @@ using TLCGen.Helpers;
 namespace TLCGen.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum FaseTypeEnum
+    public enum NooitAltijdAanUitEnum
     {
-        [Description("Auto")]
-        Auto,
-        [Description("Voetganger")]
-        Voetganger,
-        [Description("Fiets")]
-        Fiets,
-        [Description("OV")]
-        OV
+        [Description("Nooit")]
+        Nooit,
+        [Description("Altijd")]
+        Altijd,
+        [Description("Aan")]
+        SchAan,
+        [Description("Uit")]
+        SchUit,
+        Bus
     }
 }

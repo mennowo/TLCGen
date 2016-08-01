@@ -11,6 +11,38 @@ namespace TLCGen.Helpers
 {
     public class DeserializeT<T>
     {
+        #region XML Serialization
+
+        public T DeSerialize(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
+                return default(T);
+
+            T t = default(T);
+
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    var serializer = new XmlSerializer(typeof(T));
+                    t = (T)serializer.Deserialize(fs);
+                    fs.Close();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                System.Windows.MessageBox.Show("Bestandsformaat onjuist. Is dit een TLCGen bestand?", "Fout bij laden bestand.");
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show("Fout bij laden bestand: " + e.ToString(), "Fout bij laden bestand.");
+            }
+
+            return t;
+        }
+
+        #endregion // XML Serialization
+
         #region GZip Serialization
 
         public T DeSerializeGZip(string fileName)
@@ -30,9 +62,13 @@ namespace TLCGen.Helpers
                 }
                 fs.Close();
             }
-            catch
+            catch (InvalidOperationException)
             {
-                throw new NotImplementedException();
+                System.Windows.MessageBox.Show("Bestandsformaat onjuist. Is dit een TLCGen bestand?", "Fout bij laden bestand.");
+            }
+            catch (Exception e)
+            {
+                System.Windows.MessageBox.Show("Fout bij laden bestand: " + e.ToString(), "Fout bij laden bestand.");
             }
 
             return t;

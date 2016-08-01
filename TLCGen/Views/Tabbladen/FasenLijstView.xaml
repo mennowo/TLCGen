@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:custom="clr-namespace:TLCGen.CustomControls"
              xmlns:helper="clr-namespace:TLCGen.Helpers"
+             xmlns:ext="clr-namespace:TLCGen.Extensions"
              xmlns:enums="clr-namespace:TLCGen.Enumerations"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -14,11 +14,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <custom:CustomDataGrid 
+        <DataGrid 
                   ItemsSource="{Binding Path=Fasen}"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=SelectedFaseCyclus}"
-                  SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
@@ -35,52 +35,17 @@
                 <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
                 <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
                 <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />
-                <DataGridTemplateColumn Header="Vaste aanvr." >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox 
-                                Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                IsChecked="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
-                            </CheckBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=VasteAanvraag}" Value="True">
-                                    <Setter Property="Background" Value="Honeydew" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=VasteAanvraag}" Value="False">
-                                    <Setter Property="Background" Value="LavenderBlush" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="MG" >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox 
-                                Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                IsChecked="{Binding Path=Meeverlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
-                            </CheckBox>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=Meeverlengen}" Value="True">
-                                    <Setter Property="Background" Value="Honeydew" />
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Path=Meeverlengen}" Value="False">
-                                    <Setter Property="Background" Value="LavenderBlush" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
-                </DataGridTemplateColumn>
+                <DataGridComboBoxColumn Header="Vaste aanvr." 
+                                        SelectedItemBinding="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridComboBoxColumn Header="Wachtg." 
+                                        SelectedItemBinding="{Binding Path=Wachtgroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridComboBoxColumn Header="Meev." 
+                                        SelectedItemBinding="{Binding Path=Meeverlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
             </DataGrid.Columns>
-        </custom:CustomDataGrid>
+        </DataGrid>
         <WrapPanel Grid.Row="1">
             <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
             <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />

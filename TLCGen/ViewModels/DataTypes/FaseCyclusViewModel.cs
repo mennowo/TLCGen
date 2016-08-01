@@ -170,7 +170,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool VasteAanvraag
+        public NooitAltijdAanUitEnum VasteAanvraag
         {
             get { return _FaseCyclus.VasteAanvraag; }
             set
@@ -180,7 +180,17 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool Meeverlengen
+        public NooitAltijdAanUitEnum Wachtgroen
+        {
+            get { return _FaseCyclus.Wachtgroen; }
+            set
+            {
+                _FaseCyclus.Wachtgroen = value;
+                OnMonitoredPropertyChanged("Wachtgroen", _ControllerVM);
+            }
+        }
+
+        public NooitAltijdAanUitEnum Meeverlengen
         {
             get { return _FaseCyclus.Meeverlengen; }
             set

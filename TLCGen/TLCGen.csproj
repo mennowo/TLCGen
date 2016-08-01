@@ -59,13 +59,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CustomControls\CustomDataGrid.cs" />
     <Compile Include="DataAccess\DataProvider.cs" />
     <Compile Include="Enumerations\DetectorTypeEnum.cs" />
     <Compile Include="Enumerations\FaseTypeEnum.cs" />
+    <Compile Include="Enumerations\NooitAltijdAanUitEnum.cs" />
     <Compile Include="Extensions\DataGridExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="DataAccess\DeserializeT.cs" />
+    <Compile Include="Helpers\DesignMode.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />

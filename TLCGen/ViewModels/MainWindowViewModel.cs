@@ -163,14 +163,16 @@ namespace TLCGen.ViewModels
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.CheckFileExists = true;
-                openFileDialog.Filter = "TLCGen files|*.tlcgen";
+                openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
                 if (openFileDialog.ShowDialog() == true)
                 {
                     MyDataProvider.FileName = openFileDialog.FileName;
-                    MyDataProvider.LoadController();
-                    ControllerVM = new ControllerViewModel(MyDataProvider.Controller);
-                    ControllerVM.SelectedTabIndex = 0;
-                    OnPropertyChanged("ProgramTitle");
+                    if (MyDataProvider.LoadController())
+                    {
+                        ControllerVM = new ControllerViewModel(MyDataProvider.Controller);
+                        ControllerVM.SelectedTabIndex = 0;
+                        OnPropertyChanged("ProgramTitle");
+                    }
                 }
             }
         }
@@ -229,7 +231,7 @@ namespace TLCGen.ViewModels
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.OverwritePrompt = true;
-            saveFileDialog.Filter = "TLCGen files|*.tlcgen";
+            saveFileDialog.Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz";
             if (!string.IsNullOrWhiteSpace(MyDataProvider.FileName))
                 saveFileDialog.FileName = MyDataProvider.FileName;
             if (saveFileDialog.ShowDialog() == true)
@@ -294,6 +296,14 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (ControllerHasChanged())
+            {
+                e.Cancel = true;
+            }
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -303,21 +313,16 @@ namespace TLCGen.ViewModels
         #region Constructor
 
         public MainWindowViewModel()
-        {
+        { 
             _MyDataProvider = new DataProvider();
 
-            Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
-
-        }
-
-        void MainWindow_Closing(object sender, CancelEventArgs e)
-        {
-            if (ControllerHasChanged())
+            if (!DesignMode.IsInDesignMode)
             {
-                e.Cancel = true;
+                Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
             }
         }
 
         #endregion // Constructor
+
     }
 }
