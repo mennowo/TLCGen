@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -23,6 +24,10 @@ namespace TLCGen.Models
         public int TBG { get; set; }
         public int TFL { get; set; }
         public int CFL { get; set; }
+
+        DetectorTypeEnum Type { get; set; }
+        DetectorAanvraagTypeEnum Aanvraag { get; set; }
+        DetectorVerlengenTypeEnum Verlengen { get; set; }
 
         #endregion // Properties
 

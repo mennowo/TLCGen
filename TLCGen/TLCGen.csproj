@@ -60,9 +60,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataAccess\DataProvider.cs" />
+    <Compile Include="Enumerations\CCOLVersieEnum.cs" />
+    <Compile Include="Enumerations\DetectorAanvraagTypeEnum.cs" />
     <Compile Include="Enumerations\DetectorTypeEnum.cs" />
+    <Compile Include="Enumerations\DetectorVerlengenTypeEnum.cs" />
     <Compile Include="Enumerations\FaseTypeEnum.cs" />
+    <Compile Include="Enumerations\KWCTypeEnum.cs" />
     <Compile Include="Enumerations\NooitAltijdAanUitEnum.cs" />
+    <Compile Include="Enumerations\VLOGTypeEnum.cs" />
     <Compile Include="Extensions\DataGridExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="DataAccess\DeserializeT.cs" />
@@ -70,6 +75,12 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
+    <Compile Include="Models\Settings\ApplicationSettings.cs" />
+    <Compile Include="Models\Settings\DefinePrefixSettings.cs" />
+    <Compile Include="Models\Settings\IntSettingModel.cs" />
+    <Compile Include="Models\Settings\SettingModelBase.cs" />
+    <Compile Include="Helpers\SettingsProvider.cs" />
+    <Compile Include="Models\Settings\StringSettingModel.cs" />
     <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerDataViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerViewModel.cs" />
@@ -79,20 +90,37 @@
     <Compile Include="ViewModels\Overviews\ConflictMatrixViewModel.cs" />
     <Compile Include="ViewModels\Overviews\FasenListViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Resources\AutoSelectTextBox.cs" />
+    <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
+      <DependentUpon>FaseCyclusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Resources\EnumBooleanConverter.cs" />
+    <Compile Include="Views\Overviews\DetectorenLijstView.xaml.cs">
+      <DependentUpon>DetectorenLijstView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\FasenDetailsView.xaml.cs">
+      <DependentUpon>FasenDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab.xaml.cs">
+      <DependentUpon>FasenTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabbladen\ConflictMatrixView.xaml.cs">
+    <Compile Include="Views\Tabs\ConflictMatrixView.xaml.cs">
       <DependentUpon>ConflictMatrixView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabbladen\ControllerDataView.xaml.cs">
+    <Compile Include="Views\DataTypes\ControllerDataView.xaml.cs">
       <DependentUpon>ControllerDataView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControllerView.xaml.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabbladen\FasenLijstView.xaml.cs">
+    <Compile Include="Views\Overviews\FasenLijstView.xaml.cs">
       <DependentUpon>FasenLijstView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\SettingsDataGrid.xaml.cs">
+      <DependentUpon>SettingsDataGrid.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -111,15 +139,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\DetectorenLijstView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\FasenDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\ConflictMatrixDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabbladen\ConflictMatrixView.xaml">
+    <Page Include="Views\Tabs\ConflictMatrixView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabbladen\ControllerDataView.xaml">
+    <Page Include="Views\DataTypes\ControllerDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -127,7 +171,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabbladen\FasenLijstView.xaml">
+    <Page Include="Views\Overviews\FasenLijstView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\SettingsDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -166,6 +214,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

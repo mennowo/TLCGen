@@ -9,7 +9,7 @@ using TLCGen.Helpers;
 namespace TLCGen.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum DetectorType
+    public enum DetectorTypeEnum
     {
         [Description("Koplus")]
         Kop,
@@ -19,8 +19,10 @@ namespace TLCGen.Enumerations
         Verweg,
         [Description("File lus")]
         File,
-        [Description("Drukknop")]
-        Knop,
+        [Description("Drukknop binnen")]
+        KnopBinnen,
+        [Description("Drukknop buiten")]
+        KnopBuiten,
         [Description("Radar")]
         Radar
     }

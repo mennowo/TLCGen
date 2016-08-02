@@ -12,7 +12,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <DataGrid 
                   ItemsSource="{Binding Path=Fasen}"
@@ -23,7 +22,7 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
+                <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -46,13 +45,5 @@
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="1">
-            <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
-            <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />
-            <ComboBox ItemsSource="{Binding Path=Templates}" Margin="2" SelectedIndex="0" IsEnabled="False" />
-            <Button Content="Toevoegen" Margin="0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Opslaan" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Verwijderen" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-        </WrapPanel>
     </Grid>
 </UserControl>

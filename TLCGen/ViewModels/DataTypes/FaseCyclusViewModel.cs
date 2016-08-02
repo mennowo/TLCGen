@@ -32,27 +32,23 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.ID; }
         }
 
-        public string Define
-        {
-            get { return _FaseCyclus.Define; }
-            set
-            {
-                if (_ControllerVM.IsFaseDefineUnique(value))
-                {
-                    _FaseCyclus.Define = value;
-                }
-                OnMonitoredPropertyChanged("Define", _ControllerVM);
-            }
-        }
-
         public string Naam
         {
             get { return _FaseCyclus.Naam; }
             set
             {
-                _FaseCyclus.Naam = value;
+                if (_ControllerVM.IsFaseNaamUnique(value))
+                {
+                    _FaseCyclus.Naam = value;
+                    _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + value;
+                }
                 OnMonitoredPropertyChanged("Naam", _ControllerVM);
             }
+        }
+
+        public string Define
+        {
+            get { return _FaseCyclus.Define; }
         }
 
         public FaseTypeEnum Type
@@ -275,6 +271,10 @@ namespace TLCGen.ViewModels
             return Naam;
         }
 
+        #endregion // Overrides
+
+        #region Public methods
+
         public int CompareTo(object obj)
         {
             FaseCyclusViewModel fcvm = obj as FaseCyclusViewModel;
@@ -284,7 +284,15 @@ namespace TLCGen.ViewModels
                 return Naam.CompareTo(fcvm.Naam);
         }
 
-        #endregion // Overrides
+        /// <summary>
+        /// Updates the Define member of the model based on member Name
+        /// </summary>
+        public void UpdateModelDefine()
+        {
+            _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + _FaseCyclus.Naam;
+        }
+
+        #endregion // Public methods
 
         #region Constructor
 

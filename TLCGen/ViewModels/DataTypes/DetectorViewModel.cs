@@ -24,6 +24,11 @@ namespace TLCGen.ViewModels
             get { return _Detector; }
         }
 
+        public long ID
+        {
+            get { return _Detector.ID; }
+        }
+
         #endregion // Properties
 
         #region Constructor

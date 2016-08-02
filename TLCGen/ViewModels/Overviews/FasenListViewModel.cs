@@ -104,28 +104,28 @@ namespace TLCGen.ViewModels
         void AddNewFaseCommand_Executed(object prm)
         {
             FaseCyclusModel fcm = new FaseCyclusModel();
-            string newname = "fc01";
+            string newname = "01";
             int inewname = 1;
             foreach (FaseCyclusViewModel fcvm in Fasen)
             {
-                if(Regex.IsMatch(fcvm.Define, @"[0-9]+"))
+                if(Regex.IsMatch(fcvm.Naam, @"[0-9]+"))
                 {
-                    Match m = Regex.Match(fcvm.Define, @"[0-9]+");
+                    Match m = Regex.Match(fcvm.Naam, @"[0-9]+");
                     string next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
                         inewname++;
-                        newname = "fc" + (inewname < 10 ? "0" : "") + inewname.ToString();
-                        while (!_ControllerVM.IsFaseDefineUnique(newname))
+                        newname = (inewname < 10 ? "0" : "") + inewname.ToString();
+                        while (!_ControllerVM.IsFaseNaamUnique(newname))
                         {
                             inewname++;
-                            newname = "fc" + (inewname < 10 ? "0" : "") + inewname.ToString();
+                            newname = (inewname < 10 ? "0" : "") + inewname.ToString();
                         }
                     }
                 }   
             }
-            fcm.Define = newname;
-            fcm.Naam = newname.Substring(2);
+            fcm.Naam = newname;
+            fcm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + newname;
             FaseCyclusViewModel fcvm1 = new FaseCyclusViewModel(_ControllerVM, fcm);
             Fasen.Add(fcvm1);
         }

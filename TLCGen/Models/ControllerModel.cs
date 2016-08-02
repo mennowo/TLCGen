@@ -23,6 +23,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Fasecyclus")]
         public List<FaseCyclusModel> Fasen { get; set; }
 
+        [XmlArrayItem(ElementName = "Detector")]
+        public List<DetectorModel> Dectectoren { get; set; }
+
         #endregion // Properties
 
         #region Constructor
@@ -31,6 +34,7 @@ namespace TLCGen.Models
         {
             Data = new ControllerDataModel();
             Fasen = new List<FaseCyclusModel>();
+            Dectectoren = new List<DetectorModel>();
         }
 
         #endregion // Constructor

@@ -13,7 +13,7 @@
                 <local:ControllerDataView DataContext="{Binding Path=ControllerDataVM}" />
             </TabItem>
             <TabItem Header="Fasen">
-                <local:FasenLijstView DataContext="{Binding Path=FasenListVM}" />
+                <local:FasenTab DataContext="{Binding Path=FasenListVM}" />
             </TabItem>
             <TabItem Header="Conflicten">
                 <local:ConflictMatrixView DataContext="{Binding Path=ConflictMatrixVM}" />

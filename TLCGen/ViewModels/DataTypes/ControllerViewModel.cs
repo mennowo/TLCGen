@@ -174,13 +174,13 @@ namespace TLCGen.ViewModels
         /// Checks if a given string is unique in the list of Fasen. Uniqueness is determined by
         /// comparing the given argument to all instances of FaseCyclusViewModel in the Fasen collection.
         /// </summary>
-        /// <param name="define">The "define" string of the FaseCyclusViewModel instance</param>
+        /// <param name="name">The "Naam" string of the FaseCyclusViewModel instance</param>
         /// <returns></returns>
-        public bool IsFaseDefineUnique(string define)
+        public bool IsFaseNaamUnique(string naam)
         {
             foreach (FaseCyclusViewModel fcvm in Fasen)
             {
-                if (fcvm.Define == define)
+                if (fcvm.Naam == naam)
                     return false;
             }
             return true;

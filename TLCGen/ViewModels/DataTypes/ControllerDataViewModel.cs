@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Helpers.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -58,6 +61,24 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public DefinePrefixSettings PrefixSettings
+        {
+            get { return _ControllerData.Instellingen.PrefixSettings; }
+        }
+
+        private ObservableCollection<SettingModelBase> _PrefixSettingsList;
+        public ObservableCollection<SettingModelBase> PrefixSettingsList
+        {
+            get
+            {
+                if(_PrefixSettingsList == null)
+                {
+                    _PrefixSettingsList = new ObservableCollection<SettingModelBase>();
+                }
+                return _PrefixSettingsList;
+            }
+        }
+
         #endregion // Properties
 
         #region Public methods
@@ -74,6 +95,11 @@ namespace TLCGen.ViewModels
         {
             _ControllerVM = controllervm;
             _ControllerData = controllerdata;
+
+            foreach(SettingModelBase setting in SettingsProvider.AppSettings.PrefixSettingsList)
+            {
+                PrefixSettingsList.Add(setting);
+            }
         }
 
         #endregion // Constructor
