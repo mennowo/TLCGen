@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TLCGen.Models.Settings
 {
     public class ApplicationSettings
     {
         public DefinePrefixSettings PrefixSettings;
+        [XmlIgnore]
         public List<SettingModelBase> PrefixSettingsList { get; set; }
 
         public ApplicationSettings()

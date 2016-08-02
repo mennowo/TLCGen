@@ -46,9 +46,16 @@ namespace TLCGen.DataAccess
 
         #region Public methods
 
-        public void NewOrganizer()
+        public void NewEmptyController()
         {
             Controller = new ControllerModel();
+            IDProvider.Controller = Controller;
+            FileName = null;
+        }
+
+        public void SetNewController(ControllerModel cm)
+        {
+            Controller = cm;
             IDProvider.Controller = Controller;
             FileName = null;
         }

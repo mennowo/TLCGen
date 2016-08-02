@@ -24,14 +24,24 @@ namespace TLCGen.ViewModels
             get { return _Conflict; }
         }
 
-        public long FaseVan
+        public string FaseVan
         {
             get { return _Conflict.FaseVan; }
+            set
+            {
+                _Conflict.FaseVan = value;
+                OnPropertyChanged("FaseVan");
+            }
         }
         
-        public long FaseNaar
+        public string FaseNaar
         {
             get { return _Conflict.FaseNaar; }
+            set
+            {
+                _Conflict.FaseNaar = value;
+                OnPropertyChanged("FaseNaar");
+            }
         }
         
         public int Waarde

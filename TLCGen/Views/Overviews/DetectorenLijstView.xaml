@@ -4,9 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Enumerations"
+             xmlns:ext="clr-namespace:TLCGen.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <DataGrid 
+                  ItemsSource="{Binding Path=Detectoren}"
+                  Grid.Row="0"
+                  SelectedItem="{Binding Path=SelectedDetector}"
+                  ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedDetectoren, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
+                <DataGridComboBoxColumn Header="Type" 
+                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
+                <DataGridTextColumn Binding="{Binding Path=TDB}" Header="TDB" />
+                <DataGridTextColumn Binding="{Binding Path=TDH}" Header="TDH" />
+                <DataGridComboBoxColumn Header="Aanvraag" 
+                                        SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" />
+                <DataGridComboBoxColumn Header="Verlengen" 
+                                        SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <WrapPanel Grid.Row="1">
+            <Button Content="Detector toev." Margin="0,2" Command="{Binding Path=AddDetectorCommand}" />
+            <Button Content="Detector verw." Margin="2,2,0,2" Command="{Binding Path=RemoveDetectorCommand}" />
+            <ComboBox ItemsSource="{Binding Path=Templates}" Margin="2" SelectedIndex="0" IsEnabled="False" />
+            <Button Content="Toevoegen" Margin="0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
+            <Button Content="Opslaan" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
+            <Button Content="Verwijderen" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
+        </WrapPanel>
     </Grid>
 </UserControl>

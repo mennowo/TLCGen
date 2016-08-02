@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
+using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
@@ -18,6 +19,7 @@ namespace TLCGen.ViewModels
 
         private ControllerViewModel _ControllerVM;
         private DataProvider _MyDataProvider;
+        private DataImporter _MyDataImporter;
 
         #endregion // Fields
 
@@ -42,6 +44,11 @@ namespace TLCGen.ViewModels
         public DataProvider MyDataProvider
         {
             get { return _MyDataProvider; }
+        }
+
+        public DataImporter MyDataImporter
+        {
+            get { return _MyDataImporter; }
         }
 
         public string ProgramTitle
@@ -146,8 +153,9 @@ namespace TLCGen.ViewModels
         {
             if (!ControllerHasChanged())
             {
-                MyDataProvider.NewOrganizer();
+                MyDataProvider.NewEmptyController();
                 ControllerVM = new ControllerViewModel(MyDataProvider.Controller);
+                ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
             }
         }
@@ -184,24 +192,23 @@ namespace TLCGen.ViewModels
 
         void SaveFileCommand_Executed(object prm)
         {
-            // Save the conflict matrix if needed
-            if (ControllerVM.SelectedTab != null &&
-                ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
-                ControllerVM.ConflictMatrixVM.MatrixChanged)
-            {
-                string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
-                if (!string.IsNullOrEmpty(s))
-                {
-                    System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
-                    return;
-                }
-                ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
-            }
-
             if (string.IsNullOrWhiteSpace(MyDataProvider.FileName))
                 SaveAsFileCommand.Execute(null);
             else
             {
+                // Save the conflict matrix if needed
+                if (ControllerVM.SelectedTab != null &&
+                    ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
+                    ControllerVM.ConflictMatrixVM.MatrixChanged)
+                {
+                    string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
+                        return;
+                    }
+                    ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
+                }
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
             }
@@ -277,7 +284,19 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        bool ControllerHasChanged()
+        void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (ControllerHasChanged())
+            {
+                e.Cancel = true;
+            }
+        }
+
+        #endregion // Private methods
+
+        #region Public methods
+
+        public bool ControllerHasChanged()
         {
             if (ControllerVM != null && ControllerVM.HasChanged)
             {
@@ -296,17 +315,22 @@ namespace TLCGen.ViewModels
             return false;
         }
 
-        void MainWindow_Closing(object sender, CancelEventArgs e)
+        public bool SetNewController(ControllerModel cm)
         {
-            if (ControllerHasChanged())
+            if (!ControllerHasChanged())
             {
-                e.Cancel = true;
+                if(ControllerVM != null)
+                {
+                    ControllerVM.SelectedTabIndex = 0;
+                }
+                MyDataProvider.SetNewController(cm);
+                ControllerVM = new ControllerViewModel(cm);
+                ControllerVM.SelectedTabIndex = 0;
+                OnPropertyChanged("ProgramTitle");
+                return true;
             }
+            return false;
         }
-
-        #endregion // Private methods
-
-        #region Public methods
 
         #endregion // Public methods
 
@@ -315,6 +339,7 @@ namespace TLCGen.ViewModels
         public MainWindowViewModel()
         { 
             _MyDataProvider = new DataProvider();
+            _MyDataImporter = new DataImporter(this);
 
             if (!DesignMode.IsInDesignMode)
             {

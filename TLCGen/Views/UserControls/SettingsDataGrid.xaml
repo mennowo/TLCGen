@@ -8,7 +8,7 @@
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <DataGrid ItemsSource="{Binding Path=SettingsList,ElementName=root}" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding Path=SettingsList,ElementName=root}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Omschrijving" Width="200" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>

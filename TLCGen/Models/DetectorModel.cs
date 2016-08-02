@@ -25,9 +25,9 @@ namespace TLCGen.Models
         public int TFL { get; set; }
         public int CFL { get; set; }
 
-        DetectorTypeEnum Type { get; set; }
-        DetectorAanvraagTypeEnum Aanvraag { get; set; }
-        DetectorVerlengenTypeEnum Verlengen { get; set; }
+        public DetectorTypeEnum Type { get; set; }
+        public DetectorAanvraagTypeEnum Aanvraag { get; set; }
+        public DetectorVerlengenTypeEnum Verlengen { get; set; }
 
         #endregion // Properties
 

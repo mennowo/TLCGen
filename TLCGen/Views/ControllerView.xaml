@@ -13,10 +13,13 @@
                 <local:ControllerDataView DataContext="{Binding Path=ControllerDataVM}" />
             </TabItem>
             <TabItem Header="Fasen">
-                <local:FasenTab DataContext="{Binding Path=FasenListVM}" />
+                <local:FasenTab DataContext="{Binding Path=FasenTabVM}" />
             </TabItem>
             <TabItem Header="Conflicten">
                 <local:ConflictMatrixView DataContext="{Binding Path=ConflictMatrixVM}" />
+            </TabItem>
+            <TabItem Header="Detectoren">
+                <local:DetectorenTab DataContext="{Binding Path=DetectorenTabVM}" />
             </TabItem>
         </TabControl>
     </Grid>

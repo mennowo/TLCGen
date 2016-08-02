@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -299,7 +300,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (ConflictViewModel cvm in Fasen[fcvm_from].Conflicten)
                     {
-                        if(Fasen[fcvm_to].ID != 0 && Fasen[fcvm_to].ID == cvm.FaseNaar)
+                        if(!string.IsNullOrWhiteSpace(Fasen[fcvm_to].Naam) && Fasen[fcvm_to].Naam == cvm.FaseNaar)
                         {
                             ConflictMatrix[fcvm_from, fcvm_to] = cvm;
                         }
@@ -307,8 +308,8 @@ namespace TLCGen.ViewModels
                     if(ConflictMatrix[fcvm_from, fcvm_to] == null)
                     {
                         ConflictModel m = new ConflictModel();
-                        m.FaseVan = Fasen[fcvm_from].ID;
-                        m.FaseNaar = Fasen[fcvm_to].ID;
+                        m.FaseVan = Fasen[fcvm_from].Naam;
+                        m.FaseNaar = Fasen[fcvm_to].Naam;
                         m.Waarde = -1;
                         ConflictMatrix[fcvm_from, fcvm_to] = new ConflictViewModel(_ControllerVM, m);
                     }
@@ -333,7 +334,9 @@ namespace TLCGen.ViewModels
 
             for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
             {
-                Fasen[fcvm_from].Conflicten.Clear();
+                // Call extension method RemoveAll instead of built-in Clear(), see:
+                // http://stackoverflow.com/questions/224155/when-clearing-an-observablecollection-there-are-no-items-in-e-olditems
+                Fasen[fcvm_from].Conflicten.RemoveAll();
                 for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
                     if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].DisplayWaarde))

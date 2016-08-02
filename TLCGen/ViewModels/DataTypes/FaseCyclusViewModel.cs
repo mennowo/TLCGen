@@ -37,10 +37,17 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Naam; }
             set
             {
-                if (_ControllerVM.IsFaseNaamUnique(value))
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsFaseNaamUnique(value))
                 {
+                    string oldname = _FaseCyclus.Naam;
                     _FaseCyclus.Naam = value;
                     _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + value;
+                    foreach(ConflictViewModel cvm in Conflicten)
+                    {
+                        cvm.FaseVan = value;
+                    }
+                    _ControllerVM.ChangeFaseNaam(this, oldname);
+                    _ControllerVM.HasChangedFasen = true;
                 }
                 OnMonitoredPropertyChanged("Naam", _ControllerVM);
             }
@@ -273,7 +280,7 @@ namespace TLCGen.ViewModels
 
         #endregion // Overrides
 
-        #region Public methods
+        #region IComparable
 
         public int CompareTo(object obj)
         {
@@ -281,8 +288,18 @@ namespace TLCGen.ViewModels
             if (fcvm == null)
                 throw new NotImplementedException();
             else
-                return Naam.CompareTo(fcvm.Naam);
+            {
+                string myName = Naam;
+                string hisName = fcvm.Naam;
+                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+                return myName.CompareTo(hisName);
+            }
         }
+
+        #endregion // IComparable
+
+        #region Public methods
 
         /// <summary>
         /// Updates the Define member of the model based on member Name

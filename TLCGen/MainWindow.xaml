@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:TLCGen"
         xmlns:vm="clr-namespace:TLCGen.ViewModels"
         xmlns:vw="clr-namespace:TLCGen.Views"
+        xmlns:data="clr-namespace:TLCGen.DataAccess"
         mc:Ignorable="d"
         DataContext="{DynamicResource MainWindowViewModel}"
         Title="{Binding Path=ProgramTitle}" Height="350" Width="525">
@@ -64,6 +65,11 @@
                     <MenuItem.Icon>
                         <Image Source="{StaticResource ExitApplicationIconDrawingImage}" />
                     </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Import...">
+                    <MenuItem Header="Tab.c file" Command="{Binding Path=MyDataImporter.ImportTabCFileCommand}" />
                 </MenuItem>
             </MenuItem>
         </Menu>

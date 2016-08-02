@@ -14,8 +14,8 @@ namespace TLCGen.Models
 
         #region Properties
 
-        public long FaseVan { get; set; }
-        public long FaseNaar { get; set; }
+        public string FaseVan { get; set; }
+        public string FaseNaar { get; set; }
         public int Waarde { get; set; }
 
         #endregion // Properties

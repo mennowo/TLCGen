@@ -21,5 +21,10 @@ namespace TLCGen.Models.Settings
             _Decription = _description;
             _IsSet = false;
         }
+
+        public SettingModelBase()
+        {
+
+        }
     }
 }

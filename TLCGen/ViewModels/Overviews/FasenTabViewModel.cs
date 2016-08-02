@@ -12,7 +12,7 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class FasenListViewModel : ViewModelBase
+    public class FasenTabViewModel : ViewModelBase
     {
         #region Fields
 
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenListViewModel(ControllerViewModel controllervm)
+        public FasenTabViewModel(ControllerViewModel controllervm)
         {
             _ControllerVM = controllervm;
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for DetectorenLijstView.xaml
+    /// Interaction logic for DetectorenTab.xaml
     /// </summary>
-    public partial class DetectorenLijstView : UserControl
+    public partial class DetectorenTab : UserControl
     {
-        public DetectorenLijstView()
+        public DetectorenTab()
         {
             InitializeComponent();
         }

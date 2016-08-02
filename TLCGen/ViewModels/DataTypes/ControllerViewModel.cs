@@ -15,14 +15,16 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ControllerDataViewModel _ControllerDataVM;
-        private FasenListViewModel _FasenListVM;
+        private FasenTabViewModel _FasenTabVM;
         private ConflictMatrixViewModel _ConflictMatrixVM;
+        private DetectorenTabViewModel _DetectorenTabVM;
 
         private bool _HasChanged;
         private bool _IsSortingFasen;
         private bool _HasChangedFasen;
         private ControllerModel _Controller;
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
+        private ObservableCollection<DetectorViewModel> _Detectoren;
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
 
@@ -42,15 +44,15 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public FasenListViewModel FasenListVM
+        public FasenTabViewModel FasenTabVM
         {
             get
             {
-                if(_FasenListVM == null)
+                if(_FasenTabVM == null)
                 {
-                    _FasenListVM = new FasenListViewModel(this);
+                    _FasenTabVM = new FasenTabViewModel(this);
                 }
-                return _FasenListVM;
+                return _FasenTabVM;
             }
         }
 
@@ -63,6 +65,18 @@ namespace TLCGen.ViewModels
                     _ConflictMatrixVM = new ConflictMatrixViewModel(this);
                 }
                 return _ConflictMatrixVM;
+            }
+        }
+
+        public DetectorenTabViewModel DetectorenTabVM
+        {
+            get
+            {
+                if (_DetectorenTabVM == null)
+                {
+                    _DetectorenTabVM = new DetectorenTabViewModel(this);
+                }
+                return _DetectorenTabVM;
             }
         }
 
@@ -108,6 +122,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ObservableCollection<DetectorViewModel> Detectoren
+        {
+            get
+            {
+                if (_Detectoren == null)
+                {
+                    _Detectoren = new ObservableCollection<DetectorViewModel>();
+                }
+                return _Detectoren;
+            }
+        }
+
         public TabItem SelectedTab
         {
             get { return _SelectedTab; }
@@ -147,6 +173,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTabIndex = value;
+                OnPropertyChanged("SelectedTabIndex");
             }
         }
 
@@ -186,6 +213,36 @@ namespace TLCGen.ViewModels
             return true;
         }
 
+        public void ChangeFaseNaam(FaseCyclusViewModel fcvm, string oldname)
+        {
+            foreach(FaseCyclusViewModel fcvm2 in Fasen)
+            {
+                foreach(ConflictViewModel cvm in fcvm2.Conflicten)
+                {
+                    if (cvm.FaseNaar == oldname)
+                        cvm.FaseNaar = fcvm.Naam;
+                }
+            }
+        }
+
+        public bool IsDetectorNaamUnique(string naam)
+        {
+            foreach (FaseCyclusViewModel fcvm in Fasen)
+            {
+                foreach(DetectorViewModel dvm in fcvm.Detectoren)
+                {
+                    if (dvm.Naam == naam)
+                        return false;
+                }
+            }
+            foreach (DetectorViewModel dvm in Detectoren)
+            {
+                if (dvm.Naam == naam)
+                    return false;
+            }
+            return true;
+        }
+
         #endregion // Public methods
 
         #region Collection Changed
@@ -210,6 +267,26 @@ namespace TLCGen.ViewModels
             HasChangedFasen = true;
         }
 
+        private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (DetectorViewModel dvm in e.NewItems)
+                {
+                    _Controller.Dectectoren.Add(dvm.Detector);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (DetectorViewModel dvm in e.OldItems)
+                {
+                    _Controller.Dectectoren.Remove(dvm.Detector);
+                }
+            }
+            HasChanged = true;
+            HasChangedFasen = true;
+        }
+
         #endregion // Collection Changed
 
         #region Constructor
@@ -224,9 +301,15 @@ namespace TLCGen.ViewModels
                 FaseCyclusViewModel fcvm = new FaseCyclusViewModel(this, fcm);
                 Fasen.Add(fcvm);
             }
+            foreach (DetectorModel dm in _Controller.Dectectoren)
+            {
+                DetectorViewModel dvm = new DetectorViewModel(this, dm);
+                Detectoren.Add(dvm);
+            }
 
             // Connect CollectionChanged event handlers
             Fasen.CollectionChanged += Fasen_CollectionChanged;
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
         #endregion // Constructor
