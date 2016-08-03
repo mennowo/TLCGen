@@ -26,6 +26,7 @@ namespace TLCGen.Models
         public int TRG_min { get; set; }
         public int TGL { get; set; }
         public int TGL_min { get; set; }
+        public int Kopmax { get; set; }
 
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }

@@ -178,6 +178,19 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int Kopmax
+        {
+            get { return _FaseCyclus.Kopmax; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _FaseCyclus.Kopmax = value;
+                }
+                OnMonitoredPropertyChanged("Kopmax", _ControllerVM);
+            }
+        }
+
         public NooitAltijdAanUitEnum VasteAanvraag
         {
             get { return _FaseCyclus.VasteAanvraag; }
@@ -335,6 +348,11 @@ namespace TLCGen.ViewModels
         public void UpdateModelDefine()
         {
             _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + _FaseCyclus.Naam;
+        }
+
+        public void UpdateHasKopmax()
+        {
+            OnPropertyChanged("HasKopmax");
         }
 
         #endregion // Public methods

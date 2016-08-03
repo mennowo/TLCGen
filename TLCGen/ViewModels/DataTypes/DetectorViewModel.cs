@@ -64,6 +64,7 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Type = value;
                 OnMonitoredPropertyChanged("Type", _ControllerVM);
+                FaseVM?.UpdateHasKopmax();
             }
         }
 
