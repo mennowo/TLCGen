@@ -37,11 +37,6 @@ namespace TLCGen.ViewModels
             get { return FaseVM?.Naam; }
         }
 
-        public long ID
-        {
-            get { return _Detector.ID; }
-        }
-
         public string Naam
         {
             get { return _Detector.Naam; }
@@ -50,9 +45,23 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsDetectorNaamUnique(value))
                 {
                     string oldname = _Detector.Naam;
-                    _Detector.Naam = value;
-                    _Detector.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + value;
                 }
+                OnMonitoredPropertyChanged("Naam", _ControllerVM);
+            }
+        }
+
+        public string Define
+        {
+            get { return _Detector.Define; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsDetectorDefineUnique(value))
+                {
+                    string oldname = _Detector.Define;
+                    _Detector.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix.Setting, "");
+                    _Detector.Define = value;
+                }
+                OnMonitoredPropertyChanged("Define", _ControllerVM);
                 OnMonitoredPropertyChanged("Naam", _ControllerVM);
             }
         }

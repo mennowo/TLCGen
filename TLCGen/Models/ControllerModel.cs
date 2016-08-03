@@ -15,12 +15,13 @@ namespace TLCGen.Models
 
         #region Properties
 
+        [XmlIgnore]
         public long NextID { get; set; }
 
         [XmlElement(ElementName = "Data")]
         public ControllerDataModel Data { get; set; }
 
-        [XmlArrayItem(ElementName = "Fasecyclus")]
+        [XmlArrayItem(ElementName = "FaseCyclus")]
         public List<FaseCyclusModel> Fasen { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]

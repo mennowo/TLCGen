@@ -213,14 +213,24 @@ namespace TLCGen.ViewModels
             return true;
         }
 
-        public void ChangeFaseNaam(FaseCyclusViewModel fcvm, string oldname)
+        public bool IsFaseDefineUnique(string define)
+        {
+            foreach (FaseCyclusViewModel fcvm in Fasen)
+            {
+                if (fcvm.Define == define)
+                    return false;
+            }
+            return true;
+        }
+
+        public void ChangeFaseDefine(FaseCyclusViewModel fcvm, string olddefine)
         {
             foreach(FaseCyclusViewModel fcvm2 in Fasen)
             {
                 foreach(ConflictViewModel cvm in fcvm2.Conflicten)
                 {
-                    if (cvm.FaseNaar == oldname)
-                        cvm.FaseNaar = fcvm.Naam;
+                    if (cvm.FaseNaar == olddefine)
+                        cvm.FaseNaar = fcvm.Define;
                 }
             }
         }
@@ -238,6 +248,24 @@ namespace TLCGen.ViewModels
             foreach (DetectorViewModel dvm in Detectoren)
             {
                 if (dvm.Naam == naam)
+                    return false;
+            }
+            return true;
+        }
+
+        public bool IsDetectorDefineUnique(string define)
+        {
+            foreach (FaseCyclusViewModel fcvm in Fasen)
+            {
+                foreach (DetectorViewModel dvm in fcvm.Detectoren)
+                {
+                    if (dvm.Define == define)
+                        return false;
+                }
+            }
+            foreach (DetectorViewModel dvm in Detectoren)
+            {
+                if (dvm.Define == define)
                     return false;
             }
             return true;

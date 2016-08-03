@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TLCGen.Enumerations;
 using TLCGen.Helpers.Settings;
 using TLCGen.Models.Settings;
 
 namespace TLCGen.Models
 {
-    public class ControllerDataModel : ModelBase
+    public class ControllerDataModel
     {
         #region Fields
 

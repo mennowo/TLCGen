@@ -32,7 +32,7 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>
-                <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
+                <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

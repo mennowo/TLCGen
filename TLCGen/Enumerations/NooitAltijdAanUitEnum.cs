@@ -19,6 +19,5 @@ namespace TLCGen.Enumerations
         SchAan,
         [Description("Uit")]
         SchUit,
-        Bus
     }
 }

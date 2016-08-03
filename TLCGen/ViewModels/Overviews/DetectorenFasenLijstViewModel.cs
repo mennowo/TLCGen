@@ -146,8 +146,8 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+            dm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + SelectedFase.Naam + newname;
             dm.Naam = SelectedFase.Naam + newname;
-            dm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(_ControllerVM, dm);
             dvm1.FaseVM = SelectedFase;
             SelectedFase.Detectoren.Add(dvm1);

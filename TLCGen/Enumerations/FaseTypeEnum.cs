@@ -13,10 +13,10 @@ namespace TLCGen.Enumerations
     {
         [Description("Auto")]
         Auto,
-        [Description("Voetganger")]
-        Voetganger,
         [Description("Fiets")]
         Fiets,
+        [Description("Voetganger")]
+        Voetganger,
         [Description("OV")]
         OV
     }

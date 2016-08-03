@@ -8,7 +8,7 @@ namespace TLCGen.Models
 {
     public enum NaloopType { StartGroen, EindeGroen }
 
-    public class NaloopModel : ModelBase
+    public class NaloopModel
     {
         #region Fields
 

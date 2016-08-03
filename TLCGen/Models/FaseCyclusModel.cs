@@ -8,7 +8,7 @@ using TLCGen.Enumerations;
 
 namespace TLCGen.Models
 {
-    public class FaseCyclusModel : ModelBase
+    public class FaseCyclusModel
     {
         #region Fields
 
@@ -16,8 +16,8 @@ namespace TLCGen.Models
 
         #region Properties
 
-        public string Naam { get; set; }
         public string Define { get; set; }
+        public string Naam { get; set; }
         public FaseTypeEnum Type { get; set; }
         public int TFG { get; set; }
         public int TGG { get; set; }

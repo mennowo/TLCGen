@@ -300,7 +300,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (ConflictViewModel cvm in Fasen[fcvm_from].Conflicten)
                     {
-                        if(!string.IsNullOrWhiteSpace(Fasen[fcvm_to].Naam) && Fasen[fcvm_to].Naam == cvm.FaseNaar)
+                        if(!string.IsNullOrWhiteSpace(Fasen[fcvm_to].Define) && Fasen[fcvm_to].Define == cvm.FaseNaar)
                         {
                             ConflictMatrix[fcvm_from, fcvm_to] = cvm;
                         }
@@ -308,8 +308,8 @@ namespace TLCGen.ViewModels
                     if(ConflictMatrix[fcvm_from, fcvm_to] == null)
                     {
                         ConflictModel m = new ConflictModel();
-                        m.FaseVan = Fasen[fcvm_from].Naam;
-                        m.FaseNaar = Fasen[fcvm_to].Naam;
+                        m.FaseVan = Fasen[fcvm_from].Define;
+                        m.FaseNaar = Fasen[fcvm_to].Define;
                         m.Waarde = -1;
                         ConflictMatrix[fcvm_from, fcvm_to] = new ConflictViewModel(_ControllerVM, m);
                     }

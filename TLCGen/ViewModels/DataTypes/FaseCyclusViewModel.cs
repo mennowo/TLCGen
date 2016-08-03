@@ -27,11 +27,6 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus; }
         }
 
-        public long ID
-        {
-            get { return _FaseCyclus.ID; }
-        }
-
         public string Naam
         {
             get { return _FaseCyclus.Naam; }
@@ -39,15 +34,7 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsFaseNaamUnique(value))
                 {
-                    string oldname = _FaseCyclus.Naam;
                     _FaseCyclus.Naam = value;
-                    _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + value;
-                    foreach(ConflictViewModel cvm in Conflicten)
-                    {
-                        cvm.FaseVan = value;
-                    }
-                    _ControllerVM.ChangeFaseNaam(this, oldname);
-                    _ControllerVM.HasChangedFasen = true;
                 }
                 OnMonitoredPropertyChanged("Naam", _ControllerVM);
             }
@@ -58,8 +45,20 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Define; }
             set
             {
-                _FaseCyclus.Define = value;
-                OnPropertyChanged("Define");
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsFaseDefineUnique(value))
+                {
+                    string oldname = _FaseCyclus.Define;
+                    _FaseCyclus.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix.Setting, "");
+                    _FaseCyclus.Define = value;
+                    foreach (ConflictViewModel cvm in Conflicten)
+                    {
+                        cvm.FaseVan = value;
+                    }
+                    _ControllerVM.ChangeFaseDefine(this, oldname);
+                    _ControllerVM.HasChangedFasen = true;
+                }
+                OnMonitoredPropertyChanged("Naam", _ControllerVM);
+                OnMonitoredPropertyChanged("Define", _ControllerVM);
             }
         }
 

@@ -8,7 +8,7 @@ using TLCGen.Enumerations;
 namespace TLCGen.Models
 {
 
-    public class DetectorModel : ModelBase
+    public class DetectorModel
     {
         #region Fields
 
@@ -16,8 +16,8 @@ namespace TLCGen.Models
 
         #region Properties
 
-        public string Naam { get; set; }
         public string Define { get; set; }
+        public string Naam { get; set; }
         public int TDB { get; set; }
         public int TDH { get; set; }
         public int TOG { get; set; }

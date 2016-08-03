@@ -22,8 +22,8 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
                 <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
