@@ -170,11 +170,21 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
+        #region Collection Changed
+
+        private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
+        }
+
+        #endregion // Collection Change
+
         #region Constructor
 
         public DetectorenExtraLijstViewModel(ControllerViewModel controllervm)
         {
             _ControllerVM = controllervm;
+            _ControllerVM.Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
         #endregion // Constructor

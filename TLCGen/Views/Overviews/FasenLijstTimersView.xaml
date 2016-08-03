@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Views.FasenLijstView"
+﻿<UserControl x:Class="TLCGen.Views.FasenLijstTimersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,17 +16,22 @@
         <DataGrid 
                   ItemsSource="{Binding Path=Fasen}"
                   Grid.Row="0"
-                  SelectedItem="{Binding Path=SelectedFaseCyclus}"
+                  SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Naam}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
+
                 <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
-                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
-                <DataGridComboBoxColumn Header="Type" 
-                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
+                <!--<DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" IsReadOnly="True" />-->
                 <DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
@@ -34,15 +39,19 @@
                 <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
                 <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
                 <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />
-                <DataGridComboBoxColumn Header="Vaste aanvr." 
-                                        SelectedItemBinding="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
-                <DataGridComboBoxColumn Header="Wachtg." 
-                                        SelectedItemBinding="{Binding Path=Wachtgroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
-                <DataGridComboBoxColumn Header="Meev." 
-                                        SelectedItemBinding="{Binding Path=Meeverlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridTextColumn Binding="{Binding Path=Kopmax}" Header="Kopmax"  >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasKopmax}" Value="false">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

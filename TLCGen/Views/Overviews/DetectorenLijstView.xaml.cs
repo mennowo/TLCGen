@@ -21,6 +21,16 @@ namespace TLCGen.Views
     /// </summary>
     public partial class DetectorenLijstView : UserControl
     {
+        public bool ShowFaseCyclus
+        {
+            get { return (bool)GetValue(ShowFaseCyclusProperty); }
+            set { SetValue(ShowFaseCyclusProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowFaseCyclusProperty =
+            DependencyProperty.Register("ShowFaseCyclus", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
+
         public DetectorenLijstView()
         {
             InitializeComponent();

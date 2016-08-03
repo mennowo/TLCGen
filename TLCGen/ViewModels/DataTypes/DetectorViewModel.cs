@@ -14,6 +14,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private DetectorModel _Detector;
+        private FaseCyclusViewModel _FaseVM;
         private ControllerViewModel _ControllerVM;
 
         #endregion // Fields
@@ -23,6 +24,17 @@ namespace TLCGen.ViewModels
         public DetectorModel Detector
         {
             get { return _Detector; }
+        }
+
+        public FaseCyclusViewModel FaseVM
+        {
+            get { return _FaseVM; }
+            set { _FaseVM = value; }
+        }
+
+        public string FaseCyclus
+        {
+            get { return FaseVM?.Naam; }
         }
 
         public long ID

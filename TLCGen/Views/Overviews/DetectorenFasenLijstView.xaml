@@ -33,7 +33,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Detectoren" />
-            <local:DetectorenLijstView Grid.Row="1" Margin="2" />
+            <local:DetectorenLijstView Grid.Row="1" Margin="2" ShowFaseCyclus="False" />
         </Grid>
     </Grid>
 </UserControl>

@@ -41,21 +41,24 @@ namespace TLCGen.Views
         {
             InitializeComponent();
 
-            styleSelectedC = new Style();
-            styleSelectedC.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(3, 3, 3, 3)));
-            styleSelectedC.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
-            styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
-            styleSelectedC.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
-            styleSelectedC.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(5, 3, 5, 3)));
-            styleSelectedC.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
+            if (!DesignMode.IsInDesignMode)
+            {
+                styleSelectedC = new Style();
+                styleSelectedC.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(3, 3, 3, 3)));
+                styleSelectedC.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
+                styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
+                styleSelectedC.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
+                styleSelectedC.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(5, 3, 5, 3)));
+                styleSelectedC.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
 
-            styleSelectedR = new Style();
-            styleSelectedR.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(2, 3, 2, 3)));
-            styleSelectedR.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
-            styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
-            styleSelectedR.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
-            styleSelectedR.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(3, 3, 3, 3)));
-            styleSelectedR.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
+                styleSelectedR = new Style();
+                styleSelectedR.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(2, 3, 2, 3)));
+                styleSelectedR.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
+                styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
+                styleSelectedR.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
+                styleSelectedR.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(3, 3, 3, 3)));
+                styleSelectedR.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
+            }
         }
 
         private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)

@@ -149,7 +149,9 @@ namespace TLCGen.ViewModels
             dm.Naam = SelectedFase.Naam + newname;
             dm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(_ControllerVM, dm);
+            dvm1.FaseVM = SelectedFase;
             SelectedFase.Detectoren.Add(dvm1);
+            _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
         }
 
         bool AddNewDetectorCommand_CanExecute(object prm)
@@ -172,10 +174,12 @@ namespace TLCGen.ViewModels
                 {
                     SelectedFase.Detectoren.Remove(dvm);
                 }
+                _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
             }
             else if (SelectedDetector != null)
             {
                 SelectedFase.Detectoren.Remove(SelectedDetector);
+                _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
             }
         }
 
@@ -188,6 +192,10 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Command functionality
+
+        #region Collection Changed
+
+        #endregion // Collection Changed
 
         #region Constructor
 

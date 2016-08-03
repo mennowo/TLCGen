@@ -90,6 +90,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Overviews\ConflictMatrixViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DectorenTabViewModel.cs" />
+    <Compile Include="ViewModels\Overviews\DetectorenAllesLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenFasenLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenExtraLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\FasenTabViewModel.cs" />
@@ -99,6 +100,12 @@
     </Compile>
     <Compile Include="Views\Overviews\DetectorenFasenLijstView.xaml.cs">
       <DependentUpon>DetectorenFasenLijstView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\DetectorenToevVerw.xaml.cs">
+      <DependentUpon>DetectorenToevVerw.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\FasenLijstTimersView.xaml.cs">
+      <DependentUpon>FasenLijstTimersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\AutoSelectTextBox.cs" />
     <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
@@ -111,7 +118,7 @@
     <Compile Include="Views\Overviews\FasenDetailsView.xaml.cs">
       <DependentUpon>FasenDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\DetectorenTab.xaml.cs">
+    <Compile Include="Views\Tabs\.xaml.cs">
       <DependentUpon>DetectorenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab.xaml.cs">
@@ -129,8 +136,8 @@
     <Compile Include="Views\ControllerView.xaml.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\FasenLijstView.xaml.cs">
-      <DependentUpon>FasenLijstView.xaml</DependentUpon>
+    <Compile Include="Views\Overviews\FasenLijstOverView.xaml.cs">
+      <DependentUpon>FasenLijstOverView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\SettingsDataGrid.xaml.cs">
       <DependentUpon>SettingsDataGrid.xaml</DependentUpon>
@@ -168,9 +175,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Overviews\DetectorenToevVerw.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Overviews\FasenDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\FasenLijstTimersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Tabs\DetectorenTab.xaml">
       <SubType>Designer</SubType>
@@ -196,7 +211,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\FasenLijstView.xaml">
+    <Page Include="Views\Overviews\FasenLijstOverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

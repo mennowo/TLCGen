@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="TLCGen.Views.FasenLijstOverView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers"
+             xmlns:ext="clr-namespace:TLCGen.Extensions"
+             xmlns:enums="clr-namespace:TLCGen.Enumerations"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DataGrid 
+                  ItemsSource="{Binding Path=Fasen}"
+                  Grid.Row="0"
+                  SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
+                  ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
+                <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
+                <DataGridComboBoxColumn Header="Type" 
+                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
+                <!--<DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
+                <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
+                <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
+                <DataGridTextColumn Binding="{Binding Path=TRG}" Header="TRG" />
+                <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
+                <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
+                <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />-->
+                <DataGridComboBoxColumn Header="Vaste aanvr." 
+                                        SelectedItemBinding="{Binding Path=VasteAanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridComboBoxColumn Header="Wachtg." 
+                                        SelectedItemBinding="{Binding Path=Wachtgroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridComboBoxColumn Header="Meev." 
+                                        SelectedItemBinding="{Binding Path=Meeverlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridTextColumn Header="# detectors" IsReadOnly="True" Binding="{Binding Path=DetectorCount}" Foreground="Gray" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

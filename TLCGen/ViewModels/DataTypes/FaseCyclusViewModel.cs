@@ -56,6 +56,11 @@ namespace TLCGen.ViewModels
         public string Define
         {
             get { return _FaseCyclus.Define; }
+            set
+            {
+                _FaseCyclus.Define = value;
+                OnPropertyChanged("Define");
+            }
         }
 
         public FaseTypeEnum Type
@@ -227,6 +232,27 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int DetectorCount
+        {
+            get
+            {
+                return Detectoren.Count;
+            }
+        }
+
+        public bool HasKopmax
+        {
+            get
+            {
+                foreach(DetectorViewModel dvm in Detectoren)
+                {
+                    if (dvm.Type == DetectorTypeEnum.Kop)
+                        return true;
+                }
+                return false;
+            }
+        }
+
         #endregion // Properties
 
         #region Collection Changed
@@ -248,6 +274,8 @@ namespace TLCGen.ViewModels
                 }
             }
             _ControllerVM.HasChanged = true;
+            OnPropertyChanged("HasKopmax");
+            OnPropertyChanged("DetectorCount");
         }
 
         private void _Conflicten_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -322,6 +350,7 @@ namespace TLCGen.ViewModels
             foreach (DetectorModel dm in _FaseCyclus.Detectoren)
             {
                 DetectorViewModel dvm = new DetectorViewModel(_ControllerVM, dm);
+                dvm.FaseVM = this;
                 Detectoren.Add(dvm);
             }
             foreach (ConflictModel cm in _FaseCyclus.Conflicten)

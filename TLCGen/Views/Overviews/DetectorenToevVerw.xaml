@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Views.FasenTab"
+﻿<UserControl x:Class="TLCGen.Views.DetectorenToevVerw"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,24 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <TabControl TabStripPlacement="Left">
-            <TabItem Header="Overzicht" >
-                <local:FasenLijstOverView />
-            </TabItem>
-            <TabItem Header="Functies" >
-                <local:FasenDetailsView />
-            </TabItem>
-            <TabItem Header="Tijden" >
-                <local:FasenLijstTimersView />
-            </TabItem>
-        </TabControl>
         <WrapPanel Grid.Row="1">
-            <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
-            <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />
+            <Button Content="Detector toev." Margin="0,2" Command="{Binding Path=AddDetectorCommand}" />
+            <Button Content="Detector verw." Margin="2,2,0,2" Command="{Binding Path=RemoveDetectorCommand}" />
             <ComboBox ItemsSource="{Binding Path=Templates}" Margin="2" SelectedIndex="0" IsEnabled="False" />
             <Button Content="Toevoegen" Margin="0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
             <Button Content="Opslaan" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />

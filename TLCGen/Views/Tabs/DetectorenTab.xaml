@@ -13,14 +13,33 @@
         </Grid.RowDefinitions>
         <TabControl TabStripPlacement="Left">
             <TabItem Header="Per fase" >
-                <local:DetectorenFasenLijstView DataContext="{Binding Path=DetectorenFasenLijstVM}" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <local:DetectorenFasenLijstView DataContext="{Binding Path=DetectorenFasenLijstVM}" />
+                    <local:DetectorenToevVerw Grid.Row="1" DataContext="{Binding Path=DetectorenFasenLijstVM}" />
+                </Grid>
             </TabItem>
             <TabItem Header="Extra" >
-                <local:DetectorenLijstView DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <local:DetectorenLijstView DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                    <local:DetectorenToevVerw Grid.Row="1" DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                </Grid>
             </TabItem>
-            <!--<TabItem Header="Details" >
-                
-            </TabItem>-->
+            <TabItem Header="Alles" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <local:DetectorenLijstView Grid.Row="1" DataContext="{Binding Path=DetectorenAllesLijstVM}" ShowFaseCyclus="True" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

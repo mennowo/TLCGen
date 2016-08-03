@@ -21,16 +21,11 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for FasenView.xaml
     /// </summary>
-    public partial class FasenLijstView : UserControl
+    public partial class FasenLijstTimersView : UserControl
     {
-        public FasenLijstView()
+        public FasenLijstTimersView()
         {
             InitializeComponent();
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -8,7 +8,16 @@
              xmlns:enums="clr-namespace:TLCGen.Enumerations"
              xmlns:ext="clr-namespace:TLCGen.Extensions"
              mc:Ignorable="d" 
+             Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+        <DataGridTextColumn x:Key="FaseCyclusColumn"
+                            Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
+                            Header="Fase" 
+                            Foreground="Gray" IsReadOnly="True"
+                            Visibility="{Binding Path=ShowFaseCyclus, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -28,6 +37,7 @@
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
+                <StaticResource ResourceKey="FaseCyclusColumn" />
                 <DataGridTextColumn Binding="{Binding Path=TDB}" Header="TDB" />
                 <DataGridTextColumn Binding="{Binding Path=TDH}" Header="TDH" />
                 <DataGridComboBoxColumn Header="Aanvraag" 
@@ -38,13 +48,5 @@
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="1">
-            <Button Content="Detector toev." Margin="0,2" Command="{Binding Path=AddDetectorCommand}" />
-            <Button Content="Detector verw." Margin="2,2,0,2" Command="{Binding Path=RemoveDetectorCommand}" />
-            <ComboBox ItemsSource="{Binding Path=Templates}" Margin="2" SelectedIndex="0" IsEnabled="False" />
-            <Button Content="Toevoegen" Margin="0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Opslaan" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Verwijderen" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-        </WrapPanel>
     </Grid>
 </UserControl>

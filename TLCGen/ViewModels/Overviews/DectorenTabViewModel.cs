@@ -17,9 +17,9 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ControllerViewModel _ControllerVM;
-        private DetectorenExtraLijstViewModel _DetectorenExtraLijstVM;
         private DetectorenFasenLijstViewModel _DetectorenFasenLijstVM;
-        private ObservableCollection<string> _Templates;
+        private DetectorenExtraLijstViewModel _DetectorenExtraLijstVM;
+        private DetectorenAllesLijstViewModel _DetectorenAllesLijstVM;
 
         #endregion // Fields
 
@@ -33,6 +33,11 @@ namespace TLCGen.ViewModels
         public DetectorenFasenLijstViewModel DetectorenFasenLijstVM
         {
             get { return _DetectorenFasenLijstVM; }
+        }
+
+        public DetectorenAllesLijstViewModel DetectorenAllesLijstVM
+        {
+            get { return _DetectorenAllesLijstVM; }
         }
 
         #endregion // Properties
@@ -52,6 +57,7 @@ namespace TLCGen.ViewModels
             _ControllerVM = controllervm;
             _DetectorenExtraLijstVM = new DetectorenExtraLijstViewModel(_ControllerVM);
             _DetectorenFasenLijstVM = new DetectorenFasenLijstViewModel(_ControllerVM);
+            _DetectorenAllesLijstVM = new DetectorenAllesLijstViewModel(_ControllerVM);
         }
 
         #endregion // Constructor

@@ -22,9 +22,10 @@
                 Grid.Row="1" Margin="2" 
                 ItemsSource="{Binding Path=Fasen}" 
                 DisplayMemberPath="Naam"
-                Name="FasenListBox" SelectionMode="Single" />
+                SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
+                SelectionMode="Single" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <local:FaseCyclusView Grid.Column="2" DataContext="{Binding ElementName=FasenListBox,Path=SelectedItem}" />
+        <local:FaseCyclusView Grid.Column="2" DataContext="{Binding Path=SelectedFaseCyclus}" />
     </Grid>
 </UserControl>
