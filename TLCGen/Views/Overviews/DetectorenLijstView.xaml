@@ -12,11 +12,30 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+        <Style TargetType="{x:Type DataGridCell}" x:Key="LooseDetectorStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsLooseDetector}" Value="true">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <DataGridTextColumn x:Key="FaseCyclusColumn"
                             Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
                             Header="Fase" 
                             Foreground="Gray" IsReadOnly="True"
                             Visibility="{Binding Path=ShowFaseCyclus, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridComboBoxColumn x:Key="AanvraagColumn" Header="Aanvraag" 
+                                SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
+                                Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                                CellStyle="{StaticResource LooseDetectorStyle}" />
+        <DataGridComboBoxColumn x:Key="VerlengenColumn" Header="Verlengen" 
+                                SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
+                                Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                                CellStyle="{StaticResource LooseDetectorStyle}" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -31,17 +50,6 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
-            <DataGrid.Resources>
-                <Style TargetType="{x:Type DataGridCell}" x:Key="LooseDetectorStyle">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=IsLooseDetector}" Value="true">
-                            <Setter Property="IsEnabled" Value="False" />
-                            <Setter Property="Background" Value="LightGray" />
-                            <Setter Property="Foreground" Value="LightGray" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
@@ -51,14 +59,8 @@
                 <StaticResource ResourceKey="FaseCyclusColumn" />
                 <DataGridTextColumn Binding="{Binding Path=TDB}" Header="TDB" />
                 <DataGridTextColumn Binding="{Binding Path=TDH}" Header="TDH" />
-                <DataGridComboBoxColumn Header="Aanvraag" 
-                                        SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
-                                        CellStyle="{StaticResource LooseDetectorStyle}" />
-                <DataGridComboBoxColumn Header="Verlengen" 
-                                        SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
-                                        CellStyle="{StaticResource LooseDetectorStyle}" />
+                <StaticResource ResourceKey="AanvraagColumn" />
+                <StaticResource ResourceKey="VerlengenColumn" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

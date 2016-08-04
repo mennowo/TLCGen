@@ -31,6 +31,16 @@ namespace TLCGen.Views
         public static readonly DependencyProperty ShowFaseCyclusProperty =
             DependencyProperty.Register("ShowFaseCyclus", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
+        public bool ShowAanvraagVerlengen
+        {
+            get { return (bool)GetValue(ShowAanvraagVerlengenProperty); }
+            set { SetValue(ShowAanvraagVerlengenProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowAanvraagVerlengenProperty =
+            DependencyProperty.Register("ShowAanvraagVerlengen", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
+
         public DetectorenLijstView()
         {
             InitializeComponent();

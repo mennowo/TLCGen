@@ -28,7 +28,7 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <local:DetectorenLijstView DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                    <local:DetectorenLijstView DataContext="{Binding Path=DetectorenExtraLijstVM}" ShowAanvraagVerlengen="False" />
                     <local:DetectorenToevVerw Grid.Row="1" DataContext="{Binding Path=DetectorenExtraLijstVM}" />
                 </Grid>
             </TabItem>
