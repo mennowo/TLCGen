@@ -58,7 +58,8 @@ namespace TLCGen.ViewModels
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            this.VerifyPropertyName(propertyName);
+            if(propertyName != null)
+                this.VerifyPropertyName(propertyName);
 
             PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null)

@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
                     {
                         inewname++;
                         newname = (inewname < 10 ? "0" : "") + inewname.ToString();
-                        while (!_ControllerVM.IsFaseNaamUnique(newname))
+                        while (!_ControllerVM.IsElementNaamUnique(newname))
                         {
                             inewname++;
                             newname = (inewname < 10 ? "0" : "") + inewname.ToString();

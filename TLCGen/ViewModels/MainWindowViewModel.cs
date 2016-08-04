@@ -315,6 +315,13 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        public void UpdateController()
+        {
+            ControllerVM.SortFasen();
+            ControllerVM.ConflictMatrixVM.BuildConflictMatrix();
+            OnPropertyChanged(null);
+        }
+
         public bool SetNewController(ControllerModel cm)
         {
             if (!ControllerHasChanged())
@@ -327,6 +334,8 @@ namespace TLCGen.ViewModels
                 ControllerVM = new ControllerViewModel(cm);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
+                ControllerVM.SortFasen();
+                ControllerVM.ConflictMatrixVM.BuildConflictMatrix();
                 return true;
             }
             return false;

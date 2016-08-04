@@ -138,7 +138,7 @@ namespace TLCGen.ViewModels
                     {
                         inewname++;
                         newname = inewname.ToString();
-                        while (!_ControllerVM.IsDetectorNaamUnique(SelectedFase.Naam + newname))
+                        while (!_ControllerVM.IsElementNaamUnique(SelectedFase.Naam + newname))
                         {
                             inewname++;
                             newname = inewname.ToString();

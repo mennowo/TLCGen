@@ -31,6 +31,17 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridCell}" x:Key="LooseDetectorStyle">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsLooseDetector}" Value="true">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
@@ -42,10 +53,12 @@
                 <DataGridTextColumn Binding="{Binding Path=TDH}" Header="TDH" />
                 <DataGridComboBoxColumn Header="Aanvraag" 
                                         SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" />
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
+                                        CellStyle="{StaticResource LooseDetectorStyle}" />
                 <DataGridComboBoxColumn Header="Verlengen" 
                                         SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}" />
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
+                                        CellStyle="{StaticResource LooseDetectorStyle}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

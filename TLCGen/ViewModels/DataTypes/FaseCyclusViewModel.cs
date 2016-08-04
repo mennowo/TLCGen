@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsFaseNaamUnique(value))
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementNaamUnique(value))
                 {
                     _FaseCyclus.Naam = value;
                 }
@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Define; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsFaseDefineUnique(value))
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementDefineUnique(value))
                 {
                     string oldname = _FaseCyclus.Define;
                     _FaseCyclus.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix.Setting, "");

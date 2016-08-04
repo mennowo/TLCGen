@@ -197,32 +197,6 @@ namespace TLCGen.ViewModels
 
         #region Public methods
 
-        /// <summary>
-        /// Checks if a given string is unique in the list of Fasen. Uniqueness is determined by
-        /// comparing the given argument to all instances of FaseCyclusViewModel in the Fasen collection.
-        /// </summary>
-        /// <param name="name">The "Naam" string of the FaseCyclusViewModel instance</param>
-        /// <returns></returns>
-        public bool IsFaseNaamUnique(string naam)
-        {
-            foreach (FaseCyclusViewModel fcvm in Fasen)
-            {
-                if (fcvm.Naam == naam)
-                    return false;
-            }
-            return true;
-        }
-
-        public bool IsFaseDefineUnique(string define)
-        {
-            foreach (FaseCyclusViewModel fcvm in Fasen)
-            {
-                if (fcvm.Define == define)
-                    return false;
-            }
-            return true;
-        }
-
         public void ChangeFaseDefine(FaseCyclusViewModel fcvm, string olddefine)
         {
             foreach(FaseCyclusViewModel fcvm2 in Fasen)
@@ -235,8 +209,16 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool IsDetectorNaamUnique(string naam)
+        public bool IsElementNaamUnique(string naam)
         {
+            // Check fasen
+            foreach (FaseCyclusViewModel fcvm in Fasen)
+            {
+                if (fcvm.Naam == naam)
+                    return false;
+            }
+
+            // Check detectie
             foreach (FaseCyclusViewModel fcvm in Fasen)
             {
                 foreach(DetectorViewModel dvm in fcvm.Detectoren)
@@ -253,8 +235,16 @@ namespace TLCGen.ViewModels
             return true;
         }
 
-        public bool IsDetectorDefineUnique(string define)
+        public bool IsElementDefineUnique(string define)
         {
+            // Fasen
+            foreach (FaseCyclusViewModel fcvm in Fasen)
+            {
+                if (fcvm.Define == define)
+                    return false;
+            }
+
+            // Detectie
             foreach (FaseCyclusViewModel fcvm in Fasen)
             {
                 foreach (DetectorViewModel dvm in fcvm.Detectoren)

@@ -69,7 +69,8 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Import...">
-                    <MenuItem Header="Tab.c file" Command="{Binding Path=MyDataImporter.ImportTabCFileCommand}" />
+                    <MenuItem Header="Tab.c file (nieuwe regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}" />
+                    <MenuItem Header="Tab.c file (in bestaande regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" />
                 </MenuItem>
             </MenuItem>
         </Menu>

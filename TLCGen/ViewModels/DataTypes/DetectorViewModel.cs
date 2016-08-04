@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
             get { return _Detector.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsDetectorNaamUnique(value))
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementNaamUnique(value))
                 {
                     string oldname = _Detector.Naam;
                 }
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             get { return _Detector.Define; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsDetectorDefineUnique(value))
+                if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementDefineUnique(value))
                 {
                     string oldname = _Detector.Define;
                     _Detector.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix.Setting, "");
@@ -138,6 +138,14 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Verlengen = value;
                 OnMonitoredPropertyChanged("Verlengen", _ControllerVM);
+            }
+        }
+
+        public bool IsLooseDetector
+        {
+            get
+            {
+                return FaseVM == null;
             }
         }
 
