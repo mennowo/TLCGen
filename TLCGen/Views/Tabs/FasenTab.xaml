@@ -11,7 +11,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl TabStripPlacement="Left">
+        <TabControl TabStripPlacement="Left" SelectedItem="{Binding Path=SelectedTab}" SelectedIndex="{Binding Path=SelectedTabIndex}">
             <TabItem Header="Overzicht" >
                 <local:FasenLijstOverView />
             </TabItem>
@@ -20,6 +20,9 @@
             </TabItem>
             <TabItem Header="Tijden" >
                 <local:FasenLijstTimersView />
+            </TabItem>
+            <TabItem Header="Maxgroen" >
+                <local:MaxGroentijdenSetsView DataContext="{Binding Path=MaxGroentijdenLijstVM}" />
             </TabItem>
         </TabControl>
         <WrapPanel Grid.Row="1">

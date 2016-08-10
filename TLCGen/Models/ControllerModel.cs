@@ -27,6 +27,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Dectectoren { get; set; }
 
+        [XmlArrayItem(ElementName = "MaxGroentijdenSet")]
+        public List<MaxGroentijdenSetModel> MaxGroentijdenSets { get; set; }
+
         #endregion // Properties
 
         #region Constructor
@@ -36,6 +39,7 @@ namespace TLCGen.Models
             Data = new ControllerDataModel();
             Fasen = new List<FaseCyclusModel>();
             Dectectoren = new List<DetectorModel>();
+            MaxGroentijdenSets = new List<MaxGroentijdenSetModel>();
         }
 
         #endregion // Constructor

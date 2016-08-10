@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -19,7 +21,10 @@ namespace TLCGen.ViewModels
         private ControllerViewModel _ControllerVM;
         private ObservableCollection<string> _Templates;
         private FaseCyclusViewModel _SelectedFaseCyclus;
+        private MaxGroentijdenSetsLijstViewModel _MaxGroentijdenLijstVM;
         private IList _SelectedFaseCycli = new ArrayList();
+        private TabItem _SelectedTab;
+        private int _SelectedTabIndex;
 
         #endregion // Fields
 
@@ -63,6 +68,41 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCycli = value;
                 OnPropertyChanged("SelectedFaseCycli");
+            }
+        }
+
+        public MaxGroentijdenSetsLijstViewModel MaxGroentijdenLijstVM
+        {
+            get
+            {
+                return _MaxGroentijdenLijstVM;
+            }
+        }
+
+        public TabItem SelectedTab
+        {
+            get { return _SelectedTab; }
+            set
+            {
+                if (_SelectedTab != null &&
+                    _SelectedTab.Header.ToString() == "Overzicht")
+                {
+                    if (_ControllerVM.DoUpdateFasen())
+                    { 
+                        MaxGroentijdenLijstVM.BuildMaxGroenMatrix();
+                    }
+                }
+                _SelectedTab = value;
+            }
+        }
+
+        public int SelectedTabIndex
+        {
+            get { return _SelectedTabIndex; }
+            set
+            {
+                _SelectedTabIndex = value;
+                OnPropertyChanged("SelectedTabIndex");
             }
         }
 
@@ -166,11 +206,26 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
+        #region Public Methods
+
+        public void SortMaxGroenSetsFasen()
+        {
+            foreach(MaxGroentijdenSetViewModel mgsvm in _MaxGroentijdenLijstVM.MaxGroentijdenSets)
+            {
+                mgsvm.MaxGroentijdenSetList.BubbleSort();
+            }
+            _MaxGroentijdenLijstVM.BuildMaxGroenMatrix();
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
         public FasenTabViewModel(ControllerViewModel controllervm)
         {
             _ControllerVM = controllervm;
+
+            _MaxGroentijdenLijstVM = new MaxGroentijdenSetsLijstViewModel(_ControllerVM);
         }
 
         #endregion // Constructor

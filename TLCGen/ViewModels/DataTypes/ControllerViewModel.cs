@@ -25,6 +25,7 @@ namespace TLCGen.ViewModels
         private ControllerModel _Controller;
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private ObservableCollection<DetectorViewModel> _Detectoren;
+        private ObservableCollection<MaxGroentijdenSetViewModel> _MaxGroentijdenSets;
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
 
@@ -134,6 +135,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ObservableCollection<MaxGroentijdenSetViewModel> MaxGroentijdenSets
+        {
+            get
+            {
+                if (_MaxGroentijdenSets == null)
+                {
+                    _MaxGroentijdenSets = new ObservableCollection<MaxGroentijdenSetViewModel>();
+                }
+                return _MaxGroentijdenSets;
+            }
+        }
+
         public TabItem SelectedTab
         {
             get { return _SelectedTab; }
@@ -153,15 +166,9 @@ namespace TLCGen.ViewModels
                     _ConflictMatrixVM.SaveConflictMatrix();
                 }
                 if(_SelectedTab != null && 
-                    _SelectedTab.Header.ToString() == "Fasen")
+                   _SelectedTab.Header.ToString() == "Fasen")
                 {
-                    if (!Fasen.IsSorted() || HasChangedFasen)
-                    {
-                        SortFasen();
-                        HasChangedFasen = false;
-                        _ConflictMatrixVM.BuildConflictMatrix();
-                    }
-                    _ConflictMatrixVM.MatrixChanged = false;
+                    DoUpdateFasen();
                 }
                 _SelectedTab = value;
             }
@@ -188,14 +195,38 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void SortFasen()
         {
-            IsSortingFasen = true;
-            Fasen.BubbleSort();
-            IsSortingFasen = false;
+            if (!IsSortingFasen)
+            {
+                IsSortingFasen = true;
+                Fasen.BubbleSort();
+                FasenTabVM.SortMaxGroenSetsFasen();
+                IsSortingFasen = false;
+            }
         }
 
         #endregion
 
         #region Public methods
+
+        public bool DoUpdateFasen()
+        {
+            if (!Fasen.IsSorted() || HasChangedFasen)
+            {
+                // Temporarily don't watch collection changes: the collection doesn't really change, just reorders itself
+                Fasen.CollectionChanged -= Fasen_CollectionChanged;
+
+                // Sort, update
+                SortFasen();
+                HasChangedFasen = false;
+                _ConflictMatrixVM.BuildConflictMatrix();
+                _ConflictMatrixVM.MatrixChanged = false;
+
+                // Watch collection changes again
+                Fasen.CollectionChanged += Fasen_CollectionChanged;
+                return true;
+            }
+            return false;
+        }
 
         public void ChangeFaseDefine(FaseCyclusViewModel fcvm, string olddefine)
         {
@@ -205,6 +236,16 @@ namespace TLCGen.ViewModels
                 {
                     if (cvm.FaseNaar == olddefine)
                         cvm.FaseNaar = fcvm.Define;
+                }
+            }
+            foreach(MaxGroentijdenSetViewModel mgsvm in MaxGroentijdenSets)
+            {
+                foreach(MaxGroentijdViewModel mgvm in mgsvm.MaxGroentijdenSetList)
+                {
+                    if(mgvm.FaseCyclus == olddefine)
+                    {
+                        mgvm.FaseCyclus = fcvm.Define;
+                    }
                 }
             }
         }
@@ -272,6 +313,10 @@ namespace TLCGen.ViewModels
                 foreach (FaseCyclusViewModel fcvm in e.NewItems)
                 {
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
+                    foreach(MaxGroentijdenSetViewModel mgsvm in MaxGroentijdenSets)
+                    {
+                        mgsvm.AddFase(fcvm.Define);
+                    }
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
@@ -279,6 +324,10 @@ namespace TLCGen.ViewModels
                 foreach (FaseCyclusViewModel fcvm in e.OldItems)
                 {
                     _Controller.Fasen.Remove(fcvm.FaseCyclus);
+                    foreach (MaxGroentijdenSetViewModel mgsvm in MaxGroentijdenSets)
+                    {
+                        mgsvm.RemoveFase(fcvm.Define);
+                    }
                 }
             }
             HasChanged = true;
@@ -305,6 +354,25 @@ namespace TLCGen.ViewModels
             HasChangedFasen = true;
         }
 
+        private void MaxGroentijdenSets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (MaxGroentijdenSetViewModel mgsvm in e.NewItems)
+                {
+                    _Controller.MaxGroentijdenSets.Add(mgsvm.MaxGroentijdenSet);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (MaxGroentijdenSetViewModel mgsvm in e.OldItems)
+                {
+                    _Controller.MaxGroentijdenSets.Remove(mgsvm.MaxGroentijdenSet);
+                }
+            }
+            HasChanged = true;
+        }
+
         #endregion // Collection Changed
 
         #region Constructor
@@ -324,10 +392,16 @@ namespace TLCGen.ViewModels
                 DetectorViewModel dvm = new DetectorViewModel(this, dm);
                 Detectoren.Add(dvm);
             }
+            foreach (MaxGroentijdenSetModel mgm in _Controller.MaxGroentijdenSets)
+            {
+                MaxGroentijdenSetViewModel mgvm = new MaxGroentijdenSetViewModel(this, mgm);
+                MaxGroentijdenSets.Add(mgvm);
+            }
 
             // Connect CollectionChanged event handlers
             Fasen.CollectionChanged += Fasen_CollectionChanged;
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            MaxGroentijdenSets.CollectionChanged += MaxGroentijdenSets_CollectionChanged;
         }
 
         #endregion // Constructor

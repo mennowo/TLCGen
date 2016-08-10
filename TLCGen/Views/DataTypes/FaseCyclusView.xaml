@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:enums="clr-namespace:TLCGen.Enumerations"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:EnumBooleanConverter x:Key="EnumToBoolConv" />
+        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,34 +18,50 @@
         <WrapPanel Orientation="Horizontal">
             <GroupBox Header="Verkeerssoort">
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Auto" IsChecked="{Binding Path=Type,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Auto}" />
-                    <RadioButton Content="Fiets" IsChecked="{Binding Path=Type,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Fiets}" />
-                    <RadioButton Content="Voetganger" IsChecked="{Binding Path=Type,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Voetganger}" />
-                    <RadioButton Content="OV" IsChecked="{Binding Path=Type,Converter={StaticResource EnumToBoolConv}, ConverterParameter=OV}" />
+                    <RadioButton GroupName="TypeGroup" Content="Auto" 
+                                 IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Auto}}" />
+                    <RadioButton GroupName="TypeGroup" Content="Fiets" 
+                                 IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Fiets}}" />
+                    <RadioButton GroupName="TypeGroup" Content="Voetganger" 
+                                 IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Voetganger}}" />
+                    <RadioButton GroupName="TypeGroup" Content="OV" 
+                                 IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.OV}}" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Vaste aanvraag">
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Nooit" IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Nooit}" />
-                    <RadioButton Content="Altijd" IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Altijd}" />
-                    <RadioButton Content="Ingeschakeld" IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchAan}" />
-                    <RadioButton Content="Uitgeschakeld" IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchUit}" />
+                    <RadioButton GroupName="VasteAanvraagGroup" Content="Nooit" 
+                                 IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Nooit}}" />
+                    <RadioButton GroupName="VasteAanvraagGroup" Content="Altijd" 
+                                 IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Altijd}}" />
+                    <RadioButton GroupName="VasteAanvraagGroup" Content="Ingeschakeld" 
+                                 IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchAan}}" />
+                    <RadioButton GroupName="VasteAanvraagGroup" Content="Uitgeschakeld" 
+                                 IsChecked="{Binding Path=VasteAanvraag,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchUit}}" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Wachtgroen">
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Nooit" IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Nooit}" />
-                    <RadioButton Content="Altijd" IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Altijd}" />
-                    <RadioButton Content="Ingeschakeld" IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchAan}" />
-                    <RadioButton Content="Uitgeschakeld" IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchUit}" />
+                    <RadioButton GroupName="WachtgroenGroup" Content="Nooit" 
+                                 IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Nooit}}" />
+                    <RadioButton GroupName="WachtgroenGroup" Content="Altijd" 
+                                 IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Altijd}}" />
+                    <RadioButton GroupName="WachtgroenGroup" Content="Ingeschakeld" 
+                                 IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchAan}}" />
+                    <RadioButton GroupName="WachtgroenGroup" Content="Uitgeschakeld" 
+                                 IsChecked="{Binding Path=Wachtgroen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchUit}}" />
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Meeverlengen">
                 <StackPanel Orientation="Vertical">
-                    <RadioButton Content="Nooit" IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Nooit}" />
-                    <RadioButton Content="Altijd" IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=Altijd}" />
-                    <RadioButton Content="Ingeschakeld" IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchAan}" />
-                    <RadioButton Content="Uitgeschakeld" IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource EnumToBoolConv}, ConverterParameter=SchUit}" />
+                    <RadioButton GroupName="MeeverlengenGroup" Content="Nooit" 
+                                 IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Nooit}}" />
+                    <RadioButton GroupName="MeeverlengenGroup" Content="Altijd" 
+                                 IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.Altijd}}" />
+                    <RadioButton GroupName="MeeverlengenGroup" Content="Ingeschakeld" 
+                                 IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchAan}}" />
+                    <RadioButton GroupName="MeeverlengenGroup" Content="Uitgeschakeld" 
+                                 IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchUit}}" />
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

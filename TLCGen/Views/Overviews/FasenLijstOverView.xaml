@@ -9,6 +9,9 @@
              xmlns:enums="clr-namespace:TLCGen.Enumerations"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <helper:EnumDescriptionConverter x:Key="DescrConv" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,12 +24,31 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
+            <DataGrid.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown"></EventSetter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" />
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
-                <DataGridComboBoxColumn Header="Type" 
-                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
+                <DataGridTemplateColumn Header="Type" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Type,Converter={StaticResource DescrConv},Mode=OneWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedValue="{Binding Path=Type}"
+                                      Name="cb1"
+                                      DisplayMemberPath="Description"
+                                      SelectedValuePath="Value"
+                                      ItemsSource="{Binding Source={ext:Enumeration {x:Type enums:FaseTypeEnum}}}">
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <!--<DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
