@@ -13,7 +13,7 @@
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <local:BackgroundConverter x:Key="backgroundConverter" />
+        <local:ConflictBackgroundConverter x:Key="backgroundConverter" />
         <DataTemplate x:Key="ConflictMatrixCellTemplate">
             <TextBlock 
                 Margin="0"

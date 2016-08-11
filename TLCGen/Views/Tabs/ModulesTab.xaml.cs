@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TLCGen.Extensions;
 
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for ConflictMatrixView.xaml
+    /// Interaction logic for ModulesTab.xaml
     /// </summary>
-    public partial class ConflictMatrixView : UserControl
+    public partial class ModulesTab : UserControl
     {
-        public ConflictMatrixView()
+        public ModulesTab()
         {
             InitializeComponent();
         }

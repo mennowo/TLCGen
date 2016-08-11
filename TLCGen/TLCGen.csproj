@@ -79,6 +79,7 @@
     <Compile Include="DataAccess\SerializeT.cs" />
     <Compile Include="Models\MaxGroentijdenSetModel.cs" />
     <Compile Include="Models\MaxGroentijdModel.cs" />
+    <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="Models\Settings\ApplicationSettings.cs" />
     <Compile Include="Models\Settings\DefinePrefixSettings.cs" />
     <Compile Include="Models\Settings\IntSettingModel.cs" />
@@ -91,18 +92,24 @@
     <Compile Include="ViewModels\DataTypes\FaseCyclusViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdenSetViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\ModuleViewModel.cs" />
+    <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MaxGroentijdViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\ConflictMatrixViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\DectorenTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ConflictMatrixViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DectorenTabViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenAllesLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenFasenLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenExtraLijstViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\FasenTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTabViewModel.cs" />
     <Compile Include="ViewModels\Overviews\MaxGroentijdenSetsLijstViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab.xaml.cs">
+      <DependentUpon>ModulesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\DetectorenFasenLijstView.xaml.cs">
       <DependentUpon>DetectorenFasenLijstView.xaml</DependentUpon>
@@ -120,6 +127,7 @@
     <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Resources\ConflictBackgroundConverter.cs" />
     <Compile Include="Views\Resources\EnumBooleanConverter.cs" />
     <Compile Include="Views\Overviews\DetectorenLijstView.xaml.cs">
       <DependentUpon>DetectorenLijstView.xaml</DependentUpon>
@@ -136,8 +144,8 @@
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ConflictMatrixView.xaml.cs">
-      <DependentUpon>ConflictMatrixView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\ConflictMatrixTab.xaml.cs">
+      <DependentUpon>ConflictMatrixTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataTypes\ControllerDataView.xaml.cs">
       <DependentUpon>ControllerDataView.xaml</DependentUpon>
@@ -173,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\ModulesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,7 +224,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ConflictMatrixView.xaml">
+    <Page Include="Views\Tabs\ConflictMatrixTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

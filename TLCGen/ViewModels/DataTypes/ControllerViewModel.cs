@@ -18,6 +18,7 @@ namespace TLCGen.ViewModels
         private FasenTabViewModel _FasenTabVM;
         private ConflictMatrixViewModel _ConflictMatrixVM;
         private DetectorenTabViewModel _DetectorenTabVM;
+        private ModulesTabViewModel _ModulesTabVM;
 
         private bool _HasChanged;
         private bool _IsSortingFasen;
@@ -26,6 +27,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private ObservableCollection<DetectorViewModel> _Detectoren;
         private ObservableCollection<MaxGroentijdenSetViewModel> _MaxGroentijdenSets;
+        private ObservableCollection<ModuleViewModel> _Modules;
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
 
@@ -78,6 +80,18 @@ namespace TLCGen.ViewModels
                     _DetectorenTabVM = new DetectorenTabViewModel(this);
                 }
                 return _DetectorenTabVM;
+            }
+        }
+
+        public ModulesTabViewModel ModulesTabVM
+        {
+            get
+            {
+                if (_ModulesTabVM == null)
+                {
+                    _ModulesTabVM = new ModulesTabViewModel(this);
+                }
+                return _ModulesTabVM;
             }
         }
 
@@ -144,6 +158,18 @@ namespace TLCGen.ViewModels
                     _MaxGroentijdenSets = new ObservableCollection<MaxGroentijdenSetViewModel>();
                 }
                 return _MaxGroentijdenSets;
+            }
+        }
+
+        public ObservableCollection<ModuleViewModel> Modules
+        {
+            get
+            {
+                if (_Modules == null)
+                {
+                    _Modules = new ObservableCollection<ModuleViewModel>();
+                }
+                return _Modules;
             }
         }
 
@@ -396,6 +422,11 @@ namespace TLCGen.ViewModels
             {
                 MaxGroentijdenSetViewModel mgvm = new MaxGroentijdenSetViewModel(this, mgm);
                 MaxGroentijdenSets.Add(mgvm);
+            }
+            foreach (ModuleModel mm in _Controller.Modules)
+            {
+                ModuleViewModel mvm = new ModuleViewModel(this, mm);
+                Modules.Add(mvm);
             }
 
             // Connect CollectionChanged event handlers

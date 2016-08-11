@@ -44,7 +44,7 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementNaamUnique(value))
                 {
-                    string oldname = _Detector.Naam;
+                    _Detector.Naam = value;
                 }
                 OnMonitoredPropertyChanged("Naam", _ControllerVM);
             }
