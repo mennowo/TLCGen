@@ -76,6 +76,23 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection Changed
 
+        #region Public Methods
+
+        public void RemoveFase(FaseCyclusModuleViewModel fc)
+        {
+            FaseCyclusModuleViewModel _fc = null;
+            foreach (FaseCyclusModuleViewModel fc1 in Fasen)
+            {
+                if(fc1.Define == fc.Define)
+                {
+                    _fc = fc1;
+                }
+            }
+            if(_fc != null) Fasen.Remove(_fc);
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
         public ModuleViewModel(ControllerViewModel controllervm, ModuleModel module)

@@ -399,6 +399,25 @@ namespace TLCGen.ViewModels
             HasChanged = true;
         }
 
+        private void Modules_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (ModuleViewModel mvm in e.NewItems)
+                {
+                    _Controller.Modules.Add(mvm.Module);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (ModuleViewModel mvm in e.OldItems)
+                {
+                    _Controller.Modules.Remove(mvm.Module);
+                }
+            }
+            HasChanged = true;
+        }
+
         #endregion // Collection Changed
 
         #region Constructor
@@ -433,6 +452,7 @@ namespace TLCGen.ViewModels
             Fasen.CollectionChanged += Fasen_CollectionChanged;
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             MaxGroentijdenSets.CollectionChanged += MaxGroentijdenSets_CollectionChanged;
+            Modules.CollectionChanged += Modules_CollectionChanged;
         }
 
         #endregion // Constructor

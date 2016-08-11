@@ -58,6 +58,7 @@ namespace TLCGen.ViewModels
                 foreach(FaseCyclusModuleViewModel fcmvm in Fasen)
                 {
                     fcmvm.ModuleVM = value;
+                    fcmvm.UpdateModuleInfo();
                 }
                 OnPropertyChanged("SelectedModule");
             }
@@ -152,7 +153,9 @@ namespace TLCGen.ViewModels
             }
             else if(fcmvm.IsInModule)
             {
-                SelectedModule.Fasen.Remove(fcmvm);
+                // Use custom method instead of Remove method:
+                // it removes based on Define instead of reference
+                SelectedModule.RemoveFase(fcmvm);
             }
             foreach(FaseCyclusModuleViewModel _fcmvm in Fasen)
             {
@@ -171,19 +174,9 @@ namespace TLCGen.ViewModels
 
         #endregion // Public Methods
 
-        #region Constructor
+        #region Collection Changed
 
-        public ModulesTabViewModel(ControllerViewModel controllervm)
-        {
-            _ControllerVM = controllervm;
-            foreach(FaseCyclusViewModel fcvm in controllervm.Fasen)
-            {
-                Fasen.Add(new FaseCyclusModuleViewModel(fcvm, null));
-            }
-            _ControllerVM.Fasen.CollectionChanged += _Fasen_CollectionChanged;
-        }
-
-        private void _Fasen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Fasen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null && e.NewItems.Count > 0)
             {
@@ -199,16 +192,30 @@ namespace TLCGen.ViewModels
                     FaseCyclusModuleViewModel _fcmvm = null;
                     foreach (FaseCyclusModuleViewModel fcmvm in Fasen)
                     {
-                        if(fcmvm.Define == fcvm.Define)
+                        if (fcmvm.Define == fcvm.Define)
                         {
                             _fcmvm = fcmvm;
                             break;
                         }
                     }
-                    if(_fcmvm != null)
+                    if (_fcmvm != null)
                         Fasen.Remove(_fcmvm);
                 }
             }
+        }
+
+        #endregion // Collection Changed
+
+        #region Constructor
+
+        public ModulesTabViewModel(ControllerViewModel controllervm)
+        {
+            _ControllerVM = controllervm;
+            foreach(FaseCyclusViewModel fcvm in controllervm.Fasen)
+            {
+                Fasen.Add(new FaseCyclusModuleViewModel(fcvm, null));
+            }
+            _ControllerVM.Fasen.CollectionChanged += Fasen_CollectionChanged;
         }
 
         #endregion // Constructor

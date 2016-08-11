@@ -19,7 +19,9 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Label FontWeight="Bold" Content="Fasen" />
-            <ListView Grid.Row="1" Margin="2" ItemsSource="{Binding Path=Fasen}" SelectedItem="{Binding Path=SelectedFase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+            <ListView Grid.Row="1" Margin="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ItemsSource="{Binding Path=Fasen}" 
+                      SelectedItem="{Binding Path=SelectedFase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -27,7 +29,7 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Stretch" TextAlignment="Center" Name="FaseTB">
+                        <TextBlock Grid.Column="0" TextAlignment="Center" Name="FaseTB">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -47,7 +49,7 @@
                                 </Style>
                             </TextBlock.Style>
                             <Hyperlink Foreground="Black" Command="{Binding ElementName=root,Path=DataContext.AddRemoveFaseCommand}" CommandParameter="{Binding}">
-                                <Border Width="{Binding ElementName=FaseTB, Path=ActualWidth}" BorderBrush="White" BorderThickness="2">
+                                <Border Width="{Binding ElementName=FaseTB, Path=ActualWidth,UpdateSourceTrigger=PropertyChanged}" BorderBrush="White" BorderThickness="2">
                                     <TextBlock Text="{Binding Path=Naam}" HorizontalAlignment="Stretch"  TextAlignment="Center" />
                                 </Border>
                             </Hyperlink>
@@ -73,13 +75,22 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <ListView ItemsSource="{Binding Path=Fasen}" MinHeight="20">
+                            <ListView ItemsSource="{Binding Path=Fasen}" MinHeight="20" Background="Transparent">
                                 <ListView.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"></StackPanel>
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="Transparent" IsEnabled="False">
+                                            <TextBlock Text="{Binding}" Background="PaleGoldenrod" Margin="1" Padding="2" FontWeight="Bold">
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
                             </ListView>
+                            <Border Background="AliceBlue" Opacity="0" />
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
