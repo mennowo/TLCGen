@@ -24,6 +24,9 @@
             <TabItem Header="Modules">
                 <local:ModulesTab DataContext="{Binding Path=ModulesTabVM}" />
             </TabItem>
+            <TabItem Header="Bitmap" Name="BitmapTab" IsEnabled="{Binding BitmapTabEnabled}">
+                <local:BitmapTab DataContext="{Binding Path=BitmapTabVM}" />
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

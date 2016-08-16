@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="TLCGen.Views.BitmapTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="DiscreteCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="FocusVisualStyle" Value="{DynamicResource CheckBoxFocusVisual}"/>
+            <Setter Property="Background" Value="{DynamicResource NormalBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource NormalBorderBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <Grid Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}"  />
+                                <Border Width="12">
+                                    <Border.Background>
+                                        <VisualBrush Opacity="1.0" Stretch="None">
+                                            <VisualBrush.Visual>
+                                                <Path Name="path" Opacity="0.1" Data="M 0 5 L 3 10 10 0" Stroke="#FF3838BA" StrokeThickness="1.5"
+	                                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                            </VisualBrush.Visual>
+                                        </VisualBrush>
+                                    </Border.Background>
+                                </Border>
+                            </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="path" Property="Opacity" Value="1.0" />
+                                <Setter TargetName="path" Property="Stroke" Value="#FF70A16F" />
+                                <Setter TargetName="path" Property="StrokeThickness" Value="2.5" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListViewItem">
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="IsSelected" Value="True" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="LVItemCheckBoxTemplate">
+            <Grid>
+                <CheckBox 
+                    Style="{StaticResource DiscreteCheckBoxStyle}"
+                    Content="{Binding Path=Naam}" IsChecked="{Binding Path=HasCoordinates}" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding Path=RefreshBitmapCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="125" MinWidth="125" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TabControl Grid.Column="0" Margin="2" SelectedItem="{Binding Path=SelectedTab}">
+                <TabItem Header="Uitgangen" Name="OutputsTab" >
+                    <ListView ItemsSource="{Binding Path=Uitgangen}" 
+                              SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                              SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                </TabItem>
+                <TabItem Header="Ingangen" Name="InputsTab">
+                    <ListView ItemsSource="{Binding Path=Ingangen}" 
+                          SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                          SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                </TabItem>
+            </TabControl>
+            <Button Grid.Row="1" Content="Refresh bitmap (F5)" Command="{Binding Path=RefreshBitmapCommand}" Margin="2" />
+        </Grid>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <Grid Grid.Column="2" Margin="5,5,5,5" >
+            <local:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}">
+                <Viewbox Stretch="None" >
+                    <Image 
+                        RenderOptions.BitmapScalingMode="NearestNeighbor"
+                        UseLayoutRounding="True" 
+                        Source="{Binding MyBitmap, UpdateSourceTrigger=PropertyChanged}" >
+                    </Image>
+                </Viewbox>
+            </local:ZoomBorder>
+        </Grid>
+    </Grid>
+</UserControl>

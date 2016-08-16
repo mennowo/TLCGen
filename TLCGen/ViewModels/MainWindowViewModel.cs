@@ -154,9 +154,10 @@ namespace TLCGen.ViewModels
             if (!ControllerHasChanged())
             {
                 MyDataProvider.NewEmptyController();
-                ControllerVM = new ControllerViewModel(MyDataProvider.Controller);
+                ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
+                ControllerVM.UpdateTabsEnabled();
             }
         }
 
@@ -177,9 +178,11 @@ namespace TLCGen.ViewModels
                     MyDataProvider.FileName = openFileDialog.FileName;
                     if (MyDataProvider.LoadController())
                     {
-                        ControllerVM = new ControllerViewModel(MyDataProvider.Controller);
+                        ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
+                        ControllerVM.DoUpdateFasen();
+                        ControllerVM.UpdateTabsEnabled();
                     }
                 }
             }
@@ -211,6 +214,7 @@ namespace TLCGen.ViewModels
                 }
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
+                ControllerVM.UpdateTabsEnabled();
             }
         }
 
@@ -247,6 +251,7 @@ namespace TLCGen.ViewModels
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
+                ControllerVM.UpdateTabsEnabled();
             }
         }
 
@@ -317,7 +322,7 @@ namespace TLCGen.ViewModels
 
         public void UpdateController()
         {
-            ControllerVM.SortFasen();
+            ControllerVM.DoUpdateFasen();
             ControllerVM.ConflictMatrixVM.BuildConflictMatrix();
             OnPropertyChanged(null);
         }
@@ -331,7 +336,7 @@ namespace TLCGen.ViewModels
                     ControllerVM.SelectedTabIndex = 0;
                 }
                 MyDataProvider.SetNewController(cm);
-                ControllerVM = new ControllerViewModel(cm);
+                ControllerVM = new ControllerViewModel(this, cm);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.SortFasen();

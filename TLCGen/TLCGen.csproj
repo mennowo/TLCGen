@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -77,6 +78,7 @@
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
+    <Compile Include="Models\BitmapInfoModel.cs" />
     <Compile Include="Models\MaxGroentijdenSetModel.cs" />
     <Compile Include="Models\MaxGroentijdModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />
@@ -93,9 +95,11 @@
     <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdenSetViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ModuleViewModel.cs" />
+    <Compile Include="ViewModels\JustVM\BitmappedItemViewModel.cs" />
     <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MaxGroentijdViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
     <Compile Include="ViewModels\Tabs\ConflictMatrixViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DectorenTabViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenAllesLijstViewModel.cs" />
@@ -107,6 +111,10 @@
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Resources\ZoomBorder.cs" />
+    <Compile Include="Views\Tabs\BitmapTab.xaml.cs">
+      <DependentUpon>BitmapTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab.xaml.cs">
       <DependentUpon>ModulesTab.xaml</DependentUpon>
@@ -181,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\BitmapTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -280,7 +292,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FloodFill\FloodFill.csproj">
+      <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
+      <Name>FloodFill</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

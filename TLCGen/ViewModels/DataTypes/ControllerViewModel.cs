@@ -14,11 +14,13 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
+        private MainWindowViewModel _MainWindowVM;
         private ControllerDataViewModel _ControllerDataVM;
         private FasenTabViewModel _FasenTabVM;
         private ConflictMatrixViewModel _ConflictMatrixVM;
         private DetectorenTabViewModel _DetectorenTabVM;
         private ModulesTabViewModel _ModulesTabVM;
+        private BitmapTabViewModel _BitmapTabVM;
 
         private bool _HasChanged;
         private bool _IsSortingFasen;
@@ -92,6 +94,18 @@ namespace TLCGen.ViewModels
                     _ModulesTabVM = new ModulesTabViewModel(this);
                 }
                 return _ModulesTabVM;
+            }
+        }
+
+        public BitmapTabViewModel BitmapTabVM
+        {
+            get
+            {
+                if (_BitmapTabVM == null)
+                {
+                    _BitmapTabVM = new BitmapTabViewModel(this);
+                }
+                return _BitmapTabVM;
             }
         }
 
@@ -178,25 +192,50 @@ namespace TLCGen.ViewModels
             get { return _SelectedTab; }
             set
             {
-                // Save the conflict matrix if needed
-                if (_SelectedTab != null && 
-                    _SelectedTab.Header.ToString() == "Conflicten" &&
-                    _ConflictMatrixVM.MatrixChanged)
+                // Take actions for current 
+                if (_SelectedTab != null)
                 {
-                    string s = _ConflictMatrixVM.IsMatrixSymmetrical();
-                    if(!string.IsNullOrEmpty(s))
+                    // Save the conflict matrix if needed
+                    if (_SelectedTab.Header.ToString() == "Conflicten" &&
+                        _ConflictMatrixVM.MatrixChanged)
                     {
-                        System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch.");
-                        return;
+                        string s = _ConflictMatrixVM.IsMatrixSymmetrical();
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch.");
+                            return;
+                        }
+                        _ConflictMatrixVM.SaveConflictMatrix();
                     }
-                    _ConflictMatrixVM.SaveConflictMatrix();
+                    // Update Fasen
+                    if (_SelectedTab.Header.ToString() == "Fasen")
+                    {
+                        DoUpdateFasen();
+                    }
                 }
-                if(_SelectedTab != null && 
-                   _SelectedTab.Header.ToString() == "Fasen")
-                {
-                    DoUpdateFasen();
-                }
+
+                // Set new value
                 _SelectedTab = value;
+
+                // Take actions as needed
+                if (_SelectedTab != null)
+                {
+                    if (_SelectedTab.Name == "BitmapTab")
+                    {
+                        // Collect all IO to be displayed in the lists
+                        BitmapTabVM.CollectAllIO();
+
+                        // Set the bitmap
+                        if(_MainWindowVM.MyDataProvider.FileName != null)
+                            BitmapTabVM.BitmapFileName =
+                                System.IO.Path.Combine(
+                                    System.IO.Path.GetDirectoryName(_MainWindowVM.MyDataProvider.FileName), 
+                                    ControllerDataVM.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ? 
+                                    ControllerDataVM.BitmapNaam :
+                                    ControllerDataVM.BitmapNaam + ".bmp"
+                                );
+                    }
+                }
             }
         }
 
@@ -210,9 +249,33 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool ModulesTabEnabled
+        {
+            get
+            {
+                return Fasen?.Count > 0;
+            }
+        }
+
+        public bool BitmapTabEnabled
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_ControllerDataVM.BitmapNaam) && 
+                       !string.IsNullOrWhiteSpace(_MainWindowVM.MyDataProvider.FileName);
+            }
+        }
+
+
         #endregion // Properties
 
         #region Private methods
+
+        public void UpdateTabsEnabled()
+        {
+            OnPropertyChanged("ModulesTabEnabled");
+            OnPropertyChanged("BitmapTabEnabled");
+        }
 
         /// <summary>
         /// Sorts property ObservableCollection<FaseCyclusViewModel> Fasen. 
@@ -358,6 +421,7 @@ namespace TLCGen.ViewModels
             }
             HasChanged = true;
             HasChangedFasen = true;
+            UpdateTabsEnabled();
         }
 
         private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -422,8 +486,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ControllerViewModel(ControllerModel controller)
+        public ControllerViewModel(MainWindowViewModel mainwindowvm, ControllerModel controller)
         {
+            _MainWindowVM = mainwindowvm;
             _Controller = controller;
 
             // Add data from the Model to the ViewModel structure

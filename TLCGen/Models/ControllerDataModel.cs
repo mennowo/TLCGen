@@ -22,6 +22,7 @@ namespace TLCGen.Models
         public string Stad { get; set; }
         public string Straat1 { get; set; }
         public string Straat2 { get; set; }
+        public string BitmapNaam { get; set; }
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
         public VLOGTypeEnum VLOGType { get; set; }

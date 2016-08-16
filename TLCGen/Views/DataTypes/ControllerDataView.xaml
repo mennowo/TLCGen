@@ -32,6 +32,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Label Grid.Column="0" Grid.Row="0" Content="Naam/nummer" />
                             <TextBox Grid.Column="1" Grid.Row="0" Margin="2" Text="{Binding Path=Naam}" />
@@ -41,6 +42,8 @@
                             <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Straat1}" />
                             <Label Grid.Column="0" Grid.Row="3" Content="Straat 2" />
                             <TextBox Grid.Column="1" Grid.Row="3" Margin="2" Text="{Binding Path=Straat2}" />
+                            <Label Grid.Column="0" Grid.Row="4" Content="Bitmap naam" />
+                            <TextBox Grid.Column="1" Grid.Row="4" Margin="2" Text="{Binding Path=BitmapNaam,UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
                     </TabItem>
                     <TabItem Header="Voorvoegsels">

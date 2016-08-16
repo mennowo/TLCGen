@@ -61,6 +61,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string BitmapNaam
+        {
+            get { return _ControllerData.BitmapNaam; }
+            set
+            {
+                _ControllerData.BitmapNaam = value;
+                OnMonitoredPropertyChanged("BitmapNaam", _ControllerVM);
+                _ControllerVM.UpdateTabsEnabled();
+            }
+        }
+
         public DefinePrefixSettings PrefixSettings
         {
             get { return _ControllerData.Instellingen.PrefixSettings; }
