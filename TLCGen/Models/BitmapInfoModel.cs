@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TLCGen.Models
 {
-    public class BitmapInfoModel
+    public class BitmapCoordinaatModel
     {
         public int X { get; set; }
         public int Y { get; set; }

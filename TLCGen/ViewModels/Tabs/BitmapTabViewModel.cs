@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using FloodFill;
 using TLCGen.Helpers;
 using System.Windows.Controls;
+using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
@@ -29,6 +30,7 @@ namespace TLCGen.ViewModels
         private QueueLinearFloodFiller _FloodFiller;
         private string _BitmapFileName;
 
+        private Color TestFillColor = Color.CornflowerBlue;
         private Color DefaultFillColor = Color.LightGray;
         private Color DefaultFaseColor = Color.DarkRed;
         private Color DefaultFaseSelectedColor = Color.Red;
@@ -75,13 +77,15 @@ namespace TLCGen.ViewModels
             {
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
-                    FillMyBitmap(new Point(_SelectedItem.X, _SelectedItem.Y), GetFillColor(false));
+                    foreach(Point p in _SelectedItem.Coordinates)
+                        FillMyBitmap(p, GetFillColor(false));
                     RefreshMyBitmapImage();
                 }
                 _SelectedItem = value;
                 if (_SelectedItem != null && _SelectedItem.HasCoordinates)
                 {
-                    FillMyBitmap(new Point(_SelectedItem.X, _SelectedItem.Y), GetFillColor(true));
+                    foreach (Point p in _SelectedItem.Coordinates)
+                        FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
                 }
                 OnPropertyChanged("SelectedItem");
@@ -153,24 +157,39 @@ namespace TLCGen.ViewModels
 
             Color c = _EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y);
 
-            if (!c.ToArgb().Equals(Color.Black.ToArgb()) &&
+            if(c.ToArgb().Equals(GetFillColor(true).ToArgb()))
+            {
+                if (SelectedItem.HasCoordinates)
+                {
+                    List<Point> coords = new List<Point>();
+                    foreach (Point pp in SelectedItem.Coordinates)
+                    {
+                        FillMyBitmap(pp, TestFillColor);
+                        if(_EditableBitmap.Bitmap.GetPixel((int)p.X, (int)p.Y).ToArgb() == TestFillColor.ToArgb())
+                        {
+                            FillMyBitmap(pp, DefaultFillColor);
+                            coords.Add(pp);
+                        }
+                        else
+                        {
+                            FillMyBitmap(pp, GetFillColor(true));
+                        }
+                    }
+                    foreach(Point pp in coords)
+                        SelectedItem.Coordinates.Remove(pp);
+                }
+            }
+            else if (!c.ToArgb().Equals(Color.Black.ToArgb()) &&
                 !c.ToArgb().Equals(DefaultFaseColor.ToArgb()) &&
-                !c.ToArgb().Equals(DefaultFaseSelectedColor.ToArgb()) &&
                 !c.ToArgb().Equals(DefaultDetectorColor.ToArgb()) &&
                 !c.ToArgb().Equals(DefaultDetectorSelectedColor.ToArgb()))
             {
-                if(SelectedItem.HasCoordinates)
-                {
-                    FillMyBitmap(new Point(SelectedItem.X, SelectedItem.Y), DefaultFillColor);
-                }
-
-                SelectedItem.X = (int)p.X;
-                SelectedItem.Y = (int)p.Y;
+                SelectedItem.Coordinates.Add(p);
 
                 FillMyBitmap(p, GetFillColor(true));
 
-                RefreshMyBitmapImage();
             }
+            RefreshMyBitmapImage();
         }
 
         bool SetCoordinatesCommand_CanExecute(object prm)
@@ -236,17 +255,17 @@ namespace TLCGen.ViewModels
 
             foreach (FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
             {
-                Uitgangen.Add(new BitmappedItemViewModel(_ControllerVM, fcvm.FaseCyclus.BitmapInfo, fcvm.Naam, BitmappedItemViewModel.Type.Fase));
+                Uitgangen.Add(new BitmappedItemViewModel(_ControllerVM, fcvm.FaseCyclus as IOElementModel, fcvm.Naam, BitmappedItemViewModel.Type.Fase));
                 foreach (DetectorViewModel dvm in fcvm.Detectoren)
                 {
-                    Ingangen.Add(new BitmappedItemViewModel(_ControllerVM, dvm.Detector.BitmapInfo, dvm.Naam, BitmappedItemViewModel.Type.Detector));
+                    Ingangen.Add(new BitmappedItemViewModel(_ControllerVM, dvm.Detector as IOElementModel, dvm.Naam, BitmappedItemViewModel.Type.Detector));
                 }
 
             }
 
             foreach (DetectorViewModel dvm in _ControllerVM.Detectoren)
             {
-                Ingangen.Add(new BitmappedItemViewModel(_ControllerVM, dvm.Detector.BitmapInfo, dvm.Naam, BitmappedItemViewModel.Type.Detector));
+                Ingangen.Add(new BitmappedItemViewModel(_ControllerVM, dvm.Detector as IOElementModel, dvm.Naam, BitmappedItemViewModel.Type.Detector));
             }
         }
 
@@ -300,14 +319,16 @@ namespace TLCGen.ViewModels
             {
                 if (bivm.HasCoordinates)
                 {
-                    FillMyBitmap(new Point(bivm.X, bivm.Y), DefaultFaseColor);
+                    foreach (Point p in bivm.Coordinates)
+                        FillMyBitmap(p, DefaultFaseColor);
                 }
             }
             foreach (BitmappedItemViewModel bivm in Ingangen)
             {
                 if (bivm.HasCoordinates)
                 {
-                    FillMyBitmap(new Point(bivm.X, bivm.Y), DefaultDetectorColor);
+                    foreach (Point p in bivm.Coordinates)
+                        FillMyBitmap(p, DefaultDetectorColor);
                 }
             }
         }

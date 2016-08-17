@@ -8,7 +8,7 @@ using TLCGen.Enumerations;
 
 namespace TLCGen.Models
 {
-    public class FaseCyclusModel
+    public class FaseCyclusModel : IOElementModel
     {
         #region Fields
 
@@ -32,8 +32,6 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
 
-        public BitmapInfoModel BitmapInfo { get; set; }
-
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
@@ -46,7 +44,6 @@ namespace TLCGen.Models
 
         public FaseCyclusModel() : base()
         {
-            BitmapInfo = new BitmapInfoModel();
             Detectoren = new List<DetectorModel>();
             Conflicten = new List<ConflictModel>();
         }

@@ -79,6 +79,7 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
     <Compile Include="Models\BitmapInfoModel.cs" />
+    <Compile Include="Models\IOElementModel.cs" />
     <Compile Include="Models\MaxGroentijdenSetModel.cs" />
     <Compile Include="Models\MaxGroentijdModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />

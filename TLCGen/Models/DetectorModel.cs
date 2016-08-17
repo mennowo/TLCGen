@@ -8,7 +8,7 @@ using TLCGen.Enumerations;
 namespace TLCGen.Models
 {
 
-    public class DetectorModel
+    public class DetectorModel : IOElementModel
     {
         #region Fields
 
@@ -29,15 +29,13 @@ namespace TLCGen.Models
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
         public DetectorVerlengenTypeEnum Verlengen { get; set; }
 
-        public BitmapInfoModel BitmapInfo { get; set; }
-
         #endregion // Properties
 
         #region Constructor
 
         public DetectorModel() : base()
         {
-            BitmapInfo = new BitmapInfoModel();
+            
         }
 
         #endregion // Constructor
