@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TLCGen.DataAccess;
+using TLCGen.Generators.CCOL;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -142,6 +143,19 @@ namespace TLCGen.ViewModels
                     _ExitApplicationCommand = new RelayCommand(ExitApplicationCommand_Executed, ExitApplicationCommand_CanExecute);
                 }
                 return _ExitApplicationCommand;
+            }
+        }
+
+        RelayCommand _GenerateCCOLCommand;
+        public ICommand GenerateCCOLCommand
+        {
+            get
+            {
+                if (_GenerateCCOLCommand == null)
+                {
+                    _GenerateCCOLCommand = new RelayCommand(GenerateCCOLCommand_Executed, GenerateCCOLCommand_CanExecute);
+                }
+                return _GenerateCCOLCommand;
             }
         }
 
@@ -285,6 +299,17 @@ namespace TLCGen.ViewModels
             return true;
         }
 
+        void GenerateCCOLCommand_Executed(object prm)
+        {
+            CCOLCodeGenerator generator = new CCOLCodeGenerator();
+            generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+        }
+
+        bool GenerateCCOLCommand_CanExecute(object prm)
+        {
+            return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+        }
+
         #endregion // Command functionality
 
         #region Private methods
@@ -354,6 +379,18 @@ namespace TLCGen.ViewModels
         { 
             _MyDataProvider = new DataProvider();
             _MyDataImporter = new DataImporter(this);
+
+#if DEBUG
+            MyDataProvider.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";
+            if (MyDataProvider.LoadController())
+            {
+                ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
+                ControllerVM.SelectedTabIndex = 0;
+                OnPropertyChanged("ProgramTitle");
+                ControllerVM.DoUpdateFasen();
+                ControllerVM.UpdateTabsEnabled();
+            }
+#endif
 
             if (!DesignMode.IsInDesignMode)
             {

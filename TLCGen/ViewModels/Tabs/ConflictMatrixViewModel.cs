@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,15 +12,14 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class ConflictMatrixViewModel : ViewModelBase
+    public class ConflictMatrixViewModel : TabViewModel
     {
 
         #region Fields
-
-        private ControllerViewModel _ControllerVM;
+        
         private ObservableCollection<string> _FasenNames;
         private bool _MatrixChanged;
-        
+
         #endregion // Fields
 
         #region Properties
@@ -350,14 +350,13 @@ namespace TLCGen.ViewModels
         #endregion // Public methods
 
         #region Collection Changed
-        
+
         #endregion // Collection Changed
 
         #region Constructor
 
-        public ConflictMatrixViewModel(ControllerViewModel controllervm)
+        public ConflictMatrixViewModel(ControllerViewModel controllervm) : base(controllervm)
         {
-            _ControllerVM = controllervm;
             BuildConflictMatrix();
         }
 

@@ -17,8 +17,8 @@ namespace TLCGen.ViewModels
     public class ModulesTabViewModel : ViewModelBase
     {
         #region Fields
-
-        private ControllerViewModel _ControllerVM;
+        
+        protected ControllerViewModel _ControllerVM;
         private FaseCyclusModuleViewModel _SelectedFaseCyclus;
         private ModuleViewModel _SelectedModule;
         private ObservableCollection<FaseCyclusModuleViewModel> _Fasen;

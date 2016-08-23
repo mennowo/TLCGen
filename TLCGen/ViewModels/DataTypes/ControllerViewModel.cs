@@ -37,6 +37,11 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public ControllerModel Controller
+        {
+            get { return _Controller; }
+        }
+
         public ControllerDataViewModel ControllerDataVM
         {
             get

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TLCGen.Enumerations;
+using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels

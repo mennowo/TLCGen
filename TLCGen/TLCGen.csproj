@@ -62,33 +62,9 @@
     </ApplicationDefinition>
     <Compile Include="DataAccess\DataImporter.cs" />
     <Compile Include="DataAccess\DataProvider.cs" />
-    <Compile Include="Enumerations\CCOLVersieEnum.cs" />
-    <Compile Include="Enumerations\DetectorAanvraagTypeEnum.cs" />
-    <Compile Include="Enumerations\DetectorTypeEnum.cs" />
-    <Compile Include="Enumerations\DetectorVerlengenTypeEnum.cs" />
-    <Compile Include="Enumerations\FaseTypeEnum.cs" />
-    <Compile Include="Enumerations\KWCTypeEnum.cs" />
-    <Compile Include="Enumerations\NooitAltijdAanUitEnum.cs" />
-    <Compile Include="Enumerations\VLOGTypeEnum.cs" />
-    <Compile Include="Extensions\DataGridExtensions.cs" />
-    <Compile Include="Extensions\EnumerationExtensions.cs" />
-    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="DataAccess\SettingsProvider.cs" />
     <Compile Include="DataAccess\DeserializeT.cs" />
-    <Compile Include="Helpers\DesignMode.cs" />
-    <Compile Include="Helpers\EnumHelper.cs" />
-    <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
-    <Compile Include="Models\BitmapInfoModel.cs" />
-    <Compile Include="Models\IOElementModel.cs" />
-    <Compile Include="Models\MaxGroentijdenSetModel.cs" />
-    <Compile Include="Models\MaxGroentijdModel.cs" />
-    <Compile Include="Models\ModuleModel.cs" />
-    <Compile Include="Models\Settings\ApplicationSettings.cs" />
-    <Compile Include="Models\Settings\DefinePrefixSettings.cs" />
-    <Compile Include="Models\Settings\IntSettingModel.cs" />
-    <Compile Include="Models\Settings\SettingModelBase.cs" />
-    <Compile Include="Helpers\SettingsProvider.cs" />
-    <Compile Include="Models\Settings\StringSettingModel.cs" />
     <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerDataViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerViewModel.cs" />
@@ -96,10 +72,11 @@
     <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdenSetViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ModuleViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\VersieViewModel.cs" />
     <Compile Include="ViewModels\JustVM\BitmappedItemViewModel.cs" />
     <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\MaxGroentijdViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\MaxGroentijdViewModel.cs" />
     <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
     <Compile Include="ViewModels\Tabs\ConflictMatrixViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DectorenTabViewModel.cs" />
@@ -109,10 +86,26 @@
     <Compile Include="ViewModels\Tabs\FasenTabViewModel.cs" />
     <Compile Include="ViewModels\Overviews\MaxGroentijdenSetsLijstViewModel.cs" />
     <Compile Include="ViewModels\Tabs\ModulesTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\TabViewModel.cs" />
+    <Compile Include="ViewModels\Templates\DetectorTemplateViewModel.cs" />
+    <Compile Include="ViewModels\Templates\FaseCyclusTemplateViewModel.cs" />
+    <Compile Include="ViewModels\Templates\TemplatesManagerViewModelT.cs" />
+    <Compile Include="ViewModels\Templates\TemplateViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\ApplyTemplateWindow.xaml.cs">
+      <DependentUpon>ApplyTemplateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\NewTemplateWindow.xaml.cs">
+      <DependentUpon>NewTemplateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\FasenToevVerw.xaml.cs">
+      <DependentUpon>FasenToevVerw.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Resources\SingleClickDataGridTemplateColumn.cs" />
+    <Compile Include="Views\Resources\SpecialDataGrid.cs" />
     <Compile Include="Views\Resources\ZoomBorder.cs" />
     <Compile Include="Views\Tabs\BitmapTab.xaml.cs">
       <DependentUpon>BitmapTab.xaml</DependentUpon>
@@ -150,6 +143,9 @@
     <Compile Include="Views\Tabs\FasenTab.xaml.cs">
       <DependentUpon>FasenTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\TemplateManagerView.xaml.cs">
+      <DependentUpon>TemplateManagerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
@@ -176,7 +172,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\IDProvider.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -190,6 +185,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\ApplyTemplateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\NewTemplateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\FasenToevVerw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -233,6 +240,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\TemplateManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\ConflictMatrixDataGrid.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -259,13 +270,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ConflictModel.cs" />
-    <Compile Include="Models\ControllerDataModel.cs" />
-    <Compile Include="Models\ControllerModel.cs" />
-    <Compile Include="Models\DetectorModel.cs" />
-    <Compile Include="Models\ModelBase.cs" />
-    <Compile Include="Models\NaloopModel.cs" />
-    <Compile Include="Models\FaseCyclusModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -283,7 +287,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -298,7 +301,39 @@
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
+      <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Generators.YATLCCLC\TLCGen.Generators.YATLCCLC.csproj">
+      <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
+      <Name>TLCGen.Generators.YATLCCLC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
+      <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
+      <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">
+      <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
+      <Name>TLCGen.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

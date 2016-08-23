@@ -25,13 +25,5 @@
                 <local:MaxGroentijdenSetsView DataContext="{Binding Path=MaxGroentijdenLijstVM}" />
             </TabItem>
         </TabControl>
-        <WrapPanel Grid.Row="1">
-            <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
-            <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />
-            <ComboBox ItemsSource="{Binding Path=Templates}" Margin="2" SelectedIndex="0" IsEnabled="False" />
-            <Button Content="Toevoegen" Margin="0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Opslaan" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-            <Button Content="Verwijderen" Margin="2,2,0,2" Command="{Binding Path=AddTemplate}" IsEnabled="False" />
-        </WrapPanel>
     </Grid>
 </UserControl>

@@ -88,7 +88,11 @@
                 <Button Command="{Binding Path=CloseFileCommand}" ToolTip="Sluiten regeling (Ctrl-F4)">
                     <Image Source="{StaticResource CloseFileIconDrawingImage}" />
                 </Button>
-
+            </ToolBar>
+            <ToolBar>
+                <Button Command="{Binding Path=GenerateCCOLCommand}" ToolTip="Genereren CCOL code (Ctrl-G)">
+                    <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                </Button>
             </ToolBar>
         </ToolBarTray>
         <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}">

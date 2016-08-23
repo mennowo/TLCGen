@@ -8,23 +8,25 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Interfaces;
 using TLCGen.Models;
+using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {
-    public class FasenTabViewModel : ViewModelBase
+    public class FasenTabViewModel : TabViewModel, IHaveTemplates<FaseCyclusModel>
     {
         #region Fields
 
-        private ControllerViewModel _ControllerVM;
-        private ObservableCollection<string> _Templates;
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private MaxGroentijdenSetsLijstViewModel _MaxGroentijdenLijstVM;
         private IList _SelectedFaseCycli = new ArrayList();
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
+        private TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel> _TemplateManagerVM;
 
         #endregion // Fields
 
@@ -38,16 +40,17 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<string> Templates
+        public TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel> TemplateManagerVM
         {
             get
             {
-                if(_Templates == null)
+                if(_TemplateManagerVM == null)
                 {
-                    _Templates = new ObservableCollection<string>();
-                    _Templates.Add("Template placeholder");
+                    _TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
+                        (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
+                         this, $@"{SettingsProvider.AppSettings.PrefixSettings.FaseCyclusDefinePrefix}([0-9])");
                 }
-                return _Templates;
+                return _TemplateManagerVM;
             }
         }
 
@@ -219,12 +222,55 @@ namespace TLCGen.ViewModels
 
         #endregion // Public Methods
 
+        #region IHaveTemplates
+
+        public List<object> GetTemplatableItems()
+        {
+            List<object> items = new List<object>();
+            foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
+                items.Add(fcvm.FaseCyclus);
+            return items;
+        }
+
+        public void AddFromTemplate(List<FaseCyclusModel> items)
+        {
+            try
+            {
+                foreach (FaseCyclusModel fcm in items)
+                {
+                    if(_ControllerVM.IsElementDefineUnique(fcm.Define) &&
+                       _ControllerVM.IsElementNaamUnique(fcm.Naam))
+                    {
+                        bool IsOK = true;
+                        foreach(DetectorModel dm in fcm.Detectoren)
+                        {
+                            if(!(_ControllerVM.IsElementDefineUnique(dm.Define) &&
+                                 _ControllerVM.IsElementNaamUnique(dm.Naam)))
+                            {
+                                IsOK = false;
+                                break;
+                            }
+                        }
+                        if(IsOK)
+                        {
+                            FaseCyclusViewModel fcvm = new FaseCyclusViewModel(_ControllerVM, fcm);
+                            Fasen.Add(fcvm);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        #endregion // IHaveTemplates
+
         #region Constructor
 
-        public FasenTabViewModel(ControllerViewModel controllervm)
+        public FasenTabViewModel(ControllerViewModel controllervm) : base(controllervm)
         {
-            _ControllerVM = controllervm;
-
             _MaxGroentijdenLijstVM = new MaxGroentijdenSetsLijstViewModel(_ControllerVM);
         }
 

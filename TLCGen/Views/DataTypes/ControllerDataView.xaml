@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:re="clr-namespace:TLCGen.Views.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="AliceBlue">
@@ -44,6 +45,41 @@
                             <TextBox Grid.Column="1" Grid.Row="3" Margin="2" Text="{Binding Path=Straat2}" />
                             <Label Grid.Column="0" Grid.Row="4" Content="Bitmap naam" />
                             <TextBox Grid.Column="1" Grid.Row="4" Margin="2" Text="{Binding Path=BitmapNaam,UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Versiebeheer">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label FontWeight="Bold" Content="Versies" />
+                            <DataGrid Grid.Row="1" Margin="2"
+                                      ItemsSource="{Binding Versies}"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Versie" Binding="{Binding Path=Versie}" />
+                                    <re:SingleClickDataGridTemplateColumn Header="Datum">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Datum, StringFormat='{}{0:dd/MM/yyyy}'}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <DatePicker SelectedDate="{Binding Datum}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </re:SingleClickDataGridTemplateColumn>
+                                    <DataGridTextColumn Header="Ontwerper" Binding="{Binding Path=Ontwerper}" />
+                                    <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <WrapPanel Grid.Row="2">
+                                <Button Margin="2" Content="Nieuwe versie" Command="{Binding AddVersieCommand}" />
+                                <Button Margin="2" Content="Versie verwijderen" Command="{Binding RemoveVersieCommand}" />
+                            </WrapPanel>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Voorvoegsels">

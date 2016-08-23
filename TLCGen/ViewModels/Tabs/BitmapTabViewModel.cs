@@ -16,11 +16,10 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class BitmapTabViewModel : ViewModelBase
+    public class BitmapTabViewModel : TabViewModel
     {
         #region Fields
-
-        private ControllerViewModel _ControllerVM;
+        
         private ObservableCollection<BitmappedItemViewModel> _Uitgangen;
         private ObservableCollection<BitmappedItemViewModel> _Ingangen;
         private BitmappedItemViewModel _SelectedItem;
@@ -355,9 +354,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public BitmapTabViewModel(ControllerViewModel controllervm)
+        public BitmapTabViewModel(ControllerViewModel controllervm) : base(controllervm)
         {
-            _ControllerVM = controllervm;
             _FloodFiller = new QueueLinearFloodFiller(null);
         }
 

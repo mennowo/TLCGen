@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:helper="clr-namespace:TLCGen.Helpers"
-             xmlns:enums="clr-namespace:TLCGen.Enumerations"
-             xmlns:ext="clr-namespace:TLCGen.Extensions"
+             xmlns:re="clr-namespace:TLCGen.Views.Resources"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
              mc:Ignorable="d" 
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -42,7 +43,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid 
+        <re:SpecialDataGrid 
                   ItemsSource="{Binding Path=Detectoren}"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=SelectedDetector}"
@@ -62,6 +63,6 @@
                 <StaticResource ResourceKey="AanvraagColumn" />
                 <StaticResource ResourceKey="VerlengenColumn" />
             </DataGrid.Columns>
-        </DataGrid>
+        </re:SpecialDataGrid>
     </Grid>
 </UserControl>

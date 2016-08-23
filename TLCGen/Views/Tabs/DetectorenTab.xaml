@@ -11,28 +11,38 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl TabStripPlacement="Left">
-            <TabItem Header="Per fase" >
+        <TabControl TabStripPlacement="Left" SelectedItem="{Binding Path=SelectedTab}">
+            <TabItem Header="Per fase" Name="PerFaseTab">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <local:DetectorenFasenLijstView DataContext="{Binding Path=DetectorenFasenLijstVM}" />
-                    <local:DetectorenToevVerw Grid.Row="1" DataContext="{Binding Path=DetectorenFasenLijstVM}" />
+                    <local:DetectorenFasenLijstView DataContext="{Binding Path=DetectorenFasenLijstVM}" x:Name="FasenLijstView" />
+                    <StackPanel Grid.Row="1" >
+                        <WrapPanel >
+                            <local:DetectorenToevVerw DataContext="{Binding Path=DetectorenFasenLijstVM}" />
+                        </WrapPanel>
+                        <local:TemplateManagerView DataContext="{Binding TemplateManagerVM}" ApplyToItem="{Binding ElementName=FasenLijstView,Path=DataContext.SelectedFase.Naam}" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Extra" >
+            <TabItem Header="Extra" Name="ExtraTab">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <local:DetectorenLijstView DataContext="{Binding Path=DetectorenExtraLijstVM}" ShowAanvraagVerlengen="False" />
-                    <local:DetectorenToevVerw Grid.Row="1" DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                    <StackPanel Grid.Row="1" >
+                        <WrapPanel >
+                            <local:DetectorenToevVerw DataContext="{Binding Path=DetectorenExtraLijstVM}" />
+                        </WrapPanel>
+                    <local:TemplateManagerView DataContext="{Binding TemplateManagerVM}" />
+                    </StackPanel>
                 </Grid>
             </TabItem>
-            <TabItem Header="Alles" >
+            <TabItem Header="Alles" Name="AllesTab">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
