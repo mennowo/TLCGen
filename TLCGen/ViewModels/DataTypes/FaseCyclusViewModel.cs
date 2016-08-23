@@ -69,6 +69,8 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.Type = value;
                 OnMonitoredPropertyChanged("Type", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "Type");
+                
             }
         }
 
@@ -82,6 +84,7 @@ namespace TLCGen.ViewModels
                 else
                     _FaseCyclus.TFG = TGG;
                 OnMonitoredPropertyChanged("TFG", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TFG");
             }
         }
 
@@ -99,6 +102,7 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGG_min;
                 OnMonitoredPropertyChanged("TGG", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TGG");
             }
         }
 
@@ -114,6 +118,7 @@ namespace TLCGen.ViewModels
                         TGG = value;
                 }
                 OnMonitoredPropertyChanged("TGG_min", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TGG_min");
             }
         }
 
@@ -129,6 +134,7 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TRG_min;
                 OnMonitoredPropertyChanged("TRG", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TRG");
             }
         }
 
@@ -144,6 +150,7 @@ namespace TLCGen.ViewModels
                         TRG = value;
                 }
                 OnMonitoredPropertyChanged("TRG_min", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TRG_min");
             }
         }
 
@@ -159,6 +166,7 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGL_min;
                 OnMonitoredPropertyChanged("TGL", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TGL");
             }
         }
 
@@ -174,6 +182,7 @@ namespace TLCGen.ViewModels
                         TGL = value;
                 }
                 OnMonitoredPropertyChanged("TGL_min", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "TGL_min");
             }
         }
 
@@ -187,6 +196,7 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.Kopmax = value;
                 }
                 OnMonitoredPropertyChanged("Kopmax", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "Kopmax");
             }
         }
 
@@ -197,6 +207,7 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.VasteAanvraag = value;
                 OnMonitoredPropertyChanged("VasteAanvraag", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "VasteAanvraag");
             }
         }
 
@@ -207,6 +218,7 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.Wachtgroen = value;
                 OnMonitoredPropertyChanged("Wachtgroen", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "Wachtgroen");
             }
         }
 
@@ -217,6 +229,7 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.Meeverlengen = value;
                 OnMonitoredPropertyChanged("Meeverlengen", _ControllerVM);
+                _ControllerVM.SetAllSelectedFasenValue(this, "Meeverlengen");
             }
         }
 

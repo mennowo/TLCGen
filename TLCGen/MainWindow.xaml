@@ -20,6 +20,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.Icon>
+        <DrawingImage Drawing="{StaticResource AppIconDrawingGroup}" />
+    </Window.Icon>
     <Window.InputBindings>
         <KeyBinding Command="{Binding Path=NewFileCommand}" Gesture="Ctrl+N" />
         <KeyBinding Command="{Binding Path=OpenFileCommand}" Gesture="Ctrl+O" />

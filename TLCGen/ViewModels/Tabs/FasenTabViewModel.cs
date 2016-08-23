@@ -220,6 +220,15 @@ namespace TLCGen.ViewModels
             _MaxGroentijdenLijstVM.BuildMaxGroenMatrix();
         }
 
+        public void SetAllSelectedFasenValue(FaseCyclusViewModel o, string propName)
+        {
+            foreach(FaseCyclusViewModel fcvm in SelectedFaseCycli)
+            {
+                object value = o.GetType().GetProperty(propName).GetValue(o);
+                fcvm.GetType().GetProperty(propName).SetValue(fcvm, value);
+            }
+        }
+
         #endregion // Public Methods
 
         #region IHaveTemplates

@@ -3,10 +3,12 @@
   <Color x:Key="Color2">#FF000000</Color>
   <Color x:Key="Color3">#FFFFFF00</Color>
   <Color x:Key="Color4">#FFB3B3B3</Color>
+  <Color x:Key="Color5">#FF00FF00</Color>
   <SolidColorBrush x:Key="Color1Brush" Color="{DynamicResource Color1}" />
   <SolidColorBrush x:Key="Color2Brush" Color="{DynamicResource Color2}" />
   <SolidColorBrush x:Key="Color3Brush" Color="{DynamicResource Color3}" />
   <SolidColorBrush x:Key="Color4Brush" Color="{DynamicResource Color4}" />
+  <SolidColorBrush x:Key="Color5Brush" Color="{DynamicResource Color5}" />
   <Geometry x:Key="CloseFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.53375L346,505.53375 350,501.53375 356,501.53375 356,515.53375z</Geometry>
   <Geometry x:Key="CloseFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M350.18447,514.45361L355.19874,509.43933</Geometry>
   <Geometry x:Key="CloseFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M350.18446,509.43933L355.19874,514.45361</Geometry>
@@ -107,6 +109,29 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="SaveAsFileIconDrawingImage" Drawing="{StaticResource SaveAsFileIconDrawingGroup}" />
+  <Geometry x:Key="AppIconGeometry1">F1 M32,32z M0,0z M8.5979462,931.74042C8.5979388,933.2248 8.7639543,934.70918 9.095993,936.19354 9.4280161,937.67792 9.9130417,939.10045 10.551071,940.46112 11.189082,941.8218 11.976842,943.1076 12.914352,944.31854 13.85184,945.52948 14.919547,946.60369 16.117477,947.5412L13.637009,950.02167C12.243769,948.92791 11.006791,947.68768 9.9260712,946.30096 8.8453344,944.91424 7.9403874,943.43313 7.2112274,941.8576 6.4820555,940.28209 5.9221603,938.64146 5.5315399,936.93573 5.140911,935.23001 4.9455987,933.49824 4.9456024,931.74042 4.9455987,929.98262 5.140911,928.24759 5.5315399,926.53534 5.9221603,924.82312 6.4820555,923.18249 7.2112274,921.61346 7.9403874,920.04448 8.8453344,918.56661 9.9260712,917.17987 11.006791,915.79318 12.243769,914.55295 13.637009,913.45917L16.117477,915.93964C14.919547,916.86414 13.85184,917.9351 12.914352,919.15253 11.976842,920.37 11.189082,921.65906 10.551071,923.01971 9.9130417,924.38041 9.4280161,925.79968 9.095993,927.27753 8.7639543,928.75541 8.5979388,930.24303 8.5979462,931.74042z</Geometry>
+  <Geometry x:Key="AppIconGeometry2">F1 M32,32z M0,0z M55.980759,931.77948C55.980748,930.2821 55.814732,928.79447 55.482712,927.31659 55.15067,925.83874 54.665645,924.41947 54.027634,923.05878 53.389604,921.69812 52.601845,920.40906 51.664352,919.19159 50.726847,917.97417 49.659139,916.9032 48.461227,915.9787L50.941696,913.49823C52.334918,914.59201 53.56213,915.83224 54.623337,917.21893 55.684524,918.60568 56.589471,920.08354 57.338181,921.65253 58.086865,923.22156 58.656526,924.86218 59.047165,926.5744 59.437776,928.28666 59.633088,930.02168 59.633102,931.77948 59.633088,933.5373 59.437776,935.26907 59.047165,936.97479 58.656526,938.68053 58.086865,940.32115 57.338181,941.89667 56.589471,943.47219 55.684524,944.95331 54.623337,946.34003 53.56213,947.72674 52.334918,948.96697 50.941696,950.06073L48.461227,947.58026C49.659139,946.64276 50.726847,945.56854 51.664352,944.3576 52.601845,943.14667 53.389604,941.86086 54.027634,940.50018 54.665645,939.13951 55.15067,937.71699 55.482712,936.2326 55.814732,934.74824 55.980748,933.26386 55.980759,931.77948z</Geometry>
+  <Geometry x:Key="AppIconGeometry3">F1 M32,32z M0,0z M24.62835,957.29663L42.50404,931.75993 34.84303,931.75993 39.95037,906.22323 22.07468,931.75993 29.73569,931.75993z</Geometry>
+  <SolidColorBrush x:Key="AppIconColor1Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="AppIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <SolidColorBrush x:Key="AppIconColor3Brush" Color="{Binding Color, Source={StaticResource Color5Brush}}" />
+  <SolidColorBrush x:Key="AppIconColor4Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <DrawingGroup x:Key="AppIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,0,-1020.3622">
+      <DrawingGroup Transform="0.57531266,0,0,0.57531266,-2.5764731,500.30892">
+        <DrawingGroup>
+          <GeometryDrawing Brush="{DynamicResource AppIconColor1Brush}" Geometry="{StaticResource AppIconGeometry1}" />
+          <GeometryDrawing Brush="{DynamicResource AppIconColor2Brush}" Geometry="{StaticResource AppIconGeometry2}" />
+        </DrawingGroup>
+        <GeometryDrawing Brush="{DynamicResource AppIconColor3Brush}" Geometry="{StaticResource AppIconGeometry3}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="{DynamicResource AppIconColor4Brush}" Thickness="2.74213123" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Round" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="AppIconDrawingImage" Drawing="{StaticResource AppIconDrawingGroup}" />
   <Geometry x:Key="SaveFileIconGeometry1">F0 M15.999999,15.999999z M0,0z M346,515.36221L346,505.36221 350,501.36221 356,501.36221 356,515.36221z</Geometry>
   <Geometry x:Key="SaveFileIconGeometry2">F0 M15.999999,15.999999z M0,0z M357.13545,521.73586L357.17295,512.15909</Geometry>
   <Geometry x:Key="SaveFileIconGeometry3">F0 M15.999999,15.999999z M0,0z M353.37814,510.42815L348.62186,510.39385 351,515.05198z</Geometry>

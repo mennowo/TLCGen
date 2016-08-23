@@ -37,7 +37,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedValue="{Binding Path=Type}"
+                            <ComboBox SelectedValue="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}"
                                       Name="cb1"
                                       DisplayMemberPath="Description"
                                       SelectedValuePath="Value"

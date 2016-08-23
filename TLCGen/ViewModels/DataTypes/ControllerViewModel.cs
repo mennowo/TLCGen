@@ -201,7 +201,7 @@ namespace TLCGen.ViewModels
                 if (_SelectedTab != null)
                 {
                     // Save the conflict matrix if needed
-                    if (_SelectedTab.Header.ToString() == "Conflicten" &&
+                    if (_SelectedTab.Name == "ConflictenTab" &&
                         _ConflictMatrixVM.MatrixChanged)
                     {
                         string s = _ConflictMatrixVM.IsMatrixSymmetrical();
@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
                         _ConflictMatrixVM.SaveConflictMatrix();
                     }
                     // Update Fasen
-                    if (_SelectedTab.Header.ToString() == "Fasen")
+                    if (_SelectedTab.Name == "FasenTab")
                     {
                         DoUpdateFasen();
                     }
@@ -394,6 +394,20 @@ namespace TLCGen.ViewModels
                     return false;
             }
             return true;
+        }
+
+        bool IsSetting;
+        public void SetAllSelectedFasenValue(object o, string propName)
+        {
+            if (!IsSetting)
+            {
+                if (SelectedTab.Name == "FasenTab")
+                {
+                    IsSetting = true;
+                    FasenTabVM.SetAllSelectedFasenValue(o as FaseCyclusViewModel, propName);
+                }
+                IsSetting = false;
+            }
         }
 
         #endregion // Public methods

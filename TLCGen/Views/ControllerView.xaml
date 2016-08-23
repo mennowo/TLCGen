@@ -9,19 +9,19 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <TabControl SelectedItem="{Binding Path=SelectedTab}" SelectedIndex="{Binding Path=SelectedTabIndex}">
-            <TabItem Header="Algemeen">
+            <TabItem Header="Algemeen" Name="AlgemeenTab">
                 <local:ControllerDataView DataContext="{Binding Path=ControllerDataVM}" />
             </TabItem>
-            <TabItem Header="Fasen">
+            <TabItem Header="Fasen" Name="FasenTab">
                 <local:FasenTab DataContext="{Binding Path=FasenTabVM}" />
             </TabItem>
-            <TabItem Header="Conflicten">
+            <TabItem Header="Conflicten" Name="ConflictenTab">
                 <local:ConflictMatrixTab DataContext="{Binding Path=ConflictMatrixVM}" />
             </TabItem>
-            <TabItem Header="Detectoren">
+            <TabItem Header="Detectoren" Name="DetectorenTab">
                 <local:DetectorenTab DataContext="{Binding Path=DetectorenTabVM}" />
             </TabItem>
-            <TabItem Header="Modules">
+            <TabItem Header="Modules" Name="ModulesTab">
                 <local:ModulesTab DataContext="{Binding Path=ModulesTabVM}" />
             </TabItem>
             <TabItem Header="Bitmap" Name="BitmapTab" IsEnabled="{Binding BitmapTabEnabled}">
