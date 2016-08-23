@@ -16,6 +16,13 @@
                 <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/MenuIcons.xaml" />
                 <ResourceDictionary>
                     <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
+                    <Style TargetType="Image">
+                        <Style.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -29,6 +36,8 @@
         <KeyBinding Command="{Binding Path=SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding Path=SaveAsFileCommand}" Gesture="Ctrl+Shift+S" />
         <KeyBinding Command="{Binding Path=CloseFileCommand}" Gesture="Ctrl+F4" />
+        <KeyBinding Command="{Binding Path=GenerateCCOLCommand}" Gesture="Ctrl+G" />
+        <KeyBinding Command="{Binding Path=ShowAboutCommand}" Gesture="F1" />
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -41,32 +50,44 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" InputGestureText="Ctrl+N">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource NewFileIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource NewFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Open" Command="{Binding Path=OpenFileCommand}" InputGestureText="Ctrl+O" >
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource OpenFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="_Save" Command="{Binding Path=SaveFileCommand}" InputGestureText="Ctrl+S">
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource SaveFileIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource SaveFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Save _As" Command="{Binding Path=SaveAsFileCommand}" InputGestureText="Ctrl+Shift+S" >
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource SaveAsFileIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource SaveAsFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Background="Transparent" Header="Close" Command="{Binding Path=CloseFileCommand}" InputGestureText="Ctrl+F4" >
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource CloseFileIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource CloseFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Background="Transparent" Header="Exit" Command="{Binding Path=ExitApplicationCommand}" InputGestureText="Alt+F4" >
                     <MenuItem.Icon>
-                        <Image Source="{StaticResource ExitApplicationIconDrawingImage}" />
+                        <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource ExitApplicationIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -76,25 +97,31 @@
                     <MenuItem Header="Tab.c file (in bestaande regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" />
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" />
+            </MenuItem>
         </Menu>
         <ToolBarTray Grid.Row="1">
             <ToolBar>
                 <Button Command="{Binding Path=NewFileCommand}" ToolTip="Nieuwe regeling (Ctrl-N)">
-                    <Image Source="{StaticResource NewFileIconDrawingImage}" />
+                    <Image Source="{StaticResource NewFileIconDrawingImage}" Width="16" Height="16" />
                 </Button>
                 <Button Command="{Binding Path=OpenFileCommand}" ToolTip="Openen regeling (Ctrl-O)">
-                    <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                    <Image Source="{StaticResource OpenFileIconDrawingImage}" Width="16" Height="16" />
                 </Button>
                 <Button Command="{Binding Path=SaveFileCommand}" ToolTip="Opslaan regeling (Ctrl-S)">
-                    <Image Source="{StaticResource SaveFileIconDrawingImage}" />
+                    <Image Source="{StaticResource SaveFileIconDrawingImage}" Width="16" Height="16" />
+                </Button>
+                <Button Command="{Binding Path=SaveAsFileCommand}" ToolTip="Opslaan regeling (Ctrl-S)">
+                    <Image Source="{StaticResource SaveAsFileIconDrawingImage}" Width="16" Height="16"/>
                 </Button>
                 <Button Command="{Binding Path=CloseFileCommand}" ToolTip="Sluiten regeling (Ctrl-F4)">
-                    <Image Source="{StaticResource CloseFileIconDrawingImage}" />
+                    <Image Source="{StaticResource CloseFileIconDrawingImage}" Width="16" Height="16" />
                 </Button>
             </ToolBar>
             <ToolBar>
-                <Button Command="{Binding Path=GenerateCCOLCommand}" ToolTip="Genereren CCOL code (Ctrl-G)">
-                    <Image Source="{StaticResource OpenFileIconDrawingImage}" />
+                <Button Command="{Binding Path=GenerateCCOLCommand}" ToolTip="Genereren CCOL code (Ctrl-G)" >
+                    <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16" />
                 </Button>
             </ToolBar>
         </ToolBarTray>

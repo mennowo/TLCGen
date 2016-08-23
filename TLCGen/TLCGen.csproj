@@ -98,6 +98,9 @@
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Dialogs\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\ApplyTemplateWindow.xaml.cs">
       <DependentUpon>ApplyTemplateWindow.xaml</DependentUpon>
     </Compile>
@@ -188,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

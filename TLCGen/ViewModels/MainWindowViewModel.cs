@@ -159,9 +159,29 @@ namespace TLCGen.ViewModels
             }
         }
 
+        RelayCommand _ShowAboutCommand;
+        public ICommand ShowAboutCommand
+        {
+            get
+            {
+                if (_ShowAboutCommand == null)
+                {
+                    _ShowAboutCommand = new RelayCommand(ShowAboutCommand_Executed, null);
+                }
+                return _ShowAboutCommand;
+            }
+        }
+
+
         #endregion // Commands
 
         #region Command functionality
+
+        private void ShowAboutCommand_Executed(object obj)
+        {
+            TLCGen.Views.AboutWindow about = new Views.AboutWindow();
+            about.ShowDialog();
+        }
 
         void NewFileCommand_Executed(object prm)
         {
