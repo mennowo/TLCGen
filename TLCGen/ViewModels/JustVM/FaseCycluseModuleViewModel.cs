@@ -57,9 +57,9 @@ namespace TLCGen.ViewModels
             {
                 if (_ModuleVM != null)
                 {
-                    foreach (FaseCyclusModuleViewModel fcmvm in _ModuleVM.Fasen)
+                    foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
-                        if (this.IsFaseConflicting(fcmvm))
+                        if (this.IsFaseConflicting(mfcvm))
                             return false;
                     }
                 }
@@ -73,9 +73,9 @@ namespace TLCGen.ViewModels
             {
                 if (_ModuleVM != null)
                 {
-                    foreach (FaseCyclusModuleViewModel fcmvm in _ModuleVM.Fasen)
+                    foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
-                        if (fcmvm.Define == this.Define)
+                        if (mfcvm.FaseCyclusDefine == this.Define)
                             return true;
                     }
                 }
@@ -110,6 +110,16 @@ namespace TLCGen.ViewModels
             foreach(ConflictViewModel cvm in fcmvm.Conflicten)
             {
                 if (cvm.FaseNaar == this.Define)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsFaseConflicting(ModuleFaseCyclusViewModel mfcvm)
+        {
+            foreach (ConflictViewModel cvm in this.Conflicten)
+            {
+                if (cvm.FaseNaar == mfcvm.FaseCyclusDefine)
                     return true;
             }
             return false;

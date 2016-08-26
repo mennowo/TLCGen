@@ -85,7 +85,7 @@ namespace TLCGen.ViewModels
             MaxGroentijdModel mgm = new MaxGroentijdModel();
             mgm.FaseCyclus = fasedefine;
             mgm.Waarde = 0;
-            MaxGroentijdenSetList.Add(new MaxGroentijdViewModel(mgm));
+            MaxGroentijdenSetList.Add(new MaxGroentijdViewModel(_ControllerVM, mgm));
         }
 
         public void RemoveFase(string fasedefine)
@@ -115,7 +115,7 @@ namespace TLCGen.ViewModels
 
             foreach(MaxGroentijdModel mgm in mgsm.MaxGroentijden)
             {
-                MaxGroentijdViewModel mgvm = new MaxGroentijdViewModel(mgm);
+                MaxGroentijdViewModel mgvm = new MaxGroentijdViewModel(_ControllerVM, mgm);
                 MaxGroentijdenSetList.Add(mgvm);
             }
 

@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:re="clr-namespace:TLCGen.Views.Resources"
+             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+             
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="AliceBlue">
@@ -82,7 +84,18 @@
                             </WrapPanel>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Voorvoegsels">
+                    <TabItem Header="Visual project">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ComboBox ItemsSource="{Binding Generators}" DisplayMemberPath="Naam" Name="test" />
+                            <xc:PropertyGrid Grid.Row="1" SelectedObject="{Binding ElementName=test,Path=SelectedItem}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                        </Grid>
+                        <!--<local:VisualProjectDataView DataContext="{Binding Path=VisualProjectDataVM}" />-->
+                    </TabItem>
+                    <TabItem Header="Instellingen">
                         <local:SettingsDataGrid SettingsList="{Binding Path=PrefixSettingsList,UpdateSourceTrigger=PropertyChanged}" />
                     </TabItem>
                 </TabControl>

@@ -57,6 +57,30 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -73,11 +97,15 @@
     <Compile Include="ViewModels\DataTypes\ControllerViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\FaseCyclusViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\IGeneratorViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdenSetViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\ModuleFaseCyclusViewModel.cs" />
+    <Compile Include="ViewModels\DataTypes\ModuleMolenViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ModuleViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\VersieViewModel.cs" />
     <Compile Include="ViewModels\JustVM\BitmappedItemViewModel.cs" />
     <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
+    <Compile Include="ViewModels\JustVM\ModulesTabFasenLijstViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdViewModel.cs" />
     <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
@@ -98,6 +126,12 @@
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DataTypes\IGeneratorView.xaml.cs">
+      <DependentUpon>IGeneratorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
+      <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -109,6 +143,12 @@
     </Compile>
     <Compile Include="Views\Overviews\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\ModuleMolenOverView.xaml.cs">
+      <DependentUpon>ModuleMolenOverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Overviews\ModulesTabFasenLijstView.xaml.cs">
+      <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\SingleClickDataGridTemplateColumn.cs" />
     <Compile Include="Views\Resources\SpecialDataGrid.cs" />
@@ -194,6 +234,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DataTypes\IGeneratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataTypes\VisualProjectDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -207,6 +255,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Overviews\FasenToevVerw.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\ModuleMolenOverView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\ModulesTabFasenLijstView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -297,6 +353,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -327,6 +384,10 @@
       <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
       <Name>TLCGen.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Interfaces.Public.csproj">
+      <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
+      <Name>TLCGen.Interfaces.Public</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">
       <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
       <Name>TLCGen.Interfaces</Name>
@@ -346,7 +407,16 @@
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\visualprojecttemplate.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

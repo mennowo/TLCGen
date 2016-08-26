@@ -41,8 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCOLCodeGenerator.cs" />
+    <Compile Include="CollectElements.cs" />
+    <Compile Include="GenerateSysH.cs" />
+    <Compile Include="GenerateTabC.cs" />
+    <Compile Include="GenerateRegAdd.cs" />
     <Compile Include="GenerateRegC.cs" />
     <Compile Include="General.cs" />
+    <Compile Include="GenerateVSProject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

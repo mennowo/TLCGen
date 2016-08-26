@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
+using TLCGen.Interfaces.Public;
 using TLCGen.Models;
 using TLCGen.Models.Settings;
 
@@ -19,6 +22,7 @@ namespace TLCGen.ViewModels
         private ControllerViewModel _ControllerVM;
         private ControllerDataModel _ControllerData;
         private VersieViewModel _SelectedVersie;
+        private ObservableCollection<IGenerator> _Generators;
 
         #endregion // Fields
 
@@ -113,6 +117,18 @@ namespace TLCGen.ViewModels
                     _Versies = new ObservableCollection<VersieViewModel>();
                 }
                 return _Versies;
+            }
+        }
+
+        public ObservableCollection<IGenerator> Generators
+        {
+            get
+            {
+                if (_Generators == null)
+                {
+                    _Generators = new ObservableCollection<IGenerator>();
+                }
+                return _Generators;
             }
         }
 
@@ -215,6 +231,101 @@ namespace TLCGen.ViewModels
                 Versies.Add(vvm);
             }
             Versies.CollectionChanged += Versies_CollectionChanged;
+
+
+            try
+            {
+                string path = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Generators\\");
+                if (Directory.Exists(path))
+                {
+                    // Find all Generator DLL's
+                    foreach (String file in Directory.GetFiles(path))
+                    {
+                        if (Path.GetExtension(file).ToLower() == ".dll")
+                        {
+                            // Find and loop all types from the Generators
+                            Assembly assemblyInstance = Assembly.LoadFrom(file);
+                            Type[] types = assemblyInstance.GetTypes();
+                            foreach(Type t in types)
+                            {
+                                // Find TLCGenGenerator attribute, and if found, continue
+                                TLCGenGeneratorAttribute genattr = (TLCGenGeneratorAttribute)Attribute.GetCustomAttribute(t, typeof(TLCGenGeneratorAttribute));
+                                if(genattr != null)
+                                {
+                                    // Cast the Generator to IGenerator so we can read its name
+                                    var generator = Activator.CreateInstance(t);
+                                    var igenerator = generator as IGenerator;
+                                    // Loop the settings data, to see if we have settings for this Generator
+                                    foreach (GeneratorDataModel gendata in _ControllerVM.Controller.CustomData.GeneratorsData)
+                                    {
+                                        if (gendata.Naam == igenerator.GetGeneratorName())
+                                        {
+                                            // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
+                                            var dllprops = t.GetProperties().Where(
+                                                prop => Attribute.IsDefined(prop, typeof(TLCGenGeneratorSettingAttribute)));
+                                            // Loop the saved settings, and load if applicable
+                                            foreach (GeneratorDataPropertyModel dataprop in gendata.Properties)
+                                            {
+                                                foreach (var propinfo in dllprops)
+                                                {
+                                                    // Only load here, if it is a controller specific setting
+                                                    TLCGenGeneratorSettingAttribute propattr = (TLCGenGeneratorSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenGeneratorSettingAttribute));
+                                                    if(propinfo.Name == dataprop.Naam)
+                                                    {
+                                                        if (propattr != null && propattr.SettingType == "controller")
+                                                        {
+                                                            try
+                                                            {
+                                                                string type = propinfo.PropertyType.ToString();
+                                                                switch (type)
+                                                                {
+                                                                    case "System.Double":
+                                                                        double d;
+                                                                        if (Double.TryParse(dataprop.Setting, out d))
+                                                                            propinfo.SetValue(generator, d);
+                                                                        break;
+                                                                    case "System.Int32":
+                                                                        int i32;
+                                                                        if (Int32.TryParse(dataprop.Setting, out i32))
+                                                                            propinfo.SetValue(generator, i32);
+                                                                        break;
+                                                                    case "System.String":
+                                                                        propinfo.SetValue(generator, dataprop.Setting);
+                                                                        break;
+                                                                    default:
+                                                                        throw new NotImplementedException();
+                                                                }
+                                                            }
+                                                            catch
+                                                            {
+                                                                System.Windows.MessageBox.Show("Error load generator settings.");
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // Add the generator to our list of available generators
+                                    Generators.Add(igenerator);
+                                    break;
+                                }
+                                else
+                                {
+                                    System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen genrator module.");
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                }
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion // Constructor

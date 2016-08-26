@@ -53,11 +53,16 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="Models\NaloopModel.cs" />
+    <Compile Include="Models\NonController\CustomDataModel.cs" />
+    <Compile Include="Models\NonController\GeneratorDataPropertyModel.cs" />
     <Compile Include="Models\Settings\ApplicationSettings.cs" />
     <Compile Include="Models\Settings\DefinePrefixSettings.cs" />
     <Compile Include="Models\Settings\IntSettingModel.cs" />
+    <Compile Include="Models\ModuleMolenModel.cs" />
+    <Compile Include="Models\ModuleFaseCyclusModel.cs" />
     <Compile Include="Models\Settings\SettingModelBase.cs" />
     <Compile Include="Models\Settings\StringSettingModel.cs" />
+    <Compile Include="Models\NonController\GeneratorDataModel.cs" />
     <Compile Include="Models\VersieModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -8,6 +8,7 @@ using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL
 {
+    [TLCGenGenerator]
     public class YATLCCLCCodeGenerator : IGenerator
     {
         #region IGenerator
@@ -48,6 +49,12 @@ namespace TLCGen.Generators.CCOL
         #region Private Methods
 
         #endregion // Private Methods
+
+        #region Properties
+
+        public string Test { get; set; }
+
+        #endregion // Properties
 
     }
 }

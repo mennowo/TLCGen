@@ -5,100 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
-             Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Label FontWeight="Bold" Content="Fasen" />
-            <ListView Grid.Row="1" Margin="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ItemsSource="{Binding Path=Fasen}" 
-                      SelectedItem="{Binding Path=SelectedFase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Grid.Column="0" TextAlignment="Center" Name="FaseTB">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=CanBeAddedToModule,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                            <Setter Property="Background" Value="Honeydew" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=CanBeAddedToModule,UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                            <Setter Property="Background" Value="Pink" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=IsInModule,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                            <Setter Property="Background" Value="PaleGoldenrod" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=NoModuleAvailable,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                            <Setter Property="Background" Value="LightGray" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                            <Hyperlink Foreground="Black" Command="{Binding ElementName=root,Path=DataContext.AddRemoveFaseCommand}" CommandParameter="{Binding}">
-                                <Border Width="{Binding ElementName=FaseTB, Path=ActualWidth,UpdateSourceTrigger=PropertyChanged}" BorderBrush="White" BorderThickness="2">
-                                    <TextBlock Text="{Binding Path=Naam}" HorizontalAlignment="Stretch"  TextAlignment="Center" />
-                                </Border>
-                            </Hyperlink>
-                        </TextBlock>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+        <Grid Grid.Column="0" Grid.Row="0">
+            <local:ModulesTabFasenLijstView DataContext="{Binding FasenLijstVM}" />
         </Grid>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label FontWeight="Bold" Content="Modules" />
-            <ListView Grid.Row="1" Margin="2" ItemsSource="{Binding Path=Modules}" SelectedItem="{Binding Path=SelectedModule}" >
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <ListView ItemsSource="{Binding Path=Fasen}" MinHeight="20" Background="Transparent">
-                                <ListView.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"></StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Background="Transparent" IsEnabled="False">
-                                            <TextBlock Text="{Binding}" Background="PaleGoldenrod" Margin="1" Padding="2" FontWeight="Bold">
-                                            </TextBlock>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <Border Background="AliceBlue" Opacity="0" />
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <WrapPanel Grid.Row="2" Orientation="Horizontal">
-                <Button Content="Module toev." Command="{Binding Path=AddModuleCommand}" Margin="2" />
-                <Button Content="Module verw." Command="{Binding Path=RemoveModuleCommand}" Margin="2" />
-            </WrapPanel>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" />
+        <Grid Grid.Column="2" Grid.Row="0">
+            <local:ModuleMolenOverView DataContext="{Binding ModuleMolenVM}" />
         </Grid>
     </Grid>
 </UserControl>

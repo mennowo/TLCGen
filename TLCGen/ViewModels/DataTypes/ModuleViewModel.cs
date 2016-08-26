@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
 
         private ModuleModel _Module;
         private ControllerViewModel _ControllerVM;
-        private ObservableCollection<FaseCyclusModuleViewModel> _Fasen;
+        private ObservableCollection<ModuleFaseCyclusViewModel> _Fasen;
 
         #endregion // Fields
 
@@ -39,13 +39,13 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<FaseCyclusModuleViewModel> Fasen
+        public ObservableCollection<ModuleFaseCyclusViewModel> Fasen
         {
             get
             {
                 if(_Fasen == null)
                 {
-                    _Fasen = new ObservableCollection<FaseCyclusModuleViewModel>();
+                    _Fasen = new ObservableCollection<ModuleFaseCyclusViewModel>();
                 }
                 return _Fasen;
             }
@@ -59,16 +59,16 @@ namespace TLCGen.ViewModels
         {
             if (e.NewItems != null && e.NewItems.Count > 0)
             {
-                foreach (FaseCyclusModuleViewModel fcmvm in e.NewItems)
+                foreach (ModuleFaseCyclusViewModel mfcvm in e.NewItems)
                 {
-                    _Module.Fasen.Add(fcmvm.Define);
+                    _Module.Fasen.Add(mfcvm.ModuleFaseCyclus);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
-                foreach (FaseCyclusModuleViewModel fcmvm in e.OldItems)
+                foreach (ModuleFaseCyclusViewModel mfcvm in e.OldItems)
                 {
-                    _Module.Fasen.Remove(fcmvm.Define);
+                    _Module.Fasen.Remove(mfcvm.ModuleFaseCyclus);
                 }
             }
             _ControllerVM.HasChanged = true;
@@ -78,17 +78,30 @@ namespace TLCGen.ViewModels
 
         #region Public Methods
 
-        public void RemoveFase(FaseCyclusModuleViewModel fc)
+        public void RemoveFase(ModuleFaseCyclusViewModel fc)
         {
-            FaseCyclusModuleViewModel _fc = null;
-            foreach (FaseCyclusModuleViewModel fc1 in Fasen)
+            ModuleFaseCyclusViewModel _fc = null;
+            foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
             {
-                if(fc1.Define == fc.Define)
+                if(fc1.FaseCyclusDefine == fc.FaseCyclusDefine)
                 {
                     _fc = fc1;
                 }
             }
             if(_fc != null) Fasen.Remove(_fc);
+        }
+
+        public void RemoveFase(string fcdefine)
+        {
+            ModuleFaseCyclusViewModel _fc = null;
+            foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
+            {
+                if (fc1.FaseCyclusDefine == fcdefine)
+                {
+                    _fc = fc1;
+                }
+            }
+            if (_fc != null) Fasen.Remove(_fc);
         }
 
         #endregion // Public Methods
@@ -100,17 +113,23 @@ namespace TLCGen.ViewModels
             _ControllerVM = controllervm;
             _Module = module;
 
-            foreach(string fc in module.Fasen)
+            foreach(ModuleFaseCyclusModel mfcm in module.Fasen)
             {
-                foreach(FaseCyclusViewModel fcvm in controllervm.Fasen)
+                // Create ViewModel
+                ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(_ControllerVM, mfcm);
+                
+                // Find the friendly name of the FaseCyclus
+                foreach(FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
                 {
-                    if(fcvm.Define == fc)
+                    if(fcvm.Define == mfcvm.FaseCyclusDefine)
                     {
-                        FaseCyclusModuleViewModel fcmvm = new FaseCyclusModuleViewModel(fcvm, this);
-                        Fasen.Add(fcmvm);
+                        mfcvm.FaseCyclusNaam = fcvm.Naam;
                         break;
                     }
                 }
+
+                // Add to list
+                Fasen.Add(mfcvm);
             }
             Fasen.CollectionChanged += Fasen_CollectionChanged;
         }

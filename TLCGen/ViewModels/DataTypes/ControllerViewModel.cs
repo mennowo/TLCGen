@@ -29,7 +29,6 @@ namespace TLCGen.ViewModels
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private ObservableCollection<DetectorViewModel> _Detectoren;
         private ObservableCollection<MaxGroentijdenSetViewModel> _MaxGroentijdenSets;
-        private ObservableCollection<ModuleViewModel> _Modules;
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
 
@@ -177,18 +176,6 @@ namespace TLCGen.ViewModels
                     _MaxGroentijdenSets = new ObservableCollection<MaxGroentijdenSetViewModel>();
                 }
                 return _MaxGroentijdenSets;
-            }
-        }
-
-        public ObservableCollection<ModuleViewModel> Modules
-        {
-            get
-            {
-                if (_Modules == null)
-                {
-                    _Modules = new ObservableCollection<ModuleViewModel>();
-                }
-                return _Modules;
             }
         }
 
@@ -482,25 +469,6 @@ namespace TLCGen.ViewModels
             HasChanged = true;
         }
 
-        private void Modules_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (ModuleViewModel mvm in e.NewItems)
-                {
-                    _Controller.Modules.Add(mvm.Module);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (ModuleViewModel mvm in e.OldItems)
-                {
-                    _Controller.Modules.Remove(mvm.Module);
-                }
-            }
-            HasChanged = true;
-        }
-
         #endregion // Collection Changed
 
         #region Constructor
@@ -526,17 +494,11 @@ namespace TLCGen.ViewModels
                 MaxGroentijdenSetViewModel mgvm = new MaxGroentijdenSetViewModel(this, mgm);
                 MaxGroentijdenSets.Add(mgvm);
             }
-            foreach (ModuleModel mm in _Controller.Modules)
-            {
-                ModuleViewModel mvm = new ModuleViewModel(this, mm);
-                Modules.Add(mvm);
-            }
 
             // Connect CollectionChanged event handlers
             Fasen.CollectionChanged += Fasen_CollectionChanged;
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             MaxGroentijdenSets.CollectionChanged += MaxGroentijdenSets_CollectionChanged;
-            Modules.CollectionChanged += Modules_CollectionChanged;
         }
 
         #endregion // Constructor

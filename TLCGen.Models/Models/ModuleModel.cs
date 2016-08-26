@@ -13,11 +13,11 @@ namespace TLCGen.Models
         public string Naam { get; set; }
 
         [XmlArrayItem(ElementName = "FaseCyclus")]
-        public List<string> Fasen { get; set; }
-
+        public List<ModuleFaseCyclusModel> Fasen { get; set; }
+        
         public ModuleModel()
         {
-            Fasen = new List<string>();
+            Fasen = new List<ModuleFaseCyclusModel>();
         }
     }
 }

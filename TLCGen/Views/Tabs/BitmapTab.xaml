@@ -16,23 +16,22 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
-                            <Grid Background="Transparent">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter Grid.Column="1" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" Margin="{TemplateBinding Padding}"  />
-                                <Border Width="12">
-                                    <Border.Background>
-                                        <VisualBrush Opacity="1.0" Stretch="None">
-                                            <VisualBrush.Visual>
-                                                <Path Name="path" Opacity="0.1" Data="M 0 5 L 3 10 10 0" Stroke="#FF3838BA" StrokeThickness="1.5"
-	                                                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
-                                            </VisualBrush.Visual>
-                                        </VisualBrush>
-                                    </Border.Background>
-                                </Border>
-                            </Grid>
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border Width="12">
+                                <Border.Background>
+                                    <VisualBrush Opacity="1.0" Stretch="None">
+                                        <VisualBrush.Visual>
+                                            <Path Name="path" Opacity="0.1" Data="M 0 5 L 3 10 10 0" Stroke="#FF3838BA" StrokeThickness="1.5"
+	                                                StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" />
+                                        </VisualBrush.Visual>
+                                    </VisualBrush>
+                                </Border.Background>
+                            </Border>
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="path" Property="Opacity" Value="1.0" />
@@ -56,9 +55,13 @@
         </Style>
         <DataTemplate x:Key="LVItemCheckBoxTemplate">
             <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
                 <CheckBox 
-                    Style="{StaticResource DiscreteCheckBoxStyle}"
-                    Content="{Binding Path=Naam}" IsChecked="{Binding Path=HasCoordinates}" />
+                    Style="{StaticResource DiscreteCheckBoxStyle}" IsChecked="{Binding Path=HasCoordinates}" />
+                <Label Grid.Column="1" Padding="0" Content="{Binding Path=Naam}" />
             </Grid>
         </DataTemplate>
     </UserControl.Resources>

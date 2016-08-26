@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Generators.CCOL;
 using TLCGen.Helpers;
+using TLCGen.Interfaces.Public;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -246,6 +248,7 @@ namespace TLCGen.ViewModels
                     }
                     ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
                 }
+                SaveGeneratorControllerSettingsToModel();
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 ControllerVM.UpdateTabsEnabled();
@@ -282,6 +285,7 @@ namespace TLCGen.ViewModels
             if (saveFileDialog.ShowDialog() == true)
             {
                 MyDataProvider.FileName = saveFileDialog.FileName;
+                SaveGeneratorControllerSettingsToModel();
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
@@ -339,6 +343,37 @@ namespace TLCGen.ViewModels
             if (ControllerHasChanged())
             {
                 e.Cancel = true;
+            }
+        }
+
+        void SaveGeneratorControllerSettingsToModel()
+        {
+            ControllerVM.Controller.CustomData.GeneratorsData.Clear();
+            foreach(IGenerator gen in ControllerVM.ControllerDataVM.Generators)
+            {
+                GeneratorDataModel gendata = new GeneratorDataModel();
+                gendata.Naam = gen.GetGeneratorName();
+                Type t = gen.GetType();
+                // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
+                var dllprops = t.GetProperties().Where(
+                    prop => Attribute.IsDefined(prop, typeof(TLCGenGeneratorSettingAttribute)));
+                foreach (PropertyInfo propertyInfo in dllprops)
+                {
+                    if (propertyInfo.CanRead)
+                    {
+                        TLCGenGeneratorSettingAttribute propattr = (TLCGenGeneratorSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenGeneratorSettingAttribute));
+                        if (propattr.SettingType == "controller")
+                        {
+                            string name = propertyInfo.Name;
+                            string value = propertyInfo.GetValue(gen, null).ToString();
+                            GeneratorDataPropertyModel prop = new GeneratorDataPropertyModel();
+                            prop.Naam = name;
+                            prop.Setting = value;
+                            gendata.Properties.Add(prop);
+                        }
+                    }
+                }
+                ControllerVM.Controller.CustomData.GeneratorsData.Add(gendata);
             }
         }
 

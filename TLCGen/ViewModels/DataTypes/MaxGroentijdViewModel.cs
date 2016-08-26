@@ -11,7 +11,8 @@ namespace TLCGen.ViewModels
     public class MaxGroentijdViewModel : ViewModelBase, IComparable
     {
         #region Fields
-        
+
+        private ControllerViewModel _ControllerVM;
         private MaxGroentijdModel _MaxGroentijd;
 
         #endregion // Fields
@@ -44,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _MaxGroentijd.Waarde = value;
-                OnPropertyChanged("Waarde");
+                OnMonitoredPropertyChanged("Waarde", _ControllerVM);
             }
         }
 
@@ -79,8 +80,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public MaxGroentijdViewModel(MaxGroentijdModel mgm)
+        public MaxGroentijdViewModel(ControllerViewModel controllervm, MaxGroentijdModel mgm)
         {
+            _ControllerVM = controllervm;
             _MaxGroentijd = mgm;
         }
 
