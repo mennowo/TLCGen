@@ -44,6 +44,8 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine();
             sb.Append(GenerateRegCSystemApplication(controller));
             sb.AppendLine();
+            sb.Append(GenerateRegCDumpApplication(controller));
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -92,8 +94,8 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine($"{tabspace}#endif");
             sb.AppendLine("#endif");
             sb.AppendLine();
-            //sb.AppendLine("    #include \"detectie.c\"");
-            //sb.AppendLine("    #include \"ccolfunc.c\"");
+            sb.AppendLine($"{tabspace}#include \"detectie.c\"");
+            sb.AppendLine($"{tabspace}#include \"ccolfunc.c\"");
             sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}reg.add\"");
 
             return sb.ToString();
@@ -157,7 +159,8 @@ namespace TLCGen.Generators.CCOL
                     sb.AppendLine($"{tabspace}aanvraag_detectie_prm_va_arg((count) {fcm.Define}, ");
                     foreach (DetectorModel dm in fcm.Detectoren)
                     {
-                        sb.AppendLine($"{tabspace}{tabspace}(va_count) {dm.Define}, (va_mulv) PRM[prm{dm.Define}], ");
+                        if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
+                            sb.AppendLine($"{tabspace}{tabspace}(va_count) {dm.Define}, (va_mulv) PRM[prm{dm.Define}], ");
                     }
                     sb.AppendLine($"{tabspace}{tabspace}(va_count) END);");
                 }
@@ -232,7 +235,7 @@ namespace TLCGen.Generators.CCOL
                     //    ++mper;
                     //}
                     sb.Append("".PadLeft(($"{tabspace}max_star_groentijden_va_arg(").Length));
-                    sb.AppendLine("(va_mulv) PRM[prmmg1{fcm.Naam}], (va_mulv) NG, (va_count) END);");
+                    sb.AppendLine($"(va_mulv) PRM[prmmg1{fcm.Naam}], (va_mulv) NG, (va_count) END);");
                 }
                 else
                 {
@@ -321,7 +324,7 @@ namespace TLCGen.Generators.CCOL
                     if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                     {
                         sb.Append("".PadLeft($"{tabspace}meetkriterium_prm_va_arg(".Length));
-                        sb.AppendLine($"(va_count){dm.Define}_1, (va_mulv)PRM[prmmk{dm.Define}_1],");
+                        sb.AppendLine($"(va_count){dm.Define}, (va_mulv)PRM[prmmk{dm.Define}],");
                     }
                 }
                 sb.Append("".PadLeft($"{tabspace}meetkriterium_prm_va_arg(".Length));
@@ -485,6 +488,52 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine();
             sb.AppendLine($"{tabspace}post_system_application();");
             sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCDumpApplication(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("#define ENDDUMP   21");
+            sb.AppendLine("");
+            sb.AppendLine("void dump_application(void)");
+            sb.AppendLine("{");
+            //sb.AppendLine("    if (!EXTRADUMP)");
+            //sb.AppendLine("      EXTRADUMP = 1;");
+            //sb.AppendLine("");
+            //sb.AppendLine($"{tabspace}switch (EXTRADUMP)");
+            //sb.AppendLine($"{tabspace}" + "{");
+            //sb.AppendLine($"{tabspace}case 1: /* dump_realisation timers */");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!SYNCDUMP)");
+            //sb.AppendLine($"{tabspace}{tabspace}" + "{");
+            //sb.AppendLine($"{tabspace}{tabspace}{tabspace}DUMP = ENDDUMP;");
+            //sb.AppendLine($"{tabspace}{tabspace}{tabspace}SYNCDUMP = 1;");
+            //sb.AppendLine($"{tabspace}{tabspace}" + "}");
+            //sb.AppendLine($"{tabspace}dump_realisation_timers();");
+            //sb.AppendLine($"{tabspace}if (!SYNCDUMP)");
+            //sb.AppendLine($"{tabspace}{tabspace}EXTRADUMP++;");
+            //sb.AppendLine($"{tabspace}else");
+            //sb.AppendLine($"{tabspace}" + "{");
+            //sb.AppendLine($"{tabspace}{tabspace}DUMP = ENDDUMP;");
+            //sb.AppendLine($"{tabspace}{tabspace}break;");
+            //sb.AppendLine($"{tabspace}" + "}");
+            //sb.AppendLine($"{tabspace}case 2: /* dump applicatiegegevens */");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"\nPlaats: {controller.Data.Stad}\n\");");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 25)) uber_puts(\"Kruispunt: {controller.Data.Naam}\n\");");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"         : {controller.Data.Straat1}\n\");");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 30)) uber_puts(\"         : {controller.Data.Straat2}\n\");");
+            //sb.AppendLine($"{tabspace}{tabspace}if (!waitterm((mulv) 25)) uber_puts(\"Werkadres: {controller.Data.Naam}\n\n\");");
+            //sb.AppendLine($"{tabspace}{tabspace}EXTRADUMP = 0;");
+            //sb.AppendLine($"{tabspace}{tabspace}break;");
+            //sb.AppendLine($"{tabspace}default:");
+            //sb.AppendLine($"{tabspace}{tabspace}break;");
+            //sb.AppendLine($"{tabspace}" + "}");
+            sb.AppendLine("");
+            sb.AppendLine($"{tabspace}post_dump_application();");
+            sb.AppendLine("}");
+
 
             return sb.ToString();
         }

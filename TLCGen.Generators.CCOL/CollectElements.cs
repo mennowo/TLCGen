@@ -61,6 +61,15 @@ namespace TLCGen.Generators.CCOL
 
         private void CollectAllCCOLElements(ControllerModel controller)
         {
+            AlleDetectoren = new List<DetectorModel>();
+            foreach(FaseCyclusModel fcm in controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                    AlleDetectoren.Add(dm);
+            }
+            foreach (DetectorModel dm in controller.Detectoren)
+                AlleDetectoren.Add(dm);
+
             Uitgangen = CollectAllUitgangen(controller);
             Ingangen = CollectAllIngangen(controller);
             HulpElementen = CollectAllHulpElementen(controller);
@@ -123,12 +132,12 @@ namespace TLCGen.Generators.CCOL
                 {
                     sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
                     sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
-                    if (!string.IsNullOrEmpty(data.CCOLSetting))
+                    if (!string.IsNullOrEmpty(data.CCOLSetting) && !string.IsNullOrEmpty(ce.Instelling))
                     {
                         sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
                         sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
                     }
-                    if (!string.IsNullOrEmpty(data.CCOLTType))
+                    if (!string.IsNullOrEmpty(data.CCOLTType) && !string.IsNullOrEmpty(ce.TType))
                     {
                         sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
                         sb.Append($" = {ce.TType};");
@@ -147,7 +156,13 @@ namespace TLCGen.Generators.CCOL
             data.CCOLCode = "US_code";
 
             // Collect everything
-            // TODO
+            data.Elements.Add(new CCOLElement() { Define = "ussegm1", Naam = "segm1" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm2", Naam = "segm2" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm3", Naam = "segm3" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm4", Naam = "segm4" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm5", Naam = "segm5" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm6", Naam = "segm6" });
+            data.Elements.Add(new CCOLElement() { Define = "ussegm7", Naam = "segm7" });
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "USMAX" });
@@ -163,6 +178,7 @@ namespace TLCGen.Generators.CCOL
             data.CCOLCode = "IS_code";
 
             // Collect everything
+            data.Elements.Add(new CCOLElement() { Define = "isfix", Naam = "fix" });
             // TODO
 
             // Add last, nameless element for maximum #define
@@ -176,9 +192,11 @@ namespace TLCGen.Generators.CCOL
         {
             CCOLElemListData data = new CCOLElemListData();
 
-            data.CCOLCode = "HE_code";
+            data.CCOLCode = "H_code";
 
             // Collect everything
+            data.Elements.Add(new CCOLElement() { Define = "hedummy", Naam = "dummy" });
+
             // TODO
 
             // Add last, nameless element for maximum #define
@@ -252,6 +270,8 @@ namespace TLCGen.Generators.CCOL
             data.CCOLCode = "SCH_code";
             data.CCOLSetting = "SCH";
 
+            data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = "1" });
+
             // Collect schwg
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
@@ -293,6 +313,21 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
+            // Alternatieven
+            if (controller.ModuleMolen.LangstWachtendeAlternatief)
+            {
+                // alternatieven wel/niet toestaan
+                foreach (FaseCyclusModel fcm in controller.Fasen)
+                {
+                    data.Elements.Add(new CCOLElement()
+                    {
+                        Define = $"schaltg{fcm.Naam}",
+                        Naam = $"altg{fcm.Naam}",
+                        Instelling = "1"
+                    });
+                }
+            }
+
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "SCHMAX" });
 
@@ -309,7 +344,7 @@ namespace TLCGen.Generators.CCOL
             data.CCOLTType = "C_type";
 
             // Collect everything
-            // TODO
+            data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "CTMAX" });
@@ -328,7 +363,121 @@ namespace TLCGen.Generators.CCOL
 
             // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = "240", TType = "TS_type" });
-            // TODO...
+
+            // Detectie aanvraag functie
+            foreach(DetectorModel dm in AlleDetectoren)
+            {
+                if (dm.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
+                    continue;
+
+                int set = 0;
+                switch(dm.Aanvraag)
+                {
+                    case Models.Enumerations.DetectorAanvraagTypeEnum.Uit:
+                        set = 0;
+                        break;
+                    case Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG:
+                        set = 1;
+                        break;
+                    case Models.Enumerations.DetectorAanvraagTypeEnum.Rood:
+                        set = 2;
+                        break;
+                    case Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel:
+                        set = 3;
+                        break;
+                }
+                data.Elements.Add(new CCOLElement() { Define = $"prmd{dm.Naam}", Naam = $"d{dm.Naam}", Instelling = $"{set}", TType = "0" });
+            }
+
+            // Detectie verlengkriterium
+            foreach (DetectorModel dm in AlleDetectoren)
+            {
+                if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
+                    continue;
+
+                int set = 0;
+                switch (dm.Verlengen)
+                {
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.Uit:
+                        set = 0;
+                        break;
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax:
+                        set = 1;
+                        break;
+                    //case Models.Enumerations.DetectorVerlengenTypeEnum.MK3:
+                    //    set = 2;
+                    //    break;
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.MK2:
+                        set = 3;
+                        break;
+                }
+                data.Elements.Add(new CCOLElement() { Define = $"prmmkd{dm.Naam}", Naam = $"mkd{dm.Naam}", Instelling = $"{set}", TType = "0" });
+            }
+
+            // Maxgroentijden
+            foreach(MaxGroentijdenSetModel mgset in controller.MaxGroentijdenSets)
+            {
+                foreach(MaxGroentijdModel mgm in mgset.MaxGroentijden)
+                {
+                    FaseCyclusModel thisfcm = null;
+                    foreach (FaseCyclusModel fcm in controller.Fasen)
+                    {
+                        if (fcm.Define == mgm.FaseCyclus)
+                        {
+                            thisfcm = fcm;
+                            break;
+                        }
+                    }
+                    if (thisfcm == null)
+                        throw new NotImplementedException($"Maxgroentijd voor niet bestaande fase {mgm.FaseCyclus} opgegeven.");
+
+                    data.Elements.Add(new CCOLElement()
+                    {
+                        Define = $"prm{mgset.Naam.ToLower()}{thisfcm.Naam}",
+                        Naam = $"mk{mgset.Naam.ToLower()}{thisfcm.Naam}",
+                        Instelling = $"{mgm.Waarde}", TType = "TE_type"
+                    });
+                }
+            }
+
+            // Vooruit realisaties
+            foreach (FaseCyclusModel fcm in controller.Fasen)
+            {
+                data.Elements.Add(new CCOLElement()
+                {
+                    Define = $"prmmlfpr{fcm.Naam}",
+                    Naam = $"mlfpr{fcm.Naam}",
+                    Instelling = "1",
+                    TType = "0"
+                });
+            }
+
+            // Alternatieven
+            if(controller.ModuleMolen.LangstWachtendeAlternatief)
+            {
+                // alternatieve max. groentijd
+                foreach (FaseCyclusModel fcm in controller.Fasen)
+                {
+                    data.Elements.Add(new CCOLElement()
+                    {
+                        Define = $"prmaltg{fcm.Naam}",
+                        Naam = $"altg{fcm.Naam}",
+                        Instelling = "60",
+                        TType = "TE_type"
+                    });
+                }
+                // alternatieve realisatieruimte
+                foreach (FaseCyclusModel fcm in controller.Fasen)
+                {
+                    data.Elements.Add(new CCOLElement()
+                    {
+                        Define = $"prmaltp{fcm.Naam}",
+                        Naam = $"altp{fcm.Naam}",
+                        Instelling = "60",
+                        TType = "TE_type"
+                    });
+                }
+            }
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "PRMMAX" });

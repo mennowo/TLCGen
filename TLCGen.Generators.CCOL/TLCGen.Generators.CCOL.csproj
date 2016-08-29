@@ -42,6 +42,11 @@
   <ItemGroup>
     <Compile Include="CCOLCodeGenerator.cs" />
     <Compile Include="CollectElements.cs" />
+    <Compile Include="GenerateSimAdd.cs" />
+    <Compile Include="GenerateTabAdd.cs" />
+    <Compile Include="GenerateSysAdd.cs" />
+    <Compile Include="GenerateDplAdd.cs" />
+    <Compile Include="GenerateSimC.cs" />
     <Compile Include="GenerateSysH.cs" />
     <Compile Include="GenerateDplC.cs" />
     <Compile Include="GenerateTabC.cs" />

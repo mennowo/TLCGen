@@ -73,6 +73,63 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
+        RelayCommand _GenerateSimulationValuesCommand;
+        public ICommand GenerateSimulationValuesCommand
+        {
+            get
+            {
+                if (_GenerateSimulationValuesCommand == null)
+                {
+                    _GenerateSimulationValuesCommand = new RelayCommand(GenerateSimulationValuesCommand_Executed, ChangeModuleCommand_CanExecute);
+                }
+                return _GenerateSimulationValuesCommand;
+            }
+        }
+
+        private bool ChangeModuleCommand_CanExecute(object obj)
+        {
+            return DetectorenAllesLijstVM != null && DetectorenAllesLijstVM.Detectoren != null && DetectorenAllesLijstVM.Detectoren.Count > 0;
+        }
+
+        private void GenerateSimulationValuesCommand_Executed(object obj)
+        {
+            Random rd = new Random();
+            int[] qs = { 25, 50, 100, 200 };
+            int qsmax = 4;
+
+            foreach (FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
+            {
+                int qthis = rd.Next(qsmax);
+                foreach(DetectorViewModel dvm in fcvm.Detectoren)
+                {
+                    dvm.Q1 = qs[qthis];
+                    int next = qthis + 1;
+                    if (next >= qsmax) next -= qsmax;
+                    dvm.Q2 = qs[next];
+                    ++next;
+                    if (next >= qsmax) next -= qsmax;
+                    dvm.Q3 = qs[next];
+                    ++next;
+                    if (next >= qsmax) next -= qsmax;
+                    dvm.Q4 = qs[next];
+                }
+            }
+            foreach (DetectorViewModel dvm in _ControllerVM.Detectoren)
+            {
+                int qthis = rd.Next(qsmax);
+                dvm.Q1 = qs[qthis];
+                int next = qthis + 1;
+                if (next >= qsmax) next -= qsmax;
+                dvm.Q2 = qs[next];
+                ++next;
+                if (next >= qsmax) next -= qsmax;
+                dvm.Q3 = qs[next];
+                ++next;
+                if (next >= qsmax) next -= qsmax;
+                dvm.Q4 = qs[next];
+            }
+        }
+
         #endregion // Commands
 
         #region Command functionality

@@ -41,7 +41,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
-            sb.AppendLine($"{tabspace}#define MLMAX1 {controller.ModuleMolen.Modules.Count} /* aantal modulen                        */");
+            sb.AppendLine($"{tabspace}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
             sb.AppendLine();
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");
@@ -100,7 +100,41 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* detectie */");
             sb.AppendLine("/* -------- */");
 
-            // TODO!!!
+            int pad1 = "FCMAX".Length;
+            foreach (FaseCyclusModel fcm in controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    if (dm.Define.Length > pad1) pad1 = dm.Define.Length;
+                }
+            }
+            foreach (DetectorModel dm in controller.Detectoren)
+            {
+                if (dm.Define.Length > pad1) pad1 = dm.Define.Length;
+            }
+            pad1 = pad1 + $"{tabspace}#define  ".Length;
+
+            int pad2 = controller.Fasen.Count.ToString().Length;
+
+            int index = 0;
+            foreach (FaseCyclusModel fcm in controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    sb.Append($"{tabspace}#define {dm.Define} ".PadRight(pad1));
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    ++index;
+                }
+            }
+            foreach (DetectorModel dm in controller.Detectoren)
+            {
+                sb.Append($"{tabspace}#define {dm.Define} ".PadRight(pad1));
+                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                ++index;
+            }
+            sb.Append($"{tabspace}#define DPMAX ".PadRight(pad1));
+            sb.Append($"{index.ToString()} ".PadLeft(pad2));
+            sb.AppendLine("/* aantal fasecycli */");
 
             return sb.ToString();
         }

@@ -19,9 +19,9 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
-            sb.Append(GenerateDplCIncludes(controller));
+            sb.Append(GenerateDplCExtraDefines(controller));
             sb.AppendLine();
-            sb.Append(GenerateDplCInOutExtra(controller));
+            sb.Append(GenerateDplCIncludes(controller));
             sb.AppendLine();
             sb.Append(GenerateDplCDisplayBackground(controller));
             sb.AppendLine();
@@ -43,7 +43,7 @@ namespace TLCGen.Generators.CCOL
             return sb.ToString();
         }
 
-        private string GenerateDplCInOutExtra(ControllerModel controller)
+        private string GenerateDplCExtraDefines(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
 

@@ -364,12 +364,20 @@ namespace TLCGen.ViewModels
                         TLCGenGeneratorSettingAttribute propattr = (TLCGenGeneratorSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenGeneratorSettingAttribute));
                         if (propattr.SettingType == "controller")
                         {
-                            string name = propertyInfo.Name;
-                            string value = propertyInfo.GetValue(gen, null).ToString();
-                            GeneratorDataPropertyModel prop = new GeneratorDataPropertyModel();
-                            prop.Naam = name;
-                            prop.Setting = value;
-                            gendata.Properties.Add(prop);
+                            try
+                            {
+
+                                string name = propertyInfo.Name;
+                                string value = propertyInfo.GetValue(gen, null).ToString();
+                                GeneratorDataPropertyModel prop = new GeneratorDataPropertyModel();
+                                prop.Naam = name;
+                                prop.Setting = value;
+                                gendata.Properties.Add(prop);
+                            }
+                            catch
+                            {
+
+                            }
                         }
                     }
                 }

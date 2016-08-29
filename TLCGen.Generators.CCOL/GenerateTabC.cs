@@ -126,6 +126,8 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
+            sb.Append(GenerateTabCControlParametersModulen(controller));
+            sb.AppendLine();
 
             sb.AppendLine("}");
 
@@ -247,24 +249,48 @@ namespace TLCGen.Generators.CCOL
                         sb.Append("    ");
                         sb.Append($"D_code[{dm.Define}] ".PadRight(pad1));
                         sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
-                        sb.Append($"TDB_max[{dm.Define}] ".PadRight(pad3));
-                        sb.Append($"= {dm.TDB}; ".PadRight(pad4));
-                        sb.Append($"TDH_max[{dm.Define}] ".PadRight(pad5));
-                        sb.AppendLine($"= {dm.TDH};");
+                        if (dm.TDB != null)
+                        {
+                            sb.Append($"TDB_max[{dm.Define}] ".PadRight(pad3));
+                            sb.Append($"= {dm.TDB}; ".PadRight(pad4));
+                        }
+                        if (dm.TDH != null)
+                        {
+                            sb.Append($"TDH_max[{dm.Define}] ".PadRight(pad5));
+                            sb.AppendLine($"= {dm.TDH};");
+                        }
 
-                        sb.Append("    ");
-                        sb.Append("".PadLeft(pad6));
-                        sb.Append($"TBG_max[{dm.Define}] ".PadRight(pad3));
-                        sb.Append($"= {dm.TBG}; ".PadRight(pad4));
-                        sb.Append($"TOG_max[{dm.Define}] ".PadRight(pad5));
-                        sb.AppendLine($"= {dm.TOG};");
+                        if (dm.TBG != null || dm.TOG != null)
+                        {
+                            sb.Append("    ");
+                            sb.Append("".PadLeft(pad6));
+                            if (dm.TBG != null)
+                            {
+                                sb.Append($"TBG_max[{dm.Define}] ".PadRight(pad3));
+                                sb.Append($"= {dm.TBG}; ".PadRight(pad4));
+                            }
+                            if (dm.TOG != null)
+                            {
+                                sb.Append($"TOG_max[{dm.Define}] ".PadRight(pad5));
+                                sb.AppendLine($"= {dm.TOG};");
+                            }
+                        }
 
-                        sb.Append("    ");
-                        sb.Append("".PadLeft(pad6));
-                        sb.Append($"TFL_max[{dm.Define}] ".PadRight(pad3));
-                        sb.Append($"= {dm.TFL}; ".PadRight(pad4));
-                        sb.Append($"CFL_max[{dm.Define}] ".PadRight(pad5));
-                        sb.AppendLine($"= {dm.CFL};");
+                        if (dm.TFL != null || dm.CFL != null)
+                        {
+                            sb.Append("    ");
+                            sb.Append("".PadLeft(pad6));
+                            if (dm.TFL != null)
+                            {
+                                sb.Append($"TFL_max[{dm.Define}] ".PadRight(pad3));
+                                sb.Append($"= {dm.TFL}; ".PadRight(pad4));
+                            }
+                            if (dm.CFL != null)
+                            {
+                                sb.Append($"CFL_max[{dm.Define}] ".PadRight(pad5));
+                                sb.AppendLine($"= {dm.CFL};");
+                            }
+                        }
                     }
                 }
             }
@@ -353,6 +379,25 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* ---------- */");
 
             sb.Append(GetAllElementsTabCLines(Parameters));
+
+            return sb.ToString();
+        }
+
+        private string GenerateTabCControlParametersModulen(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("/* modulen */");
+            sb.AppendLine("/* ------- */");
+
+            foreach(ModuleModel mm in controller.ModuleMolen.Modules)
+            {
+                foreach(ModuleFaseCyclusModel mfcm in mm.Fasen)
+                {
+                    sb.AppendLine($"{tabspace}PRML[{mm.Naam}][{mfcm.FaseCyclus}] = PRIMAIR;");
+                }
+                sb.AppendLine();
+            }
 
             return sb.ToString();
         }
