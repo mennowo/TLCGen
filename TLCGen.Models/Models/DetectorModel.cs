@@ -19,12 +19,14 @@ namespace TLCGen.Models
 
         public string Define { get; set; }
         public string Naam { get; set; }
-        public int TDB { get; set; }
-        public int TDH { get; set; }
-        public int TOG { get; set; }
-        public int TBG { get; set; }
-        public int TFL { get; set; }
-        public int CFL { get; set; }
+        public int? TDB { get; set; }
+        public int? TDH { get; set; }
+        public int? TOG { get; set; }
+        public int? TBG { get; set; }
+        public int? TFL { get; set; }
+        public int? CFL { get; set; }
+
+        public DetectorSimulatieModel Simulatie { get; set; }
 
         public DetectorTypeEnum Type { get; set; }
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
@@ -56,7 +58,7 @@ namespace TLCGen.Models
 
         public DetectorModel() : base()
         {
-            
+            Simulatie = new DetectorSimulatieModel();
         }
 
         #endregion // Constructor

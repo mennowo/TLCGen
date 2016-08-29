@@ -46,6 +46,7 @@
     <Compile Include="Models\ControllerDataModel.cs" />
     <Compile Include="Models\ControllerModel.cs" />
     <Compile Include="Models\DetectorModel.cs" />
+    <Compile Include="Models\DetectorSimulatieModel.cs" />
     <Compile Include="Models\FaseCyclusModel.cs" />
     <Compile Include="Models\IOElementModel.cs" />
     <Compile Include="Models\MaxGroentijdenSetModel.cs" />

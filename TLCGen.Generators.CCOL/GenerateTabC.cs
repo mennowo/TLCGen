@@ -200,12 +200,12 @@ namespace TLCGen.Generators.CCOL
 
             int defmax = 0;
             int namemax = 0;
-            int dbmax = 0;
-            int dhmax = 0;
-            int ogmax = 0;
-            int bgmax = 0;
-            int cflmax = 0;
-            int tflmax = 0;
+            int? dbmax = 0;
+            int? dhmax = 0;
+            int? ogmax = 0;
+            int? bgmax = 0;
+            int? cflmax = 0;
+            int? tflmax = 0;
 
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
@@ -215,12 +215,12 @@ namespace TLCGen.Generators.CCOL
                     {
                         if (dm.Define?.Length > defmax) defmax = dm.Define.Length;
                         if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
-                        if (dm.TDB > dbmax) dbmax = dm.TDB;
-                        if (dm.TDH > dhmax) dhmax = dm.TDH;
-                        if (dm.TOG > ogmax) ogmax = dm.TOG;
-                        if (dm.TBG > bgmax) bgmax = dm.TBG;
-                        if (dm.TFL > tflmax) tflmax = dm.TFL;
-                        if (dm.CFL > cflmax) cflmax = dm.CFL;
+                        if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
+                        if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
+                        if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
+                        if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
+                        if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
+                        if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
                     }
                 }
             }
@@ -234,7 +234,7 @@ namespace TLCGen.Generators.CCOL
             int pad1 = "D_code[] ".Length + defmax;
             int pad2 = "= \"\"; ".Length + namemax;
             int pad3 = "TDB_max[] ".Length + defmax;
-            int pad4 = "= ; ".Length + Math.Max(dbmax, bgmax);
+            int pad4 = "= ; ".Length + Math.Max(dbmax == null ? 0 : (int)dbmax, bgmax == null ? 0 : (int)bgmax);
             int pad5 = "TDH_max[] ".Length + defmax;
             int pad6 = pad1 + pad2;
 

@@ -50,6 +50,14 @@
                     <local:DetectorenLijstView Grid.Row="1" DataContext="{Binding Path=DetectorenAllesLijstVM}" ShowFaseCyclus="True" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Simulatie" Name="SimulatieTab">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <local:DetectorenSimulatieLijstView Grid.Row="1" DataContext="{Binding Path=DetectorenAllesLijstVM}" />
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

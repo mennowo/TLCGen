@@ -77,45 +77,45 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int TDB
+        public int? TDB
         {
             get { return _Detector.TDB; }
             set
             {
-                if (value >= 0)
+                if (value == null || value >= 0)
                     _Detector.TDB = value;
                 OnMonitoredPropertyChanged("TDB", _ControllerVM);
             }
         }
 
-        public int TDH
+        public int? TDH
         {
             get { return _Detector.TDH; }
             set
             {
-                if (value >= 0)
+                if (value == null || value >= 0)
                     _Detector.TDH = value;
                 OnMonitoredPropertyChanged("TDH", _ControllerVM);
             }
         }
 
-        public int TOG
+        public int? TOG
         {
             get { return _Detector.TOG; }
             set
             {
-                if (value >= 0)
+                if (value == null || value >= 0)
                     _Detector.TOG = value;
                 OnMonitoredPropertyChanged("TOG", _ControllerVM);
             }
         }
 
-        public int TBG
+        public int? TBG
         {
             get { return _Detector.TBG; }
             set
             {
-                if (value >= 0)
+                if (value == null || value >= 0)
                     _Detector.TBG = value;
                 OnMonitoredPropertyChanged("TBG", _ControllerVM);
             }
@@ -138,6 +138,46 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Verlengen = value;
                 OnMonitoredPropertyChanged("Verlengen", _ControllerVM);
+            }
+        }
+
+        public int Q1
+        {
+            get { return _Detector.Simulatie.Q1; }
+            set
+            {
+                _Detector.Simulatie.Q1 = value;
+                OnMonitoredPropertyChanged("Q1", _ControllerVM);
+            }
+        }
+
+        public int Q2
+        {
+            get { return _Detector.Simulatie.Q2; }
+            set
+            {
+                _Detector.Simulatie.Q2 = value;
+                OnMonitoredPropertyChanged("Q2", _ControllerVM);
+            }
+        }
+
+        public int Q3
+        {
+            get { return _Detector.Simulatie.Q3; }
+            set
+            {
+                _Detector.Simulatie.Q3 = value;
+                OnMonitoredPropertyChanged("Q3", _ControllerVM);
+            }
+        }
+
+        public int Q4
+        {
+            get { return _Detector.Simulatie.Q4; }
+            set
+            {
+                _Detector.Simulatie.Q4 = value;
+                OnMonitoredPropertyChanged("Q4", _ControllerVM);
             }
         }
 

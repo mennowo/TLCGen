@@ -141,6 +141,9 @@
     <Compile Include="Views\Dialogs\NewTemplateWindow.xaml.cs">
       <DependentUpon>NewTemplateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Overviews\DetectorenSimulatieLijstView.xaml.cs">
+      <DependentUpon>DetectorenSimulatieLijstView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Overviews\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
     </Compile>
@@ -253,6 +256,10 @@
     <Page Include="Views\Dialogs\NewTemplateWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Overviews\DetectorenSimulatieLijstView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Overviews\FasenToevVerw.xaml">
       <SubType>Designer</SubType>
