@@ -18,6 +18,9 @@ namespace TLCGen.Generators.CCOL
             public string Type { get; set; }
             public string TType { get; set; }
             public string Instelling { get; set; }
+            public string Commentaar { get; set; }
+            public int X { get; set; }
+            public int Y { get; set; }
         }
 
         internal class CCOLElemListData
@@ -68,25 +71,38 @@ namespace TLCGen.Generators.CCOL
             Parameters = CollectAllParameters(controller);
         }
 
-        private string GetAllElementsSysHLines(CCOLElemListData data, string defmax)
+        /// <summary>
+        /// Generates all "sys.h" lines for a given instance of CCOLElemListData.
+        /// The function loops all elements in the Elements member.
+        /// </summary>
+        /// <param name="data">The instance of CCOLElemListData to use for generation</param>
+        /// <param name="numberdefine">Optional: this string will be used as follows:
+        /// - if it is null, lines are generated like this: #define ElemName #
+        /// - if it is not null, it goes like this: #define ElemName (numberdefine + #)</param>
+        /// <returns></returns>
+        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null)
         {
             StringBuilder sb = new StringBuilder();
 
             int pad1 = data.DefineMaxWidth + $"{tabspace}#define  ".Length;
-            int _pad1 = defmax.Length + $"{tabspace}#define  ".Length;
-            if (_pad1 > pad1) pad1 = _pad1;
             int pad2 = data.Elements.Count.ToString().Length;
 
             int index = 0;
             foreach (CCOLElement elem in data.Elements)
             {
                 sb.Append($"{tabspace}#define {elem.Define} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                if (string.IsNullOrWhiteSpace(numberdefine))
+                {
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                }
+                else
+                {
+                    sb.Append($"({numberdefine} + ");
+                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($")");
+                }
                 ++index;
             }
-            sb.Append($"{tabspace}#define {defmax} ".PadRight(pad1));
-            sb.Append($"{index.ToString()}".PadLeft(pad2));
-            sb.AppendLine(" /* max */");
 
             return sb.ToString();
         }
@@ -103,19 +119,22 @@ namespace TLCGen.Generators.CCOL
 
             foreach (CCOLElement ce in data.Elements)
             {
-                sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
-                sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
-                if (!string.IsNullOrEmpty(data.CCOLSetting))
+                if (!string.IsNullOrWhiteSpace(ce.Naam))
                 {
-                    sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
-                    sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
+                    sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
+                    sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
+                    if (!string.IsNullOrEmpty(data.CCOLSetting))
+                    {
+                        sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
+                        sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
+                    }
+                    if (!string.IsNullOrEmpty(data.CCOLTType))
+                    {
+                        sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
+                        sb.Append($" = {ce.TType};");
+                    }
+                    sb.AppendLine();
                 }
-                if (!string.IsNullOrEmpty(data.CCOLTType))
-                {
-                    sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
-                    sb.Append($" = {ce.TType};");
-                }
-                sb.AppendLine();
             }
 
             return sb.ToString();
@@ -127,6 +146,12 @@ namespace TLCGen.Generators.CCOL
 
             data.CCOLCode = "US_code";
 
+            // Collect everything
+            // TODO
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "USMAX" });
+
             data.SetMax();
             return data;
         }
@@ -137,6 +162,12 @@ namespace TLCGen.Generators.CCOL
 
             data.CCOLCode = "IS_code";
 
+            // Collect everything
+            // TODO
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "ISMAX" });
+
             data.SetMax();
             return data;
         }
@@ -146,6 +177,12 @@ namespace TLCGen.Generators.CCOL
             CCOLElemListData data = new CCOLElemListData();
 
             data.CCOLCode = "HE_code";
+
+            // Collect everything
+            // TODO
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "HEMAX" });
 
             data.SetMax();
             return data;
@@ -158,6 +195,12 @@ namespace TLCGen.Generators.CCOL
             data.CCOLCode = "MM_code";
 
             data.Elements.Add(new CCOLElement() { Define = "mperiod", Naam = "PERIOD" });
+
+            // Collect everything
+            // TODO
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "MEMAX" });
 
             data.SetMax();
             return data;
@@ -194,6 +237,9 @@ namespace TLCGen.Generators.CCOL
                     data.Elements.Add(elem);
                 }
             }
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "TMMAX" });
 
             data.SetMax();
             return data;
@@ -247,6 +293,9 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "SCHMAX" });
+
             data.SetMax();
             return data;
         }
@@ -258,6 +307,12 @@ namespace TLCGen.Generators.CCOL
             data.CCOLCode = "C_code";
             data.CCOLSetting = "C_max";
             data.CCOLTType = "C_type";
+
+            // Collect everything
+            // TODO
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "CTMAX" });
 
             data.SetMax();
             return data;
@@ -271,7 +326,13 @@ namespace TLCGen.Generators.CCOL
             data.CCOLSetting = "PRM";
             data.CCOLTType = "PRM_type";
 
+            // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = "240", TType = "TS_type" });
+            // TODO...
+
+            // Add last, nameless element for maximum #define
+            data.Elements.Add(new CCOLElement() { Define = "PRMMAX" });
+
 
             data.SetMax();
             return data;

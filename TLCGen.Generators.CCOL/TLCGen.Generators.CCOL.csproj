@@ -43,6 +43,7 @@
     <Compile Include="CCOLCodeGenerator.cs" />
     <Compile Include="CollectElements.cs" />
     <Compile Include="GenerateSysH.cs" />
+    <Compile Include="GenerateDplC.cs" />
     <Compile Include="GenerateTabC.cs" />
     <Compile Include="GenerateRegAdd.cs" />
     <Compile Include="GenerateRegC.cs" />

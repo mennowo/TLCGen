@@ -88,22 +88,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
 
-            int pad1 = Uitgangen.DefineMaxWidth + $"{tabspace}#define  ".Length;
-            int pad2 = Uitgangen.Elements.Count.ToString().Length;
-
-            int index = 0;
-            foreach (CCOLElement elem in Uitgangen.Elements)
-            {
-                sb.Append($"{tabspace}#define {elem.Define} ".PadRight(pad1));
-                sb.Append($"(FCMAX + ");
-                sb.Append($"{index.ToString()}".PadLeft(pad2));
-                sb.AppendLine($")");
-                ++index;
-            }
-            sb.Append($"{tabspace}#define USMAX".PadRight(pad1));
-            sb.Append($"(FCMAX + ");
-            sb.Append($"{index.ToString()}".PadLeft(pad2));
-            sb.AppendLine($") /* aantal overige uitgangen */");
+            sb.Append(GetAllElementsSysHLines(Uitgangen, "FCMAX"));
 
             return sb.ToString();
         }
@@ -115,6 +100,8 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* detectie */");
             sb.AppendLine("/* -------- */");
 
+            // TODO!!!
+
             return sb.ToString();
         }
 
@@ -125,22 +112,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            int pad1 = Ingangen.DefineMaxWidth + $"{tabspace}#define  ".Length;
-            int pad2 = Ingangen.Elements.Count.ToString().Length;
-
-            int index = 0;
-            foreach (CCOLElement elem in Ingangen.Elements)
-            {
-                sb.Append($"{tabspace}#define {elem.Define} ".PadRight(pad1));
-                sb.Append($"(DPMAX + ");
-                sb.Append($"{index.ToString()}".PadLeft(pad2));
-                sb.AppendLine($")");
-                ++index;
-            }
-            sb.Append($"{tabspace}#define ISMAX ".PadRight(pad1));
-            sb.Append($"(DPMAX + ");
-            sb.Append($"{index.ToString()}".PadLeft(pad2));
-            sb.AppendLine($") /* aantal overige ingangen */");
+            sb.Append(GetAllElementsSysHLines(Ingangen, "DPMAX"));
 
             return sb.ToString();
         }
@@ -152,7 +124,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(HulpElementen, "HEMAX"));
+            sb.Append(GetAllElementsSysHLines(HulpElementen));
 
             return sb.ToString();
         }
@@ -164,7 +136,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
 
-            sb.Append(GetAllElementsSysHLines(GeheugenElementen, "MEMAX"));
+            sb.Append(GetAllElementsSysHLines(GeheugenElementen));
 
             return sb.ToString();
         }
@@ -176,7 +148,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Timers, "TMMAX"));
+            sb.Append(GetAllElementsSysHLines(Timers));
 
             return sb.ToString();
         }
@@ -188,7 +160,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Counters, "CTMAX"));
+            sb.Append(GetAllElementsSysHLines(Counters));
 
             return sb.ToString();
         }
@@ -200,7 +172,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
 
-            sb.Append(GetAllElementsSysHLines(Schakelaars, "SCHMAX"));
+            sb.Append(GetAllElementsSysHLines(Schakelaars));
 
             return sb.ToString();
         }
@@ -213,7 +185,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
 
-            sb.Append(GetAllElementsSysHLines(Parameters, "PRMMAX"));
+            sb.Append(GetAllElementsSysHLines(Parameters));
 
             return sb.ToString();
         }

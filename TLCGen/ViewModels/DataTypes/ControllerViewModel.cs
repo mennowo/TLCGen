@@ -436,14 +436,14 @@ namespace TLCGen.ViewModels
             {
                 foreach (DetectorViewModel dvm in e.NewItems)
                 {
-                    _Controller.Dectectoren.Add(dvm.Detector);
+                    _Controller.Detectoren.Add(dvm.Detector);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (DetectorViewModel dvm in e.OldItems)
                 {
-                    _Controller.Dectectoren.Remove(dvm.Detector);
+                    _Controller.Detectoren.Remove(dvm.Detector);
                 }
             }
             HasChanged = true;
@@ -484,7 +484,7 @@ namespace TLCGen.ViewModels
                 FaseCyclusViewModel fcvm = new FaseCyclusViewModel(this, fcm);
                 Fasen.Add(fcvm);
             }
-            foreach (DetectorModel dm in _Controller.Dectectoren)
+            foreach (DetectorModel dm in _Controller.Detectoren)
             {
                 DetectorViewModel dvm = new DetectorViewModel(this, dm);
                 Detectoren.Add(dvm);

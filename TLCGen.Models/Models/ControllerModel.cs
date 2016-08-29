@@ -26,7 +26,7 @@ namespace TLCGen.Models
         public List<FaseCyclusModel> Fasen { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
-        public List<DetectorModel> Dectectoren { get; set; }
+        public List<DetectorModel> Detectoren { get; set; }
 
         [XmlArrayItem(ElementName = "MaxGroentijdenSet")]
         public List<MaxGroentijdenSetModel> MaxGroentijdenSets { get; set; }
@@ -43,7 +43,7 @@ namespace TLCGen.Models
         {
             Data = new ControllerDataModel();
             Fasen = new List<FaseCyclusModel>();
-            Dectectoren = new List<DetectorModel>();
+            Detectoren = new List<DetectorModel>();
             MaxGroentijdenSets = new List<MaxGroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
             CustomData = new CustomDataModel();
