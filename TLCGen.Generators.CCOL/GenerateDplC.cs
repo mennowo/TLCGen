@@ -139,8 +139,8 @@ namespace TLCGen.Generators.CCOL
                 {
                     for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.Append($"{tabspace}X_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[0].X}; ");
-                        sb.Append($"Y_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[0].Y}; ");
+                        sb.Append($"{tabspace}X_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[i].X}; ");
+                        sb.Append($"Y_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[i].Y}; ");
                         sb.AppendLine($"NR_us[{fcm.Define}_{i}] = {fcm.Define};");
                     }
                 }
@@ -169,8 +169,8 @@ namespace TLCGen.Generators.CCOL
                     {
                         for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                         {
-                            sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[0].X}; ");
-                            sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[0].Y}; ");
+                            sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
+                            sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
                             sb.AppendLine($"NR_is[{dm.Define}_{i}] = {dm.Define};");
                         }
                     }
@@ -192,8 +192,8 @@ namespace TLCGen.Generators.CCOL
                 {
                     for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[0].X}; ");
-                        sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[0].Y}; ");
+                        sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
+                        sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
                         sb.AppendLine($"NR_is[{dm.Define}_{i}] = {dm.Define};");
                     }
                 }
