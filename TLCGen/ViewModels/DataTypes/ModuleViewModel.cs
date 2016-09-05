@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -131,6 +132,7 @@ namespace TLCGen.ViewModels
                 // Add to list
                 Fasen.Add(mfcvm);
             }
+            Fasen.BubbleSort();
             Fasen.CollectionChanged += Fasen_CollectionChanged;
         }
 

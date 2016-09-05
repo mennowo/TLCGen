@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
                 {
                     _TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
                         (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
-                         this, $@"{SettingsProvider.AppSettings.PrefixSettings.FaseCyclusDefinePrefix}([0-9])");
+                         this, $@"{SettingsProvider.GetFaseCyclusDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
                 }   
             }
             fcm.Naam = newname;
-            fcm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + newname;
+            fcm.Define = SettingsProvider.GetFaseCyclusDefinePrefix() + newname;
             FaseCyclusViewModel fcvm1 = new FaseCyclusViewModel(_ControllerVM, fcm);
             Fasen.Add(fcvm1);
         }

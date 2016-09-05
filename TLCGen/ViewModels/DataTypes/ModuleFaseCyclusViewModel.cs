@@ -8,7 +8,7 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class ModuleFaseCyclusViewModel : ViewModelBase
+    public class ModuleFaseCyclusViewModel : ViewModelBase, IComparable
     {
         #region Fields
 
@@ -62,6 +62,25 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            ModuleFaseCyclusViewModel fcvm = obj as ModuleFaseCyclusViewModel;
+            if (fcvm == null)
+                throw new NotImplementedException();
+            else
+            {
+                string myName = FaseCyclusDefine;
+                string hisName = fcvm.FaseCyclusDefine;
+                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+                return myName.CompareTo(hisName);
+            }
+        }
+
+        #endregion // IComparable
 
         #region Collection Changed
 

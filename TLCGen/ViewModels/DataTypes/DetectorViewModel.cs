@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models;
+using TLCGen.DataAccess;
 
 namespace TLCGen.ViewModels
 {
-    public class DetectorViewModel : ViewModelBase
+    public class DetectorViewModel : ViewModelBase, IComparable
     {
         #region Fields
 
@@ -58,7 +59,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementDefineUnique(value))
                 {
                     string oldname = _Detector.Define;
-                    _Detector.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix.Setting, "");
+                    _Detector.Naam = value.Replace(SettingsProvider.GetDetectorDefinePrefix(), "");
                     _Detector.Define = value;
                 }
                 OnMonitoredPropertyChanged("Define", _ControllerVM);
@@ -181,6 +182,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int Stopline
+        {
+            get { return _Detector.Simulatie.Stopline; }
+            set
+            {
+                _Detector.Simulatie.Stopline = value;
+                OnMonitoredPropertyChanged("Stopline", _ControllerVM);
+            }
+        }
+
+        public string FCNr
+        {
+            get { return _Detector.Simulatie.FCNr; }
+            set
+            {
+                _Detector.Simulatie.FCNr = value;
+                OnMonitoredPropertyChanged("FCNr", _ControllerVM);
+            }
+        }
+
         public bool IsLooseDetector
         {
             get
@@ -190,6 +211,25 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            DetectorViewModel fcvm = obj as DetectorViewModel;
+            if (fcvm == null)
+                throw new NotImplementedException();
+            else
+            {
+                string myName = Naam;
+                string hisName = fcvm.Naam;
+                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+                return myName.CompareTo(hisName);
+            }
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 

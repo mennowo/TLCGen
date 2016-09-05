@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TLCGen.DataAccess;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Interfaces;
 using TLCGen.Models;
@@ -36,6 +37,15 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTab = value;
+                foreach(FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
+                {
+                    fcvm.Detectoren.BubbleSort();
+                }
+                if(_SelectedTab.Name == "AllesTab")
+                {
+                    _DetectorenAllesLijstVM.SetDetectorenChanged();
+                }
+                _ControllerVM.Detectoren.BubbleSort();
                 OnPropertyChanged("SelectedTab");
             }
         }
@@ -48,7 +58,7 @@ namespace TLCGen.ViewModels
                 {
                     _TemplateManagerVM = new TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel>
                         (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\detectors\\"),
-                         this, $@"{SettingsProvider.AppSettings.PrefixSettings.DetectorDefinePrefix}([0-9])");
+                         this, $@"{SettingsProvider.GetDetectorDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }
@@ -94,8 +104,8 @@ namespace TLCGen.ViewModels
         private void GenerateSimulationValuesCommand_Executed(object obj)
         {
             Random rd = new Random();
-            int[] qs = { 25, 50, 100, 200 };
-            int qsmax = 4;
+            int[] qs = { 25, 50, 100, 200, 5, 25, 50, 200, 5, 50, 100, 200 };
+            int qsmax = 12;
 
             foreach (FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
             {
@@ -112,6 +122,20 @@ namespace TLCGen.ViewModels
                     ++next;
                     if (next >= qsmax) next -= qsmax;
                     dvm.Q4 = qs[next];
+
+                    switch(fcvm.Type)
+                    {
+                        case Models.Enumerations.FaseTypeEnum.Auto:
+                            dvm.Stopline = 1800;
+                            break;
+                        case Models.Enumerations.FaseTypeEnum.Fiets:
+                            dvm.Stopline = 5000;
+                            break;
+                        case Models.Enumerations.FaseTypeEnum.Voetganger:
+                            dvm.Stopline = 10000;
+                            break;
+                    }
+                    dvm.FCNr = fcvm.Define;
                 }
             }
             foreach (DetectorViewModel dvm in _ControllerVM.Detectoren)
@@ -127,6 +151,7 @@ namespace TLCGen.ViewModels
                 ++next;
                 if (next >= qsmax) next -= qsmax;
                 dvm.Q4 = qs[next];
+                dvm.Stopline = 1800;
             }
         }
 

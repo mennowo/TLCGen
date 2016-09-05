@@ -92,6 +92,7 @@
     <Compile Include="DataAccess\SettingsProvider.cs" />
     <Compile Include="DataAccess\DeserializeT.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
+    <Compile Include="ViewModels\App\TLCGenSettingsViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerDataViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerViewModel.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="ViewModels\JustVM\BitmappedItemViewModel.cs" />
     <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
     <Compile Include="ViewModels\JustVM\ModulesTabFasenLijstViewModel.cs" />
+    <Compile Include="ViewModels\JustVM\TLCGenStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdViewModel.cs" />
     <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
@@ -140,6 +142,9 @@
     </Compile>
     <Compile Include="Views\Dialogs\NewTemplateWindow.xaml.cs">
       <DependentUpon>NewTemplateWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\TLCGenSettingsWindow.xaml.cs">
+      <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\DetectorenSimulatieLijstView.xaml.cs">
       <DependentUpon>DetectorenSimulatieLijstView.xaml</DependentUpon>
@@ -213,6 +218,9 @@
     <Compile Include="Views\UserControls\SettingsDataGrid.xaml.cs">
       <DependentUpon>SettingsDataGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\TLCGenStatusBar.xaml.cs">
+      <DependentUpon>TLCGenStatusBar.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -254,6 +262,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Dialogs\NewTemplateWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\TLCGenSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -341,6 +353,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\TLCGenStatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -407,9 +423,6 @@
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />

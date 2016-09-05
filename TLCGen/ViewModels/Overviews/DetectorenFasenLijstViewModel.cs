@@ -7,6 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.DataAccess;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -146,12 +148,11 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            dm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + SelectedFase.Naam + newname;
+            dm.Define = SettingsProvider.GetDetectorDefinePrefix() + SelectedFase.Naam + newname;
             dm.Naam = SelectedFase.Naam + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(_ControllerVM, dm);
             dvm1.FaseVM = SelectedFase;
             SelectedFase.Detectoren.Add(dvm1);
-            _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
         }
 
         bool AddNewDetectorCommand_CanExecute(object prm)
@@ -174,12 +175,10 @@ namespace TLCGen.ViewModels
                 {
                     SelectedFase.Detectoren.Remove(dvm);
                 }
-                _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
             }
             else if (SelectedDetector != null)
             {
                 SelectedFase.Detectoren.Remove(SelectedDetector);
-                _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
             }
         }
 

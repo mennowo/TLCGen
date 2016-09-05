@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,6 +24,9 @@ namespace TLCGen.ViewModels
         private ControllerViewModel _ControllerVM;
         private DataProvider _MyDataProvider;
         private DataImporter _MyDataImporter;
+        private List<IGeneratorViewModel> _Generators;
+        private IGeneratorViewModel _SelectedGenerator;
+        private TLCGenSettingsViewModel _SettingsVM;
 
         #endregion // Fields
 
@@ -54,6 +58,19 @@ namespace TLCGen.ViewModels
             get { return _MyDataImporter; }
         }
 
+        public TLCGenSettingsViewModel SettingsVM
+        {
+            get
+            {
+                if(_SettingsVM == null)
+                {
+                    _SettingsVM = new TLCGenSettingsViewModel();
+                    _SettingsVM.LoadApplicationSettings();
+                }
+                return _SettingsVM;
+            }
+        }
+
         public string ProgramTitle
         {
             get
@@ -62,6 +79,28 @@ namespace TLCGen.ViewModels
                     return "TLCGen - " + MyDataProvider.FileName;
                 else
                     return "TLCGen";
+            }
+        }
+
+        public List<IGeneratorViewModel> Generators
+        {
+            get
+            {
+                if (_Generators == null)
+                {
+                    _Generators = new List<IGeneratorViewModel>();
+                }
+                return _Generators;
+            }
+        }
+
+        public IGeneratorViewModel SelectedGenerator
+        {
+            get { return _SelectedGenerator; }
+            set
+            {
+                _SelectedGenerator = value;
+                OnPropertyChanged("SelectedGenerator");
             }
         }
 
@@ -148,17 +187,50 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _GenerateCCOLCommand;
-        public ICommand GenerateCCOLCommand
+        RelayCommand _GenerateCommand;
+        public ICommand GenerateCommand
         {
             get
             {
-                if (_GenerateCCOLCommand == null)
+                if (_GenerateCommand == null)
                 {
-                    _GenerateCCOLCommand = new RelayCommand(GenerateCCOLCommand_Executed, GenerateCCOLCommand_CanExecute);
+                    _GenerateCommand = new RelayCommand(GenerateCommand_Executed, GenerateCommand_CanExecute);
                 }
-                return _GenerateCCOLCommand;
+                return _GenerateCommand;
             }
+        }
+
+        RelayCommand _GenerateVisualCommand;
+        public ICommand GenerateVisualCommand
+        {
+            get
+            {
+                if (_GenerateVisualCommand == null)
+                {
+                    _GenerateVisualCommand = new RelayCommand(GenerateVisualCommand_Executed, GenerateVisualCommand_CanExecute);
+                }
+                return _GenerateVisualCommand;
+            }
+        }
+
+        RelayCommand _ShowSettingsWindowCommand;
+        public ICommand ShowSettingsWindowCommand
+        {
+            get
+            {
+                if (_ShowSettingsWindowCommand == null)
+                {
+                    _ShowSettingsWindowCommand = new RelayCommand(ShowSettingsWindowCommand_Executed, null);
+                }
+                return _ShowSettingsWindowCommand;
+            }
+        }
+
+        private void ShowSettingsWindowCommand_Executed(object obj)
+        {
+            TLCGen.Views.Dialogs.TLCGenSettingsWindow settingswin = new Views.Dialogs.TLCGenSettingsWindow();
+            settingswin.DataContext = this;
+            settingswin.ShowDialog();
         }
 
         RelayCommand _ShowAboutCommand;
@@ -219,6 +291,7 @@ namespace TLCGen.ViewModels
                         OnPropertyChanged("ProgramTitle");
                         ControllerVM.DoUpdateFasen();
                         ControllerVM.UpdateTabsEnabled();
+                        ControllerVM.SetStatusText("regeling geopend");
                     }
                 }
             }
@@ -248,10 +321,10 @@ namespace TLCGen.ViewModels
                     }
                     ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
                 }
-                SaveGeneratorControllerSettingsToModel();
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 ControllerVM.UpdateTabsEnabled();
+                ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
 
@@ -285,11 +358,11 @@ namespace TLCGen.ViewModels
             if (saveFileDialog.ShowDialog() == true)
             {
                 MyDataProvider.FileName = saveFileDialog.FileName;
-                SaveGeneratorControllerSettingsToModel();
                 MyDataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.UpdateTabsEnabled();
+                ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
 
@@ -323,13 +396,24 @@ namespace TLCGen.ViewModels
             return true;
         }
 
-        void GenerateCCOLCommand_Executed(object prm)
+        void GenerateCommand_Executed(object prm)
         {
-            CCOLCodeGenerator generator = new CCOLCodeGenerator();
-            generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            string result = SelectedGenerator.Generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            ControllerVM.SetStatusText(result);
         }
 
-        bool GenerateCCOLCommand_CanExecute(object prm)
+        bool GenerateCommand_CanExecute(object prm)
+        {
+            return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+        }
+
+        void GenerateVisualCommand_Executed(object prm)
+        {
+            string result = SelectedGenerator.Generator.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            ControllerVM.SetStatusText(result);
+        }
+
+        bool GenerateVisualCommand_CanExecute(object prm)
         {
             return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
         }
@@ -338,31 +422,134 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        void MainWindow_Closing(object sender, CancelEventArgs e)
+        private void LoadAllGenerators()
+        {
+            try
+            {
+                string path = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Generators\\");
+                if (Directory.Exists(path))
+                {
+                    // Find all Generator DLL's
+                    foreach (String file in Directory.GetFiles(path))
+                    {
+                        if (Path.GetExtension(file).ToLower() == ".dll")
+                        {
+                            // Find and loop all types from the Generators
+                            Assembly assemblyInstance = Assembly.LoadFrom(file);
+                            Type[] types = assemblyInstance.GetTypes();
+                            foreach (Type t in types)
+                            {
+                                // Find TLCGenGenerator attribute, and if found, continue
+                                TLCGenGeneratorAttribute genattr = (TLCGenGeneratorAttribute)Attribute.GetCustomAttribute(t, typeof(TLCGenGeneratorAttribute));
+                                if (genattr != null)
+                                {
+                                    // Cast the Generator to IGenerator so we can read its name
+                                    var generator = Activator.CreateInstance(t);
+                                    var igenerator = generator as IGenerator;
+                                    // Loop the settings data, to see if we have settings for this Generator
+                                    foreach (GeneratorDataModel gendata in SettingsVM.Settings.CustomData.GeneratorsData)
+                                    {
+                                        if (gendata.Naam == igenerator.GetGeneratorName())
+                                        {
+                                            // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
+                                            var dllprops = t.GetProperties().Where(
+                                                prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
+                                            // Loop the saved settings, and load if applicable
+                                            foreach (GeneratorDataPropertyModel dataprop in gendata.Properties)
+                                            {
+                                                foreach (var propinfo in dllprops)
+                                                {
+                                                    // Only load here, if it is a controller specific setting
+                                                    TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenCustomSettingAttribute));
+                                                    if (propinfo.Name == dataprop.Naam)
+                                                    {
+                                                        if (propattr != null && propattr.SettingType == "application")
+                                                        {
+                                                            try
+                                                            {
+                                                                string type = propinfo.PropertyType.ToString();
+                                                                switch (type)
+                                                                {
+                                                                    case "System.Double":
+                                                                        double d;
+                                                                        if (Double.TryParse(dataprop.Setting, out d))
+                                                                            propinfo.SetValue(generator, d);
+                                                                        break;
+                                                                    case "System.Int32":
+                                                                        int i32;
+                                                                        if (Int32.TryParse(dataprop.Setting, out i32))
+                                                                            propinfo.SetValue(generator, i32);
+                                                                        break;
+                                                                    case "System.String":
+                                                                        propinfo.SetValue(generator, dataprop.Setting);
+                                                                        break;
+                                                                    default:
+                                                                        throw new NotImplementedException("False IGenerator property type: " + type);
+                                                                }
+                                                            }
+                                                            catch
+                                                            {
+                                                                System.Windows.MessageBox.Show("Error load generator settings.");
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // Add the generator to our list of available generators
+                                    Generators.Add(new IGeneratorViewModel(igenerator));
+                                    break;
+                                }
+                                else
+                                {
+                                    System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen genrator module.");
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                }
+            }
+            catch
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (ControllerHasChanged())
             {
                 e.Cancel = true;
             }
+            else
+            {
+                SaveGeneratorControllerSettingsToModel();
+                SettingsVM.SaveApplicationSettings();
+            }
         }
 
-        void SaveGeneratorControllerSettingsToModel()
+        private void SaveGeneratorControllerSettingsToModel()
         {
-            ControllerVM.Controller.CustomData.GeneratorsData.Clear();
-            foreach(IGenerator gen in ControllerVM.ControllerDataVM.Generators)
+            SettingsVM.Settings.CustomData.GeneratorsData.Clear();
+            foreach(IGeneratorViewModel genvm in Generators)
             {
+                IGenerator gen = genvm.Generator;
                 GeneratorDataModel gendata = new GeneratorDataModel();
                 gendata.Naam = gen.GetGeneratorName();
                 Type t = gen.GetType();
                 // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
                 var dllprops = t.GetProperties().Where(
-                    prop => Attribute.IsDefined(prop, typeof(TLCGenGeneratorSettingAttribute)));
+                    prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
                 foreach (PropertyInfo propertyInfo in dllprops)
                 {
                     if (propertyInfo.CanRead)
                     {
-                        TLCGenGeneratorSettingAttribute propattr = (TLCGenGeneratorSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenGeneratorSettingAttribute));
-                        if (propattr.SettingType == "controller")
+                        TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenCustomSettingAttribute));
+                        if (propattr.SettingType == "application")
                         {
                             try
                             {
@@ -381,7 +568,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                ControllerVM.Controller.CustomData.GeneratorsData.Add(gendata);
+                SettingsVM.Settings.CustomData.GeneratorsData.Add(gendata);
             }
         }
 
@@ -442,6 +629,9 @@ namespace TLCGen.ViewModels
         { 
             _MyDataProvider = new DataProvider();
             _MyDataImporter = new DataImporter(this);
+
+            LoadAllGenerators();
+            if (Generators.Count > 0) SelectedGenerator = Generators[0];
 
 #if DEBUG
             MyDataProvider.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";

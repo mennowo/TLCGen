@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace TLCGen.Generators.CCOL
 
         public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
         {
-            string result = "";
+            string result = "niets gegenereerd, dit is een placeholder/demo plugin!";
 
             return result;
         }
@@ -52,7 +53,17 @@ namespace TLCGen.Generators.CCOL
 
         #region Properties
 
-        public string Test { get; set; }
+        [DisplayName("YATLCCLC resources pad")]
+        [Description("YATLCCLC resources pad")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string YATLCCLCResPath { get; set; }
+
+        [DisplayName("Preprocessor definities")]
+        [Description("Preprocessor definities")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string YATLCCLCPreprocessorDefinitions { get; set; }
 
         #endregion // Properties
 

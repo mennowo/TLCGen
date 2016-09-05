@@ -11,6 +11,11 @@ namespace TLCGen.ViewModels
     {
         private IGenerator _Generator;
 
+        public IGenerator Generator
+        {
+            get { return _Generator; }
+        }
+
         public string Naam
         {
             get

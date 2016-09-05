@@ -21,6 +21,7 @@ namespace TLCGen.ViewModels
         private DetectorenTabViewModel _DetectorenTabVM;
         private ModulesTabViewModel _ModulesTabVM;
         private BitmapTabViewModel _BitmapTabVM;
+        private TLCGenStatusBarViewModel _StatusBarVM;
 
         private bool _HasChanged;
         private bool _IsSortingFasen;
@@ -110,6 +111,16 @@ namespace TLCGen.ViewModels
                     _BitmapTabVM = new BitmapTabViewModel(this);
                 }
                 return _BitmapTabVM;
+            }
+        }
+
+        public TLCGenStatusBarViewModel StatusBarVM
+        {
+            get
+            {
+                if (_StatusBarVM == null)
+                    _StatusBarVM = new TLCGenStatusBarViewModel();
+                return _StatusBarVM;
             }
         }
 
@@ -311,6 +322,13 @@ namespace TLCGen.ViewModels
 
         public void ChangeFaseDefine(FaseCyclusViewModel fcvm, string olddefine)
         {
+            foreach(DetectorViewModel dvm in fcvm.Detectoren)
+            {
+                if(!string.IsNullOrEmpty(dvm.FCNr))
+                {
+                    dvm.FCNr = fcvm.Define;
+                }
+            }
             foreach(FaseCyclusViewModel fcvm2 in Fasen)
             {
                 foreach(ConflictViewModel cvm in fcvm2.Conflicten)
@@ -395,6 +413,11 @@ namespace TLCGen.ViewModels
                 }
                 IsSetting = false;
             }
+        }
+
+        public void SetStatusText(string statustext)
+        {
+            StatusBarVM.StatusText = DateTime.Now.ToLongTimeString() + " -> " + statustext;
         }
 
         #endregion // Public methods

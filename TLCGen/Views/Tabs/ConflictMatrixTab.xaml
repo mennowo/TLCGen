@@ -6,10 +6,40 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+    <UserControl.Resources>
+        <local:SelectedTabToBoolConverter x:Key="Tab2VisConv" />
+    </UserControl.Resources>
+    <Grid>
         <!-- check later: -->
         <!-- http://paulstovell.com/blog/dynamic-datagrid -->
-        <local:ConflictMatrixDataGrid
-            ConflictMatrix="{Binding Path=ConflictMatrix}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
+        <TabControl TabStripPlacement="Left" SelectedItem="{Binding Path=SelectedTab}" Width="100" >
+            <TabItem Header="Ontruimingstijden" Name="OntruimingstijdenTab" />
+            <TabItem Header="Gar.ontr.tijden" Name="GarantieOntruimingstijdenTab" IsEnabled="{Binding Path=UseGarantieOntruimingsTijden}" />
+            <TabItem Header="Gelijkstarten" Name="GelijkstartenTab" Width="100"/>
+            <TabItem Header="Voorstarten" Name="VoorstartenTab" Width="100"/>
+            <TabItem Header="Nalopen" Name="NalopenTab" Width="100"/>
+        </TabControl>
+        <Border BorderBrush="Black" BorderThickness="0.25" Grid.Column="1" >
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,2,2,2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <local:ConflictMatrixDataGrid ConflictMatrix="{Binding Path=ConflictMatrix}" />
+                <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=OntruimingstijdenTab}" Grid.Row="1" >
+                    <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden}" Margin="2" />
+                </Grid>
+                <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=GarantieOntruimingstijdenTab}" Grid.Row="1" >
+                    <Button Content="Vullen met nullen (placeholder)" Command="{Binding SetGarantieValuesCommand}" Margin="2" />
+                </Grid>
+            </Grid>
+        </Border>
+        <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
     </Grid>
 </UserControl>

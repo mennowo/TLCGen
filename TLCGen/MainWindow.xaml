@@ -93,9 +93,23 @@
             </MenuItem>
             <MenuItem Header="_Tools">
                 <MenuItem Header="_Import...">
-                    <MenuItem Header="Tab.c file (nieuwe regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}" />
-                    <MenuItem Header="Tab.c file (in bestaande regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" />
+                    <MenuItem Header="Tab.c file (nieuwe regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}">
+                        <MenuItem.Icon>
+                            <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource ImportNewIconDrawingImage}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Tab.c file (in bestaande regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" >
+                        <MenuItem.Icon>
+                            <Image 
+                            Width="16" Height="16"
+                            Source="{StaticResource ImportExistingIconDrawingImage}" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
+                <Separator />
+                <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" />
@@ -120,7 +134,19 @@
                 </Button>
             </ToolBar>
             <ToolBar>
-                <Button Command="{Binding Path=GenerateCCOLCommand}" ToolTip="Genereren CCOL code (Ctrl-G)" >
+                <Button Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}" ToolTip="Importeren uit tab.c file (nieuwe regeling)" >
+                    <Image Source="{StaticResource ImportNewIconDrawingImage}" Width="16" Height="16" />
+                </Button>
+                <Button Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" ToolTip="Importeren uit tab.c file (bestaande regeling)" >
+                    <Image Source="{StaticResource ImportExistingIconDrawingImage}" Width="16" Height="16" />
+                </Button>
+            </ToolBar>
+            <ToolBar>
+                <ComboBox ItemsSource="{Binding Generators}" SelectedItem="{Binding SelectedGenerator,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Naam" />
+                <Button Command="{Binding Path=GenerateCommand}" ToolTip="Genereren CCOL code (Ctrl-G)" >
+                    <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16" />
+                </Button>
+                <Button Command="{Binding Path=GenerateVisualCommand}" ToolTip="Genereren Visual project file" >
                     <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16" />
                 </Button>
             </ToolBar>
@@ -128,5 +154,6 @@
         <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}">
             <vw:ControllerView DataContext="{Binding Path=ControllerVM}" />
         </Grid>
+        <vw:TLCGenStatusBar Grid.Row="3" DataContext="{Binding Path=ControllerVM.StatusBarVM}" />
     </Grid>
 </Window>

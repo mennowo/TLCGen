@@ -23,6 +23,7 @@ namespace TLCGen.Models
 
         [XmlIgnore]
         public int Waarde { get; set; }
+        public int? GarantieWaarde { get; set; }
 
         [XmlElement(ElementName = "Waarde")]
         public string SerializedWaarde

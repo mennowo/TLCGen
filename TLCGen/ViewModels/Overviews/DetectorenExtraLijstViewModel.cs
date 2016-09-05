@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -129,7 +130,7 @@ namespace TLCGen.ViewModels
                 }
             }
             dm.Naam = newname;
-            dm.Define = _ControllerVM.ControllerDataVM.PrefixSettings.DetectorDefinePrefix + newname;
+            dm.Define = SettingsProvider.GetDetectorDefinePrefix() + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(_ControllerVM, dm);
             Detectoren.Add(dvm1);
         }
@@ -172,19 +173,13 @@ namespace TLCGen.ViewModels
 
         #region Collection Changed
 
-        private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            _ControllerVM.DetectorenTabVM.DetectorenAllesLijstVM.SetDetectorenChanged();
-        }
-
-        #endregion // Collection Change
+        #endregion // Collection Changed
 
         #region Constructor
 
         public DetectorenExtraLijstViewModel(ControllerViewModel controllervm)
         {
             _ControllerVM = controllervm;
-            _ControllerVM.Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
         #endregion // Constructor

@@ -59,6 +59,9 @@
                             <Label FontWeight="Bold" Content="Versies" />
                             <DataGrid Grid.Row="1" Margin="2"
                                       ItemsSource="{Binding Versies}"
+                                      SelectedItem="{Binding SelectedVersie}"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Versie" Binding="{Binding Path=Versie}" />
@@ -83,17 +86,6 @@
                                 <Button Margin="2" Content="Versie verwijderen" Command="{Binding RemoveVersieCommand}" />
                             </WrapPanel>
                         </Grid>
-                    </TabItem>
-                    <TabItem Header="Visual project">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <ComboBox ItemsSource="{Binding Generators}" DisplayMemberPath="Naam" Name="test" />
-                            <xc:PropertyGrid Grid.Row="1" SelectedObject="{Binding ElementName=test,Path=SelectedItem}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
-                        </Grid>
-                        <!--<local:VisualProjectDataView DataContext="{Binding Path=VisualProjectDataVM}" />-->
                     </TabItem>
                     <TabItem Header="Instellingen">
                         <local:SettingsDataGrid SettingsList="{Binding Path=PrefixSettingsList,UpdateSourceTrigger=PropertyChanged}" />

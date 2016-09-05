@@ -66,6 +66,7 @@
     <Compile Include="Models\NonController\GeneratorDataModel.cs" />
     <Compile Include="Models\VersieModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\TLCGenSettingsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">

@@ -94,12 +94,14 @@ namespace TLCGen.ViewModels
                 ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(_ControllerVM, mfcm);
                 mfcvm.FaseCyclusNaam = fcmvm.Naam;
                 SelectedModule.Fasen.Add(mfcvm);
+                SelectedModule.Fasen.BubbleSort();
             }
             else if (fcmvm.IsInModule)
             {
                 // Use custom method instead of Remove method:
                 // it removes based on Define instead of reference
                 SelectedModule.RemoveFase(fcmvm.Define);
+                SelectedModule.Fasen.BubbleSort();
             }
             foreach (FaseCyclusModuleViewModel _fcmvm in Fasen)
             {

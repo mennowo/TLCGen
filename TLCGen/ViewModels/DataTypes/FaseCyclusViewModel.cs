@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models;
+using TLCGen.DataAccess;
 
 namespace TLCGen.ViewModels
 {
@@ -48,7 +49,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value) && _ControllerVM.IsElementDefineUnique(value))
                 {
                     string oldname = _FaseCyclus.Define;
-                    _FaseCyclus.Naam = value.Replace(_ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix.Setting, "");
+                    _FaseCyclus.Naam = value.Replace(SettingsProvider.GetFaseCyclusDefinePrefix(), "");
                     _FaseCyclus.Define = value;
                     foreach (ConflictViewModel cvm in Conflicten)
                     {
@@ -359,7 +360,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void UpdateModelDefine()
         {
-            _FaseCyclus.Define = _ControllerVM.ControllerDataVM.PrefixSettings.FaseCyclusDefinePrefix + _FaseCyclus.Naam;
+            _FaseCyclus.Define = SettingsProvider.GetFaseCyclusDefinePrefix() + _FaseCyclus.Naam;
         }
 
         public void UpdateHasKopmax()

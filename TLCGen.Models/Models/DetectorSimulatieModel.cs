@@ -13,5 +13,7 @@ namespace TLCGen.Models
         public int Q2 { get; set; }
         public int Q3 { get; set; }
         public int Q4 { get; set; }
+        public int Stopline { get; set; }
+        public string FCNr { get; set; }
     }
 }

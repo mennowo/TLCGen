@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -18,11 +19,57 @@ namespace TLCGen.ViewModels
         #region Fields
         
         private ObservableCollection<string> _FasenNames;
+        private TabItem _SelectedTab;
         private bool _MatrixChanged;
 
         #endregion // Fields
 
         #region Properties
+
+        public TabItem SelectedTab
+        {
+            get { return _SelectedTab; }
+            set
+            {
+                _SelectedTab = value;
+                if (_SelectedTab.Name == "OntruimingstijdenTab")
+                {
+                    foreach(ConflictViewModel cvm in ConflictMatrix)
+                    {
+                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Conflict;
+                    }
+                }
+                if (_SelectedTab.Name == "GarantieOntruimingstijdenTab")
+                {
+                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    {
+                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.GarantieConflict;
+                    }
+                }
+                if (_SelectedTab.Name == "GelijkstartenTab")
+                {
+                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    {
+                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Gelijkstart;
+                    }
+                }
+                if (_SelectedTab.Name == "VoorstartenTab")
+                {
+                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    {
+                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Voorstart;
+                    }
+                }
+                if (_SelectedTab.Name == "NalopenTab")
+                {
+                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    {
+                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Naloop;
+                    }
+                }
+                OnPropertyChanged("SelectedTab");
+            }
+        }
 
         /// <summary>
         /// Collection of strings used to display matrix column and row headers
@@ -81,6 +128,17 @@ namespace TLCGen.ViewModels
                 if (_MatrixChanged)
                     _ControllerVM.HasChanged = true;
                 OnPropertyChanged("MatrixChanged");
+            }
+        }
+
+        public bool UseGarantieOntruimingsTijden
+        {
+            get { return _ControllerVM.Controller.Data.Instellingen.GarantieOntruimingsTijden; }
+            set
+            {
+                _ControllerVM.Controller.Data.Instellingen.GarantieOntruimingsTijden = value;
+                OnMonitoredPropertyChanged("UseGarantieOntruimingsTijden", _ControllerVM);
+                MatrixChanged = true;
             }
         }
 
@@ -192,7 +250,7 @@ namespace TLCGen.ViewModels
                                 cvm2.DisplayWaarde = "FK";
                             break;
                         case "":
-                            if(cvm2.DisplayWaarde == "*")
+                            if(cvm2.DisplayWaarde == "*" || cvm2.DisplayWaarde == "GK" || cvm2.DisplayWaarde == "GKL" || cvm2.DisplayWaarde == "FK")
                                 cvm2.DisplayWaarde = "";
                             break;
                         default:
@@ -224,28 +282,58 @@ namespace TLCGen.ViewModels
                 for (int j = 0; j < Fasen.Count; ++j)
                 {
                     // Skip from>to self
-                    if (i == j || string.IsNullOrWhiteSpace(ConflictMatrix[i, j].DisplayWaarde))
+                    if (i == j || string.IsNullOrWhiteSpace(ConflictMatrix[i, j].GetConflictValue()))
                         continue;
 
-                    switch (ConflictMatrix[i, j].DisplayWaarde)
+                    string conf = ConflictMatrix[i, j].GetConflictValue();
+                    string conf2 = ConflictMatrix[j, i].GetConflictValue();
+
+                    string gconf = null;
+                    string gconf2 = null;
+                    if(_ControllerVM.Controller.Data.Instellingen.GarantieOntruimingsTijden)
+                    {
+                        string s = IsMatrixOkWithGarantueed();
+                        if (s != null)
+                        {
+                            return s;
+                        }
+
+                        gconf = ConflictMatrix[i, j].GetGaratieConflictValue();
+                        gconf2 = ConflictMatrix[j, i].GetGaratieConflictValue();
+
+                        int c;
+                        if (Int32.TryParse(gconf, out c))
+                        {
+                            if (Int32.TryParse(gconf2, out c))
+                            {
+                               continue;
+                            }
+                            else
+                            {
+                                return "Garantie conflict matrix niet symmetrisch:\nwaarde van " + Fasen[j].Naam + " naar " + Fasen[i].Naam + " ontbrekend of onjuist (niet numeriek, FK, GK of GKL).";
+                            }
+                        }
+                    }
+
+                    switch (conf)
                     {
                         case "FK":
-                            if (ConflictMatrix[j, i].DisplayWaarde != "FK")
+                            if (conf2 != "FK")
                                 return "Conflict matrix niet symmetrisch:\nFK van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " maar niet andersom.";
                             continue;
                         case "GK":
-                            if (ConflictMatrix[j, i].DisplayWaarde != "GK" && ConflictMatrix[j, i].DisplayWaarde != "GKL")
+                            if (conf2 != "GK" && conf2 != "GKL")
                                 return "Conflict matrix niet symmetrisch:\nGK van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " maar niet andersom.";
                             continue;
                         case "GKL":
-                            if (ConflictMatrix[j, i].DisplayWaarde != "GK")
+                            if (conf2 != "GK")
                                 return "Conflict matrix niet symmetrisch:\nGKL van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " maar andersom geen GK.";
                             continue;
                         default:
                             int c;
-                            if (Int32.TryParse(ConflictMatrix[i, j].DisplayWaarde, out c))
+                            if (Int32.TryParse(conf, out c))
                             {
-                                if (Int32.TryParse(ConflictMatrix[j, i].DisplayWaarde, out c))
+                                if (Int32.TryParse(conf2, out c))
                                 {
                                     continue;
                                 }
@@ -258,6 +346,44 @@ namespace TLCGen.ViewModels
                             {
                                 return "Conflict matrix not symmetrical:\nwaarde van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " onjuist (niet numeriek, FK, GK of GKL).";
                             }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public string IsMatrixOkWithGarantueed()
+        {
+            for (int i = 0; i < Fasen.Count; ++i)
+            {
+                for (int j = 0; j < Fasen.Count; ++j)
+                {
+                    // Skip from>to self
+                    if (i == j || string.IsNullOrWhiteSpace(ConflictMatrix[i, j].DisplayWaarde))
+                        continue;
+
+                    string conf = ConflictMatrix[i, j].GetConflictValue();
+                    string gconf = ConflictMatrix[i, j].GetGaratieConflictValue();
+                    int outc;
+                    int outgc;
+
+                    if (Int32.TryParse(conf, out outc))
+                    {
+                        if (Int32.TryParse(gconf, out outgc))
+                        {
+                            if (outc < outgc)
+                            {
+                                return "Ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " lager dan garantie ontruimmingstijd.";
+                            }
+                        }
+                        else
+                        {
+                            return "Ontbrekende garantie ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + ".";
+                        }
+                    }
+                    else if (Int32.TryParse(gconf, out outgc))
+                    {
+                        return "Ontbrekende ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + ".";
                     }
                 }
             }
@@ -311,6 +437,7 @@ namespace TLCGen.ViewModels
                         m.FaseVan = Fasen[fcvm_from].Define;
                         m.FaseNaar = Fasen[fcvm_to].Define;
                         m.Waarde = -1;
+                        m.GarantieWaarde = -1;
                         ConflictMatrix[fcvm_from, fcvm_to] = new ConflictViewModel(_ControllerVM, m);
                     }
                 }
@@ -339,7 +466,7 @@ namespace TLCGen.ViewModels
                 Fasen[fcvm_from].Conflicten.RemoveAll();
                 for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
-                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].DisplayWaarde))
+                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()))
                     {                        
                         Fasen[fcvm_from].Conflicten.Add(ConflictMatrix[fcvm_from, fcvm_to]);
                     }
@@ -348,6 +475,44 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Public methods
+
+        #region Commands
+
+        RelayCommand _SetGarantieValuesCommand;
+        public ICommand SetGarantieValuesCommand
+        {
+            get
+            {
+                if (_SetGarantieValuesCommand == null)
+                {
+                    _SetGarantieValuesCommand = new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
+                }
+                return _SetGarantieValuesCommand;
+            }
+        }
+
+        private bool SetGarantieValuesCommand_CanExecute(object obj)
+        {
+            return ConflictMatrix != null && Fasen != null && SelectedTab?.Name == "GarantieOntruimingstijdenTab";
+        }
+
+        private void SetGarantieValuesCommand_Executed(object obj)
+        {
+            int fccount = Fasen.Count;
+
+            for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
+            {
+                for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
+                {
+                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()))
+                    {
+                        ConflictMatrix[fcvm_from, fcvm_to].DisplayWaarde = "0";
+                    }
+                }
+            }
+        }
+
+        #endregion // Commands
 
         #region Collection Changed
 

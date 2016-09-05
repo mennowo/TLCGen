@@ -27,4 +27,22 @@ namespace TLCGen.Views
             InitializeComponent();
         }
     }
+
+    public class SelectedTabToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string tab = parameter as string;
+            TabItem ti = value as TabItem;
+            if (ti?.Name == tab)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

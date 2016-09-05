@@ -57,7 +57,9 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <local:DetectorenSimulatieLijstView Grid.Row="0" DataContext="{Binding Path=DetectorenAllesLijstVM}" />
-                    <Button Grid.Row="1" Margin="2" Content="Genereer simulatie waarden" Command="{Binding GenerateSimulationValuesCommand}" />
+                    <WrapPanel Grid.Row="1" >
+                        <Button Margin="2" Content="Genereer simulatie waarden" Command="{Binding GenerateSimulationValuesCommand}" />
+                    </WrapPanel>
                 </Grid>
             </TabItem>
         </TabControl>

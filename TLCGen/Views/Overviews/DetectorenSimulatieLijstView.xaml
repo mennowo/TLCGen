@@ -37,6 +37,8 @@
                 <DataGridTextColumn Binding="{Binding Path=Q2}" Header="Q2" />
                 <DataGridTextColumn Binding="{Binding Path=Q3}" Header="Q3" />
                 <DataGridTextColumn Binding="{Binding Path=Q4}" Header="Q4" />
+                <DataGridTextColumn Binding="{Binding Path=Stopline}" Header="Stopline" />
+                <DataGridTextColumn Binding="{Binding Path=FCNr}" Header="FCNr" />
             </DataGrid.Columns>
         </re:SpecialDataGrid>
     </Grid>

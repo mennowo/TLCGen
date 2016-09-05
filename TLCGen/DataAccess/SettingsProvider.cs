@@ -9,15 +9,19 @@ namespace TLCGen.DataAccess
 {
     public static class SettingsProvider
     {
-        public static ApplicationSettings AppSettings
+        
+        public static string GetFaseCyclusDefinePrefix()
         {
-            get;
-            set;
+            return "fc";
+        }
+
+        public static string GetDetectorDefinePrefix()
+        {
+            return "d";
         }
 
         static SettingsProvider()
         {
-            AppSettings = new ApplicationSettings();
         }
     }
 }

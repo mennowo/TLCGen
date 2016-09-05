@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,6 @@ namespace TLCGen.Generators.CCOL
             {
                 CollectAllCCOLElements(controller);
 
-                string result = "";
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.c"), GenerateRegC(controller));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.c"), GenerateTabC(controller));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.c"), GenerateDplC(controller));
@@ -37,14 +37,16 @@ namespace TLCGen.Generators.CCOL
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add"), GenerateSimAdd(controller));
                 if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add")))
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add"), GenerateSysAdd(controller));
-                return result;
+                return "CCOL source code gegenereerd";
             }
             return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
         }
 
         public string GenerateProjectFiles(ControllerModel controller, string projectfilepath)
         {
-            string result = "";
+            string result = "test";
+
+            File.WriteAllText(Path.Combine(projectfilepath, $"{controller.Data.Naam}.vcxproj"), GenerateVisualStudioProjectFiles(controller));
 
             return result;
         }
@@ -86,14 +88,42 @@ namespace TLCGen.Generators.CCOL
 
         #region Properties
 
-        [TLCGenGeneratorSetting("application")]
-        public string Test1 { get; set; }
-        [TLCGenGeneratorSetting("application")]
-        public string Test2 { get; set; }
-        [TLCGenGeneratorSetting("controller")]
-        public string Test3 { get; set; }
-        [TLCGenGeneratorSetting("controller")]
-        public double Test4 { get; set; }
+        [DisplayName("CCOL include paden")]
+        [Description("CCOL include paden")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string CCOLIncludesPad { get; set; }
+
+        [DisplayName("CCOL library pad")]
+        [Description("CCOL library pad")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string CCOLLibsPath { get; set; }
+
+        [DisplayName("CCOL resources pad")]
+        [Description("CCOL resources pad")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string CCOLResPath { get; set; }
+
+        [DisplayName("Preprocessor definities")]
+        [Description("Preprocessor definities")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting("application")]
+        public string CCOLPreprocessorDefinitions { get; set; }
+
+
+        [DisplayName("Test set")]
+        [Description("Descr")]
+        [Category("Test")]
+        [TLCGenCustomSetting("application")]
+        public string TestSetting { get; set; }
+
+        [DisplayName("Example setting")]
+        [Description("Example of a custom generator setting per controller")]
+        [Category("Controller CCOL settings")]
+        //[TLCGenCustomSetting("controller")]
+        public string ExampleOfGeneratorSettingPerController { get; set; }
 
         #endregion // Properties
 

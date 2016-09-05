@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace TLCGen.Helpers
+namespace TLCGen.DataAccess
 {
     public class DeserializeT<T>
     {

@@ -15,7 +15,7 @@ namespace TLCGen.Interfaces.Public
     }
 
     [System.AttributeUsage(System.AttributeTargets.Property)]
-    public class TLCGenGeneratorSettingAttribute : System.Attribute
+    public class TLCGenCustomSettingAttribute : System.Attribute
     {
         public string SettingType { get; set; }
 
@@ -25,7 +25,7 @@ namespace TLCGen.Interfaces.Public
         /// </summary>
         /// <param name="type">The type of setting. Can be "application" for an application wide setting
         /// of "controller" for a setting per controller</param>
-        public TLCGenGeneratorSettingAttribute(string type)
+        public TLCGenCustomSettingAttribute(string type)
         {
             SettingType = type;
         }
