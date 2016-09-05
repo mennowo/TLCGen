@@ -92,6 +92,7 @@
     <Compile Include="DataAccess\SettingsProvider.cs" />
     <Compile Include="DataAccess\DeserializeT.cs" />
     <Compile Include="DataAccess\SerializeT.cs" />
+    <Compile Include="Utilities\FaseCyclusUtilities.cs" />
     <Compile Include="ViewModels\App\TLCGenSettingsViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ControllerDataViewModel.cs" />

@@ -68,10 +68,23 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Type; }
             set
             {
-                _FaseCyclus.Type = value;
-                OnMonitoredPropertyChanged("Type", _ControllerVM);
-                _ControllerVM.SetAllSelectedFasenValue(this, "Type");
-                
+                if (_FaseCyclus.Type != value)
+                {
+                    _FaseCyclus.Type = value;
+                    OnMonitoredPropertyChanged("Type", _ControllerVM);
+
+                    // Set default maxgroentijd
+                    foreach (MaxGroentijdenSetViewModel mgsvm in _ControllerVM.MaxGroentijdenSets)
+                    {
+                        foreach (MaxGroentijdViewModel mgvm in mgsvm.MaxGroentijdenSetList)
+                        {
+                            if (mgvm.FaseCyclus == this.Define)
+                                mgvm.Waarde = Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(value);
+                        }
+                    }
+
+                    _ControllerVM.SetAllSelectedFasenValue(this, "Type");
+                }
             }
         }
 

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -101,7 +102,7 @@ namespace TLCGen.ViewModels
             {
                 MaxGroentijdModel mgm = new MaxGroentijdModel();
                 mgm.FaseCyclus = fcvm.Define;
-                mgm.Waarde = 0;
+                mgm.Waarde = Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fcvm.Type);
                 mgsm.MaxGroentijden.Add(mgm);
             }
 

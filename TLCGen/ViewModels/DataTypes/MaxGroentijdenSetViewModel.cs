@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TLCGen.DataAccess;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -84,7 +87,7 @@ namespace TLCGen.ViewModels
         {
             MaxGroentijdModel mgm = new MaxGroentijdModel();
             mgm.FaseCyclus = fasedefine;
-            mgm.Waarde = 0;
+            mgm.Waarde = Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fasedefine);
             MaxGroentijdenSetList.Add(new MaxGroentijdViewModel(_ControllerVM, mgm));
         }
 

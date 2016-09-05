@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:dg2d="http://gu.se/DataGrid2D"
              mc:Ignorable="d" 
@@ -22,7 +23,7 @@
                     Padding="0"
                     TextAlignment="Center"
                     FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                    Text="{Binding Path=Waarde,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                    Text="{Binding Path=Waarde,Mode=TwoWay,UpdateSourceTrigger=LostFocus,TargetNullValue={x:Static sys:String.Empty}}" />
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
