@@ -86,46 +86,77 @@ namespace TLCGen.Generators.CCOL
 
         #endregion // Fields
 
-        #region Properties
+        #region Setting Properties
 
+        private string _CCOLIncludesPaden;
         [DisplayName("CCOL include paden")]
         [Description("CCOL include paden")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting("application")]
-        public string CCOLIncludesPad { get; set; }
+        public string CCOLIncludesPaden
+        {
+            get { return _CCOLIncludesPaden; }
+            set
+            {
+                if(!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+                    _CCOLIncludesPaden = value + ";";
+                else
+                    _CCOLIncludesPaden = value;
+            }
+        }
 
+        private string _CCOLLibsPath;
         [DisplayName("CCOL library pad")]
         [Description("CCOL library pad")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting("application")]
-        public string CCOLLibsPath { get; set; }
+        public string CCOLLibsPath
+        {
+            get { return _CCOLLibsPath; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+                    _CCOLLibsPath = value + ";";
+                else
+                    _CCOLLibsPath = value;
+            }
+        }
 
+        private string _CCOLResPath;
         [DisplayName("CCOL resources pad")]
         [Description("CCOL resources pad")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting("application")]
-        public string CCOLResPath { get; set; }
+        public string CCOLResPath
+        {
+            get { return _CCOLResPath; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+                    _CCOLResPath = value + ";";
+                else
+                    _CCOLResPath = value;
+            }
+        }
 
+        private string _CCOLPreprocessorDefinitions;
         [DisplayName("Preprocessor definities")]
         [Description("Preprocessor definities")]
         [Category("Visual project settings")]
         [TLCGenCustomSetting("application")]
-        public string CCOLPreprocessorDefinitions { get; set; }
+        public string CCOLPreprocessorDefinitions
+        {
+            get { return _CCOLPreprocessorDefinitions; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+                    _CCOLPreprocessorDefinitions = value + ";";
+                else
+                    _CCOLPreprocessorDefinitions = value;
+            }
+        }
 
-
-        [DisplayName("Test set")]
-        [Description("Descr")]
-        [Category("Test")]
-        [TLCGenCustomSetting("application")]
-        public string TestSetting { get; set; }
-
-        [DisplayName("Example setting")]
-        [Description("Example of a custom generator setting per controller")]
-        [Category("Controller CCOL settings")]
-        //[TLCGenCustomSetting("controller")]
-        public string ExampleOfGeneratorSettingPerController { get; set; }
-
-        #endregion // Properties
+        #endregion // Setting Properties
 
     }
 }

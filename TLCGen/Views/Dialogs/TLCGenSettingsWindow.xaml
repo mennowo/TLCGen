@@ -13,6 +13,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TabControl Margin="2">
+            <TabItem Header="Controller default settings">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <Label Content="Default settings voor verkeersregeling" />
+                    </WrapPanel>
+                    <xc:PropertyGrid Margin="2" 
+                                     ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
+                                     Grid.Row="1" SelectedObject="{Binding Path=SettingsVM.Settings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                </Grid>
+                <!--<local:VisualProjectDataView DataContext="{Binding Path=VisualProjectDataVM}" />-->
+            </TabItem>
             <TabItem Header="Generatoren settings">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -21,13 +36,12 @@
                     </Grid.RowDefinitions>
                     <WrapPanel>
                         <Label Content="Generator: " />
-                        <ComboBox Margin="2" ItemsSource="{Binding Generators}" SelectedItem="{Binding SelectedGenerator}" DisplayMemberPath="Naam" Name="test" />
+                        <ComboBox Margin="2" ItemsSource="{Binding Generators}" SelectedItem="{Binding SelectedGenerator}" DisplayMemberPath="Naam" Name="GeneratorCB" />
                     </WrapPanel>
                     <xc:PropertyGrid Margin="2" 
                                      ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
-                                     Grid.Row="1" SelectedObject="{Binding ElementName=test,Path=SelectedItem}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                                     Grid.Row="1" SelectedObject="{Binding ElementName=GeneratorCB,Path=SelectedItem.Generator}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
                 </Grid>
-                <!--<local:VisualProjectDataView DataContext="{Binding Path=VisualProjectDataVM}" />-->
             </TabItem>
         </TabControl>
         <WrapPanel Grid.Row="1">

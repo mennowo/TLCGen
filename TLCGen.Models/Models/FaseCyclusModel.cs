@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ namespace TLCGen.Models
 
         #region Properties
 
+        [Browsable(false)]
         public string Define { get; set; }
+        [Browsable(false)]
         public string Naam { get; set; }
         public FaseTypeEnum Type { get; set; }
         public int TFG { get; set; }
@@ -34,9 +37,11 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
 
+        [Browsable(false)]
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
+        [Browsable(false)]
         [XmlArrayItem(ElementName = "Conflict")]
         public List<ConflictModel> Conflicten { get; set; }
 

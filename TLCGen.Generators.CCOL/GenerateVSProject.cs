@@ -28,11 +28,10 @@ namespace TLCGen.Generators.CCOL
                     {
                         writeline = writeline.Replace("__CONTROLLERNAME__", controller.Data.Naam);
                         writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
-                        writeline = writeline.Replace("__CCOLLIBSDIR__", CCOLLibsPath);
-                        writeline = writeline.Replace("__CCOLLRESDIR__", CCOLResPath);
-                        writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", CCOLIncludesPad);
+                        writeline = writeline.Replace("__CCOLLIBSDIR__", CCOLLibsPath.Remove(CCOLLibsPath.Length - 1)); // Remove trailing ;
+                        writeline = writeline.Replace("__CCOLLRESDIR__", CCOLResPath.Remove(CCOLResPath.Length - 1));   // Remove trailing ;
+                        writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", CCOLIncludesPaden);
                         writeline = writeline.Replace("__PREPROCESSORDEFS__", CCOLPreprocessorDefinitions);
-                        writeline = writeline.Replace("__MVOBJECTSFOLDER__", TestSetting);
                     }
 
                     // If conditions

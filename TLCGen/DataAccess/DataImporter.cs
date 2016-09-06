@@ -250,6 +250,7 @@ namespace TLCGen.DataAccess
                         _fcm1 = new FaseCyclusModel();
                         _fcm1.Define = fc1;
                         _fcm1.Naam = fc1.Replace("fc", "");
+                        SettingsProvider.ApplyDefaultFaseCyclusSettings(_fcm1, fc1);
                         NewFasen.Add(_fcm1);
                     }
 
@@ -267,6 +268,7 @@ namespace TLCGen.DataAccess
                         _fcm2 = new FaseCyclusModel();
                         _fcm2.Define = fc2;
                         _fcm2.Naam = fc2.Replace("fc", "");
+                        SettingsProvider.ApplyDefaultFaseCyclusSettings(_fcm2, fc2);
                         NewFasen.Add(_fcm2);
                     }
                     _fcm1.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Define, FaseNaar = _fcm2.Define, Waarde = conf });

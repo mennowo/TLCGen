@@ -36,10 +36,77 @@
                     <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden}" Margin="2" />
                 </Grid>
                 <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=GarantieOntruimingstijdenTab}" Grid.Row="1" >
-                    <Button Content="Vullen met nullen (placeholder)" Command="{Binding SetGarantieValuesCommand}" Margin="2" />
+                    <Button Content="Vullen met nullen" Command="{Binding SetGarantieValuesCommand}" Margin="2" />
                 </Grid>
             </Grid>
         </Border>
+
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
+        
+        <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=GelijkstartenTab}" Grid.Column="3" >
+            <WrapPanel>
+                <Label Content="Gelijkstart opties (placeholder/voorbeeld)" />
+                <CheckBox Content="Bijkomen toegestaan" Margin="2"/>
+            </WrapPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=VoorstartenTab}" Grid.Column="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="Voorstart opties (placeholder/voorbeeld)" />
+            <Label Content="Tijd instelling:" Grid.Row="1" />
+            <TextBox MinWidth="50" Grid.Row="2" Text="20" Margin="2" />
+        </Grid>
+
+        <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=NalopenTab}" Grid.Column="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.Resources>
+                <BooleanToVisibilityConverter x:Key="bool2visconv" />
+            </Grid.Resources>
+            <Label Content="Naloop opties (placeholder/voorbeeld)" FontWeight="Bold" />
+            <StackPanel Orientation="Vertical" Grid.Row="1">
+                <RadioButton Content="Naloop startgroen" Margin="2" Name="SGcb" IsChecked="True" />
+                <RadioButton Content="Naloop einde groen" Margin="2" Name="EGcb" />
+            </StackPanel>
+            <Grid Grid.Row="2" Visibility="{Binding ElementName=EGcb,Path=IsChecked,Converter={StaticResource bool2visconv}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Tijden:" />
+                <Label Content="Vaste naloop tijdens vastgroen:" Grid.Row="1" />
+                <TextBox MinWidth="50" Grid.Row="2" Text="50" Margin="2" />
+                <Label Content="Det. afh. naloop tijdens vastgroen:" Grid.Row="3" />
+                <TextBox MinWidth="50" Grid.Row="4" Text="70" Margin="2" />
+                <Label Content="Vaste naloop op einde groen:" Grid.Row="5" />
+                <TextBox MinWidth="50" Grid.Row="6" Text="60" Margin="2" />
+                <Label Content="Det. afh. naloop op einde groen:" Grid.Row="7" />
+                <TextBox MinWidth="50" Grid.Row="8" Text="80" Margin="2" />
+            </Grid>
+            <Grid Grid.Row="2" Visibility="{Binding ElementName=SGcb,Path=IsChecked,Converter={StaticResource bool2visconv}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Tijden:" />
+                <Label Content="Vaste naloop vanaf startgroen:" Grid.Row="1" />
+                <TextBox MinWidth="50" Grid.Row="2" Text="50" Margin="2" />
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TLCGen.DataAccess;
-using TLCGen.Generators.CCOL;
 using TLCGen.Helpers;
 using TLCGen.Interfaces.Public;
 using TLCGen.Models;
@@ -65,7 +64,6 @@ namespace TLCGen.ViewModels
                 if(_SettingsVM == null)
                 {
                     _SettingsVM = new TLCGenSettingsViewModel();
-                    _SettingsVM.LoadApplicationSettings();
                 }
                 return _SettingsVM;
             }
@@ -409,13 +407,13 @@ namespace TLCGen.ViewModels
 
         void GenerateVisualCommand_Executed(object prm)
         {
-            string result = SelectedGenerator.Generator.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            string result = SelectedGenerator?.Generator?.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
             ControllerVM.SetStatusText(result);
         }
 
         bool GenerateVisualCommand_CanExecute(object prm)
         {
-            return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+            return SelectedGenerator != null && ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
         }
 
         #endregion // Command functionality
@@ -503,7 +501,9 @@ namespace TLCGen.ViewModels
                                 }
                                 else
                                 {
+#if !DEBUG
                                     System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen genrator module.");
+#endif
                                 }
                             }
                         }
@@ -528,7 +528,7 @@ namespace TLCGen.ViewModels
             else
             {
                 SaveGeneratorControllerSettingsToModel();
-                SettingsVM.SaveApplicationSettings();
+                SettingsProvider.SaveApplicationSettings();
             }
         }
 
@@ -572,9 +572,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        #endregion // Private methods
+#endregion // Private methods
 
-        #region Public methods
+#region Public methods
 
         public bool ControllerHasChanged()
         {
@@ -621,12 +621,13 @@ namespace TLCGen.ViewModels
             return false;
         }
 
-        #endregion // Public methods
+#endregion // Public methods
 
-        #region Constructor
+#region Constructor
 
         public MainWindowViewModel()
         { 
+            SettingsProvider.LoadApplicationSettings();
             _MyDataProvider = new DataProvider();
             _MyDataImporter = new DataImporter(this);
 
@@ -651,7 +652,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        #endregion // Constructor
+#endregion // Constructor
 
     }
 }

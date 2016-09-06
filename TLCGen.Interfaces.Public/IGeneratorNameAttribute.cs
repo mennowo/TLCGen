@@ -29,5 +29,10 @@ namespace TLCGen.Interfaces.Public
         {
             SettingType = type;
         }
+
+        public TLCGenCustomSettingAttribute()
+        {
+            SettingType = "application";
+        }
     }
 }
