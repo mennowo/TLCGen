@@ -23,18 +23,42 @@ namespace TLCGen.Models
         public string Define { get; set; }
         [Browsable(false)]
         public string Naam { get; set; }
+        [DisplayName("Type fase")]
+        [Description("Type fase")]
         public FaseTypeEnum Type { get; set; }
+        [DisplayName("Vastgroen tijd")]
+        [Description("Vastgroen tijd")]
         public int TFG { get; set; }
+        [DisplayName("Garantie groen tijd")]
+        [Description("Garantie groen tijd")]
         public int TGG { get; set; }
+        [DisplayName("Minimum garantie groen tijd")]
+        [Description("Minimum garantie groen tijd")]
         public int TGG_min { get; set; }
+        [DisplayName("Garantie rood tijd")]
+        [Description("Garantie rood tijd")]
         public int TRG { get; set; }
+        [DisplayName("Minimum garantie rood tijd")]
+        [Description("Minimum garantie rood tijd")]
         public int TRG_min { get; set; }
+        [DisplayName("Geel tijd")]
+        [Description("Geel tijd")]
         public int TGL { get; set; }
+        [DisplayName("Minimum geel tijd")]
+        [Description("Minimum geel tijd")]
         public int TGL_min { get; set; }
+        [DisplayName("Koplus maximum")]
+        [Description("Koplus maximum")]
         public int Kopmax { get; set; }
 
+        [DisplayName("Vaste aanvraag")]
+        [Description("Vaste aanvraag")]
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
+        [DisplayName("Wachtgroen")]
+        [Description("Wachtgroen")]
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
+        [DisplayName("Meeverlengen")]
+        [Description("Meeverlengen")]
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
 
         [Browsable(false)]

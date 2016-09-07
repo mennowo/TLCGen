@@ -66,33 +66,61 @@ namespace TLCGen.DataAccess
 
         public static void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, FaseTypeEnum type)
         {
-            int itype = 0;
-            switch(type)
+            switch (type)
             {
                 case FaseTypeEnum.Auto:
-                    itype = 0;
+                    fcm.Kopmax = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.Kopmax;
+                    fcm.TFG = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TFG;
+                    fcm.TGG = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TGG;
+                    fcm.TGG_min = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TGG_min;
+                    fcm.TGL = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TGL;
+                    fcm.TGL_min = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TGL_min;
+                    fcm.TRG = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TRG;
+                    fcm.TRG_min = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.TRG_min;
+                    fcm.VasteAanvraag = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.VasteAanvraag;
+                    fcm.Wachtgroen = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.Wachtgroen;
+                    fcm.Meeverlengen = Settings.DefaultFaseCyclusSettings.DefaultAutoModel.Meeverlengen;
                     break;
                 case FaseTypeEnum.Fiets:
-                    itype = 1;
+                    fcm.Kopmax = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.Kopmax;
+                    fcm.TFG = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TFG;
+                    fcm.TGG = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TGG;
+                    fcm.TGG_min = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TGG_min;
+                    fcm.TGL = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TGL;
+                    fcm.TGL_min = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TGL_min;
+                    fcm.TRG = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TRG;
+                    fcm.TRG_min = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.TRG_min;
+                    fcm.VasteAanvraag = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.VasteAanvraag;
+                    fcm.Wachtgroen = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.Wachtgroen;
+                    fcm.Meeverlengen = Settings.DefaultFaseCyclusSettings.DefaultFietsModel.Meeverlengen;
                     break;
                 case FaseTypeEnum.Voetganger:
-                    itype = 2;
+                    fcm.Kopmax = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.Kopmax;
+                    fcm.TFG = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TFG;
+                    fcm.TGG = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TGG;
+                    fcm.TGG_min = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TGG_min;
+                    fcm.TGL = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TGL;
+                    fcm.TGL_min = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TGL_min;
+                    fcm.TRG = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TRG;
+                    fcm.TRG_min = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.TRG_min;
+                    fcm.VasteAanvraag = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.VasteAanvraag;
+                    fcm.Wachtgroen = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.Wachtgroen;
+                    fcm.Meeverlengen = Settings.DefaultFaseCyclusSettings.DefaultVoetgangerModel.Meeverlengen;
                     break;
                 case FaseTypeEnum.OV:
-                    itype = 3;
+                    fcm.Kopmax = Settings.DefaultFaseCyclusSettings.DefaultOVModel.Kopmax;
+                    fcm.TFG = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TFG;
+                    fcm.TGG = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TGG;
+                    fcm.TGG_min = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TGG_min;
+                    fcm.TGL = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TGL;
+                    fcm.TGL_min = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TGL_min;
+                    fcm.TRG = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TRG;
+                    fcm.TRG_min = Settings.DefaultFaseCyclusSettings.DefaultOVModel.TRG_min;
+                    fcm.VasteAanvraag = Settings.DefaultFaseCyclusSettings.DefaultOVModel.VasteAanvraag;
+                    fcm.Wachtgroen = Settings.DefaultFaseCyclusSettings.DefaultOVModel.Wachtgroen;
+                    fcm.Meeverlengen = Settings.DefaultFaseCyclusSettings.DefaultOVModel.Meeverlengen;
                     break;
             }
-            fcm.Kopmax = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].Kopmax;
-            fcm.TFG = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TFG;
-            fcm.TGG = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TGG;
-            fcm.TGG_min = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TGG_min;
-            fcm.TGL = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TGL;
-            fcm.TGL_min = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TGL_min;
-            fcm.TRG = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TRG;
-            fcm.TRG_min = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].TRG_min;
-            fcm.VasteAanvraag = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].VasteAanvraag;
-            fcm.Wachtgroen = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].Wachtgroen;
-            fcm.Meeverlengen = Settings.DefaultFaseCyclusSettings.DefaultFasen[itype].Meeverlengen;
         }
 
         #endregion // Settings Provider Methods

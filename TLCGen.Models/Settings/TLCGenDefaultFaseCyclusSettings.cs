@@ -1,19 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace TLCGen.Models.Settings
 {
+    [Editor()]
     public class TLCGenDefaultFaseCyclusSettings
     {
+        [ExpandableObject]
+        [DisplayName("Default auto fasen")]
+        [Description("Default auto fasen")]
         public FaseCyclusModel DefaultAutoModel { get; set; }
+        [ExpandableObject]
+        [DisplayName("Default fiets fasen")]
+        [Description("Default fiets fasen")]
         public FaseCyclusModel DefaultFietsModel { get; set; }
+        [ExpandableObject]
+        [DisplayName("Default voetganger fasen")]
+        [Description("Default voetganger fasen")]
         public FaseCyclusModel DefaultVoetgangerModel { get; set; }
+        [ExpandableObject]
+        [DisplayName("Default OV fasen")]
+        [Description("Default OV fasen")]
         public FaseCyclusModel DefaultOVModel { get; set; }
-
-        public FaseCyclusModel[] DefaultFasen = new FaseCyclusModel[4];
 
         public TLCGenDefaultFaseCyclusSettings()
         {
@@ -77,11 +91,6 @@ namespace TLCGen.Models.Settings
                 VasteAanvraag = Enumerations.NooitAltijdAanUitEnum.SchUit,
                 Wachtgroen = Enumerations.NooitAltijdAanUitEnum.SchUit
             };
-
-            DefaultFasen[0] = DefaultAutoModel;
-            DefaultFasen[1] = DefaultFietsModel;
-            DefaultFasen[2] = DefaultVoetgangerModel;
-            DefaultFasen[3] = DefaultOVModel;
         }
     }
 }
