@@ -256,6 +256,11 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
+            if(data.Elements.Count == 0)
+            {
+                data.Elements.Add(new CCOLElement() { Define = "tdummy", Naam = "dummy" });
+            }
+
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "TMMAX" });
 
