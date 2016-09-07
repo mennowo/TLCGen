@@ -396,6 +396,14 @@
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Generators.YATLCCLC\TLCGen.Generators.YATLCCLC.csproj">
+      <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
+      <Name>TLCGen.Generators.YATLCCLC</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
       <Name>TLCGen.Helpers</Name>
