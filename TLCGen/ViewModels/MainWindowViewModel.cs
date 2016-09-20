@@ -353,6 +353,7 @@ namespace TLCGen.ViewModels
                     DataProvider.FileName = openFileDialog.FileName;
                     if (DataProvider.LoadController())
                     {
+                        ControllerVM = null;
                         ControllerVM = new ControllerViewModel(this, DataProvider.Controller);
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
