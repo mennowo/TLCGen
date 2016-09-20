@@ -32,6 +32,9 @@ namespace TLCGen.Models
             {
                 switch (Waarde)
                 {
+                    case -6:
+                    case -5:
+                        return "";
                     case -4:
                         return "GKL";
                     case -3:

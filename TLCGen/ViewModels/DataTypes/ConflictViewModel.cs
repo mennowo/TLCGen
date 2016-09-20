@@ -171,13 +171,13 @@ namespace TLCGen.ViewModels
             }
             // Set the value of the 'opposite' conflict 
             // (= the conflict whose from/to phasecycles are the inverse of this one)
-            _ControllerVM.ConflictMatrixVM.SetOppositeConflict(this);
+            _ControllerVM.CoordinatiesTabVM.SetOppositeConflict(this);
             // If this conflict is black, set its value from it's opposite
             // We set property 'Waarde', to avoid a loop caused by instances of 
             // ConflictViewModel setting each other's DisplayWaarde property.
             if (_Conflict.Waarde == -1)
-                _Conflict.Waarde = _ControllerVM.ConflictMatrixVM.SetBlankConflictFromOppositeConflict(this);
-            _ControllerVM.ConflictMatrixVM.MatrixChanged = true;
+                _Conflict.Waarde = _ControllerVM.CoordinatiesTabVM.SetBlankConflictFromOppositeConflict(this);
+            _ControllerVM.CoordinatiesTabVM.MatrixChanged = true;
         }
 
         public string GetGaratieConflictValue()
@@ -230,13 +230,13 @@ namespace TLCGen.ViewModels
 
             // Set the value of the 'opposite' conflict 
             // (= the conflict whose from/to phasecycles are the inverse of this one)
-            _ControllerVM.ConflictMatrixVM.SetOppositeConflict(this);
+            _ControllerVM.CoordinatiesTabVM.SetOppositeConflict(this);
             // If this conflict is black, set its value from it's opposite
             // We set property 'Waarde', to avoid a loop caused by instances of 
             // ConflictViewModel setting each other's DisplayWaarde property.
             if (_Conflict.GarantieWaarde == -1)
-                _Conflict.GarantieWaarde = _ControllerVM.ConflictMatrixVM.SetBlankConflictFromOppositeConflict(this);
-            _ControllerVM.ConflictMatrixVM.MatrixChanged = true;
+                _Conflict.GarantieWaarde = _ControllerVM.CoordinatiesTabVM.SetBlankConflictFromOppositeConflict(this);
+            _ControllerVM.CoordinatiesTabVM.MatrixChanged = true;
         }
 
         #endregion // Private methods

@@ -172,8 +172,11 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine($"{tabspace}/* --------------- */");
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                if (fcm.VasteAanvraag != NooitAltijdAanUitEnum.Nooit)
+                if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchAan ||
+                    fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchUit)
                     sb.AppendLine($"{tabspace}if (SCH[schca{fcm.Naam}]) vaste_aanvraag({fcm.Define});");
+                else if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.Altijd)
+                    sb.AppendLine($"{tabspace}vaste_aanvraag({fcm.Define});");
             }
             sb.AppendLine("");
 

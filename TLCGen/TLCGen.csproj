@@ -87,16 +87,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DataAccess\DataImporter.cs" />
-    <Compile Include="DataAccess\DataProvider.cs" />
-    <Compile Include="DataAccess\SettingsProvider.cs" />
-    <Compile Include="DataAccess\DeserializeT.cs" />
-    <Compile Include="DataAccess\SerializeT.cs" />
-    <Compile Include="Utilities\FaseCyclusUtilities.cs" />
+    <Compile Include="Utilities\AddInLoaderT.cs" />
     <Compile Include="ViewModels\App\TLCGenSettingsViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ControllerDataViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ControllerViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\AlgemeenTabViewModel.cs" />
+    <Compile Include="ViewModels\ControllerViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\FaseCyclusViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\IGeneratorViewModel.cs" />
@@ -112,7 +107,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\DataTypes\MaxGroentijdViewModel.cs" />
     <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ConflictMatrixViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\CoordinatiesTabViewModel.cs" />
     <Compile Include="ViewModels\Tabs\DectorenTabViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenAllesLijstViewModel.cs" />
     <Compile Include="ViewModels\Overviews\DetectorenFasenLijstViewModel.cs" />
@@ -204,8 +199,8 @@
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ConflictMatrixTab.xaml.cs">
-      <DependentUpon>ConflictMatrixTab.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\CoordinatiesTab.xaml.cs">
+      <DependentUpon>CoordinatiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataTypes\ControllerDataView.xaml.cs">
       <DependentUpon>ControllerDataView.xaml</DependentUpon>
@@ -334,7 +329,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ConflictMatrixTab.xaml">
+    <Page Include="Views\Tabs\CoordinatiesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -392,6 +387,14 @@
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
+      <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
+      <Name>TLCGen.CustomPropertyEditors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
+      <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
+      <Name>TLCGen.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
@@ -407,6 +410,14 @@
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
       <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
+      <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
+      <Name>TLCGen.Importers.TabC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
+      <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
+      <Name>TLCGen.Integrity</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Interfaces.Public.csproj">
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
@@ -424,6 +435,14 @@
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
+      <Name>TLCGen.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Templates\TLCGen.Templates.csproj">
+      <Project>{0dabb81f-c5a3-445e-9ea8-5a8235cad34f}</Project>
+      <Name>TLCGen.Templates</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />
@@ -435,8 +454,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)Generators"
+copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Generators\TLCGen.Generators.*.dll"
+mkdir "$(TargetDir)Importers"
+copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Importers\TLCGen.Importers.*.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -8,11 +8,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Interfaces.Public;
 using TLCGen.Models;
+using TLCGen.Settings;
+using TLCGen.Utilities;
 
 namespace TLCGen.ViewModels
 {
@@ -20,17 +24,26 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ControllerViewModel _ControllerVM;
-        private DataProvider _MyDataProvider;
-        private DataImporter _MyDataImporter;
         private List<IGeneratorViewModel> _Generators;
         private IGeneratorViewModel _SelectedGenerator;
+        public List<IImporter> _Importers;
+        private IImporter _SelectedImporter;
+
         private TLCGenSettingsViewModel _SettingsVM;
+        private ControllerViewModel _ControllerVM;
+
+        private List<MenuItem> _ImportMenuItems;
 
         #endregion // Fields
 
         #region Properties
 
+        /// <summary>
+        /// ViewModel for the Controller data object that is being edited via the application.
+        /// This is the main ViewModel for the application, which holds all other ViewModels.
+        /// (Except for the Settings ViewModel, which belongs to the application rather than 
+        /// the Controller.)
+        /// </summary>
         public ControllerViewModel ControllerVM
         {
             get { return _ControllerVM; }
@@ -42,21 +55,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Boolean used by the View to determine of a Controller has been loaded.
+        /// This is used in the View to enable/disable appropriate UI elementents.
+        /// </summary>
         public bool HasController
         {
             get { return ControllerVM != null; }
         }
 
-        public DataProvider MyDataProvider
-        {
-            get { return _MyDataProvider; }
-        }
-
-        public DataImporter MyDataImporter
-        {
-            get { return _MyDataImporter; }
-        }
-
+        /// <summary>
+        /// ViewModel for the settings of the application
+        /// </summary>
         public TLCGenSettingsViewModel SettingsVM
         {
             get
@@ -69,17 +79,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// A string to be used in the View as the title of the program.
+        /// File operations should call OnPropertyChanged for this property,
+        /// so the View updates the program title.
+        /// </summary>
         public string ProgramTitle
         {
             get
             {
-                if(HasController && !string.IsNullOrEmpty(MyDataProvider.FileName))
-                    return "TLCGen - " + MyDataProvider.FileName;
+                if(HasController && !string.IsNullOrEmpty(DataProvider.FileName))
+                    return "TLCGen - " + DataProvider.FileName;
                 else
                     return "TLCGen";
             }
         }
 
+        /// <summary>
+        /// Holds a list of available code generators. Available generators are resolved at runtime
+        /// by looking in the folder 'Generators' for DLL's with appropriate attributes.
+        /// </summary>
         public List<IGeneratorViewModel> Generators
         {
             get
@@ -92,6 +111,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Holds a list of available importers. Available importers are resolved at runtime
+        /// by looking in the folder 'Importers' for DLL's with appropriate attributes.
+        /// </summary>
+        public List<IImporter> Importers
+        {
+            get
+            {
+                if (_Importers == null)
+                {
+                    _Importers = new List<IImporter>();
+                }
+                return _Importers;
+            }
+        }
+
+        /// <summary>
+        /// Holds the selected code generator, on which the appropriate function calls are invoked
+        /// when commands relating to generators are executed.
+        /// </summary>
         public IGeneratorViewModel SelectedGenerator
         {
             get { return _SelectedGenerator; }
@@ -102,11 +141,51 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Holds the selected importer, on which the appropriate function calls are invoked
+        /// when commands relating to importing data are executed.
+        /// </summary>
+        public IImporter SelectedImporter
+        {
+            get { return _SelectedImporter; }
+            set
+            {
+                _SelectedImporter = value;
+                OnPropertyChanged("SelectedImporter");
+            }
+        }
+
+        /// <summary>
+        /// Holds a list of available menu items that are bound to the View. This allows the user
+        /// to click a menu item to instruct an importer to import data.
+        /// </summary>
+        public List<MenuItem> ImportMenuItems
+        {
+            get
+            {
+                if(_ImportMenuItems == null)
+                {
+                    _ImportMenuItems = new List<MenuItem>();
+                }
+                return _ImportMenuItems;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
 
         RelayCommand _NewFileCommand;
+        RelayCommand _OpenFileCommand;
+        RelayCommand _SaveFileCommand;
+        RelayCommand _SaveAsFileCommand;
+        RelayCommand _CloseFileCommand;
+        RelayCommand _ExitApplicationCommand;
+        RelayCommand _GenerateCommand;
+        RelayCommand _GenerateVisualCommand;
+        RelayCommand _ShowSettingsWindowCommand;
+        RelayCommand _ShowAboutCommand;
+
         public ICommand NewFileCommand
         {
             get
@@ -119,7 +198,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _OpenFileCommand;
         public ICommand OpenFileCommand
         {
             get
@@ -132,7 +210,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _SaveFileCommand;
         public ICommand SaveFileCommand
         {
             get
@@ -145,7 +222,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _SaveAsFileCommand;
         public ICommand SaveAsFileCommand
         {
             get
@@ -158,8 +234,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-
-        RelayCommand _CloseFileCommand;
         public ICommand CloseFileCommand
         {
             get
@@ -172,7 +246,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _ExitApplicationCommand;
         public ICommand ExitApplicationCommand
         {
             get
@@ -185,20 +258,18 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _GenerateCommand;
         public ICommand GenerateCommand
         {
             get
             {
                 if (_GenerateCommand == null)
                 {
-                    _GenerateCommand = new RelayCommand(GenerateCommand_Executed, GenerateCommand_CanExecute);
+                    _GenerateCommand = new RelayCommand(GenerateCodeCommand_Executed, GenerateCodeCommand_CanExecute);
                 }
                 return _GenerateCommand;
             }
         }
 
-        RelayCommand _GenerateVisualCommand;
         public ICommand GenerateVisualCommand
         {
             get
@@ -211,7 +282,20 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _ShowSettingsWindowCommand;
+
+        RelayCommand _ImportControllerCommand;
+        public ICommand ImportControllerCommand
+        {
+            get
+            {
+                if (_ImportControllerCommand == null)
+                {
+                    _ImportControllerCommand = new RelayCommand(ImportControllerCommand_Executed, ImportControllerCommand_CanExecute);
+                }
+                return _ImportControllerCommand;
+            }
+        }
+
         public ICommand ShowSettingsWindowCommand
         {
             get
@@ -224,14 +308,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void ShowSettingsWindowCommand_Executed(object obj)
-        {
-            TLCGen.Views.Dialogs.TLCGenSettingsWindow settingswin = new Views.Dialogs.TLCGenSettingsWindow();
-            settingswin.DataContext = this;
-            settingswin.ShowDialog();
-        }
-
-        RelayCommand _ShowAboutCommand;
         public ICommand ShowAboutCommand
         {
             get
@@ -244,35 +320,28 @@ namespace TLCGen.ViewModels
             }
         }
 
-
         #endregion // Commands
 
         #region Command functionality
 
-        private void ShowAboutCommand_Executed(object obj)
-        {
-            TLCGen.Views.AboutWindow about = new Views.AboutWindow();
-            about.ShowDialog();
-        }
-
-        void NewFileCommand_Executed(object prm)
+        private void NewFileCommand_Executed(object prm)
         {
             if (!ControllerHasChanged())
             {
-                MyDataProvider.NewEmptyController();
-                ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
+                DataProvider.SetController();
+                ControllerVM = new ControllerViewModel(this, DataProvider.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.UpdateTabsEnabled();
             }
         }
 
-        bool NewFileCommand_CanExecute(object prm)
+        private bool NewFileCommand_CanExecute(object prm)
         {
             return true;
         }
 
-        void OpenFileCommand_Executed(object prm)
+        private void OpenFileCommand_Executed(object prm)
         {
             if (!ControllerHasChanged())
             {
@@ -281,10 +350,10 @@ namespace TLCGen.ViewModels
                 openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    MyDataProvider.FileName = openFileDialog.FileName;
-                    if (MyDataProvider.LoadController())
+                    DataProvider.FileName = openFileDialog.FileName;
+                    if (DataProvider.LoadController())
                     {
-                        ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
+                        ControllerVM = new ControllerViewModel(this, DataProvider.Controller);
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
                         ControllerVM.DoUpdateFasen();
@@ -295,68 +364,64 @@ namespace TLCGen.ViewModels
             }
         }
 
-        bool OpenFileCommand_CanExecute(object prm)
+        private bool OpenFileCommand_CanExecute(object prm)
         {
             return true;
         }
 
-        void SaveFileCommand_Executed(object prm)
+        private void SaveFileCommand_Executed(object prm)
         {
-            if (string.IsNullOrWhiteSpace(MyDataProvider.FileName))
+            if (string.IsNullOrWhiteSpace(DataProvider.FileName))
                 SaveAsFileCommand.Execute(null);
             else
             {
-                // Save the conflict matrix if needed
-                if (ControllerVM.SelectedTab != null &&
-                    ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
-                    ControllerVM.ConflictMatrixVM.MatrixChanged)
+                // Save all changes to model
+                ControllerVM.ProcessAllChanges();
+
+                // Check data integrity: do not save wrong data
+                string s = IntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
+                if(s != null)
                 {
-                    string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
-                    if (!string.IsNullOrEmpty(s))
-                    {
-                        System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
-                        return;
-                    }
-                    ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
+                    System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
+                    return;
                 }
-                MyDataProvider.SaveController();
+
+                // Save data to disk, update saved state
+                DataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 ControllerVM.UpdateTabsEnabled();
                 ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
 
-        bool SaveFileCommand_CanExecute(object prm)
+        private bool SaveFileCommand_CanExecute(object prm)
         {
             return ControllerVM != null && ControllerVM.HasChanged;
         }
 
-        void SaveAsFileCommand_Executed(object prm)
+        private void SaveAsFileCommand_Executed(object prm)
         {
+            // Save all changes to model
+            ControllerVM.ProcessAllChanges();
 
-            // Save the conflict matrix if needed
-            if (ControllerVM.SelectedTab != null &&
-                ControllerVM.SelectedTab.Header.ToString() == "Conflicten" &&
-                ControllerVM.ConflictMatrixVM.MatrixChanged)
+            // Check data integrity: do not save wrong data
+            string s = IntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
+            if (s != null)
             {
-                string s = ControllerVM.ConflictMatrixVM.IsMatrixSymmetrical();
-                if (!string.IsNullOrEmpty(s))
-                {
-                    System.Windows.MessageBox.Show(s, "Error: Conflict matrix niet symmetrisch. Kan niet opslaan.");
-                    return;
-                }
-                ControllerVM.ConflictMatrixVM.SaveConflictMatrix();
+                System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
+                return;
             }
 
+            // Save data to disk, update saved state
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.OverwritePrompt = true;
             saveFileDialog.Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz";
-            if (!string.IsNullOrWhiteSpace(MyDataProvider.FileName))
-                saveFileDialog.FileName = MyDataProvider.FileName;
+            if (!string.IsNullOrWhiteSpace(DataProvider.FileName))
+                saveFileDialog.FileName = DataProvider.FileName;
             if (saveFileDialog.ShowDialog() == true)
             {
-                MyDataProvider.FileName = saveFileDialog.FileName;
-                MyDataProvider.SaveController();
+                DataProvider.FileName = saveFileDialog.FileName;
+                DataProvider.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.UpdateTabsEnabled();
@@ -364,56 +429,134 @@ namespace TLCGen.ViewModels
             }
         }
 
-        bool SaveAsFileCommand_CanExecute(object prm)
+        private bool SaveAsFileCommand_CanExecute(object prm)
         {
             return ControllerVM != null;
         }
 
-        void CloseFileCommand_Executed(object prm)
+        private void CloseFileCommand_Executed(object prm)
         {
             if (!ControllerHasChanged())
             {
-                MyDataProvider.CloseController();
+                DataProvider.CloseController();
                 ControllerVM = null;
                 OnPropertyChanged("ProgramTitle");
             }
         }
 
-        bool CloseFileCommand_CanExecute(object prm)
+        private bool CloseFileCommand_CanExecute(object prm)
         {
             return ControllerVM != null;
         }
 
-        void ExitApplicationCommand_Executed(object prm)
+        private void ExitApplicationCommand_Executed(object prm)
         {
             System.Windows.Application.Current.Shutdown();
         }
 
-        bool ExitApplicationCommand_CanExecute(object prm)
+        private bool ExitApplicationCommand_CanExecute(object prm)
         {
             return true;
         }
 
-        void GenerateCommand_Executed(object prm)
+        private void GenerateCodeCommand_Executed(object prm)
         {
-            string result = SelectedGenerator.Generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            string result = SelectedGenerator.Generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(DataProvider.FileName));
             ControllerVM.SetStatusText(result);
         }
 
-        bool GenerateCommand_CanExecute(object prm)
+        private bool GenerateCodeCommand_CanExecute(object prm)
         {
             return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
         }
 
-        void GenerateVisualCommand_Executed(object prm)
+        private void GenerateVisualCommand_Executed(object prm)
         {
-            string result = SelectedGenerator?.Generator?.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(MyDataProvider.FileName));
+            string result = SelectedGenerator?.Generator?.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(DataProvider.FileName));
             ControllerVM.SetStatusText(result);
         }
 
-        bool GenerateVisualCommand_CanExecute(object prm)
+        private bool GenerateVisualCommand_CanExecute(object prm)
         {
             return SelectedGenerator != null && ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+        }
+
+        private void ImportControllerCommand_Executed(object obj)
+        {
+            if (obj == null)
+                throw new NotImplementedException();
+            IImporter imp = obj as IImporter;
+            if (imp == null)
+                throw new NotImplementedException();
+
+            // Import into existing controller
+            if (!ControllerHasChanged())
+            {
+                if (imp.ImportsIntoExisting)
+                {
+                    // Check data integrity
+                    string s1 = IntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
+                    if (s1 != null)
+                    {
+                        System.Windows.MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
+                        return;
+                    }
+                    // Import to clone of original (so we can discard if wrong)
+                    ControllerModel c1 = DeepCloner.DeepClone(ControllerVM.Controller);
+                    ControllerModel c2 = imp.ImportController(c1);
+                    // Check data integrity
+                    s1 = IntegrityChecker.IsControllerDataOK(c2);
+                    if (s1 != null)
+                    {
+                        System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                        return;
+                    }
+                    SetNewController(c2);
+                    ControllerVM.HasChanged = true;
+                }
+                // Import as new controller
+                else
+                {
+                    ControllerModel c1 = imp.ImportController();
+                    // Check data integrity
+                    string s1 = IntegrityChecker.IsControllerDataOK(c1);
+                    if (s1 != null)
+                    {
+                        System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                        return;
+                    }
+                    SetNewController(c1);
+                    ControllerVM.HasChanged = true;
+                }
+            }
+        }
+
+        private bool ImportControllerCommand_CanExecute(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            IImporter imp = obj as IImporter;
+            if (imp == null)
+                throw new NotImplementedException();
+
+            if (imp.ImportsIntoExisting)
+                return ControllerVM != null;
+
+            return true;
+        }
+
+        private void ShowSettingsWindowCommand_Executed(object obj)
+        {
+            TLCGen.Views.Dialogs.TLCGenSettingsWindow settingswin = new Views.Dialogs.TLCGenSettingsWindow();
+            settingswin.DataContext = this;
+            settingswin.ShowDialog();
+        }
+
+        private void ShowAboutCommand_Executed(object obj)
+        {
+            TLCGen.Views.AboutWindow about = new Views.AboutWindow();
+            about.ShowDialog();
         }
 
         #endregion // Command functionality
@@ -445,15 +588,15 @@ namespace TLCGen.ViewModels
                                     var generator = Activator.CreateInstance(t);
                                     var igenerator = generator as IGenerator;
                                     // Loop the settings data, to see if we have settings for this Generator
-                                    foreach (GeneratorDataModel gendata in SettingsVM.Settings.CustomData.GeneratorsData)
+                                    foreach (AddinSettingsModel gendata in SettingsVM.Settings.CustomData.AddinSettings)
                                     {
-                                        if (gendata.Naam == igenerator.GetGeneratorName())
+                                        if (gendata.Naam == igenerator.Name)
                                         {
                                             // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
                                             var dllprops = t.GetProperties().Where(
                                                 prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
                                             // Loop the saved settings, and load if applicable
-                                            foreach (GeneratorDataPropertyModel dataprop in gendata.Properties)
+                                            foreach (AddinSettingsPropertyModel dataprop in gendata.Properties)
                                             {
                                                 foreach (var propinfo in dllprops)
                                                 {
@@ -461,7 +604,7 @@ namespace TLCGen.ViewModels
                                                     TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenCustomSettingAttribute));
                                                     if (propinfo.Name == dataprop.Naam)
                                                     {
-                                                        if (propattr != null && propattr.SettingType == "application")
+                                                        if (propattr != null && propattr.SettingType == TLCGenCustomSettingAttribute.SettingTypeEnum.Application)
                                                         {
                                                             try
                                                             {
@@ -534,12 +677,12 @@ namespace TLCGen.ViewModels
 
         private void SaveGeneratorControllerSettingsToModel()
         {
-            SettingsVM.Settings.CustomData.GeneratorsData.Clear();
+            SettingsVM.Settings.CustomData.AddinSettings.Clear();
             foreach(IGeneratorViewModel genvm in Generators)
             {
                 IGenerator gen = genvm.Generator;
-                GeneratorDataModel gendata = new GeneratorDataModel();
-                gendata.Naam = gen.GetGeneratorName();
+                AddinSettingsModel gendata = new AddinSettingsModel();
+                gendata.Naam = gen.Name;
                 Type t = gen.GetType();
                 // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
                 var dllprops = t.GetProperties().Where(
@@ -549,14 +692,14 @@ namespace TLCGen.ViewModels
                     if (propertyInfo.CanRead)
                     {
                         TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propertyInfo, typeof(TLCGenCustomSettingAttribute));
-                        if (propattr.SettingType == "application")
+                        if (propattr.SettingType == TLCGenCustomSettingAttribute.SettingTypeEnum.Application)
                         {
                             try
                             {
 
                                 string name = propertyInfo.Name;
                                 string value = propertyInfo.GetValue(gen, null).ToString();
-                                GeneratorDataPropertyModel prop = new GeneratorDataPropertyModel();
+                                AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel();
                                 prop.Naam = name;
                                 prop.Setting = value;
                                 gendata.Properties.Add(prop);
@@ -568,14 +711,20 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                SettingsVM.Settings.CustomData.GeneratorsData.Add(gendata);
+                SettingsVM.Settings.CustomData.AddinSettings.Add(gendata);
             }
         }
 
-#endregion // Private methods
+        #endregion // Private methods
 
-#region Public methods
+        #region Public methods
 
+        /// <summary>
+        /// Checks wether or not the currently loaded Controller has changes. If it does,
+        /// the method offers the user to save them.
+        /// </summary>
+        /// <returns>True if there are unsaved changes, false if there are not or if
+        /// the user decides to discard them.</returns>
         public bool ControllerHasChanged()
         {
             if (ControllerVM != null && ControllerVM.HasChanged)
@@ -595,13 +744,21 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Updates the ViewModel structure, causing the View to reload all bound properties.
+        /// </summary>
         public void UpdateController()
         {
-            ControllerVM.DoUpdateFasen();
-            ControllerVM.ConflictMatrixVM.BuildConflictMatrix();
+            ControllerVM.ReloadController();
             OnPropertyChanged(null);
         }
 
+        /// <summary>
+        /// Used to set the loaded Controller to a new instance of ControllerModel. The method also 
+        /// checks for changes, sets program title, and updates bound properties.
+        /// </summary>
+        /// <param name="cm">The instance of ControllerModel to be loaded.</param>
+        /// <returns></returns>
         public bool SetNewController(ControllerModel cm)
         {
             if (!ControllerHasChanged())
@@ -610,35 +767,55 @@ namespace TLCGen.ViewModels
                 {
                     ControllerVM.SelectedTabIndex = 0;
                 }
-                MyDataProvider.SetNewController(cm);
+                DataProvider.SetController(cm);
                 ControllerVM = new ControllerViewModel(this, cm);
                 ControllerVM.SelectedTabIndex = 0;
-                OnPropertyChanged("ProgramTitle");
-                ControllerVM.SortFasen();
-                ControllerVM.ConflictMatrixVM.BuildConflictMatrix();
+                UpdateController();
                 return true;
             }
             return false;
         }
 
-#endregion // Public methods
+        #endregion // Public methods
 
-#region Constructor
+        #region Constructor
 
         public MainWindowViewModel()
         { 
+            // Load application settings (defaults, etc.)
             SettingsProvider.LoadApplicationSettings();
-            _MyDataProvider = new DataProvider();
-            _MyDataImporter = new DataImporter(this);
+            
+            // Load addins: generators, importers
+            List<IGenerator> generators = AddInLoaderT.LoadAllAddins<IGenerator, TLCGenGeneratorAttribute>(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Generators\\"));
+            List<IImporter> importers = AddInLoaderT.LoadAllAddins<IImporter, TLCGenImporterAttribute>(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Importers\\"));
 
-            LoadAllGenerators();
+            foreach(IGenerator gen in generators)
+            {
+                Type t = gen.GetType();
+                AddInLoaderT.LoadAddinSettings(gen, t, SettingsProvider.CustomSettings);
+                Generators.Add(new IGeneratorViewModel(gen));
+            }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
 
-#if DEBUG
-            MyDataProvider.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";
-            if (MyDataProvider.LoadController())
+            foreach (IImporter imp in importers)
             {
-                ControllerVM = new ControllerViewModel(this, MyDataProvider.Controller);
+                Type t = imp.GetType();
+                AddInLoaderT.LoadAddinSettings(imp, t, SettingsProvider.CustomSettings);
+                Importers.Add(imp);
+                MenuItem mi = new MenuItem();
+                mi.Header = imp.Name;
+                mi.Command = ImportControllerCommand;
+                mi.CommandParameter = imp;
+                ImportMenuItems.Add(mi);
+            }
+
+            // If we are in debug mode, the code below tries loading a file
+            // called 'test.tlc' from the folder where the application runs.
+#if DEBUG
+            DataProvider.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";
+            if (DataProvider.LoadController())
+            {
+                ControllerVM = new ControllerViewModel(this, DataProvider.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.DoUpdateFasen();
@@ -652,7 +829,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-#endregion // Constructor
+        #endregion // Constructor
 
     }
 }

@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _Generator.GetGeneratorName();
+                return _Generator.Name;
             }
         }
 

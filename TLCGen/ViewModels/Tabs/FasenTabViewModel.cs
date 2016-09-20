@@ -13,6 +13,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Interfaces;
 using TLCGen.Models;
+using TLCGen.Settings;
 using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
@@ -212,6 +213,9 @@ namespace TLCGen.ViewModels
 
         #region Public Methods
 
+        /// <summary>
+        /// Sorts the maxgreen sets according to the order of the phases
+        /// </summary>
         public void SortMaxGroenSetsFasen()
         {
             foreach(MaxGroentijdenSetViewModel mgsvm in _MaxGroentijdenLijstVM.MaxGroentijdenSets)
@@ -221,6 +225,12 @@ namespace TLCGen.ViewModels
             _MaxGroentijdenLijstVM.BuildMaxGroenMatrix();
         }
 
+        /// <summary>
+        /// Sets the value of the property indicated by propName to the value it has 
+        /// for the parsed instance of PhaseCyclusViewModel for all selected phases
+        /// </summary>
+        /// <param name="o">The instance of PhaseCyclusViewModel to take as the base case</param>
+        /// <param name="propName">The property to set</param>
         public void SetAllSelectedFasenValue(FaseCyclusViewModel o, string propName)
         {
             foreach(FaseCyclusViewModel fcvm in SelectedFaseCycli)

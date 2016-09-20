@@ -10,12 +10,12 @@ namespace TLCGen.Models
     [Serializable]
     public class CustomDataModel
     {
-        [XmlArrayItem(ElementName = "GeneratorData")]
-        public List<GeneratorDataModel> GeneratorsData { get; set; }
+        [XmlArrayItem(ElementName = "CustomData")]
+        public List<AddinSettingsModel> AddinSettings { get; set; }
 
         public CustomDataModel()
         {
-            GeneratorsData = new List<GeneratorDataModel>();
+            AddinSettings = new List<AddinSettingsModel>();
         }
     }
 }

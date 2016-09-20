@@ -87,7 +87,7 @@ namespace TLCGen.ViewModels
         {
             MaxGroentijdModel mgm = new MaxGroentijdModel();
             mgm.FaseCyclus = fasedefine;
-            mgm.Waarde = Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fasedefine);
+            mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fasedefine);
             MaxGroentijdenSetList.Add(new MaxGroentijdViewModel(_ControllerVM, mgm));
         }
 

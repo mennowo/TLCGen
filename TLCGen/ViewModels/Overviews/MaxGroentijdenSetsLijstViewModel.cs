@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
             {
                 MaxGroentijdModel mgm = new MaxGroentijdModel();
                 mgm.FaseCyclus = fcvm.Define;
-                mgm.Waarde = Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fcvm.Type);
+                mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(fcvm.Type);
                 mgsm.MaxGroentijden.Add(mgm);
             }
 

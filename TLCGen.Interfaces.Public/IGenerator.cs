@@ -8,13 +8,12 @@ using TLCGen.Models;
 
 namespace TLCGen.Interfaces.Public
 {
-    public interface IGenerator
+    public interface IGenerator : ITLCGenAddin
     {
+        string Version { get; }
+
         string GenerateSourceFiles(ControllerModel controller, string sourcefilepath);
         string GenerateProjectFiles(ControllerModel controller, string projectfilepath);
         string GenerateSpecification(ControllerModel controller, string specificationfilepath);
-
-        string GetGeneratorName();
-        string GetGeneratorVersion();
     }
 }

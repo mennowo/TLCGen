@@ -14,6 +14,16 @@ namespace TLCGen.Generators.CCOL
     {
         #region IGenerator
 
+        public string Name
+        {
+            get { return "YATLCCLC"; }
+        }
+
+        public string Version
+        {
+            get { return "0"; }
+        }
+
         public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
         {
             string result = "niets gegenereerd, dit is een placeholder/demo plugin!";
@@ -33,17 +43,7 @@ namespace TLCGen.Generators.CCOL
             string result = "";
 
             return result;
-        }
-
-        public string GetGeneratorName()
-        {
-            return "YATLCCLC";
-        }
-
-        public string GetGeneratorVersion()
-        {
-            return "0";
-        }
+        }   
 
         #endregion // IGenerator
 
@@ -56,13 +56,13 @@ namespace TLCGen.Generators.CCOL
         [DisplayName("YATLCCLC resources pad")]
         [Description("YATLCCLC resources pad")]
         [Category("Visual project settings")]
-        [TLCGenCustomSetting("application")]
+        [TLCGenCustomSetting]
         public string YATLCCLCResPath { get; set; }
 
         [DisplayName("Preprocessor definities")]
         [Description("Preprocessor definities")]
         [Category("Visual project settings")]
-        [TLCGenCustomSetting("application")]
+        [TLCGenCustomSetting]
         public string YATLCCLCPreprocessorDefinitions { get; set; }
 
         #endregion // Properties

@@ -30,6 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,8 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGenerator.cs" />
-    <Compile Include="IGeneratorNameAttribute.cs" />
+    <Compile Include="IImporter.cs" />
+    <Compile Include="ITLCGenAddin.cs" />
+    <Compile Include="TLCGenCustomSettingAttribute.cs" />
+    <Compile Include="TLCGenGeneratorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TLCGenImporterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">

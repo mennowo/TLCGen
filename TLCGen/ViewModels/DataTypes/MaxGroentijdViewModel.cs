@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.DataAccess;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {

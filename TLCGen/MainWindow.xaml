@@ -92,21 +92,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Tools">
-                <MenuItem Header="_Import...">
-                    <MenuItem Header="Tab.c file (nieuwe regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}">
-                        <MenuItem.Icon>
-                            <Image 
-                            Width="16" Height="16"
-                            Source="{StaticResource ImportNewIconDrawingImage}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Tab.c file (in bestaande regeling)" Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" >
-                        <MenuItem.Icon>
-                            <Image 
-                            Width="16" Height="16"
-                            Source="{StaticResource ImportExistingIconDrawingImage}" />
-                        </MenuItem.Icon>
-                    </MenuItem>
+                <MenuItem Header="_Import..." ItemsSource="{Binding Path=ImportMenuItems}">
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}" />
@@ -131,14 +117,6 @@
                 </Button>
                 <Button Command="{Binding Path=CloseFileCommand}" ToolTip="Sluiten regeling (Ctrl-F4)">
                     <Image Source="{StaticResource CloseFileIconDrawingImage}" Width="16" Height="16" />
-                </Button>
-            </ToolBar>
-            <ToolBar>
-                <Button Command="{Binding Path=MyDataImporter.ImportTabCFileNewCommand}" ToolTip="Importeren uit tab.c file (nieuwe regeling)" >
-                    <Image Source="{StaticResource ImportNewIconDrawingImage}" Width="16" Height="16" />
-                </Button>
-                <Button Command="{Binding Path=MyDataImporter.ImportTabCFileExistingCommand}" ToolTip="Importeren uit tab.c file (bestaande regeling)" >
-                    <Image Source="{StaticResource ImportExistingIconDrawingImage}" Width="16" Height="16" />
                 </Button>
             </ToolBar>
             <ToolBar>

@@ -16,7 +16,7 @@
                 <local:FasenTab DataContext="{Binding Path=FasenTabVM}" />
             </TabItem>
             <TabItem Header="Conflicten" Name="ConflictenTab">
-                <local:ConflictMatrixTab DataContext="{Binding Path=ConflictMatrixVM}" />
+                <local:CoordinatiesTab DataContext="{Binding Path=ConflictMatrixVM}" />
             </TabItem>
             <TabItem Header="Detectoren" Name="DetectorenTab">
                 <local:DetectorenTab DataContext="{Binding Path=DetectorenTabVM}" />

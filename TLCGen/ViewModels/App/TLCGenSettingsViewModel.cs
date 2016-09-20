@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TLCGen.DataAccess;
 using TLCGen.Models;
 using TLCGen.Models.Settings;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {

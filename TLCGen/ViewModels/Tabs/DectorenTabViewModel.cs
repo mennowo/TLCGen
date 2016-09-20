@@ -13,6 +13,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Interfaces;
 using TLCGen.Models;
+using TLCGen.Settings;
 using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
@@ -211,6 +212,41 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // ITabWithTemplates
+
+        #region Public Methods
+
+        /// <summary>
+        /// Sets the value of the property indicated by propName to the value it has 
+        /// for the parsed instance of DetectorViewModel for all selected detectors
+        /// </summary>
+        /// <param name="o">The instance of DetectorViewModel to take as the base case</param>
+        /// <param name="propName">The property to set</param>
+        public void SetAllSelectedDetectorenValue(DetectorViewModel o, string propName)
+        {
+            IList dets = null;
+            switch(SelectedTab.Name)
+            {
+                case "PerFaseTab":
+                    dets = DetectorenFasenLijstVM.SelectedDetectoren;
+                    break;
+                case "ExtraTab":
+                    dets = DetectorenExtraLijstVM.SelectedDetectoren;
+                    break;
+                case "AllesTab":
+                    dets = DetectorenAllesLijstVM.SelectedDetectoren;
+                    break;
+            }
+            if(dets != null)
+            {
+                foreach (DetectorViewModel dvm in dets)
+                {
+                    object value = o.GetType().GetProperty(propName).GetValue(o);
+                    dvm.GetType().GetProperty(propName).SetValue(dvm, value);
+                }
+            }
+        }
+
+        #endregion // Public Methods
 
         #region Constructor
 

@@ -11,6 +11,7 @@ using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {

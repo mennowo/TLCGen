@@ -10,6 +10,7 @@ using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
