@@ -468,7 +468,8 @@ namespace TLCGen.ViewModels
 
         private bool GenerateCodeCommand_CanExecute(object prm)
         {
-            return ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+            return !string.IsNullOrWhiteSpace(DataProvider.FileName) && 
+                   ControllerVM?.Fasen?.Count > 0;
         }
 
         private void GenerateVisualCommand_Executed(object prm)
@@ -479,7 +480,9 @@ namespace TLCGen.ViewModels
 
         private bool GenerateVisualCommand_CanExecute(object prm)
         {
-            return SelectedGenerator != null && ControllerVM != null && ControllerVM.Fasen != null && ControllerVM.Fasen.Count > 0;
+            return !string.IsNullOrWhiteSpace(DataProvider.FileName) && 
+                   SelectedGenerator != null && 
+                   ControllerVM?.Fasen?.Count > 0;
         }
 
         private void ImportControllerCommand_Executed(object obj)
