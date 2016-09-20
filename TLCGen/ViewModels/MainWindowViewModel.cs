@@ -512,7 +512,8 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
+                    if(ControllerVM != null)
+                        ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetController(c2);
                     ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
@@ -528,7 +529,8 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
+                    if(ControllerVM != null)
+                        ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetNewController(c1);
                     ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
