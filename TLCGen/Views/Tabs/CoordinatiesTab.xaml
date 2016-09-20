@@ -31,7 +31,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <local:ConflictMatrixDataGrid ConflictMatrix="{Binding Path=ConflictMatrix}" />
+                <local:ConflictMatrixDataGrid ConflictMatrix="{Binding Path=ConflictMatrix}" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
                 <Grid Visibility="{Binding Path=SelectedTab,Converter={StaticResource Tab2VisConv},ConverterParameter=OntruimingstijdenTab}" Grid.Row="1" >
                     <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden}" Margin="2" />
                 </Grid>

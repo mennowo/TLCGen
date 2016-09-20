@@ -18,9 +18,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for ControllerDataView.xaml
     /// </summary>
-    public partial class ControllerDataView : UserControl
+    public partial class AlgemeenTab : UserControl
     {
-        public ControllerDataView()
+        public AlgemeenTab()
         {
             InitializeComponent();
         }

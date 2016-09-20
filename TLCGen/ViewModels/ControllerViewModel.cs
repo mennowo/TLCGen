@@ -321,7 +321,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return !string.IsNullOrWhiteSpace(_AlgemeenTabVM.BitmapNaam) && 
+                return !string.IsNullOrWhiteSpace(_AlgemeenTabVM?.BitmapNaam) && 
                        !string.IsNullOrWhiteSpace(DataProvider.FileName);
             }
         }
@@ -394,8 +394,8 @@ namespace TLCGen.ViewModels
                 // Sort, update
                 SortFasen();
                 HasChangedFasen = false;
-                _CoordinatiesTabVM.BuildConflictMatrix();
-                _CoordinatiesTabVM.MatrixChanged = false;
+                CoordinatiesTabVM.BuildConflictMatrix();
+                CoordinatiesTabVM.MatrixChanged = false;
 
                 // Watch collection changes again
                 Fasen.CollectionChanged += Fasen_CollectionChanged;

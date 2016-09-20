@@ -511,7 +511,8 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    SetNewController(c2);
+                    SetController(c2);
+                    ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
                 }
                 // Import as new controller
@@ -526,6 +527,7 @@ namespace TLCGen.ViewModels
                         return;
                     }
                     SetNewController(c1);
+                    ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
                 }
             }
@@ -754,11 +756,35 @@ namespace TLCGen.ViewModels
         }
 
         /// <summary>
+        /// Used to set the loaded Controller to a the parsed instance of ControllerModel. The method also 
+        /// checks for changes, sets program title, and updates bound properties.
+        /// </summary>
+        /// <param name="cm">The instance of ControllerModel to be loaded.</param>
+        /// <returns>True if successful, false otherwise</returns>
+        public bool SetController(ControllerModel cm)
+        {
+            if (!ControllerHasChanged())
+            {
+                if (ControllerVM != null)
+                {
+                    ControllerVM.SelectedTabIndex = 0;
+                }
+                string filename = DataProvider.FileName;
+                DataProvider.SetController(cm);
+                DataProvider.FileName = filename;
+                ControllerVM = new ControllerViewModel(this, cm);
+                ControllerVM.SelectedTabIndex = 0;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Used to set the loaded Controller to a new instance of ControllerModel. The method also 
         /// checks for changes, sets program title, and updates bound properties.
         /// </summary>
         /// <param name="cm">The instance of ControllerModel to be loaded.</param>
-        /// <returns></returns>
+        /// <returns>True if successful, false otherwise</returns>
         public bool SetNewController(ControllerModel cm)
         {
             if (!ControllerHasChanged())

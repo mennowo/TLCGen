@@ -33,39 +33,42 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTab = value;
-                if (_SelectedTab.Name == "OntruimingstijdenTab")
+                if (ConflictMatrix != null)
                 {
-                    foreach(ConflictViewModel cvm in ConflictMatrix)
+                    if (_SelectedTab.Name == "OntruimingstijdenTab")
                     {
-                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Conflict;
+                        foreach (ConflictViewModel cvm in ConflictMatrix)
+                        {
+                            cvm.WhatToDisplay = ConflictViewModel.DisplayType.Conflict;
+                        }
                     }
-                }
-                if (_SelectedTab.Name == "GarantieOntruimingstijdenTab")
-                {
-                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    if (_SelectedTab.Name == "GarantieOntruimingstijdenTab")
                     {
-                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.GarantieConflict;
+                        foreach (ConflictViewModel cvm in ConflictMatrix)
+                        {
+                            cvm.WhatToDisplay = ConflictViewModel.DisplayType.GarantieConflict;
+                        }
                     }
-                }
-                if (_SelectedTab.Name == "GelijkstartenTab")
-                {
-                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    if (_SelectedTab.Name == "GelijkstartenTab")
                     {
-                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Gelijkstart;
+                        foreach (ConflictViewModel cvm in ConflictMatrix)
+                        {
+                            cvm.WhatToDisplay = ConflictViewModel.DisplayType.Gelijkstart;
+                        }
                     }
-                }
-                if (_SelectedTab.Name == "VoorstartenTab")
-                {
-                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    if (_SelectedTab.Name == "VoorstartenTab")
                     {
-                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Voorstart;
+                        foreach (ConflictViewModel cvm in ConflictMatrix)
+                        {
+                            cvm.WhatToDisplay = ConflictViewModel.DisplayType.Voorstart;
+                        }
                     }
-                }
-                if (_SelectedTab.Name == "NalopenTab")
-                {
-                    foreach (ConflictViewModel cvm in ConflictMatrix)
+                    if (_SelectedTab.Name == "NalopenTab")
                     {
-                        cvm.WhatToDisplay = ConflictViewModel.DisplayType.Naloop;
+                        foreach (ConflictViewModel cvm in ConflictMatrix)
+                        {
+                            cvm.WhatToDisplay = ConflictViewModel.DisplayType.Naloop;
+                        }
                     }
                 }
                 OnPropertyChanged("SelectedTab");
