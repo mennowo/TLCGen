@@ -511,6 +511,7 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
+                    ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetController(c2);
                     ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
@@ -526,6 +527,7 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
+                    ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetNewController(c1);
                     ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
@@ -565,105 +567,9 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        private void LoadAllGenerators()
-        {
-            try
-            {
-                string path = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Generators\\");
-                if (Directory.Exists(path))
-                {
-                    // Find all Generator DLL's
-                    foreach (String file in Directory.GetFiles(path))
-                    {
-                        if (Path.GetExtension(file).ToLower() == ".dll")
-                        {
-                            // Find and loop all types from the Generators
-                            Assembly assemblyInstance = Assembly.LoadFrom(file);
-                            Type[] types = assemblyInstance.GetTypes();
-                            foreach (Type t in types)
-                            {
-                                // Find TLCGenGenerator attribute, and if found, continue
-                                TLCGenGeneratorAttribute genattr = (TLCGenGeneratorAttribute)Attribute.GetCustomAttribute(t, typeof(TLCGenGeneratorAttribute));
-                                if (genattr != null)
-                                {
-                                    // Cast the Generator to IGenerator so we can read its name
-                                    var generator = Activator.CreateInstance(t);
-                                    var igenerator = generator as IGenerator;
-                                    // Loop the settings data, to see if we have settings for this Generator
-                                    foreach (AddinSettingsModel gendata in SettingsVM.Settings.CustomData.AddinSettings)
-                                    {
-                                        if (gendata.Naam == igenerator.Name)
-                                        {
-                                            // From the Generator, real all properties attributed with [TLCGenGeneratorSetting]
-                                            var dllprops = t.GetProperties().Where(
-                                                prop => Attribute.IsDefined(prop, typeof(TLCGenCustomSettingAttribute)));
-                                            // Loop the saved settings, and load if applicable
-                                            foreach (AddinSettingsPropertyModel dataprop in gendata.Properties)
-                                            {
-                                                foreach (var propinfo in dllprops)
-                                                {
-                                                    // Only load here, if it is a controller specific setting
-                                                    TLCGenCustomSettingAttribute propattr = (TLCGenCustomSettingAttribute)Attribute.GetCustomAttribute(propinfo, typeof(TLCGenCustomSettingAttribute));
-                                                    if (propinfo.Name == dataprop.Naam)
-                                                    {
-                                                        if (propattr != null && propattr.SettingType == TLCGenCustomSettingAttribute.SettingTypeEnum.Application)
-                                                        {
-                                                            try
-                                                            {
-                                                                string type = propinfo.PropertyType.ToString();
-                                                                switch (type)
-                                                                {
-                                                                    case "System.Double":
-                                                                        double d;
-                                                                        if (Double.TryParse(dataprop.Setting, out d))
-                                                                            propinfo.SetValue(generator, d);
-                                                                        break;
-                                                                    case "System.Int32":
-                                                                        int i32;
-                                                                        if (Int32.TryParse(dataprop.Setting, out i32))
-                                                                            propinfo.SetValue(generator, i32);
-                                                                        break;
-                                                                    case "System.String":
-                                                                        propinfo.SetValue(generator, dataprop.Setting);
-                                                                        break;
-                                                                    default:
-                                                                        throw new NotImplementedException("False IGenerator property type: " + type);
-                                                                }
-                                                            }
-                                                            catch
-                                                            {
-                                                                System.Windows.MessageBox.Show("Error load generator settings.");
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    // Add the generator to our list of available generators
-                                    Generators.Add(new IGeneratorViewModel(igenerator));
-                                    break;
-                                }
-                                else
-                                {
-#if !DEBUG
-                                    System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen genrator module.");
-#endif
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        /// <summary>
+        /// Called before the application is closed. This allows to save data and settings
+        /// </summary>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (ControllerHasChanged())
@@ -677,6 +583,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+#warning Make this generic, just like how settings are loaded
         private void SaveGeneratorControllerSettingsToModel()
         {
             SettingsVM.Settings.CustomData.AddinSettings.Clear();
