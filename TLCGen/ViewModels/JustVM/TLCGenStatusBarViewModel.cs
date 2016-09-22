@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the statusbar of the application.
+    /// The statusbar is held in a seperate View.
+    /// </summary>
     public class TLCGenStatusBarViewModel : ViewModelBase
     {
         #region Fields

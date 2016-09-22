@@ -12,6 +12,9 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the list of MaxGroentijdenSets in the Fasen tab.
+    /// </summary>
     public class MaxGroentijdenSetsLijstViewModel : ViewModelBase
     {
         #region Fields

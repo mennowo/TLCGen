@@ -11,6 +11,10 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel meant for displaying a list of phases in the Modules tab.
+    /// Also handles clicks on the list, adding and removing phases from modules accordingly.
+    /// </summary>
     public class ModulesTabFasenLijstViewModel : ViewModelBase
     {
         #region Fields

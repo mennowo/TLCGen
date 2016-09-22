@@ -15,6 +15,9 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the View of detectors belonging to phases.
+    /// </summary>
     public class DetectorenFasenLijstViewModel : ViewModelBase
     {
         #region Fields

@@ -10,6 +10,9 @@ using System.Collections.ObjectModel;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// Used to disclose relevant data of items that have bitmap coordinates.
+    /// </summary>
     public class BitmappedItemViewModel : ViewModelBase
     {
         #region Fields
@@ -23,6 +26,9 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        /// <summary>
+        /// The name of the item
+        /// </summary>
         public string Naam
         {
             get { return _Naam; }
@@ -33,6 +39,9 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// A collection holding the bitmap coordinates for the item
+        /// </summary>
         public ObservableCollection<Point> Coordinates
         {
             get
@@ -45,8 +54,15 @@ namespace TLCGen.ViewModels
 
         public enum Type { Fase, Detector, Uitgang, Ingang };
 
+        /// <summary>
+        /// The type of item
+        /// </summary>
         public Type IOType { get; set; }
 
+        /// <summary>
+        /// Indicates wether or not the item has one or more coordinates set.
+        /// This value can be used in the view to display this info to the user.
+        /// </summary>
         public bool HasCoordinates
         {
             get

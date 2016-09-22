@@ -14,6 +14,9 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the list of extra detectors, not belonging to a PhaseCyclus
+    /// </summary>
     public class DetectorenExtraLijstViewModel : ViewModelBase
     {
         #region Fields

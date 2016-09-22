@@ -12,6 +12,11 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// ViewModel for the list with all detectors that are in the controller.
+    /// This class holds an ObservableCollection with all detectors, which must be updated 
+    /// before it is used by the View.
+    /// </summary>
     public class DetectorenAllesLijstViewModel : ViewModelBase
     {
         #region Fields

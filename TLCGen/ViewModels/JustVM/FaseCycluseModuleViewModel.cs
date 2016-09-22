@@ -9,6 +9,10 @@ using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
+    /// <summary>
+    /// Used to disclose relevant information about a PhaseCyclus to the of the application
+    /// that deals with modules.
+    /// </summary>
     public class FaseCyclusModuleViewModel : ViewModelBase
     {
         #region Fields
@@ -20,11 +24,19 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        /// <summary>
+        /// A reference to the FaseCyclus ViewModel to which this class is linked
+        /// </summary>
         public FaseCyclusViewModel FaseCyclusVM
         {
             get { return _FaseCyclusVM; }
         }
 
+        /// <summary>
+        /// A reference to the currently selected module. When this value is set, the method
+        /// UpdateModuleInfo causes the view to update the information of this class, thus
+        /// determining if the class is in the module, or can be added.
+        /// </summary>
         public ModuleViewModel ModuleVM
         {
             get { return _ModuleVM; }
@@ -36,21 +48,33 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// The name of the PhaseCyclus
+        /// </summary>
         public string Naam
         {
             get { return _FaseCyclusVM.Naam; }
         }
 
+        /// <summary>
+        /// The define of the PhaseCyclus
+        /// </summary>
         public string Define
         {
             get { return _FaseCyclusVM.Define; }
         }
 
+        /// <summary>
+        /// The collection of conflicts of the FaseCyclus
+        /// </summary>
         public ObservableCollection<ConflictViewModel> Conflicten
         {
             get { return _FaseCyclusVM.Conflicten; }
         }
 
+        /// <summary>
+        /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
+        /// </summary>
         public bool CanBeAddedToModule
         {
             get
@@ -67,6 +91,9 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Indicates if this phase is or is not in the Module referenced by property ModuleVM
+        /// </summary>
         public bool IsInModule
         {
             get
@@ -83,6 +110,9 @@ namespace TLCGen.ViewModels
             }
         }
 
+        /// <summary>
+        /// Indicates that the property ModuleVM has no value
+        /// </summary>
         public bool NoModuleAvailable
         {
             get { return _ModuleVM == null; }
@@ -105,6 +135,9 @@ namespace TLCGen.ViewModels
 
         #region Public methods
 
+        /// <summary>
+        /// Determines if this phase conflicts with the one parsed
+        /// </summary>
         public bool IsFaseConflicting(FaseCyclusModuleViewModel fcmvm)
         {
             foreach(ConflictViewModel cvm in fcmvm.Conflicten)
@@ -115,6 +148,9 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Determines if this phase conflicts with the one parsed
+        /// </summary>
         public bool IsFaseConflicting(ModuleFaseCyclusViewModel mfcvm)
         {
             foreach (ConflictViewModel cvm in this.Conflicten)
@@ -125,6 +161,9 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        /// <summary>
+        /// Instructs the view that info has changed
+        /// </summary>
         public void UpdateModuleInfo()
         {
             OnPropertyChanged("CanBeAddedToModule");
