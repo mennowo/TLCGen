@@ -20,7 +20,7 @@
                   ItemsSource="{Binding Path=Detectoren}"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=SelectedDetector}"
-                  SelectionUnit="Cell"
+                  SelectionUnit="CellOrRowHeader"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedDetectoren, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"

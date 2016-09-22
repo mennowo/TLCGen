@@ -23,6 +23,13 @@
             <TextBlock TextWrapping="Wrap">
                 <Span FontWeight="Bold">TLCGen</Span>
                 <LineBreak />
+                Versie: 0.1
+                <LineBreak />
+                Datum: 22 september 2016
+                <LineBreak />
+                Info: <Hyperlink Click="InfoHyperlink_Click">menno@codingconnected.eu</Hyperlink>
+                <LineBreak />
+                <LineBreak />
                 Een open source applicatie voor specificeren en genereren van software voor verkeerslichten.
                 <LineBreak />
                 Deze software is open source beschikbaar onder de MIT licentie.
@@ -31,10 +38,10 @@
                 Copyright (C) 2016 Gemeente Rotterdam, CodingConnected e.U., Menno van der Woude
                 <LineBreak />
                 <LineBreak />
-                Font used for brackets in icon: <Hyperlink>http://www.marksimonson.com/fonts/view/anonymous-pro</Hyperlink> (license: OFL)
+                Font used for brackets in icon: <Hyperlink Click="FontHyperlink_Click">http://www.marksimonson.com/fonts/view/anonymous-pro</Hyperlink> (license: OFL)
                 <LineBreak />
                 <LineBreak />
-                Icons drawn using Inkscape. File menu icons loosely based on Fugue icon set from Yusuke Kamiyamane: <Hyperlink>http://p.yusukekamiyamane.com/</Hyperlink> (license: CC BY 3.0)
+                Icons drawn using Inkscape. File menu icons loosely based on Fugue icon set from Yusuke Kamiyamane: <Hyperlink Click="IconsHyperlink_Click">http://p.yusukekamiyamane.com/</Hyperlink> (license: CC BY 3.0)
             </TextBlock>
         </StackPanel>
         <Button Grid.Row="1" HorizontalAlignment="Center" Margin="5" Click="Button_Click" IsDefault="True">

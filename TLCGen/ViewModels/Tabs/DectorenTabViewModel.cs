@@ -42,11 +42,11 @@ namespace TLCGen.ViewModels
                 {
                     fcvm.Detectoren.BubbleSort();
                 }
-                if(_SelectedTab.Name == "AllesTab")
+                _ControllerVM.Detectoren.BubbleSort();
+                if(_SelectedTab.Name == "AllesTab" || _SelectedTab.Name == "SimulatieTab")
                 {
                     _DetectorenAllesLijstVM.SetDetectorenChanged();
                 }
-                _ControllerVM.Detectoren.BubbleSort();
                 OnPropertyChanged("SelectedTab");
             }
         }
@@ -105,8 +105,11 @@ namespace TLCGen.ViewModels
         private void GenerateSimulationValuesCommand_Executed(object obj)
         {
             Random rd = new Random();
-            int[] qs = { 25, 50, 100, 200, 5, 25, 50, 200, 5, 50, 100, 200 };
-            int qsmax = 12;
+            int[] qs = { 25, 50, 100, 200,
+                         5,  25, 50,  200,
+                         5,  25, 100, 200,
+                         5,  50, 100, 200 };
+            int qsmax = 16;
 
             foreach (FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
             {

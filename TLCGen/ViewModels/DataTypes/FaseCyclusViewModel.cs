@@ -57,10 +57,12 @@ namespace TLCGen.ViewModels
                         cvm.FaseVan = value;
                     }
                     _ControllerVM.ChangeFaseDefine(this, oldname);
+
+                    // set new type
+                    this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
                     _ControllerVM.HasChangedFasen = true;
                 }
-                OnMonitoredPropertyChanged("Naam", _ControllerVM);
-                OnMonitoredPropertyChanged("Define", _ControllerVM);
+                OnMonitoredPropertyChanged(null, _ControllerVM); // Update all properties
             }
         }
 
@@ -72,7 +74,9 @@ namespace TLCGen.ViewModels
                 if (_FaseCyclus.Type != value)
                 {
                     _FaseCyclus.Type = value;
-                    OnMonitoredPropertyChanged("Type", _ControllerVM);
+
+                    // Apply new defaults
+                    SettingsProvider.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
 
                     // Set default maxgroentijd
                     foreach (MaxGroentijdenSetViewModel mgsvm in _ControllerVM.MaxGroentijdenSets)
@@ -84,6 +88,7 @@ namespace TLCGen.ViewModels
                         }
                     }
 
+                    OnMonitoredPropertyChanged(null, _ControllerVM); // Update all properties
                     _ControllerVM.SetAllSelectedElementsValue(this, "Type");
                 }
             }

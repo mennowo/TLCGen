@@ -120,15 +120,19 @@ namespace TLCGen.Importers.TabC
                             MessageBox.Show("De volgende fasen uit de tab.c file zijn nieuw toegevoegd in de regeling:\n\n" +
                                 NewPhasesMessage, "Nieuwe fasen toegevoegd", MessageBoxButton.OK);
                         }
+                        return c;
                     }
+                    else
+                        return null;
                 }
                 catch (Exception e)
                 {
                     System.Windows.MessageBox.Show("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c");
+                    return null;
                 }
             }
 
-            return c;
+            return null;
         }
     }
 }

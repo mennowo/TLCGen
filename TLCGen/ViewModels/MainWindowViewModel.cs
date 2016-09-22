@@ -508,6 +508,11 @@ namespace TLCGen.ViewModels
                     // Import to clone of original (so we can discard if wrong)
                     ControllerModel c1 = DeepCloner.DeepClone(ControllerVM.Controller);
                     ControllerModel c2 = imp.ImportController(c1);
+
+                    // Do nothing if the importer returned nothing
+                    if (c2 == null)
+                        return;
+
                     // Check data integrity
                     s1 = IntegrityChecker.IsControllerDataOK(c2);
                     if (s1 != null)
@@ -525,6 +530,11 @@ namespace TLCGen.ViewModels
                 else
                 {
                     ControllerModel c1 = imp.ImportController();
+
+                    // Do nothing if the importer returned nothing
+                    if (c1 == null)
+                        return; 
+
                     // Check data integrity
                     string s1 = IntegrityChecker.IsControllerDataOK(c1);
                     if (s1 != null)
@@ -702,10 +712,7 @@ namespace TLCGen.ViewModels
         {
             if (!ControllerHasChanged())
             {
-                if(ControllerVM != null)
-                {
-                    ControllerVM.SelectedTabIndex = 0;
-                }
+                ControllerVM = null;
                 DataProvider.SetController(cm);
                 ControllerVM = new ControllerViewModel(this, cm);
                 ControllerVM.SelectedTabIndex = 0;

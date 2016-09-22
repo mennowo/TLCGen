@@ -22,6 +22,10 @@
                     <Setter Property="Foreground" Value="LightGray" />
                 </DataTrigger>
             </Style.Triggers>
+            <!-- here, we need to redo what the specialdatagrid has, cause the style for datagridcell is overwritten 
+                 not sweet, but so far, found no better way -->
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
+            <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />
         </Style>
         <DataGridTextColumn x:Key="FaseCyclusColumn"
                             Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
@@ -45,6 +49,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <re:SpecialDataGrid 
+            x:Name="specialgrid"
                   ItemsSource="{Binding Path=Detectoren}"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=SelectedDetector}"

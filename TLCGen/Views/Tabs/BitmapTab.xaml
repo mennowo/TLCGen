@@ -78,6 +78,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TabControl Grid.Column="0" Margin="2" SelectedItem="{Binding Path=SelectedTab}">
                 <TabItem Header="Uitgangen" Name="OutputsTab" >
@@ -91,11 +92,18 @@
                           SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
                 </TabItem>
             </TabControl>
-            <Button Grid.Row="1" Content="Refresh bitmap (F5)" Command="{Binding Path=RefreshBitmapCommand}" Margin="2" />
+            <Label Grid.Row="1" Content="Bitmap:" />
+            <WrapPanel Orientation="Horizontal" Grid.Row="2">
+                <Button Content="Refresh (F5)" Command="{Binding Path=RefreshBitmapCommand}" Margin="2" />
+                <Button Content="Reset zoom" Command="{Binding Path=ResetBitmapCommand}" CommandParameter="{Binding ElementName=zb}" Margin="2" />
+            </WrapPanel>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <Grid Grid.Column="2" Margin="5,5,5,5" >
-            <local:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}">
+        <Grid Grid.Column="2" Margin="5,5,5,5" Background="White">
+            <Grid.InputBindings>
+                <MouseBinding Gesture="RightClick" Command="{Binding ResetBitmapCommand}" CommandParameter="{Binding ElementName=zb}" />
+            </Grid.InputBindings>
+            <local:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}" x:Name="zb">
                 <Viewbox Stretch="None" >
                     <Image 
                         RenderOptions.BitmapScalingMode="NearestNeighbor"

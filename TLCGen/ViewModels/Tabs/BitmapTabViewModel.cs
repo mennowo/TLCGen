@@ -146,6 +146,19 @@ namespace TLCGen.ViewModels
             }
         }
 
+        RelayCommand _ResetBitmapCommand;
+        public ICommand ResetBitmapCommand
+        {
+            get
+            {
+                if (_ResetBitmapCommand == null)
+                {
+                    _ResetBitmapCommand = new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
+                }
+                return _ResetBitmapCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Command functionality
@@ -204,6 +217,17 @@ namespace TLCGen.ViewModels
         bool RefreshBitmapCommand_CanExecute(object prm)
         {
             return BitmapFileName != null;
+        }
+
+        private void ResetBitmapCommand_Executed(object obj)
+        {
+            Views.ZoomBorder zb = obj as Views.ZoomBorder;
+            zb?.Reset();
+        }
+
+        private bool ResetBitmapCommand_CanExecute(object obj)
+        {
+            return true;
         }
 
         #endregion // Command functionality

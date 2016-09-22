@@ -45,14 +45,15 @@ namespace TLCGen.Importers.TabC
                     {
                         newc.Fasen.Add(fcm);
                     }
+                    return newc;
                 }
                 catch (Exception e)
                 {
                     System.Windows.MessageBox.Show("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c");
+                    return null;
                 }
             }
-
-            return newc;
+            return null;
         }
     }
 }

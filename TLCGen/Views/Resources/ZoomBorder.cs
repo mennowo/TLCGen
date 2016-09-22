@@ -19,6 +19,19 @@ namespace TLCGen.Views
         private System.Windows.Point start;
         private Timer delayedclicktimer = new Timer(200);
 
+        public bool SetReset
+        {
+            get { return false; }
+            set
+            {
+                if (value)
+                    this.Reset();
+            }
+        }
+
+        public static readonly DependencyProperty SetResetProperty =
+            DependencyProperty.Register("SetReset", typeof(bool), typeof(ZoomBorder), new PropertyMetadata(false));
+
         public RelayCommand ClickedCommand
         {
             get { return (RelayCommand)GetValue(ClickedCommandProperty); }
@@ -76,6 +89,7 @@ namespace TLCGen.Views
 
         public void Reset()
         {
+
             if (child != null)
             {
                 // reset zoom
