@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLCGen.Importers.TabC</RootNamespace>
     <AssemblyName>TLCGen.Importers.TabC</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Interfaces.Public.csproj">
+    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
-      <Name>TLCGen.Interfaces.Public</Name>
+      <Name>TLCGen.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>

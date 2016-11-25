@@ -9,11 +9,23 @@ using TLCGen.Settings;
 
 namespace TLCGen.Importers.TabC
 {
+    public class TabCImportHelperOutcome
+    {
+        public List<FaseCyclusModel> Fasen { get; set; }
+        public List<ConflictModel> Conflicten { get; set; }
+
+        public TabCImportHelperOutcome()
+        {
+            Fasen = new List<FaseCyclusModel>();
+            Conflicten = new List<ConflictModel>();
+        }
+    }
+
     public static class TabCImportHelper
     {
-        public static List<FaseCyclusModel> GetNewFasenList(string[] lines)
+        public static TabCImportHelperOutcome GetNewData(string[] lines)
         {
-            List<FaseCyclusModel> NewFasen = new List<FaseCyclusModel>();
+            TabCImportHelperOutcome outcome = new TabCImportHelperOutcome();
 
             // Compile a list of Phases with conflicts from the file
             foreach (string line in lines)
@@ -35,7 +47,7 @@ namespace TLCGen.Importers.TabC
                     }
 
                     FaseCyclusModel _fcm1 = null;
-                    foreach (FaseCyclusModel fcm in NewFasen)
+                    foreach (FaseCyclusModel fcm in outcome.Fasen)
                     {
                         if (fcm.Define == fc1)
                         {
@@ -48,12 +60,12 @@ namespace TLCGen.Importers.TabC
                         _fcm1 = new FaseCyclusModel();
                         _fcm1.Define = fc1;
                         _fcm1.Naam = fc1.Replace("fc", "");
-                        SettingsProvider.ApplyDefaultFaseCyclusSettings(_fcm1, fc1);
-                        NewFasen.Add(_fcm1);
+                        SettingsProvider.Instance.ApplyDefaultFaseCyclusSettings(_fcm1, fc1);
+                        outcome.Fasen.Add(_fcm1);
                     }
 
                     FaseCyclusModel _fcm2 = null;
-                    foreach (FaseCyclusModel fcm in NewFasen)
+                    foreach (FaseCyclusModel fcm in outcome.Fasen)
                     {
                         if (fcm.Define == fc2)
                         {
@@ -66,13 +78,13 @@ namespace TLCGen.Importers.TabC
                         _fcm2 = new FaseCyclusModel();
                         _fcm2.Define = fc2;
                         _fcm2.Naam = fc2.Replace("fc", "");
-                        SettingsProvider.ApplyDefaultFaseCyclusSettings(_fcm2, fc2);
-                        NewFasen.Add(_fcm2);
+                        SettingsProvider.Instance.ApplyDefaultFaseCyclusSettings(_fcm2, fc2);
+                        outcome.Fasen.Add(_fcm2);
                     }
-                    _fcm1.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Define, FaseNaar = _fcm2.Define, Waarde = conf });
+                    outcome.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Define, FaseNaar = _fcm2.Define, Waarde = conf });
                 }
             }
-            return NewFasen;
+            return outcome;
         }
     }
 }

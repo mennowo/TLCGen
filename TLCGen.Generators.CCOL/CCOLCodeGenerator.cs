@@ -8,25 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TLCGen.CustomPropertyEditors;
-using TLCGen.Interfaces.Public;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL
 {
-    [TLCGenGenerator]
-    public partial class CCOLCodeGenerator : IGenerator
+    [TLCGenPlugin(TLCGenPluginElems.Generator)]
+    public partial class CCOLCodeGenerator : ITLCGenGenerator
     {
-        #region IGenerator
-
-        public string Name
-        {
-            get { return "CCOL"; }
-        }
-
-        public string Version
-        {
-            get { return "0.1 (alfa)"; }
-        }
+        #region ITLCGenGenerator
 
         public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
         {
@@ -71,8 +61,23 @@ namespace TLCGen.Generators.CCOL
             return result;
         }
 
+        public string GetGeneratorName()
+        {
+            return "CCOL";
+        }
 
-        #endregion // IGenerator
+        public string GetGeneratorVersion()
+        {
+            return "0.1 (alfa)";
+        }
+
+        public string GetPluginName()
+        {
+            return GetGeneratorName();
+        }
+
+
+        #endregion // ITLCGenGenerator
 
         #region Fields
 

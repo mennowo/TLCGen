@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLCGen.Models</RootNamespace>
     <AssemblyName>TLCGen.Models</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,11 +51,15 @@
     <Compile Include="Models\DetectorModel.cs" />
     <Compile Include="Models\DetectorSimulatieModel.cs" />
     <Compile Include="Models\FaseCyclusModel.cs" />
+    <Compile Include="Models\GelijkstartModel.cs" />
+    <Compile Include="Models\InterSignaalGroepModel.cs" />
     <Compile Include="Models\IOElementModel.cs" />
-    <Compile Include="Models\MaxGroentijdenSetModel.cs" />
-    <Compile Include="Models\MaxGroentijdModel.cs" />
+    <Compile Include="Models\GroentijdenSetModel.cs" />
+    <Compile Include="Models\GroentijdModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />
+    <Compile Include="Models\NaloopDetectorModel.cs" />
     <Compile Include="Models\NaloopModel.cs" />
+    <Compile Include="Models\NaloopTijdModel.cs" />
     <Compile Include="Models\NonController\CustomDataModel.cs" />
     <Compile Include="Models\NonController\AddinSettingsPropertyModel.cs" />
     <Compile Include="Models\ModuleMolenModel.cs" />
@@ -62,6 +67,7 @@
     <Compile Include="Models\NonController\AddinSettingsModel.cs" />
     <Compile Include="Models\Settings\ApplicationSettings.cs" />
     <Compile Include="Models\VersieModel.cs" />
+    <Compile Include="Models\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\TLCGenDefaultControllerSettings.cs" />
     <Compile Include="Settings\TLCGenDefaultFaseCyclusSettings.cs" />

@@ -32,7 +32,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine($"   BESTAND:   {data.Naam}{fileappend}");
             sb.AppendLine($"      CCOL:   {data.CCOLVersie.GetDescription()}");
             sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie.GetDescription()}");
-            sb.AppendLine($"   COLLGEN:   {Version}");
+            sb.AppendLine($"   COLLGEN:   {GetGeneratorVersion()}");
 
             return sb.ToString();
         }

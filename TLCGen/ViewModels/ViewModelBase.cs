@@ -77,9 +77,9 @@ namespace TLCGen.ViewModels
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         /// <param name="ovm">A reference to the main MiniOrganizer viewmodel</param>
-        public void OnMonitoredPropertyChanged(string propertyName, ControllerViewModel cvm)
+        public void OnMonitoredPropertyChanged(string propertyName)
         {
-            cvm.HasChanged = true;
+            DataAccess.DataProvider.Instance.SetControllerChanged();
             OnPropertyChanged(propertyName);
         }
     }

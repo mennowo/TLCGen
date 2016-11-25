@@ -47,7 +47,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="_File">
+            <MenuItem Header="_File" AutomationProperties.AutomationId="{x:Static local:AutomationIds.FileMenu}">
                 <MenuItem Header="_New" Command="{Binding Path=NewFileCommand}" InputGestureText="Ctrl+N">
                     <MenuItem.Icon>
                         <Image 

@@ -4,25 +4,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TLCGen.Interfaces.Public;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL
 {
-    [TLCGenGenerator]
-    public class YATLCCLCCodeGenerator : IGenerator
+    [TLCGenPlugin(TLCGenPluginElems.Generator)]
+    public class YATLCCLCCodeGenerator : ITLCGenGenerator
     {
-        #region IGenerator
-
-        public string Name
-        {
-            get { return "YATLCCLC"; }
-        }
-
-        public string Version
-        {
-            get { return "0"; }
-        }
+        #region ITLCGenGenerator
 
         public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
         {
@@ -43,9 +33,24 @@ namespace TLCGen.Generators.CCOL
             string result = "";
 
             return result;
-        }   
+        }
 
-        #endregion // IGenerator
+        public string GetGeneratorName()
+        {
+            return "YATLCCLC";
+        }
+
+        public string GetGeneratorVersion()
+        {
+            return "0";
+        }
+
+        public string GetPluginName()
+        {
+            return GetGeneratorName();
+        }
+
+        #endregion // ITLCGenGenerator
 
         #region Private Methods
 

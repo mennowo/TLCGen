@@ -65,10 +65,6 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
-        [Browsable(false)]
-        [XmlArrayItem(ElementName = "Conflict")]
-        public List<ConflictModel> Conflicten { get; set; }
-
         #endregion // Properties
 
         #region ITemplatable
@@ -91,7 +87,6 @@ namespace TLCGen.Models
         public void ClearAllReferences()
         {
             BitmapCoordinaten.Clear();
-            Conflicten.Clear();
             foreach (ITemplatable templdp in Detectoren)
             {
                 templdp.ClearAllReferences();
@@ -105,7 +100,6 @@ namespace TLCGen.Models
         public FaseCyclusModel() : base()
         {
             Detectoren = new List<DetectorModel>();
-            Conflicten = new List<ConflictModel>();
         }
 
         #endregion // Constructor

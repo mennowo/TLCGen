@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:TLCGen.ViewModels"
+                    xmlns:vw="clr-namespace:TLCGen.Views">
+    <DataTemplate DataType="{x:Type vm:AlgemeenTabViewModel}">
+        <vw:AlgemeenTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:FasenTabViewModel}">
+        <vw:FasenTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SynchronisatiesTabViewModel}">
+        <vw:SynchronisatiesTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ModulesTabViewModel}">
+        <vw:ModulesTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:DetectorenTabViewModel}">
+        <vw:DetectorenTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:BitmapTabViewModel}">
+        <vw:BitmapTab />
+    </DataTemplate>
+</ResourceDictionary>

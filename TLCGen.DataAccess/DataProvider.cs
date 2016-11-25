@@ -4,26 +4,49 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Messaging;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.DataAccess
 {
-    public static class DataProvider
+    public class DataProvider
     {
         #region Fields
 
-        private static ControllerModel _Controller;
-        private static string _FileName;
+        private static readonly object _Locker = new object();
+        private static DataProvider _Instance;
+
+        private ControllerModel _Controller;
+        private string _FileName;
 
         #endregion // Fields
 
         #region Properties
 
+        public static DataProvider Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                {
+                    lock (_Locker)
+                    {
+                        if (_Instance == null)
+                        {
+                            _Instance = new DataProvider();
+                        }
+                    }
+                }
+                return _Instance;
+            }
+        }
+
         /// <summary>
         /// Holds the Controller model currently loaded in the application.
         /// This property cannot be directly set; use static functions instead.
         /// </summary>
-        public static ControllerModel Controller
+        public ControllerModel Controller
         {
             get { return _Controller; }
             private set
@@ -35,7 +58,7 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// String representation of the currently loaded file.
         /// </summary>
-        public static string FileName
+        public string FileName
         {
             get { return _FileName; }
             set
@@ -55,7 +78,7 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// Sets the loaded Controller to a new, empty instance of ControllerModel
         /// </summary>
-        public static void SetController()
+        public void SetController()
         {
             Controller = new ControllerModel();
             FileName = null;
@@ -64,7 +87,7 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// Sets the loaded Controller to the instance of ControllerModel parsed to the function
         /// </summary>
-        public static void SetController(ControllerModel cm)
+        public void SetController(ControllerModel cm)
         {
             Controller = cm;
             FileName = null;
@@ -75,7 +98,7 @@ namespace TLCGen.DataAccess
         /// </summary>
         /// <param name="filename">A string holding the filename of the file to be loaded.</param>
         /// <returns>True if succesfull, false otherwise</returns>
-        public static bool LoadController(string filename)
+        public bool LoadController(string filename)
         {
             FileName = filename;
             return LoadController();
@@ -85,7 +108,7 @@ namespace TLCGen.DataAccess
         /// Loads the data from the file whose location is stored in the FileName property.
         /// </summary>
         /// <returns>True if succesfull, false otherwise</returns>
-        public static bool LoadController()
+        public bool LoadController()
         {
             if (!string.IsNullOrWhiteSpace(FileName))
             {
@@ -112,7 +135,7 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// Saves the currently loaded Controller to the file pointed to by property FileName.
         /// </summary>
-        public static void SaveController()
+        public void SaveController()
         {
             if (!string.IsNullOrWhiteSpace(FileName))
             {
@@ -131,10 +154,23 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// Closes the current Controller, and sets FileName and Controller properties to null.
         /// </summary>
-        public static void CloseController()
+        public void CloseController()
         {
             Controller = null;
             FileName = null;
+        }
+
+        /// <summary>
+        /// Sets the loaded Controller to a new, empty instance of ControllerModel
+        /// </summary>
+        public void SetControllerChanged()
+        {
+            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+        }
+        
+        public static void RenewInstance()
+        {
+            _Instance = null;
         }
 
         #endregion // Public methods

@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:re="clr-namespace:TLCGen.Views.Resources"
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-             
+             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="AliceBlue">
@@ -24,30 +26,27 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TabControl Grid.Row="0" Margin="2">
-                    <TabItem Header="Algemeen">
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Label Grid.Column="0" Grid.Row="0" Content="Naam/nummer" />
-                            <TextBox Grid.Column="1" Grid.Row="0" Margin="2" Text="{Binding Path=Naam}" />
-                            <Label Grid.Column="0" Grid.Row="1" Content="Stad" />
-                            <TextBox Grid.Column="1" Grid.Row="1" Margin="2" Text="{Binding Path=Stad}" />
-                            <Label Grid.Column="0" Grid.Row="2" Content="Straat 1" />
-                            <TextBox Grid.Column="1" Grid.Row="2" Margin="2" Text="{Binding Path=Straat1}" />
-                            <Label Grid.Column="0" Grid.Row="3" Content="Straat 2" />
-                            <TextBox Grid.Column="1" Grid.Row="3" Margin="2" Text="{Binding Path=Straat2}" />
-                            <Label Grid.Column="0" Grid.Row="4" Content="Bitmap naam" />
-                            <TextBox Grid.Column="1" Grid.Row="4" Margin="2" Text="{Binding Path=BitmapNaam,UpdateSourceTrigger=PropertyChanged}" />
-                        </Grid>
+                    <TabItem Header="Instellingen">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="10">
+                                <Label Content="Kruispunt informatie" Grid.ColumnSpan="2" FontWeight="Bold" />
+                                <Label Content="Naam/nummer" />
+                                <TextBox Margin="2" Text="{Binding Path=Naam}" />
+                                <Label Content="Stad" />
+                                <TextBox Margin="2" Text="{Binding Path=Stad}" />
+                                <Label Content="Straat 1" />
+                                <TextBox Margin="2" Text="{Binding Path=Straat1}" />
+                                <Label Content="Straat 2" />
+                                <TextBox Margin="2" Text="{Binding Path=Straat2}" />
+                                <Label Content="Bitmap naam" />
+                                <TextBox Margin="2" Text="{Binding Path=BitmapNaam,UpdateSourceTrigger=PropertyChanged}" />
+                                <Label Content="Regeling instellingen" Grid.ColumnSpan="2" FontWeight="Bold" />
+                                <Label Content="Groentijden" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:GroentijdenTypeEnum}}}"
+                                    SelectedItem="{Binding Path=TypeGroentijden,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                            </ag:AutoGrid>
+                        </ScrollViewer>
                     </TabItem>
                     <TabItem Header="Versiebeheer">
                         <Grid>
@@ -86,9 +85,6 @@
                                 <Button Margin="2" Content="Versie verwijderen" Command="{Binding RemoveVersieCommand}" />
                             </WrapPanel>
                         </Grid>
-                    </TabItem>
-                    <TabItem Header="Instellingen">
-                        <local:SettingsDataGrid SettingsList="{Binding Path=PrefixSettingsList,UpdateSourceTrigger=PropertyChanged}" />
                     </TabItem>
                 </TabControl>
             </Grid>

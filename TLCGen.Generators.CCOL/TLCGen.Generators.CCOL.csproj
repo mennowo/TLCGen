@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLCGen.Generators.CCOL</RootNamespace>
     <AssemblyName>TLCGen.Generators.CCOL</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,9 +63,9 @@
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Interfaces.Public.csproj">
+    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
       <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
-      <Name>TLCGen.Interfaces.Public</Name>
+      <Name>TLCGen.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>

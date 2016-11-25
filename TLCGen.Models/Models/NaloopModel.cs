@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
-    public enum NaloopType { StartGroen, EindeGroen }
-
     [Serializable]
     public class NaloopModel
     {
@@ -17,21 +17,25 @@ namespace TLCGen.Models
 
         #region Properties
 
-        public int FaseFrom { get; set; }
-        public int FaseTo { get; set; }
-        public int Detector { get; set; }
-        public int Tijd { get; set; }
-        public int TijdDetector { get; set; }
-        public int TijdVastGroen { get; set; }
-        public int TijdDetectorVastGroen { get; set; }
+        public string FaseVan { get; set; }
+        public string FaseNaar { get; set; }
+        public NaloopTypeEnum Type { get; set; }
+        public bool DetectieAfhankelijk { get; set; }
+
+        [XmlArrayItem(ElementName = "NaloopDetectoren")]
+        public List<NaloopDetectorModel> Detectoren { get; set; }
+
+        [XmlArrayItem(ElementName = "NaloopTijden")]
+        public List<NaloopTijdModel> Tijden { get; set; }
 
         #endregion // Properties
 
         #region Constructor
 
-        public NaloopModel() : base()
+        public NaloopModel()
         {
-
+            Detectoren = new List<NaloopDetectorModel>();
+            Tijden = new List<NaloopTijdModel>();
         }
 
         #endregion // Constructor

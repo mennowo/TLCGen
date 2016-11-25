@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TLCGen.Extensions;
+using TLCGen.ViewModels;
+using TLCGen.ViewModels.Enums;
 
 namespace TLCGen.Views
 {
@@ -36,6 +38,16 @@ namespace TLCGen.Views
             get { return (Array)GetValue(ConflictMatrixProperty); }
             set { SetValue(ConflictMatrixProperty, value); }
         }
+
+        public object GridSelectedItem
+        {
+            get { return (object)GetValue(GridSelectedItemProperty); }
+            set { SetValue(GridSelectedItemProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty GridSelectedItemProperty =
+            DependencyProperty.Register("GridSelectedItem", typeof(object), typeof(ConflictMatrixDataGrid), new PropertyMetadata(null));
 
         public ConflictMatrixDataGrid()
         {
@@ -82,32 +94,32 @@ namespace TLCGen.Views
             }
         }
 
-        private void DataGrid2D_Loaded(object sender, RoutedEventArgs e)
-        {
-            IDisposable d = null;
-
-            try
-            {
-                d = Dispatcher.DisableProcessing();
-                Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    DataGrid dg = sender as DataGrid;
-                    if (dg != null)
-                    {
-                        int count = dg.Columns.Count;
-                        for (int i = 0; i < count; ++i)
-                        {
-                            dg.GetCell(i, i).IsEnabled = false;
-                            dg.GetCell(i, i).Background = System.Windows.Media.Brushes.Gray;
-                        }
-                    }
-                }));
-            }
-            finally
-            {
-                d.Dispose();
-            }
-        }
+        //private void DataGrid2D_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    IDisposable d = null;
+        //
+        //    try
+        //    {
+        //        d = Dispatcher.DisableProcessing();
+        //        Dispatcher.BeginInvoke((Action)(() =>
+        //        {
+        //            DataGrid dg = sender as DataGrid;
+        //            if (dg != null)
+        //            {
+        //                int count = dg.Columns.Count;
+        //                for (int i = 0; i < count; ++i)
+        //                {
+        //                    dg.GetCell(i, i).IsEnabled = false;
+        //                    dg.GetCell(i, i).Background = System.Windows.Media.Brushes.Gray;
+        //                }
+        //            }
+        //        }));
+        //    }
+        //    finally
+        //    {
+        //        d.Dispose();
+        //    }
+        //}
 
         bool editing = false;
         private void DataGrid2D_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -144,6 +156,94 @@ namespace TLCGen.Views
         private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             editing = true;
+        }
+    }
+
+    public class SynchronisatieTemplateSelector : DataTemplateSelector
+    {
+        public override DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
+        {
+            if (item is SynchronisatieViewModel)
+            {
+                SynchronisatieViewModel sync = item as SynchronisatieViewModel;
+                switch (sync.DisplayType)
+                {
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Conflict:
+                        return ConflictTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.GarantieConflict:
+                        return GarantieConflictTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Naloop:
+                        return NaloopTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart:
+                        return GelijkstartTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Voorstart:
+                        return VoorstartTemplate;
+                }
+            }
+            return null;
+        }
+
+        public DataTemplate ConflictTemplate { get; set; }
+        public DataTemplate GarantieConflictTemplate { get; set; }
+        public DataTemplate NaloopTemplate { get; set; }
+        public DataTemplate GelijkstartTemplate { get; set; }
+        public DataTemplate VoorstartTemplate { get; set; }
+    }
+
+    public class SynchronisatieEditingTemplateSelector : DataTemplateSelector
+    {
+        public override DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
+        {
+            if (item is SynchronisatieViewModel)
+            {
+                SynchronisatieViewModel sync = item as SynchronisatieViewModel;
+                switch (sync.DisplayType)
+                {
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Conflict:
+                        return ConflictTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.GarantieConflict:
+                        return GarantieConflictTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Naloop:
+                        return NaloopTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart:
+                        return GelijkstartTemplate;
+                    case ViewModels.Enums.SynchronisatieTypeEnum.Voorstart:
+                        return VoorstartTemplate;
+                }
+            }
+            return null;
+        }
+
+        public DataTemplate ConflictTemplate { get; set; }
+        public DataTemplate GarantieConflictTemplate { get; set; }
+        public DataTemplate NaloopTemplate { get; set; }
+        public DataTemplate GelijkstartTemplate { get; set; }
+        public DataTemplate VoorstartTemplate { get; set; }
+    }
+
+    public class SynchCheckBoxVisibilityConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(values == null || values.Count() != 2)
+                throw new NotImplementedException();
+
+            var DisplayType = (SynchronisatieTypeEnum)values[0];
+            var IsEnabled = (bool)values[1];
+
+            switch(DisplayType)
+            {
+                case SynchronisatieTypeEnum.Conflict:
+                case SynchronisatieTypeEnum.GarantieConflict:
+                    return Visibility.Hidden;
+                default:
+                    return IsEnabled ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

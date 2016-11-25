@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLCGen</RootNamespace>
     <AssemblyName>TLCGen</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,10 +39,6 @@
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gu.Wpf.DataGrid2D, Version=0.2.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\Gu.Wpf.DataGrid2D.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -57,6 +54,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAutoGrid">
+      <HintPath>Libs\WpfAutoGrid.dll</HintPath>
+    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=2.9.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.9\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
       <Private>True</Private>
@@ -87,34 +87,37 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Utilities\AddInLoaderT.cs" />
-    <Compile Include="ViewModels\App\TLCGenSettingsViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ConflictViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\AlgemeenTabViewModel.cs" />
+    <Compile Include="AutomationIds.cs" />
+    <Compile Include="ViewModels\Enums\SynchronisatieTypeEnum.cs" />
+    <Compile Include="ViewModels\Other\TLCGenSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdFaseViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\NaloopViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\SynchronisatieViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\AlgemeenTab\AlgemeenTabViewModel.cs" />
     <Compile Include="ViewModels\ControllerViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\FaseCyclusViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\DetectorViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\IGeneratorViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\MaxGroentijdenSetViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ModuleFaseCyclusViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ModuleMolenViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\ModuleViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\VersieViewModel.cs" />
-    <Compile Include="ViewModels\JustVM\BitmappedItemViewModel.cs" />
-    <Compile Include="ViewModels\JustVM\FaseCycluseModuleViewModel.cs" />
-    <Compile Include="ViewModels\JustVM\ModulesTabFasenLijstViewModel.cs" />
-    <Compile Include="ViewModels\JustVM\TLCGenStatusBarViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\FaseCyclusViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorViewModel.cs" />
+    <Compile Include="ViewModels\Other\IGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdenSetViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleFaseCyclusViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleMolenViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\AlgemeenTab\VersieViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\BitmapTab\BitmappedItemViewModel.cs" />
+    <Compile Include="ViewModels\Other\FaseCycluseModuleViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\ModulesTabFasenLijstViewModel.cs" />
+    <Compile Include="ViewModels\Other\TLCGenStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\DataTypes\MaxGroentijdViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\BitmapTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\CoordinatiesTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DectorenTabViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\DetectorenAllesLijstViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\DetectorenFasenLijstViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\DetectorenExtraLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTabViewModel.cs" />
-    <Compile Include="ViewModels\Overviews\MaxGroentijdenSetsLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\BitmapTab\BitmapTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DetectorTab\DectorenTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenAllesLijstViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenFasenLijstViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenExtraLijstViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\FasenTabViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdenSetsLijstViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\ModulesTabViewModel.cs" />
     <Compile Include="ViewModels\Tabs\TabViewModel.cs" />
     <Compile Include="ViewModels\Templates\DetectorTemplateViewModel.cs" />
     <Compile Include="ViewModels\Templates\FaseCyclusTemplateViewModel.cs" />
@@ -172,8 +175,8 @@
     <Compile Include="Views\Overviews\FasenLijstTimersView.xaml.cs">
       <DependentUpon>FasenLijstTimersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\MaxGroentijdenSetsView.xaml.cs">
-      <DependentUpon>MaxGroentijdenSetsView.xaml</DependentUpon>
+    <Compile Include="Views\Overviews\GroentijdenSetsView.xaml.cs">
+      <DependentUpon>GroentijdenSetsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\AutoSelectTextBox.cs" />
     <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
@@ -199,8 +202,8 @@
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\CoordinatiesTab.xaml.cs">
-      <DependentUpon>CoordinatiesTab.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\SynchronisatiesTab.xaml.cs">
+      <DependentUpon>SynchronisatiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab.xaml.cs">
       <DependentUpon>AlgemeenTab.xaml</DependentUpon>
@@ -232,6 +235,10 @@
     <Page Include="Resources\MenuIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\TabItemTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\DetectorView.xaml">
       <SubType>Designer</SubType>
@@ -309,7 +316,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Overviews\MaxGroentijdenSetsView.xaml">
+    <Page Include="Views\Overviews\GroentijdenSetsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -329,7 +336,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\CoordinatiesTab.xaml">
+    <Page Include="Views\Tabs\SynchronisatiesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -383,6 +390,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen_storage\Gu.Wpf.DataGrid2D.new\Gu.Wpf.DataGrid2D\Gu.Wpf.DataGrid2D.csproj">
+      <Project>{53af7fff-bcad-43a5-8367-48429b2878be}</Project>
+      <Name>Gu.Wpf.DataGrid2D</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FloodFill\FloodFill.csproj">
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
@@ -394,6 +405,10 @@
     <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
       <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
       <Name>TLCGen.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
+      <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
+      <Name>TLCGen.Messaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
@@ -419,9 +434,9 @@
       <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
       <Name>TLCGen.Integrity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Interfaces.Public.csproj">
+    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
-      <Name>TLCGen.Interfaces.Public</Name>
+      <Name>TLCGen.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">
       <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
@@ -448,16 +463,16 @@
     <Resource Include="Resources\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\visualprojecttemplate.xml">
+    <Content Include="Resources\visualprojecttemplate2010.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\visualprojecttemplate2013.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(TargetDir)Generators"
-copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Generators\TLCGen.Generators.*.dll"
-mkdir "$(TargetDir)Importers"
-copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Importers\TLCGen.Importers.*.dll"</PostBuildEvent>
+    <PostBuildEvent>mkdir "$(TargetDir)Plugins"
+copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins\TLCGen.Generators.*.dll"
+copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

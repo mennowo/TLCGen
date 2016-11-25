@@ -5,16 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TLCGen.Interfaces.Public;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.Importers.TabC
 {
-    [TLCGenImporter]
-    public class TabCNewControllerImporter : IImporter
+    [TLCGenPlugin(TLCGenPluginElems.Importer)]
+    public class TabCNewControllerImporter : ITLCGenImporter
     {
         public bool ImportsIntoExisting { get { return false; } }
         public string Name { get { return "Importeer tab.c (nieuwe regeling)"; } }
+
+        public string GetPluginName()
+        {
+            return Name;
+        }
 
         public ControllerModel ImportController(ControllerModel c = null)
         {
@@ -40,10 +45,14 @@ namespace TLCGen.Importers.TabC
                         throw new NotImplementedException("Het bestand heeft minder dan 2 regels.");
 
                     // Build a list of the Phases with conflicts from the tab.c file
-                    List<FaseCyclusModel> NewFasen = TabCImportHelper.GetNewFasenList(lines);
-                    foreach (FaseCyclusModel fcm in NewFasen)
+                    TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);
+                    foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
                         newc.Fasen.Add(fcm);
+                    }
+                    foreach(ConflictModel cm in NewData.Conflicten)
+                    {
+                        newc.InterSignaalGroep.Conflicten.Add(cm);
                     }
                     return newc;
                 }

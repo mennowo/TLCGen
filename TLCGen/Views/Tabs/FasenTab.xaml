@@ -21,8 +21,8 @@
             <TabItem Header="Tijden" >
                 <local:FasenLijstTimersView />
             </TabItem>
-            <TabItem Header="Maxgroen" >
-                <local:MaxGroentijdenSetsView DataContext="{Binding Path=MaxGroentijdenLijstVM}" />
+            <TabItem Header="{Binding Path=GroentijdenHeader}" >
+                <local:GroentijdenSetsView DataContext="{Binding Path=GroentijdenLijstVM}" />
             </TabItem>
         </TabControl>
     </Grid>

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TLCGen.DataAccess</RootNamespace>
     <AssemblyName>TLCGen.DataAccess</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,10 @@
     <Compile Include="SerializeT.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
+      <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
+      <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
       <Name>TLCGen.Models</Name>

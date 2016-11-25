@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
              xmlns:dg2d="http://gu.se/DataGrid2D"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
              x:Name="root"
@@ -14,46 +15,124 @@
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
     </UserControl.InputBindings>
     <UserControl.Resources>
+        <!--<ControlTemplate TargetType="{x:Type CheckBox}" x:Key="CheckBoxTemplate">
+            <Border Name="MainBorder" BorderBrush="Gray">
+                <Grid Name="BackGrid" Background="Transparent">
+                    <Grid Background="LemonChiffon" Margin="2" HorizontalAlignment="Left">
+                        <Grid Name="CheckGrid" Background="LemonChiffon" Margin="4" />
+                    </Grid>
+                    <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="BackGrid" Property="Background" Value="PaleGoldenRod" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="CheckGrid" Property="Background" Value="SandyBrown" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="BackGrid" Property="Background" Value="LightGray" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Name="sb1">
+                            <Storyboard AutoReverse="False">
+                                <ColorAnimation To="OrangeRed" 
+                                                Duration="0:0:0.1"
+                                                Storyboard.TargetName="MainBorder"
+                                                Storyboard.TargetProperty="BorderBrush.Color" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard AutoReverse="False">
+                                <ColorAnimation To="Gray" 
+                                                Duration="0:0:0.1"
+                                                Storyboard.TargetName="MainBorder"
+                                                Storyboard.TargetProperty="BorderBrush.Color" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Template" Value="{StaticResource CheckBoxTemplate}" />
+        </Style>-->
+        
+
         <local:ConflictBackgroundConverter x:Key="backgroundConverter" />
-        <DataTemplate x:Key="ConflictMatrixCellTemplate">
-            <TextBlock 
-                Margin="0"
-                Padding="2"
-                TextAlignment="Center"
-                Background="{Binding Path=DisplayWaarde, Converter={StaticResource backgroundConverter}}"
-                Text="{Binding Path=DisplayWaarde}" />
+        <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
+        <local:SelectedDisplayTypeToBoolConverter x:Key="DisplayTypeToBoolConverter" />
+        <local:ReferencesSelfToBackgroundConverter x:Key="RefSelfConv" />
+        <local:SynchCheckBoxVisibilityConverter x:Key="CheckBoxVisConverter" />
+        <BooleanToVisibilityConverter x:Key="Bool2VisConverter" />
+        <DataTemplate x:Key="MatrixCellTemplate">
+            <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
+                <TextBlock
+                    Margin="0" Padding="0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    IsEnabled="{Binding Path=IsEnabled}"
+                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.SomeConflict}}"
+                    Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                </TextBlock>
+                <CheckBox 
+                    Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    IsChecked="{Binding Path=IsCoupled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                    <CheckBox.Visibility>
+                        <MultiBinding Converter="{StaticResource CheckBoxVisConverter}">
+                            <Binding Path="DisplayType" Mode="OneWay" />
+                            <Binding Path="IsEnabled" Mode="OneWay" />
+                        </MultiBinding>
+                    </CheckBox.Visibility>
+                </CheckBox>
+                <Grid.Background>
+                    <MultiBinding Converter="{StaticResource backgroundConverter}">
+                        <Binding Path="ReferencesSelf" Mode="OneWay" />
+                        <Binding Path="IsEnabled" Mode="OneWay" />
+                        <Binding Path="DisplayType" Mode="OneWay" />
+                        <Binding Path="ConflictValue" Mode="OneWay" />
+                    </MultiBinding>
+                </Grid.Background>
+            </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="ConflictMatrixCellEditingTemplate">
-            <Grid>
+        <DataTemplate x:Key="MatrixCellEditingTemplate">
+            <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
                 <local:AutoSelectTextBox
-                    Margin="0"
-                    Padding="0"
-                    TextAlignment="Center"
-                    FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                    Text="{Binding Path=DisplayWaarde,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                        Margin="0"
+                        Padding="0"
+                        TextAlignment="Center"
+                        IsEnabled="{Binding Path=IsEnabled}"
+                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.SomeConflict}}"
+                        Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-
         <DataGrid
-                    dg2d:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=root}" 
-                    dg2d:ItemsSource.CellTemplate="{StaticResource ConflictMatrixCellTemplate}"
-                    dg2d:ItemsSource.CellEditingTemplate="{StaticResource ConflictMatrixCellEditingTemplate}"
-                    dg2d:ItemsSource.RowHeadersSource="{Binding FasenNames}"
-                    dg2d:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
-                    SelectedItem="{Binding Path=SelectedConflict,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    AutoGenerateColumns="True"
-                    EnableColumnVirtualization="False"
-                    EnableRowVirtualization="False"
-                    HorizontalGridLinesBrush="LightGray"
-                    VerticalGridLinesBrush="LightGray"
-                    SelectionUnit="Cell"
-                    Loaded="DataGrid2D_Loaded"
-                    PreviewKeyDown="DataGrid_PreviewKeyDown"
-                    BeginningEdit="DataGrid_BeginningEdit"
-                    SelectedCellsChanged="DataGrid_SelectedCellsChanged" >
-            
+            dg2d:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=root}" 
+            dg2d:ItemsSource.RowHeadersSource="{Binding FasenNames}"
+            dg2d:Cell.Template="{StaticResource MatrixCellTemplate}"
+            dg2d:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
+            dg2d:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
+            dg2d:Selected.CellItem="{Binding Path=GridSelectedItem,ElementName=root}"
+            AutoGenerateColumns="True"
+            MinRowHeight="24"
+            MinColumnWidth="24"
+            HorizontalGridLinesBrush="LightGray"
+            VerticalGridLinesBrush="LightGray"
+            SelectionUnit="Cell"
+            PreviewKeyDown="DataGrid_PreviewKeyDown"
+            BeginningEdit="DataGrid_BeginningEdit"
+            SelectedCellsChanged="DataGrid_SelectedCellsChanged">
         </DataGrid>
+        <!--EnableColumnVirtualization="False"
+            EnableRowVirtualization="False"
+            Loaded="DataGrid2D_Loaded"-->
     </Grid>
 </UserControl>

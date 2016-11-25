@@ -5,7 +5,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace TLCGen.DataAccess
 {
@@ -30,6 +32,35 @@ namespace TLCGen.DataAccess
                 result = false;
             }
             return result;
+        }
+
+        public XmlDocument SerializeToXmlDocument(T t)
+        {
+            //XmlSerializer ser = new XmlSerializer(typeof(T));
+            //XmlDocument xd = null;
+            //
+            //using (MemoryStream memStm = new MemoryStream())
+            //{
+            //    ser.Serialize(memStm, t);
+            //    XmlReaderSettings settings = new XmlReaderSettings();
+            //    settings.IgnoreWhitespace = true;
+            //
+            //    using (var xtr = XmlReader.Create(memStm, settings))
+            //    {
+            //        xd = new XmlDocument();
+            //        xd.Load(xtr);
+            //    }
+            //}
+
+            XmlDocument doc = new XmlDocument();
+            XPathNavigator nav = doc.CreateNavigator();
+            using (XmlWriter w = nav.AppendChild())
+            {
+                XmlSerializer ser = new XmlSerializer(typeof(T));
+                ser.Serialize(w, t);
+            }
+
+            return doc;
         }
 
         #endregion // XML Serialization

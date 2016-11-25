@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace TLCGen.DataAccess
@@ -39,6 +40,31 @@ namespace TLCGen.DataAccess
                 MessageBox.Show("Fout bij laden bestand: " + e.ToString(), "Fout bij laden bestand.");
             }
 
+            return t;
+        }
+        public T SerializeFromXmlDocument(XmlDocument doc)
+        {
+            //XmlSerializer ser = new XmlSerializer(typeof(T));
+            //XmlDocument xd = null;
+            //
+            //using (MemoryStream memStm = new MemoryStream())
+            //{
+            //    ser.Serialize(memStm, t);
+            //    XmlReaderSettings settings = new XmlReaderSettings();
+            //    settings.IgnoreWhitespace = true;
+            //
+            //    using (var xtr = XmlReader.Create(memStm, settings))
+            //    {
+            //        xd = new XmlDocument();
+            //        xd.Load(xtr);
+            //    }
+            //}
+            T t;
+            using (XmlReader r = XmlReader.Create(new StringReader(doc.InnerXml)))
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                t = (T)serializer.Deserialize(r);
+            }
             return t;
         }
 

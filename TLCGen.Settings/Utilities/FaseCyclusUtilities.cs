@@ -12,30 +12,35 @@ namespace TLCGen.Settings.Utilities
     {
         public static FaseTypeEnum GetFaseTypeFromDefine(string define)
         {
-            string faseswitch = Regex.Replace(define, SettingsProvider.GetFaseCyclusDefinePrefix(), "");
-            if (faseswitch.Length >= 3)
-                faseswitch = faseswitch.Substring(1);
+            string faseswitch = Regex.Replace(define, SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+            return GetFaseTypeFromNaam(faseswitch);
+        }
+
+        public static FaseTypeEnum GetFaseTypeFromNaam(string naam)
+        {
+            if (naam.Length >= 3)
+                naam = naam.Substring(1);
             int myfase = -1;
-            if (Int32.TryParse(faseswitch, out myfase))
+            if (Int32.TryParse(naam, out myfase))
             {
                 if (myfase < 1) return FaseTypeEnum.Fiets;
-                else if (myfase <  20) return FaseTypeEnum.Auto;
-                else if (myfase <  30) return FaseTypeEnum.Fiets;
-                else if (myfase <  40) return FaseTypeEnum.Voetganger;
-                else if (myfase <  60) return FaseTypeEnum.OV;
-                else if (myfase <  80) return FaseTypeEnum.Auto;
-                else if (myfase <  90) return FaseTypeEnum.Fiets;
+                else if (myfase < 20) return FaseTypeEnum.Auto;
+                else if (myfase < 30) return FaseTypeEnum.Fiets;
+                else if (myfase < 40) return FaseTypeEnum.Voetganger;
+                else if (myfase < 60) return FaseTypeEnum.OV;
+                else if (myfase < 80) return FaseTypeEnum.Auto;
+                else if (myfase < 90) return FaseTypeEnum.Fiets;
                 else if (myfase < 100) return FaseTypeEnum.Voetganger;
             }
             return FaseTypeEnum.Fiets;
         }
 
-        public static int? GetFaseDefaultMaxGroenTijd(string define)
+        public static int? GetFaseDefaultGroenTijd(string define)
         {
-            return GetFaseDefaultMaxGroenTijd(GetFaseTypeFromDefine(define));
+            return GetFaseDefaultGroenTijd(GetFaseTypeFromDefine(define));
         }
 
-        public static int? GetFaseDefaultMaxGroenTijd(FaseTypeEnum type)
+        public static int? GetFaseDefaultGroenTijd(FaseTypeEnum type)
         {
             switch (type)
             {

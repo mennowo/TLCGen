@@ -164,15 +164,12 @@ namespace TLCGen.Generators.CCOL
 
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
-
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            
+            if (controller.InterSignaalGroep.Conflicten?.Count > 0)
             {
-                if (fcm.Conflicten?.Count > 0)
+                foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                 {
-                    foreach (ConflictModel conflict in fcm.Conflicten)
-                    {
-                        sb.AppendLine($"    TO_max[{fcm.Define}][{conflict.FaseNaar}] = {conflict.SerializedWaarde};");
-                    }
+                    sb.AppendLine($"    TO_max[{conflict.FaseVan}][{conflict.FaseNaar}] = {conflict.SerializedWaarde};");
                     sb.AppendLine();
                 }
             }

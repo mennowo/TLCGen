@@ -213,9 +213,9 @@ namespace TLCGen.Generators.CCOL
             {
                 // Check if the FaseCyclus has any maxgreen times set
                 bool HasMG = false;
-                foreach(MaxGroentijdenSetModel mgsm in controller.MaxGroentijdenSets)
+                foreach(GroentijdenSetModel mgsm in controller.GroentijdenSets)
                 {
-                    foreach(MaxGroentijdModel mgm in mgsm.MaxGroentijden)
+                    foreach(GroentijdModel mgm in mgsm.Groentijden)
                     {
                         if(mgm.FaseCyclus == fcm.Define && mgm.Waarde != null)
                         {

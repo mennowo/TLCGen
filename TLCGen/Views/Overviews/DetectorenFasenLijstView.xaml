@@ -21,9 +21,8 @@
             <ListBox 
                 Grid.Row="1" Margin="2" 
                 ItemsSource="{Binding Path=Fasen}" 
-                SelectedItem="{Binding Path=SelectedFase}"
+                SelectedItem="{Binding Path=SelectedFaseNaam}"
                 SelectionMode="Single"
-                DisplayMemberPath="Naam"
                 Name="FasenListBox" />
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

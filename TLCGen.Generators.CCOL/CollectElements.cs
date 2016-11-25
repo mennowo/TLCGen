@@ -420,9 +420,9 @@ namespace TLCGen.Generators.CCOL
             }
 
             // Maxgroentijden
-            foreach(MaxGroentijdenSetModel mgset in controller.MaxGroentijdenSets)
+            foreach(GroentijdenSetModel mgset in controller.GroentijdenSets)
             {
-                foreach(MaxGroentijdModel mgm in mgset.MaxGroentijden)
+                foreach(GroentijdModel mgm in mgset.Groentijden)
                 {
                     FaseCyclusModel thisfcm = null;
                     foreach (FaseCyclusModel fcm in controller.Fasen)

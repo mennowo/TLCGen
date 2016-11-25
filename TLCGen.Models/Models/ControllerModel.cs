@@ -28,8 +28,10 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
-        [XmlArrayItem(ElementName = "MaxGroentijdenSet")]
-        public List<MaxGroentijdenSetModel> MaxGroentijdenSets { get; set; }
+        public InterSignaalGroepModel InterSignaalGroep { get; set; } 
+
+        [XmlArrayItem(ElementName = "GroentijdenSet")]
+        public List<GroentijdenSetModel> GroentijdenSets { get; set; }
 
         public ModuleMolenModel ModuleMolen { get; set; }
 
@@ -44,9 +46,10 @@ namespace TLCGen.Models
             Data = new ControllerDataModel();
             Fasen = new List<FaseCyclusModel>();
             Detectoren = new List<DetectorModel>();
-            MaxGroentijdenSets = new List<MaxGroentijdenSetModel>();
+            GroentijdenSets = new List<GroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
             CustomData = new CustomDataModel();
+            InterSignaalGroep = new InterSignaalGroepModel();
         }
 
         #endregion // Constructor

@@ -7,16 +7,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
-using TLCGen.Interfaces.Public;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.Importers.TabC
 {
-    [TLCGenImporter]
-    public class TabCExistingControllerImporter : IImporter
+    [TLCGenPlugin(TLCGenPluginElems.Importer)]
+    public class TabCExistingControllerImporter : ITLCGenImporter
     {
         public bool ImportsIntoExisting { get { return true; } }
         public string Name { get { return "Importeer tab.c (in bestaande regeling)"; } }
+
+        public string GetPluginName()
+        {
+            return Name;
+        }
 
         public ControllerModel ImportController(ControllerModel c = null)
         {
@@ -68,18 +73,24 @@ namespace TLCGen.Importers.TabC
                     if (result == MessageBoxResult.Yes)
                     {
                         // Clear conflicts from Phases not in tab.c file
-                        foreach (FaseCyclusModel fcm in newfcs)
-                        {
-                            fcm.Conflicten.Clear();
-                        }
+#warning TODO
+                        //foreach (FaseCyclusModel fcm in newfcs)
+                        //{
+                        //    fcm.Conflicten.Clear();
+                        //}
 
                         // Build a list of the Phases with conflicts from the tab.c file
-                        List<FaseCyclusModel> NewFasen = TabCImportHelper.GetNewFasenList(lines);
+                        TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);
 
                         // Copy the results into the ControllerVM
                         string NewPhasesMessage = "";
+
+                        // Store current conflicts
                         List<ConflictModel> OldConflicts = new List<ConflictModel>();
-                        foreach (FaseCyclusModel newfcm in NewFasen)
+                        foreach (ConflictModel _cm in c.InterSignaalGroep.Conflicten)
+                            OldConflicts.Add(_cm);
+
+                        foreach (FaseCyclusModel newfcm in NewData.Fasen)
                         {
                             // Search for existing phases
                             bool found = false;
@@ -88,25 +99,6 @@ namespace TLCGen.Importers.TabC
                                 if (newfcm.Define == fcm.Define)
                                 {
                                     found = true;
-
-                                    // Store current conflicts
-                                    OldConflicts.Clear();
-                                    foreach (ConflictModel _cm in fcm.Conflicten)
-                                        OldConflicts.Add(_cm);
-
-                                    // Load new conflicts
-                                    fcm.Conflicten.Clear();
-                                    foreach (ConflictModel cm in newfcm.Conflicten)
-                                    {
-                                        ConflictModel _cm = new ConflictModel();
-                                        _cm.FaseVan = fcm.Define;
-                                        _cm.FaseNaar = cm.FaseNaar;
-                                        _cm.Waarde = cm.Waarde;
-                                        fcm.Conflicten.Add(_cm);
-                                    }
-
-                                    // Check for new conflicts
-#warning TODO - At this point: check if new conflicts have been added, and act accordingly
                                 }
                             }
                             if (!found)
@@ -114,6 +106,19 @@ namespace TLCGen.Importers.TabC
                                 c.Fasen.Add(newfcm);
                                 NewPhasesMessage = NewPhasesMessage + newfcm.Define + "\n";
                             }
+                        }
+
+                        foreach(ConflictModel cm in NewData.Conflicten)
+                        {
+
+                            ConflictModel _cm = new ConflictModel();
+                            _cm.FaseVan = cm.FaseVan;
+                            _cm.FaseNaar = cm.FaseNaar;
+                            _cm.Waarde = cm.Waarde;
+                            c.InterSignaalGroep.Conflicten.Add(_cm);
+                            
+                            // Check for new conflicts
+#warning TODO - At this point: check if new conflicts have been added, and act accordingly
                         }
                         if (!string.IsNullOrEmpty(NewPhasesMessage))
                         {

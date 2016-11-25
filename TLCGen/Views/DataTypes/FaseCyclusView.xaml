@@ -21,7 +21,7 @@
                     <RadioButton GroupName="TypeGroup" Content="Auto" 
                                  IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Auto}}" />
                     <RadioButton GroupName="TypeGroup" Content="Fiets" 
-                                 IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Fiets}}" />
+                                 IsChecked="{Binding Type, ConverterParameter={x:Static enums:FaseTypeEnum.Fiets}, Converter={StaticResource RadioButtonCheckedConverter}}" />
                     <RadioButton GroupName="TypeGroup" Content="Voetganger" 
                                  IsChecked="{Binding Path=Type,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:FaseTypeEnum.Voetganger}}" />
                     <RadioButton GroupName="TypeGroup" Content="OV" 

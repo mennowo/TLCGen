@@ -11,12 +11,19 @@ using TLCGen.Settings.Utilities;
 
 namespace TLCGen.Settings
 {
-    public static class SettingsProvider
+    public class SettingsProvider
     {
+        #region Fields
+
+        private static readonly object _Locker = new object();
+        private static SettingsProvider _Instance;
+
+        #endregion // Fields
+
         #region Properties
 
-        private static TLCGenSettingsModel _Settings;
-        public static TLCGenSettingsModel Settings
+        private TLCGenSettingsModel _Settings;
+        public TLCGenSettingsModel Settings
         {
             get { return _Settings; }
             set
@@ -25,19 +32,38 @@ namespace TLCGen.Settings
             }
         }
 
-        #endregion // Properties
+        public static SettingsProvider Instance
+        {
+            get
+            {
+                if (_Instance == null)
+                {
+                    lock (_Locker)
+                    {
+                        if (_Instance == null)
+                        {
+                            _Instance = new SettingsProvider();
+                        }
+                    }
+                }
+                return _Instance;
+            }
+        }
 
-        public static CustomDataModel CustomSettings
+        public CustomDataModel CustomSettings
         {
             get { return Settings.CustomData; }
         }
+
+        #endregion // Properties
+
 
         #region Serialize Methods
 
         /// <summary>
         /// Loads the application settings from a file called TLCGenSettings.xml if it exists in the folder where the application runs
         /// </summary>
-        public static void LoadApplicationSettings()
+        public void LoadApplicationSettings()
         {
             string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
             if (File.Exists(settingsfile))
@@ -52,7 +78,7 @@ namespace TLCGen.Settings
         /// <summary>
         /// Saves the application settings to a file called TLCGenSettings.xml in the folder where the application runs
         /// </summary>
-        public static void SaveApplicationSettings()
+        public void SaveApplicationSettings()
         {
             string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
             TLCGen.DataAccess.SerializeT<TLCGenSettingsModel> serializer = new TLCGen.DataAccess.SerializeT<TLCGenSettingsModel>();
@@ -63,12 +89,17 @@ namespace TLCGen.Settings
 
         #region Settings Provider Methods
 
-        public static string GetFaseCyclusDefinePrefix()
+        public static void RenewInstance()
+        {
+            _Instance = null;
+        }
+
+        public string GetFaseCyclusDefinePrefix()
         {
             return Settings.DefaultControllerSettings.PreFixSettings.FaseCyclusDefinePrefix;
         }
 
-        public static string GetDetectorDefinePrefix()
+        public string GetDetectorDefinePrefix()
         {
             return Settings.DefaultControllerSettings.PreFixSettings.DetectorDefinePrefix;
         }
@@ -76,7 +107,7 @@ namespace TLCGen.Settings
         /// <summary>
         /// Applies default phase settings to the phase parsed, based on the define string
         /// </summary>
-        public static void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, string define)
+        public void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, string define)
         {
             fcm.Type = FaseCyclusUtilities.GetFaseTypeFromDefine(define);
             ApplyDefaultFaseCyclusSettings(fcm, fcm.Type);
@@ -85,7 +116,7 @@ namespace TLCGen.Settings
         /// <summary>
         /// Applies default phase settings to the phase parsed, based on the type
         /// </summary>
-        public static void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, FaseTypeEnum type)
+        public void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, FaseTypeEnum type)
         {
             switch (type)
             {
@@ -145,13 +176,5 @@ namespace TLCGen.Settings
         }
 
         #endregion // Settings Provider Methods
-
-        #region Constructor
-
-        static SettingsProvider()
-        {
-        }
-
-        #endregion // Constructor
     }
 }
