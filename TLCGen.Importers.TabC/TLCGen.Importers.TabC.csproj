@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
+      <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
       <Name>TLCGen.Plugins</Name>

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Extensions;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -46,11 +47,13 @@ namespace TLCGen.Importers.TabC
 
                     // Build a list of the Phases with conflicts from the tab.c file
                     TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);
+                    NewData.Fasen.BubbleSort();
                     foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
                         newc.Fasen.Add(fcm);
                     }
-                    foreach(ConflictModel cm in NewData.Conflicten)
+                    NewData.Conflicten.BubbleSort();
+                    foreach (ConflictModel cm in NewData.Conflicten)
                     {
                         newc.InterSignaalGroep.Conflicten.Add(cm);
                     }

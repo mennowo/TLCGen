@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class ConflictModel
+    public class ConflictModel : IComparable
     {
         #region Fields
 
@@ -74,6 +74,24 @@ namespace TLCGen.Models
         }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            if(obj is ConflictModel)
+            {
+                string s1 = (obj as ConflictModel).FaseVan;
+                string s2 = this.FaseVan;
+                if (s1.Length < s2.Length) s1 = s1.PadLeft(s2.Length, '0');
+                else if (s2.Length < s1.Length) s2 = s2.PadLeft(s1.Length, '0');
+
+                return s2.CompareTo(s1);
+            }
+            return 0;
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 

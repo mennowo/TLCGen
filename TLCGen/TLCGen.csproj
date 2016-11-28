@@ -39,6 +39,10 @@
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gu.Wpf.DataGrid2D, Version=0.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Gu.Wpf.DataGrid2D.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -397,10 +401,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TLCGen_storage\Gu.Wpf.DataGrid2D.new\Gu.Wpf.DataGrid2D\Gu.Wpf.DataGrid2D.csproj">
-      <Project>{53af7fff-bcad-43a5-8367-48429b2878be}</Project>
-      <Name>Gu.Wpf.DataGrid2D</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FloodFill\FloodFill.csproj">
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
