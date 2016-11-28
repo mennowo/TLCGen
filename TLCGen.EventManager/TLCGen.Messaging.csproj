@@ -54,7 +54,9 @@
     <Compile Include="Messages\DefineChangedMessage.cs" />
     <Compile Include="Messages\FasenChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Requests\GetDetectorListReqeust.cs" />
     <Compile Include="Requests\ProcessSynchronisationsRequest.cs" />
+    <Compile Include="Responses\GetDetectorListResponse.cs" />
     <Compile Include="Subscriber.cs" />
     <Compile Include="WeakAction.cs" />
     <Compile Include="WeakActionT.cs" />

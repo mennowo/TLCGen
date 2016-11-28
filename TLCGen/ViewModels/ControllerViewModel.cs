@@ -12,6 +12,7 @@ using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -483,6 +484,23 @@ namespace TLCGen.ViewModels
             SetStringInModel(_Controller, message.OldDefine, message.NewDefine);
         }
 
+        private void OnDetectorListRequested(GetDetectorListReqeust<List<DetectorModel>, object> message)
+        {
+            List<DetectorModel> detectors = new List<DetectorModel>();
+            foreach(FaseCyclusModel fcm in Controller.Fasen)
+            {
+                foreach(DetectorModel dm in fcm.Detectoren)
+                {
+                    detectors.Add(dm);
+                }
+            }
+            foreach (DetectorModel dm in Controller.Detectoren)
+            {
+                detectors.Add(dm);
+            }
+            message.Callback.Invoke(detectors);
+        }
+
         #endregion // TLCGen Message handling
 
         #region Constructor
@@ -513,6 +531,7 @@ namespace TLCGen.ViewModels
             MessageManager.Instance.Subscribe(this, new Action<NameChangedMessage>(OnNameChanged));
             MessageManager.Instance.Subscribe(this, new Action<DefineChangedMessage>(OnDefineChanged));
             MessageManager.Instance.Subscribe(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
+            MessageManager.Instance.Subscribe(this, new Action<GetDetectorListReqeust<List<DetectorModel>, object>>(OnDetectorListRequested));
 
             // Connect CollectionChanged event handlers
             MaxGroentijdenSets.CollectionChanged += MaxGroentijdenSets_CollectionChanged;

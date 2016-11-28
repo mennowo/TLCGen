@@ -44,12 +44,12 @@ namespace TLCGen.Messaging
             {
                 List<Subscriber> subscribers;
                 Events.TryGetValue(typeof(T), out subscribers);
-                subscribers.Add(new Subscriber() { MySubscriber = subscriber, MyAction = new WeakAction<T>(subscriber, action) });
+                subscribers.Add(new Subscriber(subscriber, new WeakAction<T>(subscriber, action)));
             }
             else
             {
                 List<Subscriber> subscribers = new List<Subscriber>();
-                subscribers.Add(new Subscriber() { MySubscriber = subscriber, MyAction = new WeakAction<T>(subscriber, action) });
+                subscribers.Add(new Subscriber(subscriber, new WeakAction<T>(subscriber, action)));
                 Events.Add(typeof(T), subscribers);
             }
             RequestCleanup();

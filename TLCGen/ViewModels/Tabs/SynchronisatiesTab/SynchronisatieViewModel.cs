@@ -33,9 +33,21 @@ namespace TLCGen.ViewModels
         private SynchronisatieTypeEnum _DisplayType;
         private int _SynchronisationValue;
 
+        private NaloopViewModel _NaloopVM;
+
         #endregion // Fields
 
         #region Properties
+
+        public NaloopViewModel NaloopVM
+        {
+            get
+            {
+                if(_NaloopVM == null)
+                    _NaloopVM = new NaloopViewModel(_Naloop);
+                return _NaloopVM;
+            }
+        }
 
         public ConflictModel Conflict
         {
@@ -155,8 +167,8 @@ namespace TLCGen.ViewModels
                         return;
                 }
                 OnMonitoredPropertyChanged("ConflictValue");
-                OnMonitoredPropertyChanged("HasConflict");
-                OnMonitoredPropertyChanged("IsEnabled");
+                OnPropertyChanged("HasConflict");
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -169,7 +181,7 @@ namespace TLCGen.ViewModels
                     case SynchronisatieTypeEnum.Conflict:
                         return GetConflictValue();
                     case SynchronisatieTypeEnum.GarantieConflict:
-                        return GetGaratieConflictValue();
+                        return GetGarantieConflictValue();
                     default:
                         return "";
                 }
@@ -192,8 +204,8 @@ namespace TLCGen.ViewModels
                         return;
                 }
                 OnMonitoredPropertyChanged("ConflictValue");
-                OnMonitoredPropertyChanged("HasConflict");
-                OnMonitoredPropertyChanged("IsEnabled");
+                OnPropertyChanged("HasConflict");
+                OnPropertyChanged("IsEnabled");
             }
         }
 
@@ -219,7 +231,7 @@ namespace TLCGen.ViewModels
                     default:
                         throw new NotImplementedException();
                 }
-                OnPropertyChanged("IsCoupled");
+                OnMonitoredPropertyChanged("IsCoupled");
                 OnPropertyChanged("HasNoCoupling");
             }
         }
@@ -263,7 +275,7 @@ namespace TLCGen.ViewModels
                     default:
                         throw new NotImplementedException();
                 }
-                OnPropertyChanged("IsCoupled");
+                OnMonitoredPropertyChanged("IsCoupled");
                 OnPropertyChanged("HasNoCoupling");
             }
         }
@@ -476,7 +488,7 @@ namespace TLCGen.ViewModels
                 MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
         }
 
-        public string GetGaratieConflictValue()
+        public string GetGarantieConflictValue()
         {
             if(_Conflict.Waarde >= 0)
             {
@@ -513,7 +525,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void SetGarantieConflictValue(string value, bool sendmessage)
+        private void SetGarantieConflictValue(string value, bool sendmessage)
         {
             int confval;
             HasGarantieConflict = true;
@@ -610,6 +622,7 @@ namespace TLCGen.ViewModels
             _Gelijkstart = new GelijkstartModel();
             _Voorstart = new VoorstartModel();
             _Naloop = new NaloopModel();
+
             ReferencesSelf = referencetoself;
             if (ReferencesSelf) _Conflict.Waarde = -5;
             else _Conflict.Waarde = -1;

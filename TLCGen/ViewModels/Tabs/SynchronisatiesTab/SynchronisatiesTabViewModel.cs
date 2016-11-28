@@ -73,6 +73,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private ObservableCollection<string> _Detectoren;
+        public ObservableCollection<string> Detectoren
+        {
+            get
+            {
+                if (_Detectoren == null)
+                    _Detectoren = new ObservableCollection<string>();
+                return _Detectoren;
+            }
+        }
+
         private SynchronisatieViewModel _SelectedSynchronisatie;
         public SynchronisatieViewModel SelectedSynchronisatie
         {
@@ -259,6 +270,21 @@ namespace TLCGen.ViewModels
             set { }
         }
 
+        public override void Selected()
+        {
+            foreach (FaseCyclusModel fcm in Controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    Detectoren.Add(dm.Naam);
+                }
+            }
+            foreach (DetectorModel dm in Controller.Detectoren)
+            {
+                Detectoren.Add(dm.Naam);
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Commands
@@ -310,7 +336,7 @@ namespace TLCGen.ViewModels
                         continue;
 
                     string conf = ConflictMatrix[i, j].GetConflictValue();
-                    string gconf = ConflictMatrix[i, j].GetGaratieConflictValue();
+                    string gconf = ConflictMatrix[i, j].GetGarantieConflictValue();
                     int outc;
                     int outgc;
 

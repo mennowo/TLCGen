@@ -5,12 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              mc:Ignorable="d" 
+             x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <local:SelectedDisplayTypeToBoolConverter x:Key="DisplayTypeToBoolConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
     </UserControl.Resources>
     <Grid>
@@ -69,10 +72,10 @@
                 <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
             </StackPanel>
         </Grid>
-
+        
         <Grid 
             Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Voorstart}}" 
-            Grid.Column="3" MinWidth="200" >
+            Grid.Column="3" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -86,53 +89,69 @@
             </StackPanel>
         </Grid>
 
-        <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" Grid.Column="3" >
+        <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" 
+            Grid.Column="3" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.Resources>
-                <BooleanToVisibilityConverter x:Key="bool2visconv" />
-            </Grid.Resources>
-            <Label Content="Naloop opties (placeholder/voorbeeld)" FontWeight="Bold" />
-            <StackPanel Orientation="Vertical" Grid.Row="1">
-                <RadioButton Content="Naloop startgroen" Margin="2" Name="SGcb" IsChecked="True" />
-                <RadioButton Content="Naloop einde groen" Margin="2" Name="EGcb" />
+            <Label Content="Naloop opties" FontWeight="Bold" />
+            <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
+                        Orientation="Vertical" Grid.Row="1">
+                <Label Content="Type naloop:" />
+                <ComboBox 
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
+                    SelectedItem="{Binding Path=SelectedSynchronisatie.NaloopVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                <CheckBox Content="Detectie afhankelijk" IsChecked="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk}" Margin="5" />
+                <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
+                    <Label Content="Detectors:" />
+                    <DataGrid
+                        ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
+                        Margin="2" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Detector" Width="Auto" MinWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Detector}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedItem="{Binding Path=Detector}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Type" Width="Auto" MinWidth="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Type}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopDetectorTypeEnum}}}"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <Label Content="Tijden:" />
+                <DataGrid
+                    ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Tijden}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Type" IsReadOnly="True" Foreground="DarkGray" Binding="{Binding Path=Type}"  Width="Auto" MinWidth="100" />
+                        <DataGridTextColumn Header="Waarde" Binding="{Binding Path=Waarde}" MinWidth="50" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
-            <Grid Grid.Row="2" Visibility="{Binding ElementName=EGcb,Path=IsChecked,Converter={StaticResource bool2visconv}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Tijden:" />
-                <Label Content="Vaste naloop tijdens vastgroen:" Grid.Row="1" />
-                <TextBox MinWidth="50" Grid.Row="2" Text="50" Margin="2" />
-                <Label Content="Det. afh. naloop tijdens vastgroen:" Grid.Row="3" />
-                <TextBox MinWidth="50" Grid.Row="4" Text="70" Margin="2" />
-                <Label Content="Vaste naloop op einde groen:" Grid.Row="5" />
-                <TextBox MinWidth="50" Grid.Row="6" Text="60" Margin="2" />
-                <Label Content="Det. afh. naloop op einde groen:" Grid.Row="7" />
-                <TextBox MinWidth="50" Grid.Row="8" Text="80" Margin="2" />
-            </Grid>
-            
-            <Grid Grid.Row="2" Visibility="{Binding ElementName=SGcb,Path=IsChecked,Converter={StaticResource bool2visconv}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Tijden:" />
-                <Label Content="Vaste naloop vanaf startgroen:" Grid.Row="1" />
-                <TextBox MinWidth="50" Grid.Row="2" Text="50" Margin="2" />
-            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -130,6 +130,9 @@
     <Compile Include="Views\DataTypes\IGeneratorView.xaml.cs">
       <DependentUpon>IGeneratorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DataTypes\NaloopView.xaml.cs">
+      <DependentUpon>NaloopView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
@@ -249,6 +252,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\IGeneratorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DataTypes\NaloopView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

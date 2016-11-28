@@ -246,4 +246,35 @@ namespace TLCGen.Views
             throw new NotImplementedException();
         }
     }
+
+    public class ViewModelValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            SynchronisatieTypeEnum e = (SynchronisatieTypeEnum)parameter;
+            switch(e)
+            {
+                case SynchronisatieTypeEnum.Conflict:
+                case SynchronisatieTypeEnum.GarantieConflict:
+                    if (value is string)
+                        return value as string;
+                    else
+                        return "";
+                case SynchronisatieTypeEnum.Gelijkstart:
+                case SynchronisatieTypeEnum.Voorstart:
+                case SynchronisatieTypeEnum.Naloop:
+                    if (value is bool)
+                        return (bool)value;
+                    else
+                        return false;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
