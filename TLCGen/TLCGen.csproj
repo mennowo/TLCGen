@@ -96,6 +96,7 @@
     <Compile Include="ViewModels\Enums\SynchronisatieTypeEnum.cs" />
     <Compile Include="ViewModels\Other\TLCGenSettingsViewModel.cs" />
     <Compile Include="ViewModels\Tabs\FasenTab\GroentijdFaseViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\MeeaanvraagViewModel.cs" />
     <Compile Include="ViewModels\Tabs\SynchronisatiesTab\NaloopViewModel.cs" />
     <Compile Include="ViewModels\Tabs\SynchronisatiesTab\SynchronisatieViewModel.cs" />
     <Compile Include="ViewModels\Tabs\AlgemeenTab\AlgemeenTabViewModel.cs" />

@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class NaloopModel
+    public class NaloopModel : IInterSignaalGroepElement
     {
         #region Fields
 

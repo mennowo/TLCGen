@@ -23,7 +23,7 @@ namespace TLCGen.Models
         public List<NaloopModel> Nalopen { get; set; }
 
         [XmlArrayItem(ElementName = "Meeaanvraag")]
-        public List<NaloopModel> Meeaanvragen { get; set; }
+        public List<MeeaanvraagModel> Meeaanvragen { get; set; }
 
         public InterSignaalGroepModel()
         {
@@ -31,7 +31,7 @@ namespace TLCGen.Models
             Voorstarten = new List<VoorstartModel>();
             Gelijkstarten = new List<GelijkstartModel>();
             Nalopen = new List<NaloopModel>();
-            Meeaanvragen = new List<Models.NaloopModel>();
+            Meeaanvragen = new List<MeeaanvraagModel>();
         }
     }
 }

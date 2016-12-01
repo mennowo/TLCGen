@@ -35,6 +35,8 @@
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Voorstart}}" />
             <RadioButton Content="Nalopen" GroupName="SynchronisatieType" Margin="5"
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" />
+            <RadioButton Content="Meeaanvragen" GroupName="SynchronisatieType" Margin="5"
+                         IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Meeaanvraag}}" />
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="0.25" Grid.Column="1" >
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -81,10 +83,53 @@
                 </Grid.RowDefinitions>
                 <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
                 <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
-                    <Label Content="Tijd instelling:" />
+                    <Label Content="{Binding Path=Comment1}" />
                     <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
-                    <Label Content="Ontruimingstijd instelling:" />
+                    <Label Content="{Binding Path=Comment2}" />
                     <TextBox Text="{Binding Path=VoorstartOntruimingstijd}" Margin="2" />
+                </StackPanel>
+            </Grid>
+
+            <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Meeaanvraag}}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Meeaanvraag opties" FontWeight="Bold" Grid.Row="0" />
+                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
+                        Orientation="Vertical" Grid.Row="1">
+                    <Label Content="Type meeaanvraag:" />
+                    <ComboBox 
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:MeeaanvraagTypeEnum}}}"
+                    SelectedItem="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                    <CheckBox Content="Detectie afhankelijk" 
+                          IsEnabled="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijkPossible}"
+                          IsChecked="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijk}" Margin="5" />
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
+                        <Label Content="Detectors:" />
+                        <DataGrid
+                            ItemsSource="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.Detectoren}"
+                            Margin="2" AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Detector" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=MeeaanvraagDetector}" Margin="2" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox 
+                                                ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
+                                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                                SelectedItem="{Binding Path=MeeaanvraagDetector}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
@@ -107,8 +152,8 @@
                     <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
                         <Label Content="Detectors:" />
                         <DataGrid
-                        ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
-                        Margin="2" AutoGenerateColumns="False">
+                            ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
+                            Margin="2" AutoGenerateColumns="False">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="Detector" Width="Auto">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -119,9 +164,9 @@
                                     <DataGridTemplateColumn.CellEditingTemplate>
                                         <DataTemplate>
                                             <ComboBox 
-                                            ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
-                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                            SelectedItem="{Binding Path=Detector}" />
+                                                ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
+                                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                                SelectedItem="{Binding Path=Detector}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>

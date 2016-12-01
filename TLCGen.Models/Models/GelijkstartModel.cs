@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class GelijkstartModel
+    public class GelijkstartModel : IInterSignaalGroepElement
     {
         #region Properties
 

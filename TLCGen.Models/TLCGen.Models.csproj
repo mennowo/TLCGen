@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Models\BitmapCoordinaatModel.cs" />
     <Compile Include="Models\ConflictModel.cs" />
     <Compile Include="Models\ControllerDataModel.cs" />
@@ -57,6 +58,8 @@
     <Compile Include="Models\IOElementModel.cs" />
     <Compile Include="Models\GroentijdenSetModel.cs" />
     <Compile Include="Models\GroentijdModel.cs" />
+    <Compile Include="Models\MeeaanvraagDetectorModel.cs" />
+    <Compile Include="Models\MeeaanvraagModel.cs" />
     <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="Models\NaloopDetectorModel.cs" />
     <Compile Include="Models\NaloopModel.cs" />

@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class ConflictModel : IComparable
+    public class ConflictModel : IComparable, IInterSignaalGroepElement
     {
         #region Fields
 

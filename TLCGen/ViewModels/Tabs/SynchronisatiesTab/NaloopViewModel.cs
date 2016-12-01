@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Messaging;
+using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -23,12 +24,6 @@ namespace TLCGen.ViewModels
         #endregion // Fields
 
         #region Properties
-
-        public NaloopViewModel(NaloopModel nm)
-        {
-            _Naloop = nm;
-            SetNaloopTijden();
-        }
 
         public NaloopTypeEnum Type
         {
@@ -142,5 +137,69 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Private methods
+
+        #region Collection changed
+
+        private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (NaloopDetectorModel d in e.NewItems)
+                {
+                    _Naloop.Detectoren.Add(d);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (NaloopDetectorModel d in e.OldItems)
+                {
+                    _Naloop.Detectoren.Remove(d);
+                }
+            }
+            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Tijden_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (NaloopTijdModel t in e.NewItems)
+                {
+                    _Naloop.Tijden.Add(t);
+                }
+            }
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (NaloopTijdModel t in e.OldItems)
+                {
+                    _Naloop.Tijden.Remove(t);
+                }
+            }
+            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+        }
+
+        #endregion // Collection changed
+
+        #region Constructor
+
+        public NaloopViewModel(NaloopModel nm)
+        {
+            _Naloop = nm;
+
+            foreach(NaloopDetectorModel ndm in nm.Detectoren)
+            {
+                Detectoren.Add(ndm);
+            }
+            foreach(NaloopTijdModel ntm in nm.Tijden)
+            {
+                Tijden.Add(ntm);
+            }
+
+            SetNaloopTijden();
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            Tijden.CollectionChanged += Tijden_CollectionChanged;
+        }
+
+        #endregion // Constructor
     }
 }

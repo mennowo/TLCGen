@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class MeeaaanvraagModel
+    public class MeeaanvraagModel : IInterSignaalGroepElement
     {
         #region Fields
 
@@ -23,15 +23,15 @@ namespace TLCGen.Models
         public bool DetectieAfhankelijk { get; set; }
 
         [XmlArrayItem(ElementName = "MeeaanvraagDetector")]
-        public List<string> Detectoren { get; set; }
+        public List<MeeaanvraagDetectorModel> Detectoren { get; set; }
 
         #endregion // Properties
 
         #region Constructor
 
-        public MeeaaanvraagModel()
+        public MeeaanvraagModel()
         {
-            Detectoren = new List<string>();
+            Detectoren = new List<MeeaanvraagDetectorModel>();
         }
 
         #endregion // Constructor

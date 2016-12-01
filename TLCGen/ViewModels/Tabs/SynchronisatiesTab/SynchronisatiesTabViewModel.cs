@@ -14,6 +14,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.ViewModels.Enums;
 
 namespace TLCGen.ViewModels
@@ -95,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSynchronisatie = value;
-                if (_AllDetectoren != null)
+                if (_AllDetectoren != null && !string.IsNullOrEmpty(value.FaseVan))
                 {
                     Detectoren.Clear();
                     string s = value.FaseVan.Replace(Settings.SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
@@ -105,6 +106,7 @@ namespace TLCGen.ViewModels
                         Detectoren.Add(d);
                     }
                     value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
+                    value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
                 OnPropertyChanged(null);
             }
@@ -233,6 +235,8 @@ namespace TLCGen.ViewModels
                         return $"Ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     case SynchronisatieTypeEnum.Voorstart:
                         return $"Voorstarttijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
+                    case SynchronisatieTypeEnum.Meeaanvraag:
+                        return $"Type meeaanvraag van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     default:
                         return "";
                 }
@@ -447,7 +451,23 @@ namespace TLCGen.ViewModels
                         }
                     }
 
-                    if(!ConflictMatrix[fcm_from, fcm_to].IsOK())
+                    foreach (MeeaanvraagModel mm in _Controller.InterSignaalGroep.Meeaanvragen)
+                    {
+                        if (Fasen[fcm_from].Define == mm.FaseVan && Fasen[fcm_to].Define == mm.FaseNaar)
+                        {
+                            ConflictMatrix[fcm_from, fcm_to].Meeaanvraag = mm;
+                            if (ConflictMatrix[fcm_to, fcm_from] == null)
+                            {
+                                ConflictMatrix[fcm_to, fcm_from] = new SynchronisatieViewModel();
+                                ConflictMatrix[fcm_to, fcm_from].FaseVan = Fasen[fcm_from].Define;
+                                ConflictMatrix[fcm_to, fcm_from].FaseNaar = Fasen[fcm_to].Define;
+                            }
+                            ConflictMatrix[fcm_to, fcm_from].HasOppositeMeeaanvraag = true;
+                            break;
+                        }
+                    }
+
+                    if (!ConflictMatrix[fcm_from, fcm_to].IsOK())
                     {
                         throw new NotImplementedException();
                     }
@@ -503,6 +523,11 @@ namespace TLCGen.ViewModels
                     if (ConflictMatrix[fcvm_from, fcvm_to].HasNaloop)
                     {
                         _Controller.InterSignaalGroep.Nalopen.Add(ConflictMatrix[fcvm_from, fcvm_to].Naloop);
+                    }
+
+                    if (ConflictMatrix[fcvm_from, fcvm_to].HasMeeaanvraag)
+                    {
+                        _Controller.InterSignaalGroep.Meeaanvragen.Add(ConflictMatrix[fcvm_from, fcvm_to].Meeaanvraag);
                     }
                 }
             }
@@ -666,6 +691,24 @@ namespace TLCGen.ViewModels
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.IsCoupledNoMessaging = message.IsCoupled;
+                        }
+                    }
+                }
+            }
+
+            // Meeaanvraag
+            if (message.Meeaanvraag != null)
+            {
+                int fccount = Fasen.Count;
+                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                {
+                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    {
+                        if (Fasen[fcm_from].Define == message.Meeaanvraag.FaseVan &&
+                            Fasen[fcm_to].Define == message.Meeaanvraag.FaseNaar)
+                        {
+                            var cvm2 = ConflictMatrix[fcm_to, fcm_from];
+                            cvm2.HasOppositeMeeaanvraag = message.IsCoupled;
                         }
                     }
                 }

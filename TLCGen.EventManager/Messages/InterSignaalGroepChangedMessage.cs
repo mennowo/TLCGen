@@ -18,6 +18,7 @@ namespace TLCGen.Messaging.Messages
         public NaloopModel Naloop { get; private set; }
         public GelijkstartModel Gelijkstart { get; private set; }
         public VoorstartModel Voorstart { get; private set; }
+        public MeeaanvraagModel Meeaanvraag { get; private set; }
 
         public InterSignaalGroepChangedMessage(string fasevan, string fasenaar, object synchronisatieobject, bool iscoupled = false)
         {
@@ -26,6 +27,7 @@ namespace TLCGen.Messaging.Messages
             if (t == typeof(NaloopModel)) Naloop = (NaloopModel)synchronisatieobject;
             if (t == typeof(GelijkstartModel)) Gelijkstart = (GelijkstartModel)synchronisatieobject;
             if (t == typeof(VoorstartModel)) Voorstart = (VoorstartModel)synchronisatieobject;
+            if (t == typeof(MeeaanvraagModel)) Meeaanvraag = (MeeaanvraagModel)synchronisatieobject;
             FaseVan = fasevan;
             FaseNaar = fasenaar;
             IsCoupled = iscoupled;

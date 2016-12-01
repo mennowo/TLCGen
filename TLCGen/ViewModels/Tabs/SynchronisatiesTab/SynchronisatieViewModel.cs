@@ -20,12 +20,14 @@ namespace TLCGen.ViewModels
         private NaloopModel _Naloop;
         private GelijkstartModel _Gelijkstart;
         private VoorstartModel _Voorstart;
+        private MeeaanvraagModel _Meeaanvraag;
 
         private bool _HasConflict;
         private bool _HasGarantieConflict;
         private bool _HasGelijkstart;
         private bool _HasNaloop;
         private bool _HasVoorstart;
+        private bool _HasMeeaanvraag;
 
         private string _FaseVan;
         private string _FaseNaar;
@@ -34,6 +36,9 @@ namespace TLCGen.ViewModels
         private int _SynchronisationValue;
 
         private NaloopViewModel _NaloopVM;
+        private MeeaanvraagViewModel _MeeaanvraagVM;
+
+        private Dictionary<SynchronisatieTypeEnum, IInterSignaalGroepElement> _InterSignaalGroepElements;
 
         #endregion // Fields
 
@@ -46,6 +51,16 @@ namespace TLCGen.ViewModels
                 if(_NaloopVM == null)
                     _NaloopVM = new NaloopViewModel(_Naloop);
                 return _NaloopVM;
+            }
+        }
+
+        public MeeaanvraagViewModel MeeaanvraagVM
+        {
+            get
+            {
+                if (_MeeaanvraagVM == null)
+                    _MeeaanvraagVM = new MeeaanvraagViewModel(_Meeaanvraag);
+                return _MeeaanvraagVM;
             }
         }
 
@@ -89,6 +104,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public MeeaanvraagModel Meeaanvraag
+        {
+            get { return _Meeaanvraag; }
+            set
+            {
+                _Meeaanvraag = value;
+                _HasMeeaanvraag = true;
+            }
+        }
+
         public SynchronisatieTypeEnum DisplayType
         {
             get { return _DisplayType; }
@@ -122,10 +147,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseVan = value;
-                _Conflict.FaseVan = value;
-                _Naloop.FaseVan = value;
-                _Gelijkstart.FaseVan = value;
-                _Voorstart.FaseVan = value;
+                foreach (var elem in _InterSignaalGroepElements)
+                {
+                    elem.Value.FaseVan = value;
+                }
                 OnPropertyChanged("FaseVan");
             }
         }
@@ -139,10 +164,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseNaar = value;
-                _Conflict.FaseNaar = value;
-                _Naloop.FaseNaar = value;
-                _Gelijkstart.FaseNaar = value;
-                _Voorstart.FaseNaar = value;
+                foreach (var elem in _InterSignaalGroepElements)
+                {
+                    elem.Value.FaseNaar = value;
+                }
                 OnPropertyChanged("FaseNaar");
             }
         }
@@ -228,6 +253,9 @@ namespace TLCGen.ViewModels
                     case SynchronisatieTypeEnum.Naloop:
                         HasNaloop = value;
                         break;
+                    case SynchronisatieTypeEnum.Meeaanvraag:
+                        HasMeeaanvraag = value;
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -248,8 +276,10 @@ namespace TLCGen.ViewModels
                         return HasVoorstart;
                     case SynchronisatieTypeEnum.Naloop:
                         return HasNaloop;
+                    case SynchronisatieTypeEnum.Meeaanvraag:
+                        return HasMeeaanvraag;
                     default:
-                        return HasGelijkstart || HasVoorstart || HasNaloop;
+                        return HasGelijkstart || HasVoorstart || HasNaloop || HasMeeaanvraag;
                 }
             }
             set
@@ -270,6 +300,10 @@ namespace TLCGen.ViewModels
                         break;
                     case SynchronisatieTypeEnum.Naloop:
                         HasNaloop = value;
+                        MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
+                        break;
+                    case SynchronisatieTypeEnum.Meeaanvraag:
+                        HasMeeaanvraag = value;
                         MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
                         break;
                     default:
@@ -334,6 +368,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool HasMeeaanvraag
+        {
+            get { return _HasMeeaanvraag; }
+            set
+            {
+                _HasMeeaanvraag = value;
+                OnPropertyChanged("HasMeeaanvraag");
+                OnPropertyChanged("IsCoupled");
+            }
+        }
+
         private bool _HasOppositeVoorstart;
         public bool HasOppositeVoorstart
         {
@@ -358,6 +403,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool _HasOppositeMeeaanvraag;
+        public bool HasOppositeMeeaanvraag
+        {
+            get { return _HasOppositeMeeaanvraag; }
+            set
+            {
+                _HasOppositeMeeaanvraag = value;
+                OnPropertyChanged("HasOppositeMeeaanvraag");
+                OnPropertyChanged("IsEnabled");
+            }
+        }
+
         public bool IsEnabled
         {
             get
@@ -370,12 +427,13 @@ namespace TLCGen.ViewModels
                 {
                     case SynchronisatieTypeEnum.Conflict:
                     case SynchronisatieTypeEnum.GarantieConflict:
-                        return HasNoCoupling && !HasOppositeVoorstart && !HasOppositeNaloop;
+                        return HasNoCoupling && !HasOppositeVoorstart && !HasOppositeNaloop && !HasOppositeMeeaanvraag;
                     case SynchronisatieTypeEnum.Gelijkstart:
                         return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart;
                     case SynchronisatieTypeEnum.Voorstart:
                         return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeVoorstart;
                     case SynchronisatieTypeEnum.Naloop:
+                    case SynchronisatieTypeEnum.Meeaanvraag:
                         return !HasConflict && !HasGarantieConflict;
                 }
                 return false;
@@ -384,7 +442,7 @@ namespace TLCGen.ViewModels
 
         public bool HasNoCoupling
         {
-            get { return !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart); }
+            get { return !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart || HasMeeaanvraag); }
         }
 
         public bool ReferencesSelf
@@ -620,7 +678,7 @@ namespace TLCGen.ViewModels
 
         public bool IsOK()
         {
-            if ((HasConflict || HasGarantieConflict) && (HasVoorstart || HasNaloop || HasGelijkstart))
+            if ((HasConflict || HasGarantieConflict) && (HasVoorstart || HasNaloop || HasGelijkstart || HasMeeaanvraag))
                 return false;
             if (HasVoorstart && HasGelijkstart)
                 return false;
@@ -637,6 +695,15 @@ namespace TLCGen.ViewModels
             _Gelijkstart = new GelijkstartModel();
             _Voorstart = new VoorstartModel();
             _Naloop = new NaloopModel();
+            _Meeaanvraag = new MeeaanvraagModel();
+
+            _InterSignaalGroepElements = new Dictionary<SynchronisatieTypeEnum, IInterSignaalGroepElement>();
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.Conflict, _Conflict as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.GarantieConflict, _Conflict as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.Gelijkstart, _Gelijkstart as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.Voorstart, _Voorstart as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.Naloop, _Naloop as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(SynchronisatieTypeEnum.Meeaanvraag, _Meeaanvraag as IInterSignaalGroepElement);
 
             ReferencesSelf = referencetoself;
             if (ReferencesSelf) _Conflict.Waarde = -5;
