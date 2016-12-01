@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -108,7 +109,7 @@
     <Compile Include="ViewModels\Tabs\ModulesTab\ModuleViewModel.cs" />
     <Compile Include="ViewModels\Tabs\AlgemeenTab\VersieViewModel.cs" />
     <Compile Include="ViewModels\Tabs\BitmapTab\BitmappedItemViewModel.cs" />
-    <Compile Include="ViewModels\Other\FaseCycluseModuleViewModel.cs" />
+    <Compile Include="ViewModels\Tabs\ModulesTab\FaseCyclusModuleViewModel.cs" />
     <Compile Include="ViewModels\Tabs\ModulesTab\ModulesTabFasenLijstViewModel.cs" />
     <Compile Include="ViewModels\Other\TLCGenStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

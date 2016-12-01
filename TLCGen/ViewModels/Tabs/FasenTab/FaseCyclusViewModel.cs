@@ -10,6 +10,7 @@ using TLCGen.DataAccess;
 using TLCGen.Settings;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 
 namespace TLCGen.ViewModels
 {
@@ -34,20 +35,25 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && Integrity.IntegrityChecker.IsElementNaamUnique(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    string oldname = _FaseCyclus.Naam;
-                    string olddefine = _FaseCyclus.Define;
-                    _FaseCyclus.Naam = value;
+                    var message = new IsNameUniqueRequest(value);
+                    MessageManager.Instance.SendWithRespons(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string oldname = _FaseCyclus.Naam;
+                        string olddefine = _FaseCyclus.Define;
+                        _FaseCyclus.Naam = value;
 
-                    _FaseCyclus.Define = SettingsProvider.Instance.GetFaseCyclusDefinePrefix() + value;
+                        _FaseCyclus.Define = SettingsProvider.Instance.GetFaseCyclusDefinePrefix() + value;
 
-                    // set new type
-                    this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
+                        // set new type
+                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
 
-                    // Notify the messenger
-                    MessageManager.Instance.Send(new NameChangedMessage(oldname, value));
-                    MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _FaseCyclus.Define));
+                        // Notify the messenger
+                        MessageManager.Instance.Send(new NameChangedMessage(oldname, value));
+                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _FaseCyclus.Define));
+                    }
                 }
                 OnMonitoredPropertyChanged(null); // Update all properties
 
@@ -59,19 +65,24 @@ namespace TLCGen.ViewModels
             get { return _FaseCyclus.Define; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && Integrity.IntegrityChecker.IsElementDefineUnique(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    string olddefine = _FaseCyclus.Define;
-                    string oldname = _FaseCyclus.Naam;
-                    _FaseCyclus.Naam = value.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
-                    _FaseCyclus.Define = value;
+                    var message = new IsDefineUniqueRequest(value);
+                    MessageManager.Instance.SendWithRespons(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string olddefine = _FaseCyclus.Define;
+                        string oldname = _FaseCyclus.Naam;
+                        _FaseCyclus.Naam = value.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+                        _FaseCyclus.Define = value;
 
-                    // set new type
-                    this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
+                        // set new type
+                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
 
-                    // Notify the messenger
-                    MessageManager.Instance.Send(new NameChangedMessage(oldname, _FaseCyclus.Naam));
-                    MessageManager.Instance.Send(new DefineChangedMessage(olddefine, value));
+                        // Notify the messenger
+                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _FaseCyclus.Naam));
+                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, value));
+                    }
                 }
                 OnMonitoredPropertyChanged(null); // Update all properties
             }

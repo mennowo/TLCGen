@@ -15,6 +15,7 @@ using TLCGen.Helpers;
 using TLCGen.Interfaces;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -27,7 +28,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private FaseCyclusViewModel _SelectedFaseCyclus;
-        private GroentijdenSetsLijstViewModel _MaxGroentijdenLijstVM;
+        private GroentijdenSetsLijstViewModel _GroentijdenLijstVM;
         private IList _SelectedFaseCycli = new ArrayList();
         private TabItem _SelectedTab;
         private int _SelectedTabIndex;
@@ -89,7 +90,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _MaxGroentijdenLijstVM;
+                return _GroentijdenLijstVM;
             }
         }
 
@@ -187,13 +188,15 @@ namespace TLCGen.ViewModels
                     string next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
-                        inewname++;
-                        newname = (inewname < 10 ? "0" : "") + inewname.ToString();
-                        while (!Integrity.IntegrityChecker.IsElementNaamUnique(newname))
+                        IsNameUniqueRequest message = new IsNameUniqueRequest("");
+                        do
                         {
-                            inewname++;
                             newname = (inewname < 10 ? "0" : "") + inewname.ToString();
+                            message = new IsNameUniqueRequest(newname);
+                            MessageManager.Instance.SendWithRespons(message);
+                            inewname++;
                         }
+                        while (!message.IsUnique);
                     }
                 }   
             }
@@ -267,11 +270,11 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void SortMaxGroenSetsFasen()
         {
-            foreach(GroentijdenSetViewModel mgsvm in _MaxGroentijdenLijstVM.GroentijdenSets)
+            foreach(GroentijdenSetViewModel mgsvm in _GroentijdenLijstVM.GroentijdenSets)
             {
                 mgsvm.GroentijdenSetList.BubbleSort();
             }
-            _MaxGroentijdenLijstVM.BuildGroentijdenMatrix();
+            _GroentijdenLijstVM.BuildGroentijdenMatrix();
         }
 
         /// <summary>
@@ -308,14 +311,22 @@ namespace TLCGen.ViewModels
             {
                 foreach (FaseCyclusModel fcm in items)
                 {
-                    if(Integrity.IntegrityChecker.IsElementDefineUnique(fcm.Define) &&
-                       Integrity.IntegrityChecker.IsElementNaamUnique(fcm.Naam))
+                    var message1 = new IsNameUniqueRequest(fcm.Naam);
+                    var message2 = new IsDefineUniqueRequest(fcm.Define);
+                    MessageManager.Instance.SendWithRespons(message1);
+                    MessageManager.Instance.SendWithRespons(message2);
+                    if (message1.Handled && message1.IsUnique &&
+                        message2.Handled && message2.IsUnique)
                     {
                         bool IsOK = true;
                         foreach(DetectorModel dm in fcm.Detectoren)
                         {
-                            if(!(Integrity.IntegrityChecker.IsElementDefineUnique(dm.Define) &&
-                                 Integrity.IntegrityChecker.IsElementNaamUnique(dm.Naam)))
+                            var message3 = new IsNameUniqueRequest(dm.Naam);
+                            var message4 = new IsDefineUniqueRequest(dm.Define);
+                            MessageManager.Instance.SendWithRespons(message3);
+                            MessageManager.Instance.SendWithRespons(message4);
+                            if (!(message3.Handled && message3.IsUnique &&
+                                  message4.Handled && message4.IsUnique))
                             {
                                 IsOK = false;
                                 break;
@@ -410,7 +421,7 @@ namespace TLCGen.ViewModels
 
         public FasenTabViewModel(ControllerModel controller) : base(controller)
         {
-            _MaxGroentijdenLijstVM = new GroentijdenSetsLijstViewModel(_Controller);
+            _GroentijdenLijstVM = new GroentijdenSetsLijstViewModel(_Controller);
             foreach(FaseCyclusModel fcm in _Controller.Fasen)
             {
                 Fasen.Add(new FaseCyclusViewModel(fcm));

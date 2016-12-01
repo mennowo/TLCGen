@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -68,7 +69,8 @@ namespace TLCGen.ViewModels
                 {
                     foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
-                        if (Integrity.IntegrityChecker.IsFasenConflicting(this.Define, mfcvm.FaseCyclusDefine))
+                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Define, mfcvm.FaseCyclusDefine);
+                        if (request.Handled && request.IsConflicting)
                             return false;
                     }
                 }

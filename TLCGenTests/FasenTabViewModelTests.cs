@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System.Threading;
 using TLCGen.DataAccess;
 using TLCGen.Integrity;
@@ -8,9 +8,19 @@ using TLCGen.ViewModels;
 
 namespace TLCGenTests
 {
-    [TestClass]
-    public class FasenTabTests
+    [TestFixture]
+    public class FasenTabViewModelTests
     {
+        private MainWindowViewModel mainwinvm;
+
+        [SetUp]
+        public void StartTesting()
+        {
+            // Setup variables
+            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
+            mainwinvm = new MainWindowViewModel();
+        }
+
         private void AddFaseAndAssert(FasenTabViewModel tab, int count)
         {
             tab.AddFaseCommand.Execute(null);
@@ -42,13 +52,12 @@ namespace TLCGenTests
         /// <summary>
         /// Tests adding and removing phases
         /// </summary>
-        [TestMethod]
-        public void AddAndRemoveFasen()
+        [Test]
+        public void FasenAddAndRemove()
         {
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            DataProvider.Instance.SetController();
-            var tab = new FasenTabViewModel(DataProvider.Instance.Controller);
+            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
+            mainwinvm.NewFileCommand.Execute(null);
+            var tab = mainwinvm.ControllerVM.FasenTabVM;
 
             // Add phase possible, remove phase not
             Assert.IsTrue(tab.AddFaseCommand.CanExecute(null));
@@ -66,19 +75,20 @@ namespace TLCGenTests
             // Remove phase: all are gone
             RemoveFaseAndAssert(tab, 0);
 
-            Thread.Sleep(250);
+            mainwinvm.ControllerVM.HasChanged = false;
+            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
+            mainwinvm.CloseFileCommand.Execute(null);
         }
 
         /// <summary>
         /// Tests behaviour when changing Fasen names such that sorting should occur
         /// </summary>
-        [TestMethod]
-        public void SortFasen()
+        [Test]
+        public void FasenSort()
         {
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            DataProvider.Instance.SetController();
-            var tab = new FasenTabViewModel(DataProvider.Instance.Controller);
+            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
+            mainwinvm.NewFileCommand.Execute(null);
+            var tab = mainwinvm.ControllerVM.FasenTabVM;
 
             // Add phase possible, remove phase not
             Assert.IsTrue(tab.AddFaseCommand.CanExecute(null));
@@ -160,6 +170,10 @@ namespace TLCGenTests
             tab.GroentijdenLijstVM.SelectedSet = tab.GroentijdenLijstVM.GroentijdenSets[0];
             tab.GroentijdenLijstVM.RemoveGroentijdenSetCommand.Execute(null);
             Assert.AreEqual(tab.GroentijdenLijstVM.GroentijdenSets.Count, 0);
+
+            mainwinvm.ControllerVM.HasChanged = false;
+            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
+            mainwinvm.CloseFileCommand.Execute(null);
         }
     }
 }

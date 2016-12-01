@@ -38,21 +38,21 @@ namespace TLCGen.ViewModels
             set { _Controller = value; }
         }
 
-        public virtual bool SelectedPreview()
+        public virtual bool OnSelectedPreview()
         {
             return true;
         }
 
-        public virtual void Selected()
+        public virtual void OnSelected()
         {
         }
 
-        public virtual bool DeselectedPreview()
+        public virtual bool OnDeselectedPreview()
         {
             return true;
         }
 
-        public virtual void Deselected()
+        public virtual void OnDeselected()
         {
         }
 

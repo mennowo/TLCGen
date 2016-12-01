@@ -15,56 +15,6 @@
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <!--<ControlTemplate TargetType="{x:Type CheckBox}" x:Key="CheckBoxTemplate">
-            <Border Name="MainBorder" BorderBrush="Gray">
-                <Grid Name="BackGrid" Background="Transparent">
-                    <Grid Background="LemonChiffon" Margin="2" HorizontalAlignment="Left">
-                        <Grid Name="CheckGrid" Background="LemonChiffon" Margin="4" />
-                    </Grid>
-                    <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
-                </Grid>
-            </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="BackGrid" Property="Background" Value="PaleGoldenRod" />
-                </Trigger>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="CheckGrid" Property="Background" Value="SandyBrown" />
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter TargetName="BackGrid" Property="Background" Value="LightGray" />
-                </Trigger>
-                <Trigger Property="IsPressed" Value="True">
-                    <Trigger.EnterActions>
-                        <BeginStoryboard Name="sb1">
-                            <Storyboard AutoReverse="False">
-                                <ColorAnimation To="OrangeRed" 
-                                                Duration="0:0:0.1"
-                                                Storyboard.TargetName="MainBorder"
-                                                Storyboard.TargetProperty="BorderBrush.Color" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.EnterActions>
-                    <Trigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard AutoReverse="False">
-                                <ColorAnimation To="Gray" 
-                                                Duration="0:0:0.1"
-                                                Storyboard.TargetName="MainBorder"
-                                                Storyboard.TargetProperty="BorderBrush.Color" />
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </Trigger.ExitActions>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-
-
-        <Style TargetType="CheckBox">
-            <Setter Property="Template" Value="{StaticResource CheckBoxTemplate}" />
-        </Style>-->
-        
-
         <local:ConflictBackgroundConverter x:Key="backgroundConverter" />
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
         <local:SelectedDisplayTypeToBoolConverter x:Key="DisplayTypeToBoolConverter" />
@@ -140,8 +90,5 @@
             BeginningEdit="DataGrid_BeginningEdit"
             SelectedCellsChanged="DataGrid_SelectedCellsChanged">
         </DataGrid>
-        <!--EnableColumnVirtualization="False"
-            EnableRowVirtualization="False"
-            Loaded="DataGrid2D_Loaded"-->
     </Grid>
 </UserControl>

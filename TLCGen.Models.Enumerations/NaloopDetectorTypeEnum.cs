@@ -11,6 +11,8 @@ namespace TLCGen.Models.Enumerations
     {
         [Description("Bezet")]
         Bezet,
+        [Description("Bezet geweest")]
+        BezetGeweest,
         [Description("Hiaat")]
         Hiaat
     }

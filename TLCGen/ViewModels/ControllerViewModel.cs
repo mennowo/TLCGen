@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
+using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
@@ -53,6 +54,7 @@ namespace TLCGen.ViewModels
         public ControllerModel Controller
         {
             get { return _Controller; }
+            set { _Controller = value; }
         }
 
         public ObservableCollection<ITLCGenTabItem> TabItems
@@ -265,16 +267,23 @@ namespace TLCGen.ViewModels
             set
             {
                 // Take actions for current 
-                if (_SelectedTab != null && _SelectedTab.DeselectedPreview())
+                if (_SelectedTab != null)
                 {
-                    _SelectedTab.Deselected();
+                    if(_SelectedTab.OnDeselectedPreview())
+                    {
+                        _SelectedTab.OnDeselected();
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
 
                 // Preview new, set if good
-                if (value.SelectedPreview())
+                if (value.OnSelectedPreview())
                 {
                     _SelectedTab = value;
-                    _SelectedTab.Selected();
+                    _SelectedTab.OnSelected();
                 }
             }
         }
@@ -394,28 +403,6 @@ namespace TLCGen.ViewModels
 
         #region Collection Changed
 
-        /// <summary>
-        /// This method is executed when the collection of maxgreentime sets changes
-        /// </summary>
-        private void MaxGroentijdenSets_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (GroentijdenSetViewModel mgsvm in e.NewItems)
-                {
-                    _Controller.GroentijdenSets.Add(mgsvm.GroentijdenSet);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (GroentijdenSetViewModel mgsvm in e.OldItems)
-                {
-                    _Controller.GroentijdenSets.Remove(mgsvm.GroentijdenSet);
-                }
-            }
-            HasChanged = true;
-        }
-
         #endregion // Collection Changed
 
         #region TLCGen Message handling
@@ -484,21 +471,31 @@ namespace TLCGen.ViewModels
             SetStringInModel(_Controller, message.OldDefine, message.NewDefine);
         }
 
-        private void OnDetectorListRequested(GetDetectorListReqeust<List<DetectorModel>, object> message)
+        private void OnIsNameUniqueRequestReceived(IsNameUniqueRequest request)
         {
-            List<DetectorModel> detectors = new List<DetectorModel>();
-            foreach(FaseCyclusModel fcm in Controller.Fasen)
+            if(request.Handled == false)
             {
-                foreach(DetectorModel dm in fcm.Detectoren)
-                {
-                    detectors.Add(dm);
-                }
+                request.IsUnique = IntegrityChecker.IsElementNaamUnique(_Controller, request.Name);
+                request.Handled = true;
             }
-            foreach (DetectorModel dm in Controller.Detectoren)
+        }
+
+        private void OnIsDefineUniqueRequestReceived(IsDefineUniqueRequest request)
+        {
+            if (request.Handled == false)
             {
-                detectors.Add(dm);
+                request.IsUnique = IntegrityChecker.IsElementDefineUnique(_Controller, request.Define);
+                request.Handled = true;
             }
-            message.Callback.Invoke(detectors);
+        }
+
+        private void OnIsFasenConflictRequestReceived(IsFasenConflictingRequest request)
+        {
+            if (request.Handled == false)
+            {
+                request.IsConflicting = IntegrityChecker.IsFasenConflicting(_Controller, request.Define1, request.Define2);
+                request.Handled = true;
+            }
         }
 
         #endregion // TLCGen Message handling
@@ -531,40 +528,42 @@ namespace TLCGen.ViewModels
             MessageManager.Instance.Subscribe(this, new Action<NameChangedMessage>(OnNameChanged));
             MessageManager.Instance.Subscribe(this, new Action<DefineChangedMessage>(OnDefineChanged));
             MessageManager.Instance.Subscribe(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
-            MessageManager.Instance.Subscribe(this, new Action<GetDetectorListReqeust<List<DetectorModel>, object>>(OnDetectorListRequested));
+            MessageManager.Instance.Subscribe(this, new Action<IsNameUniqueRequest>(OnIsNameUniqueRequestReceived));
+            MessageManager.Instance.Subscribe(this, new Action<IsDefineUniqueRequest>(OnIsDefineUniqueRequestReceived));
+            MessageManager.Instance.Subscribe(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
 
-            // Connect CollectionChanged event handlers
-            MaxGroentijdenSets.CollectionChanged += MaxGroentijdenSets_CollectionChanged;
-
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == AlgemeenTabVM.DisplayName).Any())
+            if (_MainWindowVM != null)
             {
-                TabItems.Add(AlgemeenTabVM as ITLCGenTabItem);
-            }
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == FasenTabVM.DisplayName).Any())
-            {
-                TabItems.Add(FasenTabVM as ITLCGenTabItem);
-            }
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == DetectorenTabVM.DisplayName).Any())
-            {
-                TabItems.Add(DetectorenTabVM as ITLCGenTabItem);
-            }
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == CoordinatiesTabVM.DisplayName).Any())
-            {
-                TabItems.Add(CoordinatiesTabVM as ITLCGenTabItem);
-            }
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == ModulesTabVM.DisplayName).Any())
-            {
-                TabItems.Add(ModulesTabVM as ITLCGenTabItem);
-            }
-            if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == BitmapTabVM.DisplayName).Any())
-            {
-                TabItems.Add(BitmapTabVM as ITLCGenTabItem);
-            }
-            foreach(ITLCGenTabItem item in _MainWindowVM.TabItems)
-            {
-                if(!TabItems.Contains(item))
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == AlgemeenTabVM.DisplayName).Any())
                 {
-                    TabItems.Add(item);
+                    TabItems.Add(AlgemeenTabVM as ITLCGenTabItem);
+                }
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == FasenTabVM.DisplayName).Any())
+                {
+                    TabItems.Add(FasenTabVM as ITLCGenTabItem);
+                }
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == DetectorenTabVM.DisplayName).Any())
+                {
+                    TabItems.Add(DetectorenTabVM as ITLCGenTabItem);
+                }
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == CoordinatiesTabVM.DisplayName).Any())
+                {
+                    TabItems.Add(CoordinatiesTabVM as ITLCGenTabItem);
+                }
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == ModulesTabVM.DisplayName).Any())
+                {
+                    TabItems.Add(ModulesTabVM as ITLCGenTabItem);
+                }
+                if (!_MainWindowVM.TabItems.Where(x => x.GetPluginName() == BitmapTabVM.DisplayName).Any())
+                {
+                    TabItems.Add(BitmapTabVM as ITLCGenTabItem);
+                }
+                foreach (ITLCGenTabItem item in _MainWindowVM.TabItems)
+                {
+                    if (!TabItems.Contains(item))
+                    {
+                        TabItems.Add(item);
+                    }
                 }
             }
 

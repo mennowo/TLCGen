@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class NaloopModel
+    public class MeeaaanvraagModel
     {
         #region Fields
 
@@ -19,23 +19,19 @@ namespace TLCGen.Models
 
         public string FaseVan { get; set; }
         public string FaseNaar { get; set; }
-        public NaloopTypeEnum Type { get; set; }
+        public MeeaanvraagTypeEnum Type { get; set; }
         public bool DetectieAfhankelijk { get; set; }
 
-        [XmlArrayItem(ElementName = "NaloopDetector")]
-        public List<NaloopDetectorModel> Detectoren { get; set; }
-
-        [XmlArrayItem(ElementName = "NaloopTijden")]
-        public List<NaloopTijdModel> Tijden { get; set; }
+        [XmlArrayItem(ElementName = "MeeaanvraagDetector")]
+        public List<string> Detectoren { get; set; }
 
         #endregion // Properties
 
         #region Constructor
 
-        public NaloopModel()
+        public MeeaaanvraagModel()
         {
-            Detectoren = new List<NaloopDetectorModel>();
-            Tijden = new List<NaloopTijdModel>();
+            Detectoren = new List<string>();
         }
 
         #endregion // Constructor

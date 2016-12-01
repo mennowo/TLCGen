@@ -198,7 +198,7 @@ namespace TLCGen.ViewModels
                         SetConflictValue(value, true);
                         break;
                     case SynchronisatieTypeEnum.GarantieConflict:
-                        SetGarantieConflictValue(value, false);
+                        SetGarantieConflictValue(value, true);
                         break;
                     default:
                         return;
@@ -434,7 +434,7 @@ namespace TLCGen.ViewModels
                 case -4:
                     return "GKL";
                 case -5:
-                    return "X";
+                    return "";
                 case -6:
                     return "*";
                 default:
@@ -484,8 +484,10 @@ namespace TLCGen.ViewModels
                     break;
             }
 
-            if(sendmessage)
+            if (sendmessage)
+            {
                 MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
+            }
         }
 
         public string GetGarantieConflictValue()
@@ -529,18 +531,31 @@ namespace TLCGen.ViewModels
         {
             int confval;
             HasGarantieConflict = true;
-            if (Int32.TryParse(value, out confval))
+
+            switch (value)
             {
-                _Conflict.GarantieWaarde = confval;
-            }
-            // Ignore false data
-            else
-            {
-                _Conflict.GarantieWaarde = -1;
-                HasGarantieConflict = false;
+                case "*":
+                    _Conflict.GarantieWaarde = -6;
+                    break;
+                default:
+                    if (Int32.TryParse(value, out confval))
+                    {
+                        _Conflict.GarantieWaarde = confval;
+                    }
+                    // Ignore false data
+                    else
+                    {
+                        _Conflict.GarantieWaarde = -1;
+                        HasGarantieConflict = false;
+                    }
+                    break;
             }
 
-            MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
+            if(sendmessage)
+            {
+                MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
+            }
+
         }
 
         private void SetSynchValue<T>(string property, T val)

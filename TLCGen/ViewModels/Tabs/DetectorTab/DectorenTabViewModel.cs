@@ -12,6 +12,8 @@ using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Interfaces;
+using TLCGen.Messaging;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.ViewModels.Templates;
@@ -184,7 +186,7 @@ namespace TLCGen.ViewModels
             set { }
         }
 
-        public override void Selected()
+        public override void OnSelected()
         {
             DetectorenFasenLijstVM.Fasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
@@ -221,8 +223,12 @@ namespace TLCGen.ViewModels
             {
                 foreach(DetectorModel dm in items)
                 {
-                    if ((Integrity.IntegrityChecker.IsElementDefineUnique(dm.Define) &&
-                         Integrity.IntegrityChecker.IsElementNaamUnique(dm.Naam)))
+                    var message1 = new IsNameUniqueRequest(dm.Naam);
+                    var message2 = new IsDefineUniqueRequest(dm.Define);
+                    MessageManager.Instance.SendWithRespons(message1);
+                    MessageManager.Instance.SendWithRespons(message2);
+                    if (message1.Handled && message1.IsUnique &&
+                        message2.Handled && message2.IsUnique)
                     {
                         DetectorViewModel dvm = new DetectorViewModel(dm);
                         dvm.FaseVM = DetectorenFasenLijstVM?.SelectedFase;

@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TLCGen.DataAccess;
 using TLCGen.Settings;
@@ -10,16 +11,25 @@ using TLCGen.ViewModels;
 
 namespace TLCGenTests
 {
-    [TestClass]
-    public class AlgemeenTabTests
+    [TestFixture]
+    public class AlgemeenTabViewModelTests
     {
-        [TestMethod]
-        public void Versioning()
+        private MainWindowViewModel mainwinvm;
+
+        [SetUp]
+        public void StartTesting()
         {
             // Setup variables
             SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            DataProvider.Instance.SetController();
-            var tab = new AlgemeenTabViewModel(DataProvider.Instance.Controller.Data);
+            mainwinvm = new MainWindowViewModel();
+        }
+
+        [Test]
+        public void AlgemeenVersioning()
+        {
+            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
+            mainwinvm.NewFileCommand.Execute(null);
+            var tab = mainwinvm.ControllerVM.AlgemeenTabVM;
 
             // empty version list
             Assert.IsTrue(tab.AddVersieCommand.CanExecute(null));
@@ -57,6 +67,10 @@ namespace TLCGenTests
             Assert.IsTrue(tab.RemoveVersieCommand.CanExecute(null));
             tab.RemoveVersieCommand.Execute(null);
             Assert.IsTrue(tab.Versies.Count == 0);
+
+            mainwinvm.ControllerVM.HasChanged = false;
+            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
+            mainwinvm.CloseFileCommand.Execute(null);
         }
     }
 }

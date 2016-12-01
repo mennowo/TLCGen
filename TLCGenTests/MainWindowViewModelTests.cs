@@ -1,8 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TLCGen.DataAccess;
 using TLCGen.Messaging;
@@ -11,9 +12,19 @@ using TLCGen.ViewModels;
 
 namespace TLCGenTests
 {
-    [TestClass]
-    public class FileOperationTests
+    [TestFixture]
+    public class MainWindowViewModelTests
     {
+        private MainWindowViewModel mainwinvm;
+
+        [SetUp]
+        public void StartTesting()
+        {
+            // Setup variables
+            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
+            mainwinvm = new MainWindowViewModel();
+        }
+
         private void AssertIsNothingOpen(MainWindowViewModel mwvm)
         {
             Assert.IsTrue(mwvm.NewFileCommand.CanExecute(null));
@@ -67,37 +78,30 @@ namespace TLCGenTests
             Assert.IsTrue(mwvm.SaveAsFileCommand.CanExecute(null));
         }
 
-        [TestMethod]
+        [Test]
         public void NewFileAndCloseFile()
         {
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            MainWindowViewModel mwvm = new MainWindowViewModel();
-            AssertIsNothingOpen(mwvm);
-            mwvm.NewFileCommand.Execute(null);
-            AssertIsNewOpen(mwvm);
-            mwvm.CloseFileCommand.Execute(null);
-            AssertIsNothingOpen(mwvm);
+            AssertIsNothingOpen(mainwinvm);
+            mainwinvm.NewFileCommand.Execute(null);
+            AssertIsNewOpen(mainwinvm);
+            mainwinvm.CloseFileCommand.Execute(null);
+            AssertIsNothingOpen(mainwinvm);
         }
 
-        [TestMethod]
+        [Test]
         public void NewFileSaveAndCloseFile()
         {
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-
-            MainWindowViewModel mwvm = new MainWindowViewModel();
-            AssertIsNothingOpen(mwvm);
-            mwvm.NewFileCommand.Execute(null);
-            AssertIsNewOpen(mwvm);
+            AssertIsNothingOpen(mainwinvm);
+            mainwinvm.NewFileCommand.Execute(null);
+            AssertIsNewOpen(mainwinvm);
 
 #warning TODO: need to alter the implementation of saving in order to be able to unit test
-            DataProvider.Instance.FileName = "test";
-            mwvm.ControllerVM.HasChanged = false;
+            
+            mainwinvm.ControllerVM.HasChanged = false;
 
-            AssertIsSavedOpen(mwvm);
-            mwvm.CloseFileCommand.Execute(null);
-            AssertIsNothingOpen(mwvm);
+            AssertIsSavedOpen(mainwinvm);
+            mainwinvm.CloseFileCommand.Execute(null);
+            AssertIsNothingOpen(mainwinvm);
         }
     }
 }

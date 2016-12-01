@@ -10,6 +10,8 @@ using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Messaging;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Settings;
 
@@ -161,13 +163,15 @@ namespace TLCGen.ViewModels
                     string next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
-                        inewname++;
-                        newname = inewname.ToString();
-                        while (!Integrity.IntegrityChecker.IsElementNaamUnique(SelectedFase.Naam + newname))
+                        IsNameUniqueRequest message = new IsNameUniqueRequest("");
+                        do
                         {
-                            inewname++;
                             newname = inewname.ToString();
+                            message = new IsNameUniqueRequest(SelectedFase.Naam + newname);
+                            MessageManager.Instance.SendWithRespons(message);
+                            inewname++;
                         }
+                        while (!message.IsUnique);
                     }
                 }
             }

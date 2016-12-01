@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +12,16 @@ using TLCGen.ViewModels;
 
 namespace TLCGenTests
 {
-    [TestClass]
-    public class InterSignaalGroepTests
+    [TestFixture]
+    public class InterSignaalGroepTabViewModelTests
     {
+        [SetUp]
+        public void StartTesting()
+        {
+            // Setup variables
+            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
+        }
+
         private void AssertConfictMatrixModelEqual(int waarde, ControllerModel c, SynchronisatieViewModel svm)
         {
             Assert.AreEqual(waarde, c.InterSignaalGroep.Conflicten.Where((x) =>
@@ -24,23 +31,20 @@ namespace TLCGenTests
             }).First().Waarde);
         }
 
-        [TestMethod]
+        private void AssertGarantieConfictMatrixModelEqual(int waarde, ControllerModel c, SynchronisatieViewModel svm)
+        {
+            Assert.AreEqual(waarde, c.InterSignaalGroep.Conflicten.Where((x) =>
+            {
+                return x.FaseVan == svm.FaseVan &&
+                       x.FaseNaar == svm.FaseNaar;
+            }).First().GarantieWaarde);
+        }
+
+        [Test]
         public void InterSGConflictMatrixIntegrity()
         {
-            while (DataProvider.Instance.Controller != null)
-                Thread.Sleep(100);
-
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            var mainwinvm = new MainWindowViewModel();
-
-            Assert.IsFalse(mainwinvm.HasController);
-            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
-            mainwinvm.NewFileCommand.Execute(null);
-            Assert.IsTrue(mainwinvm.HasController);
-
-            var c = DataProvider.Instance.Controller;
-            var controllervm = mainwinvm.ControllerVM;
+            ControllerModel c = new ControllerModel();
+            var controllervm = new ControllerViewModel(null, c);
             var fasentab = controllervm.FasenTabVM;
             var synctab = controllervm.CoordinatiesTabVM;
 
@@ -65,11 +69,11 @@ namespace TLCGenTests
             synctab.ConflictMatrix[2, 4].ConflictValue = "0";
             synctab.ConflictMatrix[2, 3].ConflictValue = "FK";
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() != null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) != null);
 
             synctab.ConflictMatrix[4, 2].ConflictValue = "50";
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             Assert.IsFalse(synctab.ConflictMatrix[0, 1].AllowCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[1, 0].AllowCoupling);
@@ -106,28 +110,110 @@ namespace TLCGenTests
                 fail = true;
             }
             Assert.IsTrue(fail);
-
-            controllervm.HasChanged = false;
-            mainwinvm.CloseFileCommand.Execute(null);
         }
 
-        [TestMethod]
+        [Test]
+        public void InterSGConflictMatrixWithGuaranteedIntegrity()
+        {
+            ControllerModel c = new ControllerModel();
+            var controllervm = new ControllerViewModel(null, c);
+            var fasentab = controllervm.FasenTabVM;
+            var synctab = controllervm.CoordinatiesTabVM;
+
+            Assert.IsTrue(c.Fasen.Count == 0);
+            Assert.IsTrue(fasentab.AddFaseCommand.CanExecute(null));
+
+            fasentab.AddFaseCommand.Execute(null);
+            fasentab.AddFaseCommand.Execute(null);
+            fasentab.AddFaseCommand.Execute(null);
+            fasentab.AddFaseCommand.Execute(null);
+            fasentab.AddFaseCommand.Execute(null);
+
+            Assert.IsTrue(c.Fasen.Count == 5);
+
+            Assert.IsTrue(synctab.DisplayType == TLCGen.ViewModels.Enums.SynchronisatieTypeEnum.Conflict);
+            Assert.IsTrue(synctab.ConflictMatrix != null);
+            Assert.IsTrue(synctab.ConflictMatrix.GetLength(0) == 5);
+            Assert.IsTrue(synctab.ConflictMatrix.GetLength(1) == 5);
+
+            synctab.ConflictMatrix[0, 1].ConflictValue = "10";
+            synctab.ConflictMatrix[1, 0].ConflictValue = "20";
+            synctab.ConflictMatrix[2, 4].ConflictValue = "0";
+            synctab.ConflictMatrix[2, 3].ConflictValue = "FK";
+
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) != null);
+
+            synctab.ConflictMatrix[4, 2].ConflictValue = "50";
+
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
+
+            AssertConfictMatrixModelEqual(10, c, synctab.ConflictMatrix[0, 1]);
+            AssertConfictMatrixModelEqual(20, c, synctab.ConflictMatrix[1, 0]);
+            AssertConfictMatrixModelEqual(0, c, synctab.ConflictMatrix[2, 4]);
+            AssertConfictMatrixModelEqual(50, c, synctab.ConflictMatrix[4, 2]);
+            AssertConfictMatrixModelEqual(-2, c, synctab.ConflictMatrix[3, 2]);
+            AssertConfictMatrixModelEqual(-2, c, synctab.ConflictMatrix[3, 2]);
+
+            synctab.UseGarantieOntruimingsTijden = true;
+
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) != null);
+
+            synctab.DisplayType = TLCGen.ViewModels.Enums.SynchronisatieTypeEnum.GarantieConflict;
+
+            synctab.ConflictMatrix[0, 1].ConflictValue = "10";
+            synctab.ConflictMatrix[1, 0].ConflictValue = "20";
+            synctab.ConflictMatrix[2, 4].ConflictValue = "0";
+            synctab.ConflictMatrix[4, 2].ConflictValue = "50";
+
+            string s = TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c);
+            Assert.IsTrue(s == null);
+
+            synctab.ConflictMatrix[3, 2].ConflictValue = "70";
+
+            s = TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c);
+            Assert.IsTrue(s != null);
+
+            synctab.ConflictMatrix[2, 3].ConflictValue = "90";
+
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) != null);
+
+            synctab.DisplayType = TLCGen.ViewModels.Enums.SynchronisatieTypeEnum.Conflict;
+
+            synctab.ConflictMatrix[3, 2].ConflictValue = "70";
+            synctab.ConflictMatrix[2, 3].ConflictValue = "90";
+
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
+
+
+            bool fail = false;
+            try
+            {
+                synctab.ConflictMatrix[4, 4].ConflictValue = "50";
+            }
+            catch
+            {
+                fail = true;
+            }
+            Assert.IsTrue(fail);
+
+            fail = false;
+            try
+            {
+                synctab.ConflictMatrix[1, 3].IsCoupled = true;
+            }
+            catch
+            {
+                fail = true;
+            }
+            Assert.IsTrue(fail);
+        }
+
+        [Test]
         public void InterSGConflictMatrixOrdering()
         {
-            while (DataProvider.Instance.Controller != null)
-                Thread.Sleep(100);
+            ControllerModel c = new ControllerModel();
+            var controllervm = new ControllerViewModel(null, c);
 
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            var mainwinvm = new MainWindowViewModel();
-
-            Assert.IsFalse(mainwinvm.HasController);
-            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
-            mainwinvm.NewFileCommand.Execute(null);
-            Assert.IsTrue(mainwinvm.HasController);
-
-            var c = DataProvider.Instance.Controller;
-            var controllervm = mainwinvm.ControllerVM;
             var fasentab = controllervm.FasenTabVM;
             var synctab = controllervm.CoordinatiesTabVM;
 
@@ -153,7 +239,7 @@ namespace TLCGenTests
             synctab.ConflictMatrix[4, 2].ConflictValue = "50";
             synctab.ConflictMatrix[2, 3].ConflictValue = "FK";
             
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             Assert.IsFalse(synctab.ConflictMatrix[0, 1].AllowCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[1, 0].AllowCoupling);
@@ -194,28 +280,14 @@ namespace TLCGenTests
             Assert.IsFalse(synctab.ConflictMatrix[3, 1].AllowCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[2, 1].AllowCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[1, 2].AllowCoupling);
-
-            controllervm.HasChanged = false;
-            mainwinvm.CloseFileCommand.Execute(null);
         }
 
-        [TestMethod]
+        [Test]
         public void InterSGSerialization()
         {
-            while (DataProvider.Instance.Controller != null)
-                Thread.Sleep(100);
 
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            var mainwinvm = new MainWindowViewModel();
-
-            Assert.IsFalse(mainwinvm.HasController);
-            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
-            mainwinvm.NewFileCommand.Execute(null);
-            Assert.IsTrue(mainwinvm.HasController);
-
-            var c = DataProvider.Instance.Controller;
-            var controllervm = mainwinvm.ControllerVM;
+            ControllerModel c = new ControllerModel();
+            var controllervm = new ControllerViewModel(null, c);
             var fasentab = controllervm.FasenTabVM;
             var synctab = controllervm.CoordinatiesTabVM;
 
@@ -241,7 +313,7 @@ namespace TLCGenTests
             synctab.ConflictMatrix[4, 2].ConflictValue = "50";
             synctab.ConflictMatrix[3, 2].ConflictValue = "FK";
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             synctab.DisplayType = TLCGen.ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart;
 
@@ -259,7 +331,7 @@ namespace TLCGenTests
             Assert.IsFalse(synctab.ConflictMatrix[3, 1].HasNoCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[1, 3].HasNoCoupling);
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             // Simulate saving and opening
             var ser = new TLCGen.DataAccess.SerializeT<ControllerModel>();
@@ -267,16 +339,9 @@ namespace TLCGenTests
             var doc = ser.SerializeToXmlDocument(c);
 
             controllervm.HasChanged = false;
-            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
-            mainwinvm.CloseFileCommand.Execute(null);
-
-            Assert.IsFalse(mainwinvm.HasController);
-
-            mainwinvm.SetController(deser.SerializeFromXmlDocument(doc));
-            Assert.IsTrue(mainwinvm.HasController);
-
-            c = DataProvider.Instance.Controller;
-            controllervm = new ControllerViewModel(mainwinvm, c);
+            controllervm.Controller = null;
+            c = deser.SerializeFromXmlDocument(doc);
+            controllervm = new ControllerViewModel(null, c);
             fasentab = controllervm.FasenTabVM;
             synctab = controllervm.CoordinatiesTabVM;
             synctab.BuildConflictMatrix();
@@ -288,7 +353,7 @@ namespace TLCGenTests
             Assert.AreEqual("FK", synctab.ConflictMatrix[3, 2].ConflictValue);
             Assert.AreEqual("FK", synctab.ConflictMatrix[2, 3].ConflictValue);
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             AssertConfictMatrixModelEqual(10, c, synctab.ConflictMatrix[0, 1]);
             AssertConfictMatrixModelEqual(20, c, synctab.ConflictMatrix[1, 0]);
@@ -308,28 +373,13 @@ namespace TLCGenTests
             Assert.IsTrue(synctab.ConflictMatrix[3, 1].HasGelijkstart);
             Assert.IsFalse(synctab.ConflictMatrix[3, 1].HasNoCoupling);
             Assert.IsFalse(synctab.ConflictMatrix[1, 3].HasNoCoupling);
-
-            controllervm.HasChanged = false;
-            mainwinvm.CloseFileCommand.Execute(null);
         }
 
-        [TestMethod]
+        [Test]
         public void InterSGCouplingMatrixIntegrity()
         {
-            while (DataProvider.Instance.Controller != null)
-                Thread.Sleep(100);
-
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            var mainwinvm = new MainWindowViewModel();
-
-            Assert.IsFalse(mainwinvm.HasController);
-            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
-            mainwinvm.NewFileCommand.Execute(null);
-            Assert.IsTrue(mainwinvm.HasController);
-
-            var c = DataProvider.Instance.Controller;
-            var controllervm = mainwinvm.ControllerVM;
+            ControllerModel c = new ControllerModel();
+            var controllervm = new ControllerViewModel(null, c);
             var fasentab = controllervm.FasenTabVM;
             var synctab = controllervm.CoordinatiesTabVM;
 
@@ -355,7 +405,7 @@ namespace TLCGenTests
             synctab.ConflictMatrix[2, 4].ConflictValue = "0";
             synctab.ConflictMatrix[4, 2].ConflictValue = "50";
             synctab.ConflictMatrix[3, 2].ConflictValue = "FK";
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             // Check properties that set cell availability
             synctab.DisplayType = TLCGen.ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart;
@@ -468,7 +518,7 @@ namespace TLCGenTests
             Assert.IsTrue(synctab.ConflictMatrix[3, 4].IsEnabled);
 
             // Check and save
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             // Simulate saving and opening
             // ===========================
@@ -477,16 +527,9 @@ namespace TLCGenTests
             var doc = ser.SerializeToXmlDocument(c);
 
             controllervm.HasChanged = false;
-            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
-            mainwinvm.CloseFileCommand.Execute(null);
-
-            Assert.IsFalse(mainwinvm.HasController);
-
-            mainwinvm.SetController(deser.SerializeFromXmlDocument(doc));
-            Assert.IsTrue(mainwinvm.HasController);
-
-            c = DataProvider.Instance.Controller;
-            controllervm = new ControllerViewModel(mainwinvm, c);
+            controllervm.Controller = null;
+            c = deser.SerializeFromXmlDocument(doc);
+            controllervm = new ControllerViewModel(null, c);
             fasentab = controllervm.FasenTabVM;
             synctab = controllervm.CoordinatiesTabVM;
             synctab.BuildConflictMatrix();
@@ -507,7 +550,7 @@ namespace TLCGenTests
             Assert.IsTrue(synctab.ConflictMatrix[0, 2].HasNaloop);
             Assert.IsTrue(synctab.ConflictMatrix[2, 0].HasOppositeNaloop);
 
-            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK() == null);
+            Assert.IsTrue(TLCGen.Integrity.IntegrityChecker.IsConflictMatrixOK(c) == null);
 
             AssertConfictMatrixModelEqual(10, c, synctab.ConflictMatrix[0, 1]);
             AssertConfictMatrixModelEqual(20, c, synctab.ConflictMatrix[1, 0]);
@@ -555,9 +598,6 @@ namespace TLCGenTests
             Assert.IsTrue(synctab.ConflictMatrix[1, 3].IsEnabled);
             Assert.IsTrue(synctab.ConflictMatrix[4, 3].IsEnabled);
             Assert.IsTrue(synctab.ConflictMatrix[3, 4].IsEnabled);
-
-            controllervm.HasChanged = false;
-            mainwinvm.CloseFileCommand.Execute(null);
         }
     }
 }

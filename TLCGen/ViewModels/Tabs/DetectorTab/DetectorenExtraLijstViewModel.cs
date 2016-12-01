@@ -11,6 +11,7 @@ using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Settings;
 
@@ -130,13 +131,18 @@ namespace TLCGen.ViewModels
                         newname = inewname.ToString();
                         newname = (inewname < 10 ? "0" : "") + newname;
                         newname = (inewname < 100 ? "0" : "") + newname;
-                        while (!Integrity.IntegrityChecker.IsElementNaamUnique(newname))
+                        IsNameUniqueRequest message = new IsNameUniqueRequest("");
+                        do
                         {
+                            message = new IsNameUniqueRequest(newname);
+                            MessageManager.Instance.SendWithRespons(message);
+                            inewname++;
                             inewname++;
                             newname = inewname.ToString();
                             newname = (inewname < 10 ? "0" : "") + newname;
                             newname = (inewname < 100 ? "0" : "") + newname;
                         }
+                        while (!message.IsUnique);
                     }
                 }
             }

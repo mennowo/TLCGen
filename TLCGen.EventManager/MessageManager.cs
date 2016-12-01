@@ -104,6 +104,23 @@ namespace TLCGen.Messaging
             }
         }
 
+        public T SendWithRespons<T>(T myevent)
+        {
+            if (Events.Keys.Contains(typeof(T)))
+            {
+                List<Subscriber> subscribers;
+                if (Events.TryGetValue(typeof(T), out subscribers) && subscribers.Count > 0)
+                {
+                    foreach (Subscriber s in subscribers)
+                    {
+                        var action = (WeakAction<T>)s.MyAction;
+                        action.ExecuteWithObject(myevent);
+                    }
+                }
+            }
+            return myevent;
+        }
+
         public void Cleanup()
         {
             CleanupList(Events);

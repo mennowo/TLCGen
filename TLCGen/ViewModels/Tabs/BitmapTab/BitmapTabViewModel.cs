@@ -14,6 +14,7 @@ using TLCGen.Helpers;
 using System.Windows.Controls;
 using TLCGen.Models;
 using TLCGen.DataAccess;
+using TLCGen.Messaging.Messages;
 
 namespace TLCGen.ViewModels
 {
@@ -28,6 +29,7 @@ namespace TLCGen.ViewModels
         private BitmapImage _MyBitmap;
         private EditableBitmap _EditableBitmap;
         private QueueLinearFloodFiller _FloodFiller;
+        private string _ControllerFileName;
         private string _BitmapFileName;
 
         private Color TestFillColor = Color.CornflowerBlue;
@@ -168,24 +170,15 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public override bool SelectedPreview()
+        public override bool OnSelectedPreview()
         {
-            // Set the bitmap
-            if (DataProvider.Instance.FileName != null)
-                BitmapFileName =
-                    System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(DataProvider.Instance.FileName),
-                        Controller.Data.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ?
-                        Controller.Data.BitmapNaam :
-                        Controller.Data.BitmapNaam + ".bmp"
-                    );
             if (File.Exists(BitmapFileName))
                 return true;
             else
                 return false;
         }
 
-        public override void Selected()
+        public override void OnSelected()
         {
             // Collect all IO to be displayed in the lists
             CollectAllIO();
@@ -195,10 +188,12 @@ namespace TLCGen.ViewModels
         public override bool CanBeEnabled()
         {
             // Set the bitmap
-            if (DataProvider.Instance.FileName != null && Controller.Data != null && !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
+            if (!string.IsNullOrWhiteSpace(_ControllerFileName) && 
+                Controller.Data != null && 
+                !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
                 BitmapFileName =
                     System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(DataProvider.Instance.FileName),
+                        System.IO.Path.GetDirectoryName(_ControllerFileName),
                         Controller.Data.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ?
                         Controller.Data.BitmapNaam :
                         Controller.Data.BitmapNaam + ".bmp"
@@ -428,11 +423,22 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection Changed
 
+        #region TLCGen Message Handling
+
+        private void OnFileNameChanged(FileNameChangedMessage message)
+        {
+            _ControllerFileName = message.NewFileName;
+        }
+
+        #endregion // TLCGen Message Handling
+
         #region Constructor
 
         public BitmapTabViewModel(ControllerModel controller) : base(controller)
         {
             _FloodFiller = new QueueLinearFloodFiller(null);
+
+            Messaging.MessageManager.Instance.Subscribe(this, new Action<FileNameChangedMessage>(OnFileNameChanged));
         }
 
         #endregion // Constructor

@@ -23,6 +23,7 @@ namespace TLCGen.ViewModels
 
         #region Fields
         
+        private List<string> _AllDetectoren;
         private ObservableCollection<string> _FasenNames;
         private bool _MatrixChanged;
         private SynchronisatieTypeEnum _DisplayType;
@@ -94,6 +95,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSynchronisatie = value;
+                if (_AllDetectoren != null)
+                {
+                    Detectoren.Clear();
+                    string s = value.FaseVan.Replace(Settings.SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+                    var __Detectoren = _AllDetectoren.Where(x => x.StartsWith(s));
+                    foreach(var d in __Detectoren)
+                    {
+                        Detectoren.Add(d);
+                    }
+                    value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
+                }
                 OnPropertyChanged(null);
             }
         }
@@ -270,18 +282,31 @@ namespace TLCGen.ViewModels
             set { }
         }
 
-        public override void Selected()
+        public override bool OnDeselectedPreview()
         {
+            string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
+            if (s == null)
+                return true;
+            else
+            {
+                MessageBox.Show(s, "Fout in conflictmatrix");
+                return false;
+            }
+        }
+
+        public override void OnSelected()
+        {
+            _AllDetectoren = new List<string>();
             foreach (FaseCyclusModel fcm in Controller.Fasen)
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    Detectoren.Add(dm.Naam);
+                    _AllDetectoren.Add(dm.Naam);
                 }
             }
             foreach (DetectorModel dm in Controller.Detectoren)
             {
-                Detectoren.Add(dm.Naam);
+                _AllDetectoren.Add(dm.Naam);
             }
         }
 
@@ -324,44 +349,6 @@ namespace TLCGen.ViewModels
         #endregion // Private methods
 
         #region Public methods
-
-        public string IsMatrixOkWithGarantueed()
-        {
-            for (int i = 0; i < Fasen.Count; ++i)
-            {
-                for (int j = 0; j < Fasen.Count; ++j)
-                {
-                    // Skip from>to self
-                    if (i == j || string.IsNullOrWhiteSpace(ConflictMatrix[i, j].ConflictValue))
-                        continue;
-
-                    string conf = ConflictMatrix[i, j].GetConflictValue();
-                    string gconf = ConflictMatrix[i, j].GetGarantieConflictValue();
-                    int outc;
-                    int outgc;
-
-                    if (Int32.TryParse(conf, out outc))
-                    {
-                        if (Int32.TryParse(gconf, out outgc))
-                        {
-                            if (outc < outgc)
-                            {
-                                return "Ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + " lager dan garantie ontruimmingstijd.";
-                            }
-                        }
-                        else
-                        {
-                            return "Ontbrekende garantie ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + ".";
-                        }
-                    }
-                    else if (Int32.TryParse(gconf, out outgc))
-                    {
-                        return "Ontbrekende ontruimingstijd van " + Fasen[i].Naam + " naar " + Fasen[j].Naam + ".";
-                    }
-                }
-            }
-            return null;
-        }
 
         /// <summary>
         /// Builds a new string[,] to be exposed to the View. The 2D array is filled with data
@@ -498,8 +485,7 @@ namespace TLCGen.ViewModels
             {
                 for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
-                    var conflict = ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue();
-                    if (!string.IsNullOrWhiteSpace(conflict) && conflict != "X" && conflict != "*")
+                    if (ConflictMatrix[fcvm_from, fcvm_to].HasConflict || ConflictMatrix[fcvm_from, fcvm_to].HasGarantieConflict)
                     {
                         _Controller.InterSignaalGroep.Conflicten.Add(ConflictMatrix[fcvm_from, fcvm_to].Conflict);
                     }
@@ -584,9 +570,6 @@ namespace TLCGen.ViewModels
             // Conflict
             if (message.Conflict != null)
             {
-                if (message.Conflict.Waarde == -4)
-                    return;
-
                 int fccount = Fasen.Count;
                 for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {

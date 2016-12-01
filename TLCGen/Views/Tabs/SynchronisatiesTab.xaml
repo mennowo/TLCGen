@@ -21,7 +21,7 @@
             <ColumnDefinition Width="110" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
             <RadioButton Content="Ontruimingstijden" GroupName="SynchronisatieType" Margin="5"
@@ -37,7 +37,7 @@
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" />
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="0.25" Grid.Column="1" >
-            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,2,2,2">
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -57,101 +57,102 @@
 
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
 
-        <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Gelijkstart}}" 
-            Grid.Column="3" MinWidth="200" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="Gelijkstart opties" FontWeight="Bold" Grid.Row="0" />
-            <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
-                <Label Content="{Binding Path=Comment1}" />
-                <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseVan}" Margin="2" />
-                <Label Content="{Binding Path=Comment2}" />
-                <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
-            </StackPanel>
-        </Grid>
-        
-        <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Voorstart}}" 
-            Grid.Column="3" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
-            <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
-                <Label Content="Tijd instelling:" />
-                <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
-                <Label Content="Ontruimingstijd instelling:" />
-                <TextBox Text="{Binding Path=VoorstartOntruimingstijd}" Margin="2" />
-            </StackPanel>
-        </Grid>
+        <Grid MaxWidth="250" Grid.Column="3">
+            <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Gelijkstart}}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Gelijkstart opties" FontWeight="Bold" Grid.Row="0" />
+                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                    <Label Content="{Binding Path=Comment1}" />
+                    <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseVan}" Margin="2" />
+                    <Label Content="{Binding Path=Comment2}" />
+                    <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
+                </StackPanel>
+            </Grid>
 
-        <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" 
-            Grid.Column="3" >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Label Content="Naloop opties" FontWeight="Bold" />
-            <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
+            <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Voorstart}}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
+                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                    <Label Content="Tijd instelling:" />
+                    <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
+                    <Label Content="Ontruimingstijd instelling:" />
+                    <TextBox Text="{Binding Path=VoorstartOntruimingstijd}" Margin="2" />
+                </StackPanel>
+            </Grid>
+
+            <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Naloop opties" FontWeight="Bold" />
+                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
                         Orientation="Vertical" Grid.Row="1">
-                <Label Content="Type naloop:" />
-                <ComboBox 
+                    <Label Content="Type naloop:" />
+                    <ComboBox 
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
                     SelectedItem="{Binding Path=SelectedSynchronisatie.NaloopVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                <CheckBox Content="Detectie afhankelijk" IsChecked="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk}" Margin="5" />
-                <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
-                    <Label Content="Detectors:" />
-                    <DataGrid
+                    <CheckBox Content="Detectie afhankelijk" 
+                          IsEnabled="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijkPossible}"
+                          IsChecked="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk}" Margin="5" />
+                    <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
+                        <Label Content="Detectors:" />
+                        <DataGrid
                         ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
                         Margin="2" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Detector" Width="Auto" MinWidth="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Detector}" Margin="2" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <ComboBox 
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Detector" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Detector}" Margin="2" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox 
                                             ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
                                             FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                                             SelectedItem="{Binding Path=Detector}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Type" Width="Auto" MinWidth="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Type}" Margin="2" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <ComboBox 
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Type" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Type}" Margin="2" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                    <DataGridTemplateColumn.CellEditingTemplate>
+                                        <DataTemplate>
+                                            <ComboBox 
                                             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopDetectorTypeEnum}}}"
                                             FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                                             SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
-                            </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellEditingTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Label Content="Tijden:" />
+                    <DataGrid
+                    ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Tijden}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Type" IsReadOnly="True" Foreground="DarkGray" Binding="{Binding Path=Type}"  Width="Auto" MinWidth="100" />
+                            <DataGridTextColumn Header="Waarde" Binding="{Binding Path=Waarde}" MinWidth="50" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-                <Label Content="Tijden:" />
-                <DataGrid
-                    ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Tijden}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Type" IsReadOnly="True" Foreground="DarkGray" Binding="{Binding Path=Type}"  Width="Auto" MinWidth="100" />
-                        <DataGridTextColumn Header="Waarde" Binding="{Binding Path=Waarde}" MinWidth="50" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +12,29 @@ using TLCGen.ViewModels;
 
 namespace TLCGenTests
 {
-    [TestClass]
-    public class GroentijdenTests
+    [TestFixture]
+    public class GroentijdenLijstViewModelTests
     {
+        private MainWindowViewModel mainwinvm;
+
+        [SetUp]
+        public void StartTesting()
+        {
+            // Setup variables
+            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
+            mainwinvm = new MainWindowViewModel();
+        }
+
         /// <summary>
         /// Checks behaviour when adding and removing greentime sets
         /// Also checks if changing a value in the coupled matrix has the right effect in the model
         /// </summary>
-        [TestMethod]
-        public void AddRemoveGreenTimeSet()
+        [Test]
+        public void GreenTimeAddRemoveSet()
         {
-            // Setup variables
-            SettingsProvider.Instance.Settings = new TLCGen.Models.Settings.TLCGenSettingsModel();
-            DataProvider.Instance.SetController();
-            var tab = new FasenTabViewModel(DataProvider.Instance.Controller);
+            Assert.IsTrue(mainwinvm.NewFileCommand.CanExecute(null));
+            mainwinvm.NewFileCommand.Execute(null);
+            var tab = mainwinvm.ControllerVM.FasenTabVM;
 
             Assert.AreEqual(tab.Fasen.Count, 0);
             Assert.AreEqual(tab.GroentijdenLijstVM.GroentijdenSets.Count, 0);
@@ -73,6 +82,10 @@ namespace TLCGenTests
             Assert.AreEqual(tab.GroentijdenLijstVM.GroentijdenSets.Count, 0);
             Assert.IsTrue(tab.GroentijdenLijstVM.AddGroentijdenSetCommand.CanExecute(null));
             Assert.IsFalse(tab.GroentijdenLijstVM.RemoveGroentijdenSetCommand.CanExecute(null));
+
+            mainwinvm.ControllerVM.HasChanged = false;
+            Assert.IsTrue(mainwinvm.CloseFileCommand.CanExecute(null));
+            mainwinvm.CloseFileCommand.Execute(null);
         }
     }
 }

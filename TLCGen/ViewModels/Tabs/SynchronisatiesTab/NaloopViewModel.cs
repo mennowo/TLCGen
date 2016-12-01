@@ -13,9 +13,16 @@ namespace TLCGen.ViewModels
 {
     public class NaloopViewModel : ViewModelBase
     {
+        #region Fields
+
         private NaloopModel _Naloop;
         private ObservableCollection<NaloopTijdModel> _Tijden;
         private ObservableCollection<NaloopDetectorModel> _Detectoren;
+        private bool _DetectieAfhankelijkPossible;
+
+        #endregion // Fields
+
+        #region Properties
 
         public NaloopViewModel(NaloopModel nm)
         {
@@ -34,6 +41,16 @@ namespace TLCGen.ViewModels
                     SetNaloopTijden();
                     OnMonitoredPropertyChanged("Type");
                 }
+            }
+        }
+
+        public bool DetectieAfhankelijkPossible
+        {
+            get { return _DetectieAfhankelijkPossible; }
+            set
+            {
+                _DetectieAfhankelijkPossible = value;
+                OnPropertyChanged("DetectieAfhankelijkPossible");
             }
         }
 
@@ -67,6 +84,10 @@ namespace TLCGen.ViewModels
                 return _Detectoren;
             }
         }
+
+        #endregion // Properties
+
+        #region Private methods
 
         private void SetNaloopTijden()
         {
@@ -119,5 +140,7 @@ namespace TLCGen.ViewModels
             _Tijden = new ObservableCollection<NaloopTijdModel>(_Naloop.Tijden);
             OnPropertyChanged("Tijden");
         }
+
+        #endregion // Private methods
     }
 }

@@ -11,10 +11,10 @@ namespace TLCGen.Plugins
         ControllerModel Controller { get; set; }
 
         bool CanBeEnabled();
-        void Selected();
-        bool SelectedPreview();
-        void Deselected();
-        bool DeselectedPreview();
+        void OnSelected();
+        bool OnSelectedPreview();
+        void OnDeselected();
+        bool OnDeselectedPreview();
 
     }
 }

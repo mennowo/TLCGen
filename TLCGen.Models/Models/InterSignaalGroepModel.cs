@@ -22,12 +22,16 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Naloop")]
         public List<NaloopModel> Nalopen { get; set; }
 
+        [XmlArrayItem(ElementName = "Meeaanvraag")]
+        public List<NaloopModel> Meeaanvragen { get; set; }
+
         public InterSignaalGroepModel()
         {
             Conflicten = new List<ConflictModel>();
             Voorstarten = new List<VoorstartModel>();
             Gelijkstarten = new List<GelijkstartModel>();
             Nalopen = new List<NaloopModel>();
+            Meeaanvragen = new List<Models.NaloopModel>();
         }
     }
 }

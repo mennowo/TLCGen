@@ -94,33 +94,6 @@ namespace TLCGen.Views
             }
         }
 
-        //private void DataGrid2D_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    IDisposable d = null;
-        //
-        //    try
-        //    {
-        //        d = Dispatcher.DisableProcessing();
-        //        Dispatcher.BeginInvoke((Action)(() =>
-        //        {
-        //            DataGrid dg = sender as DataGrid;
-        //            if (dg != null)
-        //            {
-        //                int count = dg.Columns.Count;
-        //                for (int i = 0; i < count; ++i)
-        //                {
-        //                    dg.GetCell(i, i).IsEnabled = false;
-        //                    dg.GetCell(i, i).Background = System.Windows.Media.Brushes.Gray;
-        //                }
-        //            }
-        //        }));
-        //    }
-        //    finally
-        //    {
-        //        d.Dispose();
-        //    }
-        //}
-
         bool editing = false;
         private void DataGrid2D_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {

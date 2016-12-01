@@ -23,14 +23,10 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private TLCGenPluginManager _PluginManager;
-
         private List<IGeneratorViewModel> _Generators;
-
         private IGeneratorViewModel _SelectedGenerator;
-
         private TLCGenSettingsViewModel _SettingsVM;
         private ControllerViewModel _ControllerVM;
-
         private List<MenuItem> _ImportMenuItems;
 
         #endregion // Fields
@@ -361,7 +357,7 @@ namespace TLCGen.ViewModels
                 ControllerVM.ProcessAllChanges();
 
                 // Check data integrity: do not save wrong data
-                string s = IntegrityChecker.IsControllerDataOK();
+                string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
                 if(s != null)
                 {
                     System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
@@ -387,7 +383,7 @@ namespace TLCGen.ViewModels
             ControllerVM.ProcessAllChanges();
 
             // Check data integrity: do not save wrong data
-            string s = IntegrityChecker.IsControllerDataOK();
+            string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
             if (s != null)
             {
                 System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");

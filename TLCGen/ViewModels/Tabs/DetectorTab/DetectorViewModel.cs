@@ -8,6 +8,9 @@ using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 using TLCGen.DataAccess;
 using TLCGen.Settings;
+using TLCGen.Messaging;
+using TLCGen.Messaging.Requests;
+using TLCGen.Messaging.Messages;
 
 namespace TLCGen.ViewModels
 {
@@ -43,11 +46,23 @@ namespace TLCGen.ViewModels
             get { return _Detector.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && Integrity.IntegrityChecker.IsElementNaamUnique(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    _Detector.Naam = value;
+                    var message = new IsNameUniqueRequest(value);
+                    MessageManager.Instance.SendWithRespons(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string olddefine = _Detector.Define;
+                        string oldname = _Detector.Naam;
+
+                        _Detector.Naam = value;
+                        _Detector.Define = SettingsProvider.Instance.GetDetectorDefinePrefix() + value;
+
+                        // Notify the messenger
+                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _Detector.Naam));
+                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _Detector.Define));
+                    }
                 }
-#warning TODO
                 OnMonitoredPropertyChanged("Naam");
             }
         }
@@ -57,13 +72,23 @@ namespace TLCGen.ViewModels
             get { return _Detector.Define; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && Integrity.IntegrityChecker.IsElementDefineUnique(value))
+                if (!string.IsNullOrWhiteSpace(value))
                 {
-                    string oldname = _Detector.Define;
-                    _Detector.Naam = value.Replace(SettingsProvider.Instance.GetDetectorDefinePrefix(), "");
-                    _Detector.Define = value;
+                    var message = new IsDefineUniqueRequest(value);
+                    MessageManager.Instance.SendWithRespons(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string olddefine = _Detector.Define;
+                        string oldname = _Detector.Naam;
+
+                        _Detector.Naam = value.Replace(SettingsProvider.Instance.GetDetectorDefinePrefix(), "");
+                        _Detector.Define = value;
+
+                        // Notify the messenger
+                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _Detector.Naam));
+                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _Detector.Define));
+                    }
                 }
-#warning TODO
                 OnMonitoredPropertyChanged("Define");
                 OnMonitoredPropertyChanged("Naam");
             }
@@ -75,10 +100,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Type = value;
-#warning TODO
                 OnMonitoredPropertyChanged("Type");
                 FaseVM?.UpdateHasKopmax();
-#warning TODO
+#warning TODO also below...
                 //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
             }
         }
@@ -90,7 +114,6 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDB = value;
-#warning TODO
                 OnMonitoredPropertyChanged("TDB");
                 //_ControllerVM.SetAllSelectedElementsValue(this, "TDB");
             }
@@ -103,7 +126,6 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDH = value;
-#warning TODO; also below
                 OnMonitoredPropertyChanged("TDH");
                 //_ControllerVM.SetAllSelectedElementsValue(this, "TDH");
             }
