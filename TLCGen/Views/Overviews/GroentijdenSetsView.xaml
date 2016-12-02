@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:dg2d="http://gu.se/DataGrid2D"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -17,7 +18,7 @@
                 Text="{Binding Path=Waarde}" />
         </DataTemplate>
         <DataTemplate x:Key="GroenMatrixCellEditingTemplate">
-            <local:AutoSelectTextBox
+            <controls:AutoSelectTextBox
                     Margin="0"
                     Padding="0"
                     TextAlignment="Center"

@@ -93,43 +93,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AutomationIds.cs" />
-    <Compile Include="ViewModels\Enums\SynchronisatieTypeEnum.cs" />
-    <Compile Include="ViewModels\Other\TLCGenSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdFaseViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\MeeaanvraagViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\NaloopViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\SynchronisatieViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\AlgemeenTab\AlgemeenTabViewModel.cs" />
-    <Compile Include="ViewModels\ControllerViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\FaseCyclusViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorViewModel.cs" />
-    <Compile Include="ViewModels\Other\IGeneratorViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdenSetViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleFaseCyclusViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleMolenViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\ModuleViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\AlgemeenTab\VersieViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\BitmapTab\BitmappedItemViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\FaseCyclusModuleViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\ModulesTabFasenLijstViewModel.cs" />
-    <Compile Include="ViewModels\Other\TLCGenStatusBarViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\BitmapTab\BitmapTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DetectorTab\DectorenTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenAllesLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenFasenLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\DetectorTab\DetectorenExtraLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\FasenTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\FasenTab\GroentijdenSetsLijstViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\ModulesTab\ModulesTabViewModel.cs" />
-    <Compile Include="ViewModels\Tabs\TabViewModel.cs" />
-    <Compile Include="ViewModels\Templates\DetectorTemplateViewModel.cs" />
-    <Compile Include="ViewModels\Templates\FaseCyclusTemplateViewModel.cs" />
-    <Compile Include="ViewModels\Templates\TemplatesManagerViewModelT.cs" />
-    <Compile Include="ViewModels\Templates\TemplateViewModelBase.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
@@ -166,11 +130,12 @@
     <Compile Include="Views\Overviews\ModulesTabFasenLijstView.xaml.cs">
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Resources\SingleClickDataGridTemplateColumn.cs" />
     <Compile Include="Views\Resources\SpecialDataGrid.cs" />
-    <Compile Include="Views\Resources\ZoomBorder.cs" />
     <Compile Include="Views\Tabs\BitmapTab.xaml.cs">
       <DependentUpon>BitmapTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\KlokPeriodenTab.xaml.cs">
+      <DependentUpon>KlokPeriodenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab.xaml.cs">
       <DependentUpon>ModulesTab.xaml</DependentUpon>
@@ -187,7 +152,6 @@
     <Compile Include="Views\Overviews\GroentijdenSetsView.xaml.cs">
       <DependentUpon>GroentijdenSetsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Resources\AutoSelectTextBox.cs" />
     <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
     </Compile>
@@ -204,6 +168,9 @@
     </Compile>
     <Compile Include="Views\Tabs\FasenTab.xaml.cs">
       <DependentUpon>FasenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab.xaml.cs">
+      <DependentUpon>SpecialsTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\TemplateManagerView.xaml.cs">
       <DependentUpon>TemplateManagerView.xaml</DependentUpon>
@@ -305,6 +272,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\KlokPeriodenTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\ModulesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -338,6 +309,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\FasenTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -407,6 +382,10 @@
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
       <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
       <Name>TLCGen.CustomPropertyEditors</Name>
@@ -463,9 +442,9 @@
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Templates\TLCGen.Templates.csproj">
-      <Project>{0dabb81f-c5a3-445e-9ea8-5a8235cad34f}</Project>
-      <Name>TLCGen.Templates</Name>
+    <ProjectReference Include="..\TLCGen.ViewModels\TLCGen.ViewModels.csproj">
+      <Project>{d0d102b3-23af-4f74-946b-96ebe262932c}</Project>
+      <Name>TLCGen.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -542,6 +542,7 @@ namespace TLCGenTests
             Assert.AreEqual("FK", synctab.ConflictMatrix[2, 3].ConflictValue);
 
             Assert.IsTrue(synctab.ConflictMatrix[1, 3].HasGelijkstart);
+// CHECK!!!
             Assert.IsTrue(synctab.ConflictMatrix[3, 1].HasGelijkstart);
 
             Assert.IsTrue(synctab.ConflictMatrix[4, 3].HasVoorstart);

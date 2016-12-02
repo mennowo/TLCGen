@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
+             xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums;assembly=TLCGen.ViewModels"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              mc:Ignorable="d" 
@@ -155,7 +155,7 @@
                             ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
                             Margin="2" AutoGenerateColumns="False">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Detector" Width="Auto">
+                                <DataGridTemplateColumn Header="Detector" Width="Auto" MinWidth="100">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=Detector}" Margin="2" />
@@ -170,7 +170,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellEditingTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Type" Width="*">
+                                <DataGridTemplateColumn Header="Type" Width="Auto" MinWidth="50" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Path=Type}" Margin="2" />

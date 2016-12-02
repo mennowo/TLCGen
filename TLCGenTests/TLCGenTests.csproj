@@ -89,6 +89,10 @@
       <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.ViewModels\TLCGen.ViewModels.csproj">
+      <Project>{D0D102B3-23AF-4F74-946B-96EBE262932C}</Project>
+      <Name>TLCGen.ViewModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen\TLCGen.csproj">
       <Project>{bfc33a68-228a-46b6-9e7d-25f41ac5c02c}</Project>
       <Name>TLCGen</Name>

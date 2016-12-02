@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AansturingWaitsignalenEnum.cs" />
     <Compile Include="CCOLVersieEnum.cs" />
     <Compile Include="GroentijdenTypeEnum.cs" />
     <Compile Include="DetectorAanvraagTypeEnum.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="NaloopTijdTypeEnum.cs" />
     <Compile Include="NaloopTypeEnum.cs" />
     <Compile Include="NooitAltijdAanUitEnum.cs" />
+    <Compile Include="PeriodeDagCodeEnum.cs" />
+    <Compile Include="PeriodeTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TLCGenVersieEnum.cs" />
     <Compile Include="VLOGTypeEnum.cs" />

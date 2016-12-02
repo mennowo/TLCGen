@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
-             xmlns:re="clr-namespace:TLCGen.Views.Resources"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              mc:Ignorable="d" 
@@ -28,7 +28,7 @@
                 <TabControl Grid.Row="0" Margin="2">
                     <TabItem Header="Instellingen">
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="10">
+                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="13">
                                 <Label Content="Kruispunt informatie" Grid.ColumnSpan="2" FontWeight="Bold" />
                                 <Label Content="Naam/nummer" />
                                 <TextBox Margin="2" Text="{Binding Path=Naam}" />
@@ -41,10 +41,28 @@
                                 <Label Content="Bitmap naam" />
                                 <TextBox Margin="2" Text="{Binding Path=BitmapNaam,UpdateSourceTrigger=PropertyChanged}" />
                                 <Label Content="Regeling instellingen" Grid.ColumnSpan="2" FontWeight="Bold" />
+                                <Label Content="CCOL Versie" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:CCOLVersieEnum}}}"
+                                    SelectedItem="{Binding Path=CCOLVersie,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <Label Content="VLOG" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:VLOGTypeEnum}}}"
+                                    SelectedItem="{Binding Path=VLOGType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <Label Content="KWC" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:KWCTypeEnum}}}"
+                                    SelectedItem="{Binding Path=KWCType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                                 <Label Content="Groentijden" />
                                 <ComboBox 
                                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:GroentijdenTypeEnum}}}"
                                     SelectedItem="{Binding Path=TypeGroentijden,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <Label Content="Aansturing waitsignalen" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:AansturingWaitsignalenEnum}}}"
+                                    SelectedItem="{Binding Path=AansturingWaitsignalen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <Label Content="Extra meeverlengen in WG" />
+                                <CheckBox IsChecked="{Binding Path=ExtraMeeverlengenInWG}" Margin="5" />
                             </ag:AutoGrid>
                         </ScrollViewer>
                     </TabItem>
@@ -64,7 +82,7 @@
                                       AutoGenerateColumns="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="Versie" Binding="{Binding Path=Versie}" />
-                                    <re:SingleClickDataGridTemplateColumn Header="Datum">
+                                    <controls:SingleClickDataGridTemplateColumn Header="Datum">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Datum, StringFormat='{}{0:dd/MM/yyyy}'}" />
@@ -75,7 +93,7 @@
                                                 <DatePicker SelectedDate="{Binding Datum}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
-                                    </re:SingleClickDataGridTemplateColumn>
+                                    </controls:SingleClickDataGridTemplateColumn>
                                     <DataGridTextColumn Header="Ontwerper" Binding="{Binding Path=Ontwerper}" />
                                     <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar}" />
                                 </DataGrid.Columns>

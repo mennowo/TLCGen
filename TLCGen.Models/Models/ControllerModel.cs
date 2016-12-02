@@ -33,6 +33,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "GroentijdenSet")]
         public List<GroentijdenSetModel> GroentijdenSets { get; set; }
 
+        [XmlArrayItem(ElementName = "Periode")]
+        public List<PeriodeModel> Perioden { get; set; }
+
         public ModuleMolenModel ModuleMolen { get; set; }
 
         public CustomDataModel CustomData { get; set; }
@@ -48,6 +51,7 @@ namespace TLCGen.Models
             Detectoren = new List<DetectorModel>();
             GroentijdenSets = new List<GroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
+            Perioden = new List<PeriodeModel>();
             CustomData = new CustomDataModel();
             InterSignaalGroep = new InterSignaalGroepModel();
         }

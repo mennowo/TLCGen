@@ -38,6 +38,11 @@ namespace TLCGen.Messaging
 
         public Dictionary<Type, List<Subscriber>> Events { get; set; }
 
+        public void UnsubscribeAll()
+        {
+            Events.Clear();
+        }
+
         public void Subscribe<T>(object subscriber, Action<T> action)
         {
             if (Events.Keys.Contains(typeof(T)))

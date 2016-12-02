@@ -23,12 +23,16 @@ namespace TLCGen.Models
         public string Straat1 { get; set; }
         public string Straat2 { get; set; }
         public string BitmapNaam { get; set; }
+
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
         public VLOGTypeEnum VLOGType { get; set; }
         public TLCGenVersieEnum TLCGenVersie { get; set; }
 
-        public ApplicationSettings Instellingen { get; set; }
+        public bool GarantieOntruimingsTijden { get; set; }
+        public bool ExtraMeeverlengenInWG { get; set; }
+        public GroentijdenTypeEnum TypeGroentijden { get; set; }
+        public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
 
         public List<VersieModel> Versies { get; set; }
 
@@ -38,7 +42,6 @@ namespace TLCGen.Models
 
         public ControllerDataModel() : base()
         {
-            Instellingen = new ApplicationSettings();
             Versies = new List<VersieModel>();
         }
 

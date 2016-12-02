@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -103,7 +104,7 @@
             <Grid.InputBindings>
                 <MouseBinding Gesture="RightClick" Command="{Binding ResetBitmapCommand}" CommandParameter="{Binding ElementName=zb}" />
             </Grid.InputBindings>
-            <local:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}" x:Name="zb">
+            <controls:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}" x:Name="zb">
                 <Viewbox Stretch="None" >
                     <Image 
                         RenderOptions.BitmapScalingMode="NearestNeighbor"
@@ -111,7 +112,7 @@
                         Source="{Binding MyBitmap, UpdateSourceTrigger=PropertyChanged}" >
                     </Image>
                 </Viewbox>
-            </local:ZoomBorder>
+            </controls:ZoomBorder>
         </Grid>
     </Grid>
 </UserControl>

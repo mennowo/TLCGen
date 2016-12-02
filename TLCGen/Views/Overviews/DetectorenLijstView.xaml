@@ -27,6 +27,33 @@
             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
             <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />
         </Style>
+        <Style x:Key="DisabledIfDrukknopStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="True">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DisabledIfNotDrukknopStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="False">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LooseDisabledIfDrukknopStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource LooseDetectorStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="True">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <DataGridTextColumn x:Key="FaseCyclusColumn"
                             Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
                             Header="Fase" 
@@ -41,7 +68,7 @@
                                 SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
                                 Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                                CellStyle="{StaticResource LooseDetectorStyle}" />
+                                CellStyle="{StaticResource LooseDisabledIfDrukknopStyle}" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -64,12 +91,16 @@
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
                 <StaticResource ResourceKey="FaseCyclusColumn" />
-                <DataGridTextColumn Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" />
-                <DataGridTextColumn Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" />
+                <DataGridTextColumn Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
+                <DataGridTextColumn Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
                 <StaticResource ResourceKey="AanvraagColumn" />
                 <StaticResource ResourceKey="VerlengenColumn" />
                 <DataGridTextColumn Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" />
                 <DataGridTextColumn Binding="{Binding Path=TOG,TargetNullValue={x:Static sys:String.Empty}}" Header="TOG" />
+                <DataGridTextColumn Binding="{Binding Path=TFL,TargetNullValue={x:Static sys:String.Empty}}" Header="TFL" />
+                <DataGridTextColumn Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=AanvraagDirect}" Header="Direct" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
             </DataGrid.Columns>
         </re:SpecialDataGrid>
     </Grid>

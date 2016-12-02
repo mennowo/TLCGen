@@ -65,7 +65,7 @@ namespace TLCGen.Integrity
                                 if (Int32.TryParse(cm1.SerializedWaarde, out co))
                                 {
                                     // Check against guaranteed timings
-                                    if (_Controller.Data.Instellingen.GarantieOntruimingsTijden)
+                                    if (_Controller.Data.GarantieOntruimingsTijden)
                                     {
                                         if (cm1.GarantieWaarde == null)
                                             return "Ontbrekende garantie ontruimingstijd van " + cm1.FaseVan + " naar " + cm1.FaseNaar + ".";
@@ -88,7 +88,7 @@ namespace TLCGen.Integrity
                                 }
                         }
 
-                        if (_Controller.Data.Instellingen.GarantieOntruimingsTijden)
+                        if (_Controller.Data.GarantieOntruimingsTijden)
                         {
                             int out1;
 
@@ -179,6 +179,30 @@ namespace TLCGen.Integrity
             foreach (DetectorModel dvm in _Controller.Detectoren)
             {
                 if (dvm.Naam == naam)
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if an element's VissimName property is unique accross the ControllerModel
+        /// </summary>
+        /// <param name="vissimnaam">The VissimName property to check</param>
+        /// <returns>True if unique, false if not</returns>
+        public static bool IsElementVissimNaamUnique(ControllerModel _Controller, string vissimnaam)
+        {
+            // Check detectie
+            foreach (FaseCyclusModel fcvm in _Controller.Fasen)
+            {
+                foreach (DetectorModel dvm in fcvm.Detectoren)
+                {
+                    if (dvm.VissimNaam == vissimnaam)
+                        return false;
+                }
+            }
+            foreach (DetectorModel dvm in _Controller.Detectoren)
+            {
+                if (dvm.VissimNaam == vissimnaam)
                     return false;
             }
             return true;

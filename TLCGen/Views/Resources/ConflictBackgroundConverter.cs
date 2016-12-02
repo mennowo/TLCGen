@@ -60,10 +60,11 @@ namespace TLCGen.Views
                     case SynchronisatieTypeEnum.Gelijkstart:
                     case SynchronisatieTypeEnum.Naloop:
                     case SynchronisatieTypeEnum.Voorstart:
+                    case SynchronisatieTypeEnum.Meeaanvraag:
                         if (IsEnabled)
                             return null;
                         else
-                            return Brushes.DarkGray;
+                            return Brushes.LightGray;
                     default:
                         return null;
                 }

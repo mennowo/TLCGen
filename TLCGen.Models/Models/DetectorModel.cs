@@ -19,12 +19,15 @@ namespace TLCGen.Models
 
         public string Define { get; set; }
         public string Naam { get; set; }
+        public string VissimNaam { get; set; }
         public int? TDB { get; set; }
         public int? TDH { get; set; }
         public int? TOG { get; set; }
         public int? TBG { get; set; }
         public int? TFL { get; set; }
         public int? CFL { get; set; }
+        public bool AanvraagDirect { get; set; }
+        public bool Wachtlicht { get; set; }
 
         public DetectorSimulatieModel Simulatie { get; set; }
 
@@ -44,6 +47,7 @@ namespace TLCGen.Models
         public void SetAllIdentifyingNames(string search, string replace)
         {
             Naam = Naam.Replace(search, replace);
+            VissimNaam = Naam.Replace(search, replace);
             Define = Define.Replace(search, replace);
         }
 

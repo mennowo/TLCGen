@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Messages\ControllerDataChangedMessage.cs" />
     <Compile Include="Messages\DetectorenExtraListChangedMessage.cs" />
+    <Compile Include="Messages\FaseDetectorTypeChangedMessage.cs" />
     <Compile Include="Messages\FasenSortedMessage.cs" />
     <Compile Include="Messages\FileNameChangedMessage.cs" />
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />
@@ -57,9 +58,8 @@
     <Compile Include="Messages\FasenChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\GetDetectorListReqeust.cs" />
-    <Compile Include="Requests\IsDefineUniqueRequest.cs" />
     <Compile Include="Requests\IsFasenConflictingRequest.cs" />
-    <Compile Include="Requests\IsNameUniqueRequest.cs" />
+    <Compile Include="Requests\IsElementIdentifierUniqueRequest.cs" />
     <Compile Include="Requests\ProcessSynchronisationsRequest.cs" />
     <Compile Include="Responses\GetDetectorListResponse.cs" />
     <Compile Include="Subscriber.cs" />

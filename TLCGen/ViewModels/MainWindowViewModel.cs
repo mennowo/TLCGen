@@ -29,6 +29,8 @@ namespace TLCGen.ViewModels
         private ControllerViewModel _ControllerVM;
         private List<MenuItem> _ImportMenuItems;
 
+        private SortedDictionary<int, Type> OwnTabTypes = new SortedDictionary<int, Type>();
+
         #endregion // Fields
 
         #region Properties
@@ -45,6 +47,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerVM = value;
+                if (_ControllerVM != null)
+                {
+                    _ControllerVM.TabItemTypes = OwnTabTypes;
+                }
                 OnPropertyChanged("ControllerVM");
                 OnPropertyChanged("HasController");
             }
@@ -306,7 +312,7 @@ namespace TLCGen.ViewModels
             if (!ControllerHasChanged())
             {
                 DataProvider.Instance.SetController();
-                ControllerVM = new ControllerViewModel(this, DataProvider.Instance.Controller);
+                ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
@@ -331,7 +337,7 @@ namespace TLCGen.ViewModels
                     if (DataProvider.Instance.LoadController())
                     {
                         ControllerVM = null;
-                        ControllerVM = new ControllerViewModel(this, DataProvider.Instance.Controller);
+                        ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
                         ControllerVM.DoUpdateFasen();
@@ -354,7 +360,8 @@ namespace TLCGen.ViewModels
             else
             {
                 // Save all changes to model
-                ControllerVM.ProcessAllChanges();
+#warning TODO: change to message call
+                //ControllerVM.ProcessAllChanges();
 
                 // Check data integrity: do not save wrong data
                 string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
@@ -380,7 +387,8 @@ namespace TLCGen.ViewModels
         private void SaveAsFileCommand_Executed(object prm)
         {
             // Save all changes to model
-            ControllerVM.ProcessAllChanges();
+#warning TODO: change to message call
+            //ControllerVM.ProcessAllChanges();
 
             // Check data integrity: do not save wrong data
             string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
@@ -672,7 +680,7 @@ namespace TLCGen.ViewModels
                 string filename = DataProvider.Instance.FileName;
                 DataProvider.Instance.SetController(cm);
                 DataProvider.Instance.FileName = filename;
-                ControllerVM = new ControllerViewModel(this, cm);
+                ControllerVM = new ControllerViewModel(cm);
                 ControllerVM.SelectedTabIndex = 0;
                 return true;
             }
@@ -691,7 +699,7 @@ namespace TLCGen.ViewModels
             {
                 ControllerVM = null;
                 DataProvider.Instance.SetController(cm);
-                ControllerVM = new ControllerViewModel(this, cm);
+                ControllerVM = new ControllerViewModel(cm);
                 ControllerVM.SelectedTabIndex = 0;
                 UpdateController();
                 return true;
@@ -707,11 +715,27 @@ namespace TLCGen.ViewModels
         { 
             // Load application settings (defaults, etc.)
             SettingsProvider.Instance.LoadApplicationSettings();
+
+            // Load tab types
+            string myfolder = System.AppDomain.CurrentDomain.BaseDirectory;
+            string nspace = "TLCGen.ViewModels";
             
+            var q = from t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
+                    where t.IsClass && t.Namespace == nspace
+                    select t;
+            foreach(var type in q)
+            {
+                var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(type, typeof(TLCGenTabItemAttribute));
+                if(attr != null)
+                {
+                    OwnTabTypes.Add(attr.Index, type);
+                }
+            }
+
             // Load addins
             _PluginManager = new TLCGenPluginManager(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
-            
-            foreach(ITLCGenGenerator gen in _PluginManager.Generators)
+
+            foreach (ITLCGenGenerator gen in _PluginManager.Generators)
             {
                 Type t = gen.GetType();
                 TLCGenPluginManager.LoadAddinSettings(gen, t, SettingsProvider.Instance.CustomSettings);
@@ -730,13 +754,15 @@ namespace TLCGen.ViewModels
                 ImportMenuItems.Add(mi);
             }
 
+#warning TODO: also load menu items, tabs, etc.
+
             // If we are in debug mode, the code below tries loading a file
             // called 'test.tlc' from the folder where the application runs.
 #if DEBUG
             DataProvider.Instance.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";
             if (DataProvider.Instance.LoadController())
             {
-                ControllerVM = new ControllerViewModel(this, DataProvider.Instance.Controller);
+                ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.DoUpdateFasen();

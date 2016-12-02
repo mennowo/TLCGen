@@ -69,7 +69,7 @@
     <Compile Include="Models\ModuleMolenModel.cs" />
     <Compile Include="Models\ModuleFaseCyclusModel.cs" />
     <Compile Include="Models\NonController\AddinSettingsModel.cs" />
-    <Compile Include="Models\Settings\ApplicationSettings.cs" />
+    <Compile Include="Models\PeriodeModel.cs" />
     <Compile Include="Models\VersieModel.cs" />
     <Compile Include="Models\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

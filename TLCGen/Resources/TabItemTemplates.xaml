@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:vm="clr-namespace:TLCGen.ViewModels"
+                    xmlns:vm="clr-namespace:TLCGen.ViewModels;assembly=TLCGen.ViewModels"
                     xmlns:vw="clr-namespace:TLCGen.Views">
     <DataTemplate DataType="{x:Type vm:AlgemeenTabViewModel}">
         <vw:AlgemeenTab />
@@ -16,6 +16,12 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:DetectorenTabViewModel}">
         <vw:DetectorenTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:KlokPeriodenTabViewModel}">
+        <vw:KlokPeriodenTab />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SpecialsTabViewModel}">
+        <vw:SpecialsTab />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:BitmapTabViewModel}">
         <vw:BitmapTab />

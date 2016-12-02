@@ -211,7 +211,6 @@ namespace TLCGen.Plugins
                             {
                                 //#if !DEBUG
                                 System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen addin.");
-
                                 //#endif
                             }
                         }

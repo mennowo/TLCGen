@@ -132,68 +132,6 @@ namespace TLCGen.Views
         }
     }
 
-    public class SynchronisatieTemplateSelector : DataTemplateSelector
-    {
-        public override DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
-        {
-            if (item is SynchronisatieViewModel)
-            {
-                SynchronisatieViewModel sync = item as SynchronisatieViewModel;
-                switch (sync.DisplayType)
-                {
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Conflict:
-                        return ConflictTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.GarantieConflict:
-                        return GarantieConflictTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Naloop:
-                        return NaloopTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart:
-                        return GelijkstartTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Voorstart:
-                        return VoorstartTemplate;
-                }
-            }
-            return null;
-        }
-
-        public DataTemplate ConflictTemplate { get; set; }
-        public DataTemplate GarantieConflictTemplate { get; set; }
-        public DataTemplate NaloopTemplate { get; set; }
-        public DataTemplate GelijkstartTemplate { get; set; }
-        public DataTemplate VoorstartTemplate { get; set; }
-    }
-
-    public class SynchronisatieEditingTemplateSelector : DataTemplateSelector
-    {
-        public override DataTemplate SelectTemplate(object item, System.Windows.DependencyObject container)
-        {
-            if (item is SynchronisatieViewModel)
-            {
-                SynchronisatieViewModel sync = item as SynchronisatieViewModel;
-                switch (sync.DisplayType)
-                {
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Conflict:
-                        return ConflictTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.GarantieConflict:
-                        return GarantieConflictTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Naloop:
-                        return NaloopTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Gelijkstart:
-                        return GelijkstartTemplate;
-                    case ViewModels.Enums.SynchronisatieTypeEnum.Voorstart:
-                        return VoorstartTemplate;
-                }
-            }
-            return null;
-        }
-
-        public DataTemplate ConflictTemplate { get; set; }
-        public DataTemplate GarantieConflictTemplate { get; set; }
-        public DataTemplate NaloopTemplate { get; set; }
-        public DataTemplate GelijkstartTemplate { get; set; }
-        public DataTemplate VoorstartTemplate { get; set; }
-    }
-
     public class SynchCheckBoxVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
