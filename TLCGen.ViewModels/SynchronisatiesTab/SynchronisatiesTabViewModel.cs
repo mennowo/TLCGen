@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -100,7 +101,7 @@ namespace TLCGen.ViewModels
                 if (_AllDetectoren != null && !string.IsNullOrEmpty(value.FaseVan))
                 {
                     Detectoren.Clear();
-                    string s = value.FaseVan.Replace(Settings.SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+                    string s = value.FaseVan.Replace(Settings.SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
                     var __Detectoren = _AllDetectoren.Where(x => x.StartsWith(s));
                     foreach(var d in __Detectoren)
                     {
@@ -758,10 +759,10 @@ namespace TLCGen.ViewModels
 
             BuildConflictMatrix();
 
-            MessageManager.Instance.Subscribe(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessageManager.Instance.Subscribe(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessageManager.Instance.Subscribe(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));
-            MessageManager.Instance.Subscribe(this, new Action<ProcessSynchronisationsRequest>(OnProcesSynchornisationsRequested));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            Messenger.Default.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));
+            Messenger.Default.Register(this, new Action<ProcessSynchronisationsRequest>(OnProcesSynchornisationsRequested));
         }
 
         #endregion // Constructor

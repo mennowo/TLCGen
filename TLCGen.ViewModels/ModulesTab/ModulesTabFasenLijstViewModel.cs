@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -146,7 +147,7 @@ namespace TLCGen.ViewModels
                 Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
             }
 
-            MessageManager.Instance.Subscribe(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor

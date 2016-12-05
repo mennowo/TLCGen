@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -422,7 +423,7 @@ namespace TLCGen.ViewModels
             _Controller = controller;
 
             // Add data from the Model to the ViewModel structure
-            foreach(FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 FaseCyclusViewModel fcvm = new FaseCyclusViewModel(fcm);
                 Fasen.Add(fcvm);
@@ -438,14 +439,12 @@ namespace TLCGen.ViewModels
                 MaxGroentijdenSets.Add(mgvm);
             }
 
-            MessageManager.Instance.UnsubscribeAll();
-
-            MessageManager.Instance.Subscribe(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
-            MessageManager.Instance.Subscribe(this, new Action<NameChangedMessage>(OnNameChanged));
-            MessageManager.Instance.Subscribe(this, new Action<DefineChangedMessage>(OnDefineChanged));
-            MessageManager.Instance.Subscribe(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
-            MessageManager.Instance.Subscribe(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
-            MessageManager.Instance.Subscribe(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
+            Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            Messenger.Default.Register(this, new Action<DefineChangedMessage>(OnDefineChanged));
+            Messenger.Default.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
+            Messenger.Default.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
+            Messenger.Default.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
 
             SelectedTabIndex = 0;
         }

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -79,7 +81,7 @@ namespace TLCGen.ViewModels
         /// <param name="ovm">A reference to the main MiniOrganizer viewmodel</param>
         public void OnMonitoredPropertyChanged(string propertyName)
         {
-            Messaging.MessageManager.Instance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
             OnPropertyChanged(propertyName);
         }
     }

@@ -68,8 +68,8 @@ namespace TLCGen.ViewModels
                 throw new NotImplementedException();
             else
             {
-                string myFase = FaseCyclus.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
-                string hisFase = mgvm.FaseCyclus.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+                string myFase = FaseCyclus.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
+                string hisFase = mgvm.FaseCyclus.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
                 if (myFase.Length < hisFase.Length) myFase = myFase.PadLeft(hisFase.Length, '0');
                 else if (hisFase.Length < myFase.Length) hisFase = hisFase.PadLeft(myFase.Length, '0');
                 int i = myFase.CompareTo(hisFase);

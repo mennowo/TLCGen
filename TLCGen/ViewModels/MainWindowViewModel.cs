@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -315,7 +316,7 @@ namespace TLCGen.ViewModels
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -341,7 +342,7 @@ namespace TLCGen.ViewModels
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
                         ControllerVM.DoUpdateFasen();
-                        MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                        Messenger.Default.Send(new UpdateTabsEnabledMessage());
                         ControllerVM.SetStatusText("regeling geopend");
                     }
                 }
@@ -374,7 +375,7 @@ namespace TLCGen.ViewModels
                 // Save data to disk, update saved state
                 DataProvider.Instance.SaveController();
                 ControllerVM.HasChanged = false;
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
@@ -410,7 +411,7 @@ namespace TLCGen.ViewModels
                 DataProvider.Instance.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
@@ -580,7 +581,7 @@ namespace TLCGen.ViewModels
             else
             {
                 SaveGeneratorControllerSettingsToModel();
-                SettingsProvider.Instance.SaveApplicationSettings();
+                SettingsProvider.Default.SaveApplicationSettings();
             }
         }
 
@@ -714,7 +715,7 @@ namespace TLCGen.ViewModels
         public MainWindowViewModel()
         { 
             // Load application settings (defaults, etc.)
-            SettingsProvider.Instance.LoadApplicationSettings();
+            SettingsProvider.Default.LoadApplicationSettings();
 
             // Load tab types
             string myfolder = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -738,7 +739,7 @@ namespace TLCGen.ViewModels
             foreach (ITLCGenGenerator gen in _PluginManager.Generators)
             {
                 Type t = gen.GetType();
-                TLCGenPluginManager.LoadAddinSettings(gen, t, SettingsProvider.Instance.CustomSettings);
+                TLCGenPluginManager.LoadAddinSettings(gen, t, SettingsProvider.Default.Settings.CustomData);
                 Generators.Add(new IGeneratorViewModel(gen));
             }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
@@ -746,7 +747,7 @@ namespace TLCGen.ViewModels
             foreach (ITLCGenImporter imp in _PluginManager.Importers)
             {
                 Type t = imp.GetType();
-                TLCGenPluginManager.LoadAddinSettings(imp, t, SettingsProvider.Instance.CustomSettings);
+                TLCGenPluginManager.LoadAddinSettings(imp, t, SettingsProvider.Default.Settings.CustomData);
                 MenuItem mi = new MenuItem();
                 mi.Header = imp.GetPluginName();
                 mi.Command = ImportControllerCommand;
@@ -766,7 +767,7 @@ namespace TLCGen.ViewModels
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 ControllerVM.DoUpdateFasen();
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
 #endif
 

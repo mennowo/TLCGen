@@ -9,6 +9,7 @@ using TLCGen.Models;
 using TLCGen.Extensions;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -73,7 +74,7 @@ namespace TLCGen.ViewModels
                     _Module.Fasen.Remove(mfcvm.ModuleFaseCyclus);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -114,7 +115,7 @@ namespace TLCGen.ViewModels
         {
             _Module = module;
 
-            foreach(ModuleFaseCyclusModel mfcm in module.Fasen)
+            foreach (ModuleFaseCyclusModel mfcm in module.Fasen)
             {
                 // Create ViewModel
                 ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);

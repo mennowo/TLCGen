@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -84,7 +85,7 @@ namespace TLCGen.ViewModels
             _ModuleMolenVM = new ModuleMolenViewModel(_Controller, this);
             _FasenLijstVM = new ModulesTabFasenLijstViewModel(this);
 
-            MessageManager.Instance.Subscribe(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
 
             if (ModuleMolenVM.Modules.Count > 0)
             {

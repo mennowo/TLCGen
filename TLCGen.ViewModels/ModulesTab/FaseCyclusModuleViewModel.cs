@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace TLCGen.ViewModels
                     foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
                         IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Define, mfcvm.FaseCyclusDefine);
-                        MessageManager.Instance.SendWithRespons(request);
+                        Messenger.Default.Send(request);
                         if (request.Handled && request.IsConflicting)
                             return false;
                     }

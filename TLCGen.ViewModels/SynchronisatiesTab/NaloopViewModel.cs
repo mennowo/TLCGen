@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<NaloopTijdModel> _Tijden;
         private ObservableCollection<NaloopDetectorModel> _Detectoren;
         private bool _DetectieAfhankelijkPossible;
-
+        
         #endregion // Fields
 
         #region Properties
@@ -156,7 +157,7 @@ namespace TLCGen.ViewModels
                     _Naloop.Detectoren.Remove(d);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private void Tijden_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -175,7 +176,7 @@ namespace TLCGen.ViewModels
                     _Naloop.Tijden.Remove(t);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection changed
@@ -186,7 +187,7 @@ namespace TLCGen.ViewModels
         {
             _Naloop = nm;
 
-            foreach(NaloopDetectorModel ndm in nm.Detectoren)
+            foreach (NaloopDetectorModel ndm in nm.Detectoren)
             {
                 Detectoren.Add(ndm);
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,7 +14,6 @@ using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Interfaces;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
@@ -61,7 +61,7 @@ namespace TLCGen.ViewModels
                 {
                     _TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
                         (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
-                         this, $@"{SettingsProvider.Instance.GetFaseCyclusDefinePrefix()}([0-9])");
+                         this, $@"{SettingsProvider.Default.GetFaseCyclusDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }
@@ -118,7 +118,7 @@ namespace TLCGen.ViewModels
                         _IsSorting = true;
                         Fasen.BubbleSort();
                         var message = new FasenSortedMessage(_Controller.Fasen);
-                        MessageManager.Instance.Send(message);
+                        Messenger.Default.Send(message);
                         _IsSorting = false;
                     }
                 }
@@ -194,7 +194,7 @@ namespace TLCGen.ViewModels
                         {
                             newname = (inewname < 10 ? "0" : "") + inewname.ToString();
                             message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                            MessageManager.Instance.SendWithRespons(message);
+                            Messenger.Default.Send(message);
                             inewname++;
                         }
                         while (!message.IsUnique);
@@ -202,8 +202,8 @@ namespace TLCGen.ViewModels
                 }   
             }
             fcm.Naam = newname;
-            fcm.Define = SettingsProvider.Instance.GetFaseCyclusDefinePrefix() + newname;
-            SettingsProvider.Instance.ApplyDefaultFaseCyclusSettings(fcm, fcm.Define);
+            fcm.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + newname;
+            SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(fcm, fcm.Define);
             FaseCyclusViewModel fcvm1 = new FaseCyclusViewModel(fcm);
             Fasen.Add(fcvm1);
         }
@@ -267,18 +267,6 @@ namespace TLCGen.ViewModels
         #region Public Methods
 
         /// <summary>
-        /// Sorts the maxgreen sets according to the order of the phases
-        /// </summary>
-        public void SortMaxGroenSetsFasen()
-        {
-            foreach(GroentijdenSetViewModel mgsvm in _GroentijdenLijstVM.GroentijdenSets)
-            {
-                mgsvm.GroentijdenSetList.BubbleSort();
-            }
-            _GroentijdenLijstVM.BuildGroentijdenMatrix();
-        }
-
-        /// <summary>
         /// Sets the value of the property indicated by propName to the value it has 
         /// for the parsed instance of PhaseCyclusViewModel for all selected phases
         /// </summary>
@@ -314,8 +302,8 @@ namespace TLCGen.ViewModels
                 {
                     var message1 = new IsElementIdentifierUniqueRequest(fcm.Naam, ElementIdentifierType.Naam);
                     var message2 = new IsElementIdentifierUniqueRequest(fcm.Define, ElementIdentifierType.Define);
-                    MessageManager.Instance.SendWithRespons(message1);
-                    MessageManager.Instance.SendWithRespons(message2);
+                    Messenger.Default.Send(message1);
+                    Messenger.Default.Send(message2);
                     if (message1.Handled && message1.IsUnique &&
                         message2.Handled && message2.IsUnique)
                     {
@@ -324,8 +312,8 @@ namespace TLCGen.ViewModels
                         {
                             var message3 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
                             var message4 = new IsElementIdentifierUniqueRequest(dm.Define, ElementIdentifierType.Define);
-                            MessageManager.Instance.SendWithRespons(message3);
-                            MessageManager.Instance.SendWithRespons(message4);
+                            Messenger.Default.Send(message3);
+                            Messenger.Default.Send(message4);
                             if (!(message3.Handled && message3.IsUnique &&
                                   message4.Handled && message4.IsUnique))
                             {
@@ -388,9 +376,9 @@ namespace TLCGen.ViewModels
 
             if (!_IsSorting)
             {
-                MessageManager.Instance.Send(new FasenChangedMessage(_Controller.Fasen, addedfasen, removedfasen));
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
-                MessageManager.Instance.Send(new ControllerDataChangedMessage());
+                Messenger.Default.Send(new FasenChangedMessage(_Controller.Fasen, addedfasen, removedfasen));
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
 
@@ -438,8 +426,8 @@ namespace TLCGen.ViewModels
             }
             Fasen.CollectionChanged += Fasen_CollectionChanged;
 
-            MessageManager.Instance.Subscribe(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
-            MessageManager.Instance.Subscribe(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
+            Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
+            Messenger.Default.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
         }
 
         #endregion // Constructor

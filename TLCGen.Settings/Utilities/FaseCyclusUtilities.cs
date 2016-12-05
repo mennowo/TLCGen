@@ -12,7 +12,7 @@ namespace TLCGen.Settings.Utilities
     {
         public static FaseTypeEnum GetFaseTypeFromDefine(string define)
         {
-            string faseswitch = Regex.Replace(define, SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+            string faseswitch = Regex.Replace(define, SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
             return GetFaseTypeFromNaam(faseswitch);
         }
 

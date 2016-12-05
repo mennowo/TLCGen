@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
     {
         public TLCGenSettingsModel Settings
         {
-            get { return SettingsProvider.Instance.Settings; }
+            get { return SettingsProvider.Default.Settings; }
         }
 
         #region Public Methods

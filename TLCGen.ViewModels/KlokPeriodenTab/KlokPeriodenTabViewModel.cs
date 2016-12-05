@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -245,7 +246,7 @@ namespace TLCGen.ViewModels
                     _Controller.Perioden.Remove(pvm.Periode);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

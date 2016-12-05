@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -80,8 +81,7 @@ namespace TLCGen.DataAccess
         /// </summary>
         public void SetController()
         {
-            Controller = new ControllerModel();
-            FileName = null;
+            SetController(null);
         }
 
         /// <summary>
@@ -89,7 +89,11 @@ namespace TLCGen.DataAccess
         /// </summary>
         public void SetController(ControllerModel cm)
         {
-            Controller = cm;
+            Messenger.Reset();
+            if(cm != null)
+                Controller = cm;
+            else
+                Controller = new ControllerModel();
             FileName = null;
         }
 
@@ -119,6 +123,7 @@ namespace TLCGen.DataAccess
                     Controller = deserializer.DeSerialize(FileName);
                 if (Controller != null)
                 {
+                    Messenger.Reset();
                     return true;
                 }
                 else
@@ -165,7 +170,7 @@ namespace TLCGen.DataAccess
         /// </summary>
         public void SetControllerChanged()
         {
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
         
         public static void RenewInstance()

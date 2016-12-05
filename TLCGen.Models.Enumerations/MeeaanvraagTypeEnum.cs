@@ -15,6 +15,8 @@ namespace TLCGen.Models.Enumerations
         Aanvraag,
         [Description("Rood voor aanvraag")]
         RoodVoorAanvraag,
+        [Description("RA geen conflicten")]
+        RoodVoorAanvraagGeenConflicten,
         [Description("Startgroen")]
         Startgroen
     }

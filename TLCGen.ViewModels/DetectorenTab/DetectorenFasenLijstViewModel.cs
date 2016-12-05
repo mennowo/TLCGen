@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -169,7 +170,7 @@ namespace TLCGen.ViewModels
                         {
                             newname = inewname.ToString();
                             message = new IsElementIdentifierUniqueRequest(_SelectedFase.Naam + newname, ElementIdentifierType.Naam);
-                            MessageManager.Instance.SendWithRespons(message);
+                            Messenger.Default.Send(message);
                             if(!message.IsUnique)
                                 inewname++;
                         }
@@ -177,7 +178,7 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            _dm.Define = SettingsProvider.Instance.GetDetectorDefinePrefix() + _SelectedFase.Naam + newname;
+            _dm.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + _SelectedFase.Naam + newname;
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
             DetectorViewModel dvm1 = new DetectorViewModel(_dm);

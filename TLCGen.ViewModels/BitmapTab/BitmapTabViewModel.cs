@@ -15,6 +15,8 @@ using TLCGen.Models;
 using TLCGen.DataAccess;
 using TLCGen.Messaging.Messages;
 using System.Windows.Media.Imaging;
+using TLCGen.Messaging;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -438,7 +440,7 @@ namespace TLCGen.ViewModels
         {
             _FloodFiller = new QueueLinearFloodFiller(null);
 
-            Messaging.MessageManager.Instance.Subscribe(this, new Action<FileNameChangedMessage>(OnFileNameChanged));
+            Messenger.Default.Register(this, new Action<FileNameChangedMessage>(OnFileNameChanged));
         }
 
         #endregion // Constructor

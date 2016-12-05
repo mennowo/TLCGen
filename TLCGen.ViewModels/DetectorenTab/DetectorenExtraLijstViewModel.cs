@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -132,7 +133,7 @@ namespace TLCGen.ViewModels
                         {
                             newname = inewname.ToString("000");
                             message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                            MessageManager.Instance.SendWithRespons(message);
+                            Messenger.Default.Send(message);
                             if(!message.IsUnique) inewname++;
                         }
                         while (!message.IsUnique);
@@ -140,7 +141,7 @@ namespace TLCGen.ViewModels
                 }
             }
             dm.Naam = newname;
-            dm.Define = SettingsProvider.Instance.GetDetectorDefinePrefix() + newname;
+            dm.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
         }
@@ -200,8 +201,8 @@ namespace TLCGen.ViewModels
                     _Controller.Detectoren.Remove(dvm.Detector);
                 }
             };
-            MessageManager.Instance.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new DetectorenExtraListChangedMessage(_Controller.Detectoren));
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

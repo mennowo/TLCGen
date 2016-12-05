@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -210,7 +211,7 @@ namespace TLCGen.ViewModels
                     // Build fasen list for row headers from first set
                     if(i == 0)
                     {
-                        FasenNames.Add(mgvm.FaseCyclus.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), ""));
+                        FasenNames.Add(mgvm.FaseCyclus.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), ""));
                     }
 
                     // set data in bound matrix
@@ -293,7 +294,7 @@ namespace TLCGen.ViewModels
                     _Controller.GroentijdenSets.Remove(mgsvm.GroentijdenSet);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -305,9 +306,9 @@ namespace TLCGen.ViewModels
             _Controller = controller;
             BuildGroentijdenMatrix();
 
-            MessageManager.Instance.Subscribe(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            MessageManager.Instance.Subscribe(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            MessageManager.Instance.Subscribe(this, new Action<DefineChangedMessage>(OnDefineChanged));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            Messenger.Default.Register(this, new Action<DefineChangedMessage>(OnDefineChanged));
 
             foreach(GroentijdenSetModel gsm in _Controller.GroentijdenSets)
             {

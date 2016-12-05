@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -227,7 +228,7 @@ namespace TLCGen.ViewModels
                 {
                     WachtModule = Modules[0].Naam;
                 }
-                MessageManager.Instance.Send(new ControllerDataChangedMessage());
+                Messenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
 

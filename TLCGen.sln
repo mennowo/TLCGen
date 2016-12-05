@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Controls", "TLCGen.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Dialogs", "TLCGen.Dialogs\TLCGen.Dialogs.csproj", "{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.UnitTests", "TLCGen.UnitTests\TLCGen.UnitTests.csproj", "{E82665C6-E37F-461E-B65D-3FC749443955}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82665C6-E37F-461E-B65D-3FC749443955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82665C6-E37F-461E-B65D-3FC749443955}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82665C6-E37F-461E-B65D-3FC749443955}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82665C6-E37F-461E-B65D-3FC749443955}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

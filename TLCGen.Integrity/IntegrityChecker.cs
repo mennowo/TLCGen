@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +36,7 @@ namespace TLCGen.Integrity
         public static string IsConflictMatrixOK(ControllerModel _Controller)
         {
             // Request to process all synchronisation data from matrix to model
-            MessageManager.Instance.Send(new ProcessSynchronisationsRequest());
+            Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
             // Loop all conflicts
             foreach (ConflictModel cm1 in _Controller.InterSignaalGroep.Conflicten)

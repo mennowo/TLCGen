@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -63,7 +64,7 @@ namespace TLCGen.ViewModels
                 {
                     _TemplateManagerVM = new TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel>
                         (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\detectors\\"),
-                         this, $@"{SettingsProvider.Instance.GetDetectorDefinePrefix()}([0-9])");
+                         this, $@"{SettingsProvider.Default.GetDetectorDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }
@@ -226,8 +227,8 @@ namespace TLCGen.ViewModels
                 {
                     var message1 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
                     var message2 = new IsElementIdentifierUniqueRequest(dm.Define, ElementIdentifierType.Define);
-                    MessageManager.Instance.SendWithRespons(message1);
-                    MessageManager.Instance.SendWithRespons(message2);
+                    Messenger.Default.Send(message1);
+                    Messenger.Default.Send(message2);
                     if (message1.Handled && message1.IsUnique &&
                         message2.Handled && message2.IsUnique)
                     {

@@ -11,12 +11,12 @@ using TLCGen.Settings.Utilities;
 
 namespace TLCGen.Settings
 {
-    public class SettingsProvider
+    public class SettingsProvider : ISettingsProvider
     {
         #region Fields
 
         private static readonly object _Locker = new object();
-        private static SettingsProvider _Instance;
+        private static ISettingsProvider _Default;
 
         #endregion // Fields
 
@@ -32,31 +32,34 @@ namespace TLCGen.Settings
             }
         }
 
-        public static SettingsProvider Instance
+        public static ISettingsProvider Default
         {
             get
             {
-                if (_Instance == null)
+                if (_Default == null)
                 {
                     lock (_Locker)
                     {
-                        if (_Instance == null)
+                        if (_Default == null)
                         {
-                            _Instance = new SettingsProvider();
+                            _Default = new SettingsProvider();
                         }
                     }
                 }
-                return _Instance;
+                return _Default;
             }
-        }
-
-        public CustomDataModel CustomSettings
-        {
-            get { return Settings.CustomData; }
         }
 
         #endregion // Properties
 
+        #region Public Methods
+
+        public static void OverrideDefault(ISettingsProvider provider)
+        {
+            _Default = provider;
+        }
+
+        #endregion // Public Methods
 
         #region Serialize Methods
 
@@ -88,11 +91,6 @@ namespace TLCGen.Settings
         #endregion Serialize Methods
 
         #region Settings Provider Methods
-
-        public static void RenewInstance()
-        {
-            _Instance = null;
-        }
 
         public string GetFaseCyclusDefinePrefix()
         {

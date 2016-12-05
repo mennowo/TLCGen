@@ -11,6 +11,7 @@ using TLCGen.Settings;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -47,18 +48,18 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         string olddefine = _Detector.Define;
                         string oldname = _Detector.Naam;
 
                         _Detector.Naam = value;
-                        _Detector.Define = SettingsProvider.Instance.GetDetectorDefinePrefix() + value;
+                        _Detector.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + value;
 
                         // Notify the messenger
-                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _Detector.Naam));
-                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _Detector.Define));
+                        Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
+                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _Detector.Define));
                     }
                 }
                 OnMonitoredPropertyChanged("Naam");
@@ -73,18 +74,18 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Define);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         string olddefine = _Detector.Define;
                         string oldname = _Detector.Naam;
 
-                        _Detector.Naam = value.Replace(SettingsProvider.Instance.GetDetectorDefinePrefix(), "");
+                        _Detector.Naam = value.Replace(SettingsProvider.Default.GetDetectorDefinePrefix(), "");
                         _Detector.Define = value;
 
                         // Notify the messenger
-                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _Detector.Naam));
-                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _Detector.Define));
+                        Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
+                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _Detector.Define));
                     }
                 }
                 OnMonitoredPropertyChanged("Define");
@@ -100,7 +101,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.VissimNaam);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         _Detector.VissimNaam = value;
@@ -118,7 +119,7 @@ namespace TLCGen.ViewModels
                 _Detector.Type = value;
                 OnMonitoredPropertyChanged("Type");
                 OnMonitoredPropertyChanged("IsDrukknop");
-                MessageManager.Instance.Send(new FaseDetectorTypeChangedMessage(Define, value));
+                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Define, value));
 #warning TODO also below...
                 //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
@@ -69,7 +70,7 @@ namespace TLCGen.ViewModels
             {
                 _ControllerData.BitmapNaam = value;
                 OnMonitoredPropertyChanged("BitmapNaam");
-                MessageManager.Instance.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -80,7 +81,7 @@ namespace TLCGen.ViewModels
             {
                 _ControllerData.TypeGroentijden = value;
                 OnMonitoredPropertyChanged("TypeGroentijden");
-                MessageManager.Instance.Send(new GroentijdenTypeChangedMessage(value));
+                Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }
 
@@ -273,7 +274,7 @@ namespace TLCGen.ViewModels
                     _ControllerData.Versies.Remove(vvm.VersieEntry);
                 }
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

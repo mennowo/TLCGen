@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Collections.ObjectModel;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -116,7 +117,7 @@ namespace TLCGen.ViewModels
                 foreach (BitmapCoordinaatModel bmcm in coords)
                     _IOElement.BitmapCoordinaten.Remove(bmcm);
             }
-            MessageManager.Instance.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             OnPropertyChanged("HasCoordinates");
         }
 
@@ -128,7 +129,7 @@ namespace TLCGen.ViewModels
             _Naam = naam;
             IOType = t;
 
-            foreach(BitmapCoordinaatModel coord in _IOElement.BitmapCoordinaten)
+            foreach (BitmapCoordinaatModel coord in _IOElement.BitmapCoordinaten)
             {
                 Coordinates.Add(new Point(coord.X, coord.Y));
             }

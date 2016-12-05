@@ -11,6 +11,7 @@ using TLCGen.Settings;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -37,7 +38,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         _Periode.Naam = value;
@@ -117,7 +118,6 @@ namespace TLCGen.ViewModels
         public PeriodeViewModel(PeriodeModel periode)
         {
             _Periode = periode;
-
         }
 
         #endregion // Constructor

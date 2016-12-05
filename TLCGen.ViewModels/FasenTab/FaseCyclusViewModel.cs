@@ -11,6 +11,7 @@ using TLCGen.Settings;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.ViewModels
 {
@@ -38,21 +39,21 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         string oldname = _FaseCyclus.Naam;
                         string olddefine = _FaseCyclus.Define;
                         _FaseCyclus.Naam = value;
 
-                        _FaseCyclus.Define = SettingsProvider.Instance.GetFaseCyclusDefinePrefix() + value;
+                        _FaseCyclus.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + value;
 
                         // set new type
                         this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
 
                         // Notify the messenger
-                        MessageManager.Instance.Send(new NameChangedMessage(oldname, value));
-                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, _FaseCyclus.Define));
+                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _FaseCyclus.Define));
                     }
                 }
                 OnMonitoredPropertyChanged(null); // Update all properties
@@ -68,20 +69,20 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Define);
-                    MessageManager.Instance.SendWithRespons(message);
+                    Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         string olddefine = _FaseCyclus.Define;
                         string oldname = _FaseCyclus.Naam;
-                        _FaseCyclus.Naam = value.Replace(SettingsProvider.Instance.GetFaseCyclusDefinePrefix(), "");
+                        _FaseCyclus.Naam = value.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
                         _FaseCyclus.Define = value;
 
                         // set new type
                         this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
 
                         // Notify the messenger
-                        MessageManager.Instance.Send(new NameChangedMessage(oldname, _FaseCyclus.Naam));
-                        MessageManager.Instance.Send(new DefineChangedMessage(olddefine, value));
+                        Messenger.Default.Send(new NameChangedMessage(oldname, _FaseCyclus.Naam));
+                        Messenger.Default.Send(new DefineChangedMessage(olddefine, value));
                     }
                 }
                 OnMonitoredPropertyChanged(null); // Update all properties
@@ -98,7 +99,7 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.Type = value;
 
                     // Apply new defaults
-                    SettingsProvider.Instance.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
+                    SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
 
                     // Set default maxgroentijd
 #warning TODO
@@ -334,7 +335,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void UpdateModelDefine()
         {
-            _FaseCyclus.Define = SettingsProvider.Instance.GetFaseCyclusDefinePrefix() + _FaseCyclus.Naam;
+            _FaseCyclus.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + _FaseCyclus.Naam;
         }
 
         public void UpdateHasKopmax()

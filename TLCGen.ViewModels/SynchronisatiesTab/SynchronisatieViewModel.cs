@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -292,19 +293,19 @@ namespace TLCGen.ViewModels
                 {
                     case SynchronisatieTypeEnum.Gelijkstart:
                         HasGelijkstart = value;
-                        MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Gelijkstart, value));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Gelijkstart, value));
                         break;
                     case SynchronisatieTypeEnum.Voorstart:
                         HasVoorstart = value;
-                        MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Voorstart, value));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Voorstart, value));
                         break;
                     case SynchronisatieTypeEnum.Naloop:
                         HasNaloop = value;
-                        MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
                         break;
                     case SynchronisatieTypeEnum.Meeaanvraag:
                         HasMeeaanvraag = value;
-                        MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
                         break;
                     default:
                         throw new NotImplementedException();
@@ -544,7 +545,7 @@ namespace TLCGen.ViewModels
 
             if (sendmessage)
             {
-                MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
+                Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
             }
         }
 
@@ -611,7 +612,7 @@ namespace TLCGen.ViewModels
 
             if(sendmessage)
             {
-                MessageManager.Instance.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
+                Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Conflict));
             }
 
         }
