@@ -100,11 +100,14 @@
     <Compile Include="Other\TLCGenSettingsViewModel.cs" />
     <Compile Include="Other\TLCGenStatusBarViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialsTab\DataTypes\PTPKoppelingViewModel.cs" />
     <Compile Include="SpecialsTab\SpecialsTabViewModel.cs" />
+    <Compile Include="SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\MeeaanvraagViewModel.cs" />
     <Compile Include="SynchronisatiesTab\NaloopViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
+    <Compile Include="TLCGenMainTabItemViewModel.cs" />
     <Compile Include="TLCGenTabItemViewModel.cs" />
     <Compile Include="Templates\DetectorTemplateViewModel.cs" />
     <Compile Include="Templates\FaseCyclusTemplateViewModel.cs" />
@@ -170,6 +173,7 @@
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

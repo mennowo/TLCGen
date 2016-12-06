@@ -42,6 +42,8 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Periode")]
         public List<PeriodeModel> Perioden { get; set; }
 
+        public PTPDataModel PTPData { get; set; }
+
         public ModuleMolenModel ModuleMolen { get; set; }
 
         public CustomDataModel CustomData { get; set; }
@@ -62,6 +64,7 @@ namespace TLCGen.Models
             InterSignaalGroep = new InterSignaalGroepModel();
             RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
+            PTPData = new PTPDataModel();
         }
 
         #endregion // Constructor

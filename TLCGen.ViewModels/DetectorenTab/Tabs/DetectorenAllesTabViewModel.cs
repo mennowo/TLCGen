@@ -64,22 +64,6 @@ namespace TLCGen.ViewModels
 
         #region Public methods
 
-        public void SetDetectorenChanged()
-        {
-            Detectoren.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    Detectoren.Add(new DetectorViewModel(dm));
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                Detectoren.Add(new DetectorViewModel(dm));
-            }
-        }
-
         #endregion // Public methods
 
         #region TabItem Overrides
@@ -120,7 +104,6 @@ namespace TLCGen.ViewModels
 
         public DetectorenAllesTabViewModel(ControllerModel controller) : base(controller)
         {
-            SetDetectorenChanged();
         }
 
         #endregion // Constructor

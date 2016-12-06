@@ -15,31 +15,20 @@ using TLCGen.Interfaces;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 6)]
-    public class SpecialsTabViewModel : TLCGenTabItemViewModel
+    public class SpecialsTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
-
-        private TabItem _SelectedTab;
 
         #endregion // Fields
 
         #region Properties
-
-        public TabItem SelectedTab
-        {
-            get { return _SelectedTab; }
-            set
-            {
-                _SelectedTab = value;
-                OnPropertyChanged("SelectedTab");
-            }
-        }
 
         #endregion // Properties
 
@@ -67,12 +56,8 @@ namespace TLCGen.ViewModels
             set { }
         }
 
-        public override void OnSelected()
-        {
-        }
-
         #endregion // TabItem Overrides
-        
+
         #region Public Methods
 
         #endregion // Public Methods
@@ -81,6 +66,16 @@ namespace TLCGen.ViewModels
 
         public SpecialsTabViewModel(ControllerModel controller) : base(controller)
         {
+            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
+
+            var attr = typeof(PTPKoppelingenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(PTPKoppelingenTabViewModel));
+            
+            foreach (var tab in TabTypes)
+            {
+                var v = Activator.CreateInstance(tab.Value, _Controller);
+                TabItems.Add(v as ITLCGenTabItem);
+            }
         }
 
         #endregion // Constructor

@@ -198,8 +198,11 @@
     <Compile Include="Views\Tabs\FasenTab.xaml.cs">
       <DependentUpon>FasenTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SpecialsTab.xaml.cs">
+    <Compile Include="Views\Tabs\SpecialsTab\SpecialsTab.xaml.cs">
       <DependentUpon>SpecialsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
+      <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\TemplateManagerView.xaml.cs">
       <DependentUpon>TemplateManagerView.xaml</DependentUpon>
@@ -353,7 +356,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\SpecialsTab.xaml">
+    <Page Include="Views\Tabs\SpecialsTab\SpecialsTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

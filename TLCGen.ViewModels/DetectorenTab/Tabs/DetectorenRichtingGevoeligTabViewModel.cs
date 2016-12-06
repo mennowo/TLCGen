@@ -382,6 +382,7 @@ namespace TLCGen.ViewModels
         private void RemoveRichtingGevoeligeAanvraag_Executed(object prm)
         {
             RichtingGevoeligeAanvragen.Remove(SelectedRichtingGevoeligeAanvraag);
+            SelectedRichtingGevoeligeAanvraag = null;
         }
 
         private bool RemoveRichtingGevoeligVerleng_CanExecute(object prm)
@@ -392,6 +393,7 @@ namespace TLCGen.ViewModels
         private void RemoveRichtingGevoeligVerleng_Executed(object prm)
         {
             RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVeleng);
+            SelectedRichtingGevoeligVeleng = null;
         }
 
         #endregion // Command Functionality

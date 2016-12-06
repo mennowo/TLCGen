@@ -23,68 +23,15 @@ using TLCGen.ViewModels.Templates;
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 2)]
-    public class DetectorenTabViewModel : TLCGenTabItemViewModel, IHaveTemplates<DetectorModel>
+    public class DetectorenTabViewModel : TLCGenMainTabItemViewModel, IHaveTemplates<DetectorModel>
     {
         #region Fields
-
-        private ObservableCollection<ITLCGenTabItem> _TabItems;
-        private ITLCGenTabItem _SelectedTab;
 
         private TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> _TemplateManagerVM;
 
         #endregion // Fields
 
         #region Properties
-
-        public ObservableCollection<ITLCGenTabItem> TabItems
-        {
-            get
-            {
-                if (_TabItems == null)
-                {
-                    _TabItems = new ObservableCollection<ITLCGenTabItem>();
-                }
-                return _TabItems;
-            }
-        }
-
-        public ITLCGenTabItem SelectedTab
-        {
-            get { return _SelectedTab; }
-            set
-            {
-                // Take actions for current 
-                if (_SelectedTab != null)
-                {
-                    if (_SelectedTab.OnDeselectedPreview())
-                    {
-                        _SelectedTab.OnDeselected();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-
-                // Preview new, set if good
-                if (value.OnSelectedPreview())
-                {
-                    _SelectedTab = value;
-                    _SelectedTab.OnSelected();
-                    OnPropertyChanged("SelectedTab");
-                }
-            }
-#warning TODO
-            //foreach(FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
-            //{
-            //    fcvm.Detectoren.BubbleSort();
-            //}
-            //_ControllerVM.Detectoren.BubbleSort();
-            //if(_SelectedTab.Name == "AllesTab" || _SelectedTab.Name == "SimulatieTab")
-            //{
-            //    _DetectorenAllesLijstVM.SetDetectorenChanged();
-            //}
-        }
 
         public TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> TemplateManagerVM
         {
@@ -124,32 +71,6 @@ namespace TLCGen.ViewModels
         {
             get { return true; }
             set { }
-        }
-
-        public override bool OnSelectedPreview()
-        {
-            if (SelectedTab == null)
-                return true;
-            else
-                return SelectedTab.OnSelectedPreview();
-        }
-
-        public override void OnSelected()
-        {
-            SelectedTab?.OnSelected();
-        }
-
-        public override bool OnDeselectedPreview()
-        {
-            if (SelectedTab == null)
-                return true;
-            else
-                return SelectedTab.OnDeselectedPreview();
-        }
-
-        public override void OnDeselected()
-        {
-            SelectedTab.OnDeselected();
         }
 
         #endregion // TabItem Overrides
