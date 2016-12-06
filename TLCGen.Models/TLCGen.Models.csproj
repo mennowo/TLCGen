@@ -70,6 +70,8 @@
     <Compile Include="Models\ModuleFaseCyclusModel.cs" />
     <Compile Include="Models\NonController\AddinSettingsModel.cs" />
     <Compile Include="Models\PeriodeModel.cs" />
+    <Compile Include="Models\RichtingGevoeligeAanvraagModel.cs" />
+    <Compile Include="Models\RichtingGevoeligVerlengModel.cs" />
     <Compile Include="Models\VersieModel.cs" />
     <Compile Include="Models\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ namespace TLCGen.Models.Enumerations
     public enum PeriodeDagCodeEnum
     {
         [XmlEnum("0")]
-        Zonddag,
+        Zondag,
         [XmlEnum("1")]
         Maandag,
         [XmlEnum("2")]

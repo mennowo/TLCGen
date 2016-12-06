@@ -21,7 +21,8 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// ViewModel for the View of detectors belonging to phases.
     /// </summary>
-    public class DetectorenFasenLijstViewModel : ViewModelBase
+    [TLCGenTabItem(index: 0, type: TabItemTypeEnum.DetectieTab)]
+    public class DetectorenFasenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
@@ -31,8 +32,6 @@ namespace TLCGen.ViewModels
         private IList _SelectedDetectoren = new ArrayList();
         private List<string> _Fasen;
         private FaseCyclusModel _SelectedFase;
-
-        private ControllerModel _Controller;
 
         #endregion // Fields
 
@@ -226,15 +225,49 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
+        #region TabItem Overrides
+
+        public override string DisplayName
+        {
+            get
+            {
+                return "Fasen";
+            }
+        }
+
+        public override bool IsEnabled
+        {
+            get { return true; }
+            set { }
+        }
+
+        public override void OnSelected()
+        {
+            Fasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                Fasen.Add(fcm.Naam);
+            }
+        }
+
+        public override void OnDeselected()
+        {
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                fcm.Detectoren.BubbleSort();
+            }
+        }
+
+        #endregion // TabItem Overrides
+
         #region Collection Changed
 
         #endregion // Collection Changed
 
         #region Constructor
 
-        public DetectorenFasenLijstViewModel(ControllerModel controller)
+        public DetectorenFasenTabViewModel(ControllerModel controller) : base(controller)
         {
-            _Controller = controller;
         }
 
         #endregion // Constructor

@@ -18,9 +18,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for DetectorenFasenLijstView.xaml
     /// </summary>
-    public partial class DetectorenFasenLijstView : UserControl
+    public partial class DetectorenFasenTabView : UserControl
     {
-        public DetectorenFasenLijstView()
+        public DetectorenFasenTabView()
         {
             InitializeComponent();
         }

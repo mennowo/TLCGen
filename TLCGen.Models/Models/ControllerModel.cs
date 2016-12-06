@@ -28,6 +28,12 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
+        [XmlArrayItem(ElementName = "RichtingGevoeligeAanvraag")]
+        public List<RichtingGevoeligeAanvraagModel> RichtingGevoeligeAanvragen { get; set; }
+
+        [XmlArrayItem(ElementName = "RichtingGevoeligVerleng")]
+        public List<RichtingGevoeligVerlengModel> RichtingGevoeligVerlengen { get; set; }
+
         public InterSignaalGroepModel InterSignaalGroep { get; set; } 
 
         [XmlArrayItem(ElementName = "GroentijdenSet")]
@@ -54,6 +60,8 @@ namespace TLCGen.Models
             Perioden = new List<PeriodeModel>();
             CustomData = new CustomDataModel();
             InterSignaalGroep = new InterSignaalGroepModel();
+            RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();
+            RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
         }
 
         #endregion // Constructor

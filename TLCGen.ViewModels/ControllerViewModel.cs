@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
             set { _Controller = value; }
         }
 
-        public SortedDictionary<int,Type> TabItemTypes
+        public SortedDictionary<int, Type> TabItemTypes
         {
             set
             {
@@ -205,6 +205,7 @@ namespace TLCGen.ViewModels
                 {
                     _SelectedTab = value;
                     _SelectedTab.OnSelected();
+                    OnPropertyChanged("SelectedTab");
                 }
             }
         }

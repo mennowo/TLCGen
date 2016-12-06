@@ -16,6 +16,7 @@ using TLCGen.Interfaces;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 using TLCGen.ViewModels.Templates;
 
@@ -26,34 +27,63 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private DetectorenFasenLijstViewModel _DetectorenFasenLijstVM;
-        private DetectorenExtraLijstViewModel _DetectorenExtraLijstVM;
-        private DetectorenAllesLijstViewModel _DetectorenAllesLijstVM;
-        private TabItem _SelectedTab;
+        private ObservableCollection<ITLCGenTabItem> _TabItems;
+        private ITLCGenTabItem _SelectedTab;
+
         private TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> _TemplateManagerVM;
 
         #endregion // Fields
 
         #region Properties
 
-        public TabItem SelectedTab
+        public ObservableCollection<ITLCGenTabItem> TabItems
+        {
+            get
+            {
+                if (_TabItems == null)
+                {
+                    _TabItems = new ObservableCollection<ITLCGenTabItem>();
+                }
+                return _TabItems;
+            }
+        }
+
+        public ITLCGenTabItem SelectedTab
         {
             get { return _SelectedTab; }
             set
             {
-                _SelectedTab = value;
-#warning TODO
-                //foreach(FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
-                //{
-                //    fcvm.Detectoren.BubbleSort();
-                //}
-                //_ControllerVM.Detectoren.BubbleSort();
-                if(_SelectedTab.Name == "AllesTab" || _SelectedTab.Name == "SimulatieTab")
+                // Take actions for current 
+                if (_SelectedTab != null)
                 {
-                    _DetectorenAllesLijstVM.SetDetectorenChanged();
+                    if (_SelectedTab.OnDeselectedPreview())
+                    {
+                        _SelectedTab.OnDeselected();
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-                OnPropertyChanged("SelectedTab");
+
+                // Preview new, set if good
+                if (value.OnSelectedPreview())
+                {
+                    _SelectedTab = value;
+                    _SelectedTab.OnSelected();
+                    OnPropertyChanged("SelectedTab");
+                }
             }
+#warning TODO
+            //foreach(FaseCyclusViewModel fcvm in _ControllerVM.Fasen)
+            //{
+            //    fcvm.Detectoren.BubbleSort();
+            //}
+            //_ControllerVM.Detectoren.BubbleSort();
+            //if(_SelectedTab.Name == "AllesTab" || _SelectedTab.Name == "SimulatieTab")
+            //{
+            //    _DetectorenAllesLijstVM.SetDetectorenChanged();
+            //}
         }
 
         public TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> TemplateManagerVM
@@ -70,106 +100,14 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public DetectorenExtraLijstViewModel DetectorenExtraLijstVM
-        {
-            get { return _DetectorenExtraLijstVM; }
-        }
-
-        public DetectorenFasenLijstViewModel DetectorenFasenLijstVM
-        {
-            get { return _DetectorenFasenLijstVM; }
-        }
-
-        public DetectorenAllesLijstViewModel DetectorenAllesLijstVM
-        {
-            get { return _DetectorenAllesLijstVM; }
-        }
-
         #endregion // Properties
 
         #region Commands
-
-        RelayCommand _GenerateSimulationValuesCommand;
-        public ICommand GenerateSimulationValuesCommand
-        {
-            get
-            {
-                if (_GenerateSimulationValuesCommand == null)
-                {
-                    _GenerateSimulationValuesCommand = new RelayCommand(GenerateSimulationValuesCommand_Executed, ChangeModuleCommand_CanExecute);
-                }
-                return _GenerateSimulationValuesCommand;
-            }
-        }
-
+        
         #endregion // Commands
 
         #region Command functionality
-
-        private bool ChangeModuleCommand_CanExecute(object obj)
-        {
-            return DetectorenAllesLijstVM != null && DetectorenAllesLijstVM.Detectoren != null && DetectorenAllesLijstVM.Detectoren.Count > 0;
-        }
-
-        private void GenerateSimulationValuesCommand_Executed(object obj)
-        {
-            Random rd = new Random();
-            int[] qs = { 25, 50, 100, 200,
-                         5,  25, 50,  200,
-                         5,  25, 100, 200,
-                         5,  50, 100, 200 };
-            int qsmax = 16;
-
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                int qthis = rd.Next(qsmax);
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    dm.Simulatie.Q1 = qs[qthis];
-                    int next = qthis + 1;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q2 = qs[next];
-                    ++next;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q3 = qs[next];
-                    ++next;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q4 = qs[next];
-
-                    switch (fcm.Type)
-                    {
-                        case Models.Enumerations.FaseTypeEnum.Auto:
-                            dm.Simulatie.Stopline = 1800;
-                            break;
-                        case Models.Enumerations.FaseTypeEnum.Fiets:
-                            dm.Simulatie.Stopline = 5000;
-                            break;
-                        case Models.Enumerations.FaseTypeEnum.Voetganger:
-                            dm.Simulatie.Stopline = 10000;
-                            break;
-                    }
-                    dm.Simulatie.FCNr = fcm.Define;
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                int qthis = rd.Next(qsmax);
-                dm.Simulatie.Q1 = qs[qthis];
-                int next = qthis + 1;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q2 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q3 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q4 = qs[next];
-                dm.Simulatie.Stopline = 1800;
-            }
-
-            DetectorenAllesLijstVM.SetDetectorenChanged();
-        }
-
+        
         #endregion // Command functionality
 
         #region TabItem Overrides
@@ -188,13 +126,30 @@ namespace TLCGen.ViewModels
             set { }
         }
 
+        public override bool OnSelectedPreview()
+        {
+            if (SelectedTab == null)
+                return true;
+            else
+                return SelectedTab.OnSelectedPreview();
+        }
+
         public override void OnSelected()
         {
-            DetectorenFasenLijstVM.Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                DetectorenFasenLijstVM.Fasen.Add(fcm.Naam);
-            }
+            SelectedTab?.OnSelected();
+        }
+
+        public override bool OnDeselectedPreview()
+        {
+            if (SelectedTab == null)
+                return true;
+            else
+                return SelectedTab.OnDeselectedPreview();
+        }
+
+        public override void OnDeselected()
+        {
+            SelectedTab.OnDeselected();
         }
 
         #endregion // TabItem Overrides
@@ -205,15 +160,16 @@ namespace TLCGen.ViewModels
         {
             List<object> items = new List<object>();
             
-            switch(SelectedTab?.Name)
+            switch(SelectedTab?.DisplayName)
             {
                 case "PerFaseTab":
-                    foreach (DetectorViewModel dvm in DetectorenFasenLijstVM.SelectedDetectoren)
-                        items.Add(dvm.Detector);
+#warning TODO
+                    //foreach (DetectorViewModel dvm in DetectorenFasenLijstVM.SelectedDetectoren)
+                    //    items.Add(dvm.Detector);
                     break;
                 case "ExtraTab":
-                    foreach (DetectorViewModel dvm in DetectorenExtraLijstVM.SelectedDetectoren)
-                        items.Add(dvm.Detector);
+                    //foreach (DetectorViewModel dvm in DetectorenExtraLijstVM.SelectedDetectoren)
+                    //    items.Add(dvm.Detector);
                     break;
             }
             return items;
@@ -232,17 +188,18 @@ namespace TLCGen.ViewModels
                     if (message1.Handled && message1.IsUnique &&
                         message2.Handled && message2.IsUnique)
                     {
-                        DetectorViewModel dvm = new DetectorViewModel(dm);
-                        dvm.FaseCyclus = DetectorenFasenLijstVM?.SelectedFaseNaam;
-                        switch (SelectedTab?.Name)
-                        {
-                            case "PerFaseTab":
-                                DetectorenFasenLijstVM?.Detectoren?.Add(dvm);
-                                break;
-                            case "ExtraTab":
-                                DetectorenExtraLijstVM?.Detectoren?.Add(dvm);
-                                break;
-                        }
+#warning TODO
+                        //DetectorViewModel dvm = new DetectorViewModel(dm);
+                        //dvm.FaseCyclus = DetectorenFasenLijstVM?.SelectedFaseNaam;
+                        //switch (SelectedTab?.DisplayName)
+                        //{
+                        //    case "PerFaseTab":
+                        //        DetectorenFasenLijstVM?.Detectoren?.Add(dvm);
+                        //        break;
+                        //    case "ExtraTab":
+                        //        DetectorenExtraLijstVM?.Detectoren?.Add(dvm);
+                        //        break;
+                        //}
                     }
                 }
             }
@@ -265,18 +222,19 @@ namespace TLCGen.ViewModels
         public void SetAllSelectedDetectorenValue(DetectorViewModel o, string propName)
         {
             IList dets = null;
-            switch(SelectedTab.Name)
-            {
-                case "PerFaseTab":
-                    dets = DetectorenFasenLijstVM.SelectedDetectoren;
-                    break;
-                case "ExtraTab":
-                    dets = DetectorenExtraLijstVM.SelectedDetectoren;
-                    break;
-                case "AllesTab":
-                    dets = DetectorenAllesLijstVM.SelectedDetectoren;
-                    break;
-            }
+#warning TODO
+            //switch(SelectedTab.DisplayName)
+            //{
+            //    case "PerFaseTab":
+            //        dets = DetectorenFasenLijstVM.SelectedDetectoren;
+            //        break;
+            //    case "ExtraTab":
+            //        dets = DetectorenExtraLijstVM.SelectedDetectoren;
+            //        break;
+            //    case "AllesTab":
+            //        dets = DetectorenAllesLijstVM.SelectedDetectoren;
+            //        break;
+            //}
             if(dets != null)
             {
                 foreach (DetectorViewModel dvm in dets)
@@ -293,9 +251,24 @@ namespace TLCGen.ViewModels
 
         public DetectorenTabViewModel(ControllerModel controller) : base(controller)
         {
-            _DetectorenExtraLijstVM = new DetectorenExtraLijstViewModel(_Controller);
-            _DetectorenFasenLijstVM = new DetectorenFasenLijstViewModel(_Controller);
-            _DetectorenAllesLijstVM = new DetectorenAllesLijstViewModel(_Controller);
+            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
+
+            var attr = typeof(DetectorenExtraTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(DetectorenExtraTabViewModel));
+            attr = typeof(DetectorenFasenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(DetectorenFasenTabViewModel));
+            attr = typeof(DetectorenAllesTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(DetectorenAllesTabViewModel));
+            attr = typeof(DetectorenRichtingGevoeligTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(DetectorenRichtingGevoeligTabViewModel));
+            attr = typeof(DetectorenSimulatieTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(DetectorenSimulatieTabViewModel));
+
+            foreach (var tab in TabTypes)
+            {
+                var v = Activator.CreateInstance(tab.Value, _Controller);
+                TabItems.Add(v as ITLCGenTabItem);
+            }
         }
 
         #endregion // Constructor

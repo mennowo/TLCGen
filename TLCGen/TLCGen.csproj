@@ -126,6 +126,15 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabView.xaml.cs">
+      <DependentUpon>DetectorenAllesTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenExtraTabView.xaml.cs">
+      <DependentUpon>DetectorenExtraTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenRichtingGevoeligTabView.xaml.cs">
+      <DependentUpon>DetectorenRichtingGevoeligTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Dialogs\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
@@ -138,8 +147,8 @@
     <Compile Include="Views\Dialogs\TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\DetectorenSimulatieLijstView.xaml.cs">
-      <DependentUpon>DetectorenSimulatieLijstView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenSimulatieTabView.xaml.cs">
+      <DependentUpon>DetectorenSimulatieTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
@@ -160,10 +169,10 @@
     <Compile Include="Views\Tabs\ModulesTab.xaml.cs">
       <DependentUpon>ModulesTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\DetectorenFasenLijstView.xaml.cs">
-      <DependentUpon>DetectorenFasenLijstView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenFasenTabView.xaml.cs">
+      <DependentUpon>DetectorenFasenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\DetectorenToevVerw.xaml.cs">
+    <Compile Include="Views\Tabs\DetectorenTab\Controls\DetectorenToevVerw.xaml.cs">
       <DependentUpon>DetectorenToevVerw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\FasenLijstTimersView.xaml.cs">
@@ -177,13 +186,13 @@
     </Compile>
     <Compile Include="Views\Resources\ConflictBackgroundConverter.cs" />
     <Compile Include="Views\Resources\EnumBooleanConverter.cs" />
-    <Compile Include="Views\Overviews\DetectorenLijstView.xaml.cs">
+    <Compile Include="Views\Tabs\DetectorenTab\Controls\DetectorenLijstView.xaml.cs">
       <DependentUpon>DetectorenLijstView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\FasenDetailsView.xaml.cs">
       <DependentUpon>FasenDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\.xaml.cs">
+    <Compile Include="Views\Tabs\DetectorenTab\.xaml.cs">
       <DependentUpon>DetectorenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab.xaml.cs">
@@ -256,6 +265,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenExtraTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenRichtingGevoeligTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\AboutWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -272,7 +293,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\DetectorenSimulatieLijstView.xaml">
+    <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenSimulatieTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -300,15 +321,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\DetectorenFasenLijstView.xaml">
+    <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenFasenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\DetectorenLijstView.xaml">
+    <Page Include="Views\Tabs\DetectorenTab\Controls\DetectorenLijstView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\DetectorenToevVerw.xaml">
+    <Page Include="Views\Tabs\DetectorenTab\Controls\DetectorenToevVerw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -324,7 +345,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\DetectorenTab.xaml">
+    <Page Include="Views\Tabs\DetectorenTab\DetectorenTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

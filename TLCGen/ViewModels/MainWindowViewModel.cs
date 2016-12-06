@@ -727,7 +727,7 @@ namespace TLCGen.ViewModels
             foreach(var type in q)
             {
                 var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(type, typeof(TLCGenTabItemAttribute));
-                if(attr != null)
+                if(attr != null && attr.Type == TabItemTypeEnum.MainWindow)
                 {
                     OwnTabTypes.Add(attr.Index, type);
                 }

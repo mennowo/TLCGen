@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.DataAccess;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
@@ -21,11 +22,11 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// ViewModel for the list of extra detectors, not belonging to a PhaseCyclus
     /// </summary>
-    public class DetectorenExtraLijstViewModel : ViewModelBase
+    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.DetectieTab)]
+    public class DetectorenExtraTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-
-        private ControllerModel _Controller;
+        
         private ObservableCollection<string> _Templates;
         private DetectorViewModel _SelectedDetector;
         private IList _SelectedDetectoren = new ArrayList();
@@ -182,8 +183,34 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
-        #region Collection Changed
+        #region TabItem Overrides
 
+        public override string DisplayName
+        {
+            get
+            {
+                return "Extra";
+            }
+        }
+
+        public override bool IsEnabled
+        {
+            get { return true; }
+            set { }
+        }
+
+        public override void OnSelected()
+        {
+        }
+
+        public override void OnDeselected()
+        {
+            this.Detectoren.BubbleSort();
+        }
+
+        #endregion // TabItem Overrides
+
+        #region Collection Changed
 
         private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -209,10 +236,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenExtraLijstViewModel(ControllerModel controller)
+        public DetectorenExtraTabViewModel(ControllerModel controller) : base(controller)
         {
-            _Controller = controller;
-
             foreach(DetectorModel dm in _Controller.Detectoren)
             {
                 Detectoren.Add(new DetectorViewModel(dm));

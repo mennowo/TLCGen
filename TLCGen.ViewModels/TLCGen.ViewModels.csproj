@@ -73,10 +73,14 @@
     <Compile Include="BitmapTab\BitmapTabViewModel.cs" />
     <Compile Include="ControllerViewModel.cs" />
     <Compile Include="DetectorenTab\DectorenTabViewModel.cs" />
-    <Compile Include="DetectorenTab\DetectorenAllesLijstViewModel.cs" />
-    <Compile Include="DetectorenTab\DetectorenExtraLijstViewModel.cs" />
-    <Compile Include="DetectorenTab\DetectorenFasenLijstViewModel.cs" />
-    <Compile Include="DetectorenTab\DetectorViewModel.cs" />
+    <Compile Include="DetectorenTab\Tabs\DetectorenAllesTabViewModel.cs" />
+    <Compile Include="DetectorenTab\Tabs\DetectorenExtraTabViewModel.cs" />
+    <Compile Include="DetectorenTab\Tabs\DetectorenFasenTabViewModel.cs" />
+    <Compile Include="DetectorenTab\DataTypes\DetectorViewModel.cs" />
+    <Compile Include="DetectorenTab\DataTypes\RichtingGevoeligeAanvraagViewModel.cs" />
+    <Compile Include="DetectorenTab\Tabs\DetectorenRichtingGevoeligTabViewModel.cs" />
+    <Compile Include="DetectorenTab\DataTypes\RichtingGevoeligVerlengViewModel.cs" />
+    <Compile Include="DetectorenTab\Tabs\DetectorenSimulatieTabViewModel.cs" />
     <Compile Include="Enums\SynchronisatieTypeEnum.cs" />
     <Compile Include="FasenTab\FaseCyclusViewModel.cs" />
     <Compile Include="FasenTab\FasenTabViewModel.cs" />
@@ -101,7 +105,7 @@
     <Compile Include="SynchronisatiesTab\NaloopViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
-    <Compile Include="TabViewModel.cs" />
+    <Compile Include="TLCGenTabItemViewModel.cs" />
     <Compile Include="Templates\DetectorTemplateViewModel.cs" />
     <Compile Include="Templates\FaseCyclusTemplateViewModel.cs" />
     <Compile Include="Templates\TemplatesManagerViewModelT.cs" />

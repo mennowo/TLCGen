@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class DetectorModel : IOElementModel, ITemplatable
+    public class DetectorModel : IOElementModel, ITemplatable, IComparable
     {
         #region Fields
 
@@ -54,6 +54,19 @@ namespace TLCGen.Models
         public void ClearAllReferences()
         {
             BitmapCoordinaten.Clear();
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is DetectorModel)
+            {
+                DetectorModel comp = obj as DetectorModel;
+                return this.Naam.CompareTo(comp.Naam);
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         #endregion // ITemplatable

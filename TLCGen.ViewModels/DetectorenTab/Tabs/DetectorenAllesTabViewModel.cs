@@ -17,14 +17,14 @@ namespace TLCGen.ViewModels
     /// This class holds an ObservableCollection with all detectors, which must be updated 
     /// before it is used by the View.
     /// </summary>
-    public class DetectorenAllesLijstViewModel : ViewModelBase
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.DetectieTab)]
+    public class DetectorenAllesTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-
-        private ControllerModel _Controller;
+        
         private DetectorViewModel _SelectedDetector;
         private IList _SelectedDetectoren = new ArrayList();
-        public ObservableCollection<DetectorViewModel> _Detectoren;
+        private ObservableCollection<DetectorViewModel> _Detectoren;
 
         #endregion // Fields
 
@@ -82,11 +82,44 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
+        #region TabItem Overrides
+
+        public override string DisplayName
+        {
+            get
+            {
+                return "Alles";
+            }
+        }
+
+        public override bool IsEnabled
+        {
+            get { return true; }
+            set { }
+        }
+
+        public override void OnSelected()
+        {
+            Detectoren.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = fcm.Naam });
+                }
+            }
+            foreach (DetectorModel dm in _Controller.Detectoren)
+            {
+                Detectoren.Add(new DetectorViewModel(dm));
+            }
+        }
+
+        #endregion // TabItem Overrides
+
         #region Constructor
 
-        public DetectorenAllesLijstViewModel(ControllerModel controller)
+        public DetectorenAllesTabViewModel(ControllerModel controller) : base(controller)
         {
-            _Controller = controller;
             SetDetectorenChanged();
         }
 

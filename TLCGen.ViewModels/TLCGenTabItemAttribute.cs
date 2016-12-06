@@ -1,5 +1,17 @@
 ﻿namespace TLCGen.ViewModels
 {
+    public enum TabItemTypeEnum
+    {
+        MainWindow,
+        FasenTab,
+        DetectieTab,
+        SynchronisatieTab,
+        ModulesTab,
+        PeriodenTab,
+        SpecialsTab,
+        BitmapTab
+    }
+
     [System.AttributeUsage(System.AttributeTargets.Class)]
     public class TLCGenTabItemAttribute : System.Attribute
     {
@@ -7,10 +19,12 @@
         /// Zero based index indicating how to order tabs loaded into TLCGen
         /// </summary>
         public int Index { get; set; }
+        public TabItemTypeEnum Type { get; set; }
 
-        public TLCGenTabItemAttribute(int index)
+        public TLCGenTabItemAttribute(int index, TabItemTypeEnum type = TabItemTypeEnum.MainWindow)
         {
             Index = index;
+            Type = type;
         }
     }
 }
