@@ -417,6 +417,7 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             Fasen.Clear();
+            AlleDetectoren.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 Fasen.Add(fcm.Naam);

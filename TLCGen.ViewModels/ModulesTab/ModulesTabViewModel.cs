@@ -1,5 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Windows;
+using System.Windows.Media;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -13,10 +15,23 @@ namespace TLCGen.ViewModels
         
         private ModuleMolenViewModel _ModuleMolenVM;
         private ModulesTabFasenLijstViewModel _FasenLijstVM;
-        
+
         #endregion // Fields
 
         #region Properties
+
+        public DrawingImage Icon
+        {
+            get
+            {
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (DrawingImage)dict["ModulesTabDrawingImage"];
+            }
+        }
 
         public ModuleMolenViewModel ModuleMolenVM
         {

@@ -18,7 +18,8 @@
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Button Content="Toevoegen" Command="{Binding AddRichtingGevoeligeAanvraag}" Margin="2" />
                 <Label Content="Fase" />
-                <ComboBox ItemsSource="{Binding Path=Fasen}" SelectedValue="{Binding Path=SelectedFaseAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                <ComboBox ItemsSource="{Binding Path=Fasen}" 
+                          SelectedValue="{Binding Path=SelectedFaseAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                 <Label Content="van detector" />
                 <ComboBox ItemsSource="{Binding Path=DetectorenAanvraag1}" SelectedValue="{Binding Path=SelectedDetectorAanvraag1,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                 <Label Content="naar detector" />

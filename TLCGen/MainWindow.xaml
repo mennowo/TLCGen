@@ -9,7 +9,7 @@
         xmlns:data="clr-namespace:TLCGen.DataAccess"
         mc:Ignorable="d"
         DataContext="{DynamicResource MainWindowViewModel}"
-        Title="{Binding Path=ProgramTitle}" Height="350" Width="525">
+        Title="{Binding Path=ProgramTitle}" Height="550" Width="700">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

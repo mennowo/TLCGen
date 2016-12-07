@@ -51,6 +51,19 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public System.Windows.Media.DrawingImage Icon
+        {
+            get
+            {
+                System.Windows.ResourceDictionary dict = new System.Windows.ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (System.Windows.Media.DrawingImage)dict["BitmapTabDrawingImage"];
+            }
+        }
+
         public ObservableCollection<BitmappedItemViewModel> Uitgangen
         {
             get

@@ -11,6 +11,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/TabItemTemplates.xaml" />
+                <ResourceDictionary>
+                    <local:BoolToOpacityConverter x:Key="OpacityConv" />
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -20,13 +23,19 @@
                     SelectedIndex="{Binding Path=SelectedTabIndex}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <Border>
-                        <AdornerDecorator>
-                            <Grid>
-                                <ContentPresenter 
-                                    Content="{Binding Path=DisplayName}" 
-                                    VerticalAlignment="Center" />
-                            </Grid>
+                    <Border Margin="0">
+                        <AdornerDecorator Margin="0">
+                            <StackPanel Orientation="Horizontal" Margin="0">
+                                <Image 
+                                    Grid.Column="0" 
+                                    Width="15" 
+                                    Height="15" Margin="0,0,3,0" 
+                                    Opacity="{Binding Path=IsEnabled,Converter={StaticResource OpacityConv}}"
+                                    Source="{Binding Path=Icon}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <TextBlock
+                                    Text="{Binding Path=DisplayName}" 
+                                    VerticalAlignment="Center" HorizontalAlignment="Left" />
+                            </StackPanel>
                         </AdornerDecorator>
                     </Border>
                 </DataTemplate>

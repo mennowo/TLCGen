@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging;
@@ -34,6 +35,19 @@ namespace TLCGen.ViewModels
         #endregion // Fields
 
         #region Properties
+
+        public DrawingImage Icon
+        {
+            get
+            {
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (DrawingImage)dict["InterSignaalGroepTabDrawingImage"];
+            }
+        }
 
         public SynchronisatieTypeEnum DisplayType
         {

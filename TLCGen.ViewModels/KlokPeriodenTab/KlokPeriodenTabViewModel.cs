@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -34,6 +36,19 @@ namespace TLCGen.ViewModels
         #endregion // Fields
 
         #region Properties
+
+        public DrawingImage Icon
+        {
+            get
+            {
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (DrawingImage)dict["KlokPeriodenTabDrawingImage"];
+            }
+        }
 
         public ObservableCollection<PeriodeViewModel> Periodes
         {
