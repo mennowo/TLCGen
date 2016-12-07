@@ -18,9 +18,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for FasenDetailsView.xaml
     /// </summary>
-    public partial class FasenDetailsView : UserControl
+    public partial class FasenDetailsTabView : UserControl
     {
-        public FasenDetailsView()
+        public FasenDetailsTabView()
         {
             InitializeComponent();
         }

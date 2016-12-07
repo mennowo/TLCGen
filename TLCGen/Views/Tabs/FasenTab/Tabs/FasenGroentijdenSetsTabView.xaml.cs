@@ -19,12 +19,12 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for MaxGroentijdenSetsView.xaml
     /// </summary>
-    public partial class GroentijdenSetsView : UserControl
+    public partial class FasenGroentijdenSetsTabView : UserControl
     {
         private DataGridRow _PreviousRow = null;
         private DataGridColumn _PreviousCol = null;
 
-        public GroentijdenSetsView()
+        public FasenGroentijdenSetsTabView()
         {
             InitializeComponent();
         }

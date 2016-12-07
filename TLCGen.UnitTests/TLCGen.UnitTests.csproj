@@ -78,7 +78,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FasenTabViewModelTests.cs" />
+    <Compile Include="FasenLijstTabViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

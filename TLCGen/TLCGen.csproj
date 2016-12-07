@@ -126,6 +126,7 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabView.xaml.cs">
       <DependentUpon>DetectorenAllesTabView.xaml</DependentUpon>
     </Compile>
@@ -150,7 +151,7 @@
     <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenSimulatieTabView.xaml.cs">
       <DependentUpon>DetectorenSimulatieTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\FasenToevVerw.xaml.cs">
+    <Compile Include="Views\Tabs\FasenTab\Controls\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Overviews\ModuleMolenOverView.xaml.cs">
@@ -162,6 +163,9 @@
     <Compile Include="Views\Resources\SpecialDataGrid.cs" />
     <Compile Include="Views\Tabs\BitmapTab.xaml.cs">
       <DependentUpon>BitmapTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
+      <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\KlokPeriodenTab.xaml.cs">
       <DependentUpon>KlokPeriodenTab.xaml</DependentUpon>
@@ -175,11 +179,11 @@
     <Compile Include="Views\Tabs\DetectorenTab\Controls\DetectorenToevVerw.xaml.cs">
       <DependentUpon>DetectorenToevVerw.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\FasenLijstTimersView.xaml.cs">
-      <DependentUpon>FasenLijstTimersView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabView.xaml.cs">
+      <DependentUpon>FasenLijstTimersTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\GroentijdenSetsView.xaml.cs">
-      <DependentUpon>GroentijdenSetsView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabView.xaml.cs">
+      <DependentUpon>FasenGroentijdenSetsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
@@ -189,13 +193,13 @@
     <Compile Include="Views\Tabs\DetectorenTab\Controls\DetectorenLijstView.xaml.cs">
       <DependentUpon>DetectorenLijstView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Overviews\FasenDetailsView.xaml.cs">
-      <DependentUpon>FasenDetailsView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenDetailsTabView.xaml.cs">
+      <DependentUpon>FasenDetailsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\DetectorenTab\.xaml.cs">
       <DependentUpon>DetectorenTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab.xaml.cs">
+    <Compile Include="Views\Tabs\FasenTab\FasenTab.xaml.cs">
       <DependentUpon>FasenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\SpecialsTab.xaml.cs">
@@ -218,9 +222,6 @@
     </Compile>
     <Compile Include="Views\ControllerView.xaml.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Overviews\FasenLijstOverView.xaml.cs">
-      <DependentUpon>FasenLijstOverView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\SettingsDataGrid.xaml.cs">
       <DependentUpon>SettingsDataGrid.xaml</DependentUpon>
@@ -300,7 +301,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Overviews\FasenToevVerw.xaml">
+    <Page Include="Views\Tabs\FasenTab\Controls\FasenToevVerw.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\BitmapTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,15 +341,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\FasenDetailsView.xaml">
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenDetailsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Overviews\FasenLijstTimersView.xaml">
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Overviews\GroentijdenSetsView.xaml">
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -352,7 +357,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab.xaml">
+    <Page Include="Views\Tabs\FasenTab\FasenTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -381,10 +386,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ControllerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Overviews\FasenLijstOverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

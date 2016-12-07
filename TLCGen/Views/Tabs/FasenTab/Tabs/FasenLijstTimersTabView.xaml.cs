@@ -21,9 +21,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for FasenView.xaml
     /// </summary>
-    public partial class FasenLijstTimersView : UserControl
+    public partial class FasenLijstTimersTabView : UserControl
     {
-        public FasenLijstTimersView()
+        public FasenLijstTimersTabView()
         {
             InitializeComponent();
         }

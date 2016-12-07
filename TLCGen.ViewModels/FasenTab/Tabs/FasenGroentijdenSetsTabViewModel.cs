@@ -19,11 +19,11 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// ViewModel for the list of GroentijdenSets in the Fasen tab.
     /// </summary>
-    public class GroentijdenSetsLijstViewModel : ViewModelBase
+    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.FasenTab)]
+    public class FasenGroentijdenSetsTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-
-        private ControllerModel _Controller;
+        
         private ObservableCollection<string> _SetNames;
         private ObservableCollection<string> _FasenNames;
 
@@ -230,9 +230,32 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
+        #region TabItem Overrides
+
+        public override string DisplayName
+        {
+            get
+            {
+                return _Controller.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maxgroen" : "Verlenggroen";
+            }
+        }
+
+        public override bool IsEnabled
+        {
+            get { return true; }
+            set { }
+        }
+
+        public override void OnSelected()
+        {
+
+        }
+
+        #endregion // TabItem Overrides
+
         #region TLCGen events
 
-        void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(FasenChangedMessage message)
         {
             foreach(FaseCyclusModel fcm in message.AddedFasen)
             {
@@ -252,12 +275,12 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        void OnFasenSorted(FasenSortedMessage message)
+        private void OnFasenSorted(FasenSortedMessage message)
         {
             BuildGroentijdenMatrix();
         }
 
-        void OnDefineChanged(DefineChangedMessage message)
+        private void OnDefineChanged(DefineChangedMessage message)
         {
             foreach(GroentijdenSetViewModel mgsvm in GroentijdenSets)
             {
@@ -269,6 +292,25 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+        }
+
+        private void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
+        {
+            OnPropertyChanged("DisplayName");
+            int i = 1;
+            foreach (GroentijdenSetViewModel setvm in GroentijdenSets)
+            {
+                switch (message.Type)
+                {
+                    case GroentijdenTypeEnum.MaxGroentijden:
+                        setvm.Naam = "MG" + i.ToString();
+                        break;
+                    case GroentijdenTypeEnum.VerlengGroentijden:
+                        setvm.Naam = "VG" + i.ToString();
+                        break;
+                }
+            }
+            BuildGroentijdenMatrix();
         }
 
         #endregion // TLCGen events
@@ -301,16 +343,16 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public GroentijdenSetsLijstViewModel(ControllerModel controller)
+        public FasenGroentijdenSetsTabViewModel(ControllerModel controller) : base(controller)
         {
-            _Controller = controller;
             BuildGroentijdenMatrix();
 
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<DefineChangedMessage>(OnDefineChanged));
+            Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
 
-            foreach(GroentijdenSetModel gsm in _Controller.GroentijdenSets)
+            foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)
             {
                 GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
             }
