@@ -44,6 +44,8 @@ namespace TLCGen.Models
 
         public PTPDataModel PTPData { get; set; }
 
+        public OVDataModel OVData { get; set; }
+
         public ModuleMolenModel ModuleMolen { get; set; }
 
         public CustomDataModel CustomData { get; set; }
@@ -65,6 +67,7 @@ namespace TLCGen.Models
             RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
             PTPData = new PTPDataModel();
+            OVData = new OVDataModel();
         }
 
         #endregion // Constructor

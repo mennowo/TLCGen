@@ -20,7 +20,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private FaseCyclusModel _FaseCyclus;
-        private ObservableCollection<DetectorViewModel> _Detectoren;
         
         #endregion // Fields
 
@@ -295,6 +294,16 @@ namespace TLCGen.ViewModels
                         return true;
                 }
                 return false;
+            }
+        }
+
+        public bool OVIngreep
+        {
+            get { return _FaseCyclus.OVIngreep; }
+            set
+            {
+                _FaseCyclus.OVIngreep = value;
+                OnMonitoredPropertyChanged("OVIngreep");
             }
         }
 

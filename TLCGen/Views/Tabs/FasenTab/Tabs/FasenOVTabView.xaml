@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="TLCGen.Views.FasenOVTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <Label DockPanel.Dock="Top" Content="Fasen" />
+            <ListBox 
+                Margin="2" 
+                ItemsSource="{Binding Path=Fasen}" 
+                DisplayMemberPath="Naam"
+                SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
+                SelectionMode="Single" />
+        </DockPanel>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <DockPanel Grid.Column="2">
+            <CheckBox DockPanel.Dock="Top" Content="OV ingreep" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusOVIngreep}" />
+            <Grid IsEnabled="{Binding Path=SelectedFaseCyclusOVIngreep}" >
+                <local:OVIngreepView DataContext="{Binding Path=SelectedOVIngreep}" />
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>

@@ -33,6 +33,7 @@ namespace TLCGen.Models
         public bool ExtraMeeverlengenInWG { get; set; }
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
+        public OVIngreepTypeEnum OVIngreep { get; set; }
 
         public List<VersieModel> Versies { get; set; }
 

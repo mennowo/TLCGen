@@ -26,8 +26,7 @@ namespace TLCGen.ViewModels
     public class FasenTabViewModel : TLCGenMainTabItemViewModel, IHaveTemplates<FaseCyclusModel>
     {
         #region Fields
-
-        private FasenGroentijdenSetsTabViewModel _GroentijdenLijstVM;
+        
         private IList _SelectedFaseCycli = new ArrayList();
         private TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel> _TemplateManagerVM;
 
@@ -181,6 +180,8 @@ namespace TLCGen.ViewModels
             TabTypes.Add(attr.Index, typeof(FasenDetailsTabViewModel));
             attr = typeof(FasenGroentijdenSetsTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
             TabTypes.Add(attr.Index, typeof(FasenGroentijdenSetsTabViewModel));
+            attr = typeof(FasenOVTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(FasenOVTabViewModel));
 
             foreach (var tab in TabTypes)
             {

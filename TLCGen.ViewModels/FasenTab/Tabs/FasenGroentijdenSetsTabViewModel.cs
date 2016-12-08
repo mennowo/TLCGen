@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
     /// <summary>
     /// ViewModel for the list of GroentijdenSets in the Fasen tab.
     /// </summary>
-    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.FasenTab)]
+    [TLCGenTabItem(index: 4, type: TabItemTypeEnum.FasenTab)]
     public class FasenGroentijdenSetsTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

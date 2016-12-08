@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type vm:FasenGroentijdenSetsTabViewModel}">
             <local:FasenGroentijdenSetsTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FasenOVTabViewModel}">
+            <local:FasenOVTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

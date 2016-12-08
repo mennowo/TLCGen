@@ -69,6 +69,9 @@
     <Compile Include="Models\ModuleMolenModel.cs" />
     <Compile Include="Models\ModuleFaseCyclusModel.cs" />
     <Compile Include="Models\NonController\AddinSettingsModel.cs" />
+    <Compile Include="Models\OVDataModel.cs" />
+    <Compile Include="Models\OVIngreepModel.cs" />
+    <Compile Include="Models\OVSignaalGroepParametersModel.cs" />
     <Compile Include="Models\PeriodeModel.cs" />
     <Compile Include="Models\PTPDataModel.cs" />
     <Compile Include="Models\PTPKoppelingModel.cs" />

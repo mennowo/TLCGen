@@ -332,6 +332,21 @@ namespace TLCGen.ViewModels
                 if(item.CanBeEnabled())
                 {
                     item.IsEnabled = true;
+                    if(item is TLCGenMainTabItemViewModel)
+                    {
+                        TLCGenMainTabItemViewModel tab = item as TLCGenMainTabItemViewModel;
+                        foreach(ITLCGenTabItem item2 in tab.TabItems)
+                        {
+                            if(item2.CanBeEnabled())
+                            {
+                                item2.IsEnabled = true;
+                            }
+                            else
+                            {
+                                item2.IsEnabled = false;
+                            }
+                        }
+                    }
                 }
                 else
                 {

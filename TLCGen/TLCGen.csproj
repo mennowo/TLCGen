@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\System.Windows.Interactivity.dll</HintPath>
       <Private>True</Private>
@@ -126,6 +127,9 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Controls\OVIngreepView.xaml.cs">
+      <DependentUpon>OVIngreepView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabView.xaml.cs">
       <DependentUpon>DetectorenAllesTabView.xaml</DependentUpon>
@@ -167,6 +171,9 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
       <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenOVTabView.xaml.cs">
+      <DependentUpon>FasenOVTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\KlokPeriodenTab.xaml.cs">
       <DependentUpon>KlokPeriodenTab.xaml</DependentUpon>
     </Compile>
@@ -185,7 +192,7 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabView.xaml.cs">
       <DependentUpon>FasenGroentijdenSetsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataTypes\FaseCyclusView.xaml.cs">
+    <Compile Include="Views\Tabs\FasenTab\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ConflictBackgroundConverter.cs" />
@@ -253,7 +260,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataTypes\FaseCyclusView.xaml">
+    <Page Include="Views\Tabs\FasenTab\Controls\OVIngreepView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\FaseCyclusView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -318,6 +329,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\Tabs\FasenOVTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

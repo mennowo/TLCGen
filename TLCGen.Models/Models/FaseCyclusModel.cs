@@ -51,6 +51,13 @@ namespace TLCGen.Models
         [Description("Koplus maximum")]
         public int Kopmax { get; set; }
 
+        [DisplayName("OV ingreep")]
+        [Description("OV ingreep")]
+        public bool OVIngreep { get; set; }
+        [DisplayName("HD ingreep")]
+        [Description("HD ingreep")]
+        public bool HDIngreep { get; set; }
+
         [DisplayName("Vaste aanvraag")]
         [Description("Vaste aanvraag")]
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }

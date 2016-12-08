@@ -85,7 +85,7 @@ namespace TLCGen.ViewModels
                 Detectoren.Clear();
                 foreach(DetectorModel dm in _SelectedFase.Detectoren)
                 {
-                    Detectoren.Add(new DetectorViewModel(dm));
+                    Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam });
                 }
                 if(Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];

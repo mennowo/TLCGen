@@ -28,7 +28,7 @@
                 <TabControl Grid.Row="0" Margin="2">
                     <TabItem Header="Instellingen">
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="13">
+                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="14">
                                 <Label Content="Kruispunt informatie" Grid.ColumnSpan="2" FontWeight="Bold" />
                                 <Label Content="Naam/nummer" />
                                 <TextBox Margin="2" Text="{Binding Path=Naam}" />
@@ -63,6 +63,10 @@
                                     SelectedItem="{Binding Path=AansturingWaitsignalen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                                 <Label Content="Extra meeverlengen in WG" />
                                 <CheckBox IsChecked="{Binding Path=ExtraMeeverlengenInWG}" Margin="5" />
+                                <Label Content="OV ingreep" />
+                                <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepTypeEnum}}}"
+                                    SelectedItem="{Binding Path=OVIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                             </ag:AutoGrid>
                         </ScrollViewer>
                     </TabItem>

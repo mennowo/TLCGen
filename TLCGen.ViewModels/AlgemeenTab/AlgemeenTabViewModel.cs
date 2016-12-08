@@ -150,6 +150,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public OVIngreepTypeEnum OVIngreep
+        {
+            get { return _ControllerData.OVIngreep; }
+            set
+            {
+                _ControllerData.OVIngreep = value;
+                OnMonitoredPropertyChanged("OVIngreep");
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            }
+        }
+
         public VersieViewModel SelectedVersie
         {
             get { return _SelectedVersie; }
