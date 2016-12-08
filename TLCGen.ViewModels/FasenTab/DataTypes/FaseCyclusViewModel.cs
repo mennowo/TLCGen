@@ -307,6 +307,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool HDIngreep
+        {
+            get { return _FaseCyclus.HDIngreep; }
+            set
+            {
+                _FaseCyclus.HDIngreep = value;
+                OnMonitoredPropertyChanged("HDIngreep");
+            }
+        }
+
         #endregion // Properties
 
         #region Overrides

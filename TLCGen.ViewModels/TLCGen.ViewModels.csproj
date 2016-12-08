@@ -83,6 +83,9 @@
     <Compile Include="DetectorenTab\Tabs\DetectorenSimulatieTabViewModel.cs" />
     <Compile Include="Enums\SynchronisatieTypeEnum.cs" />
     <Compile Include="FasenTab\DataTypes\FaseCyclusViewModel.cs" />
+    <Compile Include="FasenTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
+    <Compile Include="FasenTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
+    <Compile Include="FasenTab\DataTypes\HDIngreepViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\OVIngreepViewModel.cs" />
     <Compile Include="FasenTab\FasenTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenDetailsTabViewModel.cs" />

@@ -127,7 +127,10 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\Controls\OVIngreepView.xaml.cs">
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\HDIngreepView.xaml.cs">
+      <DependentUpon>HDIngreepView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\OVIngreepView.xaml.cs">
       <DependentUpon>OVIngreepView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
@@ -192,7 +195,7 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabView.xaml.cs">
       <DependentUpon>FasenGroentijdenSetsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\FaseCyclusView.xaml.cs">
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ConflictBackgroundConverter.cs" />
@@ -260,11 +263,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\Controls\OVIngreepView.xaml">
+    <Page Include="Views\Tabs\FasenTab\DataTypes\HDIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\FaseCyclusView.xaml">
+    <Page Include="Views\Tabs\FasenTab\DataTypes\OVIngreepView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\DataTypes\FaseCyclusView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

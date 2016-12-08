@@ -1,0 +1,59 @@
+﻿<UserControl x:Class="TLCGen.Views.OVIngreepView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             mc:Ignorable="d" 
+             x:Name="root"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="14">
+        <Label Content="Instellingen" Grid.ColumnSpan="2" FontWeight="Bold" />
+        <Label Content="KAR" />
+        <CheckBox IsChecked="{Binding Path=KAR}" Margin="5" />
+        <Label Content="Vecom" />
+        <CheckBox IsChecked="{Binding Path=Vecom}" Margin="5" />
+        <!--<Label Content="Massa detectie" />
+            <CheckBox IsChecked="{Binding Path=MassaDetectie}" Margin="5" />-->
+        <Label Content="Type voertuig" />
+        <ComboBox 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepVoertuigTypeEnum}}}"
+                                    SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        <Label Content="Alle lijnen" />
+        <CheckBox IsChecked="{Binding Path=AlleLijnen}" Margin="5" />
+        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical">
+            <Label Content="Lijnnummers" />
+            <ListView Height="Auto" ItemsSource="{Binding LijnNummers}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" MinHeight="24" >
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox Text="{Binding Path=Nummer}" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
+                <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+            </StackPanel>
+        </StackPanel>
+        <Label Content="Tijden" Grid.ColumnSpan="2" FontWeight="Bold" />
+        <Label Content="Rijtijd ongehinderd" />
+        <TextBox Text="{Binding Path=RijTijdOngehinderd}" Margin="2" />
+        <Label Content="Rijtijd beperkt gehinderd" />
+        <TextBox Text="{Binding Path=RijTijdBeperktgehinderd}" Margin="2" />
+        <Label Content="Rijtijd gehinderd" />
+        <TextBox Text="{Binding Path=RijTijdGehinderd}" Margin="2" />
+        <Label Content="Ondermaximum" />
+        <TextBox Text="{Binding Path=OnderMaximum}" Margin="2" />
+        <Label Content="Groenbewaking" />
+        <TextBox Text="{Binding Path=GroenBewaking}" Margin="2" />
+    </ag:AutoGrid>
+</UserControl>

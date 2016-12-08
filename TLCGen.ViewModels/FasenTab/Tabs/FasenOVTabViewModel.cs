@@ -16,6 +16,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private OVIngreepViewModel _SelectedOVIngreep;
+        private HDIngreepViewModel _SelectedHDIngreep;
 
         #endregion // Fields
 
@@ -48,8 +49,19 @@ namespace TLCGen.ViewModels
                         break;
                     }
                 }
+
+                foreach (HDIngreepModel hdm in _Controller.OVData.HDIngrepen)
+                {
+                    if (hdm.FaseCyclus == SelectedFaseCyclus.Define)
+                    {
+                        SelectedHDIngreep = new HDIngreepViewModel(_Controller, hdm);
+                        break;
+                    }
+                }
+
                 OnPropertyChanged("SelectedFaseCyclus");
                 OnMonitoredPropertyChanged("SelectedFaseCyclusOVIngreep");
+                OnMonitoredPropertyChanged("SelectedFaseCyclusHDIngreep");
             }
         }
 
@@ -100,6 +112,53 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool SelectedFaseCyclusHDIngreep
+        {
+            get
+            {
+                if (SelectedFaseCyclus == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return SelectedFaseCyclus.HDIngreep;
+                }
+            }
+            set
+            {
+                if (SelectedFaseCyclus != null)
+                {
+                    SelectedFaseCyclus.HDIngreep = value;
+                    if (value)
+                    {
+                        HDIngreepModel hd = new HDIngreepModel();
+                        hd.FaseCyclus = SelectedFaseCyclus.Define;
+                        _Controller.OVData.HDIngrepen.Add(hd);
+                        SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);
+                    }
+                    else
+                    {
+                        if (SelectedHDIngreep != null)
+                        {
+                            _Controller.OVData.HDIngrepen.Remove(SelectedHDIngreep.HDIngreep);
+                        }
+                    }
+                }
+                OnMonitoredPropertyChanged("SelectedFaseCyclusHDIngreep");
+            }
+        }
+
+        public HDIngreepViewModel SelectedHDIngreep
+        {
+            get { return _SelectedHDIngreep; }
+            set
+            {
+                _SelectedHDIngreep = value;
+                OnPropertyChanged("SelectedHDIngreep");
+            }
+        }
+
         #endregion // Properties
 
         #region TabItem Overrides
@@ -123,6 +182,11 @@ namespace TLCGen.ViewModels
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 Fasen.Add(new FaseCyclusViewModel(fcm));
+            }
+
+            if(Fasen.Count > 0)
+            {
+                SelectedFaseCyclus = Fasen[0];
             }
         }
 

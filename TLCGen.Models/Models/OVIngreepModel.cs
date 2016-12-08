@@ -25,14 +25,14 @@ namespace TLCGen.Models
         public int GroenBewaking { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
-        public List<string> LijnNummers { get; set; }
+        public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
 
         //[XmlArrayItem(ElementName = "MassaDetectieMelding")]
         //public List<OVIngreepMassaDetectieMelding> MassaDetectieMeldingen { get; set; }
 
         public OVIngreepModel()
         {
-            LijnNummers = new List<string>();
+            LijnNummers = new List<OVIngreepLijnNummerModel>();
             //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
         }
     }
