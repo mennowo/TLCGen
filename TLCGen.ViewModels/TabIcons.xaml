@@ -42,15 +42,12 @@
   <DrawingGroup x:Key="AlgemeenTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
     <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
       <DrawingGroup Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FF80E5FF" Opacity="1" Transform="1.2744518,0,0,1.2744518,351.57281,506.53234" />
-          </GeometryDrawing.Brush>
+        <GeometryDrawing Brush="#FF80E5FF">
           <GeometryDrawing.Pen>
-            <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+            <Pen Brush="#FF000000" Thickness="1.30692387" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
           </GeometryDrawing.Pen>
           <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="1.2744518,0,0,1.2744518,351.57281,506.53234" Figures="M16,16z M0,0z M-5.163321,-2.479255C-5.163321,0.4474111 -7.5358526,2.8199427 -10.462519,2.8199427 -13.389185,2.8199427 -15.761716,0.4474111 -15.761716,-2.479255 -15.761716,-5.405921 -13.389185,-7.7784526 -10.462519,-7.7784526 -7.5358526,-7.7784526 -5.163321,-5.405921 -5.163321,-2.479255z" />
+            <EllipseGeometry RadiusX="6.7585" RadiusY="6.7585" Center="338.2388,503.3463" />
           </GeometryDrawing.Geometry>
         </GeometryDrawing>
         <GeometryDrawing Geometry="{StaticResource AlgemeenTabGeometry}">
@@ -58,15 +55,9 @@
             <Pen Brush="#FF000000" Thickness="2.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
           </GeometryDrawing.Pen>
         </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FF80E5FF" Opacity="1" Transform="1.0903466,0,0,1.0903466,359.50059,530.44753" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Pen>
-            <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
-          </GeometryDrawing.Pen>
+        <GeometryDrawing Brush="#FF000000">
           <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="1.0903466,0,0,1.0903466,359.50059,530.44753" Figures="M16,16z M0,0z M-19,-28.5C-19,-28.223857 -19.223858,-27.999999 -19.500001,-27.999999 -19.776144,-27.999999 -20.000002,-28.223857 -20.000002,-28.5 -20.000002,-28.776143 -19.776144,-29.000001 -19.500001,-29.000001 -19.223858,-29.000001 -19,-28.776143 -19,-28.5z" />
+            <EllipseGeometry RadiusX="1.3002" RadiusY="1.3002" Center="338.2388,499.3726" />
           </GeometryDrawing.Geometry>
         </GeometryDrawing>
       </DrawingGroup>
@@ -76,7 +67,10 @@
   <Geometry x:Key="InterSignaalGroepTabGeometry1">F1 M16,16z M0,0z M331.77032,501.47796L344.72388,501.47797</Geometry>
   <Geometry x:Key="InterSignaalGroepTabGeometry2">F1 M16,16z M0,0z M331.88302,505.8489L343.10842,505.84891</Geometry>
   <Geometry x:Key="InterSignaalGroepTabGeometry3">F1 M16,16z M0,0z M336.34414,509.98326L336.34415,496.90414</Geometry>
-  <Geometry x:Key="InterSignaalGroepTabGeometry4">F1 M16,16z M0,0z M331.10507,510.50641L331.10507,496.23889 345.37259,496.23889</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry4">F1 M16,16z M0,0z M342.45932,500.37604L341.41901,500.37604 341.41901,500.06694 341.768,500.06694 341.768,498.83385Q341.7447,498.91525 341.6866,498.97843 341.6301,499.04163 341.54867,499.08479 341.46887,499.12629 341.36919,499.14959 341.27109,499.17119 341.16644,499.17119L341.16644,498.82719Q341.27945,498.82719 341.38581,498.79059 341.49383,498.75239 341.57858,498.67592 341.66328,498.59952 341.71485,498.48481 341.76805,498.36848 341.76805,498.20728L342.11205,498.20728 342.11205,500.06689 342.45937,500.06689 342.45937,500.37599z</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry5">F1 M16,16z M0,0z M342.97283,499.29086Q342.97283,499.07315 343.01933,498.87041 343.06583,498.66766 343.16391,498.51311 343.26191,498.35856 343.41983,498.2655 343.57937,498.1708 343.80371,498.1708 344.02806,498.1708 344.18594,498.2655 344.34547,498.3586 344.44518,498.51311 344.54488,498.66766 344.58977,498.87041 344.63467,499.07315 344.63467,499.29086 344.63467,499.50856 344.58977,499.7113 344.54487,499.91238 344.44685,500.07026 344.34875,500.22647 344.18926,500.3212 344.03139,500.4143 343.80371,500.4143 343.57604,500.4143 343.41651,500.3212 343.25863,500.2265 343.15892,500.07026 343.06082,499.91238 343.01766,499.7113 342.97276,499.50856 342.97276,499.29086z M343.31683,499.29086Q343.31683,499.44374,343.33673,499.58666L344.18759,498.73248Q344.13109,498.61947 344.03802,498.54967 343.94662,498.47987 343.8037,498.47987 343.56606,498.47987 343.44142,498.69424 343.31678,498.90862 343.31678,499.29085z M343.80375,500.1035Q343.95,500.1035 344.04306,500.032 344.13776,499.9605 344.19096,499.84587 344.24576,499.72954 344.26736,499.5833 344.29066,499.43706 344.29066,499.29082 344.29066,499.15122 344.27076,499.01827L343.42655,499.86581Q343.48305,499.97383 343.57113,500.03864 343.66083,500.10344 343.80378,500.10344z</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry6">F1 M16,16z M0,0z M331.10507,510.50641L331.10507,496.23889 345.37259,496.23889</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry7">F1 M16,16z M0,0z M333.32779,508.03271Q333.32779,507.81501 333.37429,507.61226 333.42079,507.40952 333.51887,507.25497 333.61697,507.10041 333.77479,507.00735 333.93433,506.91265 334.15868,506.91265 334.38303,506.91265 334.5409,507.00735 334.70044,507.10045 334.80015,507.25497 334.89985,507.40952 334.94473,507.61226 334.98963,507.81501 334.98963,508.03271 334.98963,508.25041 334.94473,508.45315 334.89983,508.65424 334.80181,508.81211 334.70371,508.96832 334.54423,509.06305 334.38635,509.15615 334.15868,509.15615 333.93101,509.15615 333.77147,509.06305 333.6136,508.96835 333.51388,508.81211 333.41588,508.65424 333.37263,508.45315 333.32773,508.25041 333.32773,508.03271z M333.67179,508.03271Q333.67179,508.1856,333.69169,508.32851L334.54255,507.47433Q334.48605,507.36132 334.39299,507.29153 334.30159,507.22173 334.15867,507.22173 333.92103,507.22173 333.79639,507.43611 333.67175,507.65048 333.67175,508.03271z M334.15871,508.84535Q334.30495,508.84535 334.39801,508.77385 334.49271,508.70235 334.54592,508.58772 334.60072,508.47139 334.62232,508.32515 334.64562,508.17891 334.64562,508.03267 334.64562,507.89307 334.62572,507.76013L333.7815,508.60766Q333.838,508.71568 333.92608,508.7805 334.01578,508.8453 334.15874,508.8453z</Geometry>
   <DrawingGroup x:Key="InterSignaalGroepTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
     <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing Brush="#FFB3B3B3">
@@ -118,31 +112,16 @@
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
       <DrawingGroup>
-        <GlyphRunDrawing ForegroundBrush="#FF000000">
-          <GlyphRunDrawing.GlyphRun>
-            <GlyphRun BaselineOrigin="341.16641,500.37604" FontRenderingEmSize="3.40345073" BidiLevel="0" IsSideways="False" Characters="10" GlyphIndices="18 17" AdvanceWidths="1.85828409858 1.85828409858" Language="en-us">
-              <GlyphRun.GlyphTypeface>
-                <GlyphTypeface FontUri="C:\WINDOWS\FONTS\ANONYMOUS PRO B.TTF" StyleSimulations="None" />
-              </GlyphRun.GlyphTypeface>
-            </GlyphRun>
-          </GlyphRunDrawing.GlyphRun>
-        </GlyphRunDrawing>
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry4}" />
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry5}" />
       </DrawingGroup>
-      <GeometryDrawing Geometry="{StaticResource InterSignaalGroepTabGeometry4}">
+      <GeometryDrawing Geometry="{StaticResource InterSignaalGroepTabGeometry6}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.7324841" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
       <DrawingGroup>
-        <GlyphRunDrawing ForegroundBrush="#FF000000">
-          <GlyphRunDrawing.GlyphRun>
-            <GlyphRun BaselineOrigin="333.38263,509.11789" FontRenderingEmSize="3.40345073" BidiLevel="0" IsSideways="False" Characters="0" GlyphIndices="17" AdvanceWidths="1.85828409858" Language="en-us">
-              <GlyphRun.GlyphTypeface>
-                <GlyphTypeface FontUri="C:\WINDOWS\FONTS\ANONYMOUS PRO B.TTF" StyleSimulations="None" />
-              </GlyphRun.GlyphTypeface>
-            </GlyphRun>
-          </GlyphRunDrawing.GlyphRun>
-        </GlyphRunDrawing>
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry7}" />
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
@@ -318,6 +297,7 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="ModulesTabDrawingImage" Drawing="{StaticResource ModulesTabDrawingGroup}" />
+  <Geometry x:Key="SpecialsTabGeometry">F1 M16,16z M0,0z M342.53632,504.2349L339.09649,504.2349 339.09649,507.66551 337.38118,507.66551 337.38118,504.2349 333.94135,504.2349 333.94135,502.51037 337.38118,502.51037 337.38118,499.07976 339.09649,499.07976 339.09649,502.51037 342.53632,502.51037 342.53632,504.2349z</Geometry>
   <DrawingGroup x:Key="SpecialsTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
     <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing>
@@ -339,19 +319,11 @@
           <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
         <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" Figures="M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,1,1,-15.761716,-2.479255A5.2991977,5.2991977,0,1,1,-5.163321,-2.479255z" />
+          <PathGeometry FillRule="Nonzero" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" Figures="M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,2.8199427A5.2991977,5.2991977,0,0,1,-15.761716,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,-7.7784526A5.2991977,5.2991977,0,0,1,-5.163321,-2.479255z" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
       <DrawingGroup>
-        <GlyphRunDrawing ForegroundBrush="#FF000000">
-          <GlyphRunDrawing.GlyphRun>
-            <GlyphRun BaselineOrigin="333.94135,507.7854" FontRenderingEmSize="18.88681793" BidiLevel="0" IsSideways="False" Characters="+" GlyphIndices="12" AdvanceWidths="10.31220258978" Language="en-us">
-              <GlyphRun.GlyphTypeface>
-                <GlyphTypeface FontUri="C:\WINDOWS\FONTS\ANONYMOUS PRO B.TTF" StyleSimulations="None" />
-              </GlyphRun.GlyphTypeface>
-            </GlyphRun>
-          </GlyphRunDrawing.GlyphRun>
-        </GlyphRunDrawing>
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource SpecialsTabGeometry}" />
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>

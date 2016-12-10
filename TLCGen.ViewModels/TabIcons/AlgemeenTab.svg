@@ -15,8 +15,8 @@
    viewBox="0 0 15.999999 15.999999"
    id="svg4819"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
-   sodipodi:docname="SpecialsTab.svg">
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="AlgemeenTab.svg">
   <defs
      id="defs4821">
     <marker
@@ -63,14 +63,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="13.487837"
-     inkscape:cx="17.118612"
-     inkscape:cy="2.109857"
+     inkscape:zoom="8.9645446"
+     inkscape:cx="7.863589"
+     inkscape:cy="7.9025177"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4676"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1125"
+     inkscape:window-width="1680"
+     inkscape:window-height="974"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
@@ -101,7 +101,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -110,31 +110,27 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(-330.23883,-495.37265)">
-    <path
-       style="fill:#000000;stroke:#000000;stroke-width:1.54669225000000000;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;color:#000000;fill-opacity:1;fill-rule:nonzero;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="m 7.9999995,14.963798 6.9675875,0 -0.0038,-6.9637985"
-       id="path5414"
-       transform="translate(330.23883,495.37265)" />
-    <path
-       sodipodi:type="arc"
-       style="color:#000000;fill:#ff9955;stroke:#000000;stroke-width:1.17697668000000010;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="path4658"
-       sodipodi:cx="-10.462519"
-       sodipodi:cy="-2.479255"
-       sodipodi:rx="5.2991977"
-       sodipodi:ry="5.2991977"
-       d="m -5.163321,-2.479255 a 5.2991977,5.2991977 0 1 1 -10.598395,0 5.2991977,5.2991977 0 1 1 10.598395,0 z"
-       transform="matrix(1.3141231,0,0,1.3141231,351.98787,506.6307)" />
-    <text
-       xml:space="preserve"
-       style="font-size:18.88681793px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Anonymous Pro;-inkscape-font-specification:Sans Bold"
-       x="333.94135"
-       y="507.7854"
-       id="text5410"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5412"
-         x="333.94135"
-         y="507.7854">+</tspan></text>
+    <g
+       id="g4676"
+       transform="matrix(1.0311281,0,0,1.0311281,-10.528732,-15.669034)">
+      <circle
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#80e5ff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.30692387;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+         id="path4155"
+         cx="338.23883"
+         cy="503.34628"
+         r="6.7584934" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4669"
+         d="m 338.23883,502.37265 0,5"
+         style="fill:none;stroke:#000000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <circle
+         id="path4671"
+         style="color:#000000;display:inline;overflow:visible;visibility:visible;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker:none;enable-background:accumulate"
+         cx="338.23883"
+         cy="499.37265"
+         r="1.3002436" />
+    </g>
   </g>
 </svg>
