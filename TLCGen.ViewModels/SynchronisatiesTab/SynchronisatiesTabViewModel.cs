@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
                     value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
-                OnPropertyChanged(null);
+                OnPropertyChanged("SelectedSynchronisatie");
             }
         }
 
