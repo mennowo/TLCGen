@@ -17,7 +17,7 @@
         <CheckBox IsChecked="{Binding Path=Vecom}" Margin="5" />
         <Label Content="Opticom" />
         <CheckBox IsChecked="{Binding Path=Opticom}" Margin="5" />
-        <Label Content="Sirece" />
+        <Label Content="Sirene" />
         <CheckBox IsChecked="{Binding Path=Sirene}" Margin="5" />
         <StackPanel Grid.ColumnSpan="2" Orientation="Vertical">
             <Label Content="Meerealiserende fasen" />

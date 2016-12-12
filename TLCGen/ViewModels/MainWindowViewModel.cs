@@ -312,10 +312,12 @@ namespace TLCGen.ViewModels
         {
             if (!ControllerHasChanged())
             {
+                string lastfilename = DataProvider.Instance.FileName;
                 DataProvider.Instance.SetController();
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
@@ -334,6 +336,7 @@ namespace TLCGen.ViewModels
                 openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
                 if (openFileDialog.ShowDialog() == true)
                 {
+                    string lastfilename = DataProvider.Instance.FileName;
                     DataProvider.Instance.FileName = openFileDialog.FileName;
                     if (DataProvider.Instance.LoadController())
                     {
@@ -342,6 +345,7 @@ namespace TLCGen.ViewModels
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
                         ControllerVM.DoUpdateFasen();
+                        Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
                         Messenger.Default.Send(new UpdateTabsEnabledMessage());
                         ControllerVM.SetStatusText("regeling geopend");
                     }
@@ -407,10 +411,12 @@ namespace TLCGen.ViewModels
                 saveFileDialog.FileName = DataProvider.Instance.FileName;
             if (saveFileDialog.ShowDialog() == true)
             {
+                string lastfilename = DataProvider.Instance.FileName;
                 DataProvider.Instance.FileName = saveFileDialog.FileName;
                 DataProvider.Instance.SaveController();
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 ControllerVM.SetStatusText("regeling opgeslagen");
             }
