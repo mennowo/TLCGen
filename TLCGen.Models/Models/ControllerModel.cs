@@ -42,6 +42,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Periode")]
         public List<PeriodeModel> Perioden { get; set; }
 
+        [XmlArrayItem(ElementName = "FileIngreep")]
+        public List<FileIngreepModel> FileIngrepen { get; set; }
+
         public PTPDataModel PTPData { get; set; }
 
         public OVDataModel OVData { get; set; }
@@ -66,6 +69,7 @@ namespace TLCGen.Models
             InterSignaalGroep = new InterSignaalGroepModel();
             RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
+            FileIngrepen = new List<FileIngreepModel>();
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
         }

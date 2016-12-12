@@ -53,6 +53,9 @@
     <Compile Include="Models\DetectorModel.cs" />
     <Compile Include="Models\DetectorSimulatieModel.cs" />
     <Compile Include="Models\FaseCyclusModel.cs" />
+    <Compile Include="Models\FileIngreepDetectorModel.cs" />
+    <Compile Include="Models\FileIngreepModel.cs" />
+    <Compile Include="Models\FileIngreepTeDoserenSignaalGroepModel.cs" />
     <Compile Include="Models\GelijkstartModel.cs" />
     <Compile Include="Models\HDIngreepModel.cs" />
     <Compile Include="Models\InterSignaalGroepModel.cs" />
