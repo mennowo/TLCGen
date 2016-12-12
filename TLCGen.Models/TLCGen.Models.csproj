@@ -74,7 +74,7 @@
     <Compile Include="Models\HDIngreepMeerealiserendeFaseModel.cs" />
     <Compile Include="Models\OVIngreepLijnNummerModel.cs" />
     <Compile Include="Models\OVIngreepModel.cs" />
-    <Compile Include="Models\OVSignaalGroepParametersModel.cs" />
+    <Compile Include="Models\OVIngreepSignaalGroepParametersModel.cs" />
     <Compile Include="Models\PeriodeModel.cs" />
     <Compile Include="Models\PTPDataModel.cs" />
     <Compile Include="Models\PTPKoppelingModel.cs" />

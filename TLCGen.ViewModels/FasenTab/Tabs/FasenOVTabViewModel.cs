@@ -17,6 +17,7 @@ namespace TLCGen.ViewModels
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private OVIngreepViewModel _SelectedOVIngreep;
         private HDIngreepViewModel _SelectedHDIngreep;
+        private OVIngreepSGInstellingenLijstViewModel _OVIngreepSGInstellingenLijstVM;
 
         #endregion // Fields
 
@@ -31,6 +32,14 @@ namespace TLCGen.ViewModels
                     _Fasen = new ObservableCollection<FaseCyclusViewModel>();
                 }
                 return _Fasen;
+            }
+        }
+
+        public OVIngreepSGInstellingenLijstViewModel OVIngreepSGInstellingenLijstVM
+        {
+            get
+            {
+                return _OVIngreepSGInstellingenLijstVM;
             }
         }
 
@@ -200,6 +209,7 @@ namespace TLCGen.ViewModels
 
         public FasenOVTabViewModel(ControllerModel controller) : base(controller)
         {
+            _OVIngreepSGInstellingenLijstVM = new OVIngreepSGInstellingenLijstViewModel(controller);
         }
 
         #endregion // Constructor

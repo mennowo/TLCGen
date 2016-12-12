@@ -11,6 +11,15 @@
         <DataTemplate DataType="{x:Type vm:PTPKoppelingenTabViewModel}">
             <local:PTPKoppelingenTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FileTabViewModel}">
+            <local:FileTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:VAOntruimenTabViewModel}">
+            <local:VAOntruimenTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SignalenTabViewModel}">
+            <local:SignalenTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

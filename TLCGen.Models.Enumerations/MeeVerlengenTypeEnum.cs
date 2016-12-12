@@ -9,13 +9,11 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum NaloopTypeEnum
+    public enum MeeVerlengenTypeEnum
     {
-        [Description("Start groen")]
-        StartGroen,
-        [Description("Einde groen")]
-        EindeGroen,
-        [Description("Cyclisch verlenggroen")]
-        CyclischVerlengGroen
+        [Description("Default")]
+        Default,
+        [Description("Voetganger")]
+        Voetganger
     }
 }

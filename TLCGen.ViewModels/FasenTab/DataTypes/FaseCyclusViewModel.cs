@@ -112,7 +112,6 @@ namespace TLCGen.ViewModels
                     //}
 
                     OnMonitoredPropertyChanged(null); // Update all properties
-                    //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
                 }
             }
         }
@@ -127,7 +126,6 @@ namespace TLCGen.ViewModels
                 else
                     _FaseCyclus.TFG = TGG;
                 OnMonitoredPropertyChanged("TFG");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TFG");
             }
         }
 
@@ -145,7 +143,6 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGG_min;
                 OnMonitoredPropertyChanged("TGG");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TGG");
             }
         }
 
@@ -161,7 +158,6 @@ namespace TLCGen.ViewModels
                         TGG = value;
                 }
                 OnMonitoredPropertyChanged("TGG_min");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TGG_min");
             }
         }
 
@@ -177,7 +173,6 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TRG_min;
                 OnMonitoredPropertyChanged("TRG");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "TRG");
             }
         }
 
@@ -193,7 +188,6 @@ namespace TLCGen.ViewModels
                         TRG = value;
                 }
                 OnMonitoredPropertyChanged("TRG_min");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "TRG_min");
             }
         }
 
@@ -209,7 +203,6 @@ namespace TLCGen.ViewModels
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGL_min;
                 OnMonitoredPropertyChanged("TGL");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "TGL");
             }
         }
 
@@ -225,7 +218,6 @@ namespace TLCGen.ViewModels
                         TGL = value;
                 }
                 OnMonitoredPropertyChanged("TGL_min");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "TGL_min");
             }
         }
 
@@ -239,7 +231,6 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.Kopmax = value;
                 }
                 OnMonitoredPropertyChanged("Kopmax");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Kopmax");
             }
         }
 
@@ -250,7 +241,6 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.VasteAanvraag = value;
                 OnMonitoredPropertyChanged("VasteAanvraag");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "VasteAanvraag");
             }
         }
 
@@ -261,7 +251,6 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.Wachtgroen = value;
                 OnMonitoredPropertyChanged("Wachtgroen");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Wachtgroen");
             }
         }
 
@@ -272,7 +261,36 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.Meeverlengen = value;
                 OnMonitoredPropertyChanged("Meeverlengen");
-                // _ControllerVM.SetAllSelectedElementsValue(this, "Meeverlengen");
+            }
+        }
+
+        public MeeVerlengenTypeEnum MeeverlengenType
+        {
+            get { return _FaseCyclus.MeeverlengenType; }
+            set
+            {
+                _FaseCyclus.MeeverlengenType = value;
+                OnMonitoredPropertyChanged("MeeverlengenType");
+            }
+        }
+
+        public int MeeverlengenVerschil
+        {
+            get { return _FaseCyclus.MeeverlengenVerschil; }
+            set
+            {
+                _FaseCyclus.MeeverlengenVerschil = value;
+                OnMonitoredPropertyChanged("MeeverlengenVerschil");
+            }
+        }
+
+        public bool RatelTikker
+        {
+            get { return _FaseCyclus.RatelTikker; }
+            set
+            {
+                _FaseCyclus.RatelTikker = value;
+                OnMonitoredPropertyChanged("RatelTikker");
             }
         }
 

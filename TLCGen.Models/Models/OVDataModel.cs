@@ -11,13 +11,13 @@ namespace TLCGen.Models
     {
         public List<OVIngreepModel> OVIngrepen { get; set; }
         public List<HDIngreepModel> HDIngrepen { get; set; }
-        public List<OVSignaalGroepParametersModel> OVSignaalGroepParameters { get; set; }
+        public List<OVIngreepSignaalGroepParametersModel> OVIngreepSignaalGroepParameters { get; set; }
 
         public OVDataModel()
         {
             OVIngrepen = new List<OVIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
-            OVSignaalGroepParameters = new List<OVSignaalGroepParametersModel>();
+            OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();
         }
     }
 }

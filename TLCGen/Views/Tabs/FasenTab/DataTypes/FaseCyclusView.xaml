@@ -6,12 +6,13 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -62,6 +63,43 @@
                                  IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchAan}}" />
                     <RadioButton GroupName="MeeverlengenGroup" Content="Uitgeschakeld" 
                                  IsChecked="{Binding Path=Meeverlengen,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:NooitAltijdAanUitEnum.SchUit}}" />
+                </StackPanel>
+            </GroupBox>
+        </WrapPanel>
+        <WrapPanel Grid.Row="1">
+            <GroupBox Header="Opties meeverlengen">
+                <GroupBox.Style>
+                    <Style TargetType="GroupBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Meeverlengen}" Value="Nooit">
+                                <DataTrigger.Setters>
+                                    <Setter Property="IsEnabled" Value="False" />
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Type" />
+                    <RadioButton GroupName="MeeverlengenTypeGroup" Content="Default" 
+                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Default}}" />
+                    <RadioButton GroupName="MeeverlengenTypeGroup" Content="Voetganger" 
+                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Voetganger}}" />
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=MeeverlengenType}" Value="Default">
+                                        <DataTrigger.Setters>
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger.Setters>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Label Content="Ontruimingstijd verschil" />
+                        <TextBox Text="{Binding Path=MeeverlengenVerschil}" Margin="2" />
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public DrawingImage Icon
+        public ImageSource Icon
         {
             get
             {
@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "TabIcons.xaml");
                 dict.Source = u;
-                return (DrawingImage)dict["SpecialsTabDrawingImage"];
+                return (ImageSource)dict["SpecialsTabDrawingImage"];
             }
         }
 
@@ -85,7 +85,13 @@ namespace TLCGen.ViewModels
 
             var attr = typeof(PTPKoppelingenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
             TabTypes.Add(attr.Index, typeof(PTPKoppelingenTabViewModel));
-            
+            attr = typeof(FileTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(FileTabViewModel));
+            attr = typeof(SignalenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(SignalenTabViewModel));
+            attr = typeof(VAOntruimenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(VAOntruimenTabViewModel));
+
             foreach (var tab in TabTypes)
             {
                 var v = Activator.CreateInstance(tab.Value, _Controller);

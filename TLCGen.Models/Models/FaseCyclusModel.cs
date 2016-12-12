@@ -64,9 +64,20 @@ namespace TLCGen.Models
         [DisplayName("Wachtgroen")]
         [Description("Wachtgroen")]
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
+
         [DisplayName("Meeverlengen")]
         [Description("Meeverlengen")]
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
+        [DisplayName("MeeverlengenType")]
+        [Description("MeeverlengenType")]
+        public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
+        [DisplayName("MeeverlengenVerschil")]
+        [Description("MeeverlengenVerschil")]
+        public int MeeverlengenVerschil { get; set; }
+
+        [DisplayName("RatelTikker")]
+        [Description("RatelTikker")]
+        public bool RatelTikker { get; set; }
 
         [Browsable(false)]
         [XmlArrayItem(ElementName = "Detector")]

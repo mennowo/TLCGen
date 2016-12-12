@@ -12,6 +12,10 @@
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <DockPanel Grid.Column="0">
             <Label DockPanel.Dock="Top" Content="Fasen" />
             <ListBox 
@@ -42,5 +46,8 @@
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
+        <Expander ExpandDirection="Down" MaxHeight="250" Grid.ColumnSpan="3" Grid.Row="1" Header="Instellingen voor conflicten">
+            <local:OVIngreepSGInstellingenLijstView DataContext="{Binding OVIngreepSGInstellingenLijstVM}" />
+        </Expander>
     </Grid>
 </UserControl>

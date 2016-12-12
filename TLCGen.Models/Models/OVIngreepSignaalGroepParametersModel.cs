@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class OVSignaalGroepParametersModel
+    public class OVIngreepSignaalGroepParametersModel
     {
         public string FaseCyclus { get; set; }
         public int AantalKerenNietAfkappen { get; set; }

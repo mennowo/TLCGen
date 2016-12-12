@@ -51,6 +51,7 @@
     <Compile Include="FaseTypeEnum.cs" />
     <Compile Include="KWCTypeEnum.cs" />
     <Compile Include="MeeaanvraagTypeEnum.cs" />
+    <Compile Include="MeeVerlengenTypeEnum.cs" />
     <Compile Include="NaloopDetectorTypeEnum.cs" />
     <Compile Include="NaloopTijdTypeEnum.cs" />
     <Compile Include="NaloopTypeEnum.cs" />

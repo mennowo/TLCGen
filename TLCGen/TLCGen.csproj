@@ -77,6 +77,7 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -126,6 +127,15 @@
     </Compile>
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml.cs">
+      <DependentUpon>OVIngreepSGInstellingenLijstView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\SignalenTabView.xaml.cs">
+      <DependentUpon>SignalenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabView.xaml.cs">
+      <DependentUpon>FileTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab\DataTypes\HDIngreepView.xaml.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
@@ -239,6 +249,9 @@
     <Compile Include="Views\UserControls\TLCGenStatusBar.xaml.cs">
       <DependentUpon>TLCGenStatusBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabView.xaml.cs">
+      <DependentUpon>VAOntruimenTabView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -260,6 +273,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\DetectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\SignalenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\FileTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -416,6 +441,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\TLCGenStatusBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

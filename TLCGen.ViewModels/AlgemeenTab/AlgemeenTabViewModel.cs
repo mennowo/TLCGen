@@ -158,6 +158,7 @@ namespace TLCGen.ViewModels
                 _ControllerData.OVIngreep = value;
                 OnMonitoredPropertyChanged("OVIngreep");
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
             }
         }
 

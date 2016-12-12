@@ -86,8 +86,10 @@
     <Compile Include="FasenTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\HDIngreepViewModel.cs" />
+    <Compile Include="FasenTab\DataTypes\OVIngreepSignaalGroepParametersViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\OVIngreepViewModel.cs" />
     <Compile Include="FasenTab\FasenTabViewModel.cs" />
+    <Compile Include="FasenTab\Other\OVIngreepSGInstellingenLijstViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenDetailsTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenGroentijdenSetsTabViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\GroentijdenSetViewModel.cs" />
@@ -109,6 +111,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialsTab\DataTypes\PTPKoppelingViewModel.cs" />
     <Compile Include="SpecialsTab\SpecialsTabViewModel.cs" />
+    <Compile Include="SpecialsTab\Tabs\SignalenTabViewModel.cs" />
+    <Compile Include="SpecialsTab\Tabs\VAOntruimenTabViewModel.cs" />
+    <Compile Include="SpecialsTab\Tabs\FileTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\MeeaanvraagViewModel.cs" />
     <Compile Include="SynchronisatiesTab\NaloopViewModel.cs" />
