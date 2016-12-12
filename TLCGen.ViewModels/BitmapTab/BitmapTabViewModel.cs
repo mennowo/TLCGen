@@ -24,9 +24,11 @@ namespace TLCGen.ViewModels
     public class BitmapTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-        
-        private ObservableCollection<BitmappedItemViewModel> _Uitgangen;
-        private ObservableCollection<BitmappedItemViewModel> _Ingangen;
+
+        private ObservableCollection<BitmappedItemViewModel> _Fasen;
+        private ObservableCollection<BitmappedItemViewModel> _Detectoren;
+        private ObservableCollection<BitmappedItemViewModel> _OverigeUitgangen;
+        private ObservableCollection<BitmappedItemViewModel> _OverigeIngangen;
         private BitmappedItemViewModel _SelectedItem;
         private TabItem _SelectedTab;
         private BitmapImage _MyBitmap;
@@ -64,27 +66,51 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<BitmappedItemViewModel> Uitgangen
+        public ObservableCollection<BitmappedItemViewModel> Fasen
         {
             get
             {
-                if (_Uitgangen == null)
+                if (_Fasen == null)
                 {
-                    _Uitgangen = new ObservableCollection<BitmappedItemViewModel>();
+                    _Fasen = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _Uitgangen;
+                return _Fasen;
             }
         }
 
-        public ObservableCollection<BitmappedItemViewModel> Ingangen
+        public ObservableCollection<BitmappedItemViewModel> Detectoren
         {
             get
             {
-                if (_Ingangen == null)
+                if (_Detectoren == null)
                 {
-                    _Ingangen = new ObservableCollection<BitmappedItemViewModel>();
+                    _Detectoren = new ObservableCollection<BitmappedItemViewModel>();
                 }
-                return _Ingangen;
+                return _Detectoren;
+            }
+        }
+
+        public ObservableCollection<BitmappedItemViewModel> OverigeUitgangen
+        {
+            get
+            {
+                if (_OverigeUitgangen == null)
+                {
+                    _OverigeUitgangen = new ObservableCollection<BitmappedItemViewModel>();
+                }
+                return _OverigeUitgangen;
+            }
+        }
+
+        public ObservableCollection<BitmappedItemViewModel> OverigeIngangen
+        {
+            get
+            {
+                if (_OverigeIngangen == null)
+                {
+                    _OverigeIngangen = new ObservableCollection<BitmappedItemViewModel>();
+                }
+                return _OverigeIngangen;
             }
         }
 
@@ -129,6 +155,16 @@ namespace TLCGen.ViewModels
         {
             get { return _BitmapFileName; }
             set { _BitmapFileName = value; }
+        }
+
+        public string ControllerFileName
+        {
+            get { return _ControllerFileName; }
+            set
+            {
+                _ControllerFileName = value;
+                OnPropertyChanged("IsEnabled");
+            }
         }
 
         #endregion // Properties
@@ -299,22 +335,24 @@ namespace TLCGen.ViewModels
 
         private void CollectAllIO()
         {
-            Uitgangen.Clear();
-            Ingangen.Clear();
+            Fasen.Clear();
+            Detectoren.Clear();
+            OverigeUitgangen.Clear();
+            OverigeIngangen.Clear();
 
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Uitgangen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemViewModel.Type.Fase));
+                Fasen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemViewModel.Type.Fase));
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    Ingangen.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                    Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
                 }
 
             }
 
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                Ingangen.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
             }
         }
 
@@ -398,7 +436,7 @@ namespace TLCGen.ViewModels
 
         private void FillAllIO()
         {
-            foreach (BitmappedItemViewModel bivm in Uitgangen)
+            foreach (BitmappedItemViewModel bivm in Fasen)
             {
                 if (bivm.HasCoordinates)
                 {
@@ -406,12 +444,28 @@ namespace TLCGen.ViewModels
                         FillMyBitmap(p, DefaultFaseColor);
                 }
             }
-            foreach (BitmappedItemViewModel bivm in Ingangen)
+            foreach (BitmappedItemViewModel bivm in Detectoren)
             {
                 if (bivm.HasCoordinates)
                 {
                     foreach (Point p in bivm.Coordinates)
                         FillMyBitmap(p, DefaultDetectorColor);
+                }
+            }
+            foreach (BitmappedItemViewModel bivm in OverigeUitgangen)
+            {
+                if (bivm.HasCoordinates)
+                {
+                    foreach (Point p in bivm.Coordinates)
+                        FillMyBitmap(p, DefaultUitgangColor);
+                }
+            }
+            foreach (BitmappedItemViewModel bivm in OverigeIngangen)
+            {
+                if (bivm.HasCoordinates)
+                {
+                    foreach (Point p in bivm.Coordinates)
+                        FillMyBitmap(p, DefaultIngangColor);
                 }
             }
         }
@@ -420,27 +474,11 @@ namespace TLCGen.ViewModels
 
         #region Collection Changed
 
-        private void Fasen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (BitmappedItemViewModel fcvm in e.NewItems)
-                {
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (BitmappedItemViewModel fcvm in e.OldItems)
-                {
-                }
-            }
-        }
-
         #endregion // Collection Changed
 
         #region TLCGen Message Handling
 
-        private void OnFileNameChanged(FileNameChangedMessage message)
+        private void OnFileNameChanged(ControllerFileNameChangedMessage message)
         {
             _ControllerFileName = message.NewFileName;
         }
@@ -453,7 +491,7 @@ namespace TLCGen.ViewModels
         {
             _FloodFiller = new QueueLinearFloodFiller(null);
 
-            Messenger.Default.Register(this, new Action<FileNameChangedMessage>(OnFileNameChanged));
+            Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
         }
 
         #endregion // Constructor

@@ -50,7 +50,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPTPKoppeling = value;
-                OnPropertyChanged("SelectedDetector");
+                OnPropertyChanged("SelectedPTPKoppeling");
             }
         }
 

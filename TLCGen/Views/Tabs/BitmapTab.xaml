@@ -71,7 +71,7 @@
     </UserControl.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="125" MinWidth="125" />
+            <ColumnDefinition Width="150" MinWidth="150" />
             <ColumnDefinition Width="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -83,14 +83,48 @@
             </Grid.RowDefinitions>
             <TabControl Grid.Column="0" Margin="2" SelectedItem="{Binding Path=SelectedTab}">
                 <TabItem Header="Uitgangen" Name="OutputsTab" >
-                    <ListView ItemsSource="{Binding Path=Uitgangen}" 
-                              SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
-                              SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Fasen"/>
+                        <Label Content="Overig" Grid.Column="1" />
+                        <ListView ItemsSource="{Binding Path=Fasen}" 
+                                  Grid.Column="0" Grid.Row="1" Margin="0,0,2,0"
+                                  SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                        <ListView ItemsSource="{Binding Path=OverigeUitgangen}" 
+                                  Grid.Column="1" Grid.Row="1" Margin="2,0,0,0"
+                                  SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Ingangen" Name="InputsTab">
-                    <ListView ItemsSource="{Binding Path=Ingangen}" 
-                          SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
-                          SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Detectoren"/>
+                        <Label Content="Overig" Grid.Column="1" />
+                        <ListView ItemsSource="{Binding Path=Detectoren}" 
+                                  Grid.Column="0" Grid.Row="1" Margin="0,0,2,0"
+                                  SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                        <ListView ItemsSource="{Binding Path=OverigeIngangen}" 
+                                  Grid.Column="1" Grid.Row="1" Margin="2,0,0,0"
+                                  SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectionMode="Single" ItemTemplate="{StaticResource LVItemCheckBoxTemplate}" />
+                    </Grid>
                 </TabItem>
             </TabControl>
             <Label Grid.Row="1" Content="Bitmap:" />

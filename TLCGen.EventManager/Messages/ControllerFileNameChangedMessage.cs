@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class FileNameChangedMessage
+    public class ControllerFileNameChangedMessage
     {
         public string OldFileName { get; private set; }
         public string NewFileName { get; private set; }
 
-        public FileNameChangedMessage(string newname, string oldname)
+        public ControllerFileNameChangedMessage(string newname, string oldname)
         {
             OldFileName = oldname;
             NewFileName = newname;

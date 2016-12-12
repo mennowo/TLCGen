@@ -49,7 +49,7 @@
     <Compile Include="Messages\DetectorenExtraListChangedMessage.cs" />
     <Compile Include="Messages\FaseDetectorTypeChangedMessage.cs" />
     <Compile Include="Messages\FasenSortedMessage.cs" />
-    <Compile Include="Messages\FileNameChangedMessage.cs" />
+    <Compile Include="Messages\ControllerFileNameChangedMessage.cs" />
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />
     <Compile Include="Messages\NameChangedMessage.cs" />
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
