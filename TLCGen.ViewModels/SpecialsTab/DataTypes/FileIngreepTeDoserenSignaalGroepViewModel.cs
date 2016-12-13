@@ -24,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.FaseCyclus = value;
-                OnPropertyChanged("Detector");
+                OnPropertyChanged("FaseCyclus");
             }
         }
 
@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                OnPropertyChanged("Detector");
+                OnPropertyChanged("DoseerPercentage");
             }
         }
 
@@ -67,7 +67,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        FileIngreepTeDoserenSignaalGroepViewModel(FileIngreepTeDoserenSignaalGroepModel tedoserensg)
+        public FileIngreepTeDoserenSignaalGroepViewModel(FileIngreepTeDoserenSignaalGroepModel tedoserensg)
         {
             _TeDoserenSignaalGroep = tedoserensg;
         }

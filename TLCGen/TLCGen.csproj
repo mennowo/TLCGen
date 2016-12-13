@@ -131,6 +131,9 @@
     <Compile Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml.cs">
       <DependentUpon>OVIngreepSGInstellingenLijstView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepView.xaml.cs">
+      <DependentUpon>FileIngreepView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\SignalenTabView.xaml.cs">
       <DependentUpon>SignalenTabView.xaml</DependentUpon>
     </Compile>
@@ -277,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -28,6 +28,36 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int BezetTijd
+        {
+            get { return _Detector.BezetTijd; }
+            set
+            {
+                _Detector.BezetTijd = value;
+                OnMonitoredPropertyChanged("BezetTijd");
+            }
+        }
+
+        public int RijTijd
+        {
+            get { return _Detector.RijTijd; }
+            set
+            {
+                _Detector.RijTijd = value;
+                OnMonitoredPropertyChanged("RijTijd");
+            }
+        }
+
+        public int AfvalVertraging
+        {
+            get { return _Detector.AfvalVertraging; }
+            set
+            {
+                _Detector.AfvalVertraging = value;
+                OnMonitoredPropertyChanged("AfvalVertraging");
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -57,7 +87,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        FileIngreepDetectorViewModel(FileIngreepDetectorModel detector)
+        public FileIngreepDetectorViewModel(FileIngreepDetectorModel detector)
         {
             _Detector = detector;
         }

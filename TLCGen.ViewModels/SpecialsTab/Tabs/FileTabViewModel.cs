@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -13,79 +15,96 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<FileIngreepViewModel> _FileIngrepen;
-        private ObservableCollection<string> _Fasen;
-        private ObservableCollection<string> _Detectoren;
-        private string _SelectedFaseNaam;
-        private string _SelectedDetectorNaam;
-        
+        private FileIngreepViewModel _SelectedFileIngreep;
+
+        private List<string> _ControllerFasen;
+        private List<string> _ControllerFileDetectoren;
+
+        private RelayCommand _AddFileIngreepCommand;
+        private RelayCommand _RemoveFileIngreepCommand;
+
         #endregion // Fields
 
         #region Properties
 
-        public string SelectedFaseNaam
+        public FileIngreepViewModel SelectedFileIngreep
         {
-            get { return _SelectedFaseNaam; }
+            get { return _SelectedFileIngreep; }
             set
             {
-                _SelectedFaseNaam = value;
-                OnPropertyChanged("SelectedFaseNaam");
+                _SelectedFileIngreep = value;
+                _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                OnPropertyChanged("SelectedFileIngreep");
             }
         }
 
-        public string SelectedDetectorNaam
+        public ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel> FileIngrepen
         {
-            get { return _SelectedDetectorNaam; }
-            set
-            {
-                _SelectedDetectorNaam = value;
-                OnPropertyChanged("SelectedDetectorNaam");
-            }
-        }
-
-        public ObservableCollection<FileIngreepViewModel> FileIngrepen
-        {
-            get
-            {
-                if(_FileIngrepen == null)
-                {
-                    _FileIngrepen = new ObservableCollection<FileIngreepViewModel>();
-                }
-                return _FileIngrepen;
-            }
-        }
-
-        public ObservableCollection<string> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<string>();
-                }
-                return _Fasen;
-            }
-        }
-
-        public ObservableCollection<string> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                {
-                    _Detectoren = new ObservableCollection<string>();
-                }
-                return _Detectoren;
-            }
+            get;
+            private set;
         }
 
         #endregion // Properties
 
         #region Commands
 
+        public ICommand AddFileIngreepCommand
+        {
+            get
+            {
+                if (_AddFileIngreepCommand == null)
+                {
+                    _AddFileIngreepCommand = new RelayCommand(AddNewFileIngreepCommand_Executed, AddNewFileIngreepCommand_CanExecute);
+                }
+                return _AddFileIngreepCommand;
+            }
+        }
+
+        public ICommand RemoveFileIngreepCommand
+        {
+            get
+            {
+                if (_RemoveFileIngreepCommand == null)
+                {
+                    _RemoveFileIngreepCommand = new RelayCommand(RemoveFileIngreepCommand_Executed, RemoveFileIngreepCommand_CanExecute);
+                }
+                return _RemoveFileIngreepCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Command functionality
+
+        void AddNewFileIngreepCommand_Executed(object prm)
+        {
+            FileIngreepModel fim = new FileIngreepModel();
+            int i = FileIngrepen.Count + 1;
+            fim.Naam = "File" + i.ToString();
+            while(!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam))
+            {
+                ++i;
+                fim.Naam = "File" + i.ToString();
+            }
+            FileIngreepViewModel fivm = new FileIngreepViewModel(fim);
+            FileIngrepen.Add(fivm);
+        }
+
+        bool AddNewFileIngreepCommand_CanExecute(object prm)
+        {
+            return true;
+        }
+
+        void RemoveFileIngreepCommand_Executed(object prm)
+        {
+            FileIngrepen.Remove(SelectedFileIngreep);
+            SelectedFileIngreep = null;
+        }
+
+        bool RemoveFileIngreepCommand_CanExecute(object prm)
+        {
+            return SelectedFileIngreep != null;
+        }
 
         #endregion // Command functionality
 
@@ -106,22 +125,29 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            Fasen.Clear();
+            _ControllerFasen = new List<string>();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(fcm.Naam);
+                _ControllerFasen.Add(fcm.Naam);
             }
-            Detectoren.Clear();
+            _ControllerFileDetectoren = new List<string>();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 foreach(DetectorModel dm in fcm.Detectoren)
                 {
-                    Detectoren.Add(dm.Naam);
+                    if(dm.Type == Models.Enumerations.DetectorTypeEnum.File)
+                        _ControllerFileDetectoren.Add(dm.Naam);
                 }
             }
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                Detectoren.Add(dm.Naam);
+                if(dm.Type == Models.Enumerations.DetectorTypeEnum.File)
+                    _ControllerFileDetectoren.Add(dm.Naam);
+            }
+
+            if(_SelectedFileIngreep != null)
+            {
+                _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
             }
         }
 
@@ -131,7 +157,7 @@ namespace TLCGen.ViewModels
 
         public FileTabViewModel(ControllerModel controller) : base(controller)
         {
-
+            FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
         }
 
         #endregion // Constructor

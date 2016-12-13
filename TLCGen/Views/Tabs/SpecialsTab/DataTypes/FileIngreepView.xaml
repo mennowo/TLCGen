@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="TLCGen.Views.FileIngreepView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             x:Name="root"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Style.Triggers>
+                    <Trigger Property="DataContext" Value="{x:Null}">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Naam file ingreep" Grid.Column="0" />
+        <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" />
+        <Label Content="Minimaal aantal meldingen" Grid.Row="1" />
+        <xc:IntegerUpDown Value="{Binding Path=MinimaalAantalMeldingen}" Grid.Column="1" Grid.Row="1" Margin="2" Maximum="{Binding Path=MinimaalAantalMeldingenMax}" Minimum="0" />
+        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+            <Label Content="File detectoren" DockPanel.Dock="Top" />
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                <Label Content="File detector" />
+                <ComboBox ItemsSource="{Binding Path=SelectableDetectoren}" 
+                          SelectedValue="{Binding Path=SelectedDetectorNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
+                <Button Content="Toevoegen" Command="{Binding AddFileDetectorCommand}" Margin="2" />
+                <Button Content="Verwijderen" Command="{Binding RemoveFileDetectorCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left" />
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding Path=FileDetectoren}" DockPanel.Dock="Bottom"
+                          SelectedItem="{Binding Path=SelectedFileDetector}" Margin="2"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.RowHeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Detector}"/>
+                    </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=BezetTijd}" Header="Bezettijd" />
+                    <DataGridTextColumn Binding="{Binding Path=RijTijd}" Header="Rijtijd" />
+                    <DataGridTextColumn Binding="{Binding Path=AfvalVertraging}" Header="Afval vertraging" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+            <Label Content="Te doseren fasen" DockPanel.Dock="Top" />
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                <Label Content="Fase" />
+                <ComboBox ItemsSource="{Binding Path=SelectableFasen}" 
+                          SelectedValue="{Binding Path=SelectedFaseNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
+                <Button Content="Toevoegen" Command="{Binding AddTeDoserenSignaalGroepCommand}" Margin="2" />
+                <Button Content="Verwijderen" Command="{Binding RemoveTeDoserenSignaalGroepCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left" />
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding Path=TeDoserenSignaalGroepen}" DockPanel.Dock="Bottom"
+                          SelectedItem="{Binding Path=SelectedTeDoserenFase}" Margin="2"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                <DataGrid.RowHeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.FaseCyclus}"/>
+                    </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=DoseerPercentage}" Header="Doseer percentage" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</UserControl>

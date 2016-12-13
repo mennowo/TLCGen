@@ -10,5 +10,8 @@ namespace TLCGen.Models
     public class FileIngreepDetectorModel
     {
         public string Detector { get; set; }
+        public int BezetTijd { get; set; }
+        public int RijTijd { get; set; }
+        public int AfvalVertraging { get; set; }
     }
 }

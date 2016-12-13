@@ -7,11 +7,21 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
-            <DataGrid ItemsSource="{Binding Path=FileIngrepen}" SelectedItem="{Binding Path=SelectedFileIngreep}"
+            <Label Content="File ingrepen" DockPanel.Dock="Top" />
+            <Button Content="File ingreep verw." Command="{Binding Path=RemoveFileIngreepCommand}" DockPanel.Dock="Bottom" Margin="2" />
+            <Button Content="File ingreep toev." Command="{Binding Path=AddFileIngreepCommand}" DockPanel.Dock="Bottom" Margin="2" />
+            <DataGrid ItemsSource="{Binding Path=FileIngrepen}" SelectedItem="{Binding Path=SelectedFileIngreep}" DockPanel.Dock="Bottom"
                       CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="2">
-                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Header="Naam" Width="*" IsReadOnly="True" />
+                </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
+        <local:FileIngreepView DataContext="{Binding Path=SelectedFileIngreep}" Grid.Column="1" Margin="2" />
     </Grid>
 </UserControl>
