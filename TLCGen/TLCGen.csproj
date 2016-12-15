@@ -142,9 +142,6 @@
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingDetailsView.xaml.cs">
       <DependentUpon>RoBuGroverSignaalGroepInstellingDetailsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SpecialsTab\Dialogs\RoBuGroverAddConflictGroepDialog.xaml.cs">
-      <DependentUpon>RoBuGroverAddConflictGroepDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabView.xaml.cs">
       <DependentUpon>RoBuGroverTabView.xaml</DependentUpon>
     </Compile>
@@ -300,10 +297,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingDetailsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\SpecialsTab\Dialogs\RoBuGroverAddConflictGroepDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

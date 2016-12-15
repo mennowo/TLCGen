@@ -209,13 +209,13 @@ namespace TLCGen.ViewModels
                             var addfc = _Controller.Fasen.Where(x => x.Define == instvm.FaseCyclus).First();
                             foreach(DetectorModel dm in addfc.Detectoren)
                             {
-                                if(dm.Type == DetectorTypeEnum.Kop)
+                                if(dm.Type == DetectorTypeEnum.Lang)
                                 {
                                     var hd = new RoBuGroverHiaatDetectorModel();
                                     hd.Detector = dm.Naam;
                                     instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
                                 }
-                                if(dm.Type == DetectorTypeEnum.Lang)
+                                if(dm.Type == DetectorTypeEnum.Kop)
                                 {
                                     var fd = new RoBuGroverFileDetectorModel();
                                     fd.Detector = dm.Naam;
@@ -256,13 +256,13 @@ namespace TLCGen.ViewModels
                         var addfc = _Controller.Fasen.Where(x => x.Define == instvm.FaseCyclus).First();
                         foreach (DetectorModel dm in addfc.Detectoren)
                         {
-                            if (dm.Type == DetectorTypeEnum.Kop)
+                            if (dm.Type == DetectorTypeEnum.Lang)
                             {
                                 var hd = new RoBuGroverHiaatDetectorModel();
                                 hd.Detector = dm.Naam;
                                 instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
                             }
-                            if (dm.Type == DetectorTypeEnum.Lang)
+                            if (dm.Type == DetectorTypeEnum.Kop)
                             {
                                 var fd = new RoBuGroverFileDetectorModel();
                                 fd.Detector = dm.Naam;
@@ -362,9 +362,9 @@ namespace TLCGen.ViewModels
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    if (dm.Type == Models.Enumerations.DetectorTypeEnum.Lang)
-                        _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Define);
                     if (dm.Type == Models.Enumerations.DetectorTypeEnum.Kop)
+                        _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Define);
+                    if (dm.Type == Models.Enumerations.DetectorTypeEnum.Lang)
                         _ControllerRGVHiaatDetectoren.Add(dm.Naam, fcm.Define);
                 }
             }

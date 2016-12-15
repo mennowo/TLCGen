@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -14,7 +15,9 @@ namespace TLCGen.Models
         public RoBuGroverMethodeEnum MethodeRoBuGrover { get; set; }
         public bool OphogenTijdensGroen { get; set; }
 
+        [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]
         public List<RoBuGroverConflictGroepModel> ConflictGroepen { get; set; }
+        [XmlArrayItem(ElementName = "RoBuGroverSignaalGroepInstelling")]
         public List<RoBuGroverSignaalGroepInstellingenModel> SignaalGroepInstellingen { get; set; }
 
         public RoBuGroverModel()

@@ -45,7 +45,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label FontWeight="Bold" Content="Fasen" Grid.Column="0" />
-            <ListView Grid.Row="1" Margin="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            <ListView Grid.Row="1" Grid.RowSpan="2" Margin="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ItemsSource="{Binding Path=Fasen}" 
                       SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <ListView.ItemContainerStyle>
@@ -157,7 +157,7 @@
                 </DataGrid.RowHeaderTemplate>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Min. groentijd" Binding="{Binding Path=MinGroenTijd}" />
-                    <DataGridTextColumn Header="Max. groentijd" Binding="{Binding Path=MasGroenTijd}" />
+                    <DataGridTextColumn Header="Max. groentijd" Binding="{Binding Path=MaxGroenTijd}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
             <local:RoBuGroverSignaalGroepInstellingDetailsView DataContext="{Binding Path=SelectedSignaalGroepInstelling}"

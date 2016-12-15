@@ -16,8 +16,8 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="File detectors" Grid.Row="0" Grid.Column="1" />
-        <DataGrid ItemsSource="{Binding Path=FileDetectoren}" Margin="2" Grid.Row="1" Grid.Column="1"
+        <Label Content="File detectors" Grid.Row="0" Grid.Column="0" />
+        <DataGrid ItemsSource="{Binding Path=FileDetectoren}" Margin="2" Grid.Row="1" Grid.Column="0"
                       SelectedItem="{Binding Path=SelectedFileDetector}"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
@@ -31,15 +31,16 @@
                 <DataGridTextColumn Header="File tijd" Binding="{Binding Path=FileTijd}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
             <ComboBox ItemsSource="{Binding Path=SelectableFileDetectoren}" 
                       SelectedValue="{Binding Path=SelectedFileDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
             <Button Content="+" Command="{Binding AddFileDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
             <Button Content="-" Command="{Binding RemoveFileDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
         </StackPanel>
         
-        <Label Content="Hiaat detectors" Grid.Row="0" Grid.Column="0" />
-        <DataGrid ItemsSource="{Binding Path=HiaatDetectoren}" Margin="2" Grid.Row="1" Grid.Column="0"
+        <Label Content="Hiaat detectors" Grid.Row="0" Grid.Column="1" />
+        <DataGrid ItemsSource="{Binding Path=HiaatDetectoren}" Margin="2" Grid.Row="1" Grid.Column="1"
+                  SelectedItem="{Binding Path=SelectedHiaatDetector}"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
@@ -52,7 +53,7 @@
                 <DataGridTextColumn Header="Hiaat tijd" Binding="{Binding Path=HiaatTijd}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
             <ComboBox ItemsSource="{Binding Path=SelectableHiaatDetectoren}" 
                       SelectedValue="{Binding Path=SelectedHiaatDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
             <Button Content="+" Command="{Binding AddHiaatDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
