@@ -272,6 +272,9 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabView.xaml.cs">
       <DependentUpon>VAOntruimenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseView.xaml.cs">
+      <DependentUpon>VAOntruimenFaseView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -477,6 +480,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

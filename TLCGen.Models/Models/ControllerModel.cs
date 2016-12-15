@@ -45,6 +45,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "FileIngreep")]
         public List<FileIngreepModel> FileIngrepen { get; set; }
 
+        [XmlArrayItem(ElementName = "VAOntruimenFase")]
+        public List<VAOntruimenFaseModel> VAOntruimenFasen { get; set; }
+
         public PTPDataModel PTPData { get; set; }
 
         public OVDataModel OVData { get; set; }
@@ -72,6 +75,7 @@ namespace TLCGen.Models
             RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
             FileIngrepen = new List<FileIngreepModel>();
+            VAOntruimenFasen = new List<VAOntruimenFaseModel>();
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();
