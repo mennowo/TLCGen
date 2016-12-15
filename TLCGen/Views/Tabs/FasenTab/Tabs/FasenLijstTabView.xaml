@@ -24,7 +24,7 @@
             ItemsSource="{Binding Path=Fasen}"
             Grid.Row="0"
             SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
-            ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             CanUserAddRows="False"
             CanUserDeleteRows="False"
             AutoGenerateColumns="False" >

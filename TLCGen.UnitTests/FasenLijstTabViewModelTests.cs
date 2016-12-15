@@ -8,6 +8,7 @@ using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.UnitTests
 {
@@ -29,7 +30,11 @@ namespace TLCGen.UnitTests
                 Do(c =>
                 {
                     c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
-                    c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x => x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier);
+                    c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x =>
+                    {
+                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier ||
+                               c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Define && x.Define != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
+                    });
                 });
             Messenger.OverrideDefault(messenger);
             SettingsProvider.OverrideDefault(settingsprovider);
@@ -110,7 +115,7 @@ namespace TLCGen.UnitTests
         }
 
         [Test]
-        public void RemoveFaseCommand_CanExecute_NoFasenPresent_CannotExecute()
+        public void RemoveFaseCommand_NoFasenPresent_CannotExecute()
         {
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
 
@@ -120,19 +125,19 @@ namespace TLCGen.UnitTests
         }
 
         [Test]
-        public void RemoveFaseCommand_CanExecute_FasenPresentAndSelected_CanExecute()
+        public void RemoveFaseCommand_FasenPresentAndSelected_CanExecute()
         {
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
-            vm.SelectedFaseCyclus = vm.Fasen[0];
 
+            vm.SelectedFaseCyclus = vm.Fasen[0];
             bool result = vm.RemoveFaseCommand.CanExecute(null);
 
             Assert.True(result);
         }
 
         [Test]
-        public void AddFaseCommand_CanExecute_NoFasenPresent_CanExecute()
+        public void AddFaseCommand_NoFasenPresent_CanExecute()
         {
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
 
@@ -142,7 +147,7 @@ namespace TLCGen.UnitTests
         }
 
         [Test]
-        public void AddFaseCommand_CanExecute_FasenPresent_CanExecute()
+        public void AddFaseCommand_FasenPresent_CanExecute()
         {
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
@@ -184,6 +189,49 @@ namespace TLCGen.UnitTests
 
             Assert.AreEqual("05", vm.Fasen[2].Naam);
             Assert.AreEqual("08", vm.Fasen[4].Naam);
+        }
+
+        [Test]
+        public void EditFaseInMultipleSelection_VasteAanvraagSetToAltijd_VasteAanvraagAltijdForAllSelectedItems()
+        {
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+
+            vm.SelectedFaseCycli.Add(vm.Fasen[0]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[1]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[2]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[3]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[4]);
+            vm.Fasen[4].VasteAanvraag = NooitAltijdAanUitEnum.Altijd;
+
+            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[0].VasteAanvraag);
+            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[1].VasteAanvraag);
+            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[2].VasteAanvraag);
+            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[3].VasteAanvraag);
+            Assert.AreEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[4].VasteAanvraag);
+        }
+
+        [Test]
+        public void EditFaseInMultipleSelection_VasteAanvraagSetToAltijd_VasteAanvraagNotAltijdForNonSelectedItems()
+        {
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            
+            vm.SelectedFaseCycli.Add(vm.Fasen[1]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[2]);
+            vm.SelectedFaseCycli.Add(vm.Fasen[3]);
+            vm.Fasen[3].VasteAanvraag = NooitAltijdAanUitEnum.Altijd;
+
+            Assert.AreNotEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[0].VasteAanvraag);
+            Assert.AreNotEqual(NooitAltijdAanUitEnum.Altijd, vm.Fasen[4].VasteAanvraag);
         }
     }
 }

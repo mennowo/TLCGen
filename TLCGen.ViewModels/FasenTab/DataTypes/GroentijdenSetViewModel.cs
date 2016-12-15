@@ -17,7 +17,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
         
-        private ObservableCollection<GroentijdViewModel> _GroentijdenSetList;
+        private ObservableCollection<GroentijdViewModel> _Groentijden;
         private GroentijdenSetModel _GroentijdenSet;
 
         #endregion // Fields
@@ -51,11 +51,12 @@ namespace TLCGen.ViewModels
                     case GroentijdenTypeEnum.VerlengGroentijden:
                         this.Naam = "VG" + this.Naam.Substring(2);
                         break;
-                    default:
+                    case GroentijdenTypeEnum.MaxGroentijden:
                         this.Naam = "MG" + this.Naam.Substring(2); 
                         break;
-
                 }
+                OnPropertyChanged("Naam");
+                OnPropertyChanged("Type");
             }
         }
 
@@ -67,15 +68,15 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<GroentijdViewModel> GroentijdenSetList
+        public ObservableCollection<GroentijdViewModel> Groentijden
         {
             get
             {
-                if (_GroentijdenSetList == null)
+                if (_Groentijden == null)
                 {
-                    _GroentijdenSetList = new ObservableCollection<GroentijdViewModel>();
+                    _Groentijden = new ObservableCollection<GroentijdViewModel>();
                 }
-                return _GroentijdenSetList;
+                return _Groentijden;
             }
         }
 
@@ -110,13 +111,13 @@ namespace TLCGen.ViewModels
             GroentijdModel mgm = new GroentijdModel();
             mgm.FaseCyclus = fasedefine;
             mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fasedefine);
-            GroentijdenSetList.Add(new GroentijdViewModel(mgm));
+            Groentijden.Add(new GroentijdViewModel(mgm));
         }
 
         public void RemoveFase(string fasedefine)
         {
             GroentijdViewModel _mgvm = null;
-            foreach (GroentijdViewModel mgvm in GroentijdenSetList)
+            foreach (GroentijdViewModel mgvm in Groentijden)
             {
                 if(mgvm.FaseCyclus == fasedefine)
                 {
@@ -125,7 +126,7 @@ namespace TLCGen.ViewModels
             }
             if(_mgvm != null)
             {
-                GroentijdenSetList.Remove(_mgvm);
+                Groentijden.Remove(_mgvm);
             }
         }
 
@@ -140,10 +141,10 @@ namespace TLCGen.ViewModels
             foreach(GroentijdModel mgm in mgsm.Groentijden)
             {
                 GroentijdViewModel mgvm = new GroentijdViewModel(mgm);
-                GroentijdenSetList.Add(mgvm);
+                Groentijden.Add(mgvm);
             }
 
-            GroentijdenSetList.CollectionChanged += GroentijdenSetList_CollectionChanged;
+            Groentijden.CollectionChanged += GroentijdenSetList_CollectionChanged;
         }
 
         #endregion // Constructor

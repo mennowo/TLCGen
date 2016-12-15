@@ -91,6 +91,8 @@ namespace TLCGen.ViewModels
             TabTypes.Add(attr.Index, typeof(SignalenTabViewModel));
             attr = typeof(VAOntruimenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
             TabTypes.Add(attr.Index, typeof(VAOntruimenTabViewModel));
+            attr = typeof(RoBuGroverTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(RoBuGroverTabViewModel));
 
             foreach (var tab in TabTypes)
             {

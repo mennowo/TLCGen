@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private bool _IsSorting = false;
-        private IList _SelectedFaseCycli;
+        private IList _SelectedFaseCycli = new ArrayList();
 
         #endregion // Fields
 
@@ -59,6 +60,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCycli = value;
+                _SettingMultiple = false;
                 OnPropertyChanged("SelectedFaseCycli");
             }
         }
@@ -214,6 +216,24 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen Event handling
 
+        #region Event handling
+
+        private bool _SettingMultiple = false;
+        private void FaseCyclus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<FaseCyclusViewModel>(sender, e.PropertyName, SelectedFaseCycli);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event handling
+
         #region Collection Changed
 
         private void Fasen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -223,6 +243,7 @@ namespace TLCGen.ViewModels
                 foreach (FaseCyclusViewModel fcvm in e.NewItems)
                 {
                     _Controller.Fasen.Add(fcvm.FaseCyclus);
+                    fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
@@ -267,7 +288,9 @@ namespace TLCGen.ViewModels
         {
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(new FaseCyclusViewModel(fcm));
+                var fcvm = new FaseCyclusViewModel(fcm);
+                fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
+                Fasen.Add(fcvm);
             }
             Fasen.CollectionChanged += Fasen_CollectionChanged;
 

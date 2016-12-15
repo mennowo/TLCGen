@@ -83,6 +83,12 @@
     <Compile Include="Models\PTPKoppelingModel.cs" />
     <Compile Include="Models\RichtingGevoeligeAanvraagModel.cs" />
     <Compile Include="Models\RichtingGevoeligVerlengModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverConflictGroepFaseModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverConflictGroepModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverFileDetectorModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverHiaatDetectorModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverModel.cs" />
+    <Compile Include="Models\RoBuGrover\RoBuGroverSignaalGroepInstellingenModel.cs" />
     <Compile Include="Models\VersieModel.cs" />
     <Compile Include="Models\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

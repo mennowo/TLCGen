@@ -51,6 +51,8 @@ namespace TLCGen.Models
 
         public ModuleMolenModel ModuleMolen { get; set; }
 
+        public RoBuGroverModel RoBuGrover { get; set; }
+
         public CustomDataModel CustomData { get; set; }
 
         #endregion // Properties
@@ -72,6 +74,7 @@ namespace TLCGen.Models
             FileIngrepen = new List<FileIngreepModel>();
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
+            RoBuGrover = new RoBuGroverModel();
         }
 
         #endregion // Constructor

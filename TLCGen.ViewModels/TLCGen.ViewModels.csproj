@@ -113,7 +113,14 @@
     <Compile Include="SpecialsTab\DataTypes\FileIngreepTeDoserenSignaalGroepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\FileIngreepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\PTPKoppelingViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverConflictGroepFaseViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverConflictGroepViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverFileDetectorViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverHiaatDetectorViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingenViewModel.cs" />
+    <Compile Include="SpecialsTab\Other\RoBuGroverTabFaseViewModel.cs" />
     <Compile Include="SpecialsTab\SpecialsTabViewModel.cs" />
+    <Compile Include="SpecialsTab\Tabs\RoBuGroverTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\SignalenTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\VAOntruimenTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\FileTabViewModel.cs" />
@@ -194,6 +201,7 @@
       <SubType>Designer</SubType>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

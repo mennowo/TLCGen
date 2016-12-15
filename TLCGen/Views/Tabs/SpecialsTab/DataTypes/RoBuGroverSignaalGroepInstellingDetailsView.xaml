@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="TLCGen.Views.RoBuGroverSignaalGroepInstellingDetailsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="File detectors" Grid.Row="0" Grid.Column="1" />
+        <DataGrid ItemsSource="{Binding Path=FileDetectoren}" Margin="2" Grid.Row="1" Grid.Column="1"
+                      SelectedItem="{Binding Path=SelectedFileDetector}"
+                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Detector}" />
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="File tijd" Binding="{Binding Path=FileTijd}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
+            <ComboBox ItemsSource="{Binding Path=SelectableFileDetectoren}" 
+                      SelectedValue="{Binding Path=SelectedFileDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
+            <Button Content="+" Command="{Binding AddFileDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
+            <Button Content="-" Command="{Binding RemoveFileDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
+        </StackPanel>
+        
+        <Label Content="Hiaat detectors" Grid.Row="0" Grid.Column="0" />
+        <DataGrid ItemsSource="{Binding Path=HiaatDetectoren}" Margin="2" Grid.Row="1" Grid.Column="0"
+                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Detector}" />
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Hiaat tijd" Binding="{Binding Path=HiaatTijd}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+            <ComboBox ItemsSource="{Binding Path=SelectableHiaatDetectoren}" 
+                      SelectedValue="{Binding Path=SelectedHiaatDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
+            <Button Content="+" Command="{Binding AddHiaatDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
+            <Button Content="-" Command="{Binding RemoveHiaatDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

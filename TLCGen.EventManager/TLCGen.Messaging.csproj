@@ -53,6 +53,7 @@
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />
     <Compile Include="Messages\NameChangedMessage.cs" />
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
+    <Compile Include="Messages\SelectedConflictGroepChangedMessage.cs" />
     <Compile Include="Messages\UpdateTabsEnabledMessage.cs" />
     <Compile Include="Messages\DefineChangedMessage.cs" />
     <Compile Include="Messages\FasenChangedMessage.cs" />

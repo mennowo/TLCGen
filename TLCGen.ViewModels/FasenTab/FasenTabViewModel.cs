@@ -91,23 +91,6 @@ namespace TLCGen.ViewModels
 
         #region Public Methods
 
-        /// <summary>
-        /// Sets the value of the property indicated by propName to the value it has 
-        /// for the parsed instance of PhaseCyclusViewModel for all selected phases
-        /// </summary>
-        /// <param name="o">The instance of PhaseCyclusViewModel to take as the base case</param>
-        /// <param name="propName">The property to set</param>
-        /// 
-#warning TODO
-        //public void SetAllSelectedFasenValue(FaseCyclusViewModel o, string propName)
-        //{
-        //    foreach(FaseCyclusViewModel fcvm in SelectedFaseCycli)
-        //    {
-        //        object value = o.GetType().GetProperty(propName).GetValue(o);
-        //        fcvm.GetType().GetProperty(propName).SetValue(fcvm, value);
-        //    }
-        //}
-
         #endregion // Public Methods
 
         #region IHaveTemplates

@@ -17,7 +17,6 @@ namespace TLCGen.ViewModels
 
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
-        private bool _IsSorting = false;
 
         #endregion // Fields
 
@@ -65,10 +64,14 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            var sel = SelectedFaseCyclus;
             Fasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(new FaseCyclusViewModel(fcm));
+                var fcvm = new FaseCyclusViewModel(fcm);
+                if (sel != null && fcvm.Define == sel.Define)
+                    SelectedFaseCyclus = fcvm;
+                Fasen.Add(fcvm);
             }
         }
 

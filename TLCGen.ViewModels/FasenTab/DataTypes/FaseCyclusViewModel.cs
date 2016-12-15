@@ -111,6 +111,7 @@ namespace TLCGen.ViewModels
                     //    }
                     //}
 
+                    OnMonitoredPropertyChanged("Type");
                     OnMonitoredPropertyChanged(null); // Update all properties
                 }
             }

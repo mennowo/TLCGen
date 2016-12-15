@@ -20,12 +20,14 @@
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 
                     SelectedItem="{Binding Path=SelectedTab}"
-                    SelectedIndex="{Binding Path=SelectedTabIndex}">
+                    SelectedIndex="{Binding Path=SelectedTabIndex}"
+                    TabStripPlacement="Left"
+                    HorizontalContentAlignment="Left">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Border Margin="0">
                         <AdornerDecorator Margin="0">
-                            <StackPanel Orientation="Horizontal" Margin="0">
+                            <StackPanel Orientation="Horizontal" Margin="2">
                                 <Image 
                                     Grid.Column="0" 
                                     Width="15" 

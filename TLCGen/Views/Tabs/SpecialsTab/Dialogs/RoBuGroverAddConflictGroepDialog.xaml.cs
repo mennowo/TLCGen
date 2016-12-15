@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TLCGen.Views
+namespace TLCGen.Views.Tabs.SpecialsTab.Dialogs
 {
     /// <summary>
-    /// Interaction logic for FasenView.xaml
+    /// Interaction logic for RoBuGroverAddConflictGroepDialog.xaml
     /// </summary>
-    public partial class FasenLijstOverView : UserControl
+    public partial class RoBuGroverAddConflictGroepDialog : Window
     {
-        public FasenLijstOverView()
+        public RoBuGroverAddConflictGroepDialog()
         {
             InitializeComponent();
         }
