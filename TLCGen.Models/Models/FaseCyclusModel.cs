@@ -77,7 +77,19 @@ namespace TLCGen.Models
 
         [DisplayName("RatelTikker")]
         [Description("RatelTikker")]
-        public bool RatelTikker { get; set; }
+        public RateltikkerTypeEnum RatelTikkerType { get; set; }
+        [DisplayName("RatelTikker naloop tijd")]
+        [Description("RatelTikker naloop tijd")]
+        public int RatelTikkerNaloopTijd { get; set; }
+
+        public bool ShouldSerializeRatelTikkerType()
+        {
+            return Type == FaseTypeEnum.Voetganger;
+        }
+        public bool ShouldSerializeRatelTikkerNaloopTijd()
+        {
+            return RatelTikkerType == RateltikkerTypeEnum.Hoeflake;
+        }
 
         [Browsable(false)]
         [XmlArrayItem(ElementName = "Detector")]

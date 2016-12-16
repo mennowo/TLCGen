@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.DataAccess;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Models.Settings;
@@ -71,8 +72,7 @@ namespace TLCGen.Settings
             string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
             if (File.Exists(settingsfile))
             {
-                TLCGen.DataAccess.DeserializeT<TLCGenSettingsModel> deserializer = new TLCGen.DataAccess.DeserializeT<TLCGenSettingsModel>();
-                _Settings = deserializer.DeSerialize(settingsfile);
+                _Settings = TLCGenSerialization.DeSerialize<TLCGenSettingsModel>(settingsfile);
             }
             if (_Settings == null)
                 _Settings = new TLCGenSettingsModel();
@@ -84,8 +84,7 @@ namespace TLCGen.Settings
         public void SaveApplicationSettings()
         {
             string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
-            TLCGen.DataAccess.SerializeT<TLCGenSettingsModel> serializer = new TLCGen.DataAccess.SerializeT<TLCGenSettingsModel>();
-            serializer.Serialize(settingsfile, _Settings);
+            TLCGenSerialization.Serialize(settingsfile, _Settings);
         }
 
         #endregion Serialize Methods

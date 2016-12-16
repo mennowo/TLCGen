@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using TLCGen.Messaging;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -37,6 +38,14 @@ namespace TLCGen.ViewModels
         {
             get { return _Controller; }
             set { _Controller = value; }
+        }
+
+        public virtual ImageSource Icon
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public virtual bool OnSelectedPreview()

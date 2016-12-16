@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
@@ -99,6 +100,42 @@
                         </StackPanel.Style>
                         <Label Content="Ontruimingstijd verschil" />
                         <TextBox Text="{Binding Path=MeeverlengenVerschil}" Margin="2" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Rateltikker">
+                <GroupBox.Style>
+                    <Style TargetType="GroupBox">
+                        <Setter Property="IsEnabled" Value="False" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=Type}" Value="Voetganger">
+                                <DataTrigger.Setters>
+                                    <Setter Property="IsEnabled" Value="True" />
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Type" />
+                    <ComboBox Margin="2"
+                        SelectedItem="{Binding Path=RatelTikkerType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RateltikkerTypeEnum}}}" />
+                    <StackPanel>
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="IsEnabled" Value="False" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=RatelTikkerType,UpdateSourceTrigger=PropertyChanged}" Value="Hoeflake">
+                                        <DataTrigger.Setters>
+                                            <Setter Property="IsEnabled" Value="True" />
+                                        </DataTrigger.Setters>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Label Content="Naloop tijd rateltikker" />
+                        <TextBox Text="{Binding Path=RatelTikkerNaloopTijd}" Margin="2" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

@@ -61,6 +61,7 @@
     <Compile Include="PeriodeDagCodeEnum.cs" />
     <Compile Include="PeriodeTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RateltikkerTypeEnum.cs" />
     <Compile Include="RoBuGroverMethodeEnum.cs" />
     <Compile Include="TLCGenVersieEnum.cs" />
     <Compile Include="VLOGTypeEnum.cs" />

@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="TLCGen.GebruikersOpties.GebruikersOptiesLijst"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.GebruikersOpties"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             mc:Ignorable="d" 
+             Name="root"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+        <DataGridTextColumn x:Key="NaamColumn" Binding="{Binding Path=Naam}" Header="Naam" 
+                            Visibility="{Binding Path=ShowNaam, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn x:Key="DefineColumn" Binding="{Binding Path=Define}" Header="Define" 
+                            Visibility="{Binding Path=ShowDefine, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn x:Key="InstellingColumn" Binding="{Binding Path=Instelling}" Header="Instelling" 
+                            Visibility="{Binding Path=ShowInstelling, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridComboBoxColumn x:Key="TypeColumn" Header="Type" 
+                                SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type local:CCOLElementTypeEnum}}}" 
+                                Visibility="{Binding Path=ShowType, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <controls:SpecialDataGrid 
+            x:Name="specialgrid"
+                  ItemsSource="{Binding Path=GridItemsSource,ElementName=root}"
+                  Grid.Row="0"
+                  SelectedItem="{Binding Path=GridSelectedItem,ElementName=root}"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <StaticResource ResourceKey="NaamColumn" />
+                <StaticResource ResourceKey="DefineColumn" />
+                <StaticResource ResourceKey="TypeColumn" />
+                <StaticResource ResourceKey="InstellingColumn" />
+                <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+            </DataGrid.Columns>
+        </controls:SpecialDataGrid>
+    </Grid>
+</UserControl>

@@ -7,7 +7,8 @@
         Importer = 0x2,
         TabControl = 0x4,
         MenuControl = 0x8,
-        ToolBarControl = 0x10
+        ToolBarControl = 0x10,
+        XMLNodeWriter = 0x20
     }
 
     [System.AttributeUsage(System.AttributeTargets.Class)]

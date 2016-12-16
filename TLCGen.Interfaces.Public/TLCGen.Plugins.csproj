@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITLCGenPlugin.cs" />
+    <Compile Include="ITLCGenPluginManager.cs" />
     <Compile Include="ITLCGenToolBar.cs" />
+    <Compile Include="ITLCGenXMLNodeWriter.cs" />
     <Compile Include="TLCGenPluginAttribute.cs" />
     <Compile Include="ITLCGenTabItem.cs" />
     <Compile Include="ITLCGenGenerator.cs" />

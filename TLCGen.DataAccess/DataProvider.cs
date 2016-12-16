@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -19,6 +20,7 @@ namespace TLCGen.DataAccess
         private static DataProvider _Instance;
 
         private ControllerModel _Controller;
+        private XmlDocument _ControllerXml;
         private string _FileName;
 
         #endregion // Fields
@@ -54,6 +56,11 @@ namespace TLCGen.DataAccess
             {
                 _Controller = value;
             }
+        }
+
+        public XmlDocument ControllerXml
+        {
+            get { return _ControllerXml; }
         }
 
         /// <summary>
@@ -116,14 +123,19 @@ namespace TLCGen.DataAccess
         {
             if (!string.IsNullOrWhiteSpace(FileName))
             {
-                DeserializeT<ControllerModel> deserializer = new DeserializeT<ControllerModel>();
-                if(Path.GetExtension(FileName) == ".tlcgz")
-                    Controller = deserializer.DeSerializeGZip(FileName);
+                if (Path.GetExtension(FileName) == ".tlcgz")
+                    Controller = TLCGenSerialization.DeSerializeGZip<ControllerModel>(FileName);
                 else
-                    Controller = deserializer.DeSerialize(FileName);
+                {
+                    Controller = TLCGenSerialization.DeSerialize<ControllerModel>(FileName);
+                }
                 if (Controller != null)
                 {
                     Messenger.Reset();
+
+                    _ControllerXml = new XmlDocument();
+                    _ControllerXml.Load(FileName);
+
                     return true;
                 }
                 else
@@ -140,15 +152,25 @@ namespace TLCGen.DataAccess
         /// <summary>
         /// Saves the currently loaded Controller to the file pointed to by property FileName.
         /// </summary>
+        public void SaveController(XmlDocument document)
+        {
+            if (!string.IsNullOrWhiteSpace(FileName))
+            {
+                document.Save(FileName);
+            }
+            else
+            {
+                throw new NotImplementedException("DataProvider filename not set. Cannot save.");
+            }
+        }
         public void SaveController()
         {
             if (!string.IsNullOrWhiteSpace(FileName))
             {
-                SerializeT<ControllerModel> serializer = new SerializeT<ControllerModel>();
                 if (Path.GetExtension(FileName) == ".tlcgz")
-                    serializer.SerializeGZip(FileName, Controller);
+                    TLCGenSerialization.SerializeGZip(FileName, Controller);
                 else
-                    serializer.Serialize(FileName, Controller);
+                    TLCGenSerialization.Serialize(FileName, Controller);
             }
             else
             {

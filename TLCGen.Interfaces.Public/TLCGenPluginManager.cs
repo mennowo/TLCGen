@@ -9,87 +9,65 @@ using TLCGen.Models;
 
 namespace TLCGen.Plugins
 {
-    public class TLCGenPluginManager
+    public class TLCGenPluginManager : ITLCGenPluginManager
     {
-        private List<ITLCGenPlugin> _AllPlugins;
-        public List<ITLCGenPlugin> AllPlugins
+        #region Fields
+
+        private static readonly object _Locker = new object();
+        private static ITLCGenPluginManager _Default;
+        private List<Tuple<TLCGenPluginElems,Type>> _ApplicationParts;
+        private List<Tuple<TLCGenPluginElems,Type>> _Plugins;
+
+        #endregion // Fields
+
+        #region Properties
+
+        public static ITLCGenPluginManager Default
         {
             get
             {
-                if(_AllPlugins == null)
+                if (_Default == null)
                 {
-                    _AllPlugins = new List<ITLCGenPlugin>();
+                    lock (_Locker)
+                    {
+                        if (_Default == null)
+                        {
+                            _Default = new TLCGenPluginManager();
+                        }
+                    }
                 }
-                return _AllPlugins;
+                return _Default;
             }
         }
 
-        private List<ITLCGenGenerator> _Generators;
-        public List<ITLCGenGenerator> Generators
+        public List<Tuple<TLCGenPluginElems, Type>> ApplicationParts
         {
             get
             {
-                if (_Generators == null)
+                if (_ApplicationParts == null)
                 {
-                    _Generators = new List<ITLCGenGenerator>();
+                    _ApplicationParts = new List<Tuple<TLCGenPluginElems, Type>>();
                 }
-                return _Generators;
+                return _ApplicationParts;
             }
         }
 
-        private List<ITLCGenImporter> _Importers;
-        public List<ITLCGenImporter> Importers
+        public List<Tuple<TLCGenPluginElems,Type>> Plugins
         {
             get
             {
-                if (_Importers == null)
+                if(_Plugins == null)
                 {
-                    _Importers = new List<ITLCGenImporter>();
+                    _Plugins = new List<Tuple<TLCGenPluginElems, Type>>();
                 }
-                return _Importers;
+                return _Plugins;
             }
         }
 
-        private List<ITLCGenMenuItem> _MenuItems;
-        public List<ITLCGenMenuItem> MenuItems
-        {
-            get
-            {
-                if (_MenuItems == null)
-                {
-                    _MenuItems = new List<ITLCGenMenuItem>();
-                }
-                return _MenuItems;
-            }
-        }
+        #endregion // Properties
 
-        private List<ITLCGenTabItem> _TabItems;
-        public List<ITLCGenTabItem> TabItems
-        {
-            get
-            {
-                if (_TabItems == null)
-                {
-                    _TabItems = new List<ITLCGenTabItem>();
-                }
-                return _TabItems;
-            }
-        }
+        #region Plublic methods
 
-        private List<ITLCGenToolBar> _Toolbars;
-        public List<ITLCGenToolBar> Toolbars
-        {
-            get
-            {
-                if (_Toolbars == null)
-                {
-                    _Toolbars = new List<ITLCGenToolBar>();
-                }
-                return _Toolbars;
-            }
-        }
-
-        /// <summary>
         /// Loads settings for a given TLCGen addin, such as a generator or importer. The settings are retrieved from
         /// the instance of CustomDataModel parsed, which is searched for the name of the addin.
         /// The settings are applied to the addin by loading the properties of the Type parsed, and calling
@@ -156,7 +134,7 @@ namespace TLCGen.Plugins
             }
         }
 
-        public TLCGenPluginManager(string pluginpath)
+        public void LoadPlugins(string pluginpath)
         {
             try
             {
@@ -177,33 +155,7 @@ namespace TLCGen.Plugins
                                 var attr = (TLCGenPluginAttribute)Attribute.GetCustomAttribute(t, typeof(TLCGenPluginAttribute));
                                 if (attr != null)
                                 {
-                                    var plugin = Activator.CreateInstance(t);
-
-                                    if ((attr.PluginElements & TLCGenPluginElems.Generator) == TLCGenPluginElems.Generator)
-                                    {
-                                        Generators.Add(plugin as ITLCGenGenerator);
-                                    }
-
-                                    if ((attr.PluginElements & TLCGenPluginElems.Importer) == TLCGenPluginElems.Importer)
-                                    {
-                                        Importers.Add(plugin as ITLCGenImporter);
-                                    }
-
-                                    if ((attr.PluginElements & TLCGenPluginElems.MenuControl) == TLCGenPluginElems.MenuControl)
-                                    {
-                                        MenuItems.Add(plugin as ITLCGenMenuItem);
-                                    }
-
-                                    if ((attr.PluginElements & TLCGenPluginElems.TabControl) == TLCGenPluginElems.TabControl)
-                                    {
-                                        TabItems.Add(plugin as ITLCGenTabItem);
-                                    }
-
-                                    if ((attr.PluginElements & TLCGenPluginElems.ToolBarControl) == TLCGenPluginElems.ToolBarControl)
-                                    {
-                                        TabItems.Add(plugin as ITLCGenTabItem);
-                                    }
-
+                                    Plugins.Add(new Tuple<TLCGenPluginElems, Type>(attr.PluginElements, t));
                                     bFound = true;
                                 }
                             }
@@ -225,5 +177,16 @@ namespace TLCGen.Plugins
                 throw new NotImplementedException();
             }
         }
+
+        #endregion // Plublic methods
+
+        #region Constructor
+
+        public TLCGenPluginManager()
+        {
+
+        }
+
+        #endregion // Constructor
     }
 }

@@ -53,7 +53,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public System.Windows.Media.DrawingImage Icon
+        public System.Windows.Media.ImageSource Icon
         {
             get
             {
@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "TabIcons.xaml");
                 dict.Source = u;
-                return (System.Windows.Media.DrawingImage)dict["BitmapTabDrawingImage"];
+                return (System.Windows.Media.ImageSource)dict["BitmapTabDrawingImage"];
             }
         }
 

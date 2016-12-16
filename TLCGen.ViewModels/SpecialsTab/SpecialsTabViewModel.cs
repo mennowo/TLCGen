@@ -87,8 +87,8 @@ namespace TLCGen.ViewModels
             TabTypes.Add(attr.Index, typeof(PTPKoppelingenTabViewModel));
             attr = typeof(FileTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
             TabTypes.Add(attr.Index, typeof(FileTabViewModel));
-            attr = typeof(SignalenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(SignalenTabViewModel));
+            //attr = typeof(SignalenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            //TabTypes.Add(attr.Index, typeof(SignalenTabViewModel));
             attr = typeof(VAOntruimenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
             TabTypes.Add(attr.Index, typeof(VAOntruimenTabViewModel));
             attr = typeof(RoBuGroverTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;

@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <Compile Include="AutoSelectTextBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleClickDataGridTemplateColumn.cs" />
+    <Compile Include="SpecialDataGrid.cs" />
     <Compile Include="ZoomBorder.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:re="clr-namespace:TLCGen.Views.Resources"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
@@ -75,7 +75,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <re:SpecialDataGrid 
+        <controls:SpecialDataGrid 
             x:Name="specialgrid"
                   ItemsSource="{Binding Path=Detectoren}"
                   Grid.Row="0"
@@ -102,6 +102,6 @@
                 <DataGridCheckBoxColumn Binding="{Binding Path=AanvraagDirect}" Header="Direct" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
                 <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
             </DataGrid.Columns>
-        </re:SpecialDataGrid>
+        </controls:SpecialDataGrid>
     </Grid>
 </UserControl>

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml;
 using TLCGen.DataAccess;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -23,7 +24,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private TLCGenPluginManager _PluginManager;
         private List<IGeneratorViewModel> _Generators;
         private IGeneratorViewModel _SelectedGenerator;
         private TLCGenSettingsViewModel _SettingsVM;
@@ -31,6 +31,7 @@ namespace TLCGen.ViewModels
         private List<MenuItem> _ImportMenuItems;
 
         private SortedDictionary<int, Type> OwnTabTypes = new SortedDictionary<int, Type>();
+        private List<Type> XmlNodeWriterPlugins = new List<Type>();
 
         #endregion // Fields
 
@@ -48,10 +49,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerVM = value;
-                if (_ControllerVM != null)
-                {
-                    _ControllerVM.TabItemTypes = OwnTabTypes;
-                }
                 OnPropertyChanged("ControllerVM");
                 OnPropertyChanged("HasController");
             }
@@ -109,19 +106,29 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private List<ITLCGenImporter> _Importers;
         public List<ITLCGenImporter> Importers
         {
             get
             {
-                return _PluginManager.Importers;
+                if(_Importers == null)
+                {
+                    _Importers = new List<ITLCGenImporter>();
+                }
+                return _Importers;
             }
         }
-        
+
+        private List<ITLCGenTabItem> _TabItems;
         public List<ITLCGenTabItem> TabItems
         {
             get
             {
-                return _PluginManager.TabItems;
+                if(_TabItems == null)
+                {
+                    _TabItems = new List<ITLCGenTabItem>();
+                }
+                return _TabItems;
             }
         }
 
@@ -342,9 +349,9 @@ namespace TLCGen.ViewModels
                     {
                         ControllerVM = null;
                         ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
+                        ControllerVM.LoadPluginDataFromXmlDocument(DataProvider.Instance.ControllerXml);
                         ControllerVM.SelectedTabIndex = 0;
                         OnPropertyChanged("ProgramTitle");
-                        ControllerVM.DoUpdateFasen();
                         Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
                         Messenger.Default.Send(new UpdateTabsEnabledMessage());
                         ControllerVM.SetStatusText("regeling geopend");
@@ -377,7 +384,9 @@ namespace TLCGen.ViewModels
                 }
 
                 // Save data to disk, update saved state
-                DataProvider.Instance.SaveController();
+                DataProvider.Instance.SaveController(_ControllerVM.GetControllerXmlData());
+                //DataProvider.Instance.SaveController();
+
                 ControllerVM.HasChanged = false;
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 ControllerVM.SetStatusText("regeling opgeslagen");
@@ -413,7 +422,10 @@ namespace TLCGen.ViewModels
             {
                 string lastfilename = DataProvider.Instance.FileName;
                 DataProvider.Instance.FileName = saveFileDialog.FileName;
-                DataProvider.Instance.SaveController();
+
+                DataProvider.Instance.SaveController(_ControllerVM.GetControllerXmlData());
+                //DataProvider.Instance.SaveController();
+
                 ControllerVM.HasChanged = false;
                 OnPropertyChanged("ProgramTitle");
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
@@ -460,8 +472,7 @@ namespace TLCGen.ViewModels
 
         private bool GenerateCodeCommand_CanExecute(object prm)
         {
-            return !string.IsNullOrWhiteSpace(DataProvider.Instance.FileName) && 
-                   ControllerVM?.Fasen?.Count > 0;
+            return !string.IsNullOrWhiteSpace(DataProvider.Instance.FileName);
         }
 
         private void GenerateVisualCommand_Executed(object prm)
@@ -473,8 +484,7 @@ namespace TLCGen.ViewModels
         private bool GenerateVisualCommand_CanExecute(object prm)
         {
             return !string.IsNullOrWhiteSpace(DataProvider.Instance.FileName) && 
-                   SelectedGenerator != null && 
-                   ControllerVM?.Fasen?.Count > 0;
+                   SelectedGenerator != null;
         }
 
         private void ImportControllerCommand_Executed(object obj)
@@ -540,6 +550,7 @@ namespace TLCGen.ViewModels
                     ControllerVM.ReloadController();
                     ControllerVM.HasChanged = true;
                 }
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -615,11 +626,15 @@ namespace TLCGen.ViewModels
                             {
 
                                 string name = propertyInfo.Name;
-                                string value = propertyInfo.GetValue(gen, null).ToString();
-                                AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel();
-                                prop.Naam = name;
-                                prop.Setting = value;
-                                gendata.Properties.Add(prop);
+                                var v = propertyInfo.GetValue(gen);
+                                if (v != null)
+                                {
+                                    string value = v.ToString();
+                                    AddinSettingsPropertyModel prop = new AddinSettingsPropertyModel();
+                                    prop.Naam = name;
+                                    prop.Setting = value;
+                                    gendata.Properties.Add(prop);
+                                }
                             }
                             catch
                             {
@@ -732,34 +747,36 @@ namespace TLCGen.ViewModels
                     select t;
             foreach(var type in q)
             {
-                var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(type, typeof(TLCGenTabItemAttribute));
-                if(attr != null && attr.Type == TabItemTypeEnum.MainWindow)
-                {
-                    OwnTabTypes.Add(attr.Index, type);
-                }
+                TLCGenPluginManager.Default.ApplicationParts.Add(new Tuple<TLCGenPluginElems, Type>(TLCGenPluginElems.TabControl, type));
             }
 
             // Load addins
-            _PluginManager = new TLCGenPluginManager(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
+            TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
-            foreach (ITLCGenGenerator gen in _PluginManager.Generators)
+            // Load application wide plugins
+            foreach (var plugin in TLCGenPluginManager.Default.Plugins)
             {
-                Type t = gen.GetType();
-                TLCGenPluginManager.LoadAddinSettings(gen, t, SettingsProvider.Default.Settings.CustomData);
-                Generators.Add(new IGeneratorViewModel(gen));
+                ITLCGenPlugin instpl = null;
+                if (plugin.Item1.HasFlag(TLCGenPluginElems.Generator))
+                {
+                    instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
+                    Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                }
+                if(plugin.Item1.HasFlag(TLCGenPluginElems.Importer))
+                {
+                    instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
+                    MenuItem mi = new MenuItem();
+                    mi.Header = instpl.GetPluginName();
+                    mi.Command = ImportControllerCommand;
+                    mi.CommandParameter = instpl;
+                    ImportMenuItems.Add(mi);
+                }
+                if (instpl != null)
+                {
+                    TLCGenPluginManager.LoadAddinSettings(instpl, plugin.Item2, SettingsProvider.Default.Settings.CustomData);
+                }
             }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
-
-            foreach (ITLCGenImporter imp in _PluginManager.Importers)
-            {
-                Type t = imp.GetType();
-                TLCGenPluginManager.LoadAddinSettings(imp, t, SettingsProvider.Default.Settings.CustomData);
-                MenuItem mi = new MenuItem();
-                mi.Header = imp.GetPluginName();
-                mi.Command = ImportControllerCommand;
-                mi.CommandParameter = imp;
-                ImportMenuItems.Add(mi);
-            }
 
 #warning TODO: also load menu items, tabs, etc.
 
@@ -772,7 +789,6 @@ namespace TLCGen.ViewModels
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
-                ControllerVM.DoUpdateFasen();
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
 #endif

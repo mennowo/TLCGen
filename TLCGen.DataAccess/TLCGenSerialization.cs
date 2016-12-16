@@ -8,14 +8,34 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace TLCGen.DataAccess
 {
-    public class DeserializeT<T>
+    public static class TLCGenSerialization
     {
-        #region XML Serialization
+        #region Xml File Serialization
 
-        public T DeSerialize(string fileName)
+        public static bool Serialize<T>(string file, T t)
+        {
+            bool result = true;
+            try
+            {
+                using (FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write))
+                {
+                    var serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(fs, t);
+                    fs.Close();
+                }
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
+        }
+
+        public static T DeSerialize<T>(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
                 return default(T);
@@ -42,23 +62,13 @@ namespace TLCGen.DataAccess
 
             return t;
         }
-        public T SerializeFromXmlDocument(XmlDocument doc)
+
+        #endregion // Xml File Serialization
+
+        #region XmlDocument Serialization
+
+        public static T SerializeFromXmlDocument<T>(XmlDocument doc)
         {
-            //XmlSerializer ser = new XmlSerializer(typeof(T));
-            //XmlDocument xd = null;
-            //
-            //using (MemoryStream memStm = new MemoryStream())
-            //{
-            //    ser.Serialize(memStm, t);
-            //    XmlReaderSettings settings = new XmlReaderSettings();
-            //    settings.IgnoreWhitespace = true;
-            //
-            //    using (var xtr = XmlReader.Create(memStm, settings))
-            //    {
-            //        xd = new XmlDocument();
-            //        xd.Load(xtr);
-            //    }
-            //}
             T t;
             using (XmlReader r = XmlReader.Create(new StringReader(doc.InnerXml)))
             {
@@ -68,11 +78,24 @@ namespace TLCGen.DataAccess
             return t;
         }
 
-        #endregion // XML Serialization
+        public static XmlDocument SerializeToXmlDocument<T>(T t)
+        {
+            XmlDocument doc = new XmlDocument();
+            XPathNavigator nav = doc.CreateNavigator();
+            using (XmlWriter w = nav.AppendChild())
+            {
+                XmlSerializer ser = new XmlSerializer(typeof(T));
+                ser.Serialize(w, t);
+            }
+
+            return doc;
+        }
+
+        #endregion // XmlDocument Serialization
 
         #region GZip Serialization
 
-        public T DeSerializeGZip(string fileName)
+        public static T DeSerializeGZip<T>(string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
                 return default(T);
@@ -99,6 +122,26 @@ namespace TLCGen.DataAccess
             }
 
             return t;
+        }
+
+        public static bool SerializeGZip<T>(string file, T t)
+        {
+            bool result = true;
+            try
+            {
+                FileStream fs = new FileStream(file, FileMode.Create, FileAccess.Write);
+                using (var gz = new GZipStream(fs, CompressionMode.Compress))
+                {
+                    var serializer = new XmlSerializer(typeof(T));
+                    serializer.Serialize(gz, t);
+                }
+                fs.Close();
+            }
+            catch
+            {
+                result = false;
+            }
+            return result;
         }
 
         #endregion // GZip Serialization

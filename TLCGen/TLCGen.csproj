@@ -533,6 +533,10 @@
       <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
       <Name>TLCGen.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
+      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
+      <Name>TLCGen.Dialogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
@@ -577,6 +581,10 @@
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj">
+      <Project>{deae73bc-0c8e-47bf-b7ae-850617a34949}</Project>
+      <Name>TLCGen.GebruikersOpties</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
@@ -599,7 +607,8 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"
 copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins\TLCGen.Generators.*.dll"
-copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"</PostBuildEvent>
+copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"
+copy /Y "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins\TLCGen.GebruikersOpties.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

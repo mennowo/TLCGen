@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Integrity;
@@ -27,12 +28,9 @@ namespace TLCGen.ViewModels
         private TLCGenStatusBarViewModel _StatusBarVM;
 
         private bool _HasChanged;
-        private bool _IsSortingFasen;
-        private bool _HasChangedFasen;
         private ControllerModel _Controller;
-        private ObservableCollection<FaseCyclusViewModel> _Fasen;
-        private ObservableCollection<DetectorViewModel> _Detectoren;
-        private ObservableCollection<GroentijdenSetViewModel> _MaxGroentijdenSets;
+
+        private List<ITLCGenPlugin> _LoadedPlugins;
 
         private ObservableCollection<ITLCGenTabItem> _TabItems;
         private ITLCGenTabItem _SelectedTab;
@@ -49,23 +47,6 @@ namespace TLCGen.ViewModels
         {
             get { return _Controller; }
             set { _Controller = value; }
-        }
-
-        public SortedDictionary<int, Type> TabItemTypes
-        {
-            set
-            {
-                if (value == null)
-                {
-                    throw new NotImplementedException();
-                }
-                TabItems.Clear();
-                foreach(var tab in value)
-                {
-                    var v = Activator.CreateInstance(tab.Value, _Controller);
-                    TabItems.Add(v as ITLCGenTabItem);
-                }
-            }
         }
 
         public ObservableCollection<ITLCGenTabItem> TabItems
@@ -104,78 +85,6 @@ namespace TLCGen.ViewModels
             {
                 _HasChanged = value;
                 OnPropertyChanged("HasChanged");
-            }
-        }
-
-        /// <summary>
-        /// A property meant to make sorting phases thread safe.
-        /// </summary>
-        public bool IsSortingFasen
-        {
-            get { return _IsSortingFasen; }
-            set
-            {
-                _IsSortingFasen = value;
-                OnPropertyChanged("IsSortingFasen");
-            }
-        }
-
-        /// <summary>
-        /// Indicates if changes have been made to the list of phases. This value is used to update
-        /// the model accordingly, so phases can be sorted, etc.
-        /// </summary>
-        public bool HasChangedFasen
-        {
-            get { return _HasChangedFasen; }
-            set
-            {
-                _HasChangedFasen = value;
-                OnPropertyChanged("HasChanged");
-            }
-        }
-
-        /// <summary>
-        /// ObservableCollection of phases that belong to the controller
-        /// </summary>
-        public ObservableCollection<FaseCyclusViewModel> Fasen
-        {
-            get
-            {
-                if (_Fasen == null)
-                {
-                    _Fasen = new ObservableCollection<FaseCyclusViewModel>();
-                }
-                return _Fasen;
-            }
-        }
-
-        /// <summary>
-        /// ObservableCollection of detectors that are 'extra', in that they do not belong to any phase
-        /// </summary>
-        public ObservableCollection<DetectorViewModel> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                {
-                    _Detectoren = new ObservableCollection<DetectorViewModel>();
-                }
-                return _Detectoren;
-            }
-        }
-
-        /// <summary>
-        /// ObservableCollection of sets of maxgreen times for phases
-        /// </summary>
-        public ObservableCollection<GroentijdenSetViewModel> MaxGroentijdenSets
-        {
-            get
-            {
-                if (_MaxGroentijdenSets == null)
-                {
-                    _MaxGroentijdenSets = new ObservableCollection<GroentijdenSetViewModel>();
-                }
-                return _MaxGroentijdenSets;
             }
         }
 
@@ -227,23 +136,6 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        /// <summary>
-        /// Sorts property ObservableCollection<FaseCyclusViewModel> Fasen. 
-        /// For this to not disrupt the model data, we temporarily disconnect method Fasen_CollectionChanged
-        /// from the CollectionChanged event.
-        /// </summary>
-        public void SortFasen()
-        {
-            if (!IsSortingFasen)
-            {
-                IsSortingFasen = true;
-                Fasen.BubbleSort();
-                //FasenTabVM.SortMaxGroenSetsFasen();
-#warning TODO: check above.
-                IsSortingFasen = false;
-            }
-        }
-
         #endregion
 
         #region Public methods
@@ -254,27 +146,7 @@ namespace TLCGen.ViewModels
         public void ReloadController()
         {
             OnPropertyChanged(null);
-            HasChangedFasen = true;
-            DoUpdateFasen();
             SelectedTabIndex = 0;
-        }
-
-        /// <summary>
-        /// Updates the phases collection: sorting, rebuilding conflict matrix, etc.
-        /// Only does something if phases have changed or are not sorted.
-        /// </summary>
-        /// <returns>True if it took action, false if not.</returns>
-        public bool DoUpdateFasen()
-        {
-            if (!Fasen.IsSorted() || HasChangedFasen)
-            {
-                // Sort, update
-                SortFasen();
-                HasChangedFasen = false;
-                
-                return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -310,6 +182,35 @@ namespace TLCGen.ViewModels
         public void SetStatusText(string statustext)
         {
             StatusBarVM.StatusText = DateTime.Now.ToLongTimeString() + " -> " + statustext;
+        }
+
+        public XmlDocument GetControllerXmlData()
+        {
+            var doc = TLCGenSerialization.SerializeToXmlDocument(_Controller);
+            foreach (var v in _LoadedPlugins)
+            {
+                if (v is ITLCGenXMLNodeWriter)
+                {
+                    var writer = (ITLCGenXMLNodeWriter)v;
+                    writer.SetXmlInDocument(doc);
+                }
+            }
+            return doc;
+        }
+
+        public void LoadPluginDataFromXmlDocument(XmlDocument document)
+        {
+            if (document == null)
+                return;
+
+            foreach (var v in _LoadedPlugins)
+            {
+                if (v is ITLCGenXMLNodeWriter)
+                {
+                    var writer = (ITLCGenXMLNodeWriter)v;
+                    writer.GetXmlFromDocument(document);
+                }
+            }
         }
 
         #endregion // Public methods
@@ -437,22 +338,34 @@ namespace TLCGen.ViewModels
         public ControllerViewModel(ControllerModel controller)
         {
             _Controller = controller;
+            _LoadedPlugins = new List<ITLCGenPlugin>();
 
-            // Add data from the Model to the ViewModel structure
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            var tabs = new SortedDictionary<int, ITLCGenTabItem>();
+            foreach(var v in TLCGenPluginManager.Default.ApplicationParts)
             {
-                FaseCyclusViewModel fcvm = new FaseCyclusViewModel(fcm);
-                Fasen.Add(fcvm);
+                if(v.Item1.HasFlag(TLCGenPluginElems.TabControl))
+                {
+                    var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(v.Item2, typeof(TLCGenTabItemAttribute));
+                    if (attr != null && attr.Type == TabItemTypeEnum.MainWindow)
+                    {
+                        tabs.Add(attr.Index, (ITLCGenTabItem)Activator.CreateInstance(v.Item2, _Controller));
+                    }
+                }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
+            foreach (var v in TLCGenPluginManager.Default.Plugins)
             {
-                DetectorViewModel dvm = new DetectorViewModel(dm);
-                Detectoren.Add(dvm);
+                if (v.Item1.HasFlag(TLCGenPluginElems.TabControl))
+                {
+                    int i = tabs.Count;
+                    var tab = (ITLCGenTabItem)Activator.CreateInstance(v.Item2);
+                    tab.Controller = _Controller;
+                    tabs.Add(i, tab);
+                    _LoadedPlugins.Add(tab as ITLCGenPlugin);
+                }
             }
-            foreach (GroentijdenSetModel mgm in _Controller.GroentijdenSets)
+            foreach(var tab in tabs)
             {
-                GroentijdenSetViewModel mgvm = new GroentijdenSetViewModel(mgm);
-                MaxGroentijdenSets.Add(mgvm);
+                TabItems.Add(tab.Value);   
             }
 
             Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));

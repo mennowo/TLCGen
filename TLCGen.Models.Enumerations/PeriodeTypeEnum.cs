@@ -13,12 +13,18 @@ namespace TLCGen.Models.Enumerations
     {
         [Description("Groentijden")]
         Groentijden,
-        [Description("Rateltikkers")]
-        Rateltikkers,
+        [Description("Rateltikkers altijd")]
+        RateltikkersAltijd,
+        [Description("Rateltikkers op aanvraag")]
+        RateltikkersAanvraag,
+        [Description("Rateltikkers dimmen")]
+        RateltikkersDimmen,
         [Description("Waarschuwingslichten")]
         WaarschuwingsLichten,
-        [Description("Bellen")]
-        Bellen,
+        [Description("Bellen actief")]
+        BellenActief,
+        [Description("Bellen dimmen")]
+        BellenDimmen,
         [Description("Overig")]
         Overig
     }

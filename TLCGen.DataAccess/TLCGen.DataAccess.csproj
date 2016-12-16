@@ -64,9 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataProvider.cs" />
-    <Compile Include="DeserializeT.cs" />
+    <Compile Include="TLCGenSerialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerializeT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">

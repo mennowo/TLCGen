@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public DrawingImage Icon
+        public ImageSource Icon
         {
             get
             {
@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "TabIcons.xaml");
                 dict.Source = u;
-                return (DrawingImage)dict["AlgemeenTabDrawingImage"];
+                return (ImageSource)dict["AlgemeenTabDrawingImage"];
             }
         }
 

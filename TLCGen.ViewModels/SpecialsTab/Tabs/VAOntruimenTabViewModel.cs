@@ -17,10 +17,6 @@ namespace TLCGen.ViewModels
         private string _SelectedFaseNaam;
         private Dictionary<string, string> _ControllerFasen;
         private VAOntruimenFaseViewModel _SelectedVAOntruimenFase;
-        private bool _SelectedFaseHasVAOntruimen;
-
-        private RelayCommand _AddVAOntruimenFaseCommand;
-        private RelayCommand _RemoveVAOntruimenFaseCommand;
 
         #endregion // Fields
 
@@ -128,54 +124,9 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddVAOntruimenFaseCommand
-        {
-            get
-            {
-                if (_AddVAOntruimenFaseCommand == null)
-                {
-                    _AddVAOntruimenFaseCommand = new RelayCommand(AddNewVAOntruimenFaseCommand_Executed, AddNewVAOntruimenFaseCommand_CanExecute);
-                }
-                return _AddVAOntruimenFaseCommand;
-            }
-        }
-
-        public ICommand RemoveVAOntruimenFaseCommand
-        {
-            get
-            {
-                if (_RemoveVAOntruimenFaseCommand == null)
-                {
-                    _RemoveVAOntruimenFaseCommand = new RelayCommand(RemoveVAOntruimenFaseCommand_Executed, RemoveVAOntruimenFaseCommand_CanExecute);
-                }
-                return _RemoveVAOntruimenFaseCommand;
-            }
-        }
-
         #endregion // Commands
 
         #region Command functionality
-
-        void AddNewVAOntruimenFaseCommand_Executed(object prm)
-        {
-            
-        }
-
-        bool AddNewVAOntruimenFaseCommand_CanExecute(object prm)
-        {
-            return true;
-        }
-
-        void RemoveVAOntruimenFaseCommand_Executed(object prm)
-        {
-            VAOntruimenFasen.Remove(SelectedVAOntruimenFase);
-            SelectedVAOntruimenFase = null;
-        }
-
-        bool RemoveVAOntruimenFaseCommand_CanExecute(object prm)
-        {
-            return SelectedVAOntruimenFase != null;
-        }
 
         #endregion // Command functionality
 

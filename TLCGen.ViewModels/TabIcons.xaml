@@ -297,34 +297,64 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="ModulesTabDrawingImage" Drawing="{StaticResource ModulesTabDrawingGroup}" />
-  <Geometry x:Key="SpecialsTabGeometry">F1 M16,16z M0,0z M342.53632,504.2349L339.09649,504.2349 339.09649,507.66551 337.38118,507.66551 337.38118,504.2349 333.94135,504.2349 333.94135,502.51037 337.38118,502.51037 337.38118,499.07976 339.09649,499.07976 339.09649,502.51037 342.53632,502.51037 342.53632,504.2349z</Geometry>
+  <Geometry x:Key="SpecialsTabGeometry1">F1 M16,16z M0,0z M338.97162,499.0836L338.97162,505.05108C338.97162,505.26067,338.80288,505.42941,338.59329,505.42941L334.65169,505.42941</Geometry>
+  <Geometry x:Key="SpecialsTabGeometry2">F1 M16,16z M0,0z M342.50056,507.52255L344.65836,509.64944</Geometry>
+  <Geometry x:Key="SpecialsTabGeometry3">F1 M16,16z M0,0z M335.90975,504.31638C335.86865,504.12532 335.84715,503.92706 335.84715,503.72375 335.84715,502.17165 337.10538,500.91343 338.65749,500.91343</Geometry>
   <DrawingGroup x:Key="SpecialsTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
     <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FF000000" Opacity="1" Transform="1,0,0,1,330.23883,495.37265" />
-        </GeometryDrawing.Brush>
+      <GeometryDrawing Brush="#FF87AADE">
         <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.54669225" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+          <Pen Brush="#FF000000" Thickness="0.97317314" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
         </GeometryDrawing.Pen>
         <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M8,14.963798L14.9675875,14.963798 14.9637875,7.9999995" />
+          <RectangleGeometry RadiusX="0.3435" RadiusY="0.3435" Rect="331.0473,496.6865,7.1118,7.6102" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing>
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+        <GeometryDrawing.Geometry>
+          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
       <GeometryDrawing>
         <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FFFF9955" Opacity="1" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" />
+          <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
         </GeometryDrawing.Brush>
         <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
         </GeometryDrawing.Pen>
         <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" Figures="M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,2.8199427A5.2991977,5.2991977,0,0,1,-15.761716,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,-7.7784526A5.2991977,5.2991977,0,0,1,-5.163321,-2.479255z" />
+          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
-      <DrawingGroup>
-        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource SpecialsTabGeometry}" />
-      </DrawingGroup>
+      <GeometryDrawing Geometry="{StaticResource SpecialsTabGeometry1}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="1.25495756" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource SpecialsTabGeometry2}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="2.62776661" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing>
+        <GeometryDrawing.Brush>
+          <SolidColorBrush Color="#FF44AA00" Opacity="0.64135018" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
+        </GeometryDrawing.Brush>
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+        <GeometryDrawing.Geometry>
+          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing Geometry="{StaticResource SpecialsTabGeometry3}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="0.86123097" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="SpecialsTabDrawingImage" Drawing="{StaticResource SpecialsTabDrawingGroup}" />

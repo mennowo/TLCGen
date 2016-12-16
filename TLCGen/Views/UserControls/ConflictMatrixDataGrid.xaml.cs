@@ -28,8 +28,7 @@ namespace TLCGen.Views
         private DataGridColumn _PreviousCol = null;
         private Style styleSelectedC;
         private Style styleSelectedR;
-
-        // Using a DependencyProperty as the backing store for ConflictMatrix.  This enables animation, styling, binding, etc...
+        
         public static readonly DependencyProperty ConflictMatrixProperty =
             DependencyProperty.Register("ConflictMatrix", typeof(Array), typeof(ConflictMatrixDataGrid), new PropertyMetadata(default(Array)));
 
@@ -44,8 +43,7 @@ namespace TLCGen.Views
             get { return (object)GetValue(GridSelectedItemProperty); }
             set { SetValue(GridSelectedItemProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for SelectedItem.  This enables animation, styling, binding, etc...
+        
         public static readonly DependencyProperty GridSelectedItemProperty =
             DependencyProperty.Register("GridSelectedItem", typeof(object), typeof(ConflictMatrixDataGrid), new PropertyMetadata(null));
 

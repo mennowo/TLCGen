@@ -1,0 +1,33 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="GebruikersOptiesTabGeometry">F1 M16,16z M0,0z M342.53632,504.2349L339.09649,504.2349 339.09649,507.66551 337.38118,507.66551 337.38118,504.2349 333.94135,504.2349 333.94135,502.51037 337.38118,502.51037 337.38118,499.07976 339.09649,499.07976 339.09649,502.51037 342.53632,502.51037 342.53632,504.2349z</Geometry>
+  <DrawingGroup x:Key="GebruikersOptiesTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+      <GeometryDrawing>
+        <GeometryDrawing.Brush>
+          <SolidColorBrush Color="#FF000000" Opacity="1" Transform="1,0,0,1,330.23883,495.37265" />
+        </GeometryDrawing.Brush>
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="1.54669225" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" />
+        </GeometryDrawing.Pen>
+        <GeometryDrawing.Geometry>
+          <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M8,14.963798L14.9675875,14.963798 14.9637875,7.9999995" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <GeometryDrawing>
+        <GeometryDrawing.Brush>
+          <SolidColorBrush Color="#FFFF9955" Opacity="1" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" />
+        </GeometryDrawing.Brush>
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+        </GeometryDrawing.Pen>
+        <GeometryDrawing.Geometry>
+          <PathGeometry FillRule="Nonzero" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" Figures="M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,2.8199427A5.2991977,5.2991977,0,0,1,-15.761716,-2.479255A5.2991977,5.2991977,0,0,1,-10.462519,-7.7784526A5.2991977,5.2991977,0,0,1,-5.163321,-2.479255z" />
+        </GeometryDrawing.Geometry>
+      </GeometryDrawing>
+      <DrawingGroup>
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource GebruikersOptiesTabGeometry}" />
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="GebruikersOptiesTabDrawingImage" Drawing="{StaticResource GebruikersOptiesTabDrawingGroup}" />
+</ResourceDictionary>
