@@ -18,7 +18,8 @@ namespace TLCGen.Models
         public TimeSpan StartTijd { get; set; }
         [XmlIgnore]
         public TimeSpan EindTijd { get; set; }
-        public string GroentijdenSet { get; set; }
+        public string GroentijdenSet { get; set; } 
+        public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         // Properties for serialization
         [XmlElement("StartTijd")]
@@ -46,10 +47,16 @@ namespace TLCGen.Models
             }
         }
 
+        public bool ShouldSerializeBitmapData()
+        {
+            return Type == PeriodeTypeEnum.Groentijden || Type == PeriodeTypeEnum.Overig;
+        }
+
         public PeriodeModel()
         {
             StartTijd = new TimeSpan();
             EindTijd = new TimeSpan();
+            BitmapData = new BitmapCoordinatenDataModel();
         }
     }
 }

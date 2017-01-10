@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public partial class CCOLGenerator
     {
         private string GenerateRegC(ControllerModel controller)
         {

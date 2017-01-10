@@ -18,7 +18,7 @@ namespace TLCGen.Models
         #region Properties
 
         public string Define { get; set; }
-        public string Naam { get; set; }
+        public override string Naam { get; set; }
         public string VissimNaam { get; set; }
         public int? TDB { get; set; }
         public int? TDH { get; set; }
@@ -28,12 +28,19 @@ namespace TLCGen.Models
         public int? CFL { get; set; }
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
+        
+        public BitmapCoordinatenDataModel WachtlichtBitmapData { get; set; }
 
         public DetectorSimulatieModel Simulatie { get; set; }
 
         public DetectorTypeEnum Type { get; set; }
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
         public DetectorVerlengenTypeEnum Verlengen { get; set; }
+
+        public bool ShouldSerializeWachtlichtBitmapData()
+        {
+            return Wachtlicht;
+        }
 
         #endregion // Properties
 
@@ -75,6 +82,7 @@ namespace TLCGen.Models
 
         public DetectorModel() : base()
         {
+            WachtlichtBitmapData = new BitmapCoordinatenDataModel();
             Simulatie = new DetectorSimulatieModel();
         }
 

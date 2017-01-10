@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -14,25 +15,12 @@ namespace TLCGen.Generators.CCOL
     {
         #region ITLCGenGenerator
 
-        public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
+        public UserControl GeneratorView
         {
-            string result = "niets gegenereerd, dit is een placeholder/demo plugin!";
-
-            return result;
-        }
-
-        public string GenerateProjectFiles(ControllerModel controller, string projectfilepath)
-        {
-            string result = "";
-
-            return result;
-        }
-
-        public string GenerateSpecification(ControllerModel controller, string specificationfilepath)
-        {
-            string result = "";
-
-            return result;
+            get
+            {
+                return null;
+            }
         }
 
         public string GetGeneratorName()
@@ -48,6 +36,12 @@ namespace TLCGen.Generators.CCOL
         public string GetPluginName()
         {
             return GetGeneratorName();
+        }
+
+        public ControllerModel Controller
+        {
+            get;
+            set;
         }
 
         #endregion // ITLCGenGenerator

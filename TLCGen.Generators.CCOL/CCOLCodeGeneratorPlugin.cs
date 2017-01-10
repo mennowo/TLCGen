@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using TLCGen.CustomPropertyEditors;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -14,51 +16,23 @@ using TLCGen.Plugins;
 namespace TLCGen.Generators.CCOL
 {
     [TLCGenPlugin(TLCGenPluginElems.Generator)]
-    public partial class CCOLCodeGenerator : ITLCGenGenerator
+    public class CCOLCodeGeneratorPlugin : ITLCGenGenerator, ITLCGenPlugMessaging
     {
         #region ITLCGenGenerator
 
-        public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
+        private UserControl _GeneratorInterface;
+        public UserControl GeneratorView
         {
-            if (Directory.Exists(sourcefilepath))
+            get
             {
-                CollectAllCCOLElements(controller);
-
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.c"), GenerateRegC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.c"), GenerateTabC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.c"), GenerateDplC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.c"), GenerateSimC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.h"), GenerateSysH(controller));
-
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add"), GenerateRegAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.add"), GenerateTabAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.add"), GenerateDplAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add"), GenerateSimAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add"), GenerateSysAdd(controller));
-                return "CCOL source code gegenereerd";
+                if (_GeneratorInterface == null)
+                {
+                    _GeneratorInterface = new CCOLCodeGeneratorView();
+                    _MyVM = new CCOLCodeGeneratorViewModel(this);
+                    _GeneratorInterface.DataContext = _MyVM;
+                }
+                return _GeneratorInterface;
             }
-            return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
-        }
-
-        public string GenerateProjectFiles(ControllerModel controller, string projectfilepath)
-        {
-            string result = "test";
-
-            File.WriteAllText(Path.Combine(projectfilepath, $"{controller.Data.Naam}.vcxproj"), GenerateVisualStudioProjectFiles(controller));
-
-            return result;
-        }
-
-        public string GenerateSpecification(ControllerModel controller, string specificationfilepath)
-        {
-            string result = "";
-
-            return result;
         }
 
         public string GetGeneratorName()
@@ -68,7 +42,7 @@ namespace TLCGen.Generators.CCOL
 
         public string GetGeneratorVersion()
         {
-            return "0.1 (alfa)";
+            return "0.11 (alfa)";
         }
 
         public string GetPluginName()
@@ -77,23 +51,44 @@ namespace TLCGen.Generators.CCOL
         }
 
 
+        public ControllerModel Controller
+        {
+            get;
+            set;
+        }
+
         #endregion // ITLCGenGenerator
+
+        #region ITLCGenPlugMessaging
+
+        public void UpdateTLCGenMessaging()
+        {
+            Messenger.Default.Register(this, new Action<Messaging.Messages.ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
+            Messenger.Default.Register(this, new Action<Messaging.Messages.ControllerDataChangedMessage>(OnControllerDataChanged));
+        }
+
+        #endregion // ITLCGenPlugMessaging
+
+        #region Properties
+
+        public string ControllerFileName { get; set; }
+
+        #endregion // Properties
 
         #region Fields
 
-        private CCOLElemListData Uitgangen;
-        private CCOLElemListData Ingangen;
-        private CCOLElemListData HulpElementen;
-        private CCOLElemListData GeheugenElementen;
-        private CCOLElemListData Timers;
-        private CCOLElemListData Counters;
-        private CCOLElemListData Schakelaars;
-        private CCOLElemListData Parameters;
-        private List<DetectorModel> AlleDetectoren;
-
-        private string tabspace = "    ";
+        private CCOLCodeGeneratorViewModel _MyVM;
 
         #endregion // Fields
+
+        #region Static Public Methods
+
+        public static string GetVersion()
+        {
+            return "0.11 (alfa)";
+        }
+
+        #endregion // Static Public Methods
 
         #region Setting Properties
 
@@ -169,5 +164,25 @@ namespace TLCGen.Generators.CCOL
 
         #endregion // Setting Properties
 
+        #region TLCGen Events
+
+        private void OnControllerFileNameChanged(TLCGen.Messaging.Messages.ControllerFileNameChangedMessage msg)
+        {
+            ControllerFileName = msg.NewFileName;
+        }
+
+        private void OnControllerDataChanged(TLCGen.Messaging.Messages.ControllerDataChangedMessage msg)
+        {
+        }
+
+        #endregion // TLCGen Events
+
+        #region Constructor
+
+        public CCOLCodeGeneratorPlugin()
+        {
+        }
+
+        #endregion // Constructor
     }
 }

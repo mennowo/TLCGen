@@ -16,6 +16,12 @@ namespace TLCGen.ViewModels
             get { return _Generator; }
         }
 
+        public System.Windows.Controls.UserControl GeneratorView
+        {
+            get { return _Generator.GeneratorView; }
+        }
+
+
         public string Naam
         {
             get

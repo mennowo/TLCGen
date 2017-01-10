@@ -17,6 +17,7 @@ using TLCGen.Messaging.Messages;
 using System.Windows.Media.Imaging;
 using TLCGen.Messaging;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -340,19 +341,96 @@ namespace TLCGen.ViewModels
             OverigeUitgangen.Clear();
             OverigeIngangen.Clear();
 
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+#warning Need to change this to reflect settings prefixes etc
+
+            // SignalGroups + Detectors + Waitsignalen + Rateltikkers
+            foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemViewModel.Type.Fase));
-                foreach (DetectorModel dm in fcm.Detectoren)
+                if(fcm.RatelTikkerType != Models.Enumerations.RateltikkerTypeEnum.Geen)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)fcm.RatelTikkerBitmapData, "rt" + fcm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                }
+                foreach (var dm in fcm.Detectoren)
                 {
                     Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                    if (dm.Wachtlicht)
+                    {
+                        OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    }
                 }
 
             }
 
-            foreach (DetectorModel dm in _Controller.Detectoren)
+            foreach (var dm in _Controller.Detectoren)
             {
                 Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                if (dm.Wachtlicht)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
+
+            foreach(var gr in _Controller.WaarschuwingsGroepen)
+            {
+                if(gr.Bellen)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.BellenBitmapData, "wschlgr" + gr.Naam, BitmappedItemViewModel.Type.Uitgang));
+                }
+                if(gr.Lichten)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.LichtenBitmapData, "belgr" + gr.Naam, BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
+
+            // Dimmen rateltikkers
+            if(_Controller.Fasen.Where(x => x.RatelTikkerType != Models.Enumerations.RateltikkerTypeEnum.Geen).Any())
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RateltikkersDimmenCoordinaten, "rtdim", BitmappedItemViewModel.Type.Uitgang));
+            }
+
+            // Dimmen bellen
+            if (_Controller.WaarschuwingsGroepen.Where(x => x.Bellen == true).Any())
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.BellenDimmenCoordinaten, "beldim", BitmappedItemViewModel.Type.Uitgang));
+            }
+
+            // Klokperioden
+            foreach(var per in _Controller.Perioden)
+            {
+                if(per.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden || per.Type == Models.Enumerations.PeriodeTypeEnum.Overig)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, per.Naam, BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
+
+            // OV / HD
+            foreach(var ov in _Controller.OVData.OVIngrepen)
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(ov.OVInmeldingBitmapData, "vc" + ov.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
+            }
+            foreach (var hd in _Controller.OVData.HDIngrepen)
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(hd.HDInmeldingBitmapData, "vchd" + hd.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
+            }
+
+            // IO from plugins
+            foreach (var v in TLCGenPluginManager.Default.LoadedPlugins)
+            {
+                var pl = v as ITLCGenIOElementProvider;
+                if(v != null)
+                {
+                    var initems = ((ITLCGenIOElementProvider)v).GetInputItems();
+                    var outitems = ((ITLCGenIOElementProvider)v).GetOutputItems();
+                    foreach(var i in initems)
+                    {
+                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemViewModel.Type.Ingang));
+                    }
+                    foreach (var o in outitems)
+                    {
+                        OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    }
+                }
             }
         }
 

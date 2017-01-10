@@ -363,9 +363,22 @@ namespace TLCGen.ViewModels
                     _LoadedPlugins.Add(tab as ITLCGenPlugin);
                 }
             }
+#warning Implement other plugins, like bars, menus etc.
             foreach(var tab in tabs)
             {
-                TabItems.Add(tab.Value);   
+                TabItems.Add(tab.Value);
+            }
+
+            TLCGenPluginManager.Default.LoadedPlugins.Clear();
+            foreach(var pl in _LoadedPlugins)
+            {
+                TLCGenPluginManager.Default.LoadedPlugins.Add(pl);
+
+                var messpl = pl as ITLCGenPlugMessaging;
+                if(messpl != null)
+                {
+                    messpl.UpdateTLCGenMessaging();
+                }
             }
 
             Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));

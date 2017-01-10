@@ -16,6 +16,7 @@ namespace TLCGen.Models
         public bool Opticom { get; set; }
         public bool Sirene { get; set; }
         public int GroenBewaking { get; set; }
+        public BitmapCoordinatenDataModel HDInmeldingBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
         public List<HDIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; }
@@ -23,6 +24,7 @@ namespace TLCGen.Models
         public HDIngreepModel()
         {
             MeerealiserendeFaseCycli = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
+            HDInmeldingBitmapData = new BitmapCoordinatenDataModel();
         }
     }
 }

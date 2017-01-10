@@ -121,12 +121,7 @@
             </ToolBar>
             <ToolBar>
                 <ComboBox ItemsSource="{Binding Generators}" SelectedItem="{Binding SelectedGenerator,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Naam" />
-                <Button Command="{Binding Path=GenerateCommand}" ToolTip="Genereren CCOL code (Ctrl-G)" >
-                    <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16" />
-                </Button>
-                <Button Command="{Binding Path=GenerateVisualCommand}" ToolTip="Genereren Visual project file" >
-                    <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16" />
-                </Button>
+                <ContentPresenter Content="{Binding Path=SelectedGenerator.GeneratorView}" />
             </ToolBar>
         </ToolBarTray>
         <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}">

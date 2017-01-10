@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITLCGenIOElementProvider.cs" />
+    <Compile Include="ITLCGenPlugMessaging.cs" />
     <Compile Include="ITLCGenPlugin.cs" />
     <Compile Include="ITLCGenPluginManager.cs" />
     <Compile Include="ITLCGenToolBar.cs" />

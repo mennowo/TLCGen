@@ -12,16 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TLCGen.ViewModels;
 
-namespace TLCGen.Views
+namespace TLCGen.Generators.CCOL
 {
     /// <summary>
-    /// Interaction logic for RoBuGroverTabView.xaml
+    /// Interaction logic for CCOLCodeGeneratorInterface.xaml
     /// </summary>
-    public partial class RoBuGroverTabView : UserControl
+    public partial class CCOLCodeGeneratorView : UserControl
     {
-        public RoBuGroverTabView()
+        public CCOLCodeGeneratorView()
         {
             InitializeComponent();
         }

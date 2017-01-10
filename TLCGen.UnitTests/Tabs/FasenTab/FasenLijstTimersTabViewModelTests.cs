@@ -9,6 +9,7 @@ using TLCGen.Settings;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models.Enumerations;
+using System.Collections.Generic;
 
 namespace TLCGen.UnitTests
 {
@@ -71,6 +72,27 @@ namespace TLCGen.UnitTests
             vm.OnSelected();
 
             Assert.True(object.ReferenceEquals(vm.SelectedFaseCyclus, vm.Fasen[3]));
+        }
+
+        [Test]
+        public void FasenTimersTabMultipleSelectionEdit_TGLChangedOnOnePhase_ChangesAllSelected()
+        {
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05", TGL = 30 });
+            var vm = new FasenLijstTabViewModel(model);
+
+            vm.OnSelected();
+            vm.SelectedFaseCycli = new List<FaseCyclusViewModel>() { vm.Fasen[1], vm.Fasen[2], vm.Fasen[3] };
+            vm.Fasen[3].TGL = 50;
+
+            Assert.AreEqual(30, vm.Fasen[0].TGL);
+            Assert.AreEqual(50, vm.Fasen[1].TGL);
+            Assert.AreEqual(50, vm.Fasen[2].TGL);
+            Assert.AreEqual(50, vm.Fasen[3].TGL);
+            Assert.AreEqual(30, vm.Fasen[4].TGL);
         }
     }
 }

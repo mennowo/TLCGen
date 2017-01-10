@@ -31,7 +31,7 @@
             x:Name="specialgrid"
                   ItemsSource="{Binding Path=GridItemsSource,ElementName=root}"
                   Grid.Row="0"
-                  SelectedItem="{Binding Path=GridSelectedItem,ElementName=root}"
+                  SelectedItem="{Binding Path=GridSelectedItem,ElementName=root,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >

@@ -16,7 +16,7 @@ using TLCGen.DataAccess;
 namespace TLCGen.GebruikersOpties
 {
     [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter)]
-    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem
+    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenIOElementProvider
     {
         #region Constants
 
@@ -28,6 +28,7 @@ namespace TLCGen.GebruikersOpties
         const int SchakelaarsConst = 5;
         const int GeheugenElementenConst = 6;
         const int ParametersConst = 7;
+        const int OptiesMax = 8;
 
         #endregion // Constants
 
@@ -36,8 +37,12 @@ namespace TLCGen.GebruikersOpties
         private GebruikersOptiesModel _MyGebruikersOpties;
         private int _SelectedTabIndex;
 
+        private object[] _SelectedOptie = new object[OptiesMax];
+
         private RelayCommand _AddGebruikersOptieCommand;
         private RelayCommand _RemoveGebruikersOptieCommand;
+        private RelayCommand _OmhoogCommand;
+        private RelayCommand _OmlaagCommand;
 
         object[] _AlleOpties;
 
@@ -72,6 +77,26 @@ namespace TLCGen.GebruikersOpties
             {
                 _SelectedTabIndex = value;
                 OnMonitoredPropertyChanged("SelectedTabIndex");
+                OnMonitoredPropertyChanged("SelectedOptie");
+            }
+        }
+
+        public object SelectedOptie
+        {
+            get
+            {
+                if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+                    return _SelectedOptie[SelectedTabIndex];
+                else
+                    return null;
+            }
+            set
+            {
+                if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+                {
+                    _SelectedOptie[SelectedTabIndex] = value;
+                    OnPropertyChanged("SelectedOptie");
+                }
             }
         }
 
@@ -103,18 +128,67 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        public ICommand OmhoogCommand
+        {
+            get
+            {
+                if (_OmhoogCommand == null)
+                {
+                    _OmhoogCommand = new RelayCommand(OmhoogCommand_Executed, OmhoogCommand_CanExecute);
+                }
+                return _OmhoogCommand;
+            }
+        }
+
+        public ICommand OmlaagCommand
+        {
+            get
+            {
+                if (_OmlaagCommand == null)
+                {
+                    _OmlaagCommand = new RelayCommand(OmlaagCommand_Executed, OmlaagCommand_CanExecute);
+                }
+                return _OmlaagCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Command functionality
 
         void AddNewGebruikersOptieCommand_Executed(object prm)
         {
+            int index = -1;
+
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Add(
-                    new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel()));
+            {
+                if(SelectedOptie != null)
+                    index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                        SelectedOptie as GebruikersOptieWithIOViewModel);
+
+                var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
+
+                if(index > 0)
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
+                else
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Add(o);
+            }
             else
-                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Add(
-                    new GebruikersOptieViewModel(new GebruikersOptieModel()));
+            {
+                if(SelectedOptie != null)
+                    index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                        SelectedOptie as GebruikersOptieViewModel);
+                var o = new GebruikersOptieViewModel(new GebruikersOptieModel());
+                if(index > 0)
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
+                else
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Add(o);
+            }
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+            else
+                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
         }
 
         bool AddNewGebruikersOptieCommand_CanExecute(object prm)
@@ -124,12 +198,98 @@ namespace TLCGen.GebruikersOpties
 
         void RemoveGebruikersOptieCommand_Executed(object prm)
         {
-            
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
+                    SelectedOptie as GebruikersOptieWithIOViewModel);
+            else
+                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
+                    SelectedOptie as GebruikersOptieViewModel);
+
+            SelectedOptie = null;
         }
 
         bool RemoveGebruikersOptieCommand_CanExecute(object prm)
         {
-            return false;
+            return SelectedOptie != null;
+        }
+
+        void OmhoogCommand_Executed(object prm)
+        {
+            var optie = SelectedOptie;
+
+            int index = -1;
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    SelectedOptie as GebruikersOptieWithIOViewModel);
+            else
+                index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    SelectedOptie as GebruikersOptieViewModel);
+
+            if(index > 0)
+            {
+                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Move(
+                        index, index - 1);
+                else
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Move(
+                        index, index - 1);
+            }
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+            else
+                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+
+            SelectedOptie = optie;
+        }
+
+        bool OmhoogCommand_CanExecute(object prm)
+        {
+            return SelectedOptie != null;
+        }
+
+        void OmlaagCommand_Executed(object prm)
+        {
+            var optie = SelectedOptie;
+
+            int index = -1;
+            int max = -1;
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+            {
+                index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    SelectedOptie as GebruikersOptieWithIOViewModel);
+                max = (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count - 1);
+            }
+            else
+            {
+                index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
+                    SelectedOptie as GebruikersOptieViewModel);
+                max = (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count - 1);
+            }
+
+            if (index >= 0 && index < max)
+            {
+                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Move(
+                        index, index + 1);
+                else
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Move(
+                        index, index + 1);
+            }
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+            else
+                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+
+            SelectedOptie = optie;
+        }
+
+        bool OmlaagCommand_CanExecute(object prm)
+        {
+            return SelectedOptie != null;
         }
 
         #endregion // Command functionality
@@ -273,6 +433,30 @@ namespace TLCGen.GebruikersOpties
         }
 
         #endregion // ITLCGenXMLNodeWriter
+
+        #region ITLCGenIOElementProvider
+
+        public List<IOElementModel> GetOutputItems()
+        {
+            List<IOElementModel> items = new List<IOElementModel>();
+            foreach(var v in Uitgangen)
+            {
+                items.Add(v.GebruikersOptieWithOI as IOElementModel);
+            }
+            return items;
+        }
+
+        public List<IOElementModel> GetInputItems()
+        {
+            List<IOElementModel> items = new List<IOElementModel>();
+            foreach (var v in Ingangen)
+            {
+                items.Add(v.GebruikersOptieWithOI as IOElementModel);
+            }
+            return items;
+        }
+
+        #endregion // ITLCGenIOElementProvider
 
         #region Constructor
 

@@ -11,6 +11,8 @@ namespace TLCGen.Models
     [Serializable]
     public abstract class IOElementModel
     {
+        public abstract string Naam { get; set; }
+
         [Browsable(false)]
         [XmlArrayItem(ElementName = "Coordinaat")]
         public List<BitmapCoordinaatModel> BitmapCoordinaten { get; set; }

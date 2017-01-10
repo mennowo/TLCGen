@@ -49,6 +49,21 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerVM = value;
+
+                foreach(var gen in Generators)
+                {
+                    if (value != null)
+                        gen.Generator.Controller = _ControllerVM.Controller;
+                    else
+                        gen.Generator.Controller = null;
+
+                    var messpl = gen.Generator as ITLCGenPlugMessaging;
+                    if (messpl != null)
+                    {
+                        messpl.UpdateTLCGenMessaging();
+                    }
+                }
+                
                 OnPropertyChanged("ControllerVM");
                 OnPropertyChanged("HasController");
             }
@@ -172,8 +187,6 @@ namespace TLCGen.ViewModels
         RelayCommand _SaveAsFileCommand;
         RelayCommand _CloseFileCommand;
         RelayCommand _ExitApplicationCommand;
-        RelayCommand _GenerateCommand;
-        RelayCommand _GenerateVisualCommand;
         RelayCommand _ShowSettingsWindowCommand;
         RelayCommand _ShowAboutCommand;
 
@@ -248,31 +261,6 @@ namespace TLCGen.ViewModels
                 return _ExitApplicationCommand;
             }
         }
-
-        public ICommand GenerateCommand
-        {
-            get
-            {
-                if (_GenerateCommand == null)
-                {
-                    _GenerateCommand = new RelayCommand(GenerateCodeCommand_Executed, GenerateCodeCommand_CanExecute);
-                }
-                return _GenerateCommand;
-            }
-        }
-
-        public ICommand GenerateVisualCommand
-        {
-            get
-            {
-                if (_GenerateVisualCommand == null)
-                {
-                    _GenerateVisualCommand = new RelayCommand(GenerateVisualCommand_Executed, GenerateVisualCommand_CanExecute);
-                }
-                return _GenerateVisualCommand;
-            }
-        }
-
 
         RelayCommand _ImportControllerCommand;
         public ICommand ImportControllerCommand
@@ -462,29 +450,6 @@ namespace TLCGen.ViewModels
         private bool ExitApplicationCommand_CanExecute(object prm)
         {
             return true;
-        }
-
-        private void GenerateCodeCommand_Executed(object prm)
-        {
-            string result = SelectedGenerator.Generator.GenerateSourceFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(DataProvider.Instance.FileName));
-            ControllerVM.SetStatusText(result);
-        }
-
-        private bool GenerateCodeCommand_CanExecute(object prm)
-        {
-            return !string.IsNullOrWhiteSpace(DataProvider.Instance.FileName);
-        }
-
-        private void GenerateVisualCommand_Executed(object prm)
-        {
-            string result = SelectedGenerator?.Generator?.GenerateProjectFiles(ControllerVM.Controller, System.IO.Path.GetDirectoryName(DataProvider.Instance.FileName));
-            ControllerVM.SetStatusText(result);
-        }
-
-        private bool GenerateVisualCommand_CanExecute(object prm)
-        {
-            return !string.IsNullOrWhiteSpace(DataProvider.Instance.FileName) && 
-                   SelectedGenerator != null;
         }
 
         private void ImportControllerCommand_Executed(object obj)

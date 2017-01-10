@@ -29,25 +29,21 @@ namespace TLCGen.ViewModels
         
         private List<string> _AllDetectoren;
         private ObservableCollection<string> _FasenNames;
+        private ObservableCollection<string> _Detectoren;
+        private ObservableCollection<GarantieTijdConvertHelper> _GarantieTijdenConvertValues;
+        private SynchronisatieViewModel _SelectedSynchronisatie;
+        private GarantieTijdConvertHelper _SelectedGarantieTijdenConvertValue;
         private bool _MatrixChanged;
         private SynchronisatieTypeEnum _DisplayType;
+
+        RelayCommand _DeleteValueCommand;
+        RelayCommand _AddGarantieConvertValue;
+        RelayCommand _RemoveGarantieConvertValue;
+        RelayCommand _SetGarantieValuesCommand;
 
         #endregion // Fields
 
         #region Properties
-
-        public DrawingImage Icon
-        {
-            get
-            {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "TabIcons.xaml");
-                dict.Source = u;
-                return (DrawingImage)dict["InterSignaalGroepTabDrawingImage"];
-            }
-        }
 
         public SynchronisatieTypeEnum DisplayType
         {
@@ -91,7 +87,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private ObservableCollection<string> _Detectoren;
         public ObservableCollection<string> Detectoren
         {
             get
@@ -102,7 +97,28 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private SynchronisatieViewModel _SelectedSynchronisatie;
+        public ObservableCollection<GarantieTijdConvertHelper> GarantieTijdenConvertValues
+        {
+            get
+            {
+                if (_GarantieTijdenConvertValues == null)
+                {
+                    _GarantieTijdenConvertValues = new ObservableCollection<GarantieTijdConvertHelper>();
+                }
+                return _GarantieTijdenConvertValues;
+            }
+        }
+
+        public GarantieTijdConvertHelper SelectedGarantieTijdenConvertValue
+        {
+            get { return _SelectedGarantieTijdenConvertValue; }
+            set
+            {
+                _SelectedGarantieTijdenConvertValue = value;
+                OnPropertyChanged("SelectedGarantieTijdenConvertValue");
+            }
+        }
+
         public SynchronisatieViewModel SelectedSynchronisatie
         {
             get
@@ -288,6 +304,19 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        public override ImageSource Icon
+        {
+            get
+            {
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (DrawingImage)dict["InterSignaalGroepTabDrawingImage"];
+            }
+        }
+
         public override string DisplayName
         {
             get
@@ -334,7 +363,6 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _DeleteValueCommand;
         public ICommand DeleteValueCommand
         {
             get
@@ -344,6 +372,42 @@ namespace TLCGen.ViewModels
                     _DeleteValueCommand = new RelayCommand(DeleteValueCommand_Executed, DeleteValueCommand_CanExecute);
                 }
                 return _DeleteValueCommand;
+            }
+        }
+
+        public ICommand SetGarantieValuesCommand
+        {
+            get
+            {
+                if (_SetGarantieValuesCommand == null)
+                {
+                    _SetGarantieValuesCommand = new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
+                }
+                return _SetGarantieValuesCommand;
+            }
+        }
+
+        public ICommand AddGarantieConvertValue
+        {
+            get
+            {
+                if (_AddGarantieConvertValue == null)
+                {
+                    _AddGarantieConvertValue = new RelayCommand(AddGarantieConvertValue_Executed, AddGarantieConvertValue_CanExecute);
+                }
+                return _AddGarantieConvertValue;
+            }
+        }
+
+        public ICommand RemoveGarantieConvertValue
+        {
+            get
+            {
+                if (_RemoveGarantieConvertValue == null)
+                {
+                    _RemoveGarantieConvertValue = new RelayCommand(RemoveGarantieConvertValue_Executed, RemoveGarantieConvertValue_CanExecute);
+                }
+                return _RemoveGarantieConvertValue;
             }
         }
 
@@ -362,6 +426,82 @@ namespace TLCGen.ViewModels
             return SelectedSynchronisatie != null;
         }
 
+        private bool SetGarantieValuesCommand_CanExecute(object obj)
+        {
+            return ConflictMatrix != null && 
+                   Fasen != null && 
+                   DisplayType == SynchronisatieTypeEnum.GarantieConflict &&
+                   GarantieTijdenConvertValues != null &&
+                   GarantieTijdenConvertValues.Count > 0;
+        }
+
+        private void SetGarantieValuesCommand_Executed(object obj)
+        {
+            int fccount = Fasen.Count;
+
+            for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
+            {
+                for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
+                {
+                    int i;
+                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()) && Int32.TryParse(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue(), out i))
+                    {
+                        foreach(var conv in GarantieTijdenConvertValues)
+                        {
+                            if (i >= conv.Van && i < conv.Tot)
+                            {
+                                i -= conv.Verschil;
+                                if (i < 0) i = 0;
+                                break;
+                            }
+                        }
+                        ConflictMatrix[fcvm_from, fcvm_to].ConflictValue = i.ToString();
+                    }
+                }
+            }
+        }
+
+        private bool AddGarantieConvertValue_CanExecute(object obj)
+        {
+            return true;
+        }
+
+        private void AddGarantieConvertValue_Executed(object obj)
+        {
+            GarantieTijdConvertHelper h = new GarantieTijdConvertHelper(this);
+
+            _SettingGarConvs = true;
+
+            if (GarantieTijdenConvertValues.Count > 0)
+            {
+                h.Tot = GarantieTijdenConvertValues[GarantieTijdenConvertValues.Count - 1].Tot;
+                h.MinVan = h.Van = h.Tot;
+            }
+            else
+            {
+                h.MinVan = h.Van = h.Tot = 0;
+            }
+            h.Verschil = 0;
+
+            _SettingGarConvs = false;
+
+            GarantieTijdenConvertValues.Add(h);
+        }
+
+        private bool RemoveGarantieConvertValue_CanExecute(object obj)
+        {
+            return SelectedGarantieTijdenConvertValue != null;
+        }
+
+        private void RemoveGarantieConvertValue_Executed(object obj)
+        {
+            GarantieTijdenConvertValues.Remove(SelectedGarantieTijdenConvertValue);
+            SelectedGarantieTijdenConvertValue = null;
+
+            SetGarantieConvertValuesVan();
+            SetGarantieConvertValuesTot();
+        }
+
         #endregion // Command functionality
 
         #region Private methods
@@ -369,6 +509,39 @@ namespace TLCGen.ViewModels
         #endregion // Private methods
 
         #region Public methods
+
+        private bool _SettingGarConvs = false;
+
+        public void SetGarantieConvertValuesVan()
+        {
+            if (_SettingGarConvs || GarantieTijdenConvertValues.Count < 2)
+                return;
+
+            _SettingGarConvs = true;
+
+            for (int i = 1; i < GarantieTijdenConvertValues.Count; ++i)
+            {
+                GarantieTijdenConvertValues[i].MinVan = GarantieTijdenConvertValues[i - 1].Tot;
+                GarantieTijdenConvertValues[i].Van = GarantieTijdenConvertValues[i].MinVan;
+            }
+
+            _SettingGarConvs = false;
+        }
+
+        public void SetGarantieConvertValuesTot()
+        {
+            if (_SettingGarConvs || GarantieTijdenConvertValues.Count < 2)
+                return;
+
+            _SettingGarConvs = true;
+
+            for (int i = 0; i < (GarantieTijdenConvertValues.Count - 1); ++i)
+            {
+                GarantieTijdenConvertValues[i].Tot = GarantieTijdenConvertValues[i + 1].Van;
+            }
+
+            _SettingGarConvs = false;
+        }
 
         /// <summary>
         /// Builds a new string[,] to be exposed to the View. The 2D array is filled with data
@@ -578,45 +751,6 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
-        #region Commands
-
-        RelayCommand _SetGarantieValuesCommand;
-        public ICommand SetGarantieValuesCommand
-        {
-            get
-            {
-                if (_SetGarantieValuesCommand == null)
-                {
-                    _SetGarantieValuesCommand = new RelayCommand(SetGarantieValuesCommand_Executed, SetGarantieValuesCommand_CanExecute);
-                }
-                return _SetGarantieValuesCommand;
-            }
-        }
-
-        private bool SetGarantieValuesCommand_CanExecute(object obj)
-        {
-            return ConflictMatrix != null && Fasen != null && DisplayType == SynchronisatieTypeEnum.GarantieConflict;
-        }
-
-        private void SetGarantieValuesCommand_Executed(object obj)
-        {
-            int fccount = Fasen.Count;
-
-            for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
-            {
-                for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
-                {
-                    int i;
-                    if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()) && Int32.TryParse(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue(), out i))
-                    {
-                        ConflictMatrix[fcvm_from, fcvm_to].ConflictValue = "0";
-                    }
-                }
-            }
-        }
-
-        #endregion // Commands
-
         #region Collection Changed
 
         #endregion // Collection Changed
@@ -780,5 +914,65 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Constructor
+    }
+
+    public class GarantieTijdConvertHelper : ViewModelBase
+    {
+        private int _Van;
+        private int _Tot;
+        private int _Verschil;
+        private int _MinVan;
+        private SynchronisatiesTabViewModel _MainVM;
+
+        public int Van
+        {
+            get { return _Van; }
+            set
+            {
+                if(value >= MinVan && value <= Tot)
+                    _Van = value;
+                OnPropertyChanged("Van");
+
+                _MainVM.SetGarantieConvertValuesTot();
+            }
+        }
+
+        public int Tot
+        {
+            get { return _Tot; }
+            set
+            {
+                if(value >= Van)
+                    _Tot = value;
+                OnPropertyChanged("Naar");
+
+                _MainVM.SetGarantieConvertValuesVan();
+            }
+        }
+
+        public int Verschil
+        {
+            get { return _Verschil; }
+            set
+            {
+                _Verschil = value;
+                OnPropertyChanged("Verschil");
+            }
+        }
+
+        public int MinVan
+        {
+            get { return _MinVan; }
+            set
+            {
+                _MinVan = value;
+                OnPropertyChanged("MinVan");
+            }
+        }
+
+        public GarantieTijdConvertHelper(SynchronisatiesTabViewModel mainvm)
+        {
+            _MainVM = mainvm;
+        }
     }
 }

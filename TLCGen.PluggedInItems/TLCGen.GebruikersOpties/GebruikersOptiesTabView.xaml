@@ -13,33 +13,35 @@
         </Grid.RowDefinitions>
         <TabControl TabStripPlacement="Left" SelectedIndex="{Binding Path=SelectedTabIndex}" Grid.Row="0">
             <TabItem Header="Uitgangen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" />
+                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Ingangen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" />
+                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Hulpelementen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" />
+                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Timers">
-                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Timers}" />
+                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Timers}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Counters">
-                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Counters}" />
+                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Counters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Schakelaars">
-                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Schakelaars}" />
+                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Schakelaars}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Geheugenelem.">
-                <local:GebruikersOptiesLijst ShowType="False" ShowInstelling="False" GridItemsSource="{Binding Path=GeheugenElementen}" />
+                <local:GebruikersOptiesLijst ShowType="False" ShowInstelling="False" GridItemsSource="{Binding Path=GeheugenElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Parameters">
-                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Parameters}" />
+                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Parameters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
         </TabControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1">
             <Button Content="Toevoegen" Command="{Binding Path=AddGebruikersOptieCommand}" Margin="2" />
             <Button Content="Verwijderen" Command="{Binding Path=RemoveGebruikersOptieCommand}" Margin="2" />
+            <Button Content="Omhoog" Command="{Binding Path=OmhoogCommand}" Margin="2" />
+            <Button Content="Omlaag" Command="{Binding Path=OmlaagCommand}" Margin="2" />
         </StackPanel>
     </Grid>
 </UserControl>

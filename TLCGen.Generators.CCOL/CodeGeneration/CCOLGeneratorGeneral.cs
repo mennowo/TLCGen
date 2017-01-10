@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using TLCGen.Extensions;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public partial class CCOLGenerator
     {
         /// <summary>
         /// Generates a file header
@@ -32,7 +32,7 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine($"   BESTAND:   {data.Naam}{fileappend}");
             sb.AppendLine($"      CCOL:   {data.CCOLVersie.GetDescription()}");
             sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie.GetDescription()}");
-            sb.AppendLine($"   COLLGEN:   {GetGeneratorVersion()}");
+            sb.AppendLine($"   COLLGEN:   {CCOLCodeGeneratorPlugin.GetVersion()}");
 
             return sb.ToString();
         }

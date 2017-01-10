@@ -51,15 +51,40 @@
                 <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Conflict}}" Grid.Row="1" >
                     <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden}" Margin="2" />
                 </Grid>
-                <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.GarantieConflict}}" Grid.Row="1" >
-                    <Button Content="Vullen met nullen" Command="{Binding SetGarantieValuesCommand}" Margin="2" />
-                </Grid>
             </Grid>
         </Border>
 
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
 
         <Grid MaxWidth="250" Grid.Column="3">
+            <Grid 
+            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.GarantieConflict}}" Grid.Row="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Stretch" Grid.Row="0" Orientation="Vertical">
+                    <Label Content="Waarden" FontWeight="Bold" />
+                    <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Margin="2"
+                          SelectedItem="{Binding Path=SelectedGarantieTijdenConvertValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                          ItemsSource="{Binding Path=GarantieTijdenConvertValues}" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Van" Binding="{Binding Path=Van}" />
+                            <DataGridTextColumn Header="Tot" Binding="{Binding Path=Tot}" />
+                            <DataGridTextColumn Header="Verschil" Binding="{Binding Path=Verschil}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch">
+                    <Button Content="Toevoegen" Command="{Binding Path=AddGarantieConvertValue}" Margin="2" />
+                    <Button Content="Verwijderen" Command="{Binding Path=RemoveGarantieConvertValue}" Margin="2" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Stretch">
+                    <Button Content="Toepassen" Command="{Binding Path=SetGarantieValuesCommand}" Margin="2" />
+                </StackPanel>
+            </Grid>
+            
             <Grid 
             Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Gelijkstart}}" >
                 <Grid.RowDefinitions>

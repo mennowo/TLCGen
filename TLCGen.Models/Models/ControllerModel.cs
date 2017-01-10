@@ -48,6 +48,12 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "VAOntruimenFase")]
         public List<VAOntruimenFaseModel> VAOntruimenFasen { get; set; }
 
+        [XmlArrayItem(ElementName = "WaarschuwingsGroep")]
+        public List<WaarschuwingsGroepModel> WaarschuwingsGroepen { get; set; } 
+
+        public BitmapCoordinatenDataModel RateltikkersDimmenCoordinaten { get; set; }
+        public BitmapCoordinatenDataModel BellenDimmenCoordinaten { get; set; }
+
         public PTPDataModel PTPData { get; set; }
 
         public OVDataModel OVData { get; set; }
@@ -76,9 +82,13 @@ namespace TLCGen.Models
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
             FileIngrepen = new List<FileIngreepModel>();
             VAOntruimenFasen = new List<VAOntruimenFaseModel>();
+            WaarschuwingsGroepen = new List<WaarschuwingsGroepModel>();
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();
+
+            RateltikkersDimmenCoordinaten = new BitmapCoordinatenDataModel();
+            BellenDimmenCoordinaten = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

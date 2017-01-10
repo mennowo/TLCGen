@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public partial class CCOLGenerator
     {
-        private string GenerateDplAdd(ControllerModel controller)
+        private string GenerateSimAdd(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -17,21 +17,11 @@ namespace TLCGen.Generators.CCOL
             sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
             sb.AppendLine("/* --------------------------------------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "dpl.add"));
+            sb.Append(GenerateFileHeader(controller.Data, "sim.add"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
-
-            sb.AppendLine("/* extra fasecycli */");
-            sb.AppendLine("/* --------------- */");
-            sb.AppendLine();
-            sb.AppendLine("/* extra overige uitgangen */");
-            sb.AppendLine("/* ----------------------- */");
-            sb.AppendLine();
-            sb.AppendLine("/* extra detectie */");
-            sb.AppendLine("/* -------------- */");
-            sb.AppendLine();
-            sb.AppendLine("/* extra overige ingangen */");
+            sb.AppendLine("/* dit is een placeholder */");
             sb.AppendLine("/* ---------------------- */");
             sb.AppendLine();
 

@@ -1,14 +1,17 @@
-﻿using TLCGen.Models;
+﻿using System.Collections.Generic;
+using System.Windows.Controls;
+using TLCGen.Models;
 
 namespace TLCGen.Plugins
 {
     public interface ITLCGenGenerator : ITLCGenPlugin
     {
-        string GenerateSourceFiles(ControllerModel controller, string sourcefilepath);
-        string GenerateProjectFiles(ControllerModel controller, string projectfilepath);
-        string GenerateSpecification(ControllerModel controller, string specificationfilepath);
+        UserControl GeneratorView { get; }
 
+        ControllerModel Controller { set; }
+        
         string GetGeneratorName();
         string GetGeneratorVersion();
+
     }
 }

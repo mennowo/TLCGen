@@ -22,7 +22,7 @@ namespace TLCGen.Models
         [Browsable(false)]
         public string Define { get; set; }
         [Browsable(false)]
-        public string Naam { get; set; }
+        public override string Naam { get; set; }
         [DisplayName("Type fase")]
         [Description("Type fase")]
         public FaseTypeEnum Type { get; set; }
@@ -81,6 +81,9 @@ namespace TLCGen.Models
         [DisplayName("RatelTikker naloop tijd")]
         [Description("RatelTikker naloop tijd")]
         public int RatelTikkerNaloopTijd { get; set; }
+        [Browsable(false)]
+        public BitmapCoordinatenDataModel RatelTikkerBitmapData { get; set; }
+
 
         public bool ShouldSerializeRatelTikkerType()
         {
@@ -89,6 +92,10 @@ namespace TLCGen.Models
         public bool ShouldSerializeRatelTikkerNaloopTijd()
         {
             return RatelTikkerType == RateltikkerTypeEnum.Hoeflake;
+        }
+        public bool ShouldSerializeRatelTikkerBitmapData()
+        {
+            return RatelTikkerType != RateltikkerTypeEnum.Geen;
         }
 
         [Browsable(false)]
@@ -149,6 +156,7 @@ namespace TLCGen.Models
         public FaseCyclusModel() : base()
         {
             Detectoren = new List<DetectorModel>();
+            RatelTikkerBitmapData = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

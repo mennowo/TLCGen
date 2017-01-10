@@ -16,6 +16,7 @@
         <DataGrid 
                   ItemsSource="{Binding Path=Fasen}"
                   Grid.Row="0"
+            SelectionMode="Extended"
                   SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
@@ -32,14 +33,14 @@
 
                 <!--<DataGridTextColumn Binding="{Binding Path=Define}" Header="Define" IsReadOnly="True" />-->
                 <!--<DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" IsReadOnly="True" />-->
-                <DataGridTextColumn Binding="{Binding Path=TFG,UpdateSourceTrigger=PropertyChanged}" Header="TFG" />
-                <DataGridTextColumn Binding="{Binding Path=TGG,UpdateSourceTrigger=PropertyChanged}" Header="TGG" />
-                <DataGridTextColumn Binding="{Binding Path=TGG_min,UpdateSourceTrigger=PropertyChanged}" Header="TGG_min" />
-                <DataGridTextColumn Binding="{Binding Path=TRG,UpdateSourceTrigger=PropertyChanged}" Header="TRG" />
-                <DataGridTextColumn Binding="{Binding Path=TRG_min,UpdateSourceTrigger=PropertyChanged}" Header="TRG_min" />
-                <DataGridTextColumn Binding="{Binding Path=TGL,UpdateSourceTrigger=PropertyChanged}" Header="TGL" />
-                <DataGridTextColumn Binding="{Binding Path=TGL_min,UpdateSourceTrigger=PropertyChanged}" Header="TGL_min" />
-                <DataGridTextColumn Binding="{Binding Path=Kopmax,UpdateSourceTrigger=PropertyChanged}" Header="Kopmax"  >
+                <DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
+                <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
+                <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />
+                <DataGridTextColumn Binding="{Binding Path=TRG}" Header="TRG" />
+                <DataGridTextColumn Binding="{Binding Path=TRG_min}" Header="TRG_min" />
+                <DataGridTextColumn Binding="{Binding Path=TGL}" Header="TGL" />
+                <DataGridTextColumn Binding="{Binding Path=TGL_min}" Header="TGL_min" />
+                <DataGridTextColumn Binding="{Binding Path=Kopmax}" Header="Kopmax"  >
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="{x:Type DataGridCell}">
                             <Style.Triggers>

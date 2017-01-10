@@ -18,6 +18,13 @@ namespace TLCGen.GebruikersOpties
 
         #region Properties
 
+        public GebruikersOptieWithIOModel GebruikersOptieWithOI
+        {
+            get
+            {
+                return _GebruikersOptieWithOI;
+            }
+        }
 
         public string Naam
         {

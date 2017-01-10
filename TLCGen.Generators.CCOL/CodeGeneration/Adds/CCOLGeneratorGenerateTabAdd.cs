@@ -5,19 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public partial class CCOLGenerator
     {
-        private string GenerateSysAdd(ControllerModel controller)
+        private string GenerateTabAdd(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("/* DEFINITIE BESTAND, GEBRUIKERS TOEVOEGINGEN          */");
+            sb.AppendLine("/* INSTELLINGEN BESTAND, GEBRUIKERS TOEVOEGINGEN       */");
             sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
             sb.AppendLine("/* --------------------------------------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "sys.add"));
+            sb.Append(GenerateFileHeader(controller.Data, "tab.add"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();

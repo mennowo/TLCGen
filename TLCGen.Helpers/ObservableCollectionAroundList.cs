@@ -49,6 +49,19 @@ namespace TLCGen.Helpers
 
         #endregion // Collection Changed
 
+        #region Public Methods
+
+        public void RebuildList()
+        {
+            _ModelItems.Clear();
+            foreach(var ivm in this.Items)
+            {
+                _ModelItems.Add((T2)ivm.GetItem());
+            }
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
         public ObservableCollectionAroundList(List<T2> modelitems)

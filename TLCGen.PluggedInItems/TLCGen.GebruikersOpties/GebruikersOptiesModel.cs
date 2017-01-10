@@ -80,7 +80,7 @@ namespace TLCGen.GebruikersOpties
     [Serializable]
     public class GebruikersOptieWithIOModel : IOElementModel
     {
-        public string Naam { get; set; }
+        public override string Naam { get; set; }
         public string Define { get; set; }
         public string Commentaar { get; set; }
         

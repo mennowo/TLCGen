@@ -17,6 +17,7 @@ namespace TLCGen.Plugins
         private static ITLCGenPluginManager _Default;
         private List<Tuple<TLCGenPluginElems,Type>> _ApplicationParts;
         private List<Tuple<TLCGenPluginElems,Type>> _Plugins;
+        private List<ITLCGenPlugin> _LoadedPlugins;
 
         #endregion // Fields
 
@@ -61,6 +62,18 @@ namespace TLCGen.Plugins
                     _Plugins = new List<Tuple<TLCGenPluginElems, Type>>();
                 }
                 return _Plugins;
+            }
+        }
+
+        public List<ITLCGenPlugin> LoadedPlugins
+        {
+            get
+            {
+                if (_LoadedPlugins == null)
+                {
+                    _LoadedPlugins = new List<ITLCGenPlugin>();
+                }
+                return _LoadedPlugins;
             }
         }
 

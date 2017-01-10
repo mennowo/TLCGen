@@ -5,64 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public static class CCOLElementCollector
     {
+        #region Static Fields
 
-        internal enum CCOLElementType { Uitgang, Ingang, HulpElement, GeheugenElement, Timer, Counter, Schakelaar, Parameter };
-        internal class CCOLElement
-        {
-            public string Define { get; set; }
-            public string Naam { get; set; }
-            public string Type { get; set; }
-            public string TType { get; set; }
-            public string Instelling { get; set; }
-            public string Commentaar { get; set; }
-            public int X { get; set; }
-            public int Y { get; set; }
-        }
+        private static List<DetectorModel> AlleDetectoren;
 
-        internal class CCOLElemListData
-        {
-            public List<CCOLElement> Elements { get; set; }
+        #endregion // Static Fields
 
-            public string CCOLCode { get; set; }
-            public string CCOLSetting { get; set; }
-            public string CCOLTType{ get; set; }
+        #region Static Public Methods
 
-            public int CCOLCodeWidth { get { return CCOLCode == null ? 0 : CCOLCode.Length; } }
-            public int CCOLSettingWidth { get { return CCOLSetting == null ? 0 : CCOLSetting.Length; } }
-            public int CCOLTTypeWidth { get { return CCOLTType == null ? 0 : CCOLTType.Length; } }
-
-            public int DefineMaxWidth { get; set; }
-            public int NameMaxWidth { get; set; }
-            public int SettingMaxWidth { get; set; }
-
-            public void SetMax()
-            {
-                foreach (CCOLElement elem in this.Elements)
-                {
-                    if (elem.Define?.Length > this.DefineMaxWidth) this.DefineMaxWidth = elem.Define.Length;
-                    if (elem.Naam?.Length > this.NameMaxWidth) this.NameMaxWidth = elem.Naam.Length;
-                    if (elem.Instelling?.Length > this.SettingMaxWidth) this.SettingMaxWidth = elem.Instelling.Length;
-                }
-            }
-
-            public CCOLElemListData()
-            {
-                DefineMaxWidth = 0;
-                NameMaxWidth = 0;
-                SettingMaxWidth = 0;
-
-                Elements = new List<CCOLElement>();
-            }
-        }
-
-        private void CollectAllCCOLElements(ControllerModel controller)
+        public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller)
         {
             AlleDetectoren = new List<DetectorModel>();
-            foreach(FaseCyclusModel fcm in controller.Fasen)
+            foreach (FaseCyclusModel fcm in controller.Fasen)
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                     AlleDetectoren.Add(dm);
@@ -70,86 +28,25 @@ namespace TLCGen.Generators.CCOL
             foreach (DetectorModel dm in controller.Detectoren)
                 AlleDetectoren.Add(dm);
 
-            Uitgangen = CollectAllUitgangen(controller);
-            Ingangen = CollectAllIngangen(controller);
-            HulpElementen = CollectAllHulpElementen(controller);
-            GeheugenElementen = CollectAllGeheugenElementen(controller);
-            Timers = CollectAllTimers(controller);
-            Counters = CollectAllCounters(controller);
-            Schakelaars = CollectAllSchakelaars(controller);
-            Parameters = CollectAllParameters(controller);
+            CCOLElemListData[] lists = new CCOLElemListData[8];
+
+            lists[0] = CollectAllUitgangen(controller);
+            lists[1] = CollectAllIngangen(controller);
+            lists[2] = CollectAllHulpElementen(controller);
+            lists[3] = CollectAllGeheugenElementen(controller);
+            lists[4] = CollectAllTimers(controller);
+            lists[5] = CollectAllCounters(controller);
+            lists[6] = CollectAllSchakelaars(controller);
+            lists[7] = CollectAllParameters(controller);
+
+            return lists;
         }
 
-        /// <summary>
-        /// Generates all "sys.h" lines for a given instance of CCOLElemListData.
-        /// The function loops all elements in the Elements member.
-        /// </summary>
-        /// <param name="data">The instance of CCOLElemListData to use for generation</param>
-        /// <param name="numberdefine">Optional: this string will be used as follows:
-        /// - if it is null, lines are generated like this: #define ElemName #
-        /// - if it is not null, it goes like this: #define ElemName (numberdefine + #)</param>
-        /// <returns></returns>
-        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null)
-        {
-            StringBuilder sb = new StringBuilder();
+        #endregion // Static Public Methods
 
-            int pad1 = data.DefineMaxWidth + $"{tabspace}#define  ".Length;
-            int pad2 = data.Elements.Count.ToString().Length;
+        #region Static Private Methods
 
-            int index = 0;
-            foreach (CCOLElement elem in data.Elements)
-            {
-                sb.Append($"{tabspace}#define {elem.Define} ".PadRight(pad1));
-                if (string.IsNullOrWhiteSpace(numberdefine))
-                {
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                }
-                else
-                {
-                    sb.Append($"({numberdefine} + ");
-                    sb.Append($"{index.ToString()}".PadLeft(pad2));
-                    sb.AppendLine($")");
-                }
-                ++index;
-            }
-
-            return sb.ToString();
-        }
-
-        private string GetAllElementsTabCLines(CCOLElemListData data)
-        {
-            StringBuilder sb = new StringBuilder();
-
-            int pad1 = data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
-            int pad2 = data.NameMaxWidth + 6;  // 6: space = space " " ;
-            int pad3 = data.CCOLSettingWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
-            int pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
-            int pad5 = data.CCOLTTypeWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
-
-            foreach (CCOLElement ce in data.Elements)
-            {
-                if (!string.IsNullOrWhiteSpace(ce.Naam))
-                {
-                    sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
-                    sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
-                    if (!string.IsNullOrEmpty(data.CCOLSetting) && !string.IsNullOrEmpty(ce.Instelling))
-                    {
-                        sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
-                        sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
-                    }
-                    if (!string.IsNullOrEmpty(data.CCOLTType) && !string.IsNullOrEmpty(ce.TType))
-                    {
-                        sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
-                        sb.Append($" = {ce.TType};");
-                    }
-                    sb.AppendLine();
-                }
-            }
-
-            return sb.ToString();
-        }
-
-        private CCOLElemListData CollectAllUitgangen(ControllerModel controller)
+        private static CCOLElemListData CollectAllUitgangen(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -171,7 +68,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllIngangen(ControllerModel controller)
+        private static CCOLElemListData CollectAllIngangen(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -188,7 +85,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllHulpElementen(ControllerModel controller)
+        private static CCOLElemListData CollectAllHulpElementen(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -206,7 +103,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller)
+        private static CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -224,7 +121,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllTimers(ControllerModel controller)
+        private static CCOLElemListData CollectAllTimers(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -256,7 +153,7 @@ namespace TLCGen.Generators.CCOL
                 }
             }
 
-            if(data.Elements.Count == 0)
+            if (data.Elements.Count == 0)
             {
                 data.Elements.Add(new CCOLElement() { Define = "tdummy", Naam = "dummy" });
             }
@@ -268,7 +165,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllSchakelaars(ControllerModel controller)
+        private static CCOLElemListData CollectAllSchakelaars(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -340,7 +237,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllCounters(ControllerModel controller)
+        private static CCOLElemListData CollectAllCounters(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -358,7 +255,7 @@ namespace TLCGen.Generators.CCOL
             return data;
         }
 
-        private CCOLElemListData CollectAllParameters(ControllerModel controller)
+        private static CCOLElemListData CollectAllParameters(ControllerModel controller)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -370,13 +267,13 @@ namespace TLCGen.Generators.CCOL
             data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = "240", TType = "TS_type" });
 
             // Detectie aanvraag functie
-            foreach(DetectorModel dm in AlleDetectoren)
+            foreach (DetectorModel dm in AlleDetectoren)
             {
                 if (dm.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
                     continue;
 
                 int set = 0;
-                switch(dm.Aanvraag)
+                switch (dm.Aanvraag)
                 {
                     case Models.Enumerations.DetectorAanvraagTypeEnum.Uit:
                         set = 0;
@@ -420,9 +317,9 @@ namespace TLCGen.Generators.CCOL
             }
 
             // Maxgroentijden
-            foreach(GroentijdenSetModel mgset in controller.GroentijdenSets)
+            foreach (GroentijdenSetModel mgset in controller.GroentijdenSets)
             {
-                foreach(GroentijdModel mgm in mgset.Groentijden)
+                foreach (GroentijdModel mgm in mgset.Groentijden)
                 {
                     FaseCyclusModel thisfcm = null;
                     foreach (FaseCyclusModel fcm in controller.Fasen)
@@ -440,7 +337,8 @@ namespace TLCGen.Generators.CCOL
                     {
                         Define = $"prm{mgset.Naam.ToLower()}{thisfcm.Naam}",
                         Naam = $"mk{mgset.Naam.ToLower()}{thisfcm.Naam}",
-                        Instelling = $"{mgm.Waarde}", TType = "TE_type"
+                        Instelling = $"{mgm.Waarde}",
+                        TType = "TE_type"
                     });
                 }
             }
@@ -458,7 +356,7 @@ namespace TLCGen.Generators.CCOL
             }
 
             // Alternatieven
-            if(controller.ModuleMolen.LangstWachtendeAlternatief)
+            if (controller.ModuleMolen.LangstWachtendeAlternatief)
             {
                 // alternatieve max. groentijd
                 foreach (FaseCyclusModel fcm in controller.Fasen)
@@ -491,5 +389,8 @@ namespace TLCGen.Generators.CCOL
             data.SetMax();
             return data;
         }
+
+        #endregion // Static Private Methods
+
     }
 }

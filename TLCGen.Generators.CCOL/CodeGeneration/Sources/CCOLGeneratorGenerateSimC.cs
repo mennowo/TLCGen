@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL
+namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLCodeGenerator
+    public partial class CCOLGenerator
     {
         private string GenerateSimC(ControllerModel controller)
         {

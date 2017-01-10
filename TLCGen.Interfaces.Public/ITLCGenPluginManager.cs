@@ -10,6 +10,7 @@ namespace TLCGen.Plugins
     {
         List<Tuple<TLCGenPluginElems, Type>> Plugins { get; }
         List<Tuple<TLCGenPluginElems, Type>> ApplicationParts { get; }
+        List<ITLCGenPlugin> LoadedPlugins { get; }
         void LoadPlugins(string pluginpath);
     }
 }
