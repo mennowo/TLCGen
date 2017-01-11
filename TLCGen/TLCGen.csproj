@@ -593,7 +593,9 @@
     <Content Include="Resources\visualprojecttemplate2010.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\visualprojecttemplate2013.xml" />
+    <Content Include="Resources\visualprojecttemplate2013.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

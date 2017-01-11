@@ -97,7 +97,7 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateVisualProjectCommand_Executed(object prm)
         {
-            _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin);
+            _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin, VisualProjectType);
         }
 
         private bool GenerateVisualProjectCommand_CanExecute(object prm)
