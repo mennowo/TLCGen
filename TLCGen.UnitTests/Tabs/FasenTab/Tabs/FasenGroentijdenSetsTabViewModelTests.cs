@@ -19,7 +19,7 @@ namespace TLCGen.UnitTests
         ControllerModel model;
         Action<FasenChangedMessage> fasenchangedaction;
         Action<FasenSortedMessage> fasensortedaction;
-        Action<DefineChangedMessage> definechangedaction;
+        Action<NameChangedMessage> namechangedaction;
         Action<GroentijdenTypeChangedMessage> groentijdentypechangedaction;
 
         [SetUp]
@@ -44,10 +44,10 @@ namespace TLCGen.UnitTests
                     fasensortedaction = c.Arg<Action<FasenSortedMessage>>();
                 });
             messenger.
-                When(x => x.Register(Arg.Any<object>(), Arg.Any<Action<DefineChangedMessage>>())).
+                When(x => x.Register(Arg.Any<object>(), Arg.Any<Action<NameChangedMessage>>())).
                 Do(c =>
                 {
-                    definechangedaction = c.Arg<Action<DefineChangedMessage>>();
+                    namechangedaction = c.Arg<Action<NameChangedMessage>>();
                 });
             messenger.
                 When(x => x.Register(Arg.Any<object>(), Arg.Any<Action<GroentijdenTypeChangedMessage>>())).
@@ -64,8 +64,7 @@ namespace TLCGen.UnitTests
                     c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
                     c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x =>
                     {
-                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier ||
-                               c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Define && x.Define != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
+                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
                     });
                 });
 
@@ -78,11 +77,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void RemoveGroentijdenSetCommand_NoSetPresent_CannotExecute()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             bool result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
@@ -93,11 +92,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void RemoveGroentijdenSetCommand_SetPresentAndSelected_CanExecute()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -110,11 +109,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddGroentijdenSetCommand_NoSetPresent_CanExecute()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             bool result = vm.AddGroentijdenSetCommand.CanExecute(null);
@@ -125,11 +124,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddGroentijdenSetCommand_SetPresent_CanExecute()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -141,11 +140,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddGroentijdenSetCommand_ExecutedWhile5FasenInModel_TabExposes5FasenNames()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -156,32 +155,32 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddGroentijdenSetCommand_ExecutedWhile5FasenInModel_AddsGroentijdenSetWith5FasenToModel()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
                         
             Assert.AreEqual(1, model.GroentijdenSets.Count);
             Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("fc01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
 
         [Test]
         public void AddGroentijdenSetCommand_Executed5TimesWhile5FasenInModel_Adds5GroentijdenSetsWith5FasenToModel()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -194,22 +193,22 @@ namespace TLCGen.UnitTests
             for (int i = 0; i < 5; ++i)
             {
                 Assert.AreEqual(5, model.GroentijdenSets[i].Groentijden.Count);
-                Assert.AreEqual("fc01", model.GroentijdenSets[i].Groentijden[0].FaseCyclus);
-                Assert.AreEqual("fc02", model.GroentijdenSets[i].Groentijden[1].FaseCyclus);
-                Assert.AreEqual("fc03", model.GroentijdenSets[i].Groentijden[2].FaseCyclus);
-                Assert.AreEqual("fc04", model.GroentijdenSets[i].Groentijden[3].FaseCyclus);
-                Assert.AreEqual("fc05", model.GroentijdenSets[i].Groentijden[4].FaseCyclus);
+                Assert.AreEqual("01", model.GroentijdenSets[i].Groentijden[0].FaseCyclus);
+                Assert.AreEqual("02", model.GroentijdenSets[i].Groentijden[1].FaseCyclus);
+                Assert.AreEqual("03", model.GroentijdenSets[i].Groentijden[2].FaseCyclus);
+                Assert.AreEqual("04", model.GroentijdenSets[i].Groentijden[3].FaseCyclus);
+                Assert.AreEqual("05", model.GroentijdenSets[i].Groentijden[4].FaseCyclus);
             }
         }
 
         [Test]
         public void RemoveGroentijdenSetCommand_ExecutedWhile2SetsModel_RemovesSelectedSetFromModel()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -219,21 +218,21 @@ namespace TLCGen.UnitTests
 
             Assert.AreEqual(1, model.GroentijdenSets.Count);
             Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("fc01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
         }
 
         [Test]
         public void RemoveGroentijdenSetCommand_LastSetRemovedFromModel_CannotExecuteAnymore()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -249,11 +248,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void RemoveGroentijdenSetCommand_RemoveSetInMiddleOfSetList_RemainingSetsRenamedCorrectly()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
 
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -269,28 +268,28 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_HigherThanOthers_FasenInGroentijdenSetSortedCorrectly()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vmfasen.Fasen[2].Naam = "07";
-            definechangedaction.Invoke(new DefineChangedMessage("fc03", "fc07"));
+            namechangedaction.Invoke(new NameChangedMessage("03", "07"));
             vmfasen.OnDeselected();
             fasensortedaction.Invoke(new FasenSortedMessage(model.Fasen));
 
             Assert.AreEqual(1, model.GroentijdenSets.Count);
             Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("fc01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc05", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc07", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("01", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("07", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
             Assert.AreEqual("01", vm.FasenNames[0]);
             Assert.AreEqual("02", vm.FasenNames[1]);
             Assert.AreEqual("04", vm.FasenNames[2]);
@@ -301,18 +300,18 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_HigherThanOthers_FasenNamesSortedCorrectly()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vmfasen.Fasen[2].Naam = "07";
-            definechangedaction.Invoke(new DefineChangedMessage("fc03", "fc07"));
+            namechangedaction.Invoke(new NameChangedMessage("03", "07"));
             vmfasen.OnDeselected();
             fasensortedaction.Invoke(new FasenSortedMessage(model.Fasen));
 
@@ -327,28 +326,28 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_LowerThanOthers_FasenInGroentijdenSetSortedCorrectly()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vmfasen.Fasen[2].Naam = "02";
-            definechangedaction.Invoke(new DefineChangedMessage("fc05", "fc02"));
+            namechangedaction.Invoke(new NameChangedMessage("05", "02"));
             vmfasen.OnDeselected();
             fasensortedaction.Invoke(new FasenSortedMessage(model.Fasen));
 
             Assert.AreEqual(1, model.GroentijdenSets.Count);
             Assert.AreEqual(5, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("fc02", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc03", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("02", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
             Assert.AreEqual("02", vm.FasenNames[0]);
             Assert.AreEqual("03", vm.FasenNames[1]);
             Assert.AreEqual("04", vm.FasenNames[2]);
@@ -359,18 +358,18 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_LowerThanOthers_FasenNamesSortedCorrectly()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vmfasen.Fasen[2].Naam = "02";
-            definechangedaction.Invoke(new DefineChangedMessage("fc05", "fc02"));
+            namechangedaction.Invoke(new NameChangedMessage("05", "02"));
             vmfasen.OnDeselected();
             fasensortedaction.Invoke(new FasenSortedMessage(model.Fasen));
             
@@ -385,11 +384,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void FaseAddedToModel_TwoGroentijdenSetsInModel_FaseAddedToBothSets()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
@@ -405,29 +404,29 @@ namespace TLCGen.UnitTests
             fasensortedaction.Invoke(new FasenSortedMessage(model.Fasen));
 
             Assert.AreEqual(6, model.GroentijdenSets[0].Groentijden.Count);
-            Assert.AreEqual("fc03", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc05", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("fc09", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("03", model.GroentijdenSets[0].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("09", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
             Assert.AreEqual(6, model.GroentijdenSets[1].Groentijden.Count);
-            Assert.AreEqual("fc03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
-            Assert.AreEqual("fc04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
-            Assert.AreEqual("fc05", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
-            Assert.AreEqual("fc06", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("fc08", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("fc09", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
+            Assert.AreEqual("04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
+            Assert.AreEqual("05", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
+            Assert.AreEqual("06", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("09", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
         }
 
         [Test]
         public void FaseAddedToModel_TwoGroentijdenSetsInModel_FasenNamesReflectChange()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             var vmfasen = new FasenLijstTabViewModel(model);
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
@@ -454,11 +453,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void GroentijdenTypeChanged_FromMGToVG_AllGroentijdenSetsHaveNameAndTypeChanged()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             model.Data.TypeGroentijden = GroentijdenTypeEnum.MaxGroentijden;
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -479,11 +478,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void GroentijdenTypeChanged_FromVGToMG_AllGroentijdenSetsHaveNameAndTypeChanged()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "06", Define = "fc06" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             model.Data.TypeGroentijden = GroentijdenTypeEnum.VerlengGroentijden;
             var vm = new FasenGroentijdenSetsTabViewModel(model);
             vm.AddGroentijdenSetCommand.Execute(null);

@@ -27,15 +27,6 @@ namespace TLCGen.GebruikersOpties
                 OnMonitoredPropertyChanged("Naam");
             }
         }
-        public string Define
-        {
-            get { return _GebruikersOptie.Define; }
-            set
-            {
-                _GebruikersOptie.Define = value;
-                OnMonitoredPropertyChanged("Define");
-            }
-        }
         public CCOLElementTypeEnum Type
         {
             get { return _GebruikersOptie.Type; }

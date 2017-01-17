@@ -15,7 +15,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private string _FaseCyclusNaam;
-        private string _FaseCyclusDefine;
         private RoBuGroverConflictGroepModel _SelectedConflictGroep;
 
         #endregion // Fields
@@ -31,14 +30,6 @@ namespace TLCGen.ViewModels
         }
 
         /// <summary>
-        /// The define of the PhaseCyclus
-        /// </summary>
-        public string FaseCyclusDefine
-        {
-            get { return _FaseCyclusDefine; }
-        }
-
-        /// <summary>
         /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
         /// </summary>
         public bool CanBeAddedToConflictGroep
@@ -49,7 +40,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
-                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(FaseCyclusDefine, fc.FaseCyclus);
+                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
                         Messenger.Default.Send(request);
                         if (request.Handled && !request.IsConflicting)
                             return false;
@@ -71,7 +62,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
-                        if (fc.FaseCyclus == FaseCyclusDefine)
+                        if (fc.FaseCyclus == FaseCyclusNaam)
                             return true;
                     }
                 }
@@ -128,10 +119,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public RoBuGroverTabFaseViewModel(string fasedefine, string fasenaam)
+        public RoBuGroverTabFaseViewModel(string fasenaam)
         {
-            _FaseCyclusNaam = fasedefine;
-            _FaseCyclusDefine = fasedefine;
+            _FaseCyclusNaam = fasenaam;
 
             Messenger.Default.Register(this, new Action<SelectedConflictGroepChangedMessage>(OnSelectedConflictGroepChanged));
         }

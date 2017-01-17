@@ -9,15 +9,14 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class DetectorModel : IOElementModel, ITemplatable, IComparable
+    public class DetectorModel : IOElementModel, IComparable
     {
         #region Fields
 
         #endregion // Fields
 
         #region Properties
-
-        public string Define { get; set; }
+        
         public override string Naam { get; set; }
         public string VissimNaam { get; set; }
         public int? TDB { get; set; }
@@ -44,24 +43,7 @@ namespace TLCGen.Models
 
         #endregion // Properties
 
-        #region ITemplatable
-
-        public string GetIdentifyingName()
-        {
-            return Naam;
-        }
-
-        public void SetAllIdentifyingNames(string search, string replace)
-        {
-            Naam = Naam.Replace(search, replace);
-            VissimNaam = Naam.Replace(search, replace);
-            Define = Define.Replace(search, replace);
-        }
-
-        public void ClearAllReferences()
-        {
-            BitmapCoordinaten.Clear();
-        }
+        #region IComparable
 
         public int CompareTo(object obj)
         {

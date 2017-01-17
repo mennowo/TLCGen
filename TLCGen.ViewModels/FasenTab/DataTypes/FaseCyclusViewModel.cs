@@ -42,49 +42,17 @@ namespace TLCGen.ViewModels
                     if (message.Handled && message.IsUnique)
                     {
                         string oldname = _FaseCyclus.Naam;
-                        string olddefine = _FaseCyclus.Define;
                         _FaseCyclus.Naam = value;
-
-                        _FaseCyclus.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + value;
 
                         // set new type
                         this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
 
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
-                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _FaseCyclus.Define));
                     }
                 }
                 OnMonitoredPropertyChanged(null); // Update all properties
 
-            }
-        }
-
-        public string Define
-        {
-            get { return _FaseCyclus.Define; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Define);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
-                    {
-                        string olddefine = _FaseCyclus.Define;
-                        string oldname = _FaseCyclus.Naam;
-                        _FaseCyclus.Naam = value.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
-                        _FaseCyclus.Define = value;
-
-                        // set new type
-                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
-
-                        // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, _FaseCyclus.Naam));
-                        Messenger.Default.Send(new DefineChangedMessage(olddefine, value));
-                    }
-                }
-                OnMonitoredPropertyChanged(null); // Update all properties
             }
         }
 
@@ -377,14 +345,6 @@ namespace TLCGen.ViewModels
         #endregion // IComparable
 
         #region Public methods
-
-        /// <summary>
-        /// Updates the Define member of the model based on member Name
-        /// </summary>
-        public void UpdateModelDefine()
-        {
-            _FaseCyclus.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + _FaseCyclus.Naam;
-        }
 
         public void UpdateHasKopmax()
         {

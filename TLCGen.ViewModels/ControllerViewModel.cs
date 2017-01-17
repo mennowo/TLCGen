@@ -295,11 +295,6 @@ namespace TLCGen.ViewModels
             SetStringInModel(_Controller, message.OldName, message.NewName);
         }
 
-        private void OnDefineChanged(DefineChangedMessage message)
-        {
-            SetStringInModel(_Controller, message.OldDefine, message.NewDefine);
-        }
-
         private void OnIsElementIdentifierUniqueRequestReceived(IsElementIdentifierUniqueRequest request)
         {
             if (request.Handled == false)
@@ -308,10 +303,6 @@ namespace TLCGen.ViewModels
                 {
                     case ElementIdentifierType.Naam:
                         request.IsUnique = IntegrityChecker.IsElementNaamUnique(_Controller, request.Identifier);
-                        request.Handled = true;
-                        break;
-                    case ElementIdentifierType.Define:
-                        request.IsUnique = IntegrityChecker.IsElementDefineUnique(_Controller, request.Identifier);
                         request.Handled = true;
                         break;
                     case ElementIdentifierType.VissimNaam:
@@ -383,7 +374,6 @@ namespace TLCGen.ViewModels
 
             Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            Messenger.Default.Register(this, new Action<DefineChangedMessage>(OnDefineChanged));
             Messenger.Default.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
             Messenger.Default.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
             Messenger.Default.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));

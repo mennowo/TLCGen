@@ -105,7 +105,7 @@ namespace TLCGen.ViewModels
                             dm.Simulatie.Stopline = 10000;
                             break;
                     }
-                    dm.Simulatie.FCNr = fcm.Define;
+                    dm.Simulatie.FCNr = fcm.Naam;
                 }
             }
             foreach (DetectorModel dm in _Controller.Detectoren)

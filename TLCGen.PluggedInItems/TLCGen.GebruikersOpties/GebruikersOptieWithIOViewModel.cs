@@ -35,15 +35,7 @@ namespace TLCGen.GebruikersOpties
                 OnMonitoredPropertyChanged("Naam");
             }
         }
-        public string Define
-        {
-            get { return _GebruikersOptieWithOI.Define; }
-            set
-            {
-                _GebruikersOptieWithOI.Define = value;
-                OnMonitoredPropertyChanged("Define");
-            }
-        }
+
         public string Commentaar
         {
             get { return _GebruikersOptieWithOI.Commentaar; }
@@ -53,6 +45,7 @@ namespace TLCGen.GebruikersOpties
                 OnMonitoredPropertyChanged("Commentaar");
             }
         }
+
         #endregion Properties
 
         #region Commands

@@ -25,19 +25,6 @@ namespace TLCGen.ViewModels
             get { return _ModuleFaseCyclus; }
         }
 
-        public string FaseCyclusDefine
-        {
-            get { return _ModuleFaseCyclus.FaseCyclus; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    _ModuleFaseCyclus.FaseCyclus = value;
-                }
-                OnPropertyChanged("FaseCyclus");
-            }
-        }
-
         public string FaseCyclusNaam
         {
             get { return _FaseCyclusNaam; }
@@ -71,8 +58,8 @@ namespace TLCGen.ViewModels
                 throw new NotImplementedException();
             else
             {
-                string myName = FaseCyclusDefine;
-                string hisName = fcvm.FaseCyclusDefine;
+                string myName = FaseCyclusNaam;
+                string hisName = fcvm.FaseCyclusNaam;
                 if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
                 else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
                 return myName.CompareTo(hisName);

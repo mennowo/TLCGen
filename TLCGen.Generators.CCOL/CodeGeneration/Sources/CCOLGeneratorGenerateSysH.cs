@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -61,7 +62,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad1 = "FCMAX".Length;
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                if (fcm.Define.Length > pad1) pad1 = fcm.Define.Length;
+                if (fcm.GetDefine().Length > pad1) pad1 = fcm.GetDefine().Length;
             }
             pad1 = pad1 + $"{tabspace}#define  ".Length;
 
@@ -70,7 +71,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int index = 0;
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                sb.Append($"{tabspace}#define {fcm.Define} ".PadRight(pad1));
+                sb.Append($"{tabspace}#define {fcm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }
@@ -105,12 +106,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    if (dm.Define.Length > pad1) pad1 = dm.Define.Length;
+                    if (dm.GetDefine().Length > pad1) pad1 = dm.GetDefine().Length;
                 }
             }
             foreach (DetectorModel dm in controller.Detectoren)
             {
-                if (dm.Define.Length > pad1) pad1 = dm.Define.Length;
+                if (dm.GetDefine().Length > pad1) pad1 = dm.GetDefine().Length;
             }
             pad1 = pad1 + $"{tabspace}#define  ".Length;
 
@@ -121,14 +122,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    sb.Append($"{tabspace}#define {dm.Define} ".PadRight(pad1));
+                    sb.Append($"{tabspace}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                     ++index;
                 }
             }
             foreach (DetectorModel dm in controller.Detectoren)
             {
-                sb.Append($"{tabspace}#define {dm.Define} ".PadRight(pad1));
+                sb.Append($"{tabspace}#define {dm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }

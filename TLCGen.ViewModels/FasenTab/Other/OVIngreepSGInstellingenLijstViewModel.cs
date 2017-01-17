@@ -46,10 +46,10 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        private void AddFase(string fasedefine, string fasename)
+        private void AddFase(string fasename)
         {
             var prms = new OVIngreepSignaalGroepParametersModel();
-            prms.FaseCyclus = fasedefine;
+            prms.FaseCyclus = fasename;
             OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
         }
 
@@ -83,11 +83,11 @@ namespace TLCGen.ViewModels
             {
                 foreach (FaseCyclusModel fcm in message.AddedFasen)
                 {
-                    AddFase(fcm.Define, fcm.Naam);
+                    AddFase(fcm.Naam);
                 }
                 foreach (FaseCyclusModel fcm in message.RemovedFasen)
                 {
-                    RemoveFase(fcm.Define);
+                    RemoveFase(fcm.Naam);
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace TLCGen.ViewModels
                     foreach(FaseCyclusModel fcm in _Controller.Fasen)
                     {
                         var prms = new OVIngreepSignaalGroepParametersModel();
-                        prms.FaseCyclus = fcm.Define;
+                        prms.FaseCyclus = fcm.Naam;
                         OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
                     }
                     break;

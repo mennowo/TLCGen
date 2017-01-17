@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
             ModuleFaseCyclusViewModel _fc = null;
             foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
             {
-                if(fc1.FaseCyclusDefine == fc.FaseCyclusDefine)
+                if(fc1.FaseCyclusNaam == fc.FaseCyclusNaam)
                 {
                     _fc = fc1;
                 }
@@ -99,7 +99,7 @@ namespace TLCGen.ViewModels
             ModuleFaseCyclusViewModel _fc = null;
             foreach (ModuleFaseCyclusViewModel fc1 in Fasen)
             {
-                if (fc1.FaseCyclusDefine == fcdefine)
+                if (fc1.FaseCyclusNaam == fcdefine)
                 {
                     _fc = fc1;
                 }
@@ -123,7 +123,7 @@ namespace TLCGen.ViewModels
                 // Find the friendly name of the FaseCyclus
                 foreach(FaseCyclusModel fcm in c.Fasen)
                 {
-                    if(fcm.Define == mfcvm.FaseCyclusDefine)
+                    if(fcm.Naam == mfcvm.FaseCyclusNaam)
                     {
                         mfcvm.FaseCyclusNaam = fcm.Naam;
                         break;

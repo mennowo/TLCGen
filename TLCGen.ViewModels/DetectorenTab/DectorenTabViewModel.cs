@@ -108,11 +108,8 @@ namespace TLCGen.ViewModels
                 foreach(DetectorModel dm in items)
                 {
                     var message1 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
-                    var message2 = new IsElementIdentifierUniqueRequest(dm.Define, ElementIdentifierType.Define);
                     Messenger.Default.Send(message1);
-                    Messenger.Default.Send(message2);
-                    if (message1.Handled && message1.IsUnique &&
-                        message2.Handled && message2.IsUnique)
+                    if (message1.Handled && message1.IsUnique)
                     {
 #warning TODO
                         //DetectorViewModel dvm = new DetectorViewModel(dm);

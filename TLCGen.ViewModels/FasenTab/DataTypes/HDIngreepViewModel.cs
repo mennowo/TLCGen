@@ -180,7 +180,7 @@ namespace TLCGen.ViewModels
             Fasen.Clear();
             foreach (FaseCyclusModel m in _Controller.Fasen)
             {
-                if (m.Define != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
+                if (m.Naam != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
                     Fasen.Add(m.Naam);
             }
             if(Fasen.Count > 0)
@@ -242,7 +242,7 @@ namespace TLCGen.ViewModels
             Fasen.Clear();
             foreach (FaseCyclusModel m in _Controller.Fasen)
             {
-                if (m.Define != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
+                if (m.Naam != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
                     Fasen.Add(m.Naam);
             }
             if (Fasen.Count > 0)

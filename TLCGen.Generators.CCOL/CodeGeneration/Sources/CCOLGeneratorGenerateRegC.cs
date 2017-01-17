@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -156,11 +157,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 if (HasA)
                 {
-                    sb.AppendLine($"{tabspace}aanvraag_detectie_prm_va_arg((count) {fcm.Define}, ");
+                    sb.AppendLine($"{tabspace}aanvraag_detectie_prm_va_arg((count) {fcm.GetDefine()}, ");
                     foreach (DetectorModel dm in fcm.Detectoren)
                     {
                         if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
-                            sb.AppendLine($"{tabspace}{tabspace}(va_count) {dm.Define}, (va_mulv) PRM[prm{dm.Define}], ");
+                            sb.AppendLine($"{tabspace}{tabspace}(va_count) {dm.GetDefine()}, (va_mulv) PRM[prm{dm.GetDefine()}], ");
                     }
                     sb.AppendLine($"{tabspace}{tabspace}(va_count) END);");
                 }
@@ -174,9 +175,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchAan ||
                     fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchUit)
-                    sb.AppendLine($"{tabspace}if (SCH[schca{fcm.Naam}]) vaste_aanvraag({fcm.Define});");
+                    sb.AppendLine($"{tabspace}if (SCH[schca{fcm.Naam}]) vaste_aanvraag({fcm.GetDefine()});");
                 else if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.Altijd)
-                    sb.AppendLine($"{tabspace}vaste_aanvraag({fcm.Define});");
+                    sb.AppendLine($"{tabspace}vaste_aanvraag({fcm.GetDefine()});");
             }
             sb.AppendLine("");
 
@@ -187,9 +188,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                     fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.Define}, (bool) (SCH[schwg{fcm.Naam}]));");
+                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[schwg{fcm.Naam}]));");
                 else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.Define}, TRUE);");
+                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
             }
             sb.AppendLine("");
 
@@ -217,7 +218,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach(GroentijdModel mgm in mgsm.Groentijden)
                     {
-                        if(mgm.FaseCyclus == fcm.Define && mgm.Waarde != null)
+                        if(mgm.FaseCyclus == fcm.GetDefine() && mgm.Waarde != null)
                         {
                             HasMG = true;
                         }
@@ -226,7 +227,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if(HasMG)
                 {
-                    sb.AppendLine($"{tabspace}max_star_groentijden_va_arg((count) {fcm.Define}, (mulv) FALSE, (mulv) FALSE,");
+                    sb.AppendLine($"{tabspace}max_star_groentijden_va_arg((count) {fcm.GetDefine()}, (mulv) FALSE, (mulv) FALSE,");
                     //int per = 2, mper = 1;
                     //foreach (KlokPeriodeModel kpm in controller.KlokPeriodes)
                     //{
@@ -242,7 +243,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 else
                 {
-                    sb.AppendLine($"{tabspace}TVG_max[{fcm.Define}] = 0;");
+                    sb.AppendLine($"{tabspace}TVG_max[{fcm.GetDefine()}] = 0;");
                 }
 
             }
@@ -272,11 +273,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                     fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                 {
-                    sb.AppendLine($"{tabspace}RW[{fcm.Define}] |= (SCH[schwg{fcm.Naam}] && yws_groen({fcm.Define})) && !fka({fcm.Define}) ? BIT4 : 0;");
+                    sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                 }
                 else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                 {
-                    sb.AppendLine($"{tabspace}RW[{fcm.Define}] |= (yws_groen({fcm.Define})) && !fka({fcm.Define}) ? BIT4 : 0;");
+                    sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                 }
             }
             sb.AppendLine();
@@ -285,11 +286,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                     fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                 {
-                    sb.AppendLine($"{tabspace}WS[{fcm.Define}] = WG[{fcm.Define}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.Define});");
+                    sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()});");
                 }
                 else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                 {
-                    sb.AppendLine($"{tabspace}WS[{fcm.Define}] = WG[{fcm.Define}] && yws_groen({fcm.Define});");
+                    sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()});");
                 }
             }
             sb.AppendLine();
@@ -319,15 +320,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
                 if (HasKopmax)
-                    sb.AppendLine($"{tabspace}meetkriterium_prm_va_arg((count){fcm.Define}, (count)tkm{fcm.Naam}, ");
+                    sb.AppendLine($"{tabspace}meetkriterium_prm_va_arg((count){fcm.GetDefine()}, (count)tkm{fcm.Naam}, ");
                 else
-                    sb.AppendLine($"{tabspace}meetkriterium_prm_va_arg((count){fcm.Define}, NG, ");
+                    sb.AppendLine($"{tabspace}meetkriterium_prm_va_arg((count){fcm.GetDefine()}, NG, ");
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
                     if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                     {
                         sb.Append("".PadLeft($"{tabspace}meetkriterium_prm_va_arg(".Length));
-                        sb.AppendLine($"(va_count){dm.Define}, (va_mulv)PRM[prmmk{dm.Define}],");
+                        sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[prmmk{dm.GetDefine()}],");
                     }
                 }
                 sb.Append("".PadLeft($"{tabspace}meetkriterium_prm_va_arg(".Length));
@@ -354,7 +355,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tabspace}" + "}");
             sb.AppendLine();
             foreach (FaseCyclusModel fcm in controller.Fasen)
-                sb.AppendLine($"{tabspace}YM[{fcm.Define}] |= SCH[schmv{fcm.Naam}] && ym_max({fcm.Define}, NG) && hf_wsg() ? BIT4 : 0;");
+                sb.AppendLine($"{tabspace}YM[{fcm.GetDefine()}] |= SCH[schmv{fcm.Naam}] && ym_max({fcm.GetDefine()}, NG) && hf_wsg() ? BIT4 : 0;");
             sb.AppendLine();
             sb.AppendLine($"{tabspace}Meeverlengen_Add();");
             sb.AppendLine("}");
@@ -376,7 +377,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tabspace}/* periode versnelde primaire realisatie - aantal modulen vooruit */");
             sb.AppendLine($"{tabspace}/* -------------------------------------------------------------- */");
             foreach (FaseCyclusModel fcm in controller.Fasen)
-                sb.AppendLine($"    PFPR[{fcm.Define}] = ml_fpr({fcm.Define}, PRM[prmmlfpr{fcm.Naam}], PRML, ML, MLMAX);");
+                sb.AppendLine($"    PFPR[{fcm.GetDefine()}] = ml_fpr({fcm.GetDefine()}, PRM[prmmlfpr{fcm.Naam}], PRML, ML, MLMAX);");
             sb.AppendLine("");
             sb.AppendLine($"{tabspace}VersneldPrimair_Add();");
             sb.AppendLine("");
@@ -399,13 +400,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{tabspace}/* zet richtingen die alternatief gaan realiseren         */");
                 sb.AppendLine($"{tabspace}/* terug naar RV als er geen alternatieve ruimte meer is. */");
                 foreach (FaseCyclusModel fcm in controller.Fasen)
-                    sb.AppendLine($"{tabspace}RR[{fcm.Define}] |= R[{fcm.Define}] && AR[{fcm.Define}] && (!PAR[{fcm.Define}] || ERA[{fcm.Define}]) ? BIT5 : 0;");
+                    sb.AppendLine($"{tabspace}RR[{fcm.GetDefine()}] |= R[{fcm.GetDefine()}] && AR[{fcm.GetDefine()}] && (!PAR[{fcm.GetDefine()}] || ERA[{fcm.GetDefine()}]) ? BIT5 : 0;");
                 sb.AppendLine();
                 foreach (FaseCyclusModel fcm in controller.Fasen)
-                    sb.AppendLine($"{tabspace}FM[{fcm.Define}] |= (fm_ar_kpr({fcm.Define}, PRM[prmaltg{fcm.Naam}])) ? BIT5 : 0;");
+                    sb.AppendLine($"{tabspace}FM[{fcm.GetDefine()}] |= (fm_ar_kpr({fcm.GetDefine()}, PRM[prmaltg{fcm.Naam}])) ? BIT5 : 0;");
                 sb.AppendLine();
                 foreach (FaseCyclusModel fcm in controller.Fasen)
-                    sb.AppendLine($"{tabspace}PAR[{fcm.Define}] = (max_tar_to({fcm.Define}) >= PRM[prmaltp{fcm.Naam}]) && SCH[schaltg{fcm.Naam}];");
+                    sb.AppendLine($"{tabspace}PAR[{fcm.GetDefine()}] = (max_tar_to({fcm.GetDefine()}) >= PRM[prmaltp{fcm.Naam}]) && SCH[schaltg{fcm.Naam}];");
                 sb.AppendLine();
                 sb.AppendLine($"{tabspace}Alternatief_Add();");
                 sb.AppendLine();

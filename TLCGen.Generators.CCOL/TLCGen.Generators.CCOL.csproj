@@ -85,6 +85,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateRegAdd.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRegC.cs" />
     <Compile Include="CodeGeneration\CCOLGeneratorGeneral.cs" />
+    <Compile Include="Extensions\TLCGenModelExtensions.cs" />
     <Compile Include="ProjectGeneration\CCOLVisualProjectGenerator.cs" />
     <Compile Include="ProjectGeneration\VisualProjectTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

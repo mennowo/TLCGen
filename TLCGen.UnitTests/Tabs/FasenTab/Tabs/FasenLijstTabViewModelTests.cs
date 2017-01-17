@@ -15,29 +15,28 @@ namespace TLCGen.UnitTests
     [TestFixture]
     public class FasenLijstTabViewModelTests
     {
-        IMessenger messenger;
-        ISettingsProvider settingsprovider;
+        IMessenger messengerstub;
+        ISettingsProvider settingsproviderstub;
         ControllerModel model;
 
         [SetUp]
         public void FasenTabSetup()
         {
             model = new ControllerModel();
-            messenger = Substitute.For<IMessenger>();
-            settingsprovider = Substitute.For<ISettingsProvider>();
-            messenger.
+            messengerstub = Substitute.For<IMessenger>();
+            settingsproviderstub = Substitute.For<ISettingsProvider>();
+            messengerstub.
                 When(x => x.Send(Arg.Any<IsElementIdentifierUniqueRequest>())).
                 Do(c =>
                 {
                     c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
                     c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x =>
                     {
-                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier ||
-                               c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Define && x.Define != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
+                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
                     });
                 });
-            Messenger.OverrideDefault(messenger);
-            SettingsProvider.OverrideDefault(settingsprovider);
+            Messenger.OverrideDefault(messengerstub);
+            SettingsProvider.OverrideDefault(settingsproviderstub);
         }
 
         [Test]
@@ -160,11 +159,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_HigherThanOthers_SortsCorrectlyAfterTabChange()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
 
             vm.Fasen[2].Naam = "07";
@@ -177,11 +176,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void RenameFase_LowerThanOthers_SortsCorrectlyAfterTabChange()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "07", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "08", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "09", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "07" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "09" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
 
             vm.Fasen[4].Naam = "05";
@@ -194,11 +193,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void EditFaseInMultipleSelection_VasteAanvraagSetToAltijd_VasteAanvraagAltijdForAllSelectedItems()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
 
             vm.SelectedFaseCycli.Add(vm.Fasen[0]);
@@ -218,11 +217,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void EditFaseInMultipleSelection_VasteAanvraagSetToAltijd_VasteAanvraagNotAltijdForNonSelectedItems()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
             
             vm.SelectedFaseCycli.Add(vm.Fasen[1]);

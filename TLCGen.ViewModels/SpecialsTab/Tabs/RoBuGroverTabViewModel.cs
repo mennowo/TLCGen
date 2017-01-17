@@ -206,7 +206,7 @@ namespace TLCGen.ViewModels
                         var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclus).First();
                         try
                         {
-                            var addfc = _Controller.Fasen.Where(x => x.Define == instvm.FaseCyclus).First();
+                            var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
                             foreach(DetectorModel dm in addfc.Detectoren)
                             {
                                 if(dm.Type == DetectorTypeEnum.Lang)
@@ -243,17 +243,17 @@ namespace TLCGen.ViewModels
             if (fc.CanBeAddedToConflictGroep && !fc.IsInConflictGroep)
             {
                 var fcm = new RoBuGroverConflictGroepFaseModel();
-                fcm.FaseCyclus = fc.FaseCyclusDefine;
+                fcm.FaseCyclus = fc.FaseCyclusNaam;
                 var fcvm = new RoBuGroverConflictGroepFaseViewModel(fcm);
                 SelectedConflictGroep.Fasen.Add(fcvm);
-                if(!SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusDefine).Any())
+                if(!SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).Any())
                 {
                     var inst = new RoBuGroverSignaalGroepInstellingenModel();
-                    inst.FaseCyclus = fc.FaseCyclusDefine;
+                    inst.FaseCyclus = fc.FaseCyclusNaam;
                     var instvm = new RoBuGroverSignaalGroepInstellingenViewModel(inst);
                     try
                     {
-                        var addfc = _Controller.Fasen.Where(x => x.Define == instvm.FaseCyclus).First();
+                        var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
                         foreach (DetectorModel dm in addfc.Detectoren)
                         {
                             if (dm.Type == DetectorTypeEnum.Lang)
@@ -285,10 +285,10 @@ namespace TLCGen.ViewModels
                 RoBuGroverConflictGroepFaseViewModel removevm = null;
                 removevm = SelectedConflictGroep.Fasen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
                 SelectedConflictGroep.Fasen.Remove(removevm);
-                if (!ConflictGroepen.SelectMany(x => x.Fasen).Where(y => y.FaseCyclus == fc.FaseCyclusDefine).Any() &&
-                    SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusDefine).Any())
+                if (!ConflictGroepen.SelectMany(x => x.Fasen).Where(y => y.FaseCyclus == fc.FaseCyclusNaam).Any() &&
+                    SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).Any())
                 {
-                    var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusDefine).First();
+                    var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
                     SignaalGroepInstellingen.Remove(instvm);
                     SignaalGroepInstellingen.BubbleSort();
                 }
@@ -353,7 +353,7 @@ namespace TLCGen.ViewModels
             Fasen.Clear();
             foreach(FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(new RoBuGroverTabFaseViewModel(fcm.Define, fcm.Naam));
+                Fasen.Add(new RoBuGroverTabFaseViewModel(fcm.Naam));
             }
 
             _ControllerRGVFileDetectoren = new Dictionary<string, string>();
@@ -363,9 +363,9 @@ namespace TLCGen.ViewModels
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
                     if (dm.Type == Models.Enumerations.DetectorTypeEnum.Kop)
-                        _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Define);
+                        _ControllerRGVFileDetectoren.Add(dm.Naam, fcm.Naam);
                     if (dm.Type == Models.Enumerations.DetectorTypeEnum.Lang)
-                        _ControllerRGVHiaatDetectoren.Add(dm.Naam, fcm.Define);
+                        _ControllerRGVHiaatDetectoren.Add(dm.Naam, fcm.Naam);
                 }
             }
 

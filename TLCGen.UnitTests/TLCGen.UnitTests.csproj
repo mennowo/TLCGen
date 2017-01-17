@@ -79,12 +79,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Tabs\FasenTab\FasenDetailsTabViewModelTests.cs" />
-    <Compile Include="Tabs\FasenTab\FasenGroentijdenSetsTabViewModelTests.cs" />
-    <Compile Include="Tabs\FasenTab\FasenLijstTabViewModelTests.cs" />
-    <Compile Include="Tabs\FasenTab\FasenLijstTimersTabViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\Tabs\FasenDetailsTabViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\Tabs\FasenLijstTabViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tabs\FasenTab\FasenOVTabViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\Tabs\FasenOVTabViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -110,6 +110,9 @@
       <Project>{D0D102B3-23AF-4F74-946B-96EBE262932C}</Project>
       <Name>TLCGen.ViewModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tabs\FasenTab\DataTypes\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

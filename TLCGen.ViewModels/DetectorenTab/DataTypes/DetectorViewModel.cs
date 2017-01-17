@@ -51,44 +51,14 @@ namespace TLCGen.ViewModels
                     Messenger.Default.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
-                        string olddefine = _Detector.Define;
                         string oldname = _Detector.Naam;
 
                         _Detector.Naam = value;
-                        _Detector.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + value;
-
+                        
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
-                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _Detector.Define));
                     }
                 }
-                OnMonitoredPropertyChanged("Naam");
-            }
-        }
-
-        public string Define
-        {
-            get { return _Detector.Define; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Define);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
-                    {
-                        string olddefine = _Detector.Define;
-                        string oldname = _Detector.Naam;
-
-                        _Detector.Naam = value.Replace(SettingsProvider.Default.GetDetectorDefinePrefix(), "");
-                        _Detector.Define = value;
-
-                        // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
-                        Messenger.Default.Send(new DefineChangedMessage(olddefine, _Detector.Define));
-                    }
-                }
-                OnMonitoredPropertyChanged("Define");
                 OnMonitoredPropertyChanged("Naam");
             }
         }
@@ -119,7 +89,7 @@ namespace TLCGen.ViewModels
                 _Detector.Type = value;
                 OnMonitoredPropertyChanged("Type");
                 OnMonitoredPropertyChanged("IsDrukknop");
-                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Define, value));
+                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
 #warning TODO also below...
                 //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
             }

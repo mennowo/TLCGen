@@ -11,16 +11,14 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class FaseCyclusModel : IOElementModel, ITemplatable, IComparable
+    public class FaseCyclusModel : IOElementModel, IComparable
     {
         #region Fields
 
         #endregion // Fields
 
         #region Properties
-
-        [Browsable(false)]
-        public string Define { get; set; }
+        
         [Browsable(false)]
         public override string Naam { get; set; }
         [DisplayName("Type fase")]
@@ -103,35 +101,6 @@ namespace TLCGen.Models
         public List<DetectorModel> Detectoren { get; set; }
 
         #endregion // Properties
-
-        #region ITemplatable
-
-        public string GetIdentifyingName()
-        {
-            return Naam;
-        }
-
-        public void SetAllIdentifyingNames(string search, string replace)
-        {
-            Naam = Naam.Replace(search, replace);
-            Define = Define.Replace(search, replace);
-            foreach(ITemplatable templdp in Detectoren)
-            {
-                templdp.SetAllIdentifyingNames(search, replace);
-            }
-        }
-
-        public void ClearAllReferences()
-        {
-            BitmapCoordinaten.Clear();
-            foreach (ITemplatable templdp in Detectoren)
-            {
-                templdp.ClearAllReferences();
-            }
-        }
-
-
-        #endregion // ITemplatable
 
         #region IComparable
 

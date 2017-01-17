@@ -95,7 +95,7 @@ namespace TLCGen.ViewModels
             if (fcmvm.CanBeAddedToModule && !fcmvm.IsInModule)
             {
                 ModuleFaseCyclusModel mfcm = new ModuleFaseCyclusModel();
-                mfcm.FaseCyclus = fcmvm.Define;
+                mfcm.FaseCyclus = fcmvm.Naam;
                 ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
                 mfcvm.FaseCyclusNaam = fcmvm.Naam;
                 SelectedModule.Fasen.Add(mfcvm);
@@ -105,7 +105,7 @@ namespace TLCGen.ViewModels
             {
                 // Use custom method instead of Remove method:
                 // it removes based on Define instead of reference
-                SelectedModule.RemoveFase(fcmvm.Define);
+                SelectedModule.RemoveFase(fcmvm.Naam);
                 SelectedModule.Fasen.BubbleSort();
             }
             foreach (FaseCyclusModuleViewModel _fcmvm in Fasen)

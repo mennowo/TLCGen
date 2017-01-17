@@ -8,7 +8,6 @@ namespace TLCGen.Messaging.Requests
 {
     public enum ElementIdentifierType
     {
-        Define,
         Naam,
         VissimNaam
     }

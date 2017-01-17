@@ -111,21 +111,15 @@ namespace TLCGen.ViewModels
                 foreach (FaseCyclusModel fcm in items)
                 {
                     var message1 = new IsElementIdentifierUniqueRequest(fcm.Naam, ElementIdentifierType.Naam);
-                    var message2 = new IsElementIdentifierUniqueRequest(fcm.Define, ElementIdentifierType.Define);
                     Messenger.Default.Send(message1);
-                    Messenger.Default.Send(message2);
-                    if (message1.Handled && message1.IsUnique &&
-                        message2.Handled && message2.IsUnique)
+                    if (message1.Handled && message1.IsUnique)
                     {
                         bool IsOK = true;
                         foreach(DetectorModel dm in fcm.Detectoren)
                         {
-                            var message3 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
-                            var message4 = new IsElementIdentifierUniqueRequest(dm.Define, ElementIdentifierType.Define);
-                            Messenger.Default.Send(message3);
-                            Messenger.Default.Send(message4);
-                            if (!(message3.Handled && message3.IsUnique &&
-                                  message4.Handled && message4.IsUnique))
+                            var message2 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
+                            Messenger.Default.Send(message2);
+                            if (!(message2.Handled && message2.IsUnique))
                             {
                                 IsOK = false;
                                 break;

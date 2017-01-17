@@ -69,7 +69,7 @@ namespace TLCGen.ViewModels
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 var fcvm = new FaseCyclusViewModel(fcm);
-                if (sel != null && fcvm.Define == sel.Define)
+                if (sel != null && fcvm.Naam == sel.Naam)
                     SelectedFaseCyclus = fcvm;
                 Fasen.Add(fcvm);
             }

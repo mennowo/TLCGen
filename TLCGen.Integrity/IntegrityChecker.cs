@@ -124,37 +124,6 @@ namespace TLCGen.Integrity
         }
 
         /// <summary>
-        /// Checks if an element's Define property is unique accross the ControllerModel
-        /// </summary>
-        /// <param name="naam">The Define property to check</param>
-        /// <returns>True if unique, false if not</returns>
-        public static bool IsElementDefineUnique(ControllerModel _Controller, string define)
-        {
-            // Fasen
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                if (fcm.Define == define)
-                    return false;
-            }
-
-            // Detectie
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.Define == define)
-                        return false;
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                if (dm.Define == define)
-                    return false;
-            }
-            return true;
-        }
-
-        /// <summary>
         /// Checks if an element's Name property is unique accross the ControllerModel
         /// </summary>
         /// <param name="naam">The Name property to check</param>
@@ -219,7 +188,7 @@ namespace TLCGen.Integrity
 
             foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
             {
-                if (cm.FaseVan == fcm1.Define && cm.FaseNaar == fcm2.Define)
+                if (cm.FaseVan == fcm1.Naam && cm.FaseNaar == fcm2.Naam)
                     return true;
             }
             return false;

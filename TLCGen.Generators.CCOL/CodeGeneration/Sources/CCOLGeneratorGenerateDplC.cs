@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -58,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.AppendLine($"{tabspace}#define {fcm.Define}_{i} (USMAX + {usmaxplus})");
+                        sb.AppendLine($"{tabspace}#define {fcm.GetDefine()}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
                     }
                 }
@@ -72,7 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                         {
-                            sb.AppendLine($"{tabspace}#define {dm.Define}_{i} (ISMAX + {ismaxplus})");
+                            sb.AppendLine($"{tabspace}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
                             ++ismaxplus;
                         }
                     }
@@ -85,7 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.AppendLine($"{tabspace}#define {dm.Define}_{i} (ISMAX + {ismaxplus})");
+                        sb.AppendLine($"{tabspace}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
                     }
                 }
@@ -132,21 +133,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if(fcm.BitmapCoordinaten?.Count > 0)
                 {
-                    sb.Append($"{tabspace}X_us[{fcm.Define}] = {fcm.BitmapCoordinaten[0].X}; ");
-                    sb.AppendLine($"Y_us[{fcm.Define}] = {fcm.BitmapCoordinaten[0].Y};");
+                    sb.Append($"{tabspace}X_us[{fcm.GetDefine()}] = {fcm.BitmapCoordinaten[0].X}; ");
+                    sb.AppendLine($"Y_us[{fcm.GetDefine()}] = {fcm.BitmapCoordinaten[0].Y};");
                 }
                 else
                 {
-                    sb.Append($"{tabspace}X_us[{fcm.Define}] = NG; ");
-                    sb.AppendLine($"Y_us[{fcm.Define}] = NG;");
+                    sb.Append($"{tabspace}X_us[{fcm.GetDefine()}] = NG; ");
+                    sb.AppendLine($"Y_us[{fcm.GetDefine()}] = NG;");
                 }
                 if (fcm.BitmapCoordinaten?.Count > 1)
                 {
                     for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.Append($"{tabspace}X_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[i].X}; ");
-                        sb.Append($"Y_us[{fcm.Define}_{i}] = {fcm.BitmapCoordinaten[i].Y}; ");
-                        sb.AppendLine($"NR_us[{fcm.Define}_{i}] = {fcm.Define};");
+                        sb.Append($"{tabspace}X_us[{fcm.GetDefine()}_{i}] = {fcm.BitmapCoordinaten[i].X}; ");
+                        sb.Append($"Y_us[{fcm.GetDefine()}_{i}] = {fcm.BitmapCoordinaten[i].Y}; ");
+                        sb.AppendLine($"NR_us[{fcm.GetDefine()}_{i}] = {fcm.GetDefine()};");
                     }
                 }
             }
@@ -162,21 +163,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (dm.BitmapCoordinaten?.Count > 0)
                     {
-                        sb.Append($"{tabspace}X_is[{dm.Define}] = {dm.BitmapCoordinaten[0].X}; ");
-                        sb.AppendLine($"Y_is[{dm.Define}] = {dm.BitmapCoordinaten[0].Y};");
+                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].X}; ");
+                        sb.AppendLine($"Y_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].Y};");
                     }
                     else
                     {
-                        sb.Append($"{tabspace}X_is[{dm.Define}] = NG; ");
-                        sb.AppendLine($"Y_is[{dm.Define}] = NG;");
+                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = NG; ");
+                        sb.AppendLine($"Y_is[{dm.GetDefine()}] = NG;");
                     }
                     if (dm.BitmapCoordinaten?.Count > 1)
                     {
                         for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                         {
-                            sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
-                            sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
-                            sb.AppendLine($"NR_is[{dm.Define}_{i}] = {dm.Define};");
+                            sb.Append($"{tabspace}X_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
+                            sb.Append($"Y_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
+                            sb.AppendLine($"NR_is[{dm.GetDefine()}_{i}] = {dm.GetDefine()};");
                         }
                     }
                 }
@@ -185,21 +186,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (dm.BitmapCoordinaten?.Count > 0)
                 {
-                    sb.Append($"{tabspace}X_is[{dm.Define}] = {dm.BitmapCoordinaten[0].X}; ");
-                    sb.AppendLine($"Y_is[{dm.Define}] = {dm.BitmapCoordinaten[0].Y};");
+                    sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].X}; ");
+                    sb.AppendLine($"Y_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].Y};");
                 }
                 else
                 {
-                    sb.Append($"{tabspace}X_is[{dm.Define}] = NG; ");
-                    sb.AppendLine($"Y_is[{dm.Define}] = NG;");
+                    sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = NG; ");
+                    sb.AppendLine($"Y_is[{dm.GetDefine()}] = NG;");
                 }
                 if (dm.BitmapCoordinaten?.Count > 1)
                 {
                     for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.Append($"{tabspace}X_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
-                        sb.Append($"Y_is[{dm.Define}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
-                        sb.AppendLine($"NR_is[{dm.Define}_{i}] = {dm.Define};");
+                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
+                        sb.Append($"Y_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
+                        sb.AppendLine($"NR_is[{dm.GetDefine()}_{i}] = {dm.GetDefine()};");
                     }
                 }
             }

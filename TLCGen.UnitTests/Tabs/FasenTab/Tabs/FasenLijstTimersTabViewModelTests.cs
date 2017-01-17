@@ -33,8 +33,7 @@ namespace TLCGen.UnitTests
                     c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
                     c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x =>
                     {
-                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier ||
-                               c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Define && x.Define != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
+                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
                     });
                 });
             Messenger.OverrideDefault(messenger);
@@ -59,11 +58,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void FasenTimersTabSelectedFase_TabDeselectedAndSelected_SelectedFaseEqual()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenLijstTabViewModel(model);
 
             vm.OnSelected();
@@ -77,11 +76,11 @@ namespace TLCGen.UnitTests
         [Test]
         public void FasenTimersTabMultipleSelectionEdit_TGLChangedOnOnePhase_ChangesAllSelected()
         {
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Define = "fc01", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", Define = "fc02", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", Define = "fc03", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", Define = "fc04", TGL = 30 });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", Define = "fc05", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "02", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "03", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "04", TGL = 30 });
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "05", TGL = 30 });
             var vm = new FasenLijstTabViewModel(model);
 
             vm.OnSelected();

@@ -50,18 +50,19 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCyclus = value;
                 SelectedOVIngreep = null;
-                foreach(OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
+                foreach (OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
                 {
-                    if(ovm.FaseCyclus == SelectedFaseCyclus.Define)
+                    if(ovm.FaseCyclus == SelectedFaseCyclus.Naam)
                     {
                         SelectedOVIngreep = new OVIngreepViewModel(ovm);
                         break;
                     }
                 }
 
+                SelectedHDIngreep = null;
                 foreach (HDIngreepModel hdm in _Controller.OVData.HDIngrepen)
                 {
-                    if (hdm.FaseCyclus == SelectedFaseCyclus.Define)
+                    if (hdm.FaseCyclus == SelectedFaseCyclus.Naam)
                     {
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hdm);
                         break;
@@ -95,7 +96,7 @@ namespace TLCGen.ViewModels
                     if (value)
                     {
                         OVIngreepModel ov = new OVIngreepModel();
-                        ov.FaseCyclus = SelectedFaseCyclus.Define;
+                        ov.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.OVIngrepen.Add(ov);
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
                     }
@@ -104,6 +105,7 @@ namespace TLCGen.ViewModels
                         if (SelectedOVIngreep != null)
                         {
                             _Controller.OVData.OVIngrepen.Remove(SelectedOVIngreep.OVIngreep);
+                            SelectedOVIngreep = null;
                         }
                     }
                 }
@@ -142,7 +144,7 @@ namespace TLCGen.ViewModels
                     if (value)
                     {
                         HDIngreepModel hd = new HDIngreepModel();
-                        hd.FaseCyclus = SelectedFaseCyclus.Define;
+                        hd.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.HDIngrepen.Add(hd);
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);
                     }
@@ -151,6 +153,7 @@ namespace TLCGen.ViewModels
                         if (SelectedHDIngreep != null)
                         {
                             _Controller.OVData.HDIngrepen.Remove(SelectedHDIngreep.HDIngreep);
+                            SelectedHDIngreep = null;
                         }
                     }
                 }
@@ -187,15 +190,17 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            var temp = SelectedFaseCyclus;
             Fasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(new FaseCyclusViewModel(fcm));
-            }
-
-            if(Fasen.Count > 0)
-            {
-                SelectedFaseCyclus = Fasen[0];
+                var fcvm = new FaseCyclusViewModel(fcm);
+                Fasen.Add(fcvm);
+                if(temp != null && fcvm.Naam == temp.Naam)
+                {
+                    SelectedFaseCyclus = fcvm;
+                    temp = null;
+                }
             }
         }
 

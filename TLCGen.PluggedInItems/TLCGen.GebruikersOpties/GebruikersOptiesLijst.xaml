@@ -13,8 +13,6 @@
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
         <DataGridTextColumn x:Key="NaamColumn" Binding="{Binding Path=Naam}" Header="Naam" 
                             Visibility="{Binding Path=ShowNaam, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridTextColumn x:Key="DefineColumn" Binding="{Binding Path=Define}" Header="Define" 
-                            Visibility="{Binding Path=ShowDefine, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridTextColumn x:Key="InstellingColumn" Binding="{Binding Path=Instelling}" Header="Instelling" 
                             Visibility="{Binding Path=ShowInstelling, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridComboBoxColumn x:Key="TypeColumn" Header="Type" 
@@ -37,7 +35,6 @@
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>
                 <StaticResource ResourceKey="NaamColumn" />
-                <StaticResource ResourceKey="DefineColumn" />
                 <StaticResource ResourceKey="TypeColumn" />
                 <StaticResource ResourceKey="InstellingColumn" />
                 <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />

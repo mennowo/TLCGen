@@ -15,7 +15,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private string _SelectedFaseNaam;
-        private Dictionary<string, string> _ControllerFasen;
+        private List<string> _ControllerFasen;
         private VAOntruimenFaseViewModel _SelectedVAOntruimenFase;
 
         #endregion // Fields
@@ -28,12 +28,11 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseNaam = value;
-                string def;
-                if(ControllerFasen.TryGetValue(value, out def))
+                if(ControllerFasen.Contains(value))
                 {
-                    if(VAOntruimenFasen.Where(x => x.FaseCyclus == def).Any())
+                    if(VAOntruimenFasen.Where(x => x.FaseCyclus == value).Any())
                     {
-                        SelectedVAOntruimenFase = VAOntruimenFasen.Where(x => x.FaseCyclus == def).First();
+                        SelectedVAOntruimenFase = VAOntruimenFasen.Where(x => x.FaseCyclus == value).First();
                     }
                     else
                     {
@@ -66,14 +65,13 @@ namespace TLCGen.ViewModels
             {
                 if(value)
                 {
-                    string def;
-                    if (ControllerFasen.TryGetValue(SelectedFaseNaam, out def))
+                    if (ControllerFasen.Contains(SelectedFaseNaam))
                     {
                         VAOntruimenFaseModel vam = new VAOntruimenFaseModel();
-                        vam.FaseCyclus = def;
+                        vam.FaseCyclus = SelectedFaseNaam;
                         foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
                         {
-                            if (cm.FaseVan == def && cm.Waarde >= 0)
+                            if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
                             {
                                 vam.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = cm.FaseNaar, VAOntruimingsTijd = cm.Waarde });
                             }
@@ -81,7 +79,7 @@ namespace TLCGen.ViewModels
                         VAOntruimenFaseViewModel vavm = new VAOntruimenFaseViewModel(vam);
                         foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
                         {
-                            if (cm.FaseVan == def && cm.Waarde >= 0)
+                            if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
                             {
                                 var conf = vavm.ConflicterendeFasen.Where(x => x.FaseCyclus == cm.FaseNaar).First();
                                 conf.OntruimingsTijd = cm.Waarde;
@@ -110,7 +108,7 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        public Dictionary<string, string> ControllerFasen
+        public List<string> ControllerFasen
         {
             get { return _ControllerFasen; }
             set
@@ -148,19 +146,18 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             string temp = SelectedFaseNaam;
-            ControllerFasen = new Dictionary<string, string>();
+            ControllerFasen = new List<string>();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                ControllerFasen.Add(fcm.Naam, fcm.Define);
+                ControllerFasen.Add(fcm.Naam);
             }
-            string notused;
-            if(!string.IsNullOrEmpty(temp) && ControllerFasen.TryGetValue(temp, out notused))
+            if(!string.IsNullOrEmpty(temp) && ControllerFasen.Contains(temp))
             {
                 SelectedFaseNaam = temp;
             }
             else if(ControllerFasen.Count > 0)
             {
-                SelectedFaseNaam = ControllerFasen.First().Key;
+                SelectedFaseNaam = ControllerFasen.First();
             }
         }
 

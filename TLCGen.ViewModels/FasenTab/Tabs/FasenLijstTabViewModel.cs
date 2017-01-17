@@ -126,8 +126,7 @@ namespace TLCGen.ViewModels
                 }
             }
             fcm.Naam = newname;
-            fcm.Define = SettingsProvider.Default.GetFaseCyclusDefinePrefix() + newname;
-            SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(fcm, fcm.Define);
+            SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(fcm, fcm.Naam);
             FaseCyclusViewModel fcvm1 = new FaseCyclusViewModel(fcm);
             Fasen.Add(fcvm1);
         }

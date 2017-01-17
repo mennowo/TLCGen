@@ -53,14 +53,6 @@ namespace TLCGen.ViewModels
         }
 
         /// <summary>
-        /// The define of the PhaseCyclus
-        /// </summary>
-        public string Define
-        {
-            get { return _FaseCyclus.Define; }
-        }
-
-        /// <summary>
         /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
         /// </summary>
         public bool CanBeAddedToModule
@@ -71,7 +63,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
-                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Define, mfcvm.FaseCyclusDefine);
+                        IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Naam, mfcvm.FaseCyclusNaam);
                         Messenger.Default.Send(request);
                         if (request.Handled && request.IsConflicting)
                             return false;
@@ -92,7 +84,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (ModuleFaseCyclusViewModel mfcvm in _ModuleVM.Fasen)
                     {
-                        if (mfcvm.FaseCyclusDefine == this.Define)
+                        if (mfcvm.FaseCyclusNaam == this.Naam)
                             return true;
                     }
                 }

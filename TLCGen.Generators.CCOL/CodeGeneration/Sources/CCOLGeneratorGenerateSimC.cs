@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -106,8 +107,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
                     sb.AppendLine($"{tabspace}LNK_code[{index}] = \"{dm.Naam}\";");
-                    sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.Define};");
-                    sb.AppendLine($"{tabspace}FC_nr[{index}] = {fcm.Define};");
+                    sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.GetDefine()};");
+                    sb.AppendLine($"{tabspace}FC_nr[{index}] = {fcm.GetDefine()};");
                     sb.AppendLine($"{tabspace}S_generator[{index}] = NG;");
                     sb.AppendLine($"{tabspace}S_stopline[{index}] = 1800;");
                     sb.AppendLine($"{tabspace}Q1[{index}] = {dm.Simulatie.Q1};");
@@ -121,7 +122,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (DetectorModel dm in controller.Detectoren)
             {
                 sb.AppendLine($"{tabspace}LNK_code[{index}] = \"{dm.Naam}\";");
-                sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.Define};");
+                sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.GetDefine()};");
                 sb.AppendLine($"{tabspace}FC_nr[{index}] = NG;");
                 sb.AppendLine($"{tabspace}S_generator[{index}] = NG;");
                 sb.AppendLine($"{tabspace}S_stopline[{index}] = 1800;");

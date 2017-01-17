@@ -48,17 +48,17 @@ namespace TLCGen.Importers.TabC
                         if (Regex.IsMatch(line, @"^\s+TO_max\["))
                         {
                             string fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");
-                            if (!_Fasen.Contains(fc1))
-                                _Fasen.Add(fc1);
+                            if (!_Fasen.Contains(fc1.Replace("fc", "")))
+                                _Fasen.Add(fc1.Replace("fc", ""));
                         }
                     }
                     string AllPhasesMessage = "";
                     List<FaseCyclusModel> newfcs = new List<FaseCyclusModel>();
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
-                        if (!_Fasen.Contains(fcm.Define))
+                        if (!_Fasen.Contains(fcm.Naam))
                         {
-                            AllPhasesMessage = AllPhasesMessage + fcm.Define + "\n";
+                            AllPhasesMessage = AllPhasesMessage + fcm.Naam + "\n";
                             newfcs.Add(fcm);
                         }
                     }
@@ -96,7 +96,7 @@ namespace TLCGen.Importers.TabC
                             bool found = false;
                             foreach (FaseCyclusModel fcm in c.Fasen)
                             {
-                                if (newfcm.Define == fcm.Define)
+                                if (newfcm.Naam == fcm.Naam)
                                 {
                                     found = true;
                                 }
@@ -104,7 +104,7 @@ namespace TLCGen.Importers.TabC
                             if (!found)
                             {
                                 c.Fasen.Add(newfcm);
-                                NewPhasesMessage = NewPhasesMessage + newfcm.Define + "\n";
+                                NewPhasesMessage = NewPhasesMessage + newfcm.Naam + "\n";
                             }
                         }
 

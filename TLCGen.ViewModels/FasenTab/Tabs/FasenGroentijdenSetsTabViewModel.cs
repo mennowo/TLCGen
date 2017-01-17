@@ -127,7 +127,7 @@ namespace TLCGen.ViewModels
             foreach(FaseCyclusModel fcvm in _Controller.Fasen)
             {
                 GroentijdModel mgm = new GroentijdModel();
-                mgm.FaseCyclus = fcvm.Define;
+                mgm.FaseCyclus = fcvm.Naam;
                 mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fcvm.Type);
                 mgsm.Groentijden.Add(mgm);
             }
@@ -267,7 +267,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
                     {
-                        mgsvm.AddFase(fcm.Define, fcm.Naam);
+                        mgsvm.AddFase(fcm.Naam);
                     }
                 }
             }
@@ -277,7 +277,7 @@ namespace TLCGen.ViewModels
                 {
                     foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
                     {
-                        mgsvm.RemoveFase(fcm.Define);
+                        mgsvm.RemoveFase(fcm.Naam);
                     }
                 }
             }
@@ -290,15 +290,15 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        private void OnDefineChanged(DefineChangedMessage message)
+        private void OnNameChanged(NameChangedMessage message)
         {
             foreach(GroentijdenSetViewModel mgsvm in GroentijdenSets)
             {
                 foreach(GroentijdViewModel mgvm in mgsvm.Groentijden)
                 {
-                    if(mgvm.FaseCyclus == message.OldDefine)
+                    if(mgvm.FaseCyclus == message.OldName)
                     {
-                        mgvm.FaseCyclus = message.NewDefine;
+                        mgvm.FaseCyclus = message.NewName;
                     }
                 }
             }
@@ -348,7 +348,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            Messenger.Default.Register(this, new Action<DefineChangedMessage>(OnDefineChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
 
             foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)

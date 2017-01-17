@@ -55,7 +55,6 @@
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
     <Compile Include="Messages\SelectedConflictGroepChangedMessage.cs" />
     <Compile Include="Messages\UpdateTabsEnabledMessage.cs" />
-    <Compile Include="Messages\DefineChangedMessage.cs" />
     <Compile Include="Messages\FasenChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\GetDetectorListReqeust.cs" />

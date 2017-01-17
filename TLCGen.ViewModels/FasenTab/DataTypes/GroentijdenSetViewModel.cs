@@ -106,20 +106,20 @@ namespace TLCGen.ViewModels
 
         #region Public methods
 
-        public void AddFase(string fasedefine, string fasename)
+        public void AddFase(string fasename)
         {
             GroentijdModel mgm = new GroentijdModel();
-            mgm.FaseCyclus = fasedefine;
-            mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fasedefine);
+            mgm.FaseCyclus = fasename;
+            mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fasename);
             Groentijden.Add(new GroentijdViewModel(mgm));
         }
 
-        public void RemoveFase(string fasedefine)
+        public void RemoveFase(string fasename)
         {
             GroentijdViewModel _mgvm = null;
             foreach (GroentijdViewModel mgvm in Groentijden)
             {
-                if(mgvm.FaseCyclus == fasedefine)
+                if(mgvm.FaseCyclus == fasename)
                 {
                     _mgvm = mgvm;
                 }

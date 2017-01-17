@@ -177,7 +177,6 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            _dm.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + _SelectedFase.Naam + newname;
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
             DetectorViewModel dvm1 = new DetectorViewModel(_dm);

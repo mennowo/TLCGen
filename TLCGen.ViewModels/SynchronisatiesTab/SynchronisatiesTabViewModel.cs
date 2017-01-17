@@ -586,8 +586,8 @@ namespace TLCGen.ViewModels
                         else
                         {
                             ConflictMatrix[fcm_from, fcm_to] = new SynchronisatieViewModel();
-                            ConflictMatrix[fcm_from, fcm_to].FaseVan = Fasen[fcm_from].Define;
-                            ConflictMatrix[fcm_from, fcm_to].FaseNaar = Fasen[fcm_to].Define;
+                            ConflictMatrix[fcm_from, fcm_to].FaseVan = Fasen[fcm_from].Naam;
+                            ConflictMatrix[fcm_from, fcm_to].FaseNaar = Fasen[fcm_to].Naam;
                         }
                     }
                     ConflictMatrix[fcm_from, fcm_to].DisplayType = this.DisplayType;
@@ -777,8 +777,8 @@ namespace TLCGen.ViewModels
                 {
                     for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
-                        if (Fasen[fcm_from].Define == message.Conflict.FaseVan &&
-                           Fasen[fcm_to].Define == message.Conflict.FaseNaar)
+                        if (Fasen[fcm_from].Naam == message.Conflict.FaseVan &&
+                           Fasen[fcm_to].Naam == message.Conflict.FaseNaar)
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             switch (ConflictMatrix[fcm_from, fcm_to].ConflictValue)
@@ -827,8 +827,8 @@ namespace TLCGen.ViewModels
                 {
                     for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
-                        if (Fasen[fcm_from].Define == message.Naloop.FaseVan &&
-                            Fasen[fcm_to].Define == message.Naloop.FaseNaar)
+                        if (Fasen[fcm_from].Naam == message.Naloop.FaseVan &&
+                            Fasen[fcm_to].Naam == message.Naloop.FaseNaar)
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.HasOppositeNaloop = message.IsCoupled;
@@ -845,8 +845,8 @@ namespace TLCGen.ViewModels
                 {
                     for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
-                        if (Fasen[fcm_from].Define == message.Voorstart.FaseVan &&
-                            Fasen[fcm_to].Define == message.Voorstart.FaseNaar)
+                        if (Fasen[fcm_from].Naam == message.Voorstart.FaseVan &&
+                            Fasen[fcm_to].Naam == message.Voorstart.FaseNaar)
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.HasOppositeVoorstart = message.IsCoupled;
@@ -863,8 +863,8 @@ namespace TLCGen.ViewModels
                 {
                     for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
-                        if (Fasen[fcm_from].Define == message.Gelijkstart.FaseVan &&
-                            Fasen[fcm_to].Define == message.Gelijkstart.FaseNaar)
+                        if (Fasen[fcm_from].Naam == message.Gelijkstart.FaseVan &&
+                            Fasen[fcm_to].Naam == message.Gelijkstart.FaseNaar)
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.IsCoupledNoMessaging = message.IsCoupled;
@@ -881,8 +881,8 @@ namespace TLCGen.ViewModels
                 {
                     for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
-                        if (Fasen[fcm_from].Define == message.Meeaanvraag.FaseVan &&
-                            Fasen[fcm_to].Define == message.Meeaanvraag.FaseNaar)
+                        if (Fasen[fcm_from].Naam == message.Meeaanvraag.FaseVan &&
+                            Fasen[fcm_to].Naam == message.Meeaanvraag.FaseNaar)
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.HasOppositeMeeaanvraag = message.IsCoupled;

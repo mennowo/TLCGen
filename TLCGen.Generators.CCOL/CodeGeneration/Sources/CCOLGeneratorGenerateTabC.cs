@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -143,16 +144,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                string s = $"   FC_code[{fcm.Define}] = \"{fcm.Naam}\"; TRG_max[{fcm.Define}] = {fcm.TRG};";
+                string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG};";
                 int i = s.Length;
                 sb.AppendLine(s);
-                sb.AppendLine($"TRG_min[{fcm.Define}] = {fcm.TRG_min};".PadLeft(i));
-                sb.AppendLine($"TGG_max[{fcm.Define}] = {fcm.TGG};".PadLeft(i));
-                sb.AppendLine($"TGG_min[{fcm.Define}] = {fcm.TGG_min};".PadLeft(i));
-                sb.AppendLine($"TFG_max[{fcm.Define}] = {fcm.TFG};".PadLeft(i));
-                sb.AppendLine($"TGL_max[{fcm.Define}] = {fcm.TGL};".PadLeft(i));
-                sb.AppendLine($"TGL_min[{fcm.Define}] = {fcm.TGL_min};".PadLeft(i));
-                sb.AppendLine($"TVG_max[{fcm.Define}] = NG;".PadLeft(i));
+                sb.AppendLine($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min};".PadLeft(i));
+                sb.AppendLine($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG};".PadLeft(i));
+                sb.AppendLine($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min};".PadLeft(i));
+                sb.AppendLine($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG};".PadLeft(i));
+                sb.AppendLine($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL};".PadLeft(i));
+                sb.AppendLine($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min};".PadLeft(i));
+                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;".PadLeft(i));
             }
 
             return sb.ToString();
@@ -212,7 +213,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (DetectorModel dm in fcm.Detectoren)
                     {
-                        if (dm.Define?.Length > defmax) defmax = dm.Define.Length;
+                        if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
                         if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
                         if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
                         if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
@@ -244,16 +245,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (DetectorModel dm in fcm.Detectoren)
                     {
                         sb.Append("    ");
-                        sb.Append($"D_code[{dm.Define}] ".PadRight(pad1));
+                        sb.Append($"D_code[{dm.GetDefine()}] ".PadRight(pad1));
                         sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
                         if (dm.TDB != null)
                         {
-                            sb.Append($"TDB_max[{dm.Define}] ".PadRight(pad3));
+                            sb.Append($"TDB_max[{dm.GetDefine()}] ".PadRight(pad3));
                             sb.Append($"= {dm.TDB}; ".PadRight(pad4));
                         }
                         if (dm.TDH != null)
                         {
-                            sb.Append($"TDH_max[{dm.Define}] ".PadRight(pad5));
+                            sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
                             sb.AppendLine($"= {dm.TDH};");
                         }
 
@@ -263,12 +264,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.Append("".PadLeft(pad6));
                             if (dm.TBG != null)
                             {
-                                sb.Append($"TBG_max[{dm.Define}] ".PadRight(pad3));
+                                sb.Append($"TBG_max[{dm.GetDefine()}] ".PadRight(pad3));
                                 sb.Append($"= {dm.TBG}; ".PadRight(pad4));
                             }
                             if (dm.TOG != null)
                             {
-                                sb.Append($"TOG_max[{dm.Define}] ".PadRight(pad5));
+                                sb.Append($"TOG_max[{dm.GetDefine()}] ".PadRight(pad5));
                                 sb.AppendLine($"= {dm.TOG};");
                             }
                         }
@@ -279,12 +280,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.Append("".PadLeft(pad6));
                             if (dm.TFL != null)
                             {
-                                sb.Append($"TFL_max[{dm.Define}] ".PadRight(pad3));
+                                sb.Append($"TFL_max[{dm.GetDefine()}] ".PadRight(pad3));
                                 sb.Append($"= {dm.TFL}; ".PadRight(pad4));
                             }
                             if (dm.CFL != null)
                             {
-                                sb.Append($"CFL_max[{dm.Define}] ".PadRight(pad5));
+                                sb.Append($"CFL_max[{dm.GetDefine()}] ".PadRight(pad5));
                                 sb.AppendLine($"= {dm.CFL};");
                             }
                         }

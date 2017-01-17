@@ -142,7 +142,6 @@ namespace TLCGen.ViewModels
                 }
             }
             dm.Naam = newname;
-            dm.Define = SettingsProvider.Default.GetDetectorDefinePrefix() + newname;
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
         }

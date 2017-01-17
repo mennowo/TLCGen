@@ -57,7 +57,6 @@ namespace TLCGen.GebruikersOpties
     public class GebruikersOptieModel
     {
         public string Naam { get; set; }
-        public string Define { get; set; }
 
         public CCOLElementTypeEnum Type { get; set; }
         public int? Instelling { get; set; }
@@ -81,7 +80,6 @@ namespace TLCGen.GebruikersOpties
     public class GebruikersOptieWithIOModel : IOElementModel
     {
         public override string Naam { get; set; }
-        public string Define { get; set; }
         public string Commentaar { get; set; }
         
         public bool ShouldSerializeCommentaar()

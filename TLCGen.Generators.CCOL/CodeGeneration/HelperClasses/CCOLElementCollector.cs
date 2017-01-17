@@ -324,7 +324,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     FaseCyclusModel thisfcm = null;
                     foreach (FaseCyclusModel fcm in controller.Fasen)
                     {
-                        if (fcm.Define == mgm.FaseCyclus)
+                        if (fcm.Naam == mgm.FaseCyclus)
                         {
                             thisfcm = fcm;
                             break;
