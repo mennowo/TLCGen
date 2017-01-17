@@ -5,80 +5,162 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.ProjectGeneration
 {
     public class CCOLVisualProjectGenerator
     {
+        private string HandleFileLine(string line, CCOLCodeGeneratorPlugin plugin)
+        {
+            string writeline = line;
+
+            // Replace all
+            if (writeline.Contains("__"))
+            {
+                string prepro = plugin.CCOLPreprocessorDefinitions;
+                if (string.IsNullOrEmpty(prepro))
+                    prepro = "";
+                writeline = writeline.Replace("__CONTROLLERNAME__", plugin.Controller.Data.Naam);
+                writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
+                string ccollibspath = plugin.CCOLLibsPath.Remove(plugin.CCOLLibsPath.Length - 1);
+                if(!ccollibspath.EndsWith("\\"))
+                {
+                    ccollibspath = ccollibspath + "\\";
+                }
+                writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath);
+                writeline = writeline.Replace("__CCOLLLIBS__", plugin.CCOLLibs);
+                string ccolrespath = plugin.CCOLResPath.Remove(plugin.CCOLResPath.Length - 1);
+                if (!ccolrespath.EndsWith("\\"))
+                {
+                    ccolrespath = ccolrespath + "\\";
+                }
+                writeline = writeline.Replace("__CCOLLRESDIR__", ccolrespath);
+                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", plugin.CCOLIncludesPaden);
+                writeline = writeline.Replace("__PREPROCESSORDEFS__", prepro);
+            }
+
+            // If conditions
+            if (!string.IsNullOrWhiteSpace(line) && Regex.IsMatch(line, @"^\s*__IF.*"))
+            {
+                string condition = Regex.Replace(line, @"^\s*__IF([A-Z]+)__.*", "$1");
+                if (!string.IsNullOrWhiteSpace(condition))
+                {
+                    switch (condition)
+                    {
+                        case "OV":
+                            if(!(plugin.Controller.OVData.OVIngrepen != null &&
+                                 plugin.Controller.OVData.OVIngrepen.Count > 0 || 
+                                 plugin.Controller.OVData.HDIngrepen != null &&
+                                 plugin.Controller.OVData.HDIngrepen.Count > 0))
+                                return null;
+                            break;
+                        case "MV":
+                            return null;
+                        case "PTP":
+                            if (!(plugin.Controller.PTPData.PTPKoppelingen != null &&
+                                  plugin.Controller.PTPData.PTPKoppelingen.Count > 0))
+                                return null;
+                            break;
+                        case "SYNC":
+#warning TODO
+                            //if (!model.Syncfunc)
+                            return null;
+                            //break;
+                        case "MS":
+#warning TODO
+                            //if (!model.MultiSignal)
+                                return null;
+                            //break;
+                        case "NOTMS":
+                        //    if (model.MultiSignal)
+                        //        return null;
+                            break;
+                        case "KS":
+                            return null;
+                    }
+                }
+                writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z]+__", "$1");
+            }
+            return writeline;
+        }
+
         public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, VisualProjectTypeEnum type)
         {
             StringBuilder sb = new StringBuilder();
 
             string templatefilename = "";
+            string filtersfilename = "";
+            string outputfilename = "";
             switch (type)
             {
                 case VisualProjectTypeEnum.Visual2010:
                     templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010.xml");
+                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010filters.xml");
+                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_msvc2010.vcxproj");
                     break;
                 case VisualProjectTypeEnum.Visual2013:
                     templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013.xml");
-                    break;
+                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013filters.xml");
+                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_msvc2013.vcxproj"); break;
                 case VisualProjectTypeEnum.Visual2010Vissim:
                     templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010vissim.xml");
+                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010vissimfilters.xml");
+                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_vissim_msvc2010.vcxproj");
                     break;
                 case VisualProjectTypeEnum.Visual2013Vissim:
                     templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013vissim.xml");
+                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013vissimfilters.xml");
+                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_vissim_msvc2013.vcxproj");
                     break;
             }
-            if(File.Exists(templatefilename))
+            if (File.Exists(templatefilename))
             {
                 string[] projtemplate = File.ReadAllLines(templatefilename);
-                foreach(string line in projtemplate)
+                foreach (string line in projtemplate)
                 {
-                    string writeline = line;
+                    string writeline = HandleFileLine(line, plugin);
 
-                    // Replace all
-                    if (writeline.Contains("__"))
-                    {
-                        writeline = writeline.Replace("__CONTROLLERNAME__", plugin.Controller.Data.Naam);
-                        writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
-                        writeline = writeline.Replace("__CCOLLIBSDIR__", plugin.CCOLLibsPath.Remove(plugin.CCOLLibsPath.Length - 1)); // Remove trailing ;
-                        writeline = writeline.Replace("__CCOLLRESDIR__", plugin.CCOLResPath.Remove(plugin.CCOLResPath.Length - 1));   // Remove trailing ;
-                        writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", plugin.CCOLIncludesPaden);
-                        writeline = writeline.Replace("__PREPROCESSORDEFS__", plugin.CCOLPreprocessorDefinitions);
-                    }
 
-                    // If conditions
-                    if (line.StartsWith("__IF"))
-                    {
-                        //continue;
+                    if (!string.IsNullOrWhiteSpace(writeline))
+                        sb.AppendLine(writeline);
+                }
 
-                        // Note: this is mostly a placeholder for future functionality
-                        string condition = Regex.Replace(line, @"__IF([A-Z]+)__.*", "$1");
-                        switch(condition)
-                        {
-                            case "OV":
-                                continue;
-                            case "MV":
-                                continue;
-                            case "PTP":
-                                continue;
-                            case "SYNC":
-                                continue;
-                            case "MS":
-                                continue;
-                            case "NOTMS":
-                                writeline = Regex.Replace(writeline, @"__IF[A-Z]+__", "");
-                                break;
-                            case "KS":
-                                continue;
-                        }
-                    }
-                    sb.AppendLine(writeline);
+                try
+                {
+                    File.WriteAllText(outputfilename, sb.ToString());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error writing Visual Studio project files:\n" + e.ToString());
                 }
             }
-            return sb.ToString();
+
+            sb.Clear();
+
+            if (File.Exists(filtersfilename))
+            {
+                string[] projtemplate = File.ReadAllLines(filtersfilename);
+                foreach (string line in projtemplate)
+                {
+                    string writeline = HandleFileLine(line, plugin);
+
+                    if (!string.IsNullOrWhiteSpace(writeline))
+                        sb.AppendLine(writeline);
+                }
+
+                try
+                {
+                    File.WriteAllText(outputfilename + ".filters", sb.ToString());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("Error writing Visual Studio project files:\n" + e.ToString());
+                }
+            }
+
+            return "Finished genrating Visual Studio project files.";
         }
     }
 }

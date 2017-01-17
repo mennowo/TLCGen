@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="__CONTROLLERNAME__dpl.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="__CONTROLLERNAME__reg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="__CONTROLLERNAME__sim.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="__CONTROLLERNAME__tab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    __IFOV__<ClCompile Include="__CONTROLLERNAME__ov.c">
+    __IFOV__  <Filter>Source Files</Filter>
+    __IFOV__</ClCompile>
+    __IFSYNC__<ClCompile Include="Syncfunc.C">
+    __IFSYNC__  <Filter>Source Files</Filter>
+    __IFSYNC__</ClCompile>
+    __IFPTP__<ClCompile Include="PTPWIN.C">
+    __IFPTP__  <Filter>Source Files</Filter>
+    __IFPTP__</ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{__GUIDSOURCEFILES__}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{__GUIDRESOURCEFILES__}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="__CCOLLRESDIR__Ccolmenu.res">
+      <Filter>Resource Files</Filter>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\__CONTROLLERNAME__sys.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

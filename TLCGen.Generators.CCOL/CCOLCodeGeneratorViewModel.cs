@@ -103,7 +103,10 @@ namespace TLCGen.Generators.CCOL
         private bool GenerateVisualProjectCommand_CanExecute(object prm)
         {
             bool b = _Plugin.Controller != null &&
-                   !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
+                     !string.IsNullOrWhiteSpace(_Plugin.CCOLLibsPath) &&
+                     !string.IsNullOrWhiteSpace(_Plugin.CCOLIncludesPaden) &&
+                     !string.IsNullOrWhiteSpace(_Plugin.CCOLResPath) &&
+                     !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
             VisualCBEnabled = b;
             return b;
         }

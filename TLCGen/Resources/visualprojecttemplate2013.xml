@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{__GUID__}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>__CONTROLLERNAME__</RootNamespace>
+    <RootNamespace>My__CONTROLLERNAME__</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

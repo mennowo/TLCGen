@@ -127,6 +127,23 @@ namespace TLCGen.Generators.CCOL
             }
         }
 
+        private string _CCOLLibs;
+        [DisplayName("CCOL libraries")]
+        [Description("CCOL libraries (indien van toepassing)")]
+        [Category("Visual project settings")]
+        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
+        public string CCOLLibs
+        {
+            get { return _CCOLLibs; }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+                    _CCOLLibs = value + ";";
+                else
+                    _CCOLLibs = value;
+            }
+        }
+
         private string _CCOLResPath;
         [DisplayName("CCOL resources pad")]
         [Description("CCOL resources pad")]

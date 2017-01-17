@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+__IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c">
+__IFOV__      <Filter>Source Files</Filter>
+__IFOV__    </ClCompile>
+    <ClCompile Include="__CONTROLLERNAME__reg.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="__CONTROLLERNAME__tab.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+__IFSYNC__    <ClCompile Include="Syncfunc.c">
+__IFSYNC__      <Filter>Source Files</Filter>
+__IFSYNC__    </ClCompile>
+__IFPTP__    <ClCompile Include="PTPWIN.C">
+__IFPTP__      <Filter>Source Files</Filter>
+__IFPTP__    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+__IFKS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
+    <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
+    <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
+    <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
+__IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
+    <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
+    <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
+    <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="__CCOLLIBSDIR__VISSIM\ccolvissim_e.res" />
+  </ItemGroup>
+</Project>

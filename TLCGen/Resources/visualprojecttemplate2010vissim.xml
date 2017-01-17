@@ -13,13 +13,13 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{__GUID__}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>My__CONTROLLERNAME__</RootNamespace>
+    <RootNamespace>My__CONTROLLERNAME__vissim</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -49,15 +49,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;AUTOMAAT;VISSIM;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>__ADDITIONALINCLUDEDIRS__%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBCD;LIBC</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,31 +79,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="__CONTROLLERNAME__dpl.c" />
 __IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
-    <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
-__IFPTP__    <ClCompile Include="PTPWIN.C" />
 __IFSYNC__    <ClCompile Include="Syncfunc.c" />
+__IFPTP__    <ClCompile Include="PTPWIN.C" />
   </ItemGroup>
   <ItemGroup>
 __IFKS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
-__IFMS__    <Library Include="__CCOLLIBSDIR__CCOLMAINMS.lib" />
-__IFNOTMS__    <Library Include="__CCOLLIBSDIR__CCOLMAIN.lib" />
     <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
 __IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
+    <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="__CCOLLRESDIR__Ccolmenu.res" />
-  </ItemGroup>
-  <ItemGroup>
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
+    <Resource Include="__CCOLLIBSDIR__VISSIM\ccolvissim_e.res" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
