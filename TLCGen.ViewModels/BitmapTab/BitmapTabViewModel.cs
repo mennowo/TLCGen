@@ -396,11 +396,12 @@ namespace TLCGen.ViewModels
             }
 
             // Klokperioden
-            foreach(var per in _Controller.Perioden)
+            OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.PeriodenData.DefaultPeriodeBitmapData, "perdef", BitmappedItemViewModel.Type.Uitgang));
+            foreach(var per in _Controller.PeriodenData.Perioden)
             {
                 if(per.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden || per.Type == Models.Enumerations.PeriodeTypeEnum.Overig)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, per.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, "per" + per.Naam, BitmappedItemViewModel.Type.Uitgang));
                 }
             }
 
@@ -412,6 +413,15 @@ namespace TLCGen.ViewModels
             foreach (var hd in _Controller.OVData.HDIngrepen)
             {
                 OverigeUitgangen.Add(new BitmappedItemViewModel(hd.HDInmeldingBitmapData, "vchd" + hd.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
+            }
+
+            // Segment display
+            for(int i = 0; i < 7; ++i)
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(
+                    _Controller.Data.SegmentenDisplayBitmapData[i], 
+                    _Controller.Data.SegmentenDisplayBitmapData[i].Naam, 
+                    BitmappedItemViewModel.Type.Uitgang));
             }
 
             // IO from plugins

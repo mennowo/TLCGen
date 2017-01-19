@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for KlokPeriodenTab.xaml
+    /// Interaction logic for PeriodenGroentijdenTabView.xaml
     /// </summary>
-    public partial class KlokPeriodenTab : UserControl
+    public partial class PeriodenGroentijdenTabView : UserControl
     {
-        public KlokPeriodenTab()
+        public PeriodenGroentijdenTabView()
         {
             InitializeComponent();
         }

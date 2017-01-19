@@ -112,17 +112,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{tabspace}/* ---------------------------------- */");
             sb.AppendLine($"{tabspace}MM[mperiod] = 0;");
             sb.AppendLine();
-            //int i = 1;
-            //foreach(KlokPeriodeModel kpm in controller.KlokPerioden)
-            //{
-            //    sb.AppendLine($"    /* klokperiode: {kpm.Omschrijving} */");
-            //    sb.AppendLine("    /* ---------------- */");
-            //    sb.AppendLine($"    if (klokperiode(PRM[prmstkp{i}], PRM[prmetkp{i}])");
-            //    sb.AppendLine($"        && dagsoort(PRM[prmdckp1{i}]))");
-            //    sb.AppendLine($"      MM[mperiod] = {i};");
-            //    sb.AppendLine();
-            //    ++i;
-            //}
+            int i = 1;
+            foreach(PeriodeModel kpm in controller.PeriodenData.Perioden)
+            {
+                string comm = kpm.Commentaar;
+                if (comm == null) comm = "";
+                sb.AppendLine($"{tabspace}/* klokperiode: {comm} */");
+                sb.AppendLine($"{tabspace}/* -------------{new string('-', comm.Length)} */");
+                sb.AppendLine($"{tabspace}if (klokperiode(PRM[prmstkp{i}], PRM[prmetkp{i}]) &&");
+                sb.AppendLine($"{tabspace}    dagsoort(PRM[prmdckp{i}]))");
+                sb.AppendLine($"{tabspace}{tabspace}MM[mperiod] = {i};");
+                sb.AppendLine();
+                ++i;
+            }
             sb.AppendLine($"{tabspace}KlokPerioden_Add();");
             sb.AppendLine("}");
 
@@ -487,6 +489,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{tabspace}pre_system_application();");
+            sb.AppendLine();
+            sb.AppendLine("/* periode verklikking */");
+            sb.AppendLine("/* ------------------- */");
+            int i = 0;
+            sb.AppendLine($"{tabspace}CIF_GUS[usperdef] = (MM[mperiod] == {i++});");
+            foreach(var per in controller.PeriodenData.Perioden)
+            {
+                sb.AppendLine($"{tabspace}CIF_GUS[{per.BitmapData.GetBitmapCoordinaatOutputDefine("per" + per.Naam)}] = (MM[mperiod] == {i++});");
+            }
+            sb.AppendLine();
+            sb.AppendLine("/* wachtlicht uitsturing */");
+            sb.AppendLine("/* --------------------- */");
+            foreach (var fc in controller.Fasen)
+            {
+                foreach (var d in fc.Detectoren)
+                {
+                    if(d.Wachtlicht)
+                    {
+                        string wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine("wt" + d.Naam);
+                        string ddef = d.GetDefine();
+                        string fcdef = fc.GetDefine();
+                        if (controller.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik)
+                        {
+                            sb.AppendLine($"{tabspace}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");
+                        }
+                        else if(controller.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.AanvraagGezet)
+                        {
+                            sb.AppendLine($"{tabspace}CIF_GUS[{wtdef}] = !G[{fcdef}] && A[{fcdef}] && REG;");
+                        }
+                    }
+                }
+            }
             sb.AppendLine();
             sb.AppendLine($"{tabspace}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();

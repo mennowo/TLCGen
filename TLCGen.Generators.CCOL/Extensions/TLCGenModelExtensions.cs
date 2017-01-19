@@ -18,7 +18,39 @@ namespace TLCGen.Generators.CCOL.Extensions
 
         public static string GetDefine(this FaseCyclusModel fc)
         {
-            return "d" + fc.Naam;
+            return "fc" + fc.Naam;
+        }
+
+        public static string GetFaseFromDefine(this ConflictModel conf)
+        {
+            return "fc" + conf.FaseVan;
+        }
+
+        public static string GetFaseToDefine(this ConflictModel conf)
+        {
+            return "fc" + conf.FaseNaar;
+        }
+
+        public static string GetFaseCyclusDefine(this ModuleFaseCyclusModel mlfc)
+        {
+            return "fc" + mlfc.FaseCyclus;
+        }
+
+        public static string GetBitmapCoordinaatOutputDefine(this BitmapCoordinatenDataModel bm, string name = null)
+        {
+            if (name != null)
+            {
+                return "us" + name;
+            }
+            else
+            {
+                return "us" + bm.Naam;
+            }
+        }
+
+        public static string GetBitmapCoordinaatInputDefine(this BitmapCoordinatenDataModel bm)
+        {
+            return "us" + bm.Naam;
         }
     }
 }

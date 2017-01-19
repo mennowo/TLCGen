@@ -39,9 +39,6 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "GroentijdenSet")]
         public List<GroentijdenSetModel> GroentijdenSets { get; set; }
 
-        [XmlArrayItem(ElementName = "Periode")]
-        public List<PeriodeModel> Perioden { get; set; }
-
         [XmlArrayItem(ElementName = "FileIngreep")]
         public List<FileIngreepModel> FileIngrepen { get; set; }
 
@@ -53,6 +50,8 @@ namespace TLCGen.Models
 
         public BitmapCoordinatenDataModel RateltikkersDimmenCoordinaten { get; set; }
         public BitmapCoordinatenDataModel BellenDimmenCoordinaten { get; set; }
+
+        public PeriodenDataModel PeriodenData { get; set; }
 
         public PTPDataModel PTPData { get; set; }
 
@@ -75,7 +74,7 @@ namespace TLCGen.Models
             Detectoren = new List<DetectorModel>();
             GroentijdenSets = new List<GroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
-            Perioden = new List<PeriodeModel>();
+            PeriodenData = new PeriodenDataModel();
             CustomData = new CustomDataModel();
             InterSignaalGroep = new InterSignaalGroepModel();
             RichtingGevoeligeAanvragen = new List<RichtingGevoeligeAanvraagModel>();

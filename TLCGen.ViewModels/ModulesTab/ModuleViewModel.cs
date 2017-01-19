@@ -119,16 +119,6 @@ namespace TLCGen.ViewModels
             {
                 // Create ViewModel
                 ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
-                
-                // Find the friendly name of the FaseCyclus
-                foreach(FaseCyclusModel fcm in c.Fasen)
-                {
-                    if(fcm.Naam == mfcvm.FaseCyclusNaam)
-                    {
-                        mfcvm.FaseCyclusNaam = fcm.Naam;
-                        break;
-                    }
-                }
 
                 // Add to list
                 Fasen.Add(mfcvm);

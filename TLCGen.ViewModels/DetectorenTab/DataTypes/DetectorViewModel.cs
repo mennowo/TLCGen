@@ -12,6 +12,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
@@ -45,7 +46,7 @@ namespace TLCGen.ViewModels
             get { return _Detector.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
                     Messenger.Default.Send(message);

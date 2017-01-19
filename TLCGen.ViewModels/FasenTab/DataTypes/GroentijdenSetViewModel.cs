@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,8 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -32,6 +35,19 @@ namespace TLCGen.ViewModels
             }
             set
             {
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+                {
+                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
+                    Messenger.Default.Send(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string oldname = _GroentijdenSet.Naam;
+                        _GroentijdenSet.Naam = value;
+
+                        // Notify the messenger
+                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                    }
+                }
                 _GroentijdenSet.Naam = value;
                 OnPropertyChanged("Naam");
             }

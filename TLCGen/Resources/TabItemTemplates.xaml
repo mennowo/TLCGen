@@ -17,8 +17,8 @@
     <DataTemplate DataType="{x:Type vm:DetectorenTabViewModel}">
         <vw:DetectorenTab />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:KlokPeriodenTabViewModel}">
-        <vw:KlokPeriodenTab />
+    <DataTemplate DataType="{x:Type vm:PeriodenTabViewModel}">
+        <vw:PeriodenTab />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SpecialsTabViewModel}">
         <vw:SpecialsTab />

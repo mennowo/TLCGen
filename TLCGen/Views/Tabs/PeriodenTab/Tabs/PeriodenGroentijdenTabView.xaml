@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="TLCGen.Views.PeriodenGroentijdenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             Name="root"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="Default periode naam" Grid.Row="0" Grid.Column="0" />
+            <TextBox Text="{Binding Path=DefaultPeriodeNaam,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="2" />
+            <Label Content="Default periode groentijdenset" Grid.Row="1" Grid.Column="0" />
+            <ComboBox 
+                Grid.Row="1" Grid.Column="1" Margin="2"
+                ItemsSource="{Binding Path=GroentijdenSets}" 
+                SelectedValue="{Binding Path=DefaultPeriodeGroentijdenSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        <DataGrid Margin="2" Grid.Row="1"
+            ItemsSource="{Binding Path=Periodes}"
+            SelectedItem="{Binding Path=SelectedPeriode}"
+            CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
+                <!--<DataGridComboBoxColumn Header="Type" 
+                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PeriodeTypeEnum}}}" />-->
+                <DataGridComboBoxColumn Header="Dag code" 
+                                        SelectedItemBinding="{Binding Path=DagCode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PeriodeDagCodeEnum}}}" />
+                <DataGridTemplateColumn Header="Start tijd" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=StartTijdAsText}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=StartTijd,Mode=TwoWay}" Minimum="0" ClipValueToMinMax="True" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Eind tijd" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=EindTijdAsText}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=EindTijd,Mode=TwoWay}" Minimum="0" ClipValueToMinMax="True" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="GroentijdenSet" Width="Auto" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=GroentijdenSet}" Margin="2" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                ItemsSource="{Binding Path=DataContext.GroentijdenSets,ElementName=root}" 
+                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                SelectedItem="{Binding Path=GroentijdenSet,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=IsPeriodeForGroentijdenSet}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button Content="Periode toev." Command="{Binding Path=AddPeriodeCommand}" Margin="2" />
+            <Button Content="Periode verw." Command="{Binding Path=RemovePeriodeCommand}" Margin="2" />
+            <Button Content="Periode omhoog" Command="{Binding Path=MovePeriodeUpCommand}" Margin="2" />
+            <Button Content="Periode omlaag" Command="{Binding Path=MovePeriodeDownCommand}" Margin="2" />
+        </StackPanel>
+    </Grid>
+</UserControl>

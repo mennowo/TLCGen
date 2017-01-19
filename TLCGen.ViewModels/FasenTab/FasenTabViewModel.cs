@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
         
-        public DrawingImage Icon
+        public override ImageSource Icon
         {
             get
             {
@@ -43,7 +43,7 @@ namespace TLCGen.ViewModels
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "TabIcons.xaml");
                 dict.Source = u;
-                return (DrawingImage)dict["FasenTabDrawingImage"];
+                return (ImageSource)dict["FasenTabDrawingImage"];
             }
         }
 

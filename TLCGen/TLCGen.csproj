@@ -131,6 +131,12 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml.cs">
+      <DependentUpon>PeriodenOverigTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenGroentijdenTabView.xaml.cs">
+      <DependentUpon>PeriodenGroentijdenTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingDetailsView.xaml.cs">
       <DependentUpon>RoBuGroverSignaalGroepInstellingDetailsView.xaml</DependentUpon>
     </Compile>
@@ -199,8 +205,8 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenOVTabView.xaml.cs">
       <DependentUpon>FasenOVTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\KlokPeriodenTab.xaml.cs">
-      <DependentUpon>KlokPeriodenTab.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\PeriodenTab\PeriodenTab.xaml.cs">
+      <DependentUpon>PeriodenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\ModulesTab.xaml.cs">
       <DependentUpon>ModulesTab.xaml</DependentUpon>
@@ -288,6 +294,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DataTypes\DetectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\PeriodenTab\Tabs\PeriodenGroentijdenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -395,7 +409,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\KlokPeriodenTab.xaml">
+    <Page Include="Views\Tabs\PeriodenTab\PeriodenTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -609,6 +623,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"

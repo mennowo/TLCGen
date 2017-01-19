@@ -27,12 +27,7 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclusNaam
         {
-            get { return _FaseCyclusNaam; }
-            set
-            {
-                _FaseCyclusNaam = value;
-                OnPropertyChanged("FaseCyclusNaam");
-            }
+            get { return _ModuleFaseCyclus.FaseCyclus; }
         }
 
         public ObservableCollection<string> Alternatieven

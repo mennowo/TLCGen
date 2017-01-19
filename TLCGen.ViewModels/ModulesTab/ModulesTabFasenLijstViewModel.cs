@@ -97,7 +97,6 @@ namespace TLCGen.ViewModels
                 ModuleFaseCyclusModel mfcm = new ModuleFaseCyclusModel();
                 mfcm.FaseCyclus = fcmvm.Naam;
                 ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
-                mfcvm.FaseCyclusNaam = fcmvm.Naam;
                 SelectedModule.Fasen.Add(mfcvm);
                 SelectedModule.Fasen.BubbleSort();
             }

@@ -24,6 +24,8 @@ namespace TLCGen.Models
         public string Straat2 { get; set; }
         public string BitmapNaam { get; set; }
 
+        public BitmapCoordinatenDataModel[] SegmentenDisplayBitmapData { get; set; }
+
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
         public VLOGTypeEnum VLOGType { get; set; }
@@ -44,6 +46,16 @@ namespace TLCGen.Models
         public ControllerDataModel() : base()
         {
             Versies = new List<VersieModel>();
+            SegmentenDisplayBitmapData = new BitmapCoordinatenDataModel[7] 
+            {
+                new BitmapCoordinatenDataModel(){ Naam = "segm1" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm2" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm3" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm4" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm5" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm6" },
+                new BitmapCoordinatenDataModel(){ Naam = "segm7" }
+            };
         }
 
         #endregion // Constructor

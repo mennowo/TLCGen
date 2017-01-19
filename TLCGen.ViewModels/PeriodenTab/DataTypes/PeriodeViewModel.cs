@@ -12,10 +12,11 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class PeriodeViewModel : ViewModelBase
+    public class PeriodeViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
@@ -35,7 +36,7 @@ namespace TLCGen.ViewModels
             get { return _Periode.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
                     Messenger.Default.Send(message);
@@ -45,6 +46,16 @@ namespace TLCGen.ViewModels
                     }
                 }
                 OnMonitoredPropertyChanged("Naam");
+            }
+        }
+
+        public string Commentaar
+        {
+            get { return _Periode.Commentaar; }
+            set
+            {
+                _Periode.Commentaar = value;
+                OnMonitoredPropertyChanged("Commentaar");
             }
         }
 
@@ -72,7 +83,7 @@ namespace TLCGen.ViewModels
                 OnMonitoredPropertyChanged("DagCode");
             }
         }
-
+        
         public TimeSpan StartTijd
         {
             get { return _Periode.StartTijd; }
@@ -80,6 +91,7 @@ namespace TLCGen.ViewModels
             {
                 _Periode.StartTijd = value;
                 OnMonitoredPropertyChanged("StartTijd");
+                OnMonitoredPropertyChanged("StartTijdAsText");
             }
         }
 
@@ -90,6 +102,33 @@ namespace TLCGen.ViewModels
             {
                 _Periode.EindTijd = value;
                 OnMonitoredPropertyChanged("EindTijd");
+                OnMonitoredPropertyChanged("EindTijdAsText");
+            }
+        }
+
+        public string StartTijdAsText
+        {
+            get
+            {
+                int hours = StartTijd.Hours;
+                if (StartTijd.Days == 1)
+                {
+                    hours = 24;
+                }
+                return hours.ToString("00") + ":" + StartTijd.Minutes.ToString("00");
+            }
+        }
+
+        public string EindTijdAsText
+        {
+            get
+            {
+                int hours = EindTijd.Hours;
+                if (EindTijd.Days == 1)
+                {
+                    hours = 24;
+                }
+                return hours.ToString("00") + ":" + EindTijd.Minutes.ToString("00");
             }
         }
 
@@ -112,6 +151,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return Periode;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

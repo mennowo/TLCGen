@@ -119,6 +119,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GetCoordinatesString(IOElementModel item, string itemdefine, string itemtype)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (item.BitmapCoordinaten?.Count > 0)
+            {
+                sb.Append($"{tabspace}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
+                sb.AppendLine($"Y_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].Y};");
+            }
+            else
+            {
+                sb.Append($"{tabspace}X_{itemtype}[{itemdefine}] = NG; ");
+                sb.AppendLine($"Y_{itemtype}[{itemdefine}] = NG;");
+            }
+
+            if (item.BitmapCoordinaten?.Count > 1)
+            {
+                for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                {
+                    sb.Append($"{tabspace}X_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].X}; ");
+                    sb.Append($"Y_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].Y}; ");
+                    sb.AppendLine($"NR_{itemtype}[{itemdefine}_{i}] = {itemdefine};");
+                }
+            }
+            return sb.ToString();
+        }
+
         private string GenerateDplCDisplayParameters(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
@@ -131,25 +157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(FaseCyclusModel fcm in controller.Fasen)
             {
-                if(fcm.BitmapCoordinaten?.Count > 0)
-                {
-                    sb.Append($"{tabspace}X_us[{fcm.GetDefine()}] = {fcm.BitmapCoordinaten[0].X}; ");
-                    sb.AppendLine($"Y_us[{fcm.GetDefine()}] = {fcm.BitmapCoordinaten[0].Y};");
-                }
-                else
-                {
-                    sb.Append($"{tabspace}X_us[{fcm.GetDefine()}] = NG; ");
-                    sb.AppendLine($"Y_us[{fcm.GetDefine()}] = NG;");
-                }
-                if (fcm.BitmapCoordinaten?.Count > 1)
-                {
-                    for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
-                    {
-                        sb.Append($"{tabspace}X_us[{fcm.GetDefine()}_{i}] = {fcm.BitmapCoordinaten[i].X}; ");
-                        sb.Append($"Y_us[{fcm.GetDefine()}_{i}] = {fcm.BitmapCoordinaten[i].Y}; ");
-                        sb.AppendLine($"NR_us[{fcm.GetDefine()}_{i}] = {fcm.GetDefine()};");
-                    }
-                }
+                sb.Append(GetCoordinatesString(fcm as IOElementModel, fcm.GetDefine(), "us"));
             }
 
             sb.AppendLine();
@@ -161,48 +169,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    if (dm.BitmapCoordinaten?.Count > 0)
-                    {
-                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].X}; ");
-                        sb.AppendLine($"Y_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].Y};");
-                    }
-                    else
-                    {
-                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = NG; ");
-                        sb.AppendLine($"Y_is[{dm.GetDefine()}] = NG;");
-                    }
-                    if (dm.BitmapCoordinaten?.Count > 1)
-                    {
-                        for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
-                        {
-                            sb.Append($"{tabspace}X_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
-                            sb.Append($"Y_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
-                            sb.AppendLine($"NR_is[{dm.GetDefine()}_{i}] = {dm.GetDefine()};");
-                        }
-                    }
+                    sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
                 }
             }
             foreach (DetectorModel dm in controller.Detectoren)
             {
-                if (dm.BitmapCoordinaten?.Count > 0)
-                {
-                    sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].X}; ");
-                    sb.AppendLine($"Y_is[{dm.GetDefine()}] = {dm.BitmapCoordinaten[0].Y};");
-                }
-                else
-                {
-                    sb.Append($"{tabspace}X_is[{dm.GetDefine()}] = NG; ");
-                    sb.AppendLine($"Y_is[{dm.GetDefine()}] = NG;");
-                }
-                if (dm.BitmapCoordinaten?.Count > 1)
-                {
-                    for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
-                    {
-                        sb.Append($"{tabspace}X_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].X}; ");
-                        sb.Append($"Y_is[{dm.GetDefine()}_{i}] = {dm.BitmapCoordinaten[i].Y}; ");
-                        sb.AppendLine($"NR_is[{dm.GetDefine()}_{i}] = {dm.GetDefine()};");
-                    }
-                }
+                sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
+            }
+
+            sb.AppendLine($"{tabspace}/* overige uitgangen */");
+            sb.AppendLine($"{tabspace}/* ----------------- */");
+
+            // Segment display
+            foreach (var item in controller.Data.SegmentenDisplayBitmapData)
+            {
+                sb.Append(GetCoordinatesString(item as IOElementModel, item.GetBitmapCoordinaatOutputDefine(), "us"));
+            }
+
+            // Periods
+            sb.Append(GetCoordinatesString(controller.PeriodenData.DefaultPeriodeBitmapData as IOElementModel, 
+                controller.PeriodenData.DefaultPeriodeBitmapData.GetBitmapCoordinaatOutputDefine("perdef"), "us"));
+            foreach(var per in controller.PeriodenData.Perioden)
+            {
+                sb.Append(GetCoordinatesString(per.BitmapData as IOElementModel, per.BitmapData.GetBitmapCoordinaatOutputDefine("per" + per.Naam), "us"));
             }
 
             sb.AppendLine();

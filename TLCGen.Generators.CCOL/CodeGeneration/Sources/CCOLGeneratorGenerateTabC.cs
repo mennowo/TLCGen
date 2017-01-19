@@ -168,10 +168,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             if (controller.InterSignaalGroep.Conflicten?.Count > 0)
             {
+                string prevfasefrom = "";
                 foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                 {
-                    sb.AppendLine($"    TO_max[{conflict.FaseVan}][{conflict.FaseNaar}] = {conflict.SerializedWaarde};");
-                    sb.AppendLine();
+                    if(prevfasefrom == "")
+                    {
+                        prevfasefrom = conflict.GetFaseFromDefine();
+                    }
+                    if(prevfasefrom != conflict.GetFaseFromDefine())
+                    {
+                        prevfasefrom = conflict.GetFaseFromDefine();
+                        sb.AppendLine();
+                    }
+                    sb.AppendLine($"    TO_max[{conflict.GetFaseFromDefine()}][{conflict.GetFaseToDefine()}] = {conflict.SerializedWaarde};");
                 }
             }
             //sb.AppendLine("default_to_min(0);");
@@ -257,6 +266,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
                             sb.AppendLine($"= {dm.TDH};");
                         }
+                        else
+                        {
+                            sb.AppendLine("");
+                        }
 
                         if (dm.TBG != null || dm.TOG != null)
                         {
@@ -271,6 +284,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             {
                                 sb.Append($"TOG_max[{dm.GetDefine()}] ".PadRight(pad5));
                                 sb.AppendLine($"= {dm.TOG};");
+                            }
+                            else
+                            {
+                                sb.AppendLine("");
                             }
                         }
 
@@ -287,6 +304,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             {
                                 sb.Append($"CFL_max[{dm.GetDefine()}] ".PadRight(pad5));
                                 sb.AppendLine($"= {dm.CFL};");
+                            }
+                            else
+                            {
+                                sb.AppendLine("");
                             }
                         }
                     }
@@ -392,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach(ModuleFaseCyclusModel mfcm in mm.Fasen)
                 {
-                    sb.AppendLine($"{tabspace}PRML[{mm.Naam}][{mfcm.FaseCyclus}] = PRIMAIR;");
+                    sb.AppendLine($"{tabspace}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                 }
                 sb.AppendLine();
             }

@@ -51,6 +51,7 @@
     <Compile Include="EnumHelper.cs" />
     <Compile Include="IViewModelWithItem.cs" />
     <Compile Include="MultiPropertySetter.cs" />
+    <Compile Include="NameSyntaxChecker.cs" />
     <Compile Include="ObservableCollectionAroundList.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

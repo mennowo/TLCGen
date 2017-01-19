@@ -98,8 +98,8 @@
     <Compile Include="FasenTab\Tabs\FasenLijstTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenLijstTimersTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenOVTabViewModel.cs" />
-    <Compile Include="KlokPeriodenTab\PeriodeViewModel.cs" />
-    <Compile Include="KlokPeriodenTab\KlokPeriodenTabViewModel.cs" />
+    <Compile Include="PeriodenTab\DataTypes\PeriodeViewModel.cs" />
+    <Compile Include="PeriodenTab\PeriodenTabViewModel.cs" />
     <Compile Include="ModulesTab\FaseCyclusModuleViewModel.cs" />
     <Compile Include="ModulesTab\ModuleFaseCyclusViewModel.cs" />
     <Compile Include="ModulesTab\ModuleMolenViewModel.cs" />
@@ -109,6 +109,8 @@
     <Compile Include="Other\IGeneratorViewModel.cs" />
     <Compile Include="Other\TLCGenSettingsViewModel.cs" />
     <Compile Include="Other\TLCGenStatusBarViewModel.cs" />
+    <Compile Include="PeriodenTab\Tabs\PeriodenGroentijdenTabViewModel.cs" />
+    <Compile Include="PeriodenTab\Tabs\PeriodenOverigTabViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialsTab\DataTypes\FileIngreepDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\FileIngreepTeDoserenSignaalGroepViewModel.cs" />

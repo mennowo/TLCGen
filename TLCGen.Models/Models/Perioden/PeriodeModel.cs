@@ -20,30 +20,60 @@ namespace TLCGen.Models
         public TimeSpan EindTijd { get; set; }
         public string GroentijdenSet { get; set; } 
         public BitmapCoordinatenDataModel BitmapData { get; set; }
+        public string Commentaar { get; set; }
 
         // Properties for serialization
         [XmlElement("StartTijd")]
         public string SerializedStartTijd
         {
-            get { return StartTijd.Hours.ToString("00") + ":" + StartTijd.Minutes.ToString("00"); }
+            get
+            {
+                int hours = StartTijd.Hours;
+                if(StartTijd.Days == 1)
+                {
+                    hours = 24;
+                }
+                return hours.ToString("00") + ":" + StartTijd.Minutes.ToString("00"); }
             set
             {
                 string[] parts = value.Split(':');
                 if (parts.Length != 2)
                     throw new NotImplementedException();
-                StartTijd = new TimeSpan(Int32.Parse(parts[0]), Int32.Parse(parts[1]), 0);
+                int hours = Int32.Parse(parts[0]);
+                int days = 0;
+                if (hours == 24)
+                {
+                    hours = 0;
+                    days = 1;
+                }
+                StartTijd = new TimeSpan(days, hours, Int32.Parse(parts[1]), 0);
             }
         }
         [XmlElement("EindTijd")]
         public string SerializedEindTijd
         {
-            get { return EindTijd.Hours.ToString("00") + ":" + EindTijd.Minutes.ToString("00"); }
+            get
+            {
+                int hours = EindTijd.Hours;
+                if (EindTijd.Days == 1)
+                {
+                    hours = 24;
+                }
+                return hours.ToString("00") + ":" + EindTijd.Minutes.ToString("00");
+            }
             set
             {
                 string[] parts = value.Split(':');
                 if (parts.Length != 2)
                     throw new NotImplementedException();
-                EindTijd = new TimeSpan(Int32.Parse(parts[0]), Int32.Parse(parts[1]), 0);
+                int hours = Int32.Parse(parts[0]);
+                int days = 0;
+                if (hours == 24)
+                {
+                    hours = 0;
+                    days = 1;
+                }
+                EindTijd = new TimeSpan(days, hours, Int32.Parse(parts[1]), 0);
             }
         }
 

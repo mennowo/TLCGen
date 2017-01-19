@@ -1,65 +1,34 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Media;
-using TLCGen.DataAccess;
-using TLCGen.Extensions;
 using TLCGen.Helpers;
-using TLCGen.Interfaces;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
-using TLCGen.Messaging.Requests;
 using TLCGen.Models;
-using TLCGen.Settings;
-using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 5)]
-    public class KlokPeriodenTabViewModel : TLCGenTabItemViewModel
+    [TLCGenTabItem(index: 0, type: TabItemTypeEnum.PeriodenTab)]
+    public class PeriodenGroentijdenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-
+        
         private PeriodeViewModel _SelectedPeriode;
-        private ObservableCollection<PeriodeViewModel> _Periodes;
         private ObservableCollection<string> _GroentijdenSets;
 
         #endregion // Fields
 
         #region Properties
 
-        public DrawingImage Icon
+        public ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel> Periodes
         {
-            get
-            {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "TabIcons.xaml");
-                dict.Source = u;
-                return (DrawingImage)dict["KlokPeriodenTabDrawingImage"];
-            }
-        }
-
-        public ObservableCollection<PeriodeViewModel> Periodes
-        {
-            get
-            {
-                if (_Periodes == null)
-                {
-                    _Periodes = new ObservableCollection<PeriodeViewModel>();
-                }
-                return _Periodes;
-            }
+            get; private set;
         }
 
         public ObservableCollection<string> GroentijdenSets
@@ -84,9 +53,30 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string DefaultPeriodeGroentijdenSet
+        {
+            get { return _Controller.PeriodenData.DefaultPeriodeGroentijdenSet; }
+            set
+            {
+                _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
+                OnMonitoredPropertyChanged("DefaultPeriodeGroentijdenSet");
+            }
+        }
+
+        public string DefaultPeriodeNaam
+        {
+            get { return _Controller.PeriodenData.DefaultPeriodeNaam; }
+            set
+            {
+                _Controller.PeriodenData.DefaultPeriodeNaam = value;
+                OnMonitoredPropertyChanged("DefaultPeriodeNaam");
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
+
 
         RelayCommand _AddPeriodeCommand;
         public ICommand AddPeriodeCommand
@@ -140,9 +130,10 @@ namespace TLCGen.ViewModels
                 return _MovePeriodeDownCommand;
             }
         }
+
         #endregion // Commands
 
-        #region Command functionality
+        #region Command Functionality
 
         private void MovePeriodeUpCommand_Executed(object obj)
         {
@@ -163,12 +154,15 @@ namespace TLCGen.ViewModels
                 Periodes.Insert(index - 1, mvm);
                 SelectedPeriode = mvm;
             }
+
+            Periodes.RebuildList();
         }
 
 
         private void MovePeriodeDownCommand_Executed(object obj)
         {
             int index = -1;
+            
             foreach (PeriodeViewModel mvm in Periodes)
             {
                 ++index;
@@ -185,19 +179,23 @@ namespace TLCGen.ViewModels
                 Periodes.Insert(index + 1, mvm);
                 SelectedPeriode = mvm;
             }
+
+            Periodes.RebuildList();
         }
 
         void AddNewPeriodeCommand_Executed(object prm)
         {
             PeriodeModel mm = new PeriodeModel();
-            mm.Naam = "Periode" + (Periodes.Count + 1).ToString();
+            mm.Type = Models.Enumerations.PeriodeTypeEnum.Groentijden;
+            mm.DagCode = Models.Enumerations.PeriodeDagCodeEnum.AlleDagen;
+            mm.Naam = "MGPeriode" + (Periodes.Count + 1).ToString();
             PeriodeViewModel mvm = new PeriodeViewModel(mm);
             Periodes.Add(mvm);
         }
 
         bool AddNewPeriodeCommand_CanExecute(object prm)
         {
-            return Periodes != null;
+            return Periodes != null && GroentijdenSets?.Count > 0;
         }
 
         void RemovePeriodeCommand_Executed(object prm)
@@ -210,7 +208,7 @@ namespace TLCGen.ViewModels
             return SelectedPeriode != null;
         }
 
-        #endregion // Command functionality
+        #endregion // Command Functionality
 
         #region TabItem Overrides
 
@@ -218,7 +216,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "Klokperioden";
+                return "Groentijden";
             }
         }
 
@@ -230,37 +228,32 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            var v = _Controller.PeriodenData.DefaultPeriodeGroentijdenSet;
             GroentijdenSets.Clear();
             foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)
             {
                 GroentijdenSets.Add(gsm.Naam);
             }
+            _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = v;
+            OnPropertyChanged("DefaultPeriodeGroentijdenSet");
         }
 
         #endregion // TabItem Overrides
 
-        #region Public Methods
+        #region Private Methods
 
-        #endregion // Public Methods
+        private bool FilterPerioden(object o)
+        {
+            var per = (PeriodeViewModel)o;
+            return per.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden;
+        }
+
+        #endregion // Private Methods
 
         #region Collection Changed
 
         private void Periodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (PeriodeViewModel pvm in e.NewItems)
-                {
-                    _Controller.Perioden.Add(pvm.Periode);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (PeriodeViewModel pvm in e.OldItems)
-                {
-                    _Controller.Perioden.Remove(pvm.Periode);
-                }
-            }
             Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
@@ -268,14 +261,14 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public KlokPeriodenTabViewModel(ControllerModel controller) : base(controller)
+        public PeriodenGroentijdenTabViewModel(ControllerModel controller) : base(controller)
         {
-            foreach(PeriodeModel periode in controller.Perioden)
-            {
-                Periodes.Add(new PeriodeViewModel(periode));
-            }
+            Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(controller.PeriodenData.Perioden);
 
             Periodes.CollectionChanged += Periodes_CollectionChanged;
+
+            ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
+            view.Filter = FilterPerioden;
         }
 
         #endregion // Constructor
