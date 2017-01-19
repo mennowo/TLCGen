@@ -11,14 +11,14 @@ namespace TLCGen.Models
     public class VAOntruimenFaseModel
     {
         public string FaseCyclus { get; set; }
-        public int MaximaleVAOntruimingsTijd { get; set; }
+        public int VAOntrTijdensRood { get; set; }
 
-        [XmlArrayItem(ElementName = "ConflictendeFase")]
-        public List<VAOntruimenNaarFaseModel> ConflicterendeFasen { get; set; }
+        [XmlArrayItem(ElementName = "VADetector")]
+        public List<VAOntruimenDetectorModel> VADetectoren { get; set; }
 
         public VAOntruimenFaseModel()
         {
-            ConflicterendeFasen = new List<VAOntruimenNaarFaseModel>();
+            VADetectoren = new List<VAOntruimenDetectorModel>();
         }
     }
 }

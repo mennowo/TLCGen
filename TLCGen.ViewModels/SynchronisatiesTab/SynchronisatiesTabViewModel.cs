@@ -944,7 +944,7 @@ namespace TLCGen.ViewModels
             {
                 if(value >= Van)
                     _Tot = value;
-                OnPropertyChanged("Naar");
+                OnPropertyChanged("Tot");
 
                 _MainVM.SetGarantieConvertValuesVan();
             }

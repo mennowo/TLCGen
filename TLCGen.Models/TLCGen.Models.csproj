@@ -92,6 +92,7 @@
     <Compile Include="Models\RoBuGrover\RoBuGroverHiaatDetectorModel.cs" />
     <Compile Include="Models\RoBuGrover\RoBuGroverModel.cs" />
     <Compile Include="Models\RoBuGrover\RoBuGroverSignaalGroepInstellingenModel.cs" />
+    <Compile Include="Models\Varia\VAOntruimenDetectorModel.cs" />
     <Compile Include="Models\Varia\VAOntruimenFaseModel.cs" />
     <Compile Include="Models\Varia\VAOntruimenNaarFaseModel.cs" />
     <Compile Include="Models\Controller\VersieModel.cs" />

@@ -25,14 +25,16 @@
             <ListBox 
                 Grid.Row="1" Margin="2" 
                 ItemsSource="{Binding Path=ControllerFasen}" 
-                DisplayMemberPath="Key"
-                SelectedValuePath="Key"
                 SelectedValue="{Binding Path=SelectedFaseNaam}"
                 SelectionMode="Single"
                 Name="FasenListBox" />
         </Grid>
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="1" Grid.RowSpan="2" />
         <CheckBox Grid.Column="2" IsChecked="{Binding Path=SelectedFaseHasVAOntruimen}" Margin="2" Content="Fase met VA ontruimen" />
-        <local:VAOntruimenFaseView Margin="2" DataContext="{Binding Path=SelectedVAOntruimenFase}" Grid.Column="2" Grid.Row="1" IsEnabled="{Binding Path=SelectedFaseHasVAOntruimen,UpdateSourceTrigger=PropertyChanged}" />
+        <Grid IsEnabled="{Binding Path=SelectedFaseHasVAOntruimen,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" >
+            
+            <local:VAOntruimenFaseView Margin="2" DataContext="{Binding Path=SelectedVAOntruimenFase}" 
+                                       />
+        </Grid>
     </Grid>
 </UserControl>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -15,7 +17,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private string _SelectedFaseNaam;
-        private List<string> _ControllerFasen;
+        private ObservableCollection<string> _ControllerFasen;
         private VAOntruimenFaseViewModel _SelectedVAOntruimenFase;
 
         #endregion // Fields
@@ -55,6 +57,33 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedVAOntruimenFase = value;
+                if (_SelectedVAOntruimenFase != null)
+                {
+                    try
+                    {
+                        _SelectedVAOntruimenFase.FaseDetectoren.Clear();
+                        var selfc = Controller.Fasen.Where(x => x.Naam == SelectedFaseNaam).First();
+                        foreach (DetectorModel dm in selfc.Detectoren)
+                        {
+                            _SelectedVAOntruimenFase.FaseDetectoren.Add(dm.Naam);
+                        }
+
+                        _SelectedVAOntruimenFase.ConflicterendeFasen.Clear();
+                        foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
+                        {
+                            if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
+                            {
+                                _SelectedVAOntruimenFase.ConflicterendeFasen.Add(cm.FaseNaar, cm.Waarde);
+                            }
+                        }
+
+                        _SelectedVAOntruimenFase.Refresh();
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show("Error in VA ontruimen: " + e.ToString());
+                    }
+                }
                 OnMonitoredPropertyChanged("SelectedVAOntruimenFase");
             }
         }
@@ -69,22 +98,9 @@ namespace TLCGen.ViewModels
                     {
                         VAOntruimenFaseModel vam = new VAOntruimenFaseModel();
                         vam.FaseCyclus = SelectedFaseNaam;
-                        foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
-                        {
-                            if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
-                            {
-                                vam.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = cm.FaseNaar, VAOntruimingsTijd = cm.Waarde });
-                            }
-                        }
+                        
                         VAOntruimenFaseViewModel vavm = new VAOntruimenFaseViewModel(vam);
-                        foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
-                        {
-                            if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
-                            {
-                                var conf = vavm.ConflicterendeFasen.Where(x => x.FaseCyclus == cm.FaseNaar).First();
-                                conf.OntruimingsTijd = cm.Waarde;
-                            }
-                        }
+
                         SelectedVAOntruimenFase = vavm;
                         VAOntruimenFasen.Add(vavm);
                     }
@@ -108,13 +124,15 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        public List<string> ControllerFasen
+        public ObservableCollection<string> ControllerFasen
         {
-            get { return _ControllerFasen; }
-            set
+            get
             {
-                _ControllerFasen = value;
-                OnMonitoredPropertyChanged("ControllerFasen");
+                if (_ControllerFasen == null)
+                {
+                    _ControllerFasen = new ObservableCollection<string>();
+                }
+                return _ControllerFasen;
             }
         }
 
@@ -146,7 +164,7 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             string temp = SelectedFaseNaam;
-            ControllerFasen = new List<string>();
+            ControllerFasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 ControllerFasen.Add(fcm.Naam);

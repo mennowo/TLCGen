@@ -3,15 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dg2d="http://gu.se/DataGrid2D"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="MatrixCellTemplate">
+            <TextBlock 
+                Margin="0"
+                Padding="2"
+                TextAlignment="Center"
+                Text="{Binding Path=VAOntruimingsTijd}" />
+        </DataTemplate>
+        <DataTemplate x:Key="MatrixCellEditingTemplate">
+            <controls:AutoSelectTextBox
+                    Margin="0"
+                    Padding="0"
+                    TextAlignment="Center"
+                    FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                    Text="{Binding Path=VAOntruimingsTijd,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -19,24 +37,24 @@
         </Grid.ColumnDefinitions>
         <Label Content="Herstart VA ontr. tijdens rood" />
         <TextBox Text="{Binding Path=VAOntrTijdensRood}" Margin="2" Grid.Column="1" />
-        <Label Content="Detector" Grid.Row="1" />
-        <ComboBox Margin="2" Grid.Row="1" Grid.Column="1" />
-        <Label Content="Detector (fallback)" Grid.Row="2" />
-        <ComboBox Margin="2" Grid.Row="2" Grid.Column="1" />
-        <DataGrid Grid.Row="3" Grid.ColumnSpan="2" Margin="2"
-                  ItemsSource="{Binding Path=ConflicterendeFasen}"
-                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                      AncestorType={x:Type DataGridRow}}, 
-                                      Path=Item.FaseCyclus}"/>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Ontruimingstijd" Binding="{Binding Path=OntruimingsTijd}" Foreground="DarkGray" IsReadOnly="True" />
-                <DataGridTextColumn Header="VA ontruimingstijd" Binding="{Binding Path=VAOntruimingsTijd}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <DataGrid
+            Grid.Row="1" Grid.ColumnSpan="2" Margin="2"
+            SelectionUnit="Cell"
+            dg2d:ItemsSource.Array2D="{Binding Path=VAOntruimenMatrix}"
+            dg2d:Cell.Template="{StaticResource MatrixCellTemplate}"
+            dg2d:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
+            dg2d:ItemsSource.ColumnHeadersSource="{Binding Path=VAOntruimenMatrixColumnHeaders}"
+            dg2d:ItemsSource.RowHeadersSource="{Binding Path=VAOntruimenMatrixRowHeaders}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="Detectoren" />
+            <ComboBox ItemsSource="{Binding Path=SelectableDetectoren}" 
+                      SelectedValue="{Binding Path=SelectedDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" 
+                      Margin="2" MinWidth="70" />
+            <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddDetectorCommand}" CommandParameter="Add" />
+            <ComboBox ItemsSource="{Binding Path=RemovableDetectoren}" 
+                      SelectedValue="{Binding Path=SelectedDetectorToRemove,UpdateSourceTrigger=PropertyChanged}" 
+                      Margin="2" MinWidth="70" />
+            <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveDetectorCommand}" CommandParameter="Remove" />
+        </StackPanel>
     </Grid>
 </UserControl>

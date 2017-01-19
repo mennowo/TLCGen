@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
             {
                 if (_AddFileDetectorCommand == null)
                 {
-                    _AddFileDetectorCommand = new RelayCommand(AddNewFileDetectorCommand_Executed, AddNewFileDetectorCommand_CanExecute);
+                    _AddFileDetectorCommand = new RelayCommand(AddFileDetectorCommand_Executed, AddFileDetectorCommand_CanExecute);
                 }
                 return _AddFileDetectorCommand;
             }
@@ -193,7 +193,7 @@ namespace TLCGen.ViewModels
 
         #region Command Functionality
 
-        void AddNewFileDetectorCommand_Executed(object prm)
+        void AddFileDetectorCommand_Executed(object prm)
         {
             FileIngreepDetectorModel fidm = new FileIngreepDetectorModel();
             fidm.Detector = SelectedDetectorNaam;
@@ -202,7 +202,7 @@ namespace TLCGen.ViewModels
             UpdateSelectables();
         }
 
-        bool AddNewFileDetectorCommand_CanExecute(object prm)
+        bool AddFileDetectorCommand_CanExecute(object prm)
         {
             return !string.IsNullOrWhiteSpace(SelectedDetectorNaam);
         }

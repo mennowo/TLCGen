@@ -8,38 +8,30 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class VAOntruimenNaarFaseViewModel : ViewModelBase, IViewModelWithItem
+    public class VAOntruimenDetectorViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
-        private VAOntruimenNaarFaseModel _VAOntruimenNaarFase;
-        private int _OntruimingsTijd;
+        private VAOntruimenDetectorModel _VAOntruimenDetector;
 
         #endregion // Fields
 
         #region Properties
 
-        public string FaseCyclus
+        public string Detector
         {
-            get { return _VAOntruimenNaarFase.FaseCyclus; }
+            get { return _VAOntruimenDetector.Detector; }
             set
             {
-                _VAOntruimenNaarFase.FaseCyclus = value;
+                _VAOntruimenDetector.Detector = value;
                 OnMonitoredPropertyChanged("FaseCyclus");
             }
         }
 
-        public int VAOntruimingsTijd
+        public ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel> ConflicterendeFasen
         {
-            get { return _VAOntruimenNaarFase.VAOntruimingsTijd; }
-            set
-            {
-                if (value >= 0)
-                {
-                    _VAOntruimenNaarFase.VAOntruimingsTijd = value;
-                }
-                OnMonitoredPropertyChanged("VAOntruimingsTijd");
-            }
+            get;
+            private set;
         }
 
         #endregion Properties
@@ -64,16 +56,17 @@ namespace TLCGen.ViewModels
 
         public object GetItem()
         {
-            return _VAOntruimenNaarFase;
+            return _VAOntruimenDetector;
         }
 
         #endregion // IViewModelWithItem
-        
+
         #region Constructor
 
-        public VAOntruimenNaarFaseViewModel(VAOntruimenNaarFaseModel vaontruimennaarfase)
+        public VAOntruimenDetectorViewModel(VAOntruimenDetectorModel vaontruimend)
         {
-            _VAOntruimenNaarFase = vaontruimennaarfase;
+            _VAOntruimenDetector = vaontruimend;
+            ConflicterendeFasen = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ConflicterendeFasen);
         }
 
         #endregion // Constructor

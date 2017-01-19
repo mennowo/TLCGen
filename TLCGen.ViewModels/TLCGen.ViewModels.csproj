@@ -121,6 +121,7 @@
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverFileDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverHiaatDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingenViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\VAOntruimenDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\VAOntruimenFaseViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\VAOntruimenNaarFaseViewModel.cs" />
     <Compile Include="SpecialsTab\Other\RoBuGroverTabFaseViewModel.cs" />
