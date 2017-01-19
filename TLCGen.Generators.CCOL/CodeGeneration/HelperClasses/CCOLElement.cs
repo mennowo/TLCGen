@@ -11,11 +11,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         public string Define { get; set; }
         public string Naam { get; set; }
-        public string Type { get; set; }
+        public CCOLElementType Type { get; set; }
         public string TType { get; set; }
         public string Instelling { get; set; }
         public string Commentaar { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
     }
 }

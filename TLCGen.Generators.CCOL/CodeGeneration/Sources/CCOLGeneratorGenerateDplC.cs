@@ -186,12 +186,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GetCoordinatesString(item as IOElementModel, item.GetBitmapCoordinaatOutputDefine(), "us"));
             }
 
-            // Periods
-            sb.Append(GetCoordinatesString(controller.PeriodenData.DefaultPeriodeBitmapData as IOElementModel, 
-                controller.PeriodenData.DefaultPeriodeBitmapData.GetBitmapCoordinaatOutputDefine("perdef"), "us"));
-            foreach(var per in controller.PeriodenData.Perioden)
+            foreach(var pgen in _PieceGenerators)
             {
-                sb.Append(GetCoordinatesString(per.BitmapData as IOElementModel, per.BitmapData.GetBitmapCoordinaatOutputDefine("per" + per.Naam), "us"));
+                foreach(var item in pgen.GetCCOLBitmapOutputs())
+                {
+                    sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                }
             }
 
             sb.AppendLine();

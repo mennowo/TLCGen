@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -32,7 +33,9 @@
         <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" />
         <Label Content="Minimaal aantal meldingen" Grid.Row="1" />
         <xc:IntegerUpDown Value="{Binding Path=MinimaalAantalMeldingen}" Grid.Column="1" Grid.Row="1" Margin="2" Maximum="{Binding Path=MinimaalAantalMeldingenMax}" Minimum="0" />
-        <DockPanel Grid.Row="2" Grid.ColumnSpan="2">
+        <Label Content="Eerlijk doseren" Grid.Column="0" Grid.Row="2" />
+        <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="2" Grid.Column="1" />
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
             <Label Content="File detectoren" DockPanel.Dock="Top" />
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="File detector" />
@@ -58,7 +61,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+        <DockPanel Grid.Row="4" Grid.ColumnSpan="2">
             <Label Content="Te doseren fasen" DockPanel.Dock="Top" />
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="Fase" />

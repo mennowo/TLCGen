@@ -12,6 +12,7 @@ namespace TLCGen.Models
     {
         public string Naam { get; set; }
         public int MinimaalAantalMeldingen { get; set; }
+        public bool EerlijkDoseren { get; set; }
 
         [XmlArrayItem(ElementName = "FileDetector")]
         public List<FileIngreepDetectorModel> FileDetectoren { get; set; }

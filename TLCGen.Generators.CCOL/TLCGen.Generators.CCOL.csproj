@@ -69,8 +69,12 @@
       <DependentUpon>CCOLCodeGeneratorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="CCOLCodeGeneratorViewModel.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLWaitsignalenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLIOElement.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElementCollector.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElemListData.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLCodeTypeEnum.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElemTypeEnum.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElement.cs" />
     <Compile Include="CodeGeneration\CCOLGenerator.cs" />
@@ -78,6 +82,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateTabAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateSysAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateDplAdd.cs" />
+    <Compile Include="CodeGeneration\ICCOLCodePieceGenerator.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSimC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSysH.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateDplC.cs" />

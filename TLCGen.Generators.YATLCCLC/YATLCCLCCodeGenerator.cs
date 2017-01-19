@@ -44,6 +44,16 @@ namespace TLCGen.Generators.CCOL
             set;
         }
 
+        public void GenerateController()
+        {
+
+        }
+
+        public bool CanGenerateController()
+        {
+            return false;
+        }
+
         #endregion // ITLCGenGenerator
 
         #region Private Methods

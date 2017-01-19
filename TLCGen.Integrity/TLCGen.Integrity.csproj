@@ -74,6 +74,14 @@
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
+      <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
+      <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
+      <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
+      <Name>TLCGen.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>

@@ -36,7 +36,7 @@ namespace TLCGen.Generators.CCOL.Extensions
             return "fc" + mlfc.FaseCyclus;
         }
 
-        public static string GetBitmapCoordinaatOutputDefine(this BitmapCoordinatenDataModel bm, string name = null)
+        public static string GetBitmapCoordinaatOutputDefine(this IOElementModel o, string name = null)
         {
             if (name != null)
             {
@@ -44,13 +44,13 @@ namespace TLCGen.Generators.CCOL.Extensions
             }
             else
             {
-                return "us" + bm.Naam;
+                return "us" + o.Naam;
             }
         }
 
-        public static string GetBitmapCoordinaatInputDefine(this BitmapCoordinatenDataModel bm)
+        public static string GetBitmapCoordinaatInputDefine(this IOElementModel i)
         {
-            return "us" + bm.Naam;
+            return "us" + i.Naam;
         }
     }
 }

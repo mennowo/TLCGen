@@ -132,6 +132,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool EerlijkDoseren
+        {
+            get { return _FileIngreep.EerlijkDoseren; }
+            set
+            {
+                _FileIngreep.EerlijkDoseren = value;
+                OnMonitoredPropertyChanged("EerlijkDoseren");
+            }
+        }
+
         public int MinimaalAantalMeldingenMax
         {
             get { return _FileIngreep.FileDetectoren.Count; }

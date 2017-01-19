@@ -262,6 +262,20 @@ namespace TLCGen.ViewModels
             }
         }
 
+
+        RelayCommand _GenerateControllerCommand;
+        public ICommand GenerateControllerCommand
+        {
+            get
+            {
+                if (_GenerateControllerCommand == null)
+                {
+                    _GenerateControllerCommand = new RelayCommand(GenerateControllerCommand_Executed, GenerateControllerCommand_CanExecute);
+                }
+                return _GenerateControllerCommand;
+            }
+        }
+
         RelayCommand _ImportControllerCommand;
         public ICommand ImportControllerCommand
         {
@@ -487,7 +501,7 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    if(ControllerVM != null)
+                    if (ControllerVM != null)
                         ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetController(c2);
                     ControllerVM.ReloadController();
@@ -500,7 +514,7 @@ namespace TLCGen.ViewModels
 
                     // Do nothing if the importer returned nothing
                     if (c1 == null)
-                        return; 
+                        return;
 
                     // Check data integrity
                     string s1 = IntegrityChecker.IsControllerDataOK(c1);
@@ -509,7 +523,7 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    if(ControllerVM != null)
+                    if (ControllerVM != null)
                         ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetNewController(c1);
                     ControllerVM.ReloadController();
@@ -517,6 +531,16 @@ namespace TLCGen.ViewModels
                 }
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
+        }
+
+        private bool GenerateControllerCommand_CanExecute(object obj)
+        {
+            return SelectedGenerator != null && SelectedGenerator.Generator != null && SelectedGenerator.Generator.CanGenerateController();
+        }
+
+        private void GenerateControllerCommand_Executed(object obj)
+        {
+            SelectedGenerator.Generator.GenerateController();
         }
 
         private bool ImportControllerCommand_CanExecute(object obj)

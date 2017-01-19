@@ -9,7 +9,7 @@ namespace TLCGen.Helpers
 {
     public static class NameSyntaxChecker
     {
-        private static Regex ValidCNameRegex = new Regex(@"^[a-zA-Z_][a-zA-Z_0-9]*$", RegexOptions.Compiled);
+        private static Regex ValidCNameRegex = new Regex(@"^[a-zA-Z_0-9]+$", RegexOptions.Compiled);
 
         public static bool IsValidName(string name)
         {

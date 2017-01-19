@@ -8,6 +8,7 @@ using TLCGen.DataAccess;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.Integrity
@@ -151,6 +152,25 @@ namespace TLCGen.Integrity
                 if (dvm.Naam == naam)
                     return false;
             }
+
+            // Check perioden
+            foreach(var p in _Controller.PeriodenData.Perioden)
+            {
+                if (p.Naam == naam)
+                    return false;
+            }
+
+            // Check plugins
+            foreach(var pl in TLCGenPluginManager.Default.LoadedPlugins)
+            {
+                var ipl = pl as ITLCGenElementProvider;
+                if (ipl != null)
+                {
+                    if (!ipl.IsElementNameUnique(naam))
+                        return false;
+                }
+            }
+
             return true;
         }
 

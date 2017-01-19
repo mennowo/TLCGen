@@ -12,11 +12,12 @@ using System.Windows.Input;
 using System.Xml;
 using System.Windows.Media;
 using TLCGen.DataAccess;
+using TLCGen.Integrity;
 
 namespace TLCGen.GebruikersOpties
 {
     [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter)]
-    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenIOElementProvider
+    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider
     {
         #region Constants
 
@@ -75,7 +76,10 @@ namespace TLCGen.GebruikersOpties
             get { return _SelectedTabIndex; }
             set
             {
-                _SelectedTabIndex = value;
+                if (CheckCurrentItemNameUnique())
+                {
+                    _SelectedTabIndex = value;
+                }
                 OnMonitoredPropertyChanged("SelectedTabIndex");
                 OnMonitoredPropertyChanged("SelectedOptie");
             }
@@ -95,8 +99,8 @@ namespace TLCGen.GebruikersOpties
                 if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
                 {
                     _SelectedOptie[SelectedTabIndex] = value;
-                    OnPropertyChanged("SelectedOptie");
                 }
+                OnPropertyChanged("SelectedOptie");
             }
         }
 
@@ -294,6 +298,27 @@ namespace TLCGen.GebruikersOpties
 
         #endregion // Command functionality
 
+        #region Private Methods
+
+        private bool CheckCurrentItemNameUnique()
+        {
+            if (SelectedOptie == null)
+                return true;
+
+            var oio = SelectedOptie as GebruikersOptieWithIOViewModel;
+            var o = SelectedOptie as GebruikersOptieViewModel;
+            if (oio != null)
+            {
+                return IntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam);
+            }
+            else
+            {
+                return IntegrityChecker.IsElementNaamUnique(_Controller, o.Naam);
+            }
+        }
+
+        #endregion // Private Methods
+
         #region ITLCGenTabItem
 
         private ControllerModel _Controller;
@@ -370,7 +395,7 @@ namespace TLCGen.GebruikersOpties
 
         public bool OnSelectedPreview()
         {
-            return true;
+            return CheckCurrentItemNameUnique();
         }
 
         public void OnDeselected()
@@ -434,7 +459,7 @@ namespace TLCGen.GebruikersOpties
 
         #endregion // ITLCGenXMLNodeWriter
 
-        #region ITLCGenIOElementProvider
+        #region ITLCGenElementProvider
 
         public List<IOElementModel> GetOutputItems()
         {
@@ -456,7 +481,20 @@ namespace TLCGen.GebruikersOpties
             return items;
         }
 
-        #endregion // ITLCGenIOElementProvider
+        public bool IsElementNameUnique(string name)
+        {
+            foreach(var o in Uitgangen) { if (o.Naam == name) return false; }
+            foreach(var o in Ingangen) { if (o.Naam == name) return false; }
+            foreach(var o in HulpElementen) { if (o.Naam == name) return false; }
+            foreach(var o in Timers) { if (o.Naam == name) return false; }
+            foreach(var o in Counters) { if (o.Naam == name) return false; }
+            foreach(var o in Schakelaars) { if (o.Naam == name) return false; }
+            foreach(var o in GeheugenElementen) { if (o.Naam == name) return false; }
+            foreach(var o in Parameters) { if (o.Naam == name) return false; }
+            return true;
+        }
+
+        #endregion // ITLCGenElementProvider
 
         #region Constructor
 

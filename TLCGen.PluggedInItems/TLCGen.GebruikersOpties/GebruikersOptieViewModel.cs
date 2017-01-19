@@ -1,9 +1,12 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.ViewModels;
 
 namespace TLCGen.GebruikersOpties
@@ -23,7 +26,19 @@ namespace TLCGen.GebruikersOpties
             get { return _GebruikersOptie.Naam; }
             set
             {
-                _GebruikersOptie.Naam = value;
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+                {
+                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
+                    Messenger.Default.Send(message);
+                    if (message.Handled && message.IsUnique)
+                    {
+                        string oldname = _GebruikersOptie.Naam;
+                        _GebruikersOptie.Naam = value;
+
+                        // Notify the messenger
+                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                    }
+                }
                 OnMonitoredPropertyChanged("Naam");
             }
         }

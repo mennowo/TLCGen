@@ -18,7 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Static Public Methods
 
-        public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller)
+        public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             AlleDetectoren = new List<DetectorModel>();
             foreach (FaseCyclusModel fcm in controller.Fasen)
@@ -31,14 +31,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             CCOLElemListData[] lists = new CCOLElemListData[8];
 
-            lists[0] = CollectAllUitgangen(controller);
+            lists[0] = CollectAllUitgangen(controller, pgens);
             lists[1] = CollectAllIngangen(controller);
             lists[2] = CollectAllHulpElementen(controller);
             lists[3] = CollectAllGeheugenElementen(controller);
             lists[4] = CollectAllTimers(controller);
             lists[5] = CollectAllCounters(controller);
             lists[6] = CollectAllSchakelaars(controller);
-            lists[7] = CollectAllParameters(controller);
+            lists[7] = CollectAllParameters(controller, pgens);
 
             return lists;
         }
@@ -47,7 +47,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Static Private Methods
 
-        private static CCOLElemListData CollectAllUitgangen(ControllerModel controller)
+        private static CCOLElemListData CollectAllUitgangen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -59,19 +59,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 data.Elements.Add(new CCOLElement() { Define = item.GetBitmapCoordinaatOutputDefine(), Naam = item.Naam });
             }
 
-            // Periods
-            data.Elements.Add(new CCOLElement() { Define = controller.PeriodenData.DefaultPeriodeBitmapData.GetBitmapCoordinaatOutputDefine("perdef"), Naam = "perdef" });
-            foreach (var item in controller.PeriodenData.Perioden)
+            foreach (var pgen in pgens)
             {
-                data.Elements.Add(new CCOLElement() { Define = item.BitmapData.GetBitmapCoordinaatOutputDefine("per" + item.Naam), Naam = "per" + item.Naam });
-            }
-
-            // Waitsignals
-            foreach (var fc in controller.Fasen)
-            {
-                foreach (var d in fc.Detectoren)
+                foreach (var i in pgen.GetCCOLElements(CCOLElementType.Uitgang))
                 {
-                    data.Elements.Add(new CCOLElement() { Define = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine("wt" + d.Naam), Naam = "wt" + d.Naam });
+                    data.Elements.Add(i);
                 }
             }
 
@@ -269,7 +261,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllParameters(ControllerModel controller)
+        private static CCOLElemListData CollectAllParameters(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -330,26 +322,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 data.Elements.Add(new CCOLElement() { Define = $"prmmkd{dm.Naam}", Naam = $"mkd{dm.Naam}", Instelling = $"{set}", TType = "0" });
             }
 
-            // Perioden
-            int i = 1;
-            foreach(var per in controller.PeriodenData.Perioden)
+            foreach(var pgen in pgens)
             {
-                var hours = per.StartTijd.Hours;
-                if(per.StartTijd.Days == 1)
+                foreach(var i in pgen.GetCCOLElements(CCOLElementType.Parameter))
                 {
-                    hours = 24;
+                    data.Elements.Add(i);
                 }
-                var inst = hours * 100 + per.StartTijd.Minutes;
-                data.Elements.Add(new CCOLElement() { Define = $"prmstkp{i}", Naam = $"stkp{i}", Instelling = inst.ToString(), TType = "TI_type" });
-                hours = per.EindTijd.Hours;
-                if (per.EindTijd.Days == 1)
-                {
-                    hours = 24;
-                }
-                inst = hours * 100 + per.EindTijd.Minutes;
-                data.Elements.Add(new CCOLElement() { Define = $"prmetkp{i}", Naam = $"etkp{i}", Instelling = inst.ToString(), TType = "TI_type" });
-                data.Elements.Add(new CCOLElement() { Define = $"prmdckp{i}", Naam = $"dckp{i}", Instelling = ((int)per.DagCode).ToString() });
-                ++i;
             }
 
             // Maxgroentijden

@@ -90,8 +90,8 @@
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
                 <StaticResource ResourceKey="FaseCyclusColumn" />
-                <DataGridTextColumn Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
-                <DataGridTextColumn Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
+                <DataGridTextColumn Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" />
+                <DataGridTextColumn Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" />
                 <StaticResource ResourceKey="AanvraagColumn" />
                 <StaticResource ResourceKey="VerlengenColumn" />
                 <DataGridTextColumn Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" />

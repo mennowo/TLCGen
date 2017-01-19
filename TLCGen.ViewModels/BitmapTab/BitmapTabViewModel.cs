@@ -427,11 +427,11 @@ namespace TLCGen.ViewModels
             // IO from plugins
             foreach (var v in TLCGenPluginManager.Default.LoadedPlugins)
             {
-                var pl = v as ITLCGenIOElementProvider;
+                var pl = v as ITLCGenElementProvider;
                 if(v != null)
                 {
-                    var initems = ((ITLCGenIOElementProvider)v).GetInputItems();
-                    var outitems = ((ITLCGenIOElementProvider)v).GetOutputItems();
+                    var initems = ((ITLCGenElementProvider)v).GetInputItems();
+                    var outitems = ((ITLCGenElementProvider)v).GetOutputItems();
                     foreach(var i in initems)
                     {
                         OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemViewModel.Type.Ingang));

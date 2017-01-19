@@ -7,9 +7,11 @@ using TLCGen.Models;
 
 namespace TLCGen.Plugins
 {
-    public interface ITLCGenIOElementProvider : ITLCGenPlugin
+    public interface ITLCGenElementProvider : ITLCGenPlugin
     {
         List<IOElementModel> GetOutputItems();
         List<IOElementModel> GetInputItems();
+
+        bool IsElementNameUnique(string name);
     }
 }

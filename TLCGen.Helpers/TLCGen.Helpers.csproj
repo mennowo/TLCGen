@@ -50,6 +50,7 @@
     <Compile Include="DesignMode.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="IViewModelWithItem.cs" />
+    <Compile Include="ModelStringSetter.cs" />
     <Compile Include="MultiPropertySetter.cs" />
     <Compile Include="NameSyntaxChecker.cs" />
     <Compile Include="ObservableCollectionAroundList.cs" />

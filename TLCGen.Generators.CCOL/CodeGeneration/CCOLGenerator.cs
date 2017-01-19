@@ -23,6 +23,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private List<DetectorModel> AlleDetectoren;
 
+        private CCOLPeriodenGenerator _PeriodenCodeGenerator;
+        private CCOLWaitsignalenCodeGenerator _WaitsignalenCodeGenerator;
+        private List<ICCOLCodePieceGenerator> _PieceGenerators;
+
         private string tabspace = "    ";
 
         #endregion // Fields
@@ -42,6 +46,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             if (Directory.Exists(sourcefilepath))
             {
+                foreach (var pgen in _PieceGenerators)
+                {
+                    pgen.CollectCCOLElements(controller);
+                }
+
                 AlleDetectoren = new List<DetectorModel>();
                 foreach (FaseCyclusModel fcm in controller.Fasen)
                 {
@@ -51,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (DetectorModel dm in controller.Detectoren)
                     AlleDetectoren.Add(dm);
 
-                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(controller);
+                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(controller, _PieceGenerators);
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
                 Uitgangen = CCOLElementLists[0];
@@ -163,7 +172,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public CCOLGenerator()
         {
+            _PeriodenCodeGenerator = new CCOLPeriodenGenerator();
+            _WaitsignalenCodeGenerator = new CCOLWaitsignalenCodeGenerator();
 
+            _PieceGenerators = new List<ICCOLCodePieceGenerator>();
+            _PieceGenerators.Add(_PeriodenCodeGenerator as ICCOLCodePieceGenerator);
+            _PieceGenerators.Add(_WaitsignalenCodeGenerator as ICCOLCodePieceGenerator);
         }
 
         #endregion // Constructor

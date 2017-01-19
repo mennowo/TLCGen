@@ -57,6 +57,19 @@ namespace TLCGen.Generators.CCOL
             set;
         }
 
+        public void GenerateController()
+        {
+            if(this._MyVM.GenerateCodeCommand.CanExecute(null))
+            {
+                this._MyVM.GenerateCodeCommand.Execute(null);
+            }
+        }
+
+        public bool CanGenerateController()
+        {
+            return this._MyVM.GenerateCodeCommand.CanExecute(null);
+        }
+
         #endregion // ITLCGenGenerator
 
         #region ITLCGenPlugMessaging

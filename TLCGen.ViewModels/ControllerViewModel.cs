@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Xml;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
@@ -256,43 +257,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void SetStringInModel(object obj, string oldstring, string newstring)
-        {
-            if (obj == null) return;
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                object propValue = property.GetValue(obj);
-                if (property.PropertyType == typeof(string))
-                {
-                    string propString = (string)propValue;
-                    if (propString == oldstring)
-                    {
-                        property.SetValue(obj, newstring);
-                    }
-                }
-                else if (!objType.IsValueType)
-                {
-                    var elems = propValue as IList;
-                    if (elems != null)
-                    {
-                        foreach (var item in elems)
-                        {
-                            SetStringInModel(item, oldstring, newstring);
-                        }
-                    }
-                    else
-                    {
-                        SetStringInModel(propValue, oldstring, newstring);
-                    }
-                }
-            }
-        }
-
         private void OnNameChanged(NameChangedMessage message)
         {
-            SetStringInModel(_Controller, message.OldName, message.NewName);
+            ModelStringSetter.SetStringInModel(_Controller, message.OldName, message.NewName);
         }
 
         private void OnIsElementIdentifierUniqueRequestReceived(IsElementIdentifierUniqueRequest request)
