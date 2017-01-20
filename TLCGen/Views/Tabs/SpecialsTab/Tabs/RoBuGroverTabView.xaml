@@ -39,6 +39,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
@@ -83,6 +84,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <CheckBox Grid.Row="3" Margin="4" Content="Autom. selectie" 
+                      IsChecked="{Binding Path=AutomaticallySetSelectableSignalGroups,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             <ListView 
                 Name="ConflictGroepsLB"
                 Grid.Column="1" Grid.RowSpan="2" Margin="2" 
@@ -129,7 +132,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
                 <Button Content="Conflictgroep toev." Command="{Binding Path=AddConflictGroepCommand}" Margin="2" />
                 <Button Content="Conflictgroep verw." Command="{Binding Path=RemoveConflictGroepCommand}" Margin="2" />
             </StackPanel>

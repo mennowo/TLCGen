@@ -16,6 +16,7 @@ namespace TLCGen.ViewModels
 
         private string _FaseCyclusNaam;
         private RoBuGroverConflictGroepModel _SelectedConflictGroep;
+        private bool _CheckConflicts;
 
         #endregion // Fields
 
@@ -38,6 +39,9 @@ namespace TLCGen.ViewModels
             {
                 if (_SelectedConflictGroep != null)
                 {
+                    if (!_CheckConflicts)
+                        return true;
+
                     foreach (var fc in _SelectedConflictGroep.Fasen)
                     {
                         IsFasenConflictingRequest request = new IsFasenConflictingRequest(FaseCyclusNaam, fc.FaseCyclus);
@@ -112,6 +116,7 @@ namespace TLCGen.ViewModels
         private void OnSelectedConflictGroepChanged(SelectedConflictGroepChangedMessage message)
         {
             _SelectedConflictGroep = message.NewGroep;
+            _CheckConflicts = message.NewGroupCheckConflicts;
             UpdateConflictGroepInfo();
         }
 

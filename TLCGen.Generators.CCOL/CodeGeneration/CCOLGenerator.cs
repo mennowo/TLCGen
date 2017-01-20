@@ -25,6 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private CCOLPeriodenGenerator _PeriodenCodeGenerator;
         private CCOLWaitsignalenCodeGenerator _WaitsignalenCodeGenerator;
+        private CCOLRoBuGroverCodeGenerator _RoBuGroverGenerator;
         private List<ICCOLCodePieceGenerator> _PieceGenerators;
 
         private string tabspace = "    ";
@@ -77,6 +78,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.c"), GenerateDplC(controller));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.c"), GenerateSimC(controller));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.h"), GenerateSysH(controller));
+                if(controller.RoBuGrover.ConflictGroepen?.Count > 0)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}rgv.c"), GenerateRgvC(controller));
+                }
 
                 if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add")))
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add"), GenerateRegAdd(controller));
@@ -174,10 +179,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             _PeriodenCodeGenerator = new CCOLPeriodenGenerator();
             _WaitsignalenCodeGenerator = new CCOLWaitsignalenCodeGenerator();
+            _RoBuGroverGenerator = new CCOLRoBuGroverCodeGenerator();
 
             _PieceGenerators = new List<ICCOLCodePieceGenerator>();
             _PieceGenerators.Add(_PeriodenCodeGenerator as ICCOLCodePieceGenerator);
             _PieceGenerators.Add(_WaitsignalenCodeGenerator as ICCOLCodePieceGenerator);
+            _PieceGenerators.Add(_RoBuGroverGenerator as ICCOLCodePieceGenerator);
         }
 
         #endregion // Constructor

@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="CCOLCodeGeneratorViewModel.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLWaitsignalenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLIOElement.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElementCollector.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateSysAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateDplAdd.cs" />
     <Compile Include="CodeGeneration\ICCOLCodePieceGenerator.cs" />
+    <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRgvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSimC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSysH.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateDplC.cs" />

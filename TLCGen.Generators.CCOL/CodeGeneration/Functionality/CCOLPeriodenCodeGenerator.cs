@@ -65,14 +65,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public string GetCode(ControllerModel c, CCOLCodeType type, string tabspace)
+        public string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
             int i;
 
             switch (type)
             {
-                case CCOLCodeType.KlokPerioden:
+                case CCOLRegCCodeTypeEnum.KlokPerioden:
 
                     sb.AppendLine("void KlokPerioden(void)");
                     sb.AppendLine("{");
@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{tabspace}KlokPerioden_Add();");
                     sb.AppendLine("}");
                     return sb.ToString();
-                case CCOLCodeType.SystemApplication:
+                case CCOLRegCCodeTypeEnum.SystemApplication:
                     sb.AppendLine("/* periode verklikking */");
                     sb.AppendLine("/* ------------------- */");
                     i = 0;

@@ -109,9 +109,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void display_background(void)");
             sb.AppendLine("{");
             string bmnaam = controller.Data.BitmapNaam;
-            if(!bmnaam.ToLower().EndsWith(".bmp"))
+            if(bmnaam != null)
             {
-                bmnaam = bmnaam + ".bmp";
+                if(!bmnaam.ToLower().EndsWith(".bmp"))
+                {
+                    bmnaam = bmnaam + ".bmp";
+                }
             }
             sb.AppendLine($"{tabspace}load_picture_bmp(\"{bmnaam}\");");
             sb.AppendLine("}");

@@ -13,6 +13,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementType type);
         IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapInputs();
-        string GetCode(ControllerModel c, CCOLCodeType type, string tabspace);
+        string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);
     }
 }

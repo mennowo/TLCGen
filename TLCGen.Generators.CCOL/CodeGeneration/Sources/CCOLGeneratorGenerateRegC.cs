@@ -21,9 +21,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
-            sb.AppendLine("#define REG  (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG)");
+            sb.AppendLine("#define REG (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG)");
             sb.AppendLine();
             sb.Append(GenerateRegCIncludes(controller));
+            sb.AppendLine();
+            sb.Append(GenerateRegCTop(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.AppendLine();
@@ -102,11 +104,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateRegCTop(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append(_RoBuGroverGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.Top, tabspace));
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCKlokPerioden(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLCodeType.KlokPerioden, tabspace));
+            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, tabspace));
 
             return sb.ToString();
         }
@@ -228,6 +239,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
 
             }
+            sb.AppendLine();
+            sb.Append(_RoBuGroverGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, tabspace));
+            sb.AppendLine();
 
             // Add file
             sb.AppendLine($"{tabspace}Maxgroen_Add();");
@@ -469,9 +483,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{tabspace}pre_system_application();");
             sb.AppendLine();
-            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLCodeType.SystemApplication, tabspace));
+            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, tabspace));
             sb.AppendLine();
-            sb.Append(_WaitsignalenCodeGenerator.GetCode(controller, CCOLCodeType.SystemApplication, tabspace));
+            sb.Append(_WaitsignalenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, tabspace));
             sb.AppendLine();
             sb.AppendLine($"{tabspace}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();

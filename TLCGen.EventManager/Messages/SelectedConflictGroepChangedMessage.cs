@@ -11,11 +11,13 @@ namespace TLCGen.Messaging.Messages
     {
         public RoBuGroverConflictGroepModel OldGroep { get; private set; }
         public RoBuGroverConflictGroepModel NewGroep { get; private set; }
+        public bool NewGroupCheckConflicts { get; private set; }
 
-        public SelectedConflictGroepChangedMessage(RoBuGroverConflictGroepModel newgroep, RoBuGroverConflictGroepModel oldgroep)
+        public SelectedConflictGroepChangedMessage(RoBuGroverConflictGroepModel newgroep, RoBuGroverConflictGroepModel oldgroep, bool newgroupcheckconflicts)
         {
             OldGroep = oldgroep;
             NewGroep = newgroep;
+            NewGroupCheckConflicts = newgroupcheckconflicts;
         }
     }
 }

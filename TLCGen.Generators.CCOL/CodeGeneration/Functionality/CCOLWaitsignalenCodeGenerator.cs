@@ -48,13 +48,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyBitmapOutputs;
         }
 
-        public string GetCode(ControllerModel c, CCOLCodeType type, string tabspace)
+        public string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLCodeType.SystemApplication:
+                case CCOLRegCCodeTypeEnum.SystemApplication:
                     sb.AppendLine("/* wachtlicht uitsturing */");
                     sb.AppendLine("/* --------------------- */");
                     foreach (var fc in c.Fasen)

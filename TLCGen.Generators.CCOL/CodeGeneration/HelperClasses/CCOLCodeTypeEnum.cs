@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public enum CCOLCodeType
+    public enum CCOLRegCCodeTypeEnum
     {
         Includes,
+        Top,
         KlokPerioden,
         Aanvragen,
         Maxgroen,

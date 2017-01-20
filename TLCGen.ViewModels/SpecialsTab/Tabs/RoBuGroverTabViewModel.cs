@@ -28,6 +28,8 @@ namespace TLCGen.ViewModels
         private Dictionary<string, string> _ControllerRGVFileDetectoren;
         private Dictionary<string, string> _ControllerRGVHiaatDetectoren;
 
+        private bool _AutomaticallySetSelectableSignalGroups;
+
         #endregion // Fields
 
         #region Properties
@@ -62,6 +64,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AutomaticallySetSelectableSignalGroups
+        {
+            get { return _AutomaticallySetSelectableSignalGroups; }
+            set
+            {
+                _AutomaticallySetSelectableSignalGroups = value;
+                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, null, AutomaticallySetSelectableSignalGroups));
+                OnPropertyChanged("AutomaticallySetSelectableSignalGroups");
+            }
+        }
+
         public RoBuGroverConflictGroepViewModel SelectedConflictGroep
         {
             get { return _SelectedConflictGroep; }
@@ -70,7 +83,7 @@ namespace TLCGen.ViewModels
                 var oldval = _SelectedConflictGroep;
                 _SelectedConflictGroep = value;
                 OnMonitoredPropertyChanged("SelectedConflictGroep");
-                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep));
+                Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, AutomaticallySetSelectableSignalGroups));
             }
         }
 
@@ -207,19 +220,22 @@ namespace TLCGen.ViewModels
                         try
                         {
                             var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
-                            foreach(DetectorModel dm in addfc.Detectoren)
+                            if (addfc.Type == FaseTypeEnum.Auto)
                             {
-                                if(dm.Type == DetectorTypeEnum.Lang)
+                                foreach (DetectorModel dm in addfc.Detectoren)
                                 {
-                                    var hd = new RoBuGroverHiaatDetectorModel();
-                                    hd.Detector = dm.Naam;
-                                    instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
-                                }
-                                if(dm.Type == DetectorTypeEnum.Kop)
-                                {
-                                    var fd = new RoBuGroverFileDetectorModel();
-                                    fd.Detector = dm.Naam;
-                                    instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
+                                    if (dm.Type == DetectorTypeEnum.Lang)
+                                    {
+                                        var hd = new RoBuGroverHiaatDetectorModel();
+                                        hd.Detector = dm.Naam;
+                                        instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
+                                    }
+                                    if (dm.Type == DetectorTypeEnum.Kop)
+                                    {
+                                        var fd = new RoBuGroverFileDetectorModel();
+                                        fd.Detector = dm.Naam;
+                                        instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
+                                    }
                                 }
                             }
                         }
@@ -229,6 +245,7 @@ namespace TLCGen.ViewModels
                         }
                         SignaalGroepInstellingen.Remove(instvm);
                         SignaalGroepInstellingen.BubbleSort();
+                        SignaalGroepInstellingen.RebuildList();
                     }
                 }
             }
@@ -276,6 +293,7 @@ namespace TLCGen.ViewModels
                     }
                     SignaalGroepInstellingen.Add(instvm);
                     SignaalGroepInstellingen.BubbleSort();
+                    SignaalGroepInstellingen.RebuildList();
                 }
             }
             else if (fc.IsInConflictGroep)
@@ -291,6 +309,7 @@ namespace TLCGen.ViewModels
                     var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
                     SignaalGroepInstellingen.Remove(instvm);
                     SignaalGroepInstellingen.BubbleSort();
+                    SignaalGroepInstellingen.RebuildList();
                 }
             }
             foreach (RoBuGroverTabFaseViewModel tfc in Fasen)
@@ -383,6 +402,8 @@ namespace TLCGen.ViewModels
         {
             ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
             SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+
+            AutomaticallySetSelectableSignalGroups = true;
         }
 
         #endregion // Constructor
