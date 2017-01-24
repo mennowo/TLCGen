@@ -193,34 +193,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLSetting = "SCH";
 
             data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = 1 });
-
-            // Collect schwg
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                if (fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
-                    fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"schca{fcm.Naam}",
-                        Naam = $"CA{fcm.Naam}",
-                        Instelling = fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
-                    });
-                }
-            }
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                if (fcm.Wachtgroen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
-                    fcm.Wachtgroen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"schwg{fcm.Naam}",
-                        Naam = $"WG{fcm.Naam}",
-                        Instelling = fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
-                    });
-                }
-            }
+            
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
                 if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&

@@ -3,9 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataGridComboBoxColumn x:Key="VerlengenColumn" Header="Type verlengen" 
+                                SelectedItemBinding="{Binding Path=TypeVerlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RichtingGevoeligVerlengenTypeEnum}}}" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -80,9 +88,9 @@
                     <DataGridTextColumn Header="Fase" Binding="{Binding Path=FaseCyclus}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Van" Binding="{Binding Path=VanDetector}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Naar" Binding="{Binding Path=NaarDetector}" IsReadOnly="True" />
+                    <StaticResource ResourceKey="VerlengenColumn" />
                     <DataGridTextColumn Header="Maximaal tijd verschil" Binding="{Binding Path=MaxTijdsVerschil}" />
-                    <DataGridTextColumn Header="Verleng tijd" Binding="{Binding Path=VerlengTijd}" />
-                    <DataGridTextColumn Header="Hiaat tijd" Binding="{Binding Path=HiaatTijd}" Width="*" />
+                    <DataGridTextColumn Header="Verleng tijd" Binding="{Binding Path=VerlengTijd}" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

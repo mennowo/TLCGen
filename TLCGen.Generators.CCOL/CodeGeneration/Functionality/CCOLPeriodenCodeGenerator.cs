@@ -8,12 +8,13 @@ using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public class CCOLPeriodenGenerator : ICCOLCodePieceGenerator
+    [CCOLCodePieceGenerator]
+    public class CCOLPeriodenGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
-        public void CollectCCOLElements(ControllerModel c)
+        public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
@@ -50,22 +51,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
+        public override bool HasCCOLElements()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _MyBitmapOutputs;
-        }
-
-        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
+        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override bool HasCCOLBitmapOutputs()
+        {
+            return true;
+        }
+
+        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
+        {
+            return _MyBitmapOutputs;
+        }
+
+        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLRegCCodeTypeEnum.KlokPerioden:
+                case CCOLRegCCodeTypeEnum.SystemApplication:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
             int i;

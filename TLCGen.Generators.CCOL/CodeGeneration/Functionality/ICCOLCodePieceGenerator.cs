@@ -10,9 +10,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     public interface ICCOLCodePieceGenerator
     {
         void CollectCCOLElements(ControllerModel c);
+        bool HasCCOLElements();
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
+        bool HasCCOLBitmapOutputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs();
+        bool HasCCOLBitmapInputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapInputs();
+        bool HasCode(CCOLRegCCodeTypeEnum type);
         string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);
     }
 }

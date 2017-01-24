@@ -69,8 +69,13 @@
       <DependentUpon>CCOLCodeGeneratorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="CCOLCodeGeneratorViewModel.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLCodePieceGeneratorAttribute.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLCodePieceGeneratorBase.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLRichtingGevoeligCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLVasteAanvraagCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLWachtstandGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLWaitsignalenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElementTimeTypeEnum.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLIOElement.cs" />
@@ -84,7 +89,7 @@
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateTabAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateSysAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateDplAdd.cs" />
-    <Compile Include="CodeGeneration\ICCOLCodePieceGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\ICCOLCodePieceGenerator.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateRgvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSimC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateSysH.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
@@ -22,10 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLElemListData Parameters;
 
         private List<DetectorModel> AlleDetectoren;
-
-        private CCOLPeriodenGenerator _PeriodenCodeGenerator;
-        private CCOLWaitsignalenCodeGenerator _WaitsignalenCodeGenerator;
-        private CCOLRoBuGroverCodeGenerator _RoBuGroverGenerator;
+        
         private List<ICCOLCodePieceGenerator> _PieceGenerators;
 
         private string tabspace = "    ";
@@ -177,14 +175,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public CCOLGenerator()
         {
-            _PeriodenCodeGenerator = new CCOLPeriodenGenerator();
-            _WaitsignalenCodeGenerator = new CCOLWaitsignalenCodeGenerator();
-            _RoBuGroverGenerator = new CCOLRoBuGroverCodeGenerator();
-
             _PieceGenerators = new List<ICCOLCodePieceGenerator>();
-            _PieceGenerators.Add(_PeriodenCodeGenerator as ICCOLCodePieceGenerator);
-            _PieceGenerators.Add(_WaitsignalenCodeGenerator as ICCOLCodePieceGenerator);
-            _PieceGenerators.Add(_RoBuGroverGenerator as ICCOLCodePieceGenerator);
+
+            Assembly ccolgen = typeof(CCOLGenerator).Assembly;
+            foreach (Type type in ccolgen.GetTypes())
+            {
+                // Find CCOLCodePieceGenerator attribute, and if found, continue
+                var attr = (CCOLCodePieceGeneratorAttribute)Attribute.GetCustomAttribute(type, typeof(CCOLCodePieceGeneratorAttribute));
+                if (attr != null)
+                {
+                    _PieceGenerators.Add(Activator.CreateInstance(type) as ICCOLCodePieceGenerator);
+                }
+            }
         }
 
         #endregion // Constructor

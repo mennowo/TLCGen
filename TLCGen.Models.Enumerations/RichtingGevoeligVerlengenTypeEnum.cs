@@ -9,10 +9,8 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum DetectorVerlengenTypeEnum
+    public enum RichtingGevoeligVerlengenTypeEnum
     {
-        [Description("Geen")]
-        Geen = 4,
         [Description("Uitgeschakeld")]
         Uit = 0,
         [Description("Kopmax")]

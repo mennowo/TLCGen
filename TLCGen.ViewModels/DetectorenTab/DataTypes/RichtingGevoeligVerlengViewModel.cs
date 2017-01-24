@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -12,7 +13,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private RichtingGevoeligVerlengModel _RichtingGevoeligVerlng;
+        private RichtingGevoeligVerlengModel _RichtingGevoeligVerleng;
         private ObservableCollection<string> _Detectoren;
 
         #endregion // Fields
@@ -21,7 +22,7 @@ namespace TLCGen.ViewModels
 
         public RichtingGevoeligVerlengModel RichtingGevoeligVerleng
         {
-            get { return _RichtingGevoeligVerlng; }
+            get { return _RichtingGevoeligVerleng; }
         }
 
         public ObservableCollection<string> Detectoren
@@ -38,64 +39,73 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get { return _RichtingGevoeligVerlng.FaseCyclus; }
+            get { return _RichtingGevoeligVerleng.FaseCyclus; }
             set
             {
-                _RichtingGevoeligVerlng.FaseCyclus = value;
+                _RichtingGevoeligVerleng.FaseCyclus = value;
                 OnMonitoredPropertyChanged("FaseCyclus");
             }
         }
 
         public string VanDetector
         {
-            get { return _RichtingGevoeligVerlng.VanDetector; }
+            get { return _RichtingGevoeligVerleng.VanDetector; }
             set
             {
-                _RichtingGevoeligVerlng.VanDetector = value;
+                _RichtingGevoeligVerleng.VanDetector = value;
                 OnMonitoredPropertyChanged("VanDetector");
             }
         }
 
         public string NaarDetector
         {
-            get { return _RichtingGevoeligVerlng.NaarDetector; }
+            get { return _RichtingGevoeligVerleng.NaarDetector; }
             set
             {
-                _RichtingGevoeligVerlng.NaarDetector = value;
+                _RichtingGevoeligVerleng.NaarDetector = value;
                 OnMonitoredPropertyChanged("NaarDetector");
             }
         }
 
         public int MaxTijdsVerschil
         {
-            get { return _RichtingGevoeligVerlng.MaxTijdsVerschil; }
+            get { return _RichtingGevoeligVerleng.MaxTijdsVerschil; }
             set
             {
-                _RichtingGevoeligVerlng.MaxTijdsVerschil = value;
+                _RichtingGevoeligVerleng.MaxTijdsVerschil = value;
                 OnMonitoredPropertyChanged("MaxTijdsVerschil");
             }
         }
 
         public int VerlengTijd
         {
-            get { return _RichtingGevoeligVerlng.VerlengTijd; }
+            get { return _RichtingGevoeligVerleng.VerlengTijd; }
             set
             {
-                _RichtingGevoeligVerlng.VerlengTijd = value;
+                _RichtingGevoeligVerleng.VerlengTijd = value;
                 OnMonitoredPropertyChanged("VerlengTijd");
             }
         }
 
         public int HiaatTijd
         {
-            get { return _RichtingGevoeligVerlng.HiaatTijd; }
+            get { return _RichtingGevoeligVerleng.HiaatTijd; }
             set
             {
-                _RichtingGevoeligVerlng.HiaatTijd = value;
+                _RichtingGevoeligVerleng.HiaatTijd = value;
                 OnMonitoredPropertyChanged("HiaatTijd");
             }
         }
 
+        public RichtingGevoeligVerlengenTypeEnum TypeVerlengen
+        {
+            get { return _RichtingGevoeligVerleng.TypeVerlengen; }
+            set
+            {
+                _RichtingGevoeligVerleng.TypeVerlengen = value;
+                OnMonitoredPropertyChanged("TypeVerlengen");
+            }
+        }
 
         #endregion // Properties
 
@@ -127,7 +137,7 @@ namespace TLCGen.ViewModels
 
         public RichtingGevoeligVerlengViewModel(RichtingGevoeligVerlengModel rgv)
         {
-            _RichtingGevoeligVerlng = rgv;
+            _RichtingGevoeligVerleng = rgv;
         }
 
         #endregion // Constructor

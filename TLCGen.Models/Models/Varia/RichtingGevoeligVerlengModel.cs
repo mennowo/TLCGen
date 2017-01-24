@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -15,5 +16,6 @@ namespace TLCGen.Models
         public int MaxTijdsVerschil { get; set; }
         public int VerlengTijd { get; set; }
         public int HiaatTijd { get; set; }
+        public RichtingGevoeligVerlengenTypeEnum TypeVerlengen { get; set; }
     }
 }

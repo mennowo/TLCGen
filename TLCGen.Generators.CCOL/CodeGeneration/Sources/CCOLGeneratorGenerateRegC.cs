@@ -108,7 +108,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(_RoBuGroverGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.Top, tabspace));
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Top))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Top, tabspace));
+                }
+            }
 
             return sb.ToString();
         }
@@ -117,7 +123,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, tabspace));
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.KlokPerioden))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, tabspace));
+                }
+            }
 
             return sb.ToString();
         }
@@ -160,31 +172,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine("");
 
-            // Vaste aanvragen
-            sb.AppendLine($"{tabspace}/* Vaste aanvragen */");
-            sb.AppendLine($"{tabspace}/* --------------- */");
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach(var gen in _PieceGenerators)
             {
-                if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchAan ||
-                    fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchUit)
-                    sb.AppendLine($"{tabspace}if (SCH[schca{fcm.Naam}]) vaste_aanvraag({fcm.GetDefine()});");
-                else if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.Altijd)
-                    sb.AppendLine($"{tabspace}vaste_aanvraag({fcm.GetDefine()});");
+                if(gen.HasCode(CCOLRegCCodeTypeEnum.Aanvragen))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Aanvragen, tabspace));
+                }
             }
-            sb.AppendLine("");
-
-            // Wachtstand groen aanvragen
-            sb.AppendLine($"{tabspace}/* Wachtstand groen aanvragen */");
-            sb.AppendLine($"{tabspace}/* -------------------------- */");
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
-                    fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[schwg{fcm.Naam}]));");
-                else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                    sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
-            }
-            sb.AppendLine("");
 
             // Add file
             sb.AppendLine($"{tabspace}Aanvragen_Add();");
@@ -210,7 +204,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach(GroentijdModel mgm in mgsm.Groentijden)
                     {
-                        if(mgm.FaseCyclus == fcm.GetDefine() && mgm.Waarde != null)
+                        if(mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
                         {
                             HasMG = true;
                         }
@@ -220,16 +214,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if(HasMG)
                 {
                     sb.AppendLine($"{tabspace}max_star_groentijden_va_arg((count) {fcm.GetDefine()}, (mulv) FALSE, (mulv) FALSE,");
-                    //int per = 2, mper = 1;
-                    //foreach (KlokPeriodeModel kpm in controller.KlokPeriodes)
-                    //{
-                    //    if(controller.DefaultKlokPeriode.Naam != kpm.Naam)
-                    //    {
-                    //        sb.AppendLine($"        (va_mulv) PRM[prmmg{per}{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),");
-                    //    }
-                    //    ++per;
-                    //    ++mper;
-                    //}
+                    int mper = 1;
+                    foreach (PeriodeModel per in controller.PeriodenData.Perioden)
+                    {
+                        if (per.Type == PeriodeTypeEnum.Groentijden)
+                        {
+                            foreach (GroentijdenSetModel mgsm in controller.GroentijdenSets)
+                            {
+                                if (mgsm.Naam == per.GroentijdenSet)
+                                {
+                                    foreach (GroentijdModel mgm in mgsm.Groentijden)
+                                    {
+                                        if (mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
+                                        {
+                                            sb.Append("".PadLeft(($"{tabspace}max_star_groentijden_va_arg(").Length));
+                                            sb.AppendLine(
+                                               ($"(va_mulv) PRM[prm{per.GroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
+                                        }
+                                    }
+                                }
+                            }
+                            ++mper;
+                        }
+                    }
                     sb.Append("".PadLeft(($"{tabspace}max_star_groentijden_va_arg(").Length));
                     sb.AppendLine($"(va_mulv) PRM[prmmg1{fcm.Naam}], (va_mulv) NG, (va_count) END);");
                 }
@@ -239,9 +246,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
 
             }
-            sb.AppendLine();
-            sb.Append(_RoBuGroverGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, tabspace));
-            sb.AppendLine();
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, tabspace));
+                }
+            }
 
             // Add file
             sb.AppendLine($"{tabspace}Maxgroen_Add();");
@@ -260,35 +272,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{tabspace}register count fc;");
             sb.AppendLine();
-            sb.AppendLine($"{tabspace}for (fc = 0; fc < FCMAX; ++fc)");
-            sb.AppendLine($"{tabspace}{tabspace}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
-            sb.AppendLine();
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach (var gen in _PieceGenerators)
             {
-                if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
-                    fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Wachtgroen))
                 {
-                    sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
-                }
-                else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                {
-                    sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Wachtgroen, tabspace));
                 }
             }
-            sb.AppendLine();
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
-                    fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                {
-                    sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()});");
-                }
-                else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                {
-                    sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()});");
-                }
-            }
-            sb.AppendLine();
             sb.AppendLine($"{tabspace}Wachtgroen_Add();");
             sb.AppendLine("}");
 
@@ -330,6 +320,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"(va_count)END);");
             }
             sb.AppendLine("");
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Meetkriterium))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Meetkriterium, tabspace));
+                }
+            }
             sb.AppendLine($"{tabspace}Meetkriterium_Add();");
             sb.AppendLine("}");
 
@@ -482,10 +479,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{tabspace}pre_system_application();");
-            sb.AppendLine();
-            sb.Append(_PeriodenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, tabspace));
-            sb.AppendLine();
-            sb.Append(_WaitsignalenCodeGenerator.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, tabspace));
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.SystemApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, tabspace));
+                }
+            }
+
             sb.AppendLine();
             sb.AppendLine($"{tabspace}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();

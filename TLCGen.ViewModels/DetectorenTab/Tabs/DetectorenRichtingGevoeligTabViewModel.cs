@@ -262,7 +262,7 @@ namespace TLCGen.ViewModels
         }
 
 
-        public RichtingGevoeligVerlengViewModel SelectedRichtingGevoeligVeleng
+        public RichtingGevoeligVerlengViewModel SelectedRichtingGevoeligVerleng
         {
             get { return _SelectedRichtingGevoeligVerleng; }
             set
@@ -387,13 +387,13 @@ namespace TLCGen.ViewModels
 
         private bool RemoveRichtingGevoeligVerleng_CanExecute(object prm)
         {
-            return SelectedRichtingGevoeligVeleng != null;
+            return SelectedRichtingGevoeligVerleng != null;
         }
 
         private void RemoveRichtingGevoeligVerleng_Executed(object prm)
         {
-            RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVeleng);
-            SelectedRichtingGevoeligVeleng = null;
+            RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVerleng);
+            SelectedRichtingGevoeligVerleng = null;
         }
 
         #endregion // Command Functionality

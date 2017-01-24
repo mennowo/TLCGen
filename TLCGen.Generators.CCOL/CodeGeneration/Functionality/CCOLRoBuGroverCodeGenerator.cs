@@ -7,12 +7,13 @@ using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public class CCOLRoBuGroverCodeGenerator : ICCOLCodePieceGenerator
+    [CCOLCodePieceGenerator]
+    public class CCOLRoBuGroverCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
-        public void CollectCCOLElements(ControllerModel c)
+        public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
@@ -46,22 +47,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _MyBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, "usrgv"));
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
+        public override bool HasCCOLElements()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _MyBitmapOutputs;
-        }
-
-        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
+        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override bool HasCCOLBitmapOutputs()
+        {
+            return true;
+        }
+
+        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
+        {
+            return _MyBitmapOutputs;
+        }
+
+        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLRegCCodeTypeEnum.Maxgroen:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
             if(c.RoBuGrover.ConflictGroepen?.Count == 0)
             {

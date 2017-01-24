@@ -191,9 +191,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(var pgen in _PieceGenerators)
             {
-                foreach(var item in pgen.GetCCOLBitmapOutputs())
+                if (pgen.HasCCOLBitmapOutputs())
                 {
-                    sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                    foreach (var item in pgen.GetCCOLBitmapOutputs())
+                    {
+                        sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                    }
                 }
             }
 

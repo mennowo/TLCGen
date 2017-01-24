@@ -9,12 +9,13 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public class CCOLWaitsignalenCodeGenerator : ICCOLCodePieceGenerator
+    [CCOLCodePieceGenerator]
+    public class CCOLWaitsignalenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
-        public void CollectCCOLElements(ControllerModel c)
+        public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
@@ -33,22 +34,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
+        public override bool HasCCOLElements()
+        {
+            return true;
+        }
+
+        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
+        public override bool HasCCOLBitmapOutputs()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
-        public IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
+        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
             return _MyBitmapOutputs;
         }
 
-        public string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLRegCCodeTypeEnum.SystemApplication:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
 
