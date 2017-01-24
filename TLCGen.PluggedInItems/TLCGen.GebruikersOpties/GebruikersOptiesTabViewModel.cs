@@ -67,7 +67,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _MyGebruikersOpties = value;
 
-                OnMonitoredPropertyChanged(null);
+                OnPropertyChanged(null);
             }
         }
 
@@ -80,8 +80,8 @@ namespace TLCGen.GebruikersOpties
                 {
                     _SelectedTabIndex = value;
                 }
-                OnMonitoredPropertyChanged("SelectedTabIndex");
-                OnMonitoredPropertyChanged("SelectedOptie");
+                OnPropertyChanged("SelectedTabIndex");
+                OnPropertyChanged("SelectedOptie");
             }
         }
 

@@ -154,12 +154,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
                     sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
-                    if (!string.IsNullOrEmpty(data.CCOLSetting) && !string.IsNullOrEmpty(ce.Instelling))
+                    if (!string.IsNullOrEmpty(data.CCOLSetting) && ce.Instelling.HasValue)
                     {
                         sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
                         sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
                     }
-                    if (!string.IsNullOrEmpty(data.CCOLTType) && !string.IsNullOrEmpty(ce.TType))
+                    if (!string.IsNullOrEmpty(data.CCOLTType) && ce.TType != CCOLElementTimeTypeEnum.None)
                     {
                         sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
                         sb.Append($" = {ce.TType};");

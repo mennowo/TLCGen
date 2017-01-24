@@ -174,11 +174,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     int i = 1;
                     foreach (var d in fc.HiaatDetectoren)
                     {
-                        sb.AppendLine($"{tabspace}MK1[fc{fc.FaseCyclus}] = SVG[fc{fc.FaseCyclus}] || G[fc{fc.FaseCyclus}] && MK{i}[fc{fc.FaseCyclus}] && (RT[tdh{d.Detector}] || T[tdh{d.Detector}]);");
+                        sb.AppendLine($"{tabspace}MK{i}[fc{fc.FaseCyclus}] = SVG[fc{fc.FaseCyclus}] || G[fc{fc.FaseCyclus}] && MK{i}[fc{fc.FaseCyclus}] && (RT[tdh{d.Detector}] || T[tdh{d.Detector}]);");
                         ++i;
                     }
                 }
             }
+            sb.AppendLine();
+            sb.AppendLine($"{tabspace}/* Opslaan 'oudste' TVG tijd volgens RoBuGrover */");
+            sb.AppendLine($"{tabspace}/* -------------------------------------------- */");
+            sb.AppendLine($"{tabspace}for (i = 0; i < FCMAX; ++i) TVG_rgv_older[i] = TVG_rgv[i];");
             sb.AppendLine();
             sb.AppendLine($"{tabspace}/* Aanpassen verlenggroentijden op einde verlenggroen */");
             sb.AppendLine($"{tabspace}/* -------------------------------------------------- */");

@@ -372,8 +372,10 @@ namespace TLCGen.ViewModels
             Fasen.Clear();
             foreach(FaseCyclusModel fcm in _Controller.Fasen)
             {
-                Fasen.Add(new RoBuGroverTabFaseViewModel(fcm.Naam));
+                var fc = new RoBuGroverTabFaseViewModel(fcm.Naam);
+                Fasen.Add(fc);
             }
+            SelectedConflictGroep = SelectedConflictGroep;
 
             _ControllerRGVFileDetectoren = new Dictionary<string, string>();
             _ControllerRGVHiaatDetectoren = new Dictionary<string, string>();

@@ -19,11 +19,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
             // outputs
-            _MyElements.Add(new CCOLElement() { Define = c.PeriodenData.DefaultPeriodeBitmapData.GetBitmapCoordinaatOutputDefine("perdef"), Naam = "perdef", Type = CCOLElementType.Uitgang });
+            _MyElements.Add(new CCOLElement(c.PeriodenData.DefaultPeriodeBitmapData.GetBitmapCoordinaatOutputDefine("perdef"), "perdef", CCOLElementTypeEnum.Uitgang));
             _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData as IOElementModel, "usperdef"));
             foreach (var item in c.PeriodenData.Perioden)
             {
-                _MyElements.Add(new CCOLElement() { Define = item.BitmapData.GetBitmapCoordinaatOutputDefine("per" + item.Naam), Naam = "per" + item.Naam, Type = CCOLElementType.Uitgang });
+                _MyElements.Add(new CCOLElement(item.BitmapData.GetBitmapCoordinaatOutputDefine("per" + item.Naam), "per" + item.Naam, CCOLElementTypeEnum.Uitgang));
                 _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData as IOElementModel, "usper" + item.Naam));
             }
 
@@ -37,15 +37,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     hours = 24;
                 }
                 var inst = hours * 100 + per.StartTijd.Minutes;
-                _MyElements.Add(new CCOLElement() { Define = $"prmstkp{i}", Naam = $"stkp{i}", Instelling = inst.ToString(), TType = "TI_type", Type = CCOLElementType.Parameter });
+                _MyElements.Add(new CCOLElement($"prmstkp{i}", $"stkp{i}", inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
                 hours = per.EindTijd.Hours;
                 if (per.EindTijd.Days == 1)
                 {
                     hours = 24;
                 }
                 inst = hours * 100 + per.EindTijd.Minutes;
-                _MyElements.Add(new CCOLElement() { Define = $"prmetkp{i}", Naam = $"etkp{i}", Instelling = inst.ToString(), TType = "TI_type", Type = CCOLElementType.Parameter });
-                _MyElements.Add(new CCOLElement() { Define = $"prmdckp{i}", Naam = $"dckp{i}", Instelling = ((int)per.DagCode).ToString(), Type = CCOLElementType.Parameter });
+                _MyElements.Add(new CCOLElement($"prmetkp{i}", $"etkp{i}", inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"prmdckp{i}", $"dckp{i}", (int)per.DagCode, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 ++i;
             }
         }
@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyBitmapOutputs;
         }
 
-        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementType type)
+        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
         }

@@ -14,6 +14,7 @@ namespace TLCGen.Models
         public int MaximaleCyclustijd { get; set; }
         public RoBuGroverMethodeEnum MethodeRoBuGrover { get; set; }
         public bool OphogenTijdensGroen { get; set; }
+        public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]
         public List<RoBuGroverConflictGroepModel> ConflictGroepen { get; set; }
@@ -24,6 +25,7 @@ namespace TLCGen.Models
         {
             ConflictGroepen = new List<RoBuGroverConflictGroepModel>();
             SignaalGroepInstellingen = new List<RoBuGroverSignaalGroepInstellingenModel>();
+            BitmapData = new BitmapCoordinatenDataModel();
         }
     }
 }

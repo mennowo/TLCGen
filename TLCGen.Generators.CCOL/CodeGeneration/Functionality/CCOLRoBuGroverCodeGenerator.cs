@@ -17,7 +17,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
+            _MyElements.Add(new CCOLElement("prmrgv", "rgv", 2, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmmin_tcyclus", "min_tcyclus", 900, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmmax_tcyclus", "max_tcyclus", 1500, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmtvg_omhoog", "tvg_omhoog", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmtvg_omlaag", "tvg_omlaag", 20, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmtvg_verschil", "tvg_verschil", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("prmtvg_npr_omlaag", "tvg_npr_omlaag", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("schrgv", "rgv", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement("schrgvsnel", "rgvsnel", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement("usrgv", "rgv", CCOLElementTypeEnum.Uitgang));
 
+            foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
+            {
+                _MyElements.Add(new CCOLElement($"prmmintvg_{fc.FaseCyclus}", $"mintvg_{fc.FaseCyclus}", 100, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"prmmaxtvg_{fc.FaseCyclus}", $"maxtvg_{fc.FaseCyclus}", 100, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"hprreal{fc.FaseCyclus}", $"prreal{fc.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
+                foreach(var d in fc.FileDetectoren)
+                {
+                    _MyElements.Add(new CCOLElement($"tfd{d.Detector}", $"fd{d.Detector}", 60, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                }
+                foreach (var d in fc.HiaatDetectoren)
+                {
+                    _MyElements.Add(new CCOLElement($"thd{d.Detector}", $"hd{d.Detector}", 10, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                }
+            }
+
+            _MyBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, "usrgv"));
         }
 
         public IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
@@ -30,7 +56,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyBitmapOutputs;
         }
 
-        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementType type)
+        public IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
         }

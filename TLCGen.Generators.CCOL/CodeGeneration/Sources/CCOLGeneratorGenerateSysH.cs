@@ -20,6 +20,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
+            sb.AppendLine($"#define SYSTEM \"{controller.Data.Naam}\"");
+            sb.AppendLine();
             sb.Append(GenerateSysHFasen(controller));
             sb.AppendLine();
             sb.Append(GenerateSysHUitgangen(controller));

@@ -72,6 +72,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLWaitsignalenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLElementTimeTypeEnum.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLIOElement.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElementCollector.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLElemListData.cs" />

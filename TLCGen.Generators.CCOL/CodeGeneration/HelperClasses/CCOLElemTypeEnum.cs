@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public enum CCOLElementType
+    public enum CCOLElementTypeEnum
     {
         Uitgang,
         Ingang,

@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     public interface ICCOLCodePieceGenerator
     {
         void CollectCCOLElements(ControllerModel c);
-        IEnumerable<CCOLElement> GetCCOLElements(CCOLElementType type);
+        IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
         IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapInputs();
         string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);

@@ -405,8 +405,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
+            // RoBuGrover
+            if(_Controller.RoBuGrover.ConflictGroepen?.Count > 0)
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RoBuGrover.BitmapData, "rgv", BitmappedItemViewModel.Type.Uitgang));
+            }
+
             // OV / HD
-            foreach(var ov in _Controller.OVData.OVIngrepen)
+            foreach (var ov in _Controller.OVData.OVIngrepen)
             {
                 OverigeUitgangen.Add(new BitmappedItemViewModel(ov.OVInmeldingBitmapData, "vc" + ov.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
             }

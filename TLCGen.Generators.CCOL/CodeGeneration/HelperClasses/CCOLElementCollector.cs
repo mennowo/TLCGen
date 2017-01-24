@@ -33,11 +33,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             lists[0] = CollectAllUitgangen(controller, pgens);
             lists[1] = CollectAllIngangen(controller);
-            lists[2] = CollectAllHulpElementen(controller);
+            lists[2] = CollectAllHulpElementen(controller, pgens);
             lists[3] = CollectAllGeheugenElementen(controller);
-            lists[4] = CollectAllTimers(controller);
+            lists[4] = CollectAllTimers(controller, pgens);
             lists[5] = CollectAllCounters(controller);
-            lists[6] = CollectAllSchakelaars(controller);
+            lists[6] = CollectAllSchakelaars(controller, pgens);
             lists[7] = CollectAllParameters(controller, pgens);
 
             return lists;
@@ -61,7 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                foreach (var i in pgen.GetCCOLElements(CCOLElementType.Uitgang))
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
                 {
                     data.Elements.Add(i);
                 }
@@ -91,7 +91,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllHulpElementen(ControllerModel controller)
+        private static CCOLElemListData CollectAllHulpElementen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -100,7 +100,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "hedummy", Naam = "dummy" });
 
-            // TODO
+            foreach (var pgen in pgens)
+            {
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.HulpElement))
+                {
+                    data.Elements.Add(i);
+                }
+            }
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "HEMAX" });
@@ -127,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllTimers(ControllerModel controller)
+        private static CCOLElemListData CollectAllTimers(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -152,8 +158,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CCOLElement elem = new CCOLElement();
                     elem.Define = $"tkm{fcm.Naam}";
                     elem.Naam = $"KM{fcm.Naam}";
-                    elem.Instelling = fcm.Kopmax.ToString();
-                    elem.TType = "TE_type";
+                    elem.Instelling = fcm.Kopmax;
+                    elem.TType = CCOLElementTimeTypeEnum.TE_type;
 
                     data.Elements.Add(elem);
                 }
@@ -164,6 +170,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 data.Elements.Add(new CCOLElement() { Define = "tdummy", Naam = "dummy" });
             }
 
+            foreach (var pgen in pgens)
+            {
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Timer))
+                {
+                    data.Elements.Add(i);
+                }
+            }
+
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "TMMAX" });
 
@@ -171,14 +185,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllSchakelaars(ControllerModel controller)
+        private static CCOLElemListData CollectAllSchakelaars(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
             data.CCOLCode = "SCH_code";
             data.CCOLSetting = "SCH";
 
-            data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = "1" });
+            data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = 1 });
 
             // Collect schwg
             foreach (FaseCyclusModel fcm in controller.Fasen)
@@ -190,7 +204,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"schca{fcm.Naam}",
                         Naam = $"CA{fcm.Naam}",
-                        Instelling = fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? "1" : "0"
+                        Instelling = fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
                     });
                 }
             }
@@ -203,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"schwg{fcm.Naam}",
                         Naam = $"WG{fcm.Naam}",
-                        Instelling = fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? "1" : "0"
+                        Instelling = fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
                     });
                 }
             }
@@ -216,7 +230,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"schmv{fcm.Naam}",
                         Naam = $"MV{fcm.Naam}",
-                        Instelling = fcm.Meeverlengen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? "1" : "0"
+                        Instelling = fcm.Meeverlengen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
                     });
                 }
             }
@@ -231,8 +245,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"schaltg{fcm.Naam}",
                         Naam = $"altg{fcm.Naam}",
-                        Instelling = "1"
+                        Instelling = 1
                     });
+                }
+            }
+
+            foreach (var pgen in pgens)
+            {
+                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Schakelaar))
+                {
+                    data.Elements.Add(i);
                 }
             }
 
@@ -270,7 +292,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLTType = "PRM_type";
 
             // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = "240", TType = "TS_type" });
+            data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = 240, TType = CCOLElementTimeTypeEnum.TS_type });
 
             // Detectie aanvraag functie
             foreach (DetectorModel dm in AlleDetectoren)
@@ -294,7 +316,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         set = 3;
                         break;
                 }
-                data.Elements.Add(new CCOLElement() { Define = $"prmd{dm.Naam}", Naam = $"d{dm.Naam}", Instelling = $"{set}", TType = "0" });
+                data.Elements.Add(new CCOLElement() { Define = $"prmd{dm.Naam}", Naam = $"d{dm.Naam}", Instelling = set, TType = 0 });
             }
 
             // Detectie verlengkriterium
@@ -319,12 +341,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         set = 3;
                         break;
                 }
-                data.Elements.Add(new CCOLElement() { Define = $"prmmkd{dm.Naam}", Naam = $"mkd{dm.Naam}", Instelling = $"{set}", TType = "0" });
+                data.Elements.Add(new CCOLElement() { Define = $"prmmkd{dm.Naam}", Naam = $"mkd{dm.Naam}", Instelling = set, TType = CCOLElementTimeTypeEnum.TE_type });
             }
 
             foreach(var pgen in pgens)
             {
-                foreach(var i in pgen.GetCCOLElements(CCOLElementType.Parameter))
+                foreach(var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Parameter))
                 {
                     data.Elements.Add(i);
                 }
@@ -335,6 +357,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (GroentijdModel mgm in mgset.Groentijden)
                 {
+                    if (!mgm.Waarde.HasValue)
+                        continue;
+
                     FaseCyclusModel thisfcm = null;
                     foreach (FaseCyclusModel fcm in controller.Fasen)
                     {
@@ -351,8 +376,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"prm{mgset.Naam.ToLower()}{thisfcm.Naam}",
                         Naam = $"mk{mgset.Naam.ToLower()}{thisfcm.Naam}",
-                        Instelling = $"{mgm.Waarde}",
-                        TType = "TE_type"
+                        Instelling = mgm.Waarde.Value,
+                        TType = CCOLElementTimeTypeEnum.TE_type
                     });
                 }
             }
@@ -364,8 +389,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     Define = $"prmmlfpr{fcm.Naam}",
                     Naam = $"mlfpr{fcm.Naam}",
-                    Instelling = "1",
-                    TType = "0"
+                    Instelling = 1,
+                    TType = CCOLElementTimeTypeEnum.None
                 });
             }
 
@@ -379,8 +404,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"prmaltg{fcm.Naam}",
                         Naam = $"altg{fcm.Naam}",
-                        Instelling = "60",
-                        TType = "TE_type"
+                        Instelling = 60,
+                        TType = CCOLElementTimeTypeEnum.TE_type
                     });
                 }
                 // alternatieve realisatieruimte
@@ -390,8 +415,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         Define = $"prmaltp{fcm.Naam}",
                         Naam = $"altp{fcm.Naam}",
-                        Instelling = "60",
-                        TType = "TE_type"
+                        Instelling = 60,
+                        TType = CCOLElementTimeTypeEnum.TE_type
                     });
                 }
             }

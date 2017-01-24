@@ -28,7 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (elem.Define?.Length > this.DefineMaxWidth) this.DefineMaxWidth = elem.Define.Length;
                 if (elem.Naam?.Length > this.NameMaxWidth) this.NameMaxWidth = elem.Naam.Length;
-                if (elem.Instelling?.Length > this.SettingMaxWidth) this.SettingMaxWidth = elem.Instelling.Length;
+                if (elem.Instelling?.ToString().Length > this.SettingMaxWidth) this.SettingMaxWidth = elem.Instelling.ToString().Length;
             }
         }
 
