@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <re:SpecialDataGrid 
                   ItemsSource="{Binding Path=Detectoren}"
-                  Grid.Row="0"
+                  Grid.Row="0" Margin="2"
                   SelectedItem="{Binding Path=SelectedDetector}"
                   SelectionUnit="CellOrRowHeader"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedDetectoren, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -42,5 +42,8 @@
                 <DataGridTextColumn Binding="{Binding Path=VissimNaam}" Header="VISSIM naam" />
             </DataGrid.Columns>
         </re:SpecialDataGrid>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Left">
+            <Button Content="Generate new numbers" Command="{Binding Path=GenerateSimulationValuesCommand}" Margin="2" />
+        </StackPanel>
     </Grid>
 </UserControl>

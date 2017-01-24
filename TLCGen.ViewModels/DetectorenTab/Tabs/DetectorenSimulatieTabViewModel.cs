@@ -123,6 +123,12 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Q4 = qs[next];
                 dm.Simulatie.Stopline = 1800;
             }
+
+            OnMonitoredPropertyChanged(null);
+            foreach(var d in Detectoren)
+            {
+                d.OnMonitoredPropertyChanged(null);
+            }
         }
 
         #endregion // Command functionality
