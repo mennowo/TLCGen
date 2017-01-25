@@ -13,6 +13,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -21,7 +22,8 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private FaseCyclusModel _FaseCyclus;
-        
+        private ObservableCollection<string> _MeeverlengenOpties;
+        private string _MeeverlengenTypeString;
         #endregion // Fields
 
         #region Properties
@@ -80,6 +82,12 @@ namespace TLCGen.ViewModels
                     //}
 
                     OnMonitoredPropertyChanged("Type");
+                    if(value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
+                    {
+                        MeeverlengenType = MeeVerlengenTypeEnum.Default;
+                    }
+                    SetMeeverlengenOpties();
+
                     OnMonitoredPropertyChanged(null); // Update all properties
                 }
             }
@@ -314,6 +322,49 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ObservableCollection<string> MeeverlengenOpties
+        {
+            get
+            {
+                if (_MeeverlengenOpties == null)
+                {
+                    _MeeverlengenOpties = new ObservableCollection<string>();
+                }
+                return _MeeverlengenOpties;
+            }
+        }
+
+        public string MeeverlengenTypeString
+        {
+            get { return _MeeverlengenTypeString; }
+            set
+            {
+                _MeeverlengenTypeString = value;
+                if(value == MeeVerlengenTypeEnum.Default.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.Default;
+
+                }
+                else if (value == MeeVerlengenTypeEnum.To.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.To;
+
+                }
+                else if (value == MeeVerlengenTypeEnum.MKTo.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.MKTo;
+
+                }
+                else if (value == MeeVerlengenTypeEnum.Voetganger.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.Voetganger;
+
+                }
+
+                OnPropertyChanged("MeeverlengenTypeString");
+            }
+        }
+
         #endregion // Properties
 
         #region Overrides
@@ -353,11 +404,28 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
+        #region Private Methods
+
+        private void SetMeeverlengenOpties()
+        {
+            MeeverlengenOpties.Clear();
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Default.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.To.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKTo.GetDescription());
+            if (_FaseCyclus.Type == FaseTypeEnum.Voetganger)
+                MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger.GetDescription());
+
+            MeeverlengenTypeString = MeeverlengenType.GetDescription();
+        }
+        #endregion // Private Methods
+
         #region Constructor
 
         public FaseCyclusViewModel(FaseCyclusModel fasecyclus)
         {
             _FaseCyclus = fasecyclus;
+
+            SetMeeverlengenOpties();
         }
 
         #endregion // Constructor

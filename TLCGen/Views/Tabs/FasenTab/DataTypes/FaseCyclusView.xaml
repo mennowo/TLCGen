@@ -81,11 +81,14 @@
                     </Style>
                 </GroupBox.Style>
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Type" />
-                    <RadioButton GroupName="MeeverlengenTypeGroup" Content="Default" 
+                    <Label Content="Type meeverlengen" />
+                    <ComboBox 
+                        ItemsSource="{Binding Path=MeeverlengenOpties}"
+                        SelectedValue="{Binding Path=MeeverlengenTypeString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                    <!--<RadioButton GroupName="MeeverlengenTypeGroup" Content="Default" 
                                  IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Default}}" />
                     <RadioButton GroupName="MeeverlengenTypeGroup" Content="Voetganger" 
-                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Voetganger}}" />
+                                 IsChecked="{Binding Path=MeeverlengenType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:MeeVerlengenTypeEnum.Voetganger}}" />-->
                     <StackPanel>
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">

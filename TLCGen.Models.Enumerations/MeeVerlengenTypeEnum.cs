@@ -13,6 +13,10 @@ namespace TLCGen.Models.Enumerations
     {
         [Description("Default")]
         Default,
+        [Description("Tot ontruiming")]
+        To,
+        [Description("MK tot ontruiming")]
+        MKTo,
         [Description("Voetganger")]
         Voetganger
     }

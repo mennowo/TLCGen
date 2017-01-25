@@ -91,7 +91,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
-
                     sb.AppendLine("void KlokPerioden(void)");
                     sb.AppendLine("{");
                     sb.AppendLine($"{tabspace}/* default klokperiode voor max.groen */");
@@ -124,6 +123,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{tabspace}CIF_GUS[{per.BitmapData.GetBitmapCoordinaatOutputDefine("per" + per.Naam)}] = (MM[mperiod] == {i++});");
                     }
                     return sb.ToString();
+
                 default:
                     return null;
             }

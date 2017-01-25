@@ -76,6 +76,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.Wachtgroen:
+                    if(c.Data.ExtraMeeverlengenInWG)
+                    {
+                        sb.AppendLine($"{tabspace}/* Zet voor alle fasen het WS[] bitje. */");
+                        sb.AppendLine($"{tabspace}WachtStand(PRML, ML, MLMAX);");
+                        sb.AppendLine();
+                    }
                     sb.AppendLine($"{tabspace}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{tabspace}{tabspace}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine();
@@ -84,7 +90,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                         {
-                            sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                            sb.Append($"{tabspace}RW[{fcm.GetDefine()}] |= (");
+                            if(c.Data.ExtraMeeverlengenInWG && fcm.Type != FaseTypeEnum.Voetganger)
+                            {
+                                sb.AppendLine($"(MK[{fcm.GetDefine()}] & ~BIT5) ||");
+                                sb.Append("".PadLeft($"{tabspace}RW[{fcm.GetDefine()}] |= (".Length));
+                            }
+                            sb.AppendLine($"SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {

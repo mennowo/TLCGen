@@ -74,6 +74,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRichtingGevoeligCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLMeeAanvragenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVasteAanvraagCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLWachtstandGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLWaitsignalenCodeGenerator.cs" />

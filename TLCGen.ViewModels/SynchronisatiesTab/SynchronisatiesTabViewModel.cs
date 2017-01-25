@@ -713,6 +713,7 @@ namespace TLCGen.ViewModels
             _Controller.InterSignaalGroep.Voorstarten.RemoveAll();
             _Controller.InterSignaalGroep.Gelijkstarten.RemoveAll();
             _Controller.InterSignaalGroep.Nalopen.RemoveAll();
+            _Controller.InterSignaalGroep.Meeaanvragen.RemoveAll();
             bool[,] gelijkstartsaved = new bool[fccount, fccount];
             for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
             {
