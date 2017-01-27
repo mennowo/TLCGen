@@ -73,15 +73,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    sb.AppendLine($"{tabspace}/* Detectie aanvragen */");
-                    sb.AppendLine($"{tabspace}/* ------------------ */");
+                    sb.AppendLine($"{ts}/* Detectie aanvragen */");
+                    sb.AppendLine($"{ts}/* ------------------ */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         bool HasA = false;
@@ -98,13 +98,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         if (HasA)
                         {
-                            sb.AppendLine($"{tabspace}aanvraag_detectie_prm_va_arg((count) {fcm.GetDefine()}, ");
+                            sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {fcm.GetDefine()}, ");
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
-                                    sb.AppendLine($"{tabspace}{tabspace}(va_count) {dm.GetDefine()}, (va_mulv) PRM[{_prmpf}{_prmd}{dm.Naam}], ");
+                                    sb.AppendLine($"{ts}{ts}(va_count) {dm.GetDefine()}, (va_mulv) PRM[{_prmpf}{_prmd}{dm.Naam}], ");
                             }
-                            sb.AppendLine($"{tabspace}{tabspace}(va_count) END);");
+                            sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
                     }
                     sb.AppendLine("");

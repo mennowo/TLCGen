@@ -61,9 +61,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
+                if (pgen.HasCCOLElements())
                 {
-                    data.Elements.Add(i);
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Uitgang))
+                    {
+                        data.Elements.Add(i);
+                    }
                 }
             }
 
@@ -82,7 +85,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "isfix", Naam = "fix" });
-            // TODO
+
+            foreach (var pgen in pgens)
+            {
+                if (pgen.HasCCOLElements())
+                {
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Ingang))
+                    {
+                        data.Elements.Add(i);
+                    }
+                }
+            }
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "ISMAX" });
@@ -102,9 +115,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.HulpElement))
+                if (pgen.HasCCOLElements())
                 {
-                    data.Elements.Add(i);
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.HulpElement))
+                    {
+                        data.Elements.Add(i);
+                    }
                 }
             }
 
@@ -124,7 +140,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.Elements.Add(new CCOLElement() { Define = "mperiod", Naam = "PERIOD" });
 
             // Collect everything
-            // TODO
+            foreach (var pgen in pgens)
+            {
+                if (pgen.HasCCOLElements())
+                {
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.GeheugenElement))
+                    {
+                        data.Elements.Add(i);
+                    }
+                }
+            }
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "MEMAX" });
@@ -172,9 +197,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Timer))
+                if (pgen.HasCCOLElements())
                 {
-                    data.Elements.Add(i);
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Timer))
+                    {
+                        data.Elements.Add(i);
+                    }
                 }
             }
 
@@ -196,9 +224,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var pgen in pgens)
             {
-                foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Schakelaar))
+                if (pgen.HasCCOLElements())
                 {
-                    data.Elements.Add(i);
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Schakelaar))
+                    {
+                        data.Elements.Add(i);
+                    }
                 }
             }
 
@@ -218,7 +249,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLTType = "C_type";
 
             // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
+            foreach (var pgen in pgens)
+            {
+                if (pgen.HasCCOLElements())
+                {
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Counter))
+                    {
+                        data.Elements.Add(i);
+                    }
+                }
+            }
+
+            if(data.Elements.Count == 0)
+                data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
 
             // Add last, nameless element for maximum #define
             data.Elements.Add(new CCOLElement() { Define = "CTMAX" });
@@ -265,9 +308,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(var pgen in pgens)
             {
-                foreach(var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Parameter))
+                if (pgen.HasCCOLElements())
                 {
-                    data.Elements.Add(i);
+                    foreach (var i in pgen.GetCCOLElements(CCOLElementTypeEnum.Parameter))
+                    {
+                        data.Elements.Add(i);
+                    }
                 }
             }
 

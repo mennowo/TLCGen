@@ -94,7 +94,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
             int i;
@@ -104,34 +104,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
                     sb.AppendLine("void KlokPerioden(void)");
                     sb.AppendLine("{");
-                    sb.AppendLine($"{tabspace}/* default klokperiode voor max.groen */");
-                    sb.AppendLine($"{tabspace}/* ---------------------------------- */");
-                    sb.AppendLine($"{tabspace}MM[{_mpf}{_mperiod}] = 0;");
+                    sb.AppendLine($"{ts}/* default klokperiode voor max.groen */");
+                    sb.AppendLine($"{ts}/* ---------------------------------- */");
+                    sb.AppendLine($"{ts}MM[{_mpf}{_mperiod}] = 0;");
                     sb.AppendLine();
                     i = 1;
                     foreach (PeriodeModel kpm in c.PeriodenData.Perioden)
                     {
                         string comm = kpm.Commentaar;
                         if (comm == null) comm = "";
-                        sb.AppendLine($"{tabspace}/* klokperiode: {comm} */");
-                        sb.AppendLine($"{tabspace}/* -------------{new string('-', comm.Length)} */");
-                        sb.AppendLine($"{tabspace}if (klokperiode(PRM[{_prmpf}{_prmstkp}{i}], PRM[{_prmpf}{_prmetkp}{i}]) &&");
-                        sb.AppendLine($"{tabspace}    dagsoort(PRM[{_prmpf}{_prmdckp}{i}]))");
-                        sb.AppendLine($"{tabspace}{tabspace}MM[{_mpf}{_mperiod}] = {i};");
+                        sb.AppendLine($"{ts}/* klokperiode: {comm} */");
+                        sb.AppendLine($"{ts}/* -------------{new string('-', comm.Length)} */");
+                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{i}], PRM[{_prmpf}{_prmetkp}{i}]) &&");
+                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{i}]))");
+                        sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiod}] = {i};");
                         sb.AppendLine();
                         ++i;
                     }
-                    sb.AppendLine($"{tabspace}KlokPerioden_Add();");
+                    sb.AppendLine($"{ts}KlokPerioden_Add();");
                     sb.AppendLine("}");
                     return sb.ToString();
                 case CCOLRegCCodeTypeEnum.SystemApplication:
                     sb.AppendLine("/* periode verklikking */");
                     sb.AppendLine("/* ------------------- */");
                     i = 0;
-                    sb.AppendLine($"{tabspace}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {i++});");
+                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {i++});");
                     foreach (var per in c.PeriodenData.Perioden)
                     {
-                        sb.AppendLine($"{tabspace}CIF_GUS[{_uspf}{_usper}{per.Naam}] = (MM[{_mpf}{_mperiod}] == {i++});");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{per.Naam}] = (MM[{_mpf}{_mperiod}] == {i++});");
                     }
                     return sb.ToString();
 

@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLAanvraagDirectCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />
     <Compile Include="Settings\CCOLGeneratorStringSettingModel.cs" />

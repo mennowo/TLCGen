@@ -152,6 +152,29 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int? TFL
+        {
+            get { return _Detector.TFL; }
+            set
+            {
+                if (value == null || value >= 0)
+                    _Detector.TFL = value;
+                OnMonitoredPropertyChanged("TFL");
+                //_ControllerVM.SetAllSelectedElementsValue(this, "TBG");
+            }
+        }
+
+        public int? CFL
+        {
+            get { return _Detector.CFL; }
+            set
+            {
+                if (value == null || value >= 0)
+                    _Detector.CFL = value;
+                OnMonitoredPropertyChanged("CFL");
+                //_ControllerVM.SetAllSelectedElementsValue(this, "TBG");
+            }
+        }
         public DetectorAanvraagTypeEnum Aanvraag
         {
             get { return _Detector.Aanvraag; }

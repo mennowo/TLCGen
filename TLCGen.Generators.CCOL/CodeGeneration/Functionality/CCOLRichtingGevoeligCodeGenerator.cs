@@ -84,7 +84,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         sb.AppendLine($"{tabspace}aanvraag_richtinggevoelig(fc{rga.FaseCyclus}, d{rga.NaarDetector}, d{rga.VanDetector}, trgad{rga.VanDetector}, SCH[schrgadd{rga.VanDetector}]);");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
+
                 case CCOLRegCCodeTypeEnum.Meetkriterium:
                     sb.AppendLine($"{tabspace}/* Richtinggevoelig verlengen */");
                     sb.AppendLine($"{tabspace}/* -------------------------- */");

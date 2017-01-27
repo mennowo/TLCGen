@@ -17,7 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual bool HasCCOLElements()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public virtual IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)

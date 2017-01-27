@@ -151,7 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Aanvragen, ts));
                 }
             }
-
+            
             // Add file
             sb.AppendLine($"{ts}Aanvragen_Add();");
             sb.AppendLine("}");
