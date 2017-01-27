@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Generators.CCOL
 {
     /// <summary>
-    /// Interaction logic for CCOLCodeGeneratorInterface.xaml
+    /// Interaction logic for CCOLCodeGeneratorSettingsView.xaml
     /// </summary>
-    public partial class CCOLCodeGeneratorView : UserControl
+    public partial class CCOLGeneratorSettingsView : UserControl
     {
-        public CCOLCodeGeneratorView()
+        public CCOLGeneratorSettingsView()
         {
             InitializeComponent();
         }

@@ -23,6 +23,7 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
+                    <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -96,6 +97,8 @@
                 </MenuItem>
                 <Separator />
                 <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Plugins" ItemsSource="{Binding Path=PluginMenuItems}" Visibility="{Binding Path=IsPluginMenuVisible,Converter={StaticResource Bool2VisConv}}">
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" />

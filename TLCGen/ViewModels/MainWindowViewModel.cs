@@ -25,10 +25,12 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private List<IGeneratorViewModel> _Generators;
+        private List<ITLCGenPlugin> _ApplicationPlugins;
         private IGeneratorViewModel _SelectedGenerator;
         private TLCGenSettingsViewModel _SettingsVM;
         private ControllerViewModel _ControllerVM;
         private List<MenuItem> _ImportMenuItems;
+        private List<MenuItem> _PluginMenuItems;
 
         private SortedDictionary<int, Type> OwnTabTypes = new SortedDictionary<int, Type>();
         private List<Type> XmlNodeWriterPlugins = new List<Type>();
@@ -174,6 +176,26 @@ namespace TLCGen.ViewModels
                     _ImportMenuItems = new List<MenuItem>();
                 }
                 return _ImportMenuItems;
+            }
+        }
+
+        public List<MenuItem> PluginMenuItems
+        {
+            get
+            {
+                if (_PluginMenuItems == null)
+                {
+                    _PluginMenuItems = new List<MenuItem>();
+                }
+                return _PluginMenuItems;
+            }
+        }
+
+        public bool IsPluginMenuVisible
+        {
+            get
+            {
+                return _PluginMenuItems?.Count > 0;
             }
         }
 
@@ -586,6 +608,15 @@ namespace TLCGen.ViewModels
             }
             else
             {
+                foreach (var pl in _ApplicationPlugins)
+                {
+                    var setpl = pl as ITLCGenHasSettings;
+                    if (setpl != null)
+                    {
+                        setpl.SaveSettings();
+                    }
+                }
+
                 SaveGeneratorControllerSettingsToModel();
                 SettingsProvider.Default.SaveApplicationSettings();
             }
@@ -723,7 +754,9 @@ namespace TLCGen.ViewModels
         #region Constructor
 
         public MainWindowViewModel()
-        { 
+        {
+            _ApplicationPlugins = new List<ITLCGenPlugin>();
+
             // Load application settings (defaults, etc.)
             SettingsProvider.Default.LoadApplicationSettings();
 
@@ -746,39 +779,63 @@ namespace TLCGen.ViewModels
             foreach (var plugin in TLCGenPluginManager.Default.Plugins)
             {
                 ITLCGenPlugin instpl = null;
-                if (plugin.Item1.HasFlag(TLCGenPluginElems.Generator))
+                if (plugin.Item1.HasFlag(TLCGenPluginElems.Generator) ||
+                    plugin.Item1.HasFlag(TLCGenPluginElems.Importer) ||
+                    plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
                 {
                     instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
-                    Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
-                }
-                if(plugin.Item1.HasFlag(TLCGenPluginElems.Importer))
-                {
-                    instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
-                    MenuItem mi = new MenuItem();
-                    mi.Header = instpl.GetPluginName();
-                    mi.Command = ImportControllerCommand;
-                    mi.CommandParameter = instpl;
-                    ImportMenuItems.Add(mi);
+                    if(plugin.Item1.HasFlag(TLCGenPluginElems.Generator))
+                    {
+                        Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                    }
+                    if(plugin.Item1.HasFlag(TLCGenPluginElems.Importer))
+                    {
+                       MenuItem mi = new MenuItem();
+                       mi.Header = instpl.GetPluginName();
+                       mi.Command = ImportControllerCommand;
+                       mi.CommandParameter = instpl;
+                       ImportMenuItems.Add(mi);
+                    }
+                    if (plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
+                    {
+                        instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
+                        PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
+                    }
                 }
                 if (instpl != null)
                 {
                     TLCGenPluginManager.LoadAddinSettings(instpl, plugin.Item2, SettingsProvider.Default.Settings.CustomData);
+                    _ApplicationPlugins.Add(instpl as ITLCGenPlugin);
                 }
             }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
+
+            foreach(var pl in _ApplicationPlugins)
+            {
+                var setpl = pl as ITLCGenHasSettings;
+                if(setpl != null)
+                {
+                    setpl.LoadSettings();
+                }
+            }
 
 #warning TODO: also load menu items, tabs, etc.
 
             // If we are in debug mode, the code below tries loading a file
             // called 'test.tlc' from the folder where the application runs.
 #if DEBUG
-            DataProvider.Instance.FileName = System.AppDomain.CurrentDomain.BaseDirectory + "test.tlc";
+            DataProvider.Instance.FileName = @"C:\Users\NL33478\Documents\Ontwikkeling\TLCGen_test\2017-01-17-testreg\tlcgen\12345.tlc";
+            if(!System.IO.File.Exists(DataProvider.Instance.FileName))
+            {
+                MessageBox.Show("huh? " + DataProvider.Instance.FileName);
+            }
             if (DataProvider.Instance.LoadController())
             {
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, null));
             }
 #endif
 

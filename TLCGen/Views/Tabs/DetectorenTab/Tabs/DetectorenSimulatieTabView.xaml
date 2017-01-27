@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
         <re:SpecialDataGrid 
                   ItemsSource="{Binding Path=Detectoren}"
-                  Grid.Row="0" Margin="2"
+                  Grid.Row="0" Margin="0,4,4,0"
                   SelectedItem="{Binding Path=SelectedDetector}"
                   SelectionUnit="CellOrRowHeader"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedDetectoren, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

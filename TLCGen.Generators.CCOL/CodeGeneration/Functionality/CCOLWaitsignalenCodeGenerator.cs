@@ -27,7 +27,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if(d.Wachtlicht)
                     {
-                        _MyElements.Add(new CCOLElement(d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine("wt" + d.Naam), "wt" + d.Naam, CCOLElementTypeEnum.Uitgang));
+                        _MyElements.Add(new CCOLElement("wt" + d.Naam, CCOLElementTypeEnum.Uitgang));
                         _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, "uswt" + d.Naam));
                     }
                 }

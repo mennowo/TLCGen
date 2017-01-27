@@ -37,9 +37,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
-            sb.AppendLine($"{tabspace}#include \"sysdef.c\"");
-            sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}sys.h\"");
-            sb.AppendLine($"{tabspace}#include \"dplwvar.c\"");
+            sb.AppendLine($"{ts}#include \"sysdef.c\"");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
+            sb.AppendLine($"{ts}#include \"dplwvar.c\"");
 
             return sb.ToString();
         }
@@ -59,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     for (int i = 1; i < fcm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.AppendLine($"{tabspace}#define {fcm.GetDefine()}_{i} (USMAX + {usmaxplus})");
+                        sb.AppendLine($"{ts}#define {fcm.GetDefine()}_{i} (USMAX + {usmaxplus})");
                         ++usmaxplus;
                     }
                 }
@@ -73,7 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                         {
-                            sb.AppendLine($"{tabspace}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
+                            sb.AppendLine($"{ts}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
                             ++ismaxplus;
                         }
                     }
@@ -86,7 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
                     {
-                        sb.AppendLine($"{tabspace}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
+                        sb.AppendLine($"{ts}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
                         ++ismaxplus;
                     }
                 }
@@ -96,8 +96,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
 
-            sb.AppendLine($"{tabspace}#define USDPLMAX (USMAX + {usmaxplus})");
-            sb.AppendLine($"{tabspace}#define ISDPLMAX (ISMAX + {ismaxplus})");
+            sb.AppendLine($"{ts}#define USDPLMAX (USMAX + {usmaxplus})");
+            sb.AppendLine($"{ts}#define ISDPLMAX (ISMAX + {ismaxplus})");
 
             return sb.ToString();
         }
@@ -116,7 +116,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     bmnaam = bmnaam + ".bmp";
                 }
             }
-            sb.AppendLine($"{tabspace}load_picture_bmp(\"{bmnaam}\");");
+            sb.AppendLine($"{ts}load_picture_bmp(\"{bmnaam}\");");
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -127,12 +127,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             StringBuilder sb = new StringBuilder();
             if (item.BitmapCoordinaten?.Count > 0)
             {
-                sb.Append($"{tabspace}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
+                sb.Append($"{ts}X_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].X}; ");
                 sb.AppendLine($"Y_{itemtype}[{itemdefine}] = {item.BitmapCoordinaten[0].Y};");
             }
             else
             {
-                sb.Append($"{tabspace}X_{itemtype}[{itemdefine}] = NG; ");
+                sb.Append($"{ts}X_{itemtype}[{itemdefine}] = NG; ");
                 sb.AppendLine($"Y_{itemtype}[{itemdefine}] = NG;");
             }
 
@@ -140,7 +140,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
                 {
-                    sb.Append($"{tabspace}X_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].X}; ");
+                    sb.Append($"{ts}X_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].X}; ");
                     sb.Append($"Y_{itemtype}[{itemdefine}_{i}] = {item.BitmapCoordinaten[i].Y}; ");
                     sb.AppendLine($"NR_{itemtype}[{itemdefine}_{i}] = {itemdefine};");
                 }
@@ -155,8 +155,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void display_parameters(void)");
             sb.AppendLine("{");
 
-            sb.AppendLine($"{tabspace}/* fasecycli */");
-            sb.AppendLine($"{tabspace}/* --------- */");
+            sb.AppendLine($"{ts}/* fasecycli */");
+            sb.AppendLine($"{ts}/* --------- */");
 
             foreach(FaseCyclusModel fcm in controller.Fasen)
             {
@@ -165,8 +165,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
 
-            sb.AppendLine($"{tabspace}/* detectie */");
-            sb.AppendLine($"{tabspace}/* -------- */");
+            sb.AppendLine($"{ts}/* detectie */");
+            sb.AppendLine($"{ts}/* -------- */");
 
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
@@ -180,8 +180,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
             }
 
-            sb.AppendLine($"{tabspace}/* overige uitgangen */");
-            sb.AppendLine($"{tabspace}/* ----------------- */");
+            sb.AppendLine($"{ts}/* overige uitgangen */");
+            sb.AppendLine($"{ts}/* ----------------- */");
 
             // Segment display
             foreach (var item in controller.Data.SegmentenDisplayBitmapData)
@@ -202,9 +202,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
 
-            sb.AppendLine($"{tabspace}/* Gebruikers toevoegingen file includen */");
-            sb.AppendLine($"{tabspace}/* ------------------------------------- */");
-            sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}dpl.add\"");
+            sb.AppendLine($"{ts}/* Gebruikers toevoegingen file includen */");
+            sb.AppendLine($"{ts}/* ------------------------------------- */");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}dpl.add\"");
 
             sb.AppendLine();
             sb.AppendLine("}");

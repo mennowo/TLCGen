@@ -18,34 +18,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
             {
-                _MyElements.Add(new CCOLElement($"trgad{rga.VanDetector}", $"rgad{rga.VanDetector}", rga.MaxTijdsVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement($"schrgadd{rga.VanDetector}", $"rgadd{rga.VanDetector}", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _MyElements.Add(new CCOLElement($"rgad{rga.VanDetector}", rga.MaxTijdsVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                _MyElements.Add(new CCOLElement($"rgadd{rga.VanDetector}", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
             }
 
             foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
             {
                 _MyElements.Add(
                     new CCOLElement(
-                        $"trgrd{rgv.VanDetector}_d{rgv.NaarDetector}", 
                         $"rgrd{rgv.VanDetector}_d{rgv.NaarDetector}", 
                         rgv.MaxTijdsVerschil, 
                         CCOLElementTimeTypeEnum.TE_type, 
                         CCOLElementTypeEnum.Timer));
                 _MyElements.Add(
                     new CCOLElement(
-                        $"trgvd{rgv.VanDetector}_d{rgv.NaarDetector}",
                         $"rgvd{rgv.VanDetector}_d{rgv.NaarDetector}",
                         rgv.VerlengTijd,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Timer));
                 _MyElements.Add(
                     new CCOLElement(
-                        $"hrgvd{rgv.VanDetector}_d{rgv.NaarDetector}",
                         $"rgvd{rgv.VanDetector}_d{rgv.NaarDetector}",
                         CCOLElementTypeEnum.HulpElement));
                 _MyElements.Add(
                     new CCOLElement(
-                        $"prmmkrgd{rgv.VanDetector}",
                         $"mkrgd{rgv.VanDetector}",
                         (int)rgv.TypeVerlengen,
                         CCOLElementTimeTypeEnum.TE_type,

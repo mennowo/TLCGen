@@ -71,7 +71,7 @@ namespace TLCGen.Models
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
         [DisplayName("MeeverlengenVerschil")]
         [Description("MeeverlengenVerschil")]
-        public int MeeverlengenVerschil { get; set; }
+        public int? MeeverlengenVerschil { get; set; }
 
         [DisplayName("RatelTikker")]
         [Description("RatelTikker")]

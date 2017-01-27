@@ -9,29 +9,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using TLCGen.CustomPropertyEditors;
+using TLCGen.DataAccess;
+using TLCGen.Generators.CCOL.CodeGeneration;
+using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL
 {
-    [TLCGenPlugin(TLCGenPluginElems.Generator)]
-    public class CCOLCodeGeneratorPlugin : ITLCGenGenerator, ITLCGenPlugMessaging
+    [TLCGenPlugin(TLCGenPluginElems.Generator | TLCGenPluginElems.HasSettings | TLCGenPluginElems.MenuControl)]
+    public class CCOLCodeGeneratorPlugin : ITLCGenGenerator, ITLCGenHasSettings, ITLCGenMenuItem, ITLCGenPlugMessaging
     {
         #region ITLCGenGenerator
 
-        private UserControl _GeneratorInterface;
+        private UserControl _GeneratorView;
+        private CCOLGenerator _Generator;
+
+        [Browsable(false)]
         public UserControl GeneratorView
         {
             get
             {
-                if (_GeneratorInterface == null)
+                if (_GeneratorView == null)
                 {
-                    _GeneratorInterface = new CCOLCodeGeneratorView();
-                    _MyVM = new CCOLCodeGeneratorViewModel(this);
-                    _GeneratorInterface.DataContext = _MyVM;
+                    _GeneratorView = new CCOLGeneratorView();
+                    _Generator = new CCOLGenerator();
+                    _Generator.LoadSettings();
+                    _MyVM = new CCOLGeneratorViewModel(this, _Generator);
+                    _GeneratorView.DataContext = _MyVM;
                 }
-                return _GeneratorInterface;
+                return _GeneratorView;
             }
         }
 
@@ -50,7 +60,7 @@ namespace TLCGen.Generators.CCOL
             return GetGeneratorName();
         }
 
-
+        [Browsable(false)]
         public ControllerModel Controller
         {
             get;
@@ -82,17 +92,106 @@ namespace TLCGen.Generators.CCOL
 
         #endregion // ITLCGenPlugMessaging
 
+        #region ITLCGenHasSettings
+
+        public void LoadSettings()
+        {
+            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
+            if (!Directory.Exists(setpath))
+                Directory.CreateDirectory(setpath);
+            var setfile = Path.Combine(setpath, @"settings.xml");
+            if (File.Exists(setfile))
+            {
+                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(setfile);
+            }
+            else
+            {
+                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
+            }
+        }
+
+        public void SaveSettings()
+        {
+            //_MyVM.CodeGenerator.SaveSettings();
+            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
+            if (!Directory.Exists(setpath))
+                Directory.CreateDirectory(setpath);
+            var setfile = Path.Combine(setpath, @"settings.xml");
+            TLCGenSerialization.Serialize<CCOLGeneratorSettingsModel>(setfile, CCOLGeneratorSettingsProvider.Default.Settings);
+        }
+
+        #endregion // ITLCGenHasSettings
+
+        #region ITLCGenMenuItem
+
+        public MenuItem Menu
+        {
+            get
+            {
+                MenuItem item = new MenuItem();
+                item.Header = "CCOL instellingen";
+                item.Command = ShowSettingsCommand;
+                return item;
+            }
+        }
+
+        #endregion ITLCGenMenuItem
+
         #region Properties
 
+        [Browsable(false)]
         public string ControllerFileName { get; set; }
 
         #endregion // Properties
 
         #region Fields
 
-        private CCOLCodeGeneratorViewModel _MyVM;
+        private CCOLGeneratorViewModel _MyVM;
 
         #endregion // Fields
+
+        #region Commands
+
+
+        RelayCommand _ShowSettingsCommand;
+        public ICommand ShowSettingsCommand
+        {
+            get
+            {
+                if (_ShowSettingsCommand == null)
+                {
+                    _ShowSettingsCommand = new RelayCommand(ShowSettingsCommand_Executed, ShowSettingsCommand_CanExecute);
+                }
+                return _ShowSettingsCommand;
+            }
+        }
+        #endregion // Commands
+
+        #region Command Functionality
+
+        private void ShowSettingsCommand_Executed(object obj)
+        {
+            var w = new CCOLGeneratorSettingsView();
+            w.DataContext = new CCOLGeneratorSettingsViewModel(CCOLGeneratorSettingsProvider.Default.Settings, _Generator);
+            Window window = new Window
+            {
+                Title = "CCOL Code Generator instellingen",
+                Content = w,
+                Width = 560,
+                Height = 450
+            };
+
+            window.ShowDialog();
+        }
+
+        private bool ShowSettingsCommand_CanExecute(object obj)
+        {
+            return true;
+        }
+
+        #endregion // Command Functionality
 
         #region Static Public Methods
 
@@ -102,97 +201,6 @@ namespace TLCGen.Generators.CCOL
         }
 
         #endregion // Static Public Methods
-
-        #region Setting Properties
-
-        private string _CCOLIncludesPaden;
-        [DisplayName("CCOL include paden")]
-        [Description("CCOL include paden")]
-        [Category("Visual project settings")]
-        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
-        public string CCOLIncludesPaden
-        {
-            get { return _CCOLIncludesPaden; }
-            set
-            {
-                if(!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
-                    _CCOLIncludesPaden = value + ";";
-                else
-                    _CCOLIncludesPaden = value;
-            }
-        }
-
-        private string _CCOLLibsPath;
-        [DisplayName("CCOL library pad")]
-        [Description("CCOL library pad")]
-        [Category("Visual project settings")]
-        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
-        [Editor(typeof(FolderEditor), typeof(FolderEditor))]
-        public string CCOLLibsPath
-        {
-            get { return _CCOLLibsPath; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
-                    _CCOLLibsPath = value + ";";
-                else
-                    _CCOLLibsPath = value;
-            }
-        }
-
-        private string _CCOLLibs;
-        [DisplayName("CCOL libraries")]
-        [Description("CCOL libraries (indien van toepassing)")]
-        [Category("Visual project settings")]
-        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
-        public string CCOLLibs
-        {
-            get { return _CCOLLibs; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
-                    _CCOLLibs = value + ";";
-                else
-                    _CCOLLibs = value;
-            }
-        }
-
-        private string _CCOLResPath;
-        [DisplayName("CCOL resources pad")]
-        [Description("CCOL resources pad")]
-        [Category("Visual project settings")]
-        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
-        [Editor(typeof(FolderEditor), typeof(FolderEditor))]
-        public string CCOLResPath
-        {
-            get { return _CCOLResPath; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
-                    _CCOLResPath = value + ";";
-                else
-                    _CCOLResPath = value;
-            }
-        }
-
-        private string _CCOLPreprocessorDefinitions;
-        [DisplayName("Preprocessor definities")]
-        [Description("Preprocessor definities")]
-        [Category("Visual project settings")]
-        [TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
-        public string CCOLPreprocessorDefinitions
-        {
-            get { return _CCOLPreprocessorDefinitions; }
-            set
-            {
-                if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
-                    _CCOLPreprocessorDefinitions = value + ";";
-                else
-                    _CCOLPreprocessorDefinitions = value;
-            }
-        }
-
-        #endregion // Setting Properties
 
         #region TLCGen Events
 

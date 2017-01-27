@@ -32,11 +32,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             CCOLElemListData[] lists = new CCOLElemListData[8];
 
             lists[0] = CollectAllUitgangen(controller, pgens);
-            lists[1] = CollectAllIngangen(controller);
+            lists[1] = CollectAllIngangen(controller, pgens);
             lists[2] = CollectAllHulpElementen(controller, pgens);
-            lists[3] = CollectAllGeheugenElementen(controller);
+            lists[3] = CollectAllGeheugenElementen(controller, pgens);
             lists[4] = CollectAllTimers(controller, pgens);
-            lists[5] = CollectAllCounters(controller);
+            lists[5] = CollectAllCounters(controller, pgens);
             lists[6] = CollectAllSchakelaars(controller, pgens);
             lists[7] = CollectAllParameters(controller, pgens);
 
@@ -74,7 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllIngangen(ControllerModel controller)
+        private static CCOLElemListData CollectAllIngangen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -115,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller)
+        private static CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -193,35 +193,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLSetting = "SCH";
 
             data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = 1 });
-            
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
-                    fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"schmv{fcm.Naam}",
-                        Naam = $"MV{fcm.Naam}",
-                        Instelling = fcm.Meeverlengen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0
-                    });
-                }
-            }
-
-            // Alternatieven
-            if (controller.ModuleMolen.LangstWachtendeAlternatief)
-            {
-                // alternatieven wel/niet toestaan
-                foreach (FaseCyclusModel fcm in controller.Fasen)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"schaltg{fcm.Naam}",
-                        Naam = $"altg{fcm.Naam}",
-                        Instelling = 1
-                    });
-                }
-            }
 
             foreach (var pgen in pgens)
             {
@@ -238,7 +209,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return data;
         }
 
-        private static CCOLElemListData CollectAllCounters(ControllerModel controller)
+        private static CCOLElemListData CollectAllCounters(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             CCOLElemListData data = new CCOLElemListData();
 
@@ -266,31 +237,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = 240, TType = CCOLElementTimeTypeEnum.TS_type });
-
-            // Detectie aanvraag functie
-            foreach (DetectorModel dm in AlleDetectoren)
-            {
-                if (dm.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
-                    continue;
-
-                int set = 0;
-                switch (dm.Aanvraag)
-                {
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.Uit:
-                        set = 0;
-                        break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG:
-                        set = 1;
-                        break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.Rood:
-                        set = 2;
-                        break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel:
-                        set = 3;
-                        break;
-                }
-                data.Elements.Add(new CCOLElement() { Define = $"prmd{dm.Naam}", Naam = $"d{dm.Naam}", Instelling = set, TType = 0 });
-            }
 
             // Detectie verlengkriterium
             foreach (DetectorModel dm in AlleDetectoren)
@@ -350,45 +296,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         Define = $"prm{mgset.Naam.ToLower()}{thisfcm.Naam}",
                         Naam = $"mk{mgset.Naam.ToLower()}{thisfcm.Naam}",
                         Instelling = mgm.Waarde.Value,
-                        TType = CCOLElementTimeTypeEnum.TE_type
-                    });
-                }
-            }
-
-            // Vooruit realisaties
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                data.Elements.Add(new CCOLElement()
-                {
-                    Define = $"prmmlfpr{fcm.Naam}",
-                    Naam = $"mlfpr{fcm.Naam}",
-                    Instelling = 1,
-                    TType = CCOLElementTimeTypeEnum.None
-                });
-            }
-
-            // Alternatieven
-            if (controller.ModuleMolen.LangstWachtendeAlternatief)
-            {
-                // alternatieve max. groentijd
-                foreach (FaseCyclusModel fcm in controller.Fasen)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"prmaltg{fcm.Naam}",
-                        Naam = $"altg{fcm.Naam}",
-                        Instelling = 60,
-                        TType = CCOLElementTimeTypeEnum.TE_type
-                    });
-                }
-                // alternatieve realisatieruimte
-                foreach (FaseCyclusModel fcm in controller.Fasen)
-                {
-                    data.Elements.Add(new CCOLElement()
-                    {
-                        Define = $"prmaltp{fcm.Naam}",
-                        Naam = $"altp{fcm.Naam}",
-                        Instelling = 60,
                         TType = CCOLElementTimeTypeEnum.TE_type
                     });
                 }

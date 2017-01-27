@@ -25,8 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"schwg{fcm.Naam}", 
-                            $"WG{fcm.Naam}", 
+                            $"wg{fcm.Naam}", 
                             fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, 
                             CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 }

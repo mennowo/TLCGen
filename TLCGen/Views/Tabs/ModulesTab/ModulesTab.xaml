@@ -3,24 +3,41 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:TLCGen.ViewModels;assembly=TLCGen.ViewModels"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type vm:ModulesDetailsTabViewModel}">
+            <local:ModulesDetailsTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ModulesFasenInstellingenTabViewModel}">
+            <local:ModulesFasenInstellingenTabView />
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Grid.Row="0">
-            <local:ModulesTabFasenLijstView DataContext="{Binding FasenLijstVM}" />
-        </Grid>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" />
-        <Grid Grid.Column="2" Grid.Row="0">
-            <local:ModuleMolenOverView DataContext="{Binding ModuleMolenVM}" />
-        </Grid>
+        <TabControl ItemsSource="{Binding Path=TabItems}" 
+                    TabStripPlacement="Left"
+                    SelectedItem="{Binding Path=SelectedTab}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <AdornerDecorator>
+                            <Grid>
+                                <ContentPresenter 
+                                    Content="{Binding Path=DisplayName}" 
+                                    VerticalAlignment="Center" />
+                            </Grid>
+                        </AdornerDecorator>
+                    </Border>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ItemContainerStyle>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="IsEnabled" Value="{Binding IsEnabled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Setter Property="ContentTemplate" Value="{Binding ContentDataTemplate}" />
+                </Style>
+            </TabControl.ItemContainerStyle>
+        </TabControl>
     </Grid>
 </UserControl>

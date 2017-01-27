@@ -413,7 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach(ModuleFaseCyclusModel mfcm in mm.Fasen)
                 {
-                    sb.AppendLine($"{tabspace}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                    sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                 }
                 sb.AppendLine();
             }

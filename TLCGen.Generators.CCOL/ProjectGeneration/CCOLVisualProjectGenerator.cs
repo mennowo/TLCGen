@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.ProjectGeneration
@@ -16,28 +17,34 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
         {
             string writeline = line;
 
+            string _ccolinclpaths = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden;
+            string _ccollibs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibs;
+            string _ccollibspath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath;
+            string _ccolppdefs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLPreprocessorDefinitions;
+            string _ccolrespath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath;
+
             // Replace all
             if (writeline.Contains("__"))
             {
-                string prepro = plugin.CCOLPreprocessorDefinitions;
+                string prepro = _ccolppdefs;
                 if (string.IsNullOrEmpty(prepro))
                     prepro = "";
                 writeline = writeline.Replace("__CONTROLLERNAME__", plugin.Controller.Data.Naam);
                 writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
-                string ccollibspath = plugin.CCOLLibsPath.Remove(plugin.CCOLLibsPath.Length - 1);
+                string ccollibspath = _ccollibspath.Remove(_ccollibspath.Length - 1);
                 if(!ccollibspath.EndsWith("\\"))
                 {
                     ccollibspath = ccollibspath + "\\";
                 }
                 writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath);
-                writeline = writeline.Replace("__CCOLLLIBS__", plugin.CCOLLibs);
-                string ccolrespath = plugin.CCOLResPath.Remove(plugin.CCOLResPath.Length - 1);
+                writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs);
+                string ccolrespath = _ccolrespath.Remove(_ccolrespath.Length - 1);
                 if (!ccolrespath.EndsWith("\\"))
                 {
                     ccolrespath = ccolrespath + "\\";
                 }
                 writeline = writeline.Replace("__CCOLLRESDIR__", ccolrespath);
-                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", plugin.CCOLIncludesPaden);
+                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", _ccolinclpaths);
                 writeline = writeline.Replace("__PREPROCESSORDEFS__", prepro);
             }
 

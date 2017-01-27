@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -26,11 +27,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         
         private List<ICCOLCodePieceGenerator> _PieceGenerators;
 
-        private string tabspace = "    ";
+        public string ts
+        {
+            get
+            {
+                if(CCOLGeneratorSettingsProvider.Default.Settings.TabSpace == null)
+                {
+                    return "";
+                }
+                return CCOLGeneratorSettingsProvider.Default.Settings.TabSpace;
+            }
+        }
 
         #endregion // Fields
 
         #region Properties
+
         #endregion // Properties
 
         #region Commands
@@ -62,6 +74,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(controller, _PieceGenerators);
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
+
+                foreach(var l in CCOLElementLists)
+                {
+                    l.SetMax();
+                }
+
                 Uitgangen = CCOLElementLists[0];
                 Ingangen = CCOLElementLists[1];
                 HulpElementen = CCOLElementLists[2];
@@ -96,6 +114,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
         }
 
+        public void LoadSettings()
+        {
+            foreach(var v in _PieceGenerators)
+            {
+                if (v.HasSettings())
+                {
+                    var set = CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name);
+                    if(set != null)
+                        v.SetSettings(CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name).Item2);
+                }
+            }
+        }
+
         #endregion // Public Methods
 
         #region Private Methods
@@ -113,13 +144,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            int pad1 = data.DefineMaxWidth + $"{tabspace}#define  ".Length;
+            int pad1 = data.DefineMaxWidth + $"{ts}#define  ".Length;
             int pad2 = data.Elements.Count.ToString().Length;
 
             int index = 0;
             foreach (CCOLElement elem in data.Elements)
             {
-                sb.Append($"{tabspace}#define {elem.Define} ".PadRight(pad1));
+                sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
@@ -140,7 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            int pad1 = data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
+            int pad1 = ts.Length + data.CCOLCodeWidth + 2 + data.DefineMaxWidth; // 3: [ ]
             int pad2 = data.NameMaxWidth + 6;  // 6: space = space " " ;
             int pad3 = data.CCOLSettingWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
             int pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
@@ -150,7 +181,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (!string.IsNullOrWhiteSpace(ce.Naam))
                 {
-                    sb.Append($"{tabspace}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
+                    sb.Append($"{ts}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
                     sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && ce.Instelling.HasValue)
                     {
@@ -184,7 +215,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var attr = (CCOLCodePieceGeneratorAttribute)Attribute.GetCustomAttribute(type, typeof(CCOLCodePieceGeneratorAttribute));
                 if (attr != null)
                 {
-                    _PieceGenerators.Add(Activator.CreateInstance(type) as ICCOLCodePieceGenerator);
+                    var v = Activator.CreateInstance(type) as ICCOLCodePieceGenerator;
+                    _PieceGenerators.Add(v);
                 }
             }
         }

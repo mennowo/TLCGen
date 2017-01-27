@@ -1,26 +1,26 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 4)]
-    public class ModulesTabViewModel : TLCGenTabItemViewModel
+    public class ModulesTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
-        
-        private ModuleMolenViewModel _ModuleMolenVM;
-        private ModulesTabFasenLijstViewModel _FasenLijstVM;
 
         #endregion // Fields
 
         #region Properties
 
-        public DrawingImage Icon
+        public override ImageSource Icon
         {
             get
             {
@@ -31,16 +31,6 @@ namespace TLCGen.ViewModels
                 dict.Source = u;
                 return (DrawingImage)dict["ModulesTabDrawingImage"];
             }
-        }
-
-        public ModuleMolenViewModel ModuleMolenVM
-        {
-            get { return _ModuleMolenVM; }
-        }
-
-        public ModulesTabFasenLijstViewModel FasenLijstVM
-        {
-            get { return _FasenLijstVM; }
         }
 
         #endregion // Properties
@@ -73,11 +63,6 @@ namespace TLCGen.ViewModels
 
         #region Public Methods
 
-        public void SetSelectedModule(ModuleViewModel mvm)
-        {
-            _FasenLijstVM.SelectedModule = mvm;
-        }
-
         #endregion // Public Methods
 
         #region Collection Changed
@@ -97,20 +82,19 @@ namespace TLCGen.ViewModels
 
         public ModulesTabViewModel(ControllerModel controller) : base(controller)
         {
-            _ModuleMolenVM = new ModuleMolenViewModel(_Controller, this);
-            _FasenLijstVM = new ModulesTabFasenLijstViewModel(this);
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
 
-            if (ModuleMolenVM.Modules.Count > 0)
-            {
-                ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
-                FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
-            }
+            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
 
-            if (FasenLijstVM.Fasen.Count > 0)
+            var attr = typeof(ModulesDetailsTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(ModulesDetailsTabViewModel));
+            attr = typeof(ModulesFasenInstellingenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
+            TabTypes.Add(attr.Index, typeof(ModulesFasenInstellingenTabViewModel));
+
+            foreach (var tab in TabTypes)
             {
-                FasenLijstVM.SelectedFaseCyclus = FasenLijstVM.Fasen[0];
+                var v = Activator.CreateInstance(tab.Value, _Controller);
+                TabItems.Add(v as ITLCGenTabItem);
             }
         }
 

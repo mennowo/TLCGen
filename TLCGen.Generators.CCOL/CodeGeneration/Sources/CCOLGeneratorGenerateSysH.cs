@@ -44,11 +44,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
-            sb.AppendLine($"{tabspace}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
+            sb.AppendLine($"{ts}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
             sb.AppendLine();
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");
-            sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}sys.add\"");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.add\"");
             sb.AppendLine();
 
             return sb.ToString();
@@ -66,18 +66,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (fcm.GetDefine().Length > pad1) pad1 = fcm.GetDefine().Length;
             }
-            pad1 = pad1 + $"{tabspace}#define  ".Length;
+            pad1 = pad1 + $"{ts}#define  ".Length;
 
             int pad2 = controller.Fasen.Count.ToString().Length;
 
             int index = 0;
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                sb.Append($"{tabspace}#define {fcm.GetDefine()} ".PadRight(pad1));
+                sb.Append($"{ts}#define {fcm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }
-            sb.Append($"{tabspace}#define FCMAX ".PadRight(pad1));
+            sb.Append($"{ts}#define FCMAX ".PadRight(pad1));
             sb.Append($"{index.ToString()} ".PadLeft(pad2));
             sb.AppendLine("/* aantal fasecycli */");
 
@@ -115,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (dm.GetDefine().Length > pad1) pad1 = dm.GetDefine().Length;
             }
-            pad1 = pad1 + $"{tabspace}#define  ".Length;
+            pad1 = pad1 + $"{ts}#define  ".Length;
 
             int pad2 = controller.Fasen.Count.ToString().Length;
 
@@ -124,18 +124,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    sb.Append($"{tabspace}#define {dm.GetDefine()} ".PadRight(pad1));
+                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                     ++index;
                 }
             }
             foreach (DetectorModel dm in controller.Detectoren)
             {
-                sb.Append($"{tabspace}#define {dm.GetDefine()} ".PadRight(pad1));
+                sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }
-            sb.Append($"{tabspace}#define DPMAX ".PadRight(pad1));
+            sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
             sb.Append($"{index.ToString()} ".PadLeft(pad2));
             sb.AppendLine("/* aantal fasecycli */");
 

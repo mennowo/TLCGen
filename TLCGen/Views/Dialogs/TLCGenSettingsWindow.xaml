@@ -23,11 +23,9 @@
                         <Label Content="Default settings voor verkeersregeling" />
                     </WrapPanel>
                     <xc:PropertyGrid Margin="2" 
-                                     
                                      ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
-                                     Grid.Row="1" SelectedObject="{Binding Path=SettingsVM.Settings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                                     Grid.Row="1" SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
                 </Grid>
-                <!--<local:VisualProjectDataView DataContext="{Binding Path=VisualProjectDataVM}" />-->
             </TabItem>
             <TabItem Header="Generatoren settings">
                 <Grid>

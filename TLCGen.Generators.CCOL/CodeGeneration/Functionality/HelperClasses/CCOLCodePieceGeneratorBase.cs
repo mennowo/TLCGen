@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -50,6 +51,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         }
 
         public virtual string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual bool HasSettings()
+        {
+            return false;
+        }
+
+        public virtual List<CCOLGeneratorCodeStringSettingModel> GetSettings()
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public virtual void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             throw new NotImplementedException();
         }

@@ -9,7 +9,8 @@
         MenuControl = 0x8,
         ToolBarControl = 0x10,
         IOElementProvider = 0x20,
-        XMLNodeWriter = 0x40
+        XMLNodeWriter = 0x40,
+        HasSettings = 0x80
     }
 
     [System.AttributeUsage(System.AttributeTargets.Class)]

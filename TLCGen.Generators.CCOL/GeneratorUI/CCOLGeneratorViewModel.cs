@@ -4,16 +4,18 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.ProjectGeneration;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.ViewModels;
 
 namespace TLCGen.Generators.CCOL
 {
-    public class CCOLCodeGeneratorViewModel : ViewModelBase
+    public class CCOLGeneratorViewModel : ViewModelBase
     {
         #region Fields
 
@@ -26,6 +28,11 @@ namespace TLCGen.Generators.CCOL
         #endregion // Fields
 
         #region Properties
+
+        public CCOLGenerator CodeGenerator
+        {
+            get { return _CodeGenerator; }
+        }
 
         public VisualProjectTypeEnum VisualProjectType
         {
@@ -52,7 +59,6 @@ namespace TLCGen.Generators.CCOL
         #region Commands
 
         RelayCommand _GenerateCodeCommand;
-            
         public ICommand GenerateCodeCommand
         {
             get
@@ -103,9 +109,9 @@ namespace TLCGen.Generators.CCOL
         private bool GenerateVisualProjectCommand_CanExecute(object prm)
         {
             bool b = _Plugin.Controller != null &&
-                     !string.IsNullOrWhiteSpace(_Plugin.CCOLLibsPath) &&
-                     !string.IsNullOrWhiteSpace(_Plugin.CCOLIncludesPaden) &&
-                     !string.IsNullOrWhiteSpace(_Plugin.CCOLResPath) &&
+                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath) &&
+                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden) &&
+                     !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath) &&
                      !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
             VisualCBEnabled = b;
             return b;
@@ -123,10 +129,10 @@ namespace TLCGen.Generators.CCOL
 
         #region Constructor
 
-        public CCOLCodeGeneratorViewModel(CCOLCodeGeneratorPlugin plugin)
+        public CCOLGeneratorViewModel(CCOLCodeGeneratorPlugin plugin, CCOLGenerator generator)
         {
             _Plugin = plugin;
-            _CodeGenerator = new CCOLGenerator();
+            _CodeGenerator = generator;
             _ProjectGenerator = new CCOLVisualProjectGenerator();
         }
 

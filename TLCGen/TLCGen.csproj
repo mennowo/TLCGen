@@ -131,6 +131,12 @@
     <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
       <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabView.xaml.cs">
+      <DependentUpon>ModulesFasenInstellingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabView.xaml.cs">
+      <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml.cs">
       <DependentUpon>PeriodenOverigTabView.xaml</DependentUpon>
     </Compile>
@@ -189,10 +195,10 @@
     <Compile Include="Views\Tabs\FasenTab\Controls\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ModulesTab\ModuleMolenOverView.xaml.cs">
+    <Compile Include="Views\Tabs\ModulesTab\Controls\ModuleMolenOverView.xaml.cs">
       <DependentUpon>ModuleMolenOverView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ModulesTab\ModulesTabFasenLijstView.xaml.cs">
+    <Compile Include="Views\Tabs\ModulesTab\Controls\ModulesTabFasenLijstView.xaml.cs">
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\SpecialDataGrid.cs" />
@@ -297,6 +303,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -389,11 +403,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ModulesTab\ModuleMolenOverView.xaml">
+    <Page Include="Views\Tabs\ModulesTab\Controls\ModuleMolenOverView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ModulesTab\ModulesTabFasenLijstView.xaml">
+    <Page Include="Views\Tabs\ModulesTab\Controls\ModulesTabFasenLijstView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

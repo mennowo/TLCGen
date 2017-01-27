@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              mc:Ignorable="d" 
@@ -93,7 +94,7 @@
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=MeeverlengenType}" Value="Default">
+                                    <DataTrigger Binding="{Binding Path=MeeverlengenType}" Value="Voetganger">
                                         <DataTrigger.Setters>
                                             <Setter Property="IsEnabled" Value="False" />
                                         </DataTrigger.Setters>
@@ -102,7 +103,7 @@
                             </Style>
                         </StackPanel.Style>
                         <Label Content="Ontruimingstijd verschil" />
-                        <TextBox Text="{Binding Path=MeeverlengenVerschil}" Margin="2" />
+                        <TextBox Text="{Binding Path=MeeverlengenVerschil,TargetNullValue={x:Static sys:String.Empty}}" Margin="2" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

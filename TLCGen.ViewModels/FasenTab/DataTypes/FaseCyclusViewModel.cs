@@ -251,7 +251,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int MeeverlengenVerschil
+        public int? MeeverlengenVerschil
         {
             get { return _FaseCyclus.MeeverlengenVerschil; }
             set

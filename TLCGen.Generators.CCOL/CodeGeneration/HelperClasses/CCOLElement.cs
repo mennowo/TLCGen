@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -21,10 +22,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         }
 
-        public CCOLElement(string define, string naam, CCOLElementTypeEnum type)
+        public CCOLElement(string naam, CCOLElementTypeEnum type)
         {
-            Define = define;
             Naam = naam;
+            Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Type = type;
             switch(Type)
             {
@@ -37,10 +38,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public CCOLElement(string define, string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type)
+        public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type)
         {
-            Define = define;
             Naam = naam;
+            Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Instelling = instelling;
             TType = ttype;
             Type = type;

@@ -139,7 +139,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesTabFasenLijstViewModel(ModulesTabViewModel modulestabvm)
+        public ModulesTabFasenLijstViewModel(ModulesDetailsTabViewModel modulestabvm)
         {   
             foreach(FaseCyclusModel fcm in modulestabvm.Controller.Fasen)
             {

@@ -37,8 +37,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
-            sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}sys.h\"");
-            sb.AppendLine($"{tabspace}#include \"simvar.c\" /* simulatie variabelen */");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
+            sb.AppendLine($"{ts}#include \"simvar.c\" /* simulatie variabelen */");
 
 
             return sb.ToString();
@@ -75,12 +75,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* --------------- */");
             sb.AppendLine("void simulation_defaults(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{tabspace}S_defgenerator = NG;");
-            sb.AppendLine($"{tabspace}S_defstopline  = 1800;");
-            sb.AppendLine($"{tabspace}Q1_def         = 25;");
-            sb.AppendLine($"{tabspace}Q2_def         = 50;");
-            sb.AppendLine($"{tabspace}Q3_def         = 100;");
-            sb.AppendLine($"{tabspace}Q4_def         = 200;");
+            sb.AppendLine($"{ts}S_defgenerator = NG;");
+            sb.AppendLine($"{ts}S_defstopline  = 1800;");
+            sb.AppendLine($"{ts}Q1_def         = 25;");
+            sb.AppendLine($"{ts}Q2_def         = 50;");
+            sb.AppendLine($"{ts}Q3_def         = 100;");
+            sb.AppendLine($"{ts}Q4_def         = 200;");
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -98,47 +98,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
 
-            sb.AppendLine($"{tabspace}/* Link parameters */");
-            sb.AppendLine($"{tabspace}/* --------------- */");
+            sb.AppendLine($"{ts}/* Link parameters */");
+            sb.AppendLine($"{ts}/* --------------- */");
 
             int index = 0;
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    sb.AppendLine($"{tabspace}LNK_code[{index}] = \"{dm.Naam}\";");
-                    sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.GetDefine()};");
-                    sb.AppendLine($"{tabspace}FC_nr[{index}] = {fcm.GetDefine()};");
-                    sb.AppendLine($"{tabspace}S_generator[{index}] = NG;");
-                    sb.AppendLine($"{tabspace}S_stopline[{index}] = 1800;");
-                    sb.AppendLine($"{tabspace}Q1[{index}] = {dm.Simulatie.Q1};");
-                    sb.AppendLine($"{tabspace}Q2[{index}] = {dm.Simulatie.Q2};");
-                    sb.AppendLine($"{tabspace}Q3[{index}] = {dm.Simulatie.Q3};");
-                    sb.AppendLine($"{tabspace}Q4[{index}] = {dm.Simulatie.Q4};");
+                    sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
+                    sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
+                    sb.AppendLine($"{ts}FC_nr[{index}] = {fcm.GetDefine()};");
+                    sb.AppendLine($"{ts}S_generator[{index}] = NG;");
+                    sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
+                    sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
+                    sb.AppendLine($"{ts}Q2[{index}] = {dm.Simulatie.Q2};");
+                    sb.AppendLine($"{ts}Q3[{index}] = {dm.Simulatie.Q3};");
+                    sb.AppendLine($"{ts}Q4[{index}] = {dm.Simulatie.Q4};");
                     sb.AppendLine();
                     ++index;
                 }
             }
             foreach (DetectorModel dm in controller.Detectoren)
             {
-                sb.AppendLine($"{tabspace}LNK_code[{index}] = \"{dm.Naam}\";");
-                sb.AppendLine($"{tabspace}IS_nr[{index}] = {dm.GetDefine()};");
-                sb.AppendLine($"{tabspace}FC_nr[{index}] = NG;");
-                sb.AppendLine($"{tabspace}S_generator[{index}] = NG;");
-                sb.AppendLine($"{tabspace}S_stopline[{index}] = 1800;");
-                sb.AppendLine($"{tabspace}Q1[{index}] = {dm.Simulatie.Q1};");
-                sb.AppendLine($"{tabspace}Q2[{index}] = {dm.Simulatie.Q2};");
-                sb.AppendLine($"{tabspace}Q3[{index}] = {dm.Simulatie.Q3};");
-                sb.AppendLine($"{tabspace}Q4[{index}] = {dm.Simulatie.Q4};");
+                sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
+                sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
+                sb.AppendLine($"{ts}FC_nr[{index}] = NG;");
+                sb.AppendLine($"{ts}S_generator[{index}] = NG;");
+                sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
+                sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
+                sb.AppendLine($"{ts}Q2[{index}] = {dm.Simulatie.Q2};");
+                sb.AppendLine($"{ts}Q3[{index}] = {dm.Simulatie.Q3};");
+                sb.AppendLine($"{ts}Q4[{index}] = {dm.Simulatie.Q4};");
                 sb.AppendLine();
                 ++index;
             }
 
             sb.AppendLine();
 
-            sb.AppendLine($"{tabspace}/* Gebruikers toevoegingen file includen */");
-            sb.AppendLine($"{tabspace}/* ------------------------------------- */");
-            sb.AppendLine($"{tabspace}#include \"{controller.Data.Naam}sim.add\"");
+            sb.AppendLine($"{ts}/* Gebruikers toevoegingen file includen */");
+            sb.AppendLine($"{ts}/* ------------------------------------- */");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sim.add\"");
 
             sb.AppendLine();
             sb.AppendLine("}");

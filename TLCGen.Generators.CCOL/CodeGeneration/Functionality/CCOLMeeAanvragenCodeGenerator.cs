@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -13,6 +14,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLMeeAanvragenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
+
+        private string _hpf;  // help element prefix local storage
+        private string _hmad; // help element meeaanvraag detector name
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -26,7 +30,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         _MyElements.Add(
                             new CCOLElement(
-                                $"hmad{dm.MeeaanvraagDetector}",
                                 $"mad{dm.MeeaanvraagDetector}",
                                 CCOLElementTypeEnum.HulpElement));
                     }
@@ -135,6 +138,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
+        }
+
+        public override bool HasSettings()
+        {
+            return true;
+        }
+
+        public override void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            foreach (var s in settings.Settings)
+            {
+                if (s.Default == "mad") _hmad = s.Setting == null ? s.Default : s.Setting;
+            }
+
+            _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
         }
     }
 }

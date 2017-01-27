@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         Wachtgroen,
         Meetkriterium,
         Meeverlengen,
+        RealisatieAfhandelingModules,
         RealisatieAfhandeling,
         InitApplication,
         Application,

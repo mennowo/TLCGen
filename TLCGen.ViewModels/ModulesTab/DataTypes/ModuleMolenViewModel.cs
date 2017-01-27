@@ -16,7 +16,7 @@ namespace TLCGen.ViewModels
     public class ModuleMolenViewModel : ViewModelBase
     {
         private ControllerModel _Controller;
-        private ModulesTabViewModel _ModulesTabVM;
+        private ModulesDetailsTabViewModel _ModulesTabVM;
         private ModuleMolenModel _ModuleMolen;
         private ObservableCollection<ModuleViewModel> _Modules;
         private ModuleViewModel _SelectedModule;
@@ -232,7 +232,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ModuleMolenViewModel(ControllerModel controller, ModulesTabViewModel modulestabvm)
+        public ModuleMolenViewModel(ControllerModel controller, ModulesDetailsTabViewModel modulestabvm)
         {
             _Controller = controller;
             _ModulesTabVM = modulestabvm;
