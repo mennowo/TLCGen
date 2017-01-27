@@ -97,6 +97,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLAanvraagDirectCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
     <Compile Include="Settings\CCOLGeneratorStringSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorFolderSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorVisualSettingsModel.cs" />
