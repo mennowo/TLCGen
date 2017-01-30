@@ -10,6 +10,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public abstract class CCOLCodePieceGeneratorBase : ICCOLCodePieceGenerator
     {
+        protected string _fcpf;
+        protected string _dpf;
+        protected string _uspf;
+        protected string _ispf;
+        protected string _hpf;
+        protected string _mpf;
+        protected string _tpf;
+        protected string _ctpf;
+        protected string _schpf;
+        protected string _prmpf;
+
         public virtual void CollectCCOLElements(ControllerModel c)
         {
             
@@ -57,18 +68,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual bool HasSettings()
         {
-            return false;
-        }
-
-        public virtual List<CCOLGeneratorCodeStringSettingModel> GetSettings()
-        {
-            throw new NotImplementedException();
-
+            return true;
         }
 
         public virtual void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            throw new NotImplementedException();
+            _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
+            _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
+            _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
+            _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
+            _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+            _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
+            _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
+            _ctpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("ct");
+            _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
+            _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
         }
     }
 }

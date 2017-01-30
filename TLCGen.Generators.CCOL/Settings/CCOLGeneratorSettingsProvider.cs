@@ -22,7 +22,70 @@ namespace TLCGen.Generators.CCOL.Settings
             }
         }
 
-        public CCOLGeneratorSettingsModel Settings { get; set; }
+        public CCOLGeneratorSettingsProvider()
+        {
+            CCOLElementNames = new Dictionary<string, string>();
+        }
+
+        public Dictionary<string, string> CCOLElementNames { get; set; }
+
+        private CCOLGeneratorSettingsModel _Settings;
+        public CCOLGeneratorSettingsModel Settings
+        {
+            get { return _Settings; }
+            set
+            {
+                _Settings = value;
+                
+                // Build dictionary with all available settings
+                CCOLElementNames.Clear();
+                foreach (var s in _Settings.CodePieceGeneratorSettings)
+                {
+                    foreach(var ss in s.Item2.Settings)
+                    {
+                        CCOLElementNames.Add(CCOLGeneratorSettingsProvider.Default.GetPrefix(ss.Type) + ss.Default, ss.Setting);
+                    }
+                }
+            }
+        }
+
+        public string GetElementName(string defaultwithprefix)
+        {
+            string n = null;
+            if(CCOLElementNames.TryGetValue(defaultwithprefix, out n))
+            {
+                return (n);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public string GetPrefix(CCOLGeneratorSettingTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLGeneratorSettingTypeEnum.Uitgang:
+                    return GetPrefix("us");
+                case CCOLGeneratorSettingTypeEnum.Ingang:
+                    return GetPrefix("is");
+                case CCOLGeneratorSettingTypeEnum.HulpElement:
+                    return GetPrefix("h");
+                case CCOLGeneratorSettingTypeEnum.Timer:
+                    return GetPrefix("t");
+                case CCOLGeneratorSettingTypeEnum.Counter:
+                    return GetPrefix("c");
+                case CCOLGeneratorSettingTypeEnum.Schakelaar:
+                    return GetPrefix("sch");
+                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
+                    return GetPrefix("m");
+                case CCOLGeneratorSettingTypeEnum.Parameter:
+                    return GetPrefix("prm");
+                default:
+                    return null;
+            }
+        }
 
         public string GetPrefix(CCOLElementTypeEnum type)
         {

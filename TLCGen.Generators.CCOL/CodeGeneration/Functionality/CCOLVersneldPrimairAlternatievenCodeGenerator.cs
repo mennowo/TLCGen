@@ -15,9 +15,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
-        private string _fcpf;  // fase prefix 
-        private string _prmpf;  // parameter prefix 
-        private string _schpf;  // switch prefix 
         private string _prmmlfpr; // parameter modules ahead
         private string _prmaltg; // parameter alternative real green time
         private string _prmaltp; // parameter alternative real space
@@ -159,9 +156,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
-            _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
-            _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
-            _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+            base.SetSettings(settings);
         }
     }
 }

@@ -14,8 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLMeeAanvragenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
-
-        private string _hpf;  // help element prefix local storage
+        
         private string _hmad; // help element meeaanvraag detector name
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -152,7 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (s.Default == "mad") _hmad = s.Setting == null ? s.Default : s.Setting;
             }
 
-            _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+            base.SetSettings(settings);
         }
     }
 }

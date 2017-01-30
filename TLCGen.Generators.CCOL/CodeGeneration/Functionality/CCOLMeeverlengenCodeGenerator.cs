@@ -14,8 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLMeeverlengenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
-
-        private string _schpf; // schakelaar prefix
+        
         private string _schmv; // schakelaar meeverlengen naam
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -116,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (s.Default == "mv") _schmv = s.Setting == null ? s.Default : s.Setting;
             }
 
-            _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
+            base.SetSettings(settings);
         }
     }
 }

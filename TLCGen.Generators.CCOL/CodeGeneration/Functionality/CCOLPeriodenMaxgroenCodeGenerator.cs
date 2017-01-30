@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     [CCOLCodePieceGenerator]
-    public class CCOLPeriodenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class CCOLPeriodenMaxgroenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
-        private string _uspf;     // output prefix
-        private string _prmpf;    // parameter prefix
-        private string _mpf;      // memory element prefix
         private string _usperdef; // output default period name
         private string _usper;    // output period name
         private string _prmstkp;  // parameter start period name
@@ -87,6 +85,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
+                case CCOLRegCCodeTypeEnum.Maxgroen:
                 case CCOLRegCCodeTypeEnum.SystemApplication:
                     return true;
                 default:
@@ -124,6 +123,62 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}KlokPerioden_Add();");
                     sb.AppendLine("}");
                     return sb.ToString();
+
+                case CCOLRegCCodeTypeEnum.Maxgroen:
+                    sb.AppendLine();
+                    // Maxgroen obv periode
+                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    {
+                        // Check if the FaseCyclus has any maxgreen times set
+                        bool HasMG = false;
+                        foreach (GroentijdenSetModel mgsm in c.GroentijdenSets)
+                        {
+                            foreach (GroentijdModel mgm in mgsm.Groentijden)
+                            {
+                                if (mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
+                                {
+                                    HasMG = true;
+                                }
+                            }
+                        }
+
+                        if (HasMG)
+                        {
+                            sb.AppendLine($"{ts}max_star_groentijden_va_arg((count) {_fcpf}{fcm.Naam}, (mulv) FALSE, (mulv) FALSE,");
+                            int mper = 1;
+                            foreach (PeriodeModel per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.Groentijden)
+                                {
+                                    foreach (GroentijdenSetModel mgsm in c.GroentijdenSets)
+                                    {
+                                        if (mgsm.Naam == per.GroentijdenSet)
+                                        {
+                                            foreach (GroentijdModel mgm in mgsm.Groentijden)
+                                            {
+                                                if (mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
+                                                {
+                                                    sb.Append("".PadLeft(($"{ts}max_star_groentijden_va_arg(").Length));
+                                                    sb.AppendLine(
+                                                       ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    ++mper;
+                                }
+                            }
+                            sb.Append("".PadLeft(($"{ts}max_star_groentijden_va_arg(").Length));
+                            sb.AppendLine($"(va_mulv) PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_count) END);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}TVG_max[{_fcpf}{fcm.Naam}] = 0;");
+                        }
+
+                    }
+                    return sb.ToString();
+
                 case CCOLRegCCodeTypeEnum.SystemApplication:
                     sb.AppendLine("/* periode verklikking */");
                     sb.AppendLine("/* ------------------- */");
@@ -160,9 +215,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
-            _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
-            _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
+            base.SetSettings(settings);
         }
     }
 }

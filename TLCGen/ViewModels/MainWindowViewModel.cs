@@ -798,7 +798,6 @@ namespace TLCGen.ViewModels
                     }
                     if (plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
                     {
-                        instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
                         PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
                     }
                 }

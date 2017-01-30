@@ -20,7 +20,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         RealisatieAfhandeling,
         InitApplication,
         Application,
+        PreSystemApplication,
         SystemApplication,
+        PostSystemApplication,
         DumpApplication
     };
 }

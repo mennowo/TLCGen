@@ -33,14 +33,6 @@ namespace TLCGen.Generators.CCOL
         {
             get
             {
-                if (_GeneratorView == null)
-                {
-                    _GeneratorView = new CCOLGeneratorView();
-                    _Generator = new CCOLGenerator();
-                    _Generator.LoadSettings();
-                    _MyVM = new CCOLGeneratorViewModel(this, _Generator);
-                    _GeneratorView.DataContext = _MyVM;
-                }
                 return _GeneratorView;
             }
         }
@@ -109,11 +101,11 @@ namespace TLCGen.Generators.CCOL
             {
                 CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
             }
+            _Generator.LoadSettings();
         }
 
         public void SaveSettings()
         {
-            //_MyVM.CodeGenerator.SaveSettings();
             var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
             if (!Directory.Exists(setpath))
@@ -219,6 +211,10 @@ namespace TLCGen.Generators.CCOL
 
         public CCOLCodeGeneratorPlugin()
         {
+            _GeneratorView = new CCOLGeneratorView();
+            _Generator = new CCOLGenerator();
+            _MyVM = new CCOLGeneratorViewModel(this, _Generator);
+            _GeneratorView.DataContext = _MyVM;
         }
 
         #endregion // Constructor

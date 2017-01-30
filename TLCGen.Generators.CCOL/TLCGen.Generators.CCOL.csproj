@@ -94,10 +94,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
-    <Compile Include="CodeGeneration\Functionality\CCOLAanvraagDirectCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvraagDirectCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLPtpCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
+    <Compile Include="Settings\CCOLGeneratorSettingTypeEnum.cs" />
     <Compile Include="Settings\CCOLGeneratorStringSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorFolderSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorVisualSettingsModel.cs" />
@@ -111,8 +113,8 @@
     <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs" />
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorAttribute.cs" />
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorBase.cs" />
-    <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvragenCodeGenerator.cs" />
-    <Compile Include="CodeGeneration\Functionality\CCOLPeriodenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvragenMeetkriteriumCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLPeriodenMaxgroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRichtingGevoeligCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeAanvragenCodeGenerator.cs" />
@@ -212,7 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Settings\defaults.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>

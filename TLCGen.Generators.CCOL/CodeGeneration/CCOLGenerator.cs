@@ -98,6 +98,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}rgv.c"), GenerateRgvC(controller));
                 }
+                if(controller.PTPData.PTPKoppelingen?.Count > 0)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ptp.c"), GeneratePtpC(controller));
+                }
 
                 if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add")))
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add"), GenerateRegAdd(controller));
@@ -121,8 +125,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (v.HasSettings())
                 {
                     var set = CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name);
-                    if(set != null)
+                    if (set != null)
                         v.SetSettings(CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name).Item2);
+                    else
+                        v.SetSettings(null);
                 }
             }
         }

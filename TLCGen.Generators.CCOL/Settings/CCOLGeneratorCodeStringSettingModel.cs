@@ -10,6 +10,7 @@ namespace TLCGen.Generators.CCOL.Settings
     public class CCOLGeneratorCodeStringSettingModel
     {
         public string Default { get; set; }
+
         private string _Setting;
         public string Setting
         {
@@ -26,6 +27,7 @@ namespace TLCGen.Generators.CCOL.Settings
                 }
             }
         }
+        public CCOLGeneratorSettingTypeEnum Type { get; set; }
         public string Description { get; set; }
 
         public CCOLGeneratorCodeStringSettingModel()

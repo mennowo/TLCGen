@@ -4,64 +4,87 @@
     <Prefix>
       <Default>fc</Default>
       <Setting>fc</Setting>
+      <Type>Prefix</Type>
       <Description>Fase</Description>
     </Prefix>
     <Prefix>
       <Default>d</Default>
       <Setting>d</Setting>
+      <Type>Prefix</Type>
       <Description>Detector</Description>
     </Prefix>
     <Prefix>
       <Default>us</Default>
       <Setting>us</Setting>
+      <Type>Prefix</Type>
       <Description>Uitgang</Description>
     </Prefix>
     <Prefix>
       <Default>is</Default>
       <Setting>is</Setting>
+      <Type>Prefix</Type>
       <Description>Ingang</Description>
     </Prefix>
     <Prefix>
       <Default>h</Default>
       <Setting>h</Setting>
+      <Type>Prefix</Type>
       <Description>Hulpelement</Description>
     </Prefix>
     <Prefix>
       <Default>c</Default>
       <Setting>c</Setting>
+      <Type>Prefix</Type>
       <Description>Counter</Description>
     </Prefix>
     <Prefix>
       <Default>t</Default>
       <Setting>t</Setting>
+      <Type>Prefix</Type>
       <Description>Timer</Description>
     </Prefix>
     <Prefix>
       <Default>sch</Default>
       <Setting>sch</Setting>
+      <Type>Prefix</Type>
       <Description>Schakelaar</Description>
     </Prefix>
     <Prefix>
       <Default>m</Default>
       <Setting>m</Setting>
+      <Type>Prefix</Type>
       <Description>Geheugenelement</Description>
     </Prefix>
     <Prefix>
       <Default>prm</Default>
       <Setting>prm</Setting>
+      <Type>Prefix</Type>
       <Description>Parameter</Description>
     </Prefix>
   </Prefixes>
   <CodePieceGeneratorSettings>
-    <CodePieceGenerator CodePiece="CCOLDetectieAanvragenCodeGenerator">
+    <CodePieceGenerator CodePiece="CCOLDetectieAanvragenMeetkriteriumCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLDetectieAanvragenCodeGenerator</ClassName>
+        <ClassName>CCOLDetectieAanvragenMeetkriteriumCodeGenerator</ClassName>
         <Description>Detectie aanvragen</Description>
         <Settings>
           <Setting>
             <Default>da</Default>
             <Setting>da</Setting>
+            <Type>Parameter</Type>
             <Description>Parameter detectie aanvraag</Description>
+          </Setting>
+          <Setting>
+            <Default>mk</Default>
+            <Setting>mk</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter detectie meetkriterium</Description>
+          </Setting>
+          <Setting>
+            <Default>km</Default>
+            <Setting>km</Setting>
+            <Type>Timer</Type>
+            <Description>Timer detectie kop maximum</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -74,44 +97,51 @@
           <Setting>
             <Default>mad</Default>
             <Setting>mad</Setting>
+            <Type>HulpElement</Type>
             <Description>Hulpelement onthouden detector melding meeaanvraag</Description>
           </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLPeriodenCodeGenerator">
+    <CodePieceGenerator CodePiece="CCOLPeriodenMaxgroenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLPeriodenCodeGenerator</ClassName>
-        <Description>Perioden</Description>
+        <ClassName>CCOLPeriodenMaxgroenCodeGenerator</ClassName>
+        <Description>Perioden en maxgroen</Description>
         <Settings>
           <Setting>
             <Default>perdef</Default>
             <Setting>perdef</Setting>
+            <Type>Uitgang</Type>
             <Description>Uitgang default periode</Description>
           </Setting>
           <Setting>
             <Default>per</Default>
             <Setting>per</Setting>
+            <Type>Uitgang</Type>
             <Description>Uitgang periode</Description>
           </Setting>
           <Setting>
             <Default>stkp</Default>
             <Setting>stkp</Setting>
+            <Type>Parameter</Type>
             <Description>Parameter start klokperiode</Description>
           </Setting>
           <Setting>
             <Default>etkp</Default>
             <Setting>etkp</Setting>
+            <Type>Parameter</Type>
             <Description>Parameter einde klokperiode</Description>
           </Setting>
           <Setting>
             <Default>dckp</Default>
             <Setting>dckp</Setting>
+            <Type>Parameter</Type>
             <Description>Parameter dagsoort klokperiode</Description>
           </Setting>
           <Setting>
             <Default>period</Default>
             <Setting>period</Setting>
+            <Type>GeheugenElement</Type>
             <Description>Geheugen element periode</Description>
           </Setting>
         </Settings>
@@ -125,35 +155,206 @@
           <Setting>
             <Default>mv</Default>
             <Setting>mv</Setting>
+            <Type>Schakelaar</Type>
             <Description>Schakelaar meeverlengen</Description>
           </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVersneldPrimairCodeGenerator">
+    <CodePieceGenerator CodePiece="CCOLVersneldPrimairAlternatievenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVersneldPrimairCodeGenerator</ClassName>
+        <ClassName>CCOLVersneldPrimairAlternatievenCodeGenerator</ClassName>
         <Description>Modules en alternatieven</Description>
         <Settings>
           <Setting>
             <Default>mlfpr</Default>
             <Setting>mlfpr</Setting>
-            <Description>Parameters aantal modules vooruit</Description>
+            <Type>Parameter</Type>
+            <Description>Parameter aantal modules vooruit</Description>
           </Setting>
           <Setting>
             <Default>alt</Default>
             <Setting>alt</Setting>
+            <Type>Schakelaar</Type>
             <Description>Schakelaar alternatieve realisatie toestaan</Description>
           </Setting>
           <Setting>
             <Default>altg</Default>
             <Setting>altg</Setting>
+            <Type>Parameter</Type>
             <Description>Min. groentijd bij alternatiev</Description>
           </Setting>
           <Setting>
             <Default>altp</Default>
             <Setting>altp</Setting>
+            <Type>Parameter</Type>
             <Description>Ruimte tbv alternatieve realisatie</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLRichtingGevoeligCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLRichtingGevoeligCodeGenerator</ClassName>
+        <Description>Richting gevoeligheid</Description>
+        <Settings>
+          <Setting>
+            <Default>rga</Default>
+            <Setting>rga</Setting>
+            <Type>Timer</Type>
+            <Description>Timer richtinggevoelige aanvraag rijtijd</Description>
+          </Setting>
+          <Setting>
+            <Default>rgad</Default>
+            <Setting>rgad</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar type richtinggevoelige aanvraag</Description>
+          </Setting>
+          <Setting>
+            <Default>rgr</Default>
+            <Setting>rgr</Setting>
+            <Type>Timer</Type>
+            <Description>Timer richtinggevoelig verlengen rijtijd</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>Timer</Type>
+            <Description>Timer richtinggevoelig verlengen hiaattijd</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement detector melding richtinggevoelig verlengen</Description>
+          </Setting>
+          <Setting>
+            <Default>mkrg</Default>
+            <Setting>mkrg</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter type verlengen tbv richtinggevoelig verlengen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLPtpCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLPtpCodeGenerator</ClassName>
+        <Description>PTP koppeling</Description>
+        <Settings>
+          <Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement prefix</Description>
+          </Setting>
+          <Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter prefix</Description>
+          </Setting>
+          <Setting>
+            <Default>ptp</Default>
+            <Setting>ptp</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang prefix</Description>
+          </Setting>
+          <Setting>
+            <Default>iks</Default>
+            <Setting>iks</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement inkomende signalen</Description>
+          </Setting>
+          <Setting>
+            <Default>uks</Default>
+            <Setting>uks</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement uitgaande signalen</Description>
+          </Setting>
+          <Setting>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement PTP oke</Description>
+          </Setting>
+          <Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement PTP error</Description>
+          </Setting>
+          <Setting>
+            <Default>err0</Default>
+            <Setting>err0</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement PTP error 0</Description>
+          </Setting>
+          <Setting>
+            <Default>err1</Default>
+            <Setting>err1</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement PTP error 1</Description>
+          </Setting>
+          <Setting>
+            <Default>err2</Default>
+            <Setting>err2</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement PTP error 2</Description>
+          </Setting>
+          <Setting>
+            <Default>iks</Default>
+            <Setting>iks</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter inkomende signalen</Description>
+          </Setting>
+          <Setting>
+            <Default>uks</Default>
+            <Setting>uks</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter uitgaande signalen</Description>
+          </Setting>
+          <Setting>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter PTP oke</Description>
+          </Setting>
+          <Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter PTP error</Description>
+          </Setting>
+          <Setting>
+            <Default>err0</Default>
+            <Setting>err0</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter PTP error 0</Description>
+          </Setting>
+          <Setting>
+            <Default>err1</Default>
+            <Setting>err1</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter PTP error 1</Description>
+          </Setting>
+          <Setting>
+            <Default>err2</Default>
+            <Setting>err2</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter PTP error 2</Description>
+          </Setting>
+          <Setting>
+            <Default>oke</Default>
+            <Setting>oke</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang PTP oke</Description>
+          </Setting>
+          <Setting>
+            <Default>err</Default>
+            <Setting>err</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang PTP error</Description>
           </Setting>
         </Settings>
       </CodePieceData>

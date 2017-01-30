@@ -11,7 +11,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
+    public class CCOLDetectieAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
     {
         public override bool HasCode(CCOLRegCCodeTypeEnum type)
         {
@@ -27,9 +27,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
-
-            string _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
-            string _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
 
             switch (type)
             {

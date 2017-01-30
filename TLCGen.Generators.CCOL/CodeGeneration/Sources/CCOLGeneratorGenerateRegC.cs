@@ -100,6 +100,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Includes))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Includes, ts));
+                }
+            }
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}reg.add\"");
 
             return sb.ToString();
@@ -165,60 +172,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Maxgroen(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
-
-            // Maxgroen obv periode
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                // Check if the FaseCyclus has any maxgreen times set
-                bool HasMG = false;
-                foreach(GroentijdenSetModel mgsm in controller.GroentijdenSets)
-                {
-                    foreach(GroentijdModel mgm in mgsm.Groentijden)
-                    {
-                        if(mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
-                        {
-                            HasMG = true;
-                        }
-                    }
-                }
-
-                if(HasMG)
-                {
-                    sb.AppendLine($"{ts}max_star_groentijden_va_arg((count) {fcm.GetDefine()}, (mulv) FALSE, (mulv) FALSE,");
-                    int mper = 1;
-                    foreach (PeriodeModel per in controller.PeriodenData.Perioden)
-                    {
-                        if (per.Type == PeriodeTypeEnum.Groentijden)
-                        {
-                            foreach (GroentijdenSetModel mgsm in controller.GroentijdenSets)
-                            {
-                                if (mgsm.Naam == per.GroentijdenSet)
-                                {
-                                    foreach (GroentijdModel mgm in mgsm.Groentijden)
-                                    {
-                                        if (mgm.FaseCyclus == fcm.Naam && mgm.Waarde.HasValue)
-                                        {
-                                            sb.Append("".PadLeft(($"{ts}max_star_groentijden_va_arg(").Length));
-                                            sb.AppendLine(
-                                               ($"(va_mulv) PRM[prm{per.GroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
-                                        }
-                                    }
-                                }
-                            }
-                            ++mper;
-                        }
-                    }
-                    sb.Append("".PadLeft(($"{ts}max_star_groentijden_va_arg(").Length));
-                    sb.AppendLine($"(va_mulv) PRM[prmmg1{fcm.Naam}], (va_mulv) NG, (va_count) END);");
-                }
-                else
-                {
-                    sb.AppendLine($"{ts}TVG_max[{fcm.GetDefine()}] = 0;");
-                }
-
-            }
-
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
@@ -264,34 +217,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                bool HasKopmax = false;
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.Verlengen == DetectorVerlengenTypeEnum.Kopmax)
-                    {
-                        HasKopmax = true;
-                        break;
-                    }
-                }
-                if (HasKopmax)
-                    sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){fcm.GetDefine()}, (count)tkm{fcm.Naam}, ");
-                else
-                    sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){fcm.GetDefine()}, NG, ");
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
-                    {
-                        sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
-                        sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[prmmk{dm.GetDefine()}],");
-                    }
-                }
-                sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
-                sb.AppendLine($"(va_count)END);");
-            }
-            sb.AppendLine("");
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Meetkriterium))
@@ -420,6 +345,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.PreSystemApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PreSystemApplication, ts));
+                }
+            }
+
             sb.AppendLine($"{ts}pre_system_application();");
 
             foreach (var gen in _PieceGenerators)
@@ -433,6 +367,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.PostSystemApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PostSystemApplication, ts));
+                }
+            }
+
+
             sb.AppendLine($"{ts}post_system_application();");
             sb.AppendLine("}");
 

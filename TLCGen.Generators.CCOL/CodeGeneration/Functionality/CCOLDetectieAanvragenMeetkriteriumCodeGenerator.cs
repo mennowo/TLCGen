@@ -11,12 +11,13 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLDetectieAanvragenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class CCOLDetectieAanvragenMeetkriteriumCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
 
-        private string _prmpf; // parameter prefix local storage
         private string _prmd;  // parameter request type name
+        private string _prmmk; // parameter measurement type name
+        private string _tkm;   // kopmax timer type name
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -67,6 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLRegCCodeTypeEnum.Meetkriterium:
                     return true;
                 default:
                     return false;
@@ -98,17 +100,48 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         if (HasA)
                         {
-                            sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {fcm.GetDefine()}, ");
+                            sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
-                                    sb.AppendLine($"{ts}{ts}(va_count) {dm.GetDefine()}, (va_mulv) PRM[{_prmpf}{_prmd}{dm.Naam}], ");
+                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmd}{dm.Naam}], ");
                             }
                             sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
                     }
-                    sb.AppendLine("");
+                    sb.AppendLine();
                     return sb.ToString();
+
+                case CCOLRegCCodeTypeEnum.Meetkriterium:
+                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    {
+                        bool HasKopmax = false;
+                        foreach (DetectorModel dm in fcm.Detectoren)
+                        {
+                            if (dm.Verlengen == DetectorVerlengenTypeEnum.Kopmax)
+                            {
+                                HasKopmax = true;
+                                break;
+                            }
+                        }
+                        if (HasKopmax)
+                            sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, (count){_tpf}{_tkm}{fcm.Naam}, ");
+                        else
+                            sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, NG, ");
+                        foreach (DetectorModel dm in fcm.Detectoren)
+                        {
+                            if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
+                            {
+                                sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
+                                sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.GetDefine()}],");
+                            }
+                        }
+                        sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
+                        sb.AppendLine($"(va_count)END);");
+                    }
+                    sb.AppendLine();
+                    return sb.ToString();
+
                 default:
                     return null;
             }
@@ -124,9 +157,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach(var s in settings.Settings)
             {
                 if (s.Default == "da") _prmd = s.Setting == null ? s.Default : s.Setting;
+                if (s.Default == "mk") _prmmk = s.Setting == null ? s.Default : s.Setting;
+                if (s.Default == "km") _tkm = s.Setting == null ? s.Default : s.Setting;
             }
 
-            _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+            base.SetSettings(settings);
         }
     }
 }

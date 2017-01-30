@@ -20,7 +20,7 @@
                           ItemsSource="{Binding Path=Prefixes}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Type" IsReadOnly="True" Binding="{Binding Description}" Foreground="Gray" />
-                        <DataGridTextColumn Header="Default" Binding="{Binding Default}" IsReadOnly="True" Foreground="LightGray" />
+                        <DataGridTextColumn Header="Default" Binding="{Binding Default}" IsReadOnly="True" Foreground="Gray" />
                         <DataGridTextColumn Header="Instelling" Binding="{Binding Setting}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -42,7 +42,8 @@
                               Grid.Row="1" ItemsSource="{Binding ElementName=FunctionaliteitDG,Path=SelectedItem.Item2.Settings}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Omschrijving" IsReadOnly="True" Binding="{Binding Description}" Foreground="Gray" />
-                            <DataGridTextColumn Header="Default" Binding="{Binding Default}" IsReadOnly="True" Foreground="LightGray" />
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" Foreground="Gray" />
+                            <DataGridTextColumn Header="Default" Binding="{Binding Default}" IsReadOnly="True" Foreground="Gray" />
                             <DataGridTextColumn Header="Instelling" Binding="{Binding Setting}" />
                         </DataGrid.Columns>
                     </DataGrid>
