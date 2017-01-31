@@ -23,6 +23,7 @@ namespace TLCGen.Models
         public ModuleMolenModel()
         {
             Modules = new List<ModuleModel>();
+            FasenModuleData = new List<FaseCyclusModuleDataModel>();
         }
     }
 }
