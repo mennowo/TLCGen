@@ -134,7 +134,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                     else
+                    {
+                        if (!v.SetSettings(null))
+                        {
+                            System.Windows.MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
+                            return;
+                        }
                         v.SetSettings(null);
+                    }
                 }
             }
         }

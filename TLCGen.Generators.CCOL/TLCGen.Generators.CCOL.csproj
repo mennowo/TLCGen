@@ -96,6 +96,7 @@
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvraagDirectCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPtpCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLVAOntruimenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />

@@ -292,6 +292,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
             sb.AppendLine($"{ts}" + "}");
             sb.AppendLine();
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandeling))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandeling, ts));
+                }
+            }
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
             sb.AppendLine("}");
 

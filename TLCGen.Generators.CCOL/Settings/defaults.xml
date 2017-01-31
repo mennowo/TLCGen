@@ -359,6 +359,26 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLVAOntruimenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLVAOntruimenCodeGenerator</ClassName>
+        <Description>VA ontruimen</Description>
+        <Settings>
+          <Setting>
+            <Default>va</Default>
+            <Setting>va</Setting>
+            <Type>Timer</Type>
+            <Description>Timer VA ontruimen</Description>
+          </Setting>
+          <Setting>
+            <Default>vamax</Default>
+            <Setting>vamax</Setting>
+            <Type>Timer</Type>
+            <Description>Timer maximale tijd na einde geel VA ontruimen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>
