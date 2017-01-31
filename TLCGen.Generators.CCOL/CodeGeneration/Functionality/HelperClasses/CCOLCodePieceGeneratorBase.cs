@@ -71,7 +71,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return true;
         }
 
-        public virtual void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        public virtual bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
             _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
@@ -83,6 +83,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _ctpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("ct");
             _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
             _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
+            return true;
         }
     }
 }

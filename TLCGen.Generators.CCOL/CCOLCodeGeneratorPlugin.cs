@@ -93,6 +93,9 @@ namespace TLCGen.Generators.CCOL
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
+#if DEBUG
+            CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
+#else
             if (File.Exists(setfile))
             {
                 CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(setfile);
@@ -101,6 +104,7 @@ namespace TLCGen.Generators.CCOL
             {
                 CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
             }
+#endif
             _Generator.LoadSettings();
         }
 
@@ -114,9 +118,9 @@ namespace TLCGen.Generators.CCOL
             TLCGenSerialization.Serialize<CCOLGeneratorSettingsModel>(setfile, CCOLGeneratorSettingsProvider.Default.Settings);
         }
 
-        #endregion // ITLCGenHasSettings
+#endregion // ITLCGenHasSettings
 
-        #region ITLCGenMenuItem
+#region ITLCGenMenuItem
 
         public MenuItem Menu
         {
@@ -129,22 +133,22 @@ namespace TLCGen.Generators.CCOL
             }
         }
 
-        #endregion ITLCGenMenuItem
+#endregion ITLCGenMenuItem
 
-        #region Properties
+#region Properties
 
         [Browsable(false)]
         public string ControllerFileName { get; set; }
 
-        #endregion // Properties
+#endregion // Properties
 
-        #region Fields
+#region Fields
 
         private CCOLGeneratorViewModel _MyVM;
 
-        #endregion // Fields
+#endregion // Fields
 
-        #region Commands
+#region Commands
 
 
         RelayCommand _ShowSettingsCommand;
@@ -159,9 +163,9 @@ namespace TLCGen.Generators.CCOL
                 return _ShowSettingsCommand;
             }
         }
-        #endregion // Commands
+#endregion // Commands
 
-        #region Command Functionality
+#region Command Functionality
 
         private void ShowSettingsCommand_Executed(object obj)
         {
@@ -183,18 +187,18 @@ namespace TLCGen.Generators.CCOL
             return true;
         }
 
-        #endregion // Command Functionality
+#endregion // Command Functionality
 
-        #region Static Public Methods
+#region Static Public Methods
 
         public static string GetVersion()
         {
             return "0.11 (alfa)";
         }
 
-        #endregion // Static Public Methods
+#endregion // Static Public Methods
 
-        #region TLCGen Events
+#region TLCGen Events
 
         private void OnControllerFileNameChanged(TLCGen.Messaging.Messages.ControllerFileNameChangedMessage msg)
         {
@@ -205,9 +209,9 @@ namespace TLCGen.Generators.CCOL
         {
         }
 
-        #endregion // TLCGen Events
+#endregion // TLCGen Events
 
-        #region Constructor
+#region Constructor
 
         public CCOLCodeGeneratorPlugin()
         {
@@ -217,6 +221,6 @@ namespace TLCGen.Generators.CCOL
             _GeneratorView.DataContext = _MyVM;
         }
 
-        #endregion // Constructor
+#endregion // Constructor
     }
 }

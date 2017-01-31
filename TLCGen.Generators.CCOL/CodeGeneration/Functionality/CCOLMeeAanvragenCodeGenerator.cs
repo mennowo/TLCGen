@@ -144,14 +144,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            if (settings == null || settings.Settings == null)
+            {
+                return false;
+            }
+
             foreach (var s in settings.Settings)
             {
                 if (s.Default == "mad") _hmad = s.Setting == null ? s.Default : s.Setting;
             }
 
-            base.SetSettings(settings);
+            return base.SetSettings(settings);
         }
     }
 }

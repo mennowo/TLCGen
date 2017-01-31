@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -200,8 +201,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return true;
         }
 
-        public override void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            if (settings == null || settings.Settings == null)
+            {
+                return false;
+            }
+
             foreach (var s in settings.Settings)
             {
                 switch(s.Default)
@@ -215,7 +221,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            base.SetSettings(settings);
+            return base.SetSettings(settings);
         }
     }
 }

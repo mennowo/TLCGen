@@ -130,8 +130,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return true;
         }
 
-        public override void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            if (settings == null || settings.Settings == null)
+            {
+                return false;
+            }
+
             foreach (var s in settings.Settings)
             {
                 if (s.Default == "rga") _trga = s.Setting == null ? s.Default : s.Setting;
@@ -151,7 +156,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             _tkm = CCOLGeneratorSettingsProvider.Default.GetElementName("tkm");
 
-            base.SetSettings(settings);
+            return base.SetSettings(settings);
         }
     }
 }

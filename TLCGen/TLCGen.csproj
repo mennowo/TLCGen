@@ -645,6 +645,9 @@ copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins\TLCGen.Genera
 copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"
 copy /Y "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins\TLCGen.GebruikersOpties.dll"</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>del /F /Q "$(TargetDir)Settings"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

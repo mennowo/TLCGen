@@ -152,16 +152,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override void SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            foreach(var s in settings.Settings)
+            if (settings == null || settings.Settings == null)
+            {
+                return false;
+            }
+
+            foreach (var s in settings.Settings)
             {
                 if (s.Default == "da") _prmd = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "mk") _prmmk = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "km") _tkm = s.Setting == null ? s.Default : s.Setting;
             }
 
-            base.SetSettings(settings);
+            return base.SetSettings(settings);
         }
     }
 }

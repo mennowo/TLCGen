@@ -20,6 +20,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         bool HasCode(CCOLRegCCodeTypeEnum type);
         string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);
         bool HasSettings();
-        void SetSettings(CCOLGeneratorClassWithSettingsModel settings);
+        bool SetSettings(CCOLGeneratorClassWithSettingsModel settings);
     }
 }

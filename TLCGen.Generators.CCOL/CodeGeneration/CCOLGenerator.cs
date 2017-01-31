@@ -126,7 +126,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var set = CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name);
                     if (set != null)
-                        v.SetSettings(CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == v.GetType().Name).Item2);
+                    {
+                        if (!v.SetSettings(set.Item2))
+                        {
+                            System.Windows.MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
+                            return;
+                        }
+                    }
                     else
                         v.SetSettings(null);
                 }
