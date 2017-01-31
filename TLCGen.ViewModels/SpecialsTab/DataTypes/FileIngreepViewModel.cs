@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTeDoserenFase = value;
-                OnMonitoredPropertyChanged("SelectedTeDoserenFase");
+                OnPropertyChanged("SelectedTeDoserenFase");
             }
         }
 
@@ -108,7 +108,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFileDetector = value;
-                OnMonitoredPropertyChanged("SelectedFileDetector");
+                OnPropertyChanged("SelectedFileDetector");
             }
         }
 

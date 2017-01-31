@@ -379,6 +379,68 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLFileIngrepenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLFileIngrepenCodeGenerator</ClassName>
+        <Description>File ingrepen</Description>
+        <Settings>
+          <Setting>
+            <Default>file</Default>
+            <Setting>file</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang file ingreep actief</Description>
+          </Setting>
+          <Setting>
+            <Default>file</Default>
+            <Setting>file</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement file detector/ingreep actief</Description>
+          </Setting>
+          <Setting>
+            <Default>bz</Default>
+            <Setting>bz</Setting>
+            <Type>Timer</Type>
+            <Description>Timer bezettijd file detector</Description>
+          </Setting>
+          <Setting>
+            <Default>rij</Default>
+            <Setting>rij</Setting>
+            <Type>Timer</Type>
+            <Description>Timer rijtijd file detector</Description>
+          </Setting>
+          <Setting>
+            <Default>afv</Default>
+            <Setting>afv</Setting>
+            <Type>Timer</Type>
+            <Description>Timer afval vertraging file detector/ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>afv</Default>
+            <Setting>afv</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement afval vertraging file detector</Description>
+          </Setting>
+          <Setting>
+            <Default>afv</Default>
+            <Setting>afv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar toepassing afval vertraging gehele file ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>fperc</Default>
+            <Setting>fperc</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter doseerpercentage</Description>
+          </Setting>
+          <Setting>
+            <Default>fmeldmin</Default>
+            <Setting>fmeldmin</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimum aantal meldingen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator> 
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

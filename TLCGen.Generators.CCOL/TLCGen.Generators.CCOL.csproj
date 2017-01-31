@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvraagDirectCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLFileIngrepenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPtpCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVAOntruimenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />

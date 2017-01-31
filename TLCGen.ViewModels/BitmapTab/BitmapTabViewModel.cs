@@ -416,8 +416,16 @@ namespace TLCGen.ViewModels
             {
                 foreach(var k in _Controller.PTPData.PTPKoppelingen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.OkBitmapData, "ptpok", BitmappedItemViewModel.Type.Uitgang));
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.ErrorBitmapData, "ptperror", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.OkBitmapData, k.TeKoppelenKruispunt + "ptpok", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.ErrorBitmapData, k.TeKoppelenKruispunt + "ptperror", BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
+            // File ingrepen
+            if (_Controller.FileIngrepen?.Count > 0)
+            {
+                foreach (var f in _Controller.FileIngrepen)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(f.BitmapData, f.Naam + "file", BitmappedItemViewModel.Type.Uitgang));
                 }
             }
 

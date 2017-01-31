@@ -41,6 +41,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
             sb.AppendLine();
+            sb.Append(GenerateRegCFileVerwerking(controller));
+            sb.AppendLine();
             sb.Append(GenerateRegCInitApplication(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCApplication(controller));
@@ -305,6 +307,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateRegCFileVerwerking(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void FileVerwerking(void)");
+            sb.AppendLine("{");
+            sb.AppendLine();
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.FileVerwerking))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.FileVerwerking, ts));
+                }
+            }
+            sb.AppendLine($"{ts}FileVerwerking_Add();");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCInitApplication(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
@@ -338,6 +360,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}Meetkriterium();");
             sb.AppendLine($"{ts}Meeverlengen();");
             sb.AppendLine($"{ts}RealisatieAfhandeling();");
+            sb.AppendLine($"{ts}FileVerwerking();");
             sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_application();");

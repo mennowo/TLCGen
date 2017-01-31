@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         Maxgroen,
         Wachtgroen,
         Meetkriterium,
+        FileVerwerking,
         Meeverlengen,
         RealisatieAfhandelingModules,
         RealisatieAfhandeling,

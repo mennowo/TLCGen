@@ -12,7 +12,9 @@ namespace TLCGen.Models
     {
         public string Naam { get; set; }
         public int MinimaalAantalMeldingen { get; set; }
+        public int AfvalVertraging { get; set; }
         public bool EerlijkDoseren { get; set; }
+        public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "FileDetector")]
         public List<FileIngreepDetectorModel> FileDetectoren { get; set; }
@@ -24,6 +26,7 @@ namespace TLCGen.Models
         {
             FileDetectoren = new List<FileIngreepDetectorModel>();
             TeDoserenSignaalGroepen = new List<FileIngreepTeDoserenSignaalGroepModel>();
+            BitmapData = new BitmapCoordinatenDataModel();
         }
     }
 }
