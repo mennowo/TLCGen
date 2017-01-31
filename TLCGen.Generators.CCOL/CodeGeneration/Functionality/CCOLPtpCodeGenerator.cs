@@ -14,6 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLPtpCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
+        private List<CCOLIOElement> _MyBitmapOutputs;
 
         private string _hptp;
         private string _prmptp;
@@ -41,8 +42,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
+            _MyBitmapOutputs = new List<CCOLIOElement>();
 
-            foreach(var k in c.PTPData.PTPKoppelingen)
+            foreach (var k in c.PTPData.PTPKoppelingen)
             {
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
@@ -114,6 +116,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         new CCOLElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_usptperr}",
                             CCOLElementTypeEnum.Uitgang));
+                _MyBitmapOutputs.Add(
+                        new CCOLIOElement(
+                            k.OkBitmapData as IOElementModel,
+                            $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_usptpoke}"));
+                _MyBitmapOutputs.Add(
+                        new CCOLIOElement(
+                            k.ErrorBitmapData as IOElementModel,
+                            $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_usptperr}"));
 
                 _MyElements.Add(
                         new CCOLElement(
@@ -156,6 +166,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _MyElements.Where(x => x.Type == type);
+        }
+
+        public override bool HasCCOLBitmapOutputs()
+        {
+            return true;
+        }
+
+        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
+        {
+            return _MyBitmapOutputs;
         }
 
         public override bool HasCode(CCOLRegCCodeTypeEnum type)

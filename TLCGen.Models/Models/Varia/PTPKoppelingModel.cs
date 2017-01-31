@@ -16,5 +16,13 @@ namespace TLCGen.Models
         public int PortnummerAutomaatOmgeving { get; set; }
         public int NummerSource { get; set; }
         public int NummerDestination { get; set; }
+        public BitmapCoordinatenDataModel OkBitmapData { get; set; }
+        public BitmapCoordinatenDataModel ErrorBitmapData { get; set; }
+
+        public PTPKoppelingModel()
+        {
+            OkBitmapData = new BitmapCoordinatenDataModel();
+            ErrorBitmapData = new BitmapCoordinatenDataModel();
+        }
     }
 }

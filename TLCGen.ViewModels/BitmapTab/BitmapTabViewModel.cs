@@ -411,6 +411,16 @@ namespace TLCGen.ViewModels
                 OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RoBuGrover.BitmapData, "rgv", BitmappedItemViewModel.Type.Uitgang));
             }
 
+            // PTP
+            if(_Controller.PTPData?.PTPKoppelingen?.Count > 0)
+            {
+                foreach(var k in _Controller.PTPData.PTPKoppelingen)
+                {
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.OkBitmapData, "ptpok", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.ErrorBitmapData, "ptperror", BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
+
             // OV / HD
             foreach (var ov in _Controller.OVData.OVIngrepen)
             {
