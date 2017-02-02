@@ -15,6 +15,7 @@ namespace TLCGen.Models
         public string FaseNaar { get; set; }
         public int GelijkstartOntruimingstijdFaseVan { get; set; }
         public int GelijkstartOntruimingstijdFaseNaar { get; set; }
+        public bool DeelConflict { get; set; }
 
         #endregion // Properties
     }

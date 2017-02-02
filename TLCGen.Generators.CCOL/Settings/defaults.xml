@@ -441,6 +441,75 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator> 
+  <CodePieceGenerator CodePiece="CCOLNalopenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLNalopenCodeGenerator</ClassName>
+        <Description>Nalopen</Description>
+        <Settings>
+          <Setting>
+            <Default>nla</Default>
+            <Setting>nla</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement onthouden detectiemelding tbv naloop</Description>
+          </Setting>
+          <Setting>
+            <Default>nlsg</Default>
+            <Setting>nlsg</Setting>
+            <Type>Timer</Type>
+            <Description>Timer naloop op start groen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlsgd</Default>
+            <Setting>nlsgd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer detectieafhankelijke op start groen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlfg</Default>
+            <Setting>nlfg</Setting>
+            <Type>Timer</Type>
+            <Description>Timer naloop tijdens vastgroen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlfgd</Default>
+            <Setting>nlfgd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer detectieafhankelijke naloop tijdens vastgroen</Description>
+          </Setting>
+          <Setting>
+            <Default>nleg</Default>
+            <Setting>nleg</Setting>
+            <Type>Timer</Type>
+            <Description>Timer naloop op einde groen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlegd</Default>
+            <Setting>nlegd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer detectieafhankelijke naloop op einde groen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlcv</Default>
+            <Setting>nlcv</Setting>
+            <Type>Timer</Type>
+            <Description>Timer naloop tijdens cyclisch verlenggroen</Description>
+          </Setting>
+          <Setting>
+            <Default>nlcvd</Default>
+            <Setting>nlcvd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer detectieafhankelijke naloop tijdens cyclisch verlenggroen</Description>
+          </Setting>
+          <Setting>
+            <Default>nldgl</Default>
+            <Setting>nldgl</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter maximale tijd herstarten det.afh. naloop tijdens geel</Description>
+          </Setting>
+          
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator> 
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

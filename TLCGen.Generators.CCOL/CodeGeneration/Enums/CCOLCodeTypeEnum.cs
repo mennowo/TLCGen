@@ -19,6 +19,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         Meeverlengen,
         RealisatieAfhandelingModules,
         RealisatieAfhandeling,
+        Synchronisaties,
         InitApplication,
         Application,
         PreSystemApplication,

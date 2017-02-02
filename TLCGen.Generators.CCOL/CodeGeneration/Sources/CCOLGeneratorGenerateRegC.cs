@@ -22,6 +22,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
             sb.AppendLine("#define REG (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG)");
+            if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
+            {
+                sb.AppendLine("#define NALOPEN");
+            }
             sb.AppendLine();
             sb.Append(GenerateRegCIncludes(controller));
             sb.AppendLine();
@@ -38,6 +42,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCMeetkriterium(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCMeeverlengen(controller));
+            sb.AppendLine();
+            sb.Append(GenerateRegCSynchronisaties(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
             sb.AppendLine();
@@ -174,6 +180,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Maxgroen(void)");
             sb.AppendLine("{");
+            if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
+            {
+                sb.AppendLine($"{ts}int fc;");
+            }
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
@@ -250,6 +260,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}Meeverlengen_Add();");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCSynchronisaties(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void Synchronisaties(void)");
+            sb.AppendLine("{");
+            sb.AppendLine($"{ts}register count fc;");
+
+            sb.AppendLine();
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Meeverlengen))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Meeverlengen, ts));
+                }
+            }
+
+            sb.AppendLine($"{ts}Synchronisaties_Add();");
             sb.AppendLine("}");
 
             return sb.ToString();
