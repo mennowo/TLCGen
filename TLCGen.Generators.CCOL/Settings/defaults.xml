@@ -506,10 +506,35 @@
             <Type>Parameter</Type>
             <Description>Parameter maximale tijd herstarten det.afh. naloop tijdens geel</Description>
           </Setting>
-          
         </Settings>
       </CodePieceData>
-    </CodePieceGenerator> 
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLGelijkstartenVoorstartenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLGelijkstartenVoorstartenCodeGenerator</ClassName>
+        <Description>Voor- en gelijkstarten</Description>
+        <Settings>
+          <Setting>
+            <Default>vs</Default>
+            <Setting>vs</Setting>
+            <Type>Timer</Type>
+            <Description>Timer voorstart tijdsduur</Description>
+          </Setting>
+          <Setting>
+            <Default>vsot</Default>
+            <Setting>vsot</Setting>
+            <Type>Timer</Type>
+            <Description>Timer fictief ontruimen voorstart</Description>
+          </Setting>
+          <Setting>
+            <Default>gsot</Default>
+            <Setting>gsot</Setting>
+            <Type>Timer</Type>
+            <Description>Timer fictief ontruimen gelijkstart</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

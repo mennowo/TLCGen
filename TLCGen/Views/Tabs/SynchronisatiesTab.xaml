@@ -92,11 +92,15 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Content="Gelijkstart opties" FontWeight="Bold" Grid.Row="0" />
-                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
-                    <Label Content="{Binding Path=Comment1}" />
-                    <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseVan}" Margin="2" />
-                    <Label Content="{Binding Path=Comment2}" />
-                    <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
+                <StackPanel 
+                    HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                    <CheckBox Content="Deelconflict" IsChecked="{Binding Path=GelijkstartDeelConflict}" Margin="5" />
+                    <StackPanel IsEnabled="{Binding Path=GelijkstartDeelConflict}" HorizontalAlignment="Stretch">
+                        <Label Content="{Binding Path=Comment1}" />
+                        <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseVan}" Margin="2" />
+                        <Label Content="{Binding Path=Comment2}" />
+                        <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
+                    </StackPanel>
                 </StackPanel>
             </Grid>
 
@@ -107,7 +111,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
-                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                <StackPanel 
+                    HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
                     <Label Content="{Binding Path=Comment1}" />
                     <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
                     <Label Content="{Binding Path=Comment2}" />

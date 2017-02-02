@@ -276,9 +276,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             foreach (var gen in _PieceGenerators)
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Meeverlengen))
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.Synchronisaties))
                 {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Meeverlengen, ts));
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Synchronisaties, ts));
                 }
             }
 
@@ -371,6 +371,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");
             sb.AppendLine("");
+            if(controller.InterSignaalGroep.Voorstarten.Count > 0 ||
+               controller.InterSignaalGroep.Gelijkstarten.Count > 0)
+            {
+                sb.AppendLine($"{ts}init_realisation_timers();");
+            }
             sb.AppendLine($"{ts}post_init_application();");
             sb.AppendLine("}");
 
@@ -392,6 +397,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}Wachtgroen();");
             sb.AppendLine($"{ts}Meetkriterium();");
             sb.AppendLine($"{ts}Meeverlengen();");
+            sb.AppendLine($"{ts}Synchronisaties();");
             sb.AppendLine($"{ts}RealisatieAfhandeling();");
             sb.AppendLine($"{ts}FileVerwerking();");
             sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");

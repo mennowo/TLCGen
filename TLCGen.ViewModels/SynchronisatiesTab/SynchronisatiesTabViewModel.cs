@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
                         cvm.DisplayType = value;
                     }
                 }
-                OnPropertyChanged("DisplayType");
+                OnPropertyChanged(null);
             }
         }
 
@@ -141,6 +141,14 @@ namespace TLCGen.ViewModels
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
                 OnPropertyChanged("SelectedSynchronisatie");
+                if (_SelectedSynchronisatie.DisplayType == SynchronisatieTypeEnum.Gelijkstart)
+                {
+                    OnPropertyChanged("GelijkstartDeelConflict");
+                    OnPropertyChanged("GelijkstartOntruimingstijdFaseVan");
+                    OnPropertyChanged("GelijkstartOntruimingstijdFaseNaar");
+                }
+                OnPropertyChanged("Comment1");
+                OnPropertyChanged("Comment2");
             }
         }
 
@@ -224,6 +232,28 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("GelijkstartOntruimingstijdFaseNaar");
             }
         }
+        public bool GelijkstartDeelConflict
+        {
+            get
+            {
+                if (SelectedSynchronisatie == null)
+                    return false;
+
+                return SelectedSynchronisatie.Gelijkstart.DeelConflict;
+            }
+            set
+            {
+                SelectedSynchronisatie.Gelijkstart.DeelConflict = value;
+                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                {
+                    if (svm.FaseVan == SelectedSynchronisatie.FaseNaar && svm.FaseNaar == SelectedSynchronisatie.FaseVan)
+                    {
+                        svm.Gelijkstart.DeelConflict = value;
+                    }
+                }
+                OnPropertyChanged("GelijkstartDeelConflict");
+            }
+        }
 
         public int VoorstartTijd
         {
@@ -264,7 +294,7 @@ namespace TLCGen.ViewModels
                 switch (DisplayType)
                 {
                     case SynchronisatieTypeEnum.Gelijkstart:
-                        return $"Ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
+                        return $"Fictive ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     case SynchronisatieTypeEnum.Voorstart:
                         return $"Voorstarttijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     case SynchronisatieTypeEnum.Meeaanvraag:
@@ -281,7 +311,7 @@ namespace TLCGen.ViewModels
                 switch (DisplayType)
                 {
                     case SynchronisatieTypeEnum.Gelijkstart:
-                        return $"Ontruimingstijd van {SelectedSynchronisatie.FaseNaar} naar {SelectedSynchronisatie.FaseVan}";
+                        return $"Fictieve ontruimingstijd van {SelectedSynchronisatie.FaseNaar} naar {SelectedSynchronisatie.FaseVan}";
                     case SynchronisatieTypeEnum.Voorstart:
                         return $"Voorstart ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     default:
@@ -640,6 +670,7 @@ namespace TLCGen.ViewModels
                                 svm_opp.HasGelijkstart = true;
                                 svm_opp.Gelijkstart.GelijkstartOntruimingstijdFaseNaar = svm.Gelijkstart.GelijkstartOntruimingstijdFaseVan;
                                 svm_opp.Gelijkstart.GelijkstartOntruimingstijdFaseVan = svm.Gelijkstart.GelijkstartOntruimingstijdFaseNaar;
+                                svm_opp.Gelijkstart.DeelConflict = svm.Gelijkstart.DeelConflict;
                                 break;
                             }
                         }

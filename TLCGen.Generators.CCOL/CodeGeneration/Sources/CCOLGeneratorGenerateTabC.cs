@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -162,6 +163,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateTabCControlParametersConflicten(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
+            string _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
 
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
@@ -180,9 +182,81 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         prevfasefrom = conflict.GetFaseFromDefine();
                         sb.AppendLine();
                     }
-                    sb.AppendLine($"    TO_max[{conflict.GetFaseFromDefine()}][{conflict.GetFaseToDefine()}] = {conflict.SerializedWaarde};");
+                    sb.AppendLine($"{ts}TO_max[{conflict.GetFaseFromDefine()}][{conflict.GetFaseToDefine()}] = {conflict.SerializedWaarde};");
                 }
             }
+
+
+            if(controller.InterSignaalGroep.Gelijkstarten.Count > 0 || controller.InterSignaalGroep.Voorstarten.Count > 0)
+            {
+                foreach(var gs in controller.InterSignaalGroep.Gelijkstarten)
+                {
+                    foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                    {
+                        if (gs.FaseVan == conflict.FaseVan)
+                        {
+                            bool issym = false;
+                            foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
+                            {
+                                if(conflict.FaseNaar == conflict2.FaseNaar &&
+                                   gs.FaseNaar == conflict2.FaseVan)
+                                {
+                                    issym = true;
+                                    break;
+                                }
+                            }
+                            if(!issym)
+                            {
+                                sb.AppendLine($"{ts}TO_max[{_fcpf}{gs.FaseNaar}][{conflict.GetFaseToDefine()}] = FK;");
+                                sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{gs.FaseNaar}] = FK;");
+                            }
+                        }
+                        if (gs.FaseNaar == conflict.FaseVan)
+                        {
+                            bool issym = false;
+                            foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
+                            {
+                                if (conflict.FaseNaar == conflict2.FaseNaar &&
+                                   gs.FaseVan == conflict2.FaseVan)
+                                {
+                                    issym = true;
+                                    break;
+                                }
+                            }
+                            if (!issym)
+                            {
+                                sb.AppendLine($"{ts}TO_max[{_fcpf}{gs.FaseVan}][{conflict.GetFaseToDefine()}] = FK;");
+                                sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{gs.FaseVan}] = FK;");
+                            }
+                        }
+                    }
+                }
+                foreach (var vs in controller.InterSignaalGroep.Voorstarten)
+                {
+                    foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                    {
+                        if (vs.FaseVan == conflict.FaseVan)
+                        {
+                            bool issym = false;
+                            foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
+                            {
+                                if (conflict.FaseNaar == conflict2.FaseNaar &&
+                                   vs.FaseNaar == conflict2.FaseVan)
+                                {
+                                    issym = true;
+                                    break;
+                                }
+                            }
+                            if (!issym)
+                            {
+                                sb.AppendLine($"{ts}TO_max[{_fcpf}{vs.FaseNaar}][{conflict.GetFaseToDefine()}] = FK;");
+                                sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{vs.FaseNaar}] = FK;");
+                            }
+                        }
+                    }
+                }
+            }
+
             //sb.AppendLine("default_to_min(0);");
 
             return sb.ToString();
