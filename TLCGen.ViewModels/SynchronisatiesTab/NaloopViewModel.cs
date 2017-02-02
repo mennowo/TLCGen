@@ -61,6 +61,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int? MaximaleVoorstart
+        {
+            get { return _Naloop.MaximaleVoorstart; }
+            set
+            {
+                _Naloop.MaximaleVoorstart = value;
+                OnMonitoredPropertyChanged("MaximaleVoorstart");
+            }
+        }
+
         public ObservableCollection<NaloopTijdModel> Tijden
         {
             get

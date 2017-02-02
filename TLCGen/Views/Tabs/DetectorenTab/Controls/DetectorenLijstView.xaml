@@ -9,6 +9,7 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
+             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">

@@ -25,7 +25,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlcvd;
         private string _tnleg;
         private string _tnlegd;
-        private string _prmnldgl;
 
         #endregion // Fields
 
@@ -80,12 +79,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 $"{_hnla}{nld.Detector}",
                                 CCOLElementTypeEnum.HulpElement));
                     }
-                    _MyElements.Add(
-                        new CCOLElement(
-                            $"{_prmnldgl}{nl.FaseVan}{nl.FaseNaar}",
-                            0,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Parameter));
                 }
             }
         }
@@ -182,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("NG, ");
                                         }
                                     }
-                                    sb.AppendLine($"{_prmpf}{_prmnldgl}{vn}, {_tpf}{_tnlfg}{vn}, {_tpf}{_tnlfgd}{vn}, {_tpf}{_tnleg}{vn}, {_tpf}{_tnlegd}{vn});");
+                                    sb.AppendLine($"{_tpf}{_tnlfg}{vn}, {_tpf}{_tnlfgd}{vn}, {_tpf}{_tnleg}{vn}, {_tpf}{_tnlegd}{vn});");
                                     break;
 
                                 case NaloopTypeEnum.CyclischVerlengGroen:
@@ -199,7 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("NG, ");
                                         }
                                     }
-                                    sb.AppendLine($"{_prmpf}{_prmnldgl}{vn}, {_tpf}{_tnlfg}{vn}, {_tpf}{_tnlfgd}{vn}, {_tpf}{_tnlcv}{vn}, {_tpf}{_tnlcvd}{vn});");
+                                    sb.AppendLine($"{_tpf}{_tnlfg}{vn}, {_tpf}{_tnlfgd}{vn}, {_tpf}{_tnlcv}{vn}, {_tpf}{_tnlcvd}{vn});");
                                     break;
                             }
                         }
@@ -236,7 +229,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (s.Default == "nleg") _tnleg = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "nlegd") _tnlegd = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "nla") _hnla = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nldgl") _prmnldgl = s.Setting == null ? s.Default : s.Setting;
             }
             
             return base.SetSettings(settings);

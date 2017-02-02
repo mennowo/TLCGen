@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public string FaseNaar { get; set; }
         public NaloopTypeEnum Type { get; set; }
         public bool DetectieAfhankelijk { get; set; }
+        public int? MaximaleVoorstart { get; set; }
 
         [XmlArrayItem(ElementName = "NaloopDetector")]
         public List<NaloopDetectorModel> Detectoren { get; set; }

@@ -7,6 +7,8 @@
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums;assembly=TLCGen.ViewModels"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -176,6 +178,10 @@
                     <ComboBox 
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
                     SelectedItem="{Binding Path=SelectedSynchronisatie.NaloopVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                    <Label Content="Maximale voorstart tijd:" />
+                    <xc:WatermarkTextBox 
+                        Watermark="NG"
+                        Text="{Binding Path=SelectedSynchronisatie.NaloopVM.MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
                     <CheckBox Content="Detectie afhankelijk" 
                           IsEnabled="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijkPossible}"
                           IsChecked="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk}" Margin="5" />
