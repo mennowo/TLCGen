@@ -25,6 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlcvd;
         private string _tnleg;
         private string _tnlegd;
+        private string _prmxnl;
 
         #endregion // Fields
 
@@ -80,6 +81,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 CCOLElementTypeEnum.HulpElement));
                     }
                 }
+                if(nl.MaximaleVoorstart.HasValue)
+                {
+                    _MyElements.Add(
+                        new CCOLElement(
+                            $"{_prmxnl}{nl.FaseVan}{nl.FaseNaar}",
+                            nl.MaximaleVoorstart.Value,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            CCOLElementTypeEnum.Parameter));
+                }
             }
         }
 
@@ -97,6 +107,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLRegCCodeTypeEnum.Synchronisaties:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
                     return true;
                 default:
@@ -110,17 +121,41 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLRegCCodeTypeEnum.Synchronisaties:
+                    if (c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        if (c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue).Any())
+                        {
+                            var nls = c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue);
+                            sb.AppendLine($"{ts}/* Tegenhouden voedende fietsers tot tijd t voor naloop mag komen */");
+                            sb.AppendLine($"{ts}/* afzetten X */");
+                            foreach (var nl in nls)
+                            {
+                                sb.AppendLine($"{ts}X[{_fcpf}{nl.FaseVan}] &= ~{_BITxnl};");
+                            }
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* Vasthouden voedende fietsrichtingen tot in 1 keer kan worden overgefietst */");
+                            sb.AppendLine($"{ts}/* Betekenis {_prmpf}x##: tijd dat fase ## eerder mag komen dan SG nalooprichting */");
+                            foreach (var nl in nls)
+                            {
+                                sb.AppendLine($"{ts}X[{_fcpf}{nl.FaseVan}] |= x_aanvoer({_fcpf}{nl.FaseNaar}, PRM[{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}]) ? {_BITxnl} : 0;");
+                            }
+                            sb.AppendLine();
+                        }
+                    }
+                    return sb.ToString();
 
+                case CCOLRegCCodeTypeEnum.Maxgroen:
 
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
-                        sb.AppendLine($"{ts}{{   RW[fc]&= ~BIT2;");
-                        sb.AppendLine($"{ts}{ts}YV[fc]&= ~BIT2;");
-                        sb.AppendLine($"{ts}{ts}YM[fc]&= ~BIT2;");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT2;");
+                        sb.AppendLine($"{ts}{ts}YV[fc] &= ~BIT2;");
+                        sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT2;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                         foreach (var nl in c.InterSignaalGroep.Nalopen)
@@ -229,6 +264,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (s.Default == "nleg") _tnleg = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "nlegd") _tnlegd = s.Setting == null ? s.Default : s.Setting;
                 if (s.Default == "nla") _hnla = s.Setting == null ? s.Default : s.Setting;
+                if (s.Default == "xnl") _prmxnl = s.Setting == null ? s.Default : s.Setting;
             }
             
             return base.SetSettings(settings);

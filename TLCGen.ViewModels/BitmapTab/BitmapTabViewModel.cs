@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using TLCGen.Messaging;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Plugins;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -404,9 +405,54 @@ namespace TLCGen.ViewModels
                     OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, "per" + per.Naam, BitmappedItemViewModel.Type.Uitgang));
                 }
             }
+            if (_Controller.PeriodenData.Perioden.Count > 0)
+            {
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd).First().BitmapData, 
+                            "perrt", BitmappedItemViewModel.Type.Uitgang));
+                }
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).First().BitmapData,
+                            "perrta", BitmappedItemViewModel.Type.Uitgang));
+                }
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).First().BitmapData,
+                            "perrtdim", BitmappedItemViewModel.Type.Uitgang));
+                }
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).First().BitmapData,
+                            "perbel", BitmappedItemViewModel.Type.Uitgang));
+                }
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).First().BitmapData,
+                            "perbeldim", BitmappedItemViewModel.Type.Uitgang));
+                }
+                if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).Any())
+                {
+                    OverigeUitgangen.Add(
+                        new BitmappedItemViewModel(
+                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).First().BitmapData,
+                            "pertwl", BitmappedItemViewModel.Type.Uitgang));
+                }
+            }
 
             // RoBuGrover
-            if(_Controller.RoBuGrover.ConflictGroepen?.Count > 0)
+            if (_Controller.RoBuGrover.ConflictGroepen?.Count > 0)
             {
                 OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RoBuGrover.BitmapData, "rgv", BitmappedItemViewModel.Type.Uitgang));
             }

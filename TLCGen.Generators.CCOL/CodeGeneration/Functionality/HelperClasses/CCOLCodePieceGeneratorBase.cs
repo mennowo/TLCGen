@@ -21,6 +21,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         protected string _schpf;
         protected string _prmpf;
 
+        protected string _BITxnl = "BIT8";
+
         public virtual void CollectCCOLElements(ControllerModel c)
         {
             

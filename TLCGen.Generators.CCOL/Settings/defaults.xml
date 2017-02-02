@@ -144,6 +144,54 @@
             <Type>GeheugenElement</Type>
             <Description>Geheugen element periode</Description>
           </Setting>
+          <Setting>
+            <Default>period</Default>
+            <Setting>period</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement periode</Description>
+          </Setting>
+          <Setting>
+            <Default>perrt</Default>
+            <Setting>rt</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode rateltikkers altijd</Description>
+          </Setting>
+          <Setting>
+            <Default>perrta</Default>
+            <Setting>rta</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode rateltikkers op aanvraag</Description>
+          </Setting>
+          <Setting>
+            <Default>perrtdim</Default>
+            <Setting>rtdim</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode rateltikkers dimmen</Description>
+          </Setting>
+          <Setting>
+            <Default>perbel</Default>
+            <Setting>bel</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode bellen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>perbeldim</Default>
+            <Setting>beldim</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode bellen dimmen</Description>
+          </Setting>
+          <Setting>
+            <Default>pertwl</Default>
+            <Setting>twl</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode TWLs actief</Description>
+          </Setting>
+          <Setting>
+            <Default>pero</Default>
+            <Setting>o</Setting>
+            <Type>Parameter</Type>
+            <Description>Naamgeving elementen periode overig</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
@@ -505,6 +553,12 @@
             <Setting>nldgl</Setting>
             <Type>Parameter</Type>
             <Description>Parameter maximale tijd herstarten det.afh. naloop tijdens geel</Description>
+          </Setting>
+          <Setting>
+            <Default>xnl</Default>
+            <Setting>xnl</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter tijd tegenhouden voedende richting</Description>
           </Setting>
         </Settings>
       </CodePieceData>
