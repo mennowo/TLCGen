@@ -589,6 +589,32 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLRateltikkersCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLRateltikkersCodeGenerator</ClassName>
+        <Description>Rateltikkers</Description>
+        <Settings>
+          <Setting>
+            <Default>rt</Default>
+            <Setting>rt</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement rateltikker actief</Description>
+          </Setting>
+          <Setting>
+            <Default>rt</Default>
+            <Setting>rt</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang rateltikker actief</Description>
+          </Setting>
+          <Setting>
+            <Default>nlrt</Default>
+            <Setting>nlrt</Setting>
+            <Type>Timer</Type>
+            <Description>Timer nalooptijd rateltikker</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

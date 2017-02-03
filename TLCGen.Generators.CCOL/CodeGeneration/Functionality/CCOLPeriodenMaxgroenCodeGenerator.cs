@@ -255,60 +255,132 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode rateltikkers altijd */");
                             sb.AppendLine($"{ts}/* ------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrt}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{iperrt}], PRM[{_prmpf}{_prmetkp}{_prmperrt}{iperrt}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{iperrt}]));");
+                            foreach(var per in c.PeriodenData.Perioden)
+                            {
+                                if(per.Type == PeriodeTypeEnum.RateltikkersAltijd)
+                                {
+                                    if(iperrt != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{iperrt}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrt}{iperrt}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{iperrt}]))");
+                                    iperrt++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++iperrt;
                         }
                         if (c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).Any())
                         {
                             sb.AppendLine($"{ts}/* klokperiode rateltikker op aanvraag */");
                             sb.AppendLine($"{ts}/* ----------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrta}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{iperrta}], PRM[{_prmpf}{_prmetkp}{_prmperrta}{iperrta}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{iperrta}]));");
+                            foreach (var per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.RateltikkersAanvraag)
+                                {
+                                    if (iperrta != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{iperrta}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrta}{iperrta}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{iperrta}]))");
+                                    iperrta++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++iperrta;
                         }
                         if (c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).Any())
                         {
                             sb.AppendLine($"{ts}/* klokperiode rateltikker dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------------ */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrtdim}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrtdim}{iperrtdim}], PRM[{_prmpf}{_prmetkp}{_prmperrtdim}{iperrtdim}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrtdim}{iperrtdim}]));");
+                            foreach (var per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.RateltikkersDimmen)
+                                {
+                                    if (iperrtdim != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrtdim}{iperrtdim}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrtdim}{iperrtdim}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrtdim}{iperrtdim}]))");
+                                    iperrtdim++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++iperrtdim;
                         }
                         if (c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).Any())
                         {
                             sb.AppendLine($"{ts}/* klokperiode bellen actief */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbel}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbel}{iperbel}], PRM[{_prmpf}{_prmetkp}{_prmperbel}{iperbel}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbel}{iperbel}]));");
+                            foreach (var per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.RateltikkersAanvraag)
+                                {
+                                    if (iperbel != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbel}{iperbel}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbel}{iperbel}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbel}{iperbel}]))");
+                                    iperbel++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++iperbel;
                         }
                         if (c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).Any())
                         {
                             sb.AppendLine($"{ts}/* klokperiode bellen dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbeldim}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbeldim}{iperbeldim}], PRM[{_prmpf}{_prmetkp}{_prmperbeldim}{iperbeldim}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbeldim}{iperbeldim}]));");
+                            foreach (var per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.RateltikkersAanvraag)
+                                {
+                                    if (iperbeldim != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperbeldim}{iperbeldim}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperbeldim}{iperbeldim}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperbeldim}{iperbeldim}]))");
+                                    iperbeldim++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++iperbeldim;
                         }
                         if (c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).Any())
                         {
                             sb.AppendLine($"{ts}/* klokperiode twl's actief */");
                             sb.AppendLine($"{ts}/* ------------------------ */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmpertwl}] = ");
-                            sb.AppendLine($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpertwl}{ipertwl}], PRM[{_prmpf}{_prmetkp}{_prmpertwl}{ipertwl}]) &&");
-                            sb.AppendLine($"{ts}{ts}{ts}dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpertwl}{ipertwl}]));");
+                            foreach (var per in c.PeriodenData.Perioden)
+                            {
+                                if (per.Type == PeriodeTypeEnum.RateltikkersAanvraag)
+                                {
+                                    if (ipertwl != 1)
+                                    {
+                                        sb.AppendLine(" || ");
+                                    }
+                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpertwl}{ipertwl}], ");
+                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmpertwl}{ipertwl}]) && ");
+                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpertwl}{ipertwl}]))");
+                                    ipertwl++;
+                                }
+                            }
+                            sb.AppendLine(";");
                             sb.AppendLine();
-                            ++ipertwl;
                         }
                     }
                     sb.AppendLine($"{ts}KlokPerioden_Add();");

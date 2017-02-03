@@ -10,6 +10,9 @@ using System.Collections.ObjectModel;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Extensions;
+using TLCGen.Messaging.Requests;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -54,12 +57,10 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public enum Type { Fase, Detector, Uitgang, Ingang };
-
         /// <summary>
         /// The type of item
         /// </summary>
-        public Type IOType { get; set; }
+        public BitmappedItemTypeEnum IOType { get; set; }
 
         /// <summary>
         /// Indicates wether or not the item has one or more coordinates set.
@@ -77,11 +78,9 @@ namespace TLCGen.ViewModels
                 {
                     if(Coordinates?.Count > 0)
                     {
-#warning TODO
-                        //foreach(Point p in Coordinates)
-                        //    _ControllerVM.BitmapTabVM.FillDefaultColor(p);
+                        Messenger.Default.Send(new RefreshBitmapRequest(Coordinates.ToList()));
                     }
-                    Coordinates.Clear();
+                    Coordinates.RemoveAll();
                     OnPropertyChanged("HasCoordinates");
                 }
             }
@@ -123,7 +122,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public BitmappedItemViewModel(IOElementModel ioelem, string naam, Type t)
+        public BitmappedItemViewModel(IOElementModel ioelem, string naam, BitmappedItemTypeEnum t)
         {
             _IOElement = ioelem;
             _Naam = naam;

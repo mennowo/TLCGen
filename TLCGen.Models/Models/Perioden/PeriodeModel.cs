@@ -79,7 +79,7 @@ namespace TLCGen.Models
 
         public bool ShouldSerializeBitmapData()
         {
-            return Type == PeriodeTypeEnum.Groentijden || Type == PeriodeTypeEnum.Overig;
+            return BitmapData?.BitmapCoordinaten?.Count > 0;
         }
 
         public PeriodeModel()

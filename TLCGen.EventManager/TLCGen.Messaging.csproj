@@ -36,6 +36,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +62,7 @@
     <Compile Include="Requests\IsFasenConflictingRequest.cs" />
     <Compile Include="Requests\IsElementIdentifierUniqueRequest.cs" />
     <Compile Include="Requests\ProcessSynchronisationsRequest.cs" />
+    <Compile Include="Requests\RefreshBitmapRequest.cs" />
     <Compile Include="Responses\GetDetectorListResponse.cs" />
     <Compile Include="Subscriber.cs" />
     <Compile Include="WeakAction.cs" />

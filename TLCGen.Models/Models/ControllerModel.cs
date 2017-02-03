@@ -48,9 +48,6 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "WaarschuwingsGroep")]
         public List<WaarschuwingsGroepModel> WaarschuwingsGroepen { get; set; } 
 
-        public BitmapCoordinatenDataModel RateltikkersDimmenCoordinaten { get; set; }
-        public BitmapCoordinatenDataModel BellenDimmenCoordinaten { get; set; }
-
         public PeriodenDataModel PeriodenData { get; set; }
 
         public PTPDataModel PTPData { get; set; }
@@ -85,9 +82,6 @@ namespace TLCGen.Models
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();
-
-            RateltikkersDimmenCoordinaten = new BitmapCoordinatenDataModel();
-            BellenDimmenCoordinaten = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

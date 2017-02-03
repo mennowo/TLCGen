@@ -833,8 +833,8 @@ namespace TLCGen.ViewModels
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, null));
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
 #endif
 

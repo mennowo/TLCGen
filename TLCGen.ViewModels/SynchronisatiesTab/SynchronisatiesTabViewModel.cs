@@ -131,11 +131,16 @@ namespace TLCGen.ViewModels
                 if (_AllDetectoren != null && !string.IsNullOrEmpty(value.FaseVan))
                 {
                     Detectoren.Clear();
-                    string s = value.FaseVan.Replace(Settings.SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
-                    var __Detectoren = _AllDetectoren.Where(x => x.StartsWith(s));
-                    foreach(var d in __Detectoren)
+                    foreach(var fc in _Controller.Fasen)
                     {
-                        Detectoren.Add(d);
+                        if (fc.Naam == _SelectedSynchronisatie.FaseVan)
+                        {
+                            foreach (var dm in fc.Detectoren)
+                            {
+                                Detectoren.Add(dm.Naam);
+                            }
+                            break;
+                        }
                     }
                     value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;

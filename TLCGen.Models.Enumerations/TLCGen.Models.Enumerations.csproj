@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AansturingWaitsignalenEnum.cs" />
+    <Compile Include="BitmappedItemTypeEnum.cs" />
     <Compile Include="CCOLVersieEnum.cs" />
     <Compile Include="GroentijdenTypeEnum.cs" />
     <Compile Include="DetectorAanvraagTypeEnum.cs" />

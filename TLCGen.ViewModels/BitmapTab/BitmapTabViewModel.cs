@@ -19,6 +19,7 @@ using TLCGen.Messaging;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;
+using TLCGen.Messaging.Requests;
 
 namespace TLCGen.ViewModels
 {
@@ -42,12 +43,12 @@ namespace TLCGen.ViewModels
         private Color TestFillColor = Color.CornflowerBlue;
         private Color DefaultFillColor = Color.LightGray;
         private Color DefaultFaseColor = Color.DarkRed;
-        private Color DefaultFaseSelectedColor = Color.Red;
-        private Color DefaultDetectorColor = Color.DarkCyan;
-        private Color DefaultDetectorSelectedColor = Color.Cyan;
+        private Color DefaultFaseSelectedColor = Color.Lime;
+        private Color DefaultDetectorColor = Color.Yellow;
+        private Color DefaultDetectorSelectedColor = Color.Magenta;
 
-        private Color DefaultUitgangColor = Color.DarkRed;
-        private Color DefaultUitgangSelectedColor = Color.Red;
+        private Color DefaultUitgangColor = Color.Blue;
+        private Color DefaultUitgangSelectedColor = Color.Lime;
         private Color DefaultIngangColor = Color.DarkCyan;
         private Color DefaultIngangSelectedColor = Color.Cyan;
 
@@ -347,17 +348,17 @@ namespace TLCGen.ViewModels
             // SignalGroups + Detectors + Waitsignalen + Rateltikkers
             foreach (var fcm in _Controller.Fasen)
             {
-                Fasen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemViewModel.Type.Fase));
+                Fasen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemTypeEnum.Fase));
                 if(fcm.RatelTikkerType != Models.Enumerations.RateltikkerTypeEnum.Geen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)fcm.RatelTikkerBitmapData, "rt" + fcm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)fcm.RatelTikkerBitmapData, "rt" + fcm.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
                 foreach (var dm in fcm.Detectoren)
                 {
-                    Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                    Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemTypeEnum.Detector));
                     if (dm.Wachtlicht)
                     {
-                        OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                        OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemTypeEnum.Uitgang));
                     }
                 }
 
@@ -365,10 +366,10 @@ namespace TLCGen.ViewModels
 
             foreach (var dm in _Controller.Detectoren)
             {
-                Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemViewModel.Type.Detector));
+                Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemTypeEnum.Detector));
                 if (dm.Wachtlicht)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)dm.WachtlichtBitmapData, "wl" + dm.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
             }
 
@@ -376,85 +377,55 @@ namespace TLCGen.ViewModels
             {
                 if(gr.Bellen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.BellenBitmapData, "wschlgr" + gr.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.BellenBitmapData, "wschlgr" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
                 if(gr.Lichten)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.LichtenBitmapData, "belgr" + gr.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.LichtenBitmapData, "belgr" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
             }
 
-            // Dimmen rateltikkers
-            if(_Controller.Fasen.Where(x => x.RatelTikkerType != Models.Enumerations.RateltikkerTypeEnum.Geen).Any())
-            {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RateltikkersDimmenCoordinaten, "rtdim", BitmappedItemViewModel.Type.Uitgang));
-            }
-
-            // Dimmen bellen
-            if (_Controller.WaarschuwingsGroepen.Where(x => x.Bellen == true).Any())
-            {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.BellenDimmenCoordinaten, "beldim", BitmappedItemViewModel.Type.Uitgang));
-            }
-
             // Klokperioden
-            OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.PeriodenData.DefaultPeriodeBitmapData, "perdef", BitmappedItemViewModel.Type.Uitgang));
+            OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.PeriodenData.DefaultPeriodeBitmapData, "perdef", BitmappedItemTypeEnum.Uitgang));
             foreach(var per in _Controller.PeriodenData.Perioden)
             {
                 if(per.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden || per.Type == Models.Enumerations.PeriodeTypeEnum.Overig)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, "per" + per.Naam, BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(per.BitmapData, "per" + per.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
             }
             if (_Controller.PeriodenData.Perioden.Count > 0)
             {
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd).First().BitmapData, 
-                            "perrt", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.RateltikkersAltijd, "perrt"));
                 }
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).First().BitmapData,
-                            "perrta", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.RateltikkersAanvraag, "perrta"));
                 }
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).First().BitmapData,
-                            "perrtdim", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.RateltikkersDimmen, "perrtdim"));
                 }
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).First().BitmapData,
-                            "perbel", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.BellenActief, "perbel"));
                 }
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).First().BitmapData,
-                            "perbeldim", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.BellenDimmen, "perbeldim"));
                 }
                 if (_Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).Any())
                 {
-                    OverigeUitgangen.Add(
-                        new BitmappedItemViewModel(
-                            _Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).First().BitmapData,
-                            "pertwl", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum.WaarschuwingsLichten, "pertwl"));
                 }
             }
 
             // RoBuGrover
             if (_Controller.RoBuGrover.ConflictGroepen?.Count > 0)
             {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RoBuGrover.BitmapData, "rgv", BitmappedItemViewModel.Type.Uitgang));
+                OverigeUitgangen.Add(new BitmappedItemViewModel(_Controller.RoBuGrover.BitmapData, "rgv", BitmappedItemTypeEnum.Uitgang));
             }
 
             // PTP
@@ -462,8 +433,8 @@ namespace TLCGen.ViewModels
             {
                 foreach(var k in _Controller.PTPData.PTPKoppelingen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.OkBitmapData, k.TeKoppelenKruispunt + "ptpok", BitmappedItemViewModel.Type.Uitgang));
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.ErrorBitmapData, k.TeKoppelenKruispunt + "ptperror", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.OkBitmapData, k.TeKoppelenKruispunt + "ptpok", BitmappedItemTypeEnum.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(k.ErrorBitmapData, k.TeKoppelenKruispunt + "ptperror", BitmappedItemTypeEnum.Uitgang));
                 }
             }
             // File ingrepen
@@ -471,18 +442,18 @@ namespace TLCGen.ViewModels
             {
                 foreach (var f in _Controller.FileIngrepen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(f.BitmapData, f.Naam + "file", BitmappedItemViewModel.Type.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(f.BitmapData, f.Naam + "file", BitmappedItemTypeEnum.Uitgang));
                 }
             }
 
             // OV / HD
             foreach (var ov in _Controller.OVData.OVIngrepen)
             {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(ov.OVInmeldingBitmapData, "vc" + ov.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
+                OverigeUitgangen.Add(new BitmappedItemViewModel(ov.OVInmeldingBitmapData, "vc" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
             }
             foreach (var hd in _Controller.OVData.HDIngrepen)
             {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(hd.HDInmeldingBitmapData, "vchd" + hd.FaseCyclus, BitmappedItemViewModel.Type.Uitgang));
+                OverigeUitgangen.Add(new BitmappedItemViewModel(hd.HDInmeldingBitmapData, "vchd" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
             }
 
             // Segment display
@@ -491,7 +462,7 @@ namespace TLCGen.ViewModels
                 OverigeUitgangen.Add(new BitmappedItemViewModel(
                     _Controller.Data.SegmentenDisplayBitmapData[i], 
                     _Controller.Data.SegmentenDisplayBitmapData[i].Naam, 
-                    BitmappedItemViewModel.Type.Uitgang));
+                    BitmappedItemTypeEnum.Uitgang));
             }
 
             // IO from plugins
@@ -504,14 +475,30 @@ namespace TLCGen.ViewModels
                     var outitems = ((ITLCGenElementProvider)v).GetOutputItems();
                     foreach(var i in initems)
                     {
-                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemViewModel.Type.Ingang));
+                        OverigeIngangen.Add(new BitmappedItemViewModel(i, i.Naam, BitmappedItemTypeEnum.Ingang));
                     }
                     foreach (var o in outitems)
                     {
-                        OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemViewModel.Type.Uitgang));
+                        OverigeUitgangen.Add(new BitmappedItemViewModel(o, o.Naam, BitmappedItemTypeEnum.Uitgang));
                     }
                 }
             }
+        }
+
+        private BitmappedItemViewModel GetBitmappedItemViewModelForPeriodType(PeriodeTypeEnum type, string itemname)
+        {
+            List<PeriodeModel> pers = new List<PeriodeModel>();
+            if(_Controller.PeriodenData.Perioden.Count > 0)
+            {
+                foreach(var p in _Controller.PeriodenData.Perioden)
+                {
+                    if(p.Type == type)
+                    {
+                        return new BitmappedItemViewModel(p.BitmapData, itemname, BitmappedItemTypeEnum.Uitgang);
+                    }
+                }
+            }
+            return null;
         }
 
         private void LoadBitmap()
@@ -553,16 +540,16 @@ namespace TLCGen.ViewModels
             Color c = new Color();
             switch (SelectedItem.IOType)
             {
-                case BitmappedItemViewModel.Type.Fase:
+                case BitmappedItemTypeEnum.Fase:
                     c = selected ? DefaultFaseSelectedColor : DefaultFaseColor;
                     break;
-                case BitmappedItemViewModel.Type.Detector:
+                case BitmappedItemTypeEnum.Detector:
                     c = selected ? DefaultDetectorSelectedColor : DefaultDetectorColor;
                     break;
-                case BitmappedItemViewModel.Type.Uitgang:
+                case BitmappedItemTypeEnum.Uitgang:
                     c = selected ? DefaultUitgangSelectedColor : DefaultUitgangColor;
                     break;
-                case BitmappedItemViewModel.Type.Ingang:
+                case BitmappedItemTypeEnum.Ingang:
                     c = selected ? DefaultIngangSelectedColor : DefaultIngangColor;
                     break;
             }
@@ -641,6 +628,21 @@ namespace TLCGen.ViewModels
             _ControllerFileName = message.NewFileName;
         }
 
+        private void OnRefreshBitmapRequest(RefreshBitmapRequest request)
+        {
+            if (request.Coordinates?.Count > 0)
+            {
+                foreach (Point p in request.Coordinates)
+                {
+                    FillDefaultColor(p);
+                }
+            }
+            else
+            {
+                RefreshMyBitmapImage();
+            }
+        }
+
         #endregion // TLCGen Message Handling
 
         #region Constructor
@@ -650,6 +652,7 @@ namespace TLCGen.ViewModels
             _FloodFiller = new QueueLinearFloodFiller(null);
 
             Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
+            Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
         }
 
         #endregion // Constructor

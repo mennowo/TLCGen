@@ -99,6 +99,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLGelijkstartenVoorstartenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLNalopenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPtpCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLRateltikkersCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVAOntruimenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVersneldPrimairAlternatievenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />

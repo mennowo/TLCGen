@@ -34,7 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
-            foreach (FileIngreepModel fm in c.FileIngrepen)
+            foreach (var fm in c.FileIngrepen)
             {
                 _MyBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData as IOElementModel, $"{_uspf}{_usfile}{fm.Naam}"));
 
