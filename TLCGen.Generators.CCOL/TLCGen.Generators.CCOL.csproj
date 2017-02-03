@@ -119,7 +119,7 @@
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorAttribute.cs" />
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorBase.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvragenMeetkriteriumCodeGenerator.cs" />
-    <Compile Include="CodeGeneration\Functionality\CCOLPeriodenMaxgroenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLPeriodenGroentijdenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRichtingGevoeligCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLRoBuGroverCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLMeeAanvragenCodeGenerator.cs" />

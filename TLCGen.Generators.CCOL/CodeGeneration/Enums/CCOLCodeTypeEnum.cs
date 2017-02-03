@@ -12,6 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         Top,
         KlokPerioden,
         Aanvragen,
+        Verlenggroen,
         Maxgroen,
         Wachtgroen,
         Meetkriterium,

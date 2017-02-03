@@ -103,9 +103,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLPeriodenMaxgroenCodeGenerator">
+    <CodePieceGenerator CodePiece="CCOLPeriodenGroentijdenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLPeriodenMaxgroenCodeGenerator</ClassName>
+        <ClassName>CCOLPeriodenGroentijdenCodeGenerator</ClassName>
         <Description>Perioden en maxgroen</Description>
         <Settings>
           <Setting>

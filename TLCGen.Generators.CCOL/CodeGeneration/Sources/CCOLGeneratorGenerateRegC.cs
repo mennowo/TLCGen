@@ -35,7 +35,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateRegCAanvragen(controller));
             sb.AppendLine();
-            sb.Append(GenerateRegCMaxgroen(controller));
+            sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCWachtgroen(controller));
             sb.AppendLine();
@@ -174,29 +174,56 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateRegCMaxgroen(ControllerModel controller)
+        private string GenerateRegCMaxOfVerlenggroen(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("void Maxgroen(void)");
-            sb.AppendLine("{");
-            if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
+            switch(controller.Data.TypeGroentijden)
             {
-                sb.AppendLine($"{ts}int fc;");
-            }
-            foreach (var gen in _PieceGenerators)
-            {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, ts));
-                }
-            }
+                case GroentijdenTypeEnum.MaxGroentijden:
+                    sb.AppendLine("void Maxgroen(void)");
+                    sb.AppendLine("{");
+                    if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        sb.AppendLine($"{ts}int fc;");
+                    }
+                    foreach (var gen in _PieceGenerators)
+                    {
+                        if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
+                        {
+                            sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, ts));
+                        }
+                    }
 
-            // Add file
-            sb.AppendLine($"{ts}Maxgroen_Add();");
-            sb.AppendLine("}");
+                    // Add file
+                    sb.AppendLine($"{ts}Maxgroen_Add();");
+                    sb.AppendLine("}");
 
-            sb.AppendLine();
+                    sb.AppendLine();
+                    break;
+
+                case GroentijdenTypeEnum.VerlengGroentijden:
+                    sb.AppendLine("void Verlenggroen(void)");
+                    sb.AppendLine("{");
+                    if (controller.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        sb.AppendLine($"{ts}int fc;");
+                    }
+                    foreach (var gen in _PieceGenerators)
+                    {
+                        if (gen.HasCode(CCOLRegCCodeTypeEnum.Verlenggroen))
+                        {
+                            sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Verlenggroen, ts));
+                        }
+                    }
+
+                    // Add file
+                    sb.AppendLine($"{ts}Maxgroen_Add();");
+                    sb.AppendLine("}");
+
+                    sb.AppendLine();
+                    break;
+            }
 
             return sb.ToString();
         }
@@ -393,7 +420,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TFB_max = PRM[prmfb];");
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
-            sb.AppendLine($"{ts}Maxgroen();");
+            switch (controller.Data.TypeGroentijden)
+            {
+                case GroentijdenTypeEnum.MaxGroentijden:
+                    sb.AppendLine($"{ts}Maxgroen();");
+                    break;
+                case GroentijdenTypeEnum.VerlengGroentijden:
+                    sb.AppendLine($"{ts}Verlenggroen();");
+                    break;
+            }
             sb.AppendLine($"{ts}Wachtgroen();");
             sb.AppendLine($"{ts}Meetkriterium();");
             sb.AppendLine($"{ts}Meeverlengen();");

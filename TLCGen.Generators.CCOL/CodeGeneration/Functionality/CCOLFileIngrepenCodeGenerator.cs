@@ -197,8 +197,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var ff in fm.TeDoserenSignaalGroepen)
                         {
-                            sb.AppendLine($"{ts}{ts}PercentageMaxGroenTijden({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
-                            sb.Append("".PadLeft($"{ts}{ts}PercentageMaxGroenTijden(".Length));
+                            string grfunc = "";
+                            switch (c.Data.TypeGroentijden)
+                            {
+                                case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
+                                case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
+                            }
+                            sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
+                            sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             string rest = "";
                             int irest = 1;
                             rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}{ff.FaseCyclus}";
