@@ -172,26 +172,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.DetectieTab)
         {
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            var attr = typeof(DetectorenExtraTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(DetectorenExtraTabViewModel));
-            attr = typeof(DetectorenFasenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(DetectorenFasenTabViewModel));
-            attr = typeof(DetectorenAllesTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(DetectorenAllesTabViewModel));
-            attr = typeof(DetectorenRichtingGevoeligTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(DetectorenRichtingGevoeligTabViewModel));
-            attr = typeof(DetectorenSimulatieTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(DetectorenSimulatieTabViewModel));
-
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
+            
         }
 
         #endregion // Constructor

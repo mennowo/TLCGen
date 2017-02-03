@@ -80,22 +80,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesTabViewModel(ControllerModel controller) : base(controller)
+        public ModulesTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.ModulesTab)
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            var attr = typeof(ModulesDetailsTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(ModulesDetailsTabViewModel));
-            attr = typeof(ModulesFasenInstellingenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(ModulesFasenInstellingenTabViewModel));
-
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
         }
 
         #endregion // Constructor

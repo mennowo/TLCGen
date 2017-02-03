@@ -18,6 +18,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Static Public Methods
 
+        public static void AddAllMaxElements(CCOLElemListData[] lists)
+        {
+            lists[0].Elements.Add(new CCOLElement() { Define = "USMAX" });
+            lists[1].Elements.Add(new CCOLElement() { Define = "ISMAX" });
+            lists[2].Elements.Add(new CCOLElement() { Define = "HEMAX" });
+            lists[3].Elements.Add(new CCOLElement() { Define = "MEMAX" });
+            lists[4].Elements.Add(new CCOLElement() { Define = "TMMAX" });
+            lists[5].Elements.Add(new CCOLElement() { Define = "CTMAX" });
+            lists[6].Elements.Add(new CCOLElement() { Define = "SCHMAX" });
+            lists[7].Elements.Add(new CCOLElement() { Define = "PRMMAX" });
+        }
+
         public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
             AlleDetectoren = new List<DetectorModel>();
@@ -69,11 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "USMAX" });
-
-            data.SetMax();
+            
             return data;
         }
 
@@ -97,10 +105,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "ISMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -124,10 +128,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "HEMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -151,10 +151,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "MEMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -206,10 +202,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "TMMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -233,10 +225,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "SCHMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -263,10 +251,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if(data.Elements.Count == 0)
                 data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "CTMAX" });
-
-            data.SetMax();
             return data;
         }
 
@@ -347,11 +331,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            // Add last, nameless element for maximum #define
-            data.Elements.Add(new CCOLElement() { Define = "PRMMAX" });
-
-
-            data.SetMax();
             return data;
         }
 

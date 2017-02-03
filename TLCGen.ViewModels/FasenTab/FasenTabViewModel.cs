@@ -145,26 +145,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenTabViewModel(ControllerModel controller) : base(controller)
+        public FasenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.FasenTab)
         {
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            var attr = typeof(FasenLijstTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FasenLijstTabViewModel));
-            attr = typeof(FasenLijstTimersTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FasenLijstTimersTabViewModel));
-            attr = typeof(FasenDetailsTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FasenDetailsTabViewModel));
-            attr = typeof(FasenGroentijdenSetsTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FasenGroentijdenSetsTabViewModel));
-            attr = typeof(FasenOVTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FasenOVTabViewModel));
-
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
+            
         }
 
         #endregion // Constructor

@@ -7,6 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="Waarschuwings signalen groepen" />
+        <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1"
+                  ItemsSource="{Binding Path=WaarschuwingsGroepen}" SelectedItem="{Binding Path=SelectedWaarschuwingsGroep}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam}" />
+                <DataGridCheckBoxColumn Header="Lichten" Binding="{Binding Path=Lichten}" />
+                <DataGridCheckBoxColumn Header="Bellen" Binding="{Binding Path=Bellen}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Button Content="Signalen groep toev." Command="{Binding Path=AddWaarschuwingsGroepCommand}" Margin="2" />
+            <Button Content="Signalen groep verw." Command="{Binding Path=RemoveWaarschuwingsGroepCommand}" Margin="2" />
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Messaging;
@@ -95,8 +96,26 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public TLCGenMainTabItemViewModel(ControllerModel controller) : base(controller)
+        public TLCGenMainTabItemViewModel(ControllerModel controller, TabItemTypeEnum type) : base(controller)
         {
+            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
+
+            Assembly assmbl = this.GetType().Assembly;
+            foreach (Type mytype in assmbl.GetTypes())
+            {
+                // Find CCOLCodePieceGenerator attribute, and if found, continue
+                var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(mytype, typeof(TLCGenTabItemAttribute));
+                if (attr != null && attr.Type == type)
+                {
+                    TabTypes.Add(attr.Index, mytype);
+                }
+            }
+
+            foreach (var tab in TabTypes)
+            {
+                var v = Activator.CreateInstance(tab.Value, _Controller);
+                TabItems.Add(v as ITLCGenTabItem);
+            }
         }
 
         #endregion // Constructor

@@ -373,6 +373,7 @@ namespace TLCGen.ViewModels
                 }
             }
 
+            // Warn signals
             foreach(var gr in _Controller.WaarschuwingsGroepen)
             {
                 if(gr.Bellen)

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -72,10 +73,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     AlleDetectoren.Add(dm);
 
                 var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(controller, _PieceGenerators);
+
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
 
-                foreach(var l in CCOLElementLists)
+                foreach (var plug in TLCGen.Plugins.TLCGenPluginManager.Default.LoadedPlugins)
+                {
+                    var elemprov = plug as ITLCGenElementProvider;
+                    if (elemprov != null)
+                    {
+                        var elems = elemprov.GetAllItems() as List<object>;
+                        if (elems != null)
+                        {
+                            foreach(var elem in elems)
+                            {
+                                var _elem = elem as CCOLElement;
+                                if (_elem != null)
+                                {
+                                    switch (_elem.Type)
+                                    {
+                                        case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(_elem); break;
+                                        case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(_elem); break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
+
+                foreach (var l in CCOLElementLists)
                 {
                     l.SetMax();
                 }

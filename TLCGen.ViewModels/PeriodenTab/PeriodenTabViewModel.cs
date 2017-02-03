@@ -81,20 +81,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PeriodenTabViewModel(ControllerModel controller) : base(controller)
+        public PeriodenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.PeriodenTab)
         {
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            var attr = typeof(PeriodenGroentijdenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(PeriodenGroentijdenTabViewModel));
-            attr = typeof(PeriodenOverigTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(PeriodenOverigTabViewModel));
             
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
         }
 
         #endregion // Constructor

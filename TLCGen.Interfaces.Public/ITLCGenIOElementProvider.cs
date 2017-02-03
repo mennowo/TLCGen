@@ -11,6 +11,7 @@ namespace TLCGen.Plugins
     {
         List<IOElementModel> GetOutputItems();
         List<IOElementModel> GetInputItems();
+        List<object> GetAllItems();
 
         bool IsElementNameUnique(string name);
     }

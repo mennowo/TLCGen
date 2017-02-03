@@ -13,6 +13,7 @@ using System.Xml;
 using System.Windows.Media;
 using TLCGen.DataAccess;
 using TLCGen.Integrity;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -76,12 +77,9 @@ namespace TLCGen.GebruikersOpties
             get { return _SelectedTabIndex; }
             set
             {
-                if (CheckCurrentItemNameUnique())
-                {
-                    _SelectedTabIndex = value;
-                }
-                OnPropertyChanged("SelectedTabIndex");
+                _SelectedTabIndex = value;
                 OnPropertyChanged("SelectedOptie");
+                OnPropertyChanged("SelectedTabIndex");
             }
         }
 
@@ -193,6 +191,8 @@ namespace TLCGen.GebruikersOpties
                 ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
             else
                 ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
+
+            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool AddNewGebruikersOptieCommand_CanExecute(object prm)
@@ -210,6 +210,7 @@ namespace TLCGen.GebruikersOpties
                     SelectedOptie as GebruikersOptieViewModel);
 
             SelectedOptie = null;
+            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool RemoveGebruikersOptieCommand_CanExecute(object prm)
@@ -246,6 +247,7 @@ namespace TLCGen.GebruikersOpties
                 ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
 
             SelectedOptie = optie;
+            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmhoogCommand_CanExecute(object prm)
@@ -289,6 +291,7 @@ namespace TLCGen.GebruikersOpties
                 ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
 
             SelectedOptie = optie;
+            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
         bool OmlaagCommand_CanExecute(object prm)
@@ -492,6 +495,93 @@ namespace TLCGen.GebruikersOpties
             foreach(var o in GeheugenElementen) { if (o.Naam == name) return false; }
             foreach(var o in Parameters) { if (o.Naam == name) return false; }
             return true;
+        }
+
+        public Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum ConvertType(CCOLElementTypeEnum type)
+        {
+            switch(type)
+            {
+                case CCOLElementTypeEnum.TE_type:
+                    return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TE_type;
+                case CCOLElementTypeEnum.TS_type:
+                    return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TS_type;
+                case CCOLElementTypeEnum.TM_type:
+                    return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TM_type;
+                default:
+                    return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None;
+            }
+        }
+
+        public List<object> GetAllItems()
+        {
+            var AllElements = new List<object>();
+
+            foreach(var elem in Uitgangen)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang));
+            }
+            foreach (var elem in Ingangen)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang));
+            }
+            foreach (var elem in HulpElementen)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement));
+            }
+            foreach (var elem in Timers)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        elem.Instelling.Value,
+                        ConvertType(elem.Type),
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer));
+            }
+            foreach (var elem in Counters)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        elem.Instelling.Value,
+                        Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter));
+            }
+            foreach (var elem in Schakelaars)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        elem.Instelling.Value,
+                        Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.SCH_type,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar));
+            }
+            foreach (var elem in GeheugenElementen)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement));
+            }
+            foreach (var elem in Parameters)
+            {
+                AllElements.Add(
+                    new Generators.CCOL.CodeGeneration.CCOLElement(
+                        elem.Naam,
+                        elem.Instelling.Value,
+                        ConvertType(elem.Type),
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter));
+            }
+
+            return AllElements;
         }
 
         #endregion // ITLCGenElementProvider

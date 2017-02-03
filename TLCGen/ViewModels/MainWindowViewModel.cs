@@ -830,11 +830,14 @@ namespace TLCGen.ViewModels
             }
             if (DataProvider.Instance.LoadController())
             {
+                ControllerVM = null;
                 ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
+                ControllerVM.LoadPluginDataFromXmlDocument(DataProvider.Instance.ControllerXml);
                 ControllerVM.SelectedTabIndex = 0;
                 OnPropertyChanged("ProgramTitle");
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, null));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                ControllerVM.SetStatusText("regeling geopend");
             }
 #endif
 

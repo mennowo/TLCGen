@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -79,26 +80,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SpecialsTabViewModel(ControllerModel controller) : base(controller)
+        public SpecialsTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.SpecialsTab)
         {
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            var attr = typeof(PTPKoppelingenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(PTPKoppelingenTabViewModel));
-            attr = typeof(FileTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(FileTabViewModel));
-            //attr = typeof(SignalenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            //TabTypes.Add(attr.Index, typeof(SignalenTabViewModel));
-            attr = typeof(VAOntruimenTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(VAOntruimenTabViewModel));
-            attr = typeof(RoBuGroverTabViewModel).GetCustomAttributes(typeof(TLCGenTabItemAttribute), true).FirstOrDefault() as TLCGenTabItemAttribute;
-            TabTypes.Add(attr.Index, typeof(RoBuGroverTabViewModel));
-
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
+            
         }
 
         #endregion // Constructor
