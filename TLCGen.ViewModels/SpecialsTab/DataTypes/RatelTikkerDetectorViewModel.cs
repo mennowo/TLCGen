@@ -8,11 +8,11 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RoBuGroverFileDetectorViewModel : ViewModelBase, IViewModelWithItem
+    public class RatelTikkerDetectorViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
-        private RoBuGroverFileDetectorModel _FileDetector;
+        private RatelTikkerDetectorModel _Detector;
 
         #endregion // Fields
 
@@ -20,20 +20,11 @@ namespace TLCGen.ViewModels
 
         public string Detector
         {
-            get { return _FileDetector.Detector; }
+            get { return _Detector.Detector; }
             set
             {
-                _FileDetector.Detector = value;
+                _Detector.Detector = value;
                 OnMonitoredPropertyChanged("Detector");
-            }
-        }
-        public int FileTijd
-        {
-            get { return _FileDetector.FileTijd; }
-            set
-            {
-                _FileDetector.FileTijd = value;
-                OnMonitoredPropertyChanged("FileTijd");
             }
         }
 
@@ -59,19 +50,18 @@ namespace TLCGen.ViewModels
 
         public object GetItem()
         {
-            return _FileDetector;
+            return _Detector;
         }
 
         #endregion // IViewModelWithItem
 
         #region Constructor
 
-        public RoBuGroverFileDetectorViewModel(RoBuGroverFileDetectorModel filedetector)
+        public RatelTikkerDetectorViewModel(RatelTikkerDetectorModel rtdetector)
         {
-            _FileDetector = filedetector;
+            _Detector = rtdetector;
         }
 
         #endregion // Constructor
-
     }
 }

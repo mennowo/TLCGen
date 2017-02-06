@@ -27,6 +27,7 @@ namespace TLCGen.ViewModels
                 OnMonitoredPropertyChanged("Naam");
             }
         }
+
         public bool Lichten
         {
             get { return _WaarschuwingsGroep.Lichten; }
@@ -36,6 +37,7 @@ namespace TLCGen.ViewModels
                 OnMonitoredPropertyChanged("Lichten");
             }
         }
+
         public bool Bellen
         {
             get { return _WaarschuwingsGroep.Bellen; }
@@ -43,6 +45,16 @@ namespace TLCGen.ViewModels
             {
                 _WaarschuwingsGroep.Bellen = value;
                 OnMonitoredPropertyChanged("Bellen");
+            }
+        }
+
+        public string FaseCyclusVoorAansturing
+        {
+            get { return _WaarschuwingsGroep.FaseCyclusVoorAansturing; }
+            set
+            {
+                _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
+                OnMonitoredPropertyChanged("FaseCyclusVoorAansturing");
             }
         }
 

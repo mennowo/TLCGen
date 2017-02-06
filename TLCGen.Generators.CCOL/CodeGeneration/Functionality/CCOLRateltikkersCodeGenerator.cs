@@ -51,31 +51,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
-            foreach (var fc in c.Fasen)
+            foreach (var rt in c.Signalen.Rateltikkers)
             {
-                if (fc.RatelTikkerType != RateltikkerTypeEnum.Geen)
+                _MyElements.Add(
+                        new CCOLElement(
+                            $"{_usrt}{rt.FaseCyclus}",
+                            CCOLElementTypeEnum.Uitgang));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_hrt}{rt.FaseCyclus}",
+                        CCOLElementTypeEnum.HulpElement));
+
+                if (rt.Type == RateltikkerTypeEnum.Hoeflake)
                 {
                     _MyElements.Add(
-                        new CCOLElement(
-                            $"{_usrt}{fc.Naam}",
-                            CCOLElementTypeEnum.Uitgang));
-                    _MyElements.Add(
-                        new CCOLElement(
-                            $"{_hrt}{fc.Naam}",
-                            CCOLElementTypeEnum.HulpElement));
-
-                    if(fc.RatelTikkerType == RateltikkerTypeEnum.Hoeflake)
-                    {
-                        _MyElements.Add(
-                        new CCOLElement(
-                            $"{_tnlrt}{fc.Naam}",
-                            fc.RatelTikkerNaloopTijd,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
-                    }
-
-                    _MyBitmapOutputs.Add(new CCOLIOElement(fc.RatelTikkerBitmapData as IOElementModel, $"{_uspf}{_usrt}{fc.Naam}"));
+                    new CCOLElement(
+                        $"{_tnlrt}{rt.FaseCyclus}",
+                        rt.NaloopTijd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Timer));
                 }
+
+                _MyBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
             }
         }
 
@@ -118,69 +115,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLRegCCodeTypeEnum.SystemApplication:
                     sb.AppendLine($"{ts}/* uitsturing aanvraag rateltikkers */");
-                    foreach(var fc in c.Fasen)
+                    foreach (var rt in c.Signalen.Rateltikkers)
                     {
-                        if(fc.RatelTikkerType != RateltikkerTypeEnum.Geen)
+                        string rtd1 = "NG";
+                        string rtd2 = "NG";
+                        string nlfcd = "NG";
+
+                        if (rt.Detectoren.Count > 0) rtd1 = rt.Detectoren[0].Detector;
+                        if (rt.Detectoren.Count > 1) rtd2 = rt.Detectoren[1].Detector;
+                        if (rt.Detectoren.Count > 2) nlfcd = rt.Detectoren[2].Detector;
+
+                        switch (rt.Type)
                         {
-                            string rtd1 = "NG";
-                            string rtd2 = "NG";
-                            string nlfcd = "NG";
-                            // Find buttons
-                            foreach(var dm in fc.Detectoren)
-                            {
-                                if(dm.Type == DetectorTypeEnum.KnopBuiten)
-                                {
-                                    rtd1 = dm.Naam;
-                                    break;
-                                }
-                            }
-                            foreach (var dm in fc.Detectoren)
-                            {
-                                if (dm.Type == DetectorTypeEnum.KnopBinnen)
-                                {
-                                    rtd2 = dm.Naam;
-                                    break;
-                                }
-                            }
-                            // Find possible outside button of follow-up signal group
-                            foreach (var nl in c.InterSignaalGroep.Nalopen)
-                            {
-                                if(nl.FaseNaar == fc.Naam && nl.DetectieAfhankelijk)
-                                {
-                                    FaseCyclusModel fcnl = null;
-                                    foreach(var fc2 in c.Fasen)
-                                    {
-                                        if(nl.FaseVan == fc2.Naam)
-                                        {
-                                            fcnl = fc2;
-                                            break;
-                                        }
-                                    }
-                                    if(fcnl == null)
-                                    {
-                                        break;
-                                    }
-                                    foreach(var nld in nl.Detectoren)
-                                    {
-                                        foreach(DetectorModel dm in fcnl.Detectoren)
-                                        {
-                                            if(dm.Naam == nld.Detector && dm.Type == DetectorTypeEnum.KnopBuiten)
-                                            {
-                                                nlfcd = _dpf + dm.Naam;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            switch(fc.RatelTikkerType)
-                            {
-                                case RateltikkerTypeEnum.Accross:
-                                    sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{fc.Naam}] = Rateltikkers_Accross({_fcpf}{fc.Naam}, {_hpf}{_hrt}{fc.Naam}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_dpf}{rtd1}, {_dpf}{rtd2}, {nlfcd});");
-                                    break;
-                                case RateltikkerTypeEnum.Hoeflake:
-                                    sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{fc.Naam}] = Rateltikkers({_fcpf}{fc.Naam}, {_hpf}{_hrt}{fc.Naam}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{fc.Naam}, {_dpf}{rtd1}, {_dpf}{rtd2}, {nlfcd});");
-                                    break;
-                            }
+                            case RateltikkerTypeEnum.Accross:
+                                sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_dpf}{rtd1}, {_dpf}{rtd2}, {_dpf}{nlfcd});");
+                                break;
+                            case RateltikkerTypeEnum.Hoeflake:
+                                sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, {_dpf}{rtd1}, {_dpf}{rtd2}, {_dpf}{nlfcd});");
+                                break;
                         }
                     }
                     sb.AppendLine();

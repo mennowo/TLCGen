@@ -12,6 +12,7 @@ namespace TLCGen.Models
         public string Naam { get; set; }
         public bool Lichten { get; set; }
         public bool Bellen { get; set; }
+        public string FaseCyclusVoorAansturing { get; set; }
         public BitmapCoordinatenDataModel LichtenBitmapData { get; set; }
         public BitmapCoordinatenDataModel BellenBitmapData { get; set; }
 

@@ -349,10 +349,6 @@ namespace TLCGen.ViewModels
             foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(new BitmappedItemViewModel(fcm as IOElementModel, fcm.Naam, BitmappedItemTypeEnum.Fase));
-                if(fcm.RatelTikkerType != Models.Enumerations.RateltikkerTypeEnum.Geen)
-                {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)fcm.RatelTikkerBitmapData, "rt" + fcm.Naam, BitmappedItemTypeEnum.Uitgang));
-                }
                 foreach (var dm in fcm.Detectoren)
                 {
                     Detectoren.Add(new BitmappedItemViewModel(dm as IOElementModel, dm.Naam, BitmappedItemTypeEnum.Detector));
@@ -374,16 +370,20 @@ namespace TLCGen.ViewModels
             }
 
             // Warn signals
-            foreach(var gr in _Controller.WaarschuwingsGroepen)
+            foreach(var gr in _Controller.Signalen.WaarschuwingsGroepen)
             {
                 if(gr.Bellen)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.BellenBitmapData, "wschlgr" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.BellenBitmapData, "wschl" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
                 if(gr.Lichten)
                 {
-                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.LichtenBitmapData, "belgr" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
+                    OverigeUitgangen.Add(new BitmappedItemViewModel(gr.LichtenBitmapData, "bel" + gr.Naam, BitmappedItemTypeEnum.Uitgang));
                 }
+            }
+            foreach (var rt in _Controller.Signalen.Rateltikkers)
+            {
+                OverigeUitgangen.Add(new BitmappedItemViewModel((IOElementModel)rt.BitmapData, "rt" + rt.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
             }
 
             // Klokperioden

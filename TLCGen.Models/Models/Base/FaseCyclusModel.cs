@@ -73,29 +73,6 @@ namespace TLCGen.Models
         [Description("MeeverlengenVerschil")]
         public int? MeeverlengenVerschil { get; set; }
 
-        [DisplayName("RatelTikker")]
-        [Description("RatelTikker")]
-        public RateltikkerTypeEnum RatelTikkerType { get; set; }
-        [DisplayName("RatelTikker naloop tijd")]
-        [Description("RatelTikker naloop tijd")]
-        public int RatelTikkerNaloopTijd { get; set; }
-        [Browsable(false)]
-        public BitmapCoordinatenDataModel RatelTikkerBitmapData { get; set; }
-
-
-        public bool ShouldSerializeRatelTikkerType()
-        {
-            return Type == FaseTypeEnum.Voetganger;
-        }
-        public bool ShouldSerializeRatelTikkerNaloopTijd()
-        {
-            return RatelTikkerType == RateltikkerTypeEnum.Hoeflake;
-        }
-        public bool ShouldSerializeRatelTikkerBitmapData()
-        {
-            return RatelTikkerType != RateltikkerTypeEnum.Geen;
-        }
-
         [Browsable(false)]
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
@@ -125,7 +102,6 @@ namespace TLCGen.Models
         public FaseCyclusModel() : base()
         {
             Detectoren = new List<DetectorModel>();
-            RatelTikkerBitmapData = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

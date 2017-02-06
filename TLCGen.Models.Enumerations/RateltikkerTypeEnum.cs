@@ -11,7 +11,6 @@ namespace TLCGen.Models.Enumerations
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum RateltikkerTypeEnum
     {
-        Geen,
         Hoeflake,
         Accross
     }

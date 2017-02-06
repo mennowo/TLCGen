@@ -46,7 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
-    <Compile Include="Models\Base\WaarschuwingsGroepModel.cs" />
+    <Compile Include="Models\Signalen\RatelTikkerDetectorModel.cs" />
+    <Compile Include="Models\Signalen\RatelTikkerModel.cs" />
+    <Compile Include="Models\Signalen\SignalenDataModel.cs" />
+    <Compile Include="Models\Signalen\WaarschuwingsGroepModel.cs" />
     <Compile Include="Models\Modules\FaseCyclusModuleDataModel.cs" />
     <Compile Include="Models\Perioden\PeriodenDataModel.cs" />
     <Compile Include="Models\Varia\BitmapCoordinaatModel.cs" />

@@ -45,9 +45,6 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "VAOntruimenFase")]
         public List<VAOntruimenFaseModel> VAOntruimenFasen { get; set; }
 
-        [XmlArrayItem(ElementName = "WaarschuwingsGroep")]
-        public List<WaarschuwingsGroepModel> WaarschuwingsGroepen { get; set; } 
-
         public PeriodenDataModel PeriodenData { get; set; }
 
         public PTPDataModel PTPData { get; set; }
@@ -57,6 +54,8 @@ namespace TLCGen.Models
         public ModuleMolenModel ModuleMolen { get; set; }
 
         public RoBuGroverModel RoBuGrover { get; set; }
+
+        public SignalenDataModel Signalen { get; set; } 
 
         public CustomDataModel CustomData { get; set; }
 
@@ -78,7 +77,7 @@ namespace TLCGen.Models
             RichtingGevoeligVerlengen = new List<RichtingGevoeligVerlengModel>();
             FileIngrepen = new List<FileIngreepModel>();
             VAOntruimenFasen = new List<VAOntruimenFaseModel>();
-            WaarschuwingsGroepen = new List<WaarschuwingsGroepModel>();
+            Signalen = new SignalenDataModel();
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();

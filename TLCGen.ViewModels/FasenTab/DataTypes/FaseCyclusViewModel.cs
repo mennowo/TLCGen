@@ -261,26 +261,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public RateltikkerTypeEnum RatelTikkerType
-        {
-            get { return _FaseCyclus.RatelTikkerType; }
-            set
-            {
-                _FaseCyclus.RatelTikkerType = value;
-                OnMonitoredPropertyChanged("RatelTikkerType");
-            }
-        }
-
-        public int RatelTikkerNaloopTijd
-        {
-            get { return _FaseCyclus.RatelTikkerNaloopTijd; }
-            set
-            {
-                _FaseCyclus.RatelTikkerNaloopTijd = value;
-                OnMonitoredPropertyChanged("RatelTikkerNaloopTijd");
-            }
-        }
-
         public int DetectorCount
         {
             get

@@ -119,6 +119,8 @@
     <Compile Include="SpecialsTab\DataTypes\FileIngreepTeDoserenSignaalGroepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\FileIngreepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\PTPKoppelingViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RatelTikkerDetectorViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RatelTikkerViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverConflictGroepFaseViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverConflictGroepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverFileDetectorViewModel.cs" />
