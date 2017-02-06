@@ -29,6 +29,7 @@ namespace TLCGen.Models
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
         public VLOGTypeEnum VLOGType { get; set; }
+        public bool VLOGInTestOmgeving { get; set; }
         public TLCGenVersieEnum TLCGenVersie { get; set; }
 
         public bool GarantieOntruimingsTijden { get; set; }

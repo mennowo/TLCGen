@@ -30,6 +30,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCIncludes(controller));
             sb.AppendLine();
             sb.Append(GenerateRegCTop(controller));
+            if (controller.Data.KWCType != KWCTypeEnum.Geen)
+            {
+                sb.AppendLine();
+                sb.Append(GenerateRegCKwcApplication(controller));
+            }
             sb.AppendLine();
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.AppendLine();
@@ -135,9 +140,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateRegCKwcApplication(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void KwcApplication(void)");
+            sb.AppendLine("{");
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.KwcApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.KwcApplication, ts));
+                }
+            }
+
+            sb.AppendLine($"{ts}KwcApplication_Add();");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCKlokPerioden(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void KlokPerioden(void)");
+            sb.AppendLine("{");
 
             foreach (var gen in _PieceGenerators)
             {
@@ -146,6 +175,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, ts));
                 }
             }
+
+            sb.AppendLine($"{ts}KlokPerioden_Add();");
+            sb.AppendLine("}");
 
             return sb.ToString();
         }
@@ -438,6 +470,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_application();");
+            if(controller.Data.KWCType != KWCTypeEnum.Geen)
+            {
+                sb.AppendLine($"{ts}KwcApplication();");
+            }
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -479,7 +515,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PostSystemApplication, ts));
                 }
             }
-
 
             sb.AppendLine($"{ts}post_system_application();");
             sb.AppendLine("}");

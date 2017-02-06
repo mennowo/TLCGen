@@ -130,6 +130,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool VLOGInTestOmgeving
+        {
+            get { return _ControllerData.VLOGInTestOmgeving; }
+            set
+            {
+                _ControllerData.VLOGInTestOmgeving = value;
+                OnMonitoredPropertyChanged("VLOGInTestOmgeving");
+            }
+        }
+
         public bool ExtraMeeverlengenInWG
         {
             get { return _ControllerData.ExtraMeeverlengenInWG; }

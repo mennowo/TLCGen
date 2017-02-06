@@ -310,6 +310,7 @@ namespace TLCGen.ViewModels
 
         void AddRatelTikkerDetectorCommand_Executed(object prm)
         {
+            int id = SelectedRatelTikker.Detectoren.IndexOf(SelectedRatelTikker.SelectedDetector);
             SelectedRatelTikker.Detectoren.Add(
                 new RatelTikkerDetectorViewModel(
                     new RatelTikkerDetectorModel()
@@ -317,7 +318,14 @@ namespace TLCGen.ViewModels
                         Detector = SelectedRatelTikkerDetectorToAdd
                     }));
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            SelectedRatelTikker.SelectedDetector = null;
             UpdateSelectables();
+            if (SelectedRatelTikker.Detectoren.Count > 0)
+            {
+                id = id < 0 ? 0 : id;
+                id = id >= SelectedRatelTikker.Detectoren.Count ? SelectedRatelTikker.Detectoren.Count - 1 : id;
+                SelectedRatelTikker.SelectedDetector = SelectedRatelTikker.Detectoren[id];
+            }
         }
 
         bool AddRatelTikkerDetectorCommand_CanExecute(object prm)
@@ -330,6 +338,7 @@ namespace TLCGen.ViewModels
             int id = SelectedRatelTikker.Detectoren.IndexOf(SelectedRatelTikker.SelectedDetector);
             SelectedRatelTikker.Detectoren.Remove(SelectedRatelTikker.SelectedDetector);
             SelectedRatelTikker.SelectedDetector = null;
+            UpdateSelectables();
             if (SelectedRatelTikker.Detectoren.Count > 0)
             {
                 id = id < 0 ? 0 : id;
@@ -337,7 +346,6 @@ namespace TLCGen.ViewModels
                 SelectedRatelTikker.SelectedDetector = SelectedRatelTikker.Detectoren[id];
             }
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
-            UpdateSelectables();
         }
 
         bool RemoveRatelTikkerDetectorCommand_CanExecute(object prm)

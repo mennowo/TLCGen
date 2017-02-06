@@ -13,6 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         TS_type,
         TE_type,
         TI_type,
-        SCH_type
+        SCH_type,
+        CT_type
     }
 }

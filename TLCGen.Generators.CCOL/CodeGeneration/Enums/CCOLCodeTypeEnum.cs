@@ -10,6 +10,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         Includes,
         Top,
+        KwcApplication,
         KlokPerioden,
         Aanvragen,
         Verlenggroen,

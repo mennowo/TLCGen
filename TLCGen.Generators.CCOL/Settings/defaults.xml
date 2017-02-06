@@ -615,6 +615,26 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLVLOGCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLVLOGCodeGenerator</ClassName>
+        <Description>VLOG</Description>
+        <Settings>
+          <Setting>
+            <Default>maxtvg</Default>
+            <Setting>maxtvg</Setting>
+            <Type>Parameter</Type>
+            <Description>Paramter VLOG max. aantal volledige verlenggroen</Description>
+          </Setting>
+          <Setting>
+            <Default>maxtfb</Default>
+            <Setting>maxtfb</Setting>
+            <Type>Uitgang</Type>
+            <Description>Paramter VLOG max. wachttijd na aanvraag</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

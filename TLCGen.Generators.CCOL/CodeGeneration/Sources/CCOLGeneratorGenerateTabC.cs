@@ -36,35 +36,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
-            sb.AppendLine($"    #include \"{controller.Data.Naam}sys.h\"");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
 #warning TODO - make includes dependent on the kind of controller and its settings
-            sb.AppendLine("/* include files */");
-            sb.AppendLine("/* ------------- */");
-            sb.AppendLine("    #include \"fcvar.h\"    /* fasecycli                         */");
-            sb.AppendLine("    #include \"kfvar.h\"    /* conflicten                        */");
-            sb.AppendLine("    #include \"usvar.h\"    /* uitgangs elementen                */");
-            sb.AppendLine("    #include \"dpvar.h\"    /* detectie elementen                */");
-            sb.AppendLine("    #include \"to_min.h\"   /* garantie-ontruimingstijden        */");
-            sb.AppendLine("    #include \"trg_min.h\"  /* garantie-roodtijden               */");
-            sb.AppendLine("    #include \"tgg_min.h\"  /* garantie-groentijden              */");
-            sb.AppendLine("    #include \"tgl_min.h\"  /* garantie-geeltijden               */");
-            sb.AppendLine("    #include \"isvar.h\"    /* ingangs elementen                 */");
-            sb.AppendLine("    #include \"dsivar.h\"   /* selectieve detectie               */");
-            sb.AppendLine("    #include \"hevar.h\"    /* hulp elementen                    */");
-            sb.AppendLine("    #include \"mevar.h\"    /* geheugen elementen                */");
-            sb.AppendLine("    #include \"tmvar.h\"    /* tijd elementen                    */");
-            sb.AppendLine("    #include \"ctvar.h\"    /* teller elementen                  */");
-            sb.AppendLine("    #include \"schvar.h\"   /* software schakelaars              */");
-            sb.AppendLine("    #include \"prmvar.h\"   /* parameters                        */");
-            sb.AppendLine("    #include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
-            sb.AppendLine("    #include \"control.h\"  /* controller interface              */");
-            //sb.AppendLine("#ifndef NO_VLOG");
-            //sb.AppendLine("    #include \"vlogvar.h\"  /* variabelen t.b.v. vlogfuncties                */");
-            //sb.AppendLine("    #include \"logvar.h\"   /* variabelen t.b.v. logging                     */");
-            //sb.AppendLine("    #include \"monvar.h\"   /* variabelen t.b.v. realtime monitoring         */");
-            //sb.AppendLine("#endif");
+            sb.AppendLine($"{ts}/* include files */");
+            sb.AppendLine($"{ts}/* ------------- */");
+            sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
+            sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
+            sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
+            sb.AppendLine($"{ts}#include \"dpvar.h\"    /* detectie elementen                */");
+            sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+            sb.AppendLine($"{ts}#include \"trg_min.h\"  /* garantie-roodtijden               */");
+            sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
+            sb.AppendLine($"{ts}#include \"tgl_min.h\"  /* garantie-geeltijden               */");
+            sb.AppendLine($"{ts}#include \"isvar.h\"    /* ingangs elementen                 */");
+            sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
+            sb.AppendLine($"{ts}#include \"hevar.h\"    /* hulp elementen                    */");
+            sb.AppendLine($"{ts}#include \"mevar.h\"    /* geheugen elementen                */");
+            sb.AppendLine($"{ts}#include \"tmvar.h\"    /* tijd elementen                    */");
+            sb.AppendLine($"{ts}#include \"ctvar.h\"    /* teller elementen                  */");
+            sb.AppendLine($"{ts}#include \"schvar.h\"   /* software schakelaars              */");
+            sb.AppendLine($"{ts}#include \"prmvar.h\"   /* parameters                        */");
+            sb.AppendLine($"{ts}#include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
+            sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
+            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            {
+                sb.AppendLine($"{ts}#ifndef NO_VLOG");
+                sb.AppendLine($"{ts}{ts}#include \"vlogvar.h\"  /* variabelen t.b.v. vlogfuncties                */");
+                sb.AppendLine($"{ts}{ts}#include \"logvar.h\"   /* variabelen t.b.v. logging                     */");
+                sb.AppendLine($"{ts}{ts}#include \"monvar.h\"   /* variabelen t.b.v. realtime monitoring         */");
+                sb.AppendLine($"{ts}#endif");
+            }
 
-            sb.AppendLine($"    #include \"{controller.Data.Naam}tab.add\"");
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
 
             return sb.ToString();
         }
@@ -75,22 +78,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void control_defaults(void)");
             sb.AppendLine("{");
-            sb.AppendLine("    TDB_defmax = NG;");
-            sb.AppendLine("    TDH_defmax = NG;");
-            sb.AppendLine("    TBG_defmax = NG;");
-            sb.AppendLine("    TOG_defmax = NG;");
+            sb.AppendLine($"{ts}TDB_defmax = NG;");
+            sb.AppendLine($"{ts}TDH_defmax = NG;");
+            sb.AppendLine($"{ts}TBG_defmax = NG;");
+            sb.AppendLine($"{ts}TOG_defmax = NG;");
             sb.AppendLine();
-            sb.AppendLine("    TRG_defmax = NG;");
-            sb.AppendLine("    TGG_defmax = NG;");
-            sb.AppendLine("    TGL_defmax = NG;");
-            sb.AppendLine("    TFG_defmax = NG;");
-            sb.AppendLine("    TVG_defmax = NG;");
+            sb.AppendLine($"{ts}TRG_defmax = NG;");
+            sb.AppendLine($"{ts}TGG_defmax = NG;");
+            sb.AppendLine($"{ts}TGL_defmax = NG;");
+            sb.AppendLine($"{ts}TFG_defmax = NG;");
+            sb.AppendLine($"{ts}TVG_defmax = NG;");
             sb.AppendLine();
-            sb.AppendLine("    TVG_deftype |= RO_type; /* Verlenggroentijden  read-only */");
+            sb.AppendLine($"{ts}TVG_deftype |= RO_type; /* Verlenggroentijden  read-only */");
+            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}MON_def = 1;");
+                sb.AppendLine($"{ts}LOG_def = 1;");
+            }
             sb.AppendLine();
-            //sb.AppendLine("    MON_def=1;");
-            //sb.AppendLine("    LOG_def=1;");
-            //sb.AppendLine();
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -130,6 +136,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersModulen(controller));
             sb.AppendLine();
+            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            {
+                sb.Append(GenerateTabCControlParametersVLOG(controller));
+                sb.AppendLine();
+            }
 
             sb.AppendLine("}");
 
@@ -492,6 +503,126 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
 
+            return sb.ToString();
+        }
+
+        private string GenerateTabCControlParametersVLOG(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            string _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
+            string _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
+
+            sb.AppendLine("/* Typen ingangen */");
+            sb.AppendLine("/* -------------- */");
+
+            foreach(FaseCyclusModel fc in controller.Fasen)
+            {
+                foreach (DetectorModel dm in fc.Detectoren)
+                {
+                    sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                    switch(dm.Type)
+                    {
+                        case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
+                        case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
+                            sb.AppendLine("DK_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.File:
+                        case Models.Enumerations.DetectorTypeEnum.Verweg:
+                            sb.AppendLine("DVER_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.Kop:
+                            sb.AppendLine("DKOP_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.Lang:
+                            sb.AppendLine("DLNG_type;");
+                            break;
+                    }
+                }
+            }
+            foreach (DetectorModel dm in controller.Detectoren)
+            {
+                sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                switch (dm.Type)
+                {
+                    case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
+                    case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
+                        sb.AppendLine("DK_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.File:
+                    case Models.Enumerations.DetectorTypeEnum.Verweg:
+                        sb.AppendLine("DVER_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.Kop:
+                        sb.AppendLine("DKOP_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.Lang:
+                        sb.AppendLine("DLNG_type;");
+                        break;
+                }
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("/* Typen uitgangen */");
+            sb.AppendLine("/* --------------- */");
+
+            foreach(FaseCyclusModel fc in controller.Fasen)
+            {
+                sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
+                switch (fc.Type)
+                {
+                    case Models.Enumerations.FaseTypeEnum.Auto:
+                        sb.AppendLine("MVT_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.OV:
+                        sb.AppendLine("OV_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                        sb.AppendLine("FTS_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                        sb.AppendLine("VTG_type;");
+                        break;
+                }
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"{ts}/*VLOG - logging */");
+            sb.AppendLine($"{ts}/*-------------- */");
+            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
+            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
+            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
+            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
+            if(controller.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
+            {
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"{ts}/* VLOG - monitoring */");
+            sb.AppendLine($"{ts}/* ----------------- */");
+            sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
+            sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = BIT0+BIT1;");
+            sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = BIT0+BIT1;");
+            sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = BIT0+BIT1;");
+
+            sb.AppendLine();
+            foreach (FaseCyclusModel fc in controller.Fasen)
+            {
+                sb.AppendLine($"{ts}MONFC[{_fcpf}{fc.Naam}] = BIT0+BIT1+BIT2+BIT3;");
+            }
+
+            sb.AppendLine();
+            foreach (var u in Uitgangen.Elements)
+            {
+                sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = VLOGMODE_MON_ASCII;");
+
+            sb.AppendLine();
             return sb.ToString();
         }
     }

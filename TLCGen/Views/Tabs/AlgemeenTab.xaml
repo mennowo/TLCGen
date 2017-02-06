@@ -49,6 +49,8 @@
                                 <ComboBox 
                                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:VLOGTypeEnum}}}"
                                     SelectedItem="{Binding Path=VLOGType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <Label Content="VLOG in testomgeving" />
+                                <CheckBox IsChecked="{Binding Path=VLOGInTestOmgeving,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
                                 <Label Content="KWC" />
                                 <ComboBox 
                                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:KWCTypeEnum}}}"

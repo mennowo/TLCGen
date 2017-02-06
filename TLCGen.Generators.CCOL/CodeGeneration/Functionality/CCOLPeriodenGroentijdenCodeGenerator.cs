@@ -205,8 +205,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
-                    sb.AppendLine("void KlokPerioden(void)");
-                    sb.AppendLine("{");
                     sb.AppendLine($"{ts}/* default klokperiode voor max.groen */");
                     sb.AppendLine($"{ts}/* ---------------------------------- */");
                     sb.AppendLine($"{ts}MM[{_mpf}{_mperiod}] = 0;");
@@ -384,8 +382,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine();
                         }
                     }
-                    sb.AppendLine($"{ts}KlokPerioden_Add();");
-                    sb.AppendLine("}");
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
