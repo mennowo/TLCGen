@@ -180,6 +180,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
             }
 
+            sb.AppendLine();
+
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
@@ -200,6 +202,45 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
+            sb.AppendLine();
+
+            sb.AppendLine($"{ts}/* overige ingangen */");
+            sb.AppendLine($"{ts}/* ---------------- */");
+
+            foreach (var pgen in _PieceGenerators)
+            {
+                if (pgen.HasCCOLBitmapInputs())
+                {
+                    foreach (var item in pgen.GetCCOLBitmapInputs())
+                    {
+                        if(!item.Dummy)
+                            sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                    }
+                }
+            }
+            bool isdummy = false;
+            foreach (var pgen in _PieceGenerators)
+            {
+                if (pgen.HasCCOLBitmapInputs())
+                {
+                    foreach (var item in pgen.GetCCOLBitmapInputs())
+                    {
+                        if (item.Dummy)
+                        {
+                            if(!isdummy)
+                            {
+                                sb.AppendLine("#ifndef AUTOMAAT");
+                            }
+                            isdummy = true;
+                            sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                        }
+                    }
+                }
+            }
+            if (isdummy)
+            {
+                sb.AppendLine("#endif AUTOMAAT");
+            }
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Gebruikers toevoegingen file includen */");

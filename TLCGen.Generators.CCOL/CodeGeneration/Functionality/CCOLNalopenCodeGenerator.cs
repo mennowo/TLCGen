@@ -240,37 +240,5 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return null;
             }
         }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "nlsg") _tnlsg = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlsgd") _tnlsgd = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlfg") _tnlfg = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlfgd") _tnlfgd = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlcv") _tnlcv = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlcvd") _tnlcvd = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nleg") _tnleg = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nlegd") _tnlegd = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "nla") _hnla = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "xnl") _prmxnl = s.Setting == null ? s.Default : s.Setting;
-            }
-            
-            return base.SetSettings(settings);
-        }
-
-        #region Constructor
-        #endregion // Constructor
     }
 }

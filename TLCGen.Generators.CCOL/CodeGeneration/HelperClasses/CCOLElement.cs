@@ -16,14 +16,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public int? Instelling { get; set; }
         public string Commentaar { get; set; }
         public CCOLElementTypeEnum Type { get; set; }
+        public bool Dummy { get; set; }
 
         public CCOLElement()
         {
-
+            Dummy = false;
         }
 
         public CCOLElement(string naam, CCOLElementTypeEnum type)
         {
+            Dummy = false;
             Naam = naam;
             Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Type = type;
@@ -40,6 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type)
         {
+            Dummy = false;
             Naam = naam;
             Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Instelling = instelling;

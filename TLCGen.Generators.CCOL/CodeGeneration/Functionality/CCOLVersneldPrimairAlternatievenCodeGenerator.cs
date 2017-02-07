@@ -14,11 +14,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLVersneldPrimairAlternatievenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
-
+        
         private string _prmmlfpr; // parameter modules ahead
         private string _prmaltg; // parameter alternative real green time
         private string _prmaltp; // parameter alternative real space
-        private string _schalt; // switch alternative real
+        private string _schaltg; // switch alternative real
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -29,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // Vooruit realisaties
                 _MyElements.Add(
                     new CCOLElement(
-                        $"mlfpr{fc.FaseCyclus}",
+                        $"{_prmmlfpr}{fc.FaseCyclus}",
                         fc.ModulenVooruit,
                         CCOLElementTimeTypeEnum.None,
                         CCOLElementTypeEnum.Parameter));
@@ -39,21 +39,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"altg{fc.FaseCyclus}",
+                            $"{_prmaltg}{fc.FaseCyclus}",
                             fc.AlternatieveGroenTijd,
                             CCOLElementTimeTypeEnum.TE_type,
                             CCOLElementTypeEnum.Parameter));
 
                     _MyElements.Add(
                         new CCOLElement(
-                            $"altp{fc.FaseCyclus}",
+                            $"{_prmaltp}{fc.FaseCyclus}",
                             fc.AlternatieveRuimte,
                             CCOLElementTimeTypeEnum.TE_type,
                             CCOLElementTypeEnum.Parameter));
 
                     _MyElements.Add(
                         new CCOLElement(
-                            $"altg{fc.FaseCyclus}",
+                            $"{_schaltg}{fc.FaseCyclus}",
                             fc.AlternatiefToestaan == true ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             CCOLElementTypeEnum.Schakelaar));
@@ -124,7 +124,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
                         sb.AppendLine();
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
-                            sb.AppendLine($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schalt}{fc.FaseCyclus}];");
+                            sb.AppendLine($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         sb.AppendLine();
@@ -136,32 +136,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
-        }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                switch (s.Default)
-                {
-                    case "mlfpr": _prmmlfpr = s.Setting == null ? s.Default : s.Setting; break;
-                    case "altg": _prmaltg = s.Setting == null ? s.Default : s.Setting; break;
-                    case "altp": _prmaltp = s.Setting == null ? s.Default : s.Setting; break;
-                    case "alt": _schalt = s.Setting == null ? s.Default : s.Setting; break;
-                }
-            }
-
-            return base.SetSettings(settings);
         }
     }
 }

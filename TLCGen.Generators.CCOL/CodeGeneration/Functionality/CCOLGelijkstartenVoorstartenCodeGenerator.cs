@@ -219,23 +219,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "gsot") _tgsot = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "vs") _tvs = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "vsot") _tvsot = s.Setting == null ? s.Default : s.Setting;
-            }
-            
-            return base.SetSettings(settings);
-        }
-
         #region Constructor
         #endregion // Constructor
     }

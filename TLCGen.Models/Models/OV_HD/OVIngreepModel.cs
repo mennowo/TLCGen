@@ -23,8 +23,11 @@ namespace TLCGen.Models
         public int RijTijdGehinderd { get; set; }
         public int OnderMaximum { get; set; }
         public int GroenBewaking { get; set; }
+        public int PrioriteitsOpties { get; set; }
 
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
+        public BitmapCoordinatenDataModel OVKARDummyInmeldingBitmapData { get; set; }
+        public BitmapCoordinatenDataModel OVKARDummyUitmeldingBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
@@ -36,6 +39,8 @@ namespace TLCGen.Models
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
+            OVKARDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
+            OVKARDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
             //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
         }
     }

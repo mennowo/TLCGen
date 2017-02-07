@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -22,6 +24,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         protected string _prmpf;
 
         protected string _BITxnl = "BIT8";
+
+        private Regex __fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
         public virtual void CollectCCOLElements(ControllerModel c)
         {
@@ -82,9 +86,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
             _mpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("m");
             _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
-            _ctpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("ct");
+            _ctpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
             _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
             _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
+            if (settings != null)
+            {
+                FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (var s in settings.Settings)
+                {
+                    string type = CCOLGeneratorSettingsProvider.Default.GetPrefix(s.Type);
+
+                    foreach (var field in fields)
+                    {
+                        if (field.Name == "_" + type + s.Default)
+                        {
+                            field.SetValue(this, s.Setting == null ? s.Default : s.Setting);
+                        }
+                    }
+                }
+                foreach (var field in fields)
+                {
+                    if(__fieldregex.IsMatch(field.Name) && string.IsNullOrEmpty((string)field.GetValue(this)))
+                    {
+#if DEBUG
+                        System.Windows.MessageBox.Show("Setting not found: [" + this.GetType().Name + "] " + field.Name);
+#endif
+                        return false;
+                    }
+                }
+            }
 
             return true;
         }

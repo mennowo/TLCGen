@@ -172,6 +172,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool DSI
+        {
+            get { return _ControllerData.DSI; }
+            set
+            {
+                _ControllerData.DSI = value;
+                OnMonitoredPropertyChanged("DSI");
+            }
+        }
+
         public VersieViewModel SelectedVersie
         {
             get { return _SelectedVersie; }

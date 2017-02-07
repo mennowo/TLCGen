@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -25,7 +26,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLElemListData Parameters;
 
         private List<DetectorModel> AlleDetectoren;
-        
+
+        string _uspf;
+        string _ispf;
+        string _fcpf;
+        string _dpf;
+        string _tpf;
+        string _cpf;
+        string _schpf;
+        string _prmpf;
+        string _hpf;
+
         private List<ICCOLCodePieceGenerator> _PieceGenerators;
 
         public string ts
@@ -58,6 +69,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             if (Directory.Exists(sourcefilepath))
             {
+                _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
+                _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
+                _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
+                _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
+                _tpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("t");
+                _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
+                _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
+                _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
+                _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
+
                 foreach (var pgen in _PieceGenerators)
                 {
                     pgen.CollectCCOLElements(controller);
@@ -136,6 +157,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ptp.c"), GeneratePtpC(controller));
                 }
+                if (controller.OVData.OVIngrepen.Count > 0 ||
+                    controller.OVData.HDIngrepen.Count > 0)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.c"), GenerateOvC(controller));
+                }
 
                 if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add")))
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add"), GenerateRegAdd(controller));
@@ -201,8 +227,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad2 = data.Elements.Count.ToString().Length;
 
             int index = 0;
+            int indexautom = 0;
             foreach (CCOLElement elem in data.Elements)
             {
+                if (elem.Dummy || (Regex.IsMatch(elem.Define, @"[A-Z]+MAX")))
+                    continue;
+                
                 sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
@@ -212,9 +242,71 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     sb.Append($"({numberdefine} + ");
                     sb.Append($"{index.ToString()}".PadLeft(pad2));
-                    sb.AppendLine($")");
+                    sb.AppendLine(")");
                 }
                 ++index;
+            }
+            indexautom = index;
+
+            if (data.Elements.Count > 0 && data.Elements.Where(x => x.Dummy).Any())
+            {
+                sb.AppendLine("#ifndef AUTOMAAT");
+                foreach (CCOLElement elem in data.Elements)
+                {
+                    if (!elem.Dummy || (Regex.IsMatch(elem.Define, @"[A-Z]+MAX")))
+                        continue;
+
+                    sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
+                    if (string.IsNullOrWhiteSpace(numberdefine))
+                    {
+                        sb.AppendLine($"{indexautom.ToString()}".PadLeft(pad2));
+                    }
+                    else
+                    {
+                        sb.Append($"({numberdefine} + ");
+                        sb.Append($"{indexautom.ToString()}".PadLeft(pad2));
+                        sb.AppendLine($")");
+                    }
+                    ++indexautom;
+                }
+                sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
+                if (string.IsNullOrWhiteSpace(numberdefine))
+                {
+                    sb.AppendLine($"{indexautom.ToString()}".PadLeft(pad2));
+                }
+                else
+                {
+                    sb.Append($"({numberdefine} + ");
+                    sb.Append($"{indexautom.ToString()}".PadLeft(pad2));
+                    sb.AppendLine(")");
+                }
+                sb.AppendLine("#else");
+                sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
+                if (string.IsNullOrWhiteSpace(numberdefine))
+                {
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                }
+                else
+                {
+                    sb.Append($"({numberdefine} + ");
+                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine(")");
+                }
+                sb.AppendLine("#endif");
+            }
+            else if(data.Elements.Count > 0)
+            {
+                sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
+                if (string.IsNullOrWhiteSpace(numberdefine))
+                {
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                }
+                else
+                {
+                    sb.Append($"({numberdefine} + ");
+                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine(")");
+                }
             }
 
             return sb.ToString();

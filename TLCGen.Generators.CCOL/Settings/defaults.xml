@@ -221,8 +221,8 @@
             <Description>Parameter aantal modules vooruit</Description>
           </Setting>
           <Setting>
-            <Default>alt</Default>
-            <Setting>alt</Setting>
+            <Default>altg</Default>
+            <Setting>altg</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar alternatieve realisatie toestaan</Description>
           </Setting>
@@ -631,6 +631,290 @@
             <Setting>maxtfb</Setting>
             <Type>Uitgang</Type>
             <Description>Paramter VLOG max. wachttijd na aanvraag</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLOVHDCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLOVHDCodeGenerator</ClassName>
+        <Description>VLOG</Description>
+        <Settings>
+          <Setting>
+            <Default>vc</Default>
+            <Setting>vc</Setting>
+            <Type>Counter</Type>
+            <Description>Counter inmeldingen OV</Description>
+          </Setting>
+          <Setting>
+            <Default>vchd</Default>
+            <Setting>vchd</Setting>
+            <Type>Counter</Type>
+            <Description>Counter inmeldingen HD</Description>
+          </Setting>
+          <Setting>
+            <Default>rt</Default>
+            <Setting>rt</Setting>
+            <Type>Timer</Type>
+            <Description>Timer rijtijd OV</Description>
+          </Setting>
+          <Setting>
+            <Default>rthd</Default>
+            <Setting>rthd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer rijtijd HD</Description>
+          </Setting>
+          <Setting>
+            <Default>gb</Default>
+            <Setting>gb</Setting>
+            <Type>Timer</Type>
+            <Description>Timer groenbewaking OV</Description>
+          </Setting>
+          <Setting>
+            <Default>gbhd</Default>
+            <Setting>gbhd</Setting>
+            <Type>Timer</Type>
+            <Description>Timer groenbewaking HD</Description>
+          </Setting>
+          <Setting>
+            <Default>rto</Default>
+            <Setting>rto</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter ongehinderde rijtijd OV</Description>
+          </Setting>
+          <Setting>
+            <Default>rtbg</Default>
+            <Setting>rtbg</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter beperkt gehinderde rijtijd OV</Description>
+          </Setting>
+          <Setting>
+            <Default>rtg</Default>
+            <Setting>rtg</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter gehinderde rijtijd OV</Description>
+          </Setting>
+          <Setting>
+            <Default>rtohd</Default>
+            <Setting>rtohd</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter ongehinderde rijtijd HD</Description>
+          </Setting>
+          <Setting>
+            <Default>rtbghd</Default>
+            <Setting>rtbghd</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter beperkt gehinderde rijtijd HD</Description>
+          </Setting>
+          <Setting>
+            <Default>rtghd</Default>
+            <Setting>rtghd</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter gehinderde rijtijd HD</Description>
+          </Setting>
+          <Setting>
+            <Default>blk</Default>
+            <Setting>blk</Setting>
+            <Type>Timer</Type>
+            <Description>Timer belokkertijd na ingreep OV</Description>
+          </Setting>
+          <Setting>
+            <Default>btovg</Default>
+            <Setting>btovg</Setting>
+            <Type>Timer</Type>
+            <Description>Timer bezettijd OV gehinderde rijtijd</Description>
+          </Setting>
+          <Setting>
+            <Default>dhkarin</Default>
+            <Setting>dhkarin</Setting>
+            <Type>Timer</Type>
+            <Description>Timer hiaattijd inmelding KAR</Description>
+          </Setting>
+          <Setting>
+            <Default>dhkaruit</Default>
+            <Setting>dhkaruit</Setting>
+            <Type>Timer</Type>
+            <Description>Timer hiaattijd uitmelding KAR</Description>
+          </Setting>
+          <Setting>
+            <Default>ov</Default>
+            <Setting>ov</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement OV</Description>
+          </Setting>
+          <Setting>
+            <Default>hd</Default>
+            <Setting>hd</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement HD</Description>
+          </Setting>
+          <Setting>
+            <Default>ovin</Default>
+            <Setting>ovin</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement OV inmelding</Description>
+          </Setting>
+          <Setting>
+            <Default>ovuit</Default>
+            <Setting>ovuit</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement OV uitmelding</Description>
+          </Setting>
+          <Setting>
+            <Default>hdin</Default>
+            <Setting>hdin</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement HD inmelding</Description>
+          </Setting>
+          <Setting>
+            <Default>hduit</Default>
+            <Setting>hduit</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement HD uitmelding</Description>
+          </Setting>
+          <Setting>
+            <Default>laatcrit</Default>
+            <Setting>laatcrit</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter criterium OV aanmerking als te laat</Description>
+          </Setting>
+          <Setting>
+            <Default>allelijnen</Default>
+            <Setting>allelijnen</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter prioriteit geven aan alle lijnen</Description>
+          </Setting>
+          <Setting>
+            <Default>lijn</Default>
+            <Setting>lijn</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter lijnnummer prioriteit OV</Description>
+          </Setting>
+          <Setting>
+            <Default>cprio</Default>
+            <Setting>cprio</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar toepassen geconditioneerde priorieit</Description>
+          </Setting>
+          <Setting>
+            <Default>upinagb</Default>
+            <Setting>upinagb</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking OV</Description>
+          </Setting>
+          <Setting>
+            <Default>upinagbhd</Default>
+            <Setting>upinagbhd</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking HD</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstp</Default>
+            <Setting>ovstp</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimale stiptheid voor inmelding OV</Description>
+          </Setting>
+          <Setting>
+            <Default>testkarvert</Default>
+            <Setting>testkarvert</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter testen vertraging in KAR bericht in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>testkarlyn</Default>
+            <Setting>testkarlyn</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter testen lijnnummer KAR bericht in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>prio</Default>
+            <Setting>prio</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter prioriteitsinstelling OV</Description>
+          </Setting>
+          <Setting>
+            <Default>priohd</Default>
+            <Setting>priohd</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter prioriteitsinstelling HD</Description>
+          </Setting>
+          <Setting>
+            <Default>omx</Default>
+            <Setting>omx</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter ondermaximum OV</Description>
+          </Setting>
+          <Setting>
+            <Default>mwta</Default>
+            <Setting>mwta</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter maximale wachttijd autoverkeer</Description>
+          </Setting>
+          <Setting>
+            <Default>mwtfts</Default>
+            <Setting>mwtfts</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter maximale wachttijd fiets</Description>
+          </Setting>
+          <Setting>
+            <Default>mwtvtg</Default>
+            <Setting>mwtvtg</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter maximale wachttijd voetgangers</Description>
+          </Setting>
+          <Setting>
+            <Default>pmgt</Default>
+            <Setting>pmgt</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimale groentijd primair terugkomen</Description>
+          </Setting>
+          <Setting>
+            <Default>ognt</Default>
+            <Setting>ognt</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimale groentijd bij terugkomen</Description>
+          </Setting>
+          <Setting>
+            <Default>ohpmg</Default>
+            <Setting>ohpmg</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter percentage ophogen groentijd na afkappen</Description>
+          </Setting>
+          <Setting>
+            <Default>nofm</Default>
+            <Setting>nofm</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter aantal malen niet afkappen na OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>mgcov</Default>
+            <Setting>mgcov</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimum groentijd voor fase afgkapt mag worden door OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>pmgcov</Default>
+            <Setting>pmgcov</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimum percentage groentijd voor fase afgkapt mag worden door OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>dummykarin</Default>
+            <Setting>dummykarin</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv KAR inmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummykaruit</Default>
+            <Setting>dummykaruit</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv KAR uitmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>ovinm</Default>
+            <Setting>ovinm</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang verklikken inmelding OV</Description>
           </Setting>
         </Settings>
       </CodePieceData>

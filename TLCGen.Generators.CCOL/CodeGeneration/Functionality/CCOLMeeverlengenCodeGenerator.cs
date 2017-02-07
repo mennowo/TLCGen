@@ -102,25 +102,5 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return null;
             }
         }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "mv") _schmv = s.Setting == null ? s.Default : s.Setting;
-            }
-
-            return base.SetSettings(settings);
-        }
     }
 }

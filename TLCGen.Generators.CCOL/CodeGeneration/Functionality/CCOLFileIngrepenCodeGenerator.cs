@@ -250,43 +250,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "file")
-                {
-                    switch (s.Type)
-                    {
-                        case CCOLGeneratorSettingTypeEnum.Uitgang: _usfile = s.Setting == null ? s.Default : s.Setting; break;
-                        case CCOLGeneratorSettingTypeEnum.HulpElement: _hfile = s.Setting == null ? s.Default : s.Setting; break;
-                    }
-                }
-                if (s.Default == "bz") _tbz = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "rij") _trij = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "fperc") _prmfperc = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "fmeldmin") _prmfmeldmin = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "afv")
-                {
-                    switch (s.Type)
-                    {
-                        case CCOLGeneratorSettingTypeEnum.Timer: _tafv = s.Setting == null ? s.Default : s.Setting; break;
-                        case CCOLGeneratorSettingTypeEnum.HulpElement: _hafv = s.Setting == null ? s.Default : s.Setting; break;
-                        case CCOLGeneratorSettingTypeEnum.Schakelaar: _schafv = s.Setting == null ? s.Default : s.Setting; break;
-                    }
-                }
-            }
-
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
 
             return base.SetSettings(settings);

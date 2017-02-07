@@ -125,35 +125,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "rga") _trga = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "rgad") _schrgad = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "rgr") _trgr = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "rgv")
-                {
-                    switch(s.Type)
-                    {
-                        case CCOLGeneratorSettingTypeEnum.Timer: _trgv = s.Setting == null ? s.Default : s.Setting; break;
-                        case CCOLGeneratorSettingTypeEnum.HulpElement: _hrgv = s.Setting == null ? s.Default : s.Setting; break;
-                    }
-                }
-                if (s.Default == "mkrg") _prmmkrg = s.Setting == null ? s.Default : s.Setting;
-                
-            }
-
             _tkm = CCOLGeneratorSettingsProvider.Default.GetElementName("tkm");
 
             return base.SetSettings(settings);

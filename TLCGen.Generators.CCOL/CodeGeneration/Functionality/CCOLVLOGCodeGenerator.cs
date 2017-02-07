@@ -41,7 +41,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
                 case CCOLRegCCodeTypeEnum.Top:
                 case CCOLRegCCodeTypeEnum.SystemApplication:
                     return true;
@@ -56,15 +55,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
-                    sb.AppendLine($"{ts}#ifndef NO_VLOG");
-                    sb.AppendLine($"{ts}{ts}#include \"vlogvar.c\"  /* variabelen t.b.v. vlogfuncties                */");
-                    sb.AppendLine($"{ts}{ts}#include \"logvar.c\"   /* variabelen t.b.v. logging                     */");
-                    sb.AppendLine($"{ts}{ts}#include \"monvar.c\"   /* variabelen t.b.v. realtime monitoring         */");
-                    sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
-                    sb.AppendLine($"{ts}#endif");
-                    return sb.ToString();
-
                 case CCOLRegCCodeTypeEnum.Top:
                     if (!c.Data.VLOGInTestOmgeving)
                     {

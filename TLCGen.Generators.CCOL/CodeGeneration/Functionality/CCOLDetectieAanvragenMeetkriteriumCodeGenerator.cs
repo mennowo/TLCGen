@@ -15,9 +15,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
-        private string _prmd;  // parameter request type name
-        private string _prmmk; // parameter measurement type name
-        private string _tkm;   // kopmax timer type name
+#pragma warning disable 0649
+#pragma warning disable 0169
+        private string _prmda;
+        private string _prmmk;
+        private string _tkm;
+#pragma warning restore 0169
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -49,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         set = 3;
                         break;
                 }
-                _MyElements.Add(new CCOLElement($"{_prmd}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
             }
         }
 
@@ -104,7 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
-                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmd}{dm.Naam}], ");
+                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
                             }
                             sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
@@ -145,28 +149,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
-        }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "da") _prmd = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "mk") _prmmk = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "km") _tkm = s.Setting == null ? s.Default : s.Setting;
-            }
-
-            return base.SetSettings(settings);
         }
     }
 }

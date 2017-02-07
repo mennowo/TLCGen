@@ -12,11 +12,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GeneratePtpC(ControllerModel controller)
         {
-            string _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
             string _hptp = CCOLGeneratorSettingsProvider.Default.GetElementName("hptp");
-            string _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
             string _prmptp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmptp");
-            string _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
             string _usptp = CCOLGeneratorSettingsProvider.Default.GetElementName("usptp");
             string _usptperr = CCOLGeneratorSettingsProvider.Default.GetElementName("userr");
             string _usptpoke = CCOLGeneratorSettingsProvider.Default.GetElementName("usoke");

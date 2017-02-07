@@ -174,7 +174,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateTabCControlParametersConflicten(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
-            string _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
 
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
@@ -509,9 +508,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateTabCControlParametersVLOG(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
-
-            string _dpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("d");
-            string _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");
 
             sb.AppendLine("/* Typen ingangen */");
             sb.AppendLine("/* -------------- */");

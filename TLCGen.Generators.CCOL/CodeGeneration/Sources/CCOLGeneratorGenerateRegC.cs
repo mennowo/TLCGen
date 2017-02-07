@@ -28,40 +28,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
             sb.Append(GenerateRegCIncludes(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCTop(controller));
             if (controller.Data.KWCType != KWCTypeEnum.Geen)
             {
                 sb.AppendLine();
                 sb.Append(GenerateRegCKwcApplication(controller));
             }
-            sb.AppendLine();
             sb.Append(GenerateRegCKlokPerioden(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCAanvragen(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCWachtgroen(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCMeetkriterium(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCMeeverlengen(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCSynchronisaties(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCFileVerwerking(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCInitApplication(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCApplication(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCSystemApplication(controller));
-            sb.AppendLine();
             sb.Append(GenerateRegCDumpApplication(controller));
-            sb.AppendLine();
+            sb.Append(GenerateRegCSpecialSignals(controller));
 
             return sb.ToString();
         }
@@ -121,6 +107,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}reg.add\"");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -136,6 +123,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Top, ts));
                 }
             }
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -157,6 +145,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}KwcApplication_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -202,6 +191,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Add file
             sb.AppendLine($"{ts}Aanvragen_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -256,6 +246,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     break;
             }
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -297,6 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine($"{ts}Meetkriterium_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -343,6 +335,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}Synchronisaties_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -395,6 +388,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -415,6 +409,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine($"{ts}FileVerwerking_Add();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -437,6 +432,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine($"{ts}post_init_application();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -467,6 +463,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}Synchronisaties();");
             sb.AppendLine($"{ts}RealisatieAfhandeling();");
             sb.AppendLine($"{ts}FileVerwerking();");
+            if (controller.OVData.OVIngrepen.Count > 0 ||
+                controller.OVData.HDIngrepen.Count > 0)
+            {
+                sb.AppendLine($"{ts}AfhandelingOV();");
+            }
             sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_application();");
@@ -475,6 +476,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}KwcApplication();");
             }
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -518,6 +520,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}post_system_application();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -563,7 +566,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_dump_application();");
             sb.AppendLine("}");
+            sb.AppendLine();
 
+            return sb.ToString();
+        }
+
+        private string GenerateRegCSpecialSignals(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
+            sb.AppendLine("void is_special_signals(void)");
+            sb.AppendLine("{");
+            sb.AppendLine($"{ts}OVSpecialSignals();");
+            sb.AppendLine($"{ts}SpecialSignals_Add();");
+            sb.AppendLine("}");
+            sb.AppendLine("#endif");
+            sb.AppendLine();
 
             return sb.ToString();
         }

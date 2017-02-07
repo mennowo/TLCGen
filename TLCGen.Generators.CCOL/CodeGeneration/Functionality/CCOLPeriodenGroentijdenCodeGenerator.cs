@@ -501,46 +501,5 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     return null;
             }
         }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                switch(s.Default)
-                {
-                    case "perdef": _usperdef = s.Setting == null ? s.Default : s.Setting; break;
-                    case "per": _usper = s.Setting == null ? s.Default : s.Setting; break;
-                    case "stkp": _prmetkp = s.Setting == null ? s.Default : s.Setting; break;
-                    case "etkp": _prmstkp = s.Setting == null ? s.Default : s.Setting; break;
-                    case "dckp": _prmdckp = s.Setting == null ? s.Default : s.Setting; break;
-                    case "period":
-                        switch (s.Type)
-                        {
-                            case CCOLGeneratorSettingTypeEnum.GeheugenElement: _mperiod = s.Setting == null ? s.Default : s.Setting; break;
-                            case CCOLGeneratorSettingTypeEnum.HulpElement: _hperiod = s.Setting == null ? s.Default : s.Setting; break;
-                        }
-                        break;
-                    case "perrt": _prmperrt = s.Setting == null ? s.Default : s.Setting; break;
-                    case "perrta": _prmperrta = s.Setting == null ? s.Default : s.Setting; break;
-                    case "perrtdim": _prmperrtdim = s.Setting == null ? s.Default : s.Setting; break;
-                    case "perbel": _prmperbel = s.Setting == null ? s.Default : s.Setting; break;
-                    case "perbeldim": _prmperbeldim = s.Setting == null ? s.Default : s.Setting; break;
-                    case "pertwl": _prmpertwl = s.Setting == null ? s.Default : s.Setting; break;
-                    case "pero": _prmpero = s.Setting == null ? s.Default : s.Setting; break;
-                }
-            }
-
-            return base.SetSettings(settings);
-        }
     }
 }

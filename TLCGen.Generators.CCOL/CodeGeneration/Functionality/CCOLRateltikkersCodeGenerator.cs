@@ -143,31 +143,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "rt")
-                {
-                    switch (s.Type)
-                    {
-                        case CCOLGeneratorSettingTypeEnum.HulpElement: _hrt = s.Setting == null ? s.Default : s.Setting; break;
-                        case CCOLGeneratorSettingTypeEnum.Uitgang: _usrt = s.Setting == null ? s.Default : s.Setting; break;
-                    }
-                }
-                if (s.Default == "nlrt") _tnlrt = s.Setting == null ? s.Default : s.Setting;
-            }
-
             _hperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("hperiod");
             _prmperrt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmperrt");
             _prmperrta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmperrta");
@@ -175,8 +152,5 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             return base.SetSettings(settings);
         }
-
-        #region Constructor
-        #endregion // Constructor
     }
 }

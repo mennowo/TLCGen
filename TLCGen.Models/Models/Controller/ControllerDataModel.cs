@@ -37,6 +37,7 @@ namespace TLCGen.Models
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
         public OVIngreepTypeEnum OVIngreep { get; set; }
+        public bool DSI { get; set; }
 
         public List<VersieModel> Versies { get; set; }
 

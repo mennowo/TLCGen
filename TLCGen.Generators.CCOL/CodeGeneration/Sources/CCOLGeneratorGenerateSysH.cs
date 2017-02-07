@@ -42,6 +42,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHParameters(controller));
             sb.AppendLine();
+            if (controller.Data.DSI)
+            {
+                sb.Append(GenerateSysHDS(controller));
+            }
+            sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
             sb.AppendLine($"{ts}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
@@ -214,7 +219,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-
         private string GenerateSysHParameters(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
@@ -223,6 +227,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ---------- */");
 
             sb.Append(GetAllElementsSysHLines(Parameters));
+
+            return sb.ToString();
+        }
+
+        private string GenerateSysHDS(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("/* Selectieve detectie */");
+            sb.AppendLine("/* ------------------- */");
+
+            sb.AppendLine("#define dsdummy 0");
+            sb.AppendLine("#define DSMAX   1");
 
             return sb.ToString();
         }
