@@ -20,61 +20,24 @@ namespace TLCGen.Models
 
         #region Properties
         
-        [Browsable(false)]
         public override string Naam { get; set; }
-        [DisplayName("Type fase")]
-        [Description("Type fase")]
         public FaseTypeEnum Type { get; set; }
-        [DisplayName("Vastgroen tijd")]
-        [Description("Vastgroen tijd")]
         public int TFG { get; set; }
-        [DisplayName("Garantie groen tijd")]
-        [Description("Garantie groen tijd")]
         public int TGG { get; set; }
-        [DisplayName("Minimum garantie groen tijd")]
-        [Description("Minimum garantie groen tijd")]
         public int TGG_min { get; set; }
-        [DisplayName("Garantie rood tijd")]
-        [Description("Garantie rood tijd")]
         public int TRG { get; set; }
-        [DisplayName("Minimum garantie rood tijd")]
-        [Description("Minimum garantie rood tijd")]
         public int TRG_min { get; set; }
-        [DisplayName("Geel tijd")]
-        [Description("Geel tijd")]
         public int TGL { get; set; }
-        [DisplayName("Minimum geel tijd")]
-        [Description("Minimum geel tijd")]
         public int TGL_min { get; set; }
-        [DisplayName("Koplus maximum")]
-        [Description("Koplus maximum")]
         public int Kopmax { get; set; }
-
-        [DisplayName("OV ingreep")]
-        [Description("OV ingreep")]
         public bool OVIngreep { get; set; }
-        [DisplayName("HD ingreep")]
-        [Description("HD ingreep")]
         public bool HDIngreep { get; set; }
-
-        [DisplayName("Vaste aanvraag")]
-        [Description("Vaste aanvraag")]
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
-        [DisplayName("Wachtgroen")]
-        [Description("Wachtgroen")]
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }
-
-        [DisplayName("Meeverlengen")]
-        [Description("Meeverlengen")]
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
-        [DisplayName("MeeverlengenType")]
-        [Description("MeeverlengenType")]
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
-        [DisplayName("MeeverlengenVerschil")]
-        [Description("MeeverlengenVerschil")]
         public int? MeeverlengenVerschil { get; set; }
 
-        [Browsable(false)]
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 

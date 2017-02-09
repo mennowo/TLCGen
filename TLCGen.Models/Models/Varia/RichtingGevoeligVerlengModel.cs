@@ -9,6 +9,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
+    [RefersToDetector("VanDetector", "NaarDetector")]
     public class RichtingGevoeligVerlengModel
     {
         #region Properties

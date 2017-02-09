@@ -9,6 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToDetector("Naam")]
     public class DetectorModel : IOElementModel, IComparable
     {
         #region Fields

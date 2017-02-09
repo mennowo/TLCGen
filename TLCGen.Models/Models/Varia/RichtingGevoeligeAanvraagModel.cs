@@ -8,6 +8,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
+    [RefersToDetector("VanDetector", "NaarDetector")]
     public class RichtingGevoeligeAanvraagModel
     {
         public string FaseCyclus { get; set; }

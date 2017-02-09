@@ -14,6 +14,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Operations;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -192,25 +193,24 @@ namespace TLCGen.ViewModels
 
         void RemoveDetectorCommand_Executed(object prm)
         {
+            bool changed = false;
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
-                // Create temporary List cause we cannot directly remove the selection,
-                // as it will cause the selection to change while we loop it
-                List<DetectorViewModel> ldvm = new List<DetectorViewModel>();
+                changed = true;
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
-                    ldvm.Add(dvm);
-                }
-                foreach (DetectorViewModel dvm in ldvm)
-                {
-                    _SelectedFase.Detectoren.Remove(dvm.Detector);
-                    Detectoren.Remove(dvm);
+                    ControllerModifier.RemoveDetectorFromController(_Controller, dvm.Naam);
                 }
             }
             else if (SelectedDetector != null)
             {
-                _SelectedFase.Detectoren.Remove(SelectedDetector.Detector);
-                Detectoren.Remove(SelectedDetector);
+                changed = true;
+                ControllerModifier.RemoveDetectorFromController(_Controller, SelectedDetector.Naam);
+            }
+
+            if (changed)
+            {
+                SelectedFaseNaam = SelectedFaseNaam;
             }
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TLCGen.Models
 {
+    [RefersToDetector("MeeaanvraagDetector")]
     public class MeeaanvraagDetectorModel
     {
         public string MeeaanvraagDetector { get; set; }

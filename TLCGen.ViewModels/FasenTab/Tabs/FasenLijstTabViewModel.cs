@@ -139,37 +139,38 @@ namespace TLCGen.ViewModels
 
         void RemoveFaseCommand_Executed(object prm)
         {
+            bool changed = false;
+            List<FaseCyclusModel> remfcs = new List<FaseCyclusModel>();
             if (SelectedFaseCycli != null && SelectedFaseCycli.Count > 0)
             {
-                // Create temporary List cause we cannot directly remove the selection,
-                // as it will cause the selection to change while we loop it
-                //List<FaseCyclusViewModel> lfcvm = new List<FaseCyclusViewModel>();
-                List<FaseCyclusModel> remfcs = new List<FaseCyclusModel>();
+                changed = true;
                 foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
                 {
-                    //lfcvm.Add(fcvm);
                     ControllerModifier.RemoveSignalGroupFromController(_Controller, fcvm.Naam);
                     remfcs.Add(fcvm.FaseCyclus);
                 }
+
+                SelectedFaseCycli = null;
+            }
+            else if (SelectedFaseCyclus != null)
+            {
+                changed = true;
+                remfcs.Add(SelectedFaseCyclus.FaseCyclus);
+                ControllerModifier.RemoveSignalGroupFromController(_Controller, SelectedFaseCyclus.Naam);
+                SelectedFaseCyclus = null;
+            }
+
+            if(changed)
+            {
                 Fasen.CollectionChanged -= Fasen_CollectionChanged;
                 Fasen.Clear();
-                foreach(var fc in _Controller.Fasen)
+                foreach (var fc in _Controller.Fasen)
                 {
                     Fasen.Add(new FaseCyclusViewModel(fc));
                 }
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
                 Messenger.Default.Send(new FasenChangedMessage(_Controller.Fasen, null, remfcs));
-                //foreach (FaseCyclusViewModel fcvm in lfcvm)
-                //{
-                //}
-                SelectedFaseCycli = null;
             }
-            else if (SelectedFaseCyclus != null)
-            {
-                Fasen.Remove(SelectedFaseCyclus);
-                SelectedFaseCyclus = null;
-            }
-
 
         }
 

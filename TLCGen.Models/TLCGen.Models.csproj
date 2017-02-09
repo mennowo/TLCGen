@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />

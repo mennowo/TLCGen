@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToDetector("Detector")]
     public class RoBuGroverHiaatDetectorModel
     {
         public string Detector { get; set; }
