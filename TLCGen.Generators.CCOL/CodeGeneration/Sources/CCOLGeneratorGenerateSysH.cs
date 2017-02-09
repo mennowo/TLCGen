@@ -242,6 +242,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 controller.OVData.OVIngrepen.Where(x => x.Vecom).Any())
             {
                 int index = 0;
+                if(controller.OVData.OVIngrepen.Where(x => x.KAR).Any())
+                {
+                    sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR DSI berichten */");
+                    ++index;
+                }
                 foreach(var ov in controller.OVData.OVIngrepen.Where(x => x.Vecom))
                 {
                     sb.AppendLine($"{ts}#define ds{ov.FaseCyclus}_in  {index++}");

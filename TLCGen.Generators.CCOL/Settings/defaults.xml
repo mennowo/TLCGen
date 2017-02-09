@@ -929,10 +929,40 @@
             <Description>Ingang tbv VECOM uitmelding in testomgeving</Description>
           </Setting>
           <Setting>
+            <Default>dummykarhdin</Default>
+            <Setting>dummykarhdin</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv HD KAR inmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummykarhduit</Default>
+            <Setting>dummykarhduit</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv HD KAR uitmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummyvecomhdin</Default>
+            <Setting>dummyvecomhdin</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv HD VECOM inmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummyvecomhduit</Default>
+            <Setting>dummyvecomhduit</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv HD VECOM uitmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>
             <Description>Uitgang verklikken inmelding OV</Description>
+          </Setting>
+          <Setting>
+            <Default>hdinm</Default>
+            <Setting>hdinm</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang verklikken inmelding HD</Description>
           </Setting>
         </Settings>
       </CodePieceData>

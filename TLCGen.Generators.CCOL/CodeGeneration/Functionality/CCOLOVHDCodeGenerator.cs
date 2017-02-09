@@ -21,6 +21,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
 #pragma warning disable 0169
         private string _cvc;
+        private string _cvchd;
         private string _tgb;
         private string _tgbhd;
         private string _prmrto;
@@ -36,6 +37,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tdhkarin;
         private string _tdhkaruit;
         private string _usovinm;
+        private string _ushdinm;
         private string _hov;
         private string _hhd;
         private string _hovin;
@@ -59,6 +61,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _isdummykaruit;
         private string _isdummyvecomin;
         private string _isdummyvecomuit;
+        private string _isdummykarhdin;
+        private string _isdummykarhduit;
+        private string _isdummyvecomhdin;
+        private string _isdummyvecomhduit;
         private string _schupinagb;
         private string _schupinagbhd;
         private string _prmpmgt;
@@ -211,6 +217,107 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 CCOLElementTimeTypeEnum.None,
                                 CCOLElementTypeEnum.Parameter));
                     }
+                }
+            }
+
+            foreach(var hd in c.OVData.HDIngrepen)
+            {
+                _MyBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData as IOElementModel, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
+                _MyElements.Add(new CCOLElement($"{_ushdinm}{hd.FaseCyclus}", CCOLElementTypeEnum.Uitgang));
+
+                _MyElements.Add(
+                        new CCOLElement(
+                            $"{_hhd}{hd.FaseCyclus}",
+                            CCOLElementTypeEnum.HulpElement));
+
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_tgbhd}{hd.FaseCyclus}",
+                        hd.GroenBewaking,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Timer));
+
+                _MyElements.Add(
+                        new CCOLElement(
+                            $"{_trthd}{hd.FaseCyclus}",
+                            0,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            CCOLElementTypeEnum.Timer));
+                _MyElements.Add(
+                        new CCOLElement(
+                            $"{_cvchd}{hd.FaseCyclus}",
+                            999,
+                            CCOLElementTimeTypeEnum.CT_type,
+                            CCOLElementTypeEnum.Counter));
+
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmpriohd}{hd.FaseCyclus}",
+                        hd.PrioriteitsOpties,
+                        CCOLElementTimeTypeEnum.None,
+                        CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmrtohd}{hd.FaseCyclus}",
+                        hd.RijTijdOngehinderd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmrtbghd}{hd.FaseCyclus}",
+                        hd.RijTijdBeperktgehinderd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmrtghd}{hd.FaseCyclus}",
+                        hd.RijTijdGehinderd,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_schupinagbhd}{hd.FaseCyclus}",
+                        0,
+                        CCOLElementTimeTypeEnum.SCH_type,
+                        CCOLElementTypeEnum.Schakelaar));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_hhdin}{hd.FaseCyclus}",
+                        CCOLElementTypeEnum.HulpElement));
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_hhduit}{hd.FaseCyclus}",
+                        CCOLElementTypeEnum.HulpElement));
+                if (hd.Vecom)
+                {
+                    var elem1 = new CCOLElement($"{_isdummyvecomhdin}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    var elem2 = new CCOLElement($"{_isdummyvecomhduit}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    elem1.Dummy = true;
+                    elem2.Dummy = true;
+                    _MyElements.Add(elem1);
+                    _MyElements.Add(elem2);
+
+                    var iselem1 = new CCOLIOElement(hd.HDVecomDummyInmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomhdin}{hd.FaseCyclus}");
+                    var iselem2 = new CCOLIOElement(hd.HDVecomDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomhduit}{hd.FaseCyclus}");
+                    iselem1.Dummy = iselem2.Dummy = true;
+                    _MyBitmapInputs.Add(iselem1);
+                    _MyBitmapInputs.Add(iselem2);
+                }
+
+                if (hd.KAR)
+                {
+                    var elem1 = new CCOLElement($"{_isdummykarhdin}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    var elem2 = new CCOLElement($"{_isdummykarhduit}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    elem1.Dummy = true;
+                    elem2.Dummy = true;
+                    _MyElements.Add(elem1);
+                    _MyElements.Add(elem2);
+
+                    var iselem1 = new CCOLIOElement(hd.HDKARDummyInmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummykarhdin}{hd.FaseCyclus}");
+                    var iselem2 = new CCOLIOElement(hd.HDKARDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummykarhduit}{hd.FaseCyclus}");
+                    iselem1.Dummy = iselem2.Dummy = true;
+                    _MyBitmapInputs.Add(iselem1);
+                    _MyBitmapInputs.Add(iselem2);
                 }
             }
 

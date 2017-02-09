@@ -464,6 +464,16 @@ namespace TLCGen.ViewModels
             }
             foreach (var hd in _Controller.OVData.HDIngrepen)
             {
+                if (hd.KAR)
+                {
+                    OverigeIngangen.Add(new BitmappedItemViewModel(hd.HDKARDummyInmeldingBitmapData, "dummykarhdin" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                    OverigeIngangen.Add(new BitmappedItemViewModel(hd.HDKARDummyUitmeldingBitmapData, "dummykarhduit" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                }
+                if (hd.Vecom)
+                {
+                    OverigeIngangen.Add(new BitmappedItemViewModel(hd.HDVecomDummyInmeldingBitmapData, "dummyvecomhdin" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                    OverigeIngangen.Add(new BitmappedItemViewModel(hd.HDVecomDummyUitmeldingBitmapData, "dummyvecomhduit" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                }
                 OverigeUitgangen.Add(new BitmappedItemViewModel(hd.HDInmeldingBitmapData, "vchd" + hd.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
             }
 
