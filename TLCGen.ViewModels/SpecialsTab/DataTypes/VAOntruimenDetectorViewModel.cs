@@ -1,9 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -61,12 +63,22 @@ namespace TLCGen.ViewModels
 
         #endregion // IViewModelWithItem
 
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            ConflicterendeFasen.Rebuild();
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public VAOntruimenDetectorViewModel(VAOntruimenDetectorModel vaontruimend)
         {
             _VAOntruimenDetector = vaontruimend;
             ConflicterendeFasen = new ObservableCollectionAroundList<VAOntruimenNaarFaseViewModel, VAOntruimenNaarFaseModel>(vaontruimend.ConflicterendeFasen);
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor

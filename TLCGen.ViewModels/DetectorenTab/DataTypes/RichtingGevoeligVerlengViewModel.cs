@@ -4,12 +4,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class RichtingGevoeligVerlengViewModel : ViewModelBase, IComparable
+    public class RichtingGevoeligVerlengViewModel : ViewModelBase, IComparable, IViewModelWithItem
     {
         #region Fields
 
@@ -132,6 +133,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IComparable
+
+        #region IViewModelWithItem  
+
+        public object GetItem()
+        {
+            return RichtingGevoeligVerleng;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

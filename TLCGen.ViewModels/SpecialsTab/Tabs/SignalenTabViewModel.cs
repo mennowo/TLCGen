@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -461,12 +462,23 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen TabItem overrides
 
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            WaarschuwingsGroepen.Rebuild();
+            RatelTikkers.Rebuild();
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public SignalenTabViewModel(ControllerModel controller) : base(controller)
         {
             WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
             RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor

@@ -4,11 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class RichtingGevoeligeAanvraagViewModel : ViewModelBase, IComparable
+    public class RichtingGevoeligeAanvraagViewModel : ViewModelBase, IComparable, IViewModelWithItem
     {
         #region Fields
 
@@ -99,8 +100,17 @@ namespace TLCGen.ViewModels
                 return 0;
             }
         }
-        
+
         #endregion // IComparable
+
+        #region IViewModelWithItem  
+
+        public object GetItem()
+        {
+            return RichtingGevoeligeAanvraag;
+        }
+        
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

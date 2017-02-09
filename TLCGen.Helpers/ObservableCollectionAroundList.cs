@@ -60,6 +60,18 @@ namespace TLCGen.Helpers
             }
         }
 
+        public void Rebuild()
+        {
+            this.CollectionChanged -= Items_CollectionChanged;
+            Clear();
+            foreach (T2 im in _ModelItems)
+            {
+                object[] args = { im };
+                this.Add((T1)Activator.CreateInstance(typeof(T1), args));
+            }
+            this.CollectionChanged += Items_CollectionChanged;
+        }
+
         #endregion // Public Methods
 
         #region Constructor
@@ -74,7 +86,7 @@ namespace TLCGen.Helpers
                 this.Add((T1)Activator.CreateInstance(typeof(T1), args));
             }
 
-            this.CollectionChanged += new NotifyCollectionChangedEventHandler(Items_CollectionChanged);
+            this.CollectionChanged += Items_CollectionChanged;
         }
 
         #endregion // Constructor

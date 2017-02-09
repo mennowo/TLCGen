@@ -398,6 +398,15 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen TabItem overrides
 
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            SignaalGroepInstellingen.Rebuild();
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public RoBuGroverTabViewModel(ControllerModel controller) : base(controller)
@@ -406,6 +415,7 @@ namespace TLCGen.ViewModels
             SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
 
             AutomaticallySetSelectableSignalGroups = true;
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor

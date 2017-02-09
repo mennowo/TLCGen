@@ -18,9 +18,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<RichtingGevoeligeAanvraagViewModel> _RichtingGevoeligeAanvragen;
-        private ObservableCollection<RichtingGevoeligVerlengViewModel> _RichtingGevoeligVerlengen;
-
         private RichtingGevoeligeAanvraagViewModel _SelectedRichtingGevoeligeAanvraag;
         private RichtingGevoeligVerlengViewModel _SelectedRichtingGevoeligVerleng;
 
@@ -227,28 +224,16 @@ namespace TLCGen.ViewModels
         }
 
 
-        public ObservableCollection<RichtingGevoeligeAanvraagViewModel> RichtingGevoeligeAanvragen
+        public ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel> RichtingGevoeligeAanvragen
         {
-            get
-            {
-                if (_RichtingGevoeligeAanvragen == null)
-                {
-                    _RichtingGevoeligeAanvragen = new ObservableCollection<RichtingGevoeligeAanvraagViewModel>();
-                }
-                return _RichtingGevoeligeAanvragen;
-            }
+            get;
+            private set;
         }
 
-        public ObservableCollection<RichtingGevoeligVerlengViewModel> RichtingGevoeligVerlengen
+        public ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel> RichtingGevoeligVerlengen
         {
-            get
-            {
-                if (_RichtingGevoeligVerlengen == null)
-                {
-                    _RichtingGevoeligVerlengen = new ObservableCollection<RichtingGevoeligVerlengViewModel>();
-                }
-                return _RichtingGevoeligVerlengen;
-            }
+            get;
+            private set;
         }
 
         public RichtingGevoeligeAanvraagViewModel SelectedRichtingGevoeligeAanvraag
@@ -351,6 +336,8 @@ namespace TLCGen.ViewModels
             OnPropertyChanged("SelectedFaseAanvraag");
             OnPropertyChanged("SelectedDetectorAanvraag1");
             OnPropertyChanged("SelectedDetectorAanvraag2");
+
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool AddRichtingGevoeligVerleng_CanExecute(object prm)
@@ -372,6 +359,8 @@ namespace TLCGen.ViewModels
             OnPropertyChanged("SelectedFaseVerleng");
             OnPropertyChanged("SelectedDetectorVerleng1");
             OnPropertyChanged("SelectedDetectorVerleng2");
+
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveRichtingGevoeligeAanvraag_CanExecute(object prm)
@@ -383,6 +372,7 @@ namespace TLCGen.ViewModels
         {
             RichtingGevoeligeAanvragen.Remove(SelectedRichtingGevoeligeAanvraag);
             SelectedRichtingGevoeligeAanvraag = null;
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveRichtingGevoeligVerleng_CanExecute(object prm)
@@ -394,6 +384,7 @@ namespace TLCGen.ViewModels
         {
             RichtingGevoeligVerlengen.Remove(SelectedRichtingGevoeligVerleng);
             SelectedRichtingGevoeligVerleng = null;
+            Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Command Functionality
@@ -430,63 +421,24 @@ namespace TLCGen.ViewModels
 
         #endregion // TabItem Overrides
 
-        #region Collection Changed
+        #region TLCGen Events
 
-        private void RichtingGevoeligVerlengen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnFasenChanged(FasenChangedMessage message)
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (RichtingGevoeligVerlengViewModel rgv in e.NewItems)
-                {
-                    _Controller.RichtingGevoeligVerlengen.Add(rgv.RichtingGevoeligVerleng);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (RichtingGevoeligVerlengViewModel rgv in e.OldItems)
-                {
-                    _Controller.RichtingGevoeligVerlengen.Remove(rgv.RichtingGevoeligVerleng);
-                }
-            };
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            RichtingGevoeligeAanvragen.Rebuild();
+            RichtingGevoeligVerlengen.Rebuild();
         }
 
-        private void RichtingGevoeligeAanvragen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (RichtingGevoeligeAanvraagViewModel rga in e.NewItems)
-                {
-                    _Controller.RichtingGevoeligeAanvragen.Add(rga.RichtingGevoeligeAanvraag);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (RichtingGevoeligeAanvraagViewModel rga in e.OldItems)
-                {
-                    _Controller.RichtingGevoeligeAanvragen.Remove(rga.RichtingGevoeligeAanvraag);
-                }
-            };
-            Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        #endregion // Collection Changed
+        #endregion // TLCGen Events
 
         #region Constructor
 
         public DetectorenRichtingGevoeligTabViewModel(ControllerModel controller) : base(controller)
         {
-            foreach(RichtingGevoeligeAanvraagModel rga in controller.RichtingGevoeligeAanvragen)
-            {
-                RichtingGevoeligeAanvragen.Add(new RichtingGevoeligeAanvraagViewModel(rga));
-            }
-            foreach (RichtingGevoeligVerlengModel rgv in controller.RichtingGevoeligVerlengen)
-            {
-                RichtingGevoeligVerlengen.Add(new RichtingGevoeligVerlengViewModel(rgv));
-            }
+            RichtingGevoeligeAanvragen = new ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel>(controller.RichtingGevoeligeAanvragen);
+            RichtingGevoeligVerlengen = new ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel>(controller.RichtingGevoeligVerlengen);
 
-            RichtingGevoeligeAanvragen.CollectionChanged += RichtingGevoeligeAanvragen_CollectionChanged;
-            RichtingGevoeligVerlengen.CollectionChanged += RichtingGevoeligVerlengen_CollectionChanged;
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
 

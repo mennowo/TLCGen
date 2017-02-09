@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -153,11 +155,21 @@ namespace TLCGen.ViewModels
 
         #endregion // TLCGen TabItem overrides
 
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            FileIngrepen.Rebuild();
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public FileTabViewModel(ControllerModel controller) : base(controller)
         {
             FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor
