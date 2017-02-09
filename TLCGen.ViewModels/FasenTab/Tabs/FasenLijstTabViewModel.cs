@@ -14,6 +14,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Operations;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -142,15 +143,25 @@ namespace TLCGen.ViewModels
             {
                 // Create temporary List cause we cannot directly remove the selection,
                 // as it will cause the selection to change while we loop it
-                List<FaseCyclusViewModel> lfcvm = new List<FaseCyclusViewModel>();
+                //List<FaseCyclusViewModel> lfcvm = new List<FaseCyclusViewModel>();
+                List<FaseCyclusModel> remfcs = new List<FaseCyclusModel>();
                 foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
                 {
-                    lfcvm.Add(fcvm);
+                    //lfcvm.Add(fcvm);
+                    ControllerModifier.RemoveSignalGroupFromController(_Controller, fcvm.Naam);
+                    remfcs.Add(fcvm.FaseCyclus);
                 }
-                foreach (FaseCyclusViewModel fcvm in lfcvm)
+                Fasen.CollectionChanged -= Fasen_CollectionChanged;
+                Fasen.Clear();
+                foreach(var fc in _Controller.Fasen)
                 {
-                    Fasen.Remove(fcvm);
+                    Fasen.Add(new FaseCyclusViewModel(fc));
                 }
+                Fasen.CollectionChanged += Fasen_CollectionChanged;
+                Messenger.Default.Send(new FasenChangedMessage(_Controller.Fasen, null, remfcs));
+                //foreach (FaseCyclusViewModel fcvm in lfcvm)
+                //{
+                //}
                 SelectedFaseCycli = null;
             }
             else if (SelectedFaseCyclus != null)
@@ -158,6 +169,8 @@ namespace TLCGen.ViewModels
                 Fasen.Remove(SelectedFaseCyclus);
                 SelectedFaseCyclus = null;
             }
+
+
         }
 
         bool RemoveFaseCommand_CanExecute(object prm)
@@ -190,15 +203,21 @@ namespace TLCGen.ViewModels
             
         }
 
-        public override void OnDeselected()
+        public override bool OnDeselectedPreview()
         {
             if (!Fasen.IsSorted())
             {
                 _IsSorting = true;
                 Fasen.BubbleSort();
+                _Controller.Fasen.Clear();
+                foreach(var fcvm in Fasen)
+                {
+                    _Controller.Fasen.Add(fcvm.FaseCyclus);
+                }
                 Messenger.Default.Send(new FasenSortedMessage(_Controller.Fasen));
                 _IsSorting = false;
             }
+            return true;
         }
 
         #endregion // TabItem Overrides

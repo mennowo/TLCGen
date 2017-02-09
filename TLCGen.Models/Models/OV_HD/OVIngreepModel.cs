@@ -9,8 +9,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class OVIngreepModel
     {
+        #region Properties
+
         public string FaseCyclus { get; set; }
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
@@ -37,6 +40,10 @@ namespace TLCGen.Models
         //[XmlArrayItem(ElementName = "MassaDetectieMelding")]
         //public List<OVIngreepMassaDetectieMelding> MassaDetectieMeldingen { get; set; }
 
+        #endregion // Properties
+
+        #region Constructor
+
         public OVIngreepModel()
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
@@ -47,6 +54,8 @@ namespace TLCGen.Models
             OVVecomDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
             //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
         }
+
+        #endregion // Constructor
     }
 
     //public class OVIngreepMassaDetectieMelding

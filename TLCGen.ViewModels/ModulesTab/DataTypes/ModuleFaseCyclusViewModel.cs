@@ -13,9 +13,8 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ModuleFaseCyclusModel _ModuleFaseCyclus;
-        private ObservableCollection<string> _Alternatieven;
-        private string _FaseCyclusNaam;
-
+        private ObservableCollection<ModuleFaseCyclusAlternatiefModel> _Alternatieven;
+        
         #endregion // Fields
 
         #region Properties
@@ -30,13 +29,13 @@ namespace TLCGen.ViewModels
             get { return _ModuleFaseCyclus.FaseCyclus; }
         }
 
-        public ObservableCollection<string> Alternatieven
+        public ObservableCollection<ModuleFaseCyclusAlternatiefModel> Alternatieven
         {
             get
             {
                 if (_Alternatieven == null)
                 {
-                    _Alternatieven = new ObservableCollection<string>();
+                    _Alternatieven = new ObservableCollection<ModuleFaseCyclusAlternatiefModel>();
                 }
                 return _Alternatieven;
             }
@@ -69,14 +68,14 @@ namespace TLCGen.ViewModels
         {
             if (e.NewItems != null && e.NewItems.Count > 0)
             {
-                foreach (string s in e.NewItems)
+                foreach (ModuleFaseCyclusAlternatiefModel s in e.NewItems)
                 {
                     _ModuleFaseCyclus.Alternatieven.Add(s);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
-                foreach (string s in e.OldItems)
+                foreach (ModuleFaseCyclusAlternatiefModel s in e.OldItems)
                 {
                     _ModuleFaseCyclus.Alternatieven.Remove(s);
                 }
@@ -101,7 +100,7 @@ namespace TLCGen.ViewModels
         public ModuleFaseCyclusViewModel(ModuleFaseCyclusModel mfcm)
         {
             _ModuleFaseCyclus = mfcm;
-            foreach(string s in _ModuleFaseCyclus.Alternatieven)
+            foreach(ModuleFaseCyclusAlternatiefModel s in _ModuleFaseCyclus.Alternatieven)
             {
                 Alternatieven.Add(s);
             }

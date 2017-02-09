@@ -232,6 +232,25 @@ namespace TLCGen.ViewModels
             }
         }
 
+
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            Modules.CollectionChanged -= Modules_CollectionChanged;
+            Modules.Clear();
+            foreach (ModuleModel mm in _ModuleMolen.Modules)
+            {
+                ModuleViewModel mvm = new ModuleViewModel(_Controller, mm);
+                Modules.Add(mvm);
+            }
+            Modules.CollectionChanged += Modules_CollectionChanged;
+        }
+
+        #endregion // TLCGen Events
+
+        #region Constructor
+
         public ModuleMolenViewModel(ControllerModel controller, ModulesDetailsTabViewModel modulestabvm)
         {
             _Controller = controller;
@@ -245,6 +264,10 @@ namespace TLCGen.ViewModels
             }
 
             Modules.CollectionChanged += Modules_CollectionChanged;
+
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
+
+        #endregion // Constructor
     }
 }

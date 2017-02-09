@@ -11,6 +11,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("Naam")]
     public class FaseCyclusModel : IOElementModel, IComparable
     {
         #region Fields

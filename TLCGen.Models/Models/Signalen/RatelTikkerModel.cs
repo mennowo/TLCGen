@@ -8,6 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class RatelTikkerModel
     {
         public RateltikkerTypeEnum Type { get; set; }

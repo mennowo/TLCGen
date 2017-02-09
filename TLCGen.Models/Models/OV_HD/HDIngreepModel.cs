@@ -8,8 +8,11 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class HDIngreepModel
     {
+        #region Properties
+
         public string FaseCyclus { get; set; }
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
@@ -29,6 +32,24 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
         public List<HDIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; }
 
+        #endregion // Properties
+
+        #region IBelongToSignalGroup
+
+        public string SignalGroup1
+        {
+            get { return FaseCyclus; }
+        }
+
+        public string SignalGroup2
+        {
+            get { return null; }
+        }
+
+        #endregion // IBelongToSignalGroup
+
+        #region Constructor
+
         public HDIngreepModel()
         {
             MeerealiserendeFaseCycli = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
@@ -38,5 +59,7 @@ namespace TLCGen.Models
             HDVecomDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
             HDVecomDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
         }
+
+        #endregion // Constructor
     }
 }

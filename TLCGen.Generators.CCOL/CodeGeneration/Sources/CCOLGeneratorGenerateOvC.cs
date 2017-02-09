@@ -930,11 +930,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykaruit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykaruit}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                 }
             }
-            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+            if (c.Data.DSI)
             {
-                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+                {
+                    string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                }
             }
 
             sb.AppendLine();

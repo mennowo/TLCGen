@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseVan", "FaseNaar")]
     public class GelijkstartModel : IInterSignaalGroepElement
     {
         #region Properties

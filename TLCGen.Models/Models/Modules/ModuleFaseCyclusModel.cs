@@ -8,17 +8,26 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class ModuleFaseCyclusModel
     {
+        #region Properties
+
         public string FaseCyclus { get; set; }
 
         [XmlArrayItem(ElementName = "Fase")]
-        public List<string> Alternatieven { get; set; }
+        public List<ModuleFaseCyclusAlternatiefModel> Alternatieven { get; set; }
+
+        #endregion // Properties
+
+        #region Constructor
 
         public ModuleFaseCyclusModel()
         {
-            Alternatieven = new List<string>();
+            Alternatieven = new List<ModuleFaseCyclusAlternatiefModel>();
         }
+        
+        #endregion // Constructor
 
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclusVoorAansturing")]
     public class WaarschuwingsGroepModel
     {
         public string Naam { get; set; }

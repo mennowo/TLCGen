@@ -88,7 +88,7 @@ namespace TLCGen.ViewModels
 
             Fasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
-                {
+            {
                 var fcvm = new FaseCyclusViewModel(fcm);
                 if (sel != null && fcvm.Naam == sel.Naam)
                     SelectedFaseCyclus = fcvm;

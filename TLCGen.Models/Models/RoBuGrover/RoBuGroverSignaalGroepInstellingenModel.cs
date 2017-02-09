@@ -8,8 +8,11 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class RoBuGroverSignaalGroepInstellingenModel
     {
+        #region Properties
+
         public string FaseCyclus { get; set; }
         public int MinGroenTijd { get; set; }
         public int MaxGroenTijd { get; set; }
@@ -19,10 +22,16 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "RoBuGroverHiaatDetector")]
         public List<RoBuGroverHiaatDetectorModel> HiaatDetectoren { get; set; }
 
+        #endregion // Properties
+
+        #region Constructor
+
         public RoBuGroverSignaalGroepInstellingenModel()
         {
             FileDetectoren = new List<RoBuGroverFileDetectorModel>();
             HiaatDetectoren = new List<RoBuGroverHiaatDetectorModel>();
         }
+
+        #endregion // Constructor
     }
 }

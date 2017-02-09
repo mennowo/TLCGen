@@ -9,6 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseVan", "FaseNaar")]
     public class MeeaanvraagModel : IInterSignaalGroepElement
     {
         #region Fields

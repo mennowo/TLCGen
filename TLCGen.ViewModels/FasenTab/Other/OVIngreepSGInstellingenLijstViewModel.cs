@@ -5,8 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
@@ -16,22 +18,15 @@ namespace TLCGen.ViewModels
 
         private OVDataModel _OVData;
         private ControllerModel _Controller;
-        private ObservableCollection<OVIngreepSignaalGroepParametersViewModel> _OVIngreepSGParameters; 
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<OVIngreepSignaalGroepParametersViewModel> OVIngreepSGParameters
+        public ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel> OVIngreepSGParameters
         {
-            get
-            {
-                if (_OVIngreepSGParameters == null)
-                {
-                    _OVIngreepSGParameters = new ObservableCollection<OVIngreepSignaalGroepParametersViewModel>();
-                }
-                return _OVIngreepSGParameters;
-            }
+            get;
+            private set;
         }
 
         #endregion // Properties
@@ -81,14 +76,21 @@ namespace TLCGen.ViewModels
         {
             if (_Controller.Data.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
-                foreach (FaseCyclusModel fcm in message.AddedFasen)
+                if (message.AddedFasen != null)
                 {
-                    AddFase(fcm.Naam);
+                    foreach (FaseCyclusModel fcm in message.AddedFasen)
+                    {
+                        AddFase(fcm.Naam);
+                    }
                 }
-                foreach (FaseCyclusModel fcm in message.RemovedFasen)
+                if (message.RemovedFasen != null)
                 {
-                    RemoveFase(fcm.Naam);
+                    foreach (FaseCyclusModel fcm in message.RemovedFasen)
+                    {
+                        RemoveFase(fcm.Naam);
+                    }
                 }
+                OVIngreepSGParameters.BubbleSort();
             }
         }
 
@@ -110,29 +112,16 @@ namespace TLCGen.ViewModels
             }
         }
 
-        #endregion TLCGen events
-
-        #region Collection changed
-
-        private void OVIngreepSGParameters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public void OnFasenSorted(FasenSortedMessage message)
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
+            if (_Controller.Data.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
-                foreach (OVIngreepSignaalGroepParametersViewModel prms in e.NewItems)
-                {
-                    _OVData.OVIngreepSignaalGroepParameters.Add(prms.Parameters);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (OVIngreepSignaalGroepParametersViewModel prms in e.OldItems)
-                {
-                    _OVData.OVIngreepSignaalGroepParameters.Remove(prms.Parameters);
-                }
+                OVIngreepSGParameters.BubbleSort();
+                OVIngreepSGParameters.RebuildList();
             }
         }
 
-        #endregion
+        #endregion TLCGen events
 
         #region Constructor
 
@@ -141,15 +130,12 @@ namespace TLCGen.ViewModels
             _OVData = controller.OVData;
             _Controller = controller;
 
-            foreach (OVIngreepSignaalGroepParametersModel prms in _OVData.OVIngreepSignaalGroepParameters)
-            {
-                OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
-            }
-
-            OVIngreepSGParameters.CollectionChanged += OVIngreepSGParameters_CollectionChanged;
+            OVIngreepSGParameters = 
+                new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(controller.OVData.OVIngreepSignaalGroepParameters);
 
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
+            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
         }
 
         #endregion // Constructor

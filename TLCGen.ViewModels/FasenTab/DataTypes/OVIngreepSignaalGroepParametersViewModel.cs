@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepSignaalGroepParametersViewModel : ViewModelBase
+    [RefersToSignalGroup("FaseCyclus")]
+    public class OVIngreepSignaalGroepParametersViewModel : ViewModelBase, IComparable, IViewModelWithItem
     {
         #region Fields
 
@@ -118,6 +120,26 @@ namespace TLCGen.ViewModels
         #region Public methods
 
         #endregion // Public methods
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return Parameters;
+        }
+
+        #endregion // IViewModelWithItem
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var they = obj as OVIngreepSignaalGroepParametersViewModel;
+            if (they == null) return 0;
+            else return FaseCyclus.CompareTo(they.FaseCyclus);
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 

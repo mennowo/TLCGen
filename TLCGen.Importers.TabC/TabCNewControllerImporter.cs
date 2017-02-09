@@ -51,6 +51,7 @@ namespace TLCGen.Importers.TabC
                     foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
                         newc.Fasen.Add(fcm);
+                        newc.ModuleMolen.FasenModuleData.Add(new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam });
                     }
                     NewData.Conflicten.BubbleSort();
                     foreach (ConflictModel cm in NewData.Conflicten)

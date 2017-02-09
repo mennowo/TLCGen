@@ -1,6 +1,6 @@
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,7 +8,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class RoBuGroverConflictGroepFaseModel
+    public class ModuleFaseCyclusAlternatiefModel
     {
         #region Properties
 

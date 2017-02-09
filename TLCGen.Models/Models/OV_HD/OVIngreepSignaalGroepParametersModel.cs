@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
+    [RefersToSignalGroup("FaseCyclus")]
     public class OVIngreepSignaalGroepParametersModel
     {
+        #region Properties
+
         public string FaseCyclus { get; set; }
         public int AantalKerenNietAfkappen { get; set; }
         public int MinimumGroentijdConflictOVRealisatie { get; set; }
@@ -17,5 +20,7 @@ namespace TLCGen.Models
         public int OndergrensNaTerugkomen { get; set; }
         public int OphoogpercentageNaAfkappen { get; set; }
         public int BlokkeertijdNaOVIngreep { get; set; }
+
+        #endregion // Properties
     }
 }

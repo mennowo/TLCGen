@@ -104,6 +104,7 @@ namespace TLCGen.Importers.TabC
                             if (!found)
                             {
                                 c.Fasen.Add(newfcm);
+                                c.ModuleMolen.FasenModuleData.Add(new FaseCyclusModuleDataModel() { FaseCyclus = newfcm.Naam });
                                 NewPhasesMessage = NewPhasesMessage + newfcm.Naam + "\n";
                             }
                         }
