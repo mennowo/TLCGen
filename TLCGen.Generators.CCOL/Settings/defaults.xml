@@ -638,7 +638,7 @@
     <CodePieceGenerator CodePiece="CCOLOVHDCodeGenerator">
       <CodePieceData>
         <ClassName>CCOLOVHDCodeGenerator</ClassName>
-        <Description>VLOG</Description>
+        <Description>OV en HD ingrepen</Description>
         <Settings>
           <Setting>
             <Default>vc</Default>
@@ -809,6 +809,12 @@
             <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking HD</Description>
           </Setting>
           <Setting>
+            <Default>checkopdsin</Default>
+            <Setting>checkopdsin</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar check op DS_IN bij VECOM</Description>
+          </Setting>
+          <Setting>
             <Default>ovstp</Default>
             <Setting>ovstp</Setting>
             <Type>Parameter</Type>
@@ -909,6 +915,18 @@
             <Setting>dummykaruit</Setting>
             <Type>Ingang</Type>
             <Description>Ingang tbv KAR uitmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummyvecomin</Default>
+            <Setting>dummyvecomin</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv VECOM inmelding in testomgeving</Description>
+          </Setting>
+          <Setting>
+            <Default>dummyvecomuit</Default>
+            <Setting>dummyvecomuit</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang tbv VECOM uitmelding in testomgeving</Description>
           </Setting>
           <Setting>
             <Default>ovinm</Default>

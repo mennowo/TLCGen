@@ -57,6 +57,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmtestkarlyn;
         private string _isdummykarin;
         private string _isdummykaruit;
+        private string _isdummyvecomin;
+        private string _isdummyvecomuit;
         private string _schupinagb;
         private string _schupinagbhd;
         private string _prmpmgt;
@@ -65,6 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmmgcov;
         private string _prmpmgcov;
         private string _prmohpmg;
+        private string _schcheckopdsin;
 #pragma warning restore 0169
 #pragma warning restore 0649
 
@@ -138,6 +141,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 prmtest2.Dummy = true;
                 _MyElements.Add(prmtest1);
                 _MyElements.Add(prmtest2);
+
+                if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+                {
+                    _MyElements.Add(
+                        new CCOLElement(
+                            $"{_schcheckopdsin}",
+                            0,
+                            CCOLElementTimeTypeEnum.SCH_type,
+                            CCOLElementTypeEnum.Schakelaar));
+                }
 
                 foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
                 {
@@ -228,6 +241,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         new CCOLElement(
                             $"{_hov}{ov.FaseCyclus}",
                             CCOLElementTypeEnum.HulpElement));
+
+                if (ov.Vecom)
+                {
+                    var elem1 = new CCOLElement($"{_isdummyvecomin}{ov.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    var elem2 = new CCOLElement($"{_isdummyvecomuit}{ov.FaseCyclus}", CCOLElementTypeEnum.Ingang);
+                    elem1.Dummy = true;
+                    elem2.Dummy = true;
+                    _MyElements.Add(elem1);
+                    _MyElements.Add(elem2);
+
+                    var iselem1 = new CCOLIOElement(ov.OVVecomDummyInmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomin}{ov.FaseCyclus}");
+                    var iselem2 = new CCOLIOElement(ov.OVVecomDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}");
+                    iselem1.Dummy = iselem2.Dummy = true;
+                    _MyBitmapInputs.Add(iselem1);
+                    _MyBitmapInputs.Add(iselem2);
+                }
 
                 if (ov.KAR)
                 {

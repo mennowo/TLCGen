@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TLCGen.DataAccess;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
-using TLCGen.Settings;
 
 namespace TLCGen.Integrity
 {

@@ -8,14 +8,13 @@
         xmlns:vw="clr-namespace:TLCGen.Views"
         xmlns:data="clr-namespace:TLCGen.DataAccess"
         mc:Ignorable="d"
-        DataContext="{DynamicResource MainWindowViewModel}"
+        DataContext="{Binding}"
         Title="{Binding Path=ProgramTitle}" Height="550" Width="700">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/MenuIcons.xaml" />
                 <ResourceDictionary>
-                    <vm:MainWindowViewModel x:Key="MainWindowViewModel" />
                     <Style TargetType="Image">
                         <Style.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
@@ -104,7 +103,7 @@
                 <MenuItem Header="_About" Command="{Binding Path=ShowAboutCommand}" />
             </MenuItem>
         </Menu>
-        <ToolBarTray Grid.Row="1">
+        <ToolBarTray Grid.Row="1" x:Name="MainToolBarTray">
             <ToolBar>
                 <Button Command="{Binding Path=NewFileCommand}" ToolTip="Nieuwe regeling (Ctrl-N)">
                     <Image Source="{StaticResource NewFileIconDrawingImage}" Width="16" Height="16" />

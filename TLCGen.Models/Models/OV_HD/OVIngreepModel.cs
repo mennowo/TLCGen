@@ -28,6 +28,8 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
         public BitmapCoordinatenDataModel OVKARDummyInmeldingBitmapData { get; set; }
         public BitmapCoordinatenDataModel OVKARDummyUitmeldingBitmapData { get; set; }
+        public BitmapCoordinatenDataModel OVVecomDummyInmeldingBitmapData { get; set; }
+        public BitmapCoordinatenDataModel OVVecomDummyUitmeldingBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
@@ -41,6 +43,8 @@ namespace TLCGen.Models
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
             OVKARDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
             OVKARDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
+            OVVecomDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
+            OVVecomDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
             //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
         }
     }

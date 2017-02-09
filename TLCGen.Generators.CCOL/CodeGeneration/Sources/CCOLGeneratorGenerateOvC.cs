@@ -679,6 +679,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = FALSE;");
             }
+
             var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
             foreach (var ov in karovfcs)
             {
@@ -698,6 +699,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSUIT, (bool)FALSE, 0, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}uit, {_tpf}{_tdhkaruit}{ov.FaseCyclus});");
                 }
             }
+
+            var vecomovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
+            foreach (var ov in vecomovfcs)
+            {
+                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+                sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_in, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
+            }
+            foreach (var ov in vecomovfcs)
+            {
+                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+                sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_uit, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
+            }
+
             sb.AppendLine();
             sb.AppendLine("}");
             sb.AppendLine();
@@ -757,6 +771,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _prmtestkarlyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarlyn");
             string _isdummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykarin");
             string _isdummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykaruit");
+            string _isdummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummyvecomin");
+            string _isdummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummyvecomuit");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   OVSpecialSignals wordt aangeroepen vanuit de functie ");
@@ -780,6 +796,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarin}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                     sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykaruit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykaruit}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                 }
+            }
+            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+            {
+                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
             }
             sb.AppendLine("}");
             sb.AppendLine("#endif");

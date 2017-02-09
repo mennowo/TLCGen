@@ -81,7 +81,7 @@ namespace TLCGen.ViewModels
         /// <param name="ovm">A reference to the main MiniOrganizer viewmodel</param>
         public void OnMonitoredPropertyChanged(string propertyName)
         {
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            DataAccess.TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
             OnPropertyChanged(propertyName);
         }
     }

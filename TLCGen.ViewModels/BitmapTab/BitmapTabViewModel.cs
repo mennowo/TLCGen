@@ -450,8 +450,16 @@ namespace TLCGen.ViewModels
             // OV / HD
             foreach (var ov in _Controller.OVData.OVIngrepen)
             {
-                OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVKARDummyInmeldingBitmapData, "dummykarin" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
-                OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVKARDummyUitmeldingBitmapData, "dummykaruit" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                if (ov.KAR)
+                {
+                    OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVKARDummyInmeldingBitmapData, "dummykarin" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                    OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVKARDummyUitmeldingBitmapData, "dummykaruit" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                }
+                if(ov.Vecom)
+                {
+                    OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVVecomDummyInmeldingBitmapData, "dummyvecomin" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                    OverigeIngangen.Add(new BitmappedItemViewModel(ov.OVVecomDummyUitmeldingBitmapData, "dummyvecomuit" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
+                }
                 OverigeUitgangen.Add(new BitmappedItemViewModel(ov.OVInmeldingBitmapData, "vc" + ov.FaseCyclus, BitmappedItemTypeEnum.Uitgang));
             }
             foreach (var hd in _Controller.OVData.HDIngrepen)

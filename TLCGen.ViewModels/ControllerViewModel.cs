@@ -22,7 +22,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public class ControllerViewModel : ViewModelBase
+    public class ControllerViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
         #region Fields
 
@@ -76,20 +76,6 @@ namespace TLCGen.ViewModels
         }
 
         /// <summary>
-        /// Indicates whether the model has ben changed by the user. This property is used to determine if
-        /// the user needs to be shown a dialog, asking to save changes, when closing the controller.
-        /// </summary>
-        public bool HasChanged
-        {
-            get { return _HasChanged; }
-            set
-            {
-                _HasChanged = value;
-                OnPropertyChanged("HasChanged");
-            }
-        }
-
-        /// <summary>
         /// Reference to the selected tab in the Controller View
         /// </summary>
         public ITLCGenTabItem SelectedTab
@@ -115,7 +101,7 @@ namespace TLCGen.ViewModels
                 {
                     _SelectedTab = value;
                     _SelectedTab.OnSelected();
-                    OnPropertyChanged("SelectedTab");
+                    RaisePropertyChanged("SelectedTab");
                 }
             }
         }
@@ -129,7 +115,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTabIndex = value;
-                OnPropertyChanged("SelectedTabIndex");
+                RaisePropertyChanged("SelectedTabIndex");
             }
         }
 
@@ -146,7 +132,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void ReloadController()
         {
-            OnPropertyChanged(null);
+            RaisePropertyChanged(null);
             SelectedTabIndex = 0;
         }
 
@@ -185,35 +171,6 @@ namespace TLCGen.ViewModels
             StatusBarVM.StatusText = DateTime.Now.ToLongTimeString() + " -> " + statustext;
         }
 
-        public XmlDocument GetControllerXmlData()
-        {
-            var doc = TLCGenSerialization.SerializeToXmlDocument(_Controller);
-            foreach (var v in _LoadedPlugins)
-            {
-                if (v is ITLCGenXMLNodeWriter)
-                {
-                    var writer = (ITLCGenXMLNodeWriter)v;
-                    writer.SetXmlInDocument(doc);
-                }
-            }
-            return doc;
-        }
-
-        public void LoadPluginDataFromXmlDocument(XmlDocument document)
-        {
-            if (document == null)
-                return;
-
-            foreach (var v in _LoadedPlugins)
-            {
-                if (v is ITLCGenXMLNodeWriter)
-                {
-                    var writer = (ITLCGenXMLNodeWriter)v;
-                    writer.GetXmlFromDocument(document);
-                }
-            }
-        }
-
         #endregion // Public methods
 
         #region Collection Changed
@@ -221,11 +178,6 @@ namespace TLCGen.ViewModels
         #endregion // Collection Changed
 
         #region TLCGen Message handling
-
-        private void OnControllerDataChanged(ControllerDataChangedMessage message)
-        {
-            this.HasChanged = true;
-        }
 
         private void OnUpdateTabsEnabled(UpdateTabsEnabledMessage message)
         {
@@ -298,6 +250,8 @@ namespace TLCGen.ViewModels
             _Controller = controller;
             _LoadedPlugins = new List<ITLCGenPlugin>();
 
+#warning This must be moved: to plugin manager
+
             var tabs = new SortedDictionary<int, ITLCGenTabItem>();
             foreach(var v in TLCGenPluginManager.Default.ApplicationParts)
             {
@@ -312,7 +266,10 @@ namespace TLCGen.ViewModels
             }
             foreach (var v in TLCGenPluginManager.Default.Plugins)
             {
-                if (v.Item1.HasFlag(TLCGenPluginElems.TabControl))
+                if (v.Item1.HasFlag(TLCGenPluginElems.TabControl) &&
+                    !v.Item1.HasFlag(TLCGenPluginElems.Generator) &&
+                    !v.Item1.HasFlag(TLCGenPluginElems.Importer) &&
+                    !v.Item1.HasFlag(TLCGenPluginElems.ToolBarControl))
                 {
                     int i = tabs.Count;
                     var tab = (ITLCGenTabItem)Activator.CreateInstance(v.Item2);
@@ -321,7 +278,17 @@ namespace TLCGen.ViewModels
                     _LoadedPlugins.Add(tab as ITLCGenPlugin);
                 }
             }
-#warning Implement other plugins, like bars, menus etc.
+            foreach(var tab in TLCGenPluginManager.Default.ApplicationPlugins)
+            {
+                var tabpl = tab as ITLCGenTabItem;
+                if(tabpl != null)
+                {
+                    int i = tabs.Count;
+                    tabpl.Controller = _Controller;
+                    tabs.Add(i, tabpl);
+                    _LoadedPlugins.Add(tab as ITLCGenPlugin);
+                }
+            }
             foreach(var tab in tabs)
             {
                 TabItems.Add(tab.Value);
@@ -338,8 +305,7 @@ namespace TLCGen.ViewModels
                     messpl.UpdateTLCGenMessaging();
                 }
             }
-
-            Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
+            
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             Messenger.Default.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
             Messenger.Default.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));

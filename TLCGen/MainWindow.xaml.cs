@@ -23,6 +23,27 @@ namespace TLCGen
         public MainWindow()
         {
             InitializeComponent();
+
+            MainToolBarTray.DataContextChanged += (s, e) =>
+            {
+                var vm = e.NewValue as ViewModels.MainWindowViewModel;
+                if (vm != null)
+                {
+                    foreach (var pl in vm.ApplicationPlugins)
+                    {
+                        var tbpl = pl as Plugins.ITLCGenToolBar;
+                        if (tbpl != null)
+                        {
+                            var tb = new ToolBar();
+                            tb.Items.Add(tbpl.ToolBarView);
+                            MainToolBarTray.ToolBars.Add(tb);
+                        }
+                    }
+                }
+            };
+
+            ViewModels.MainWindowViewModel mvm = new ViewModels.MainWindowViewModel();
+            this.DataContext = mvm;
         }
     }
 }

@@ -31,13 +31,17 @@ namespace TLCGen.ViewModels
         private ControllerViewModel _ControllerVM;
         private List<MenuItem> _ImportMenuItems;
         private List<MenuItem> _PluginMenuItems;
-
-        private SortedDictionary<int, Type> OwnTabTypes = new SortedDictionary<int, Type>();
+        
         private List<Type> XmlNodeWriterPlugins = new List<Type>();
 
         #endregion // Fields
 
         #region Properties
+
+        public List<ITLCGenPlugin> ApplicationPlugins
+        {
+            get { return _ApplicationPlugins; }
+        }
 
         /// <summary>
         /// ViewModel for the Controller data object that is being edited via the application.
@@ -59,7 +63,10 @@ namespace TLCGen.ViewModels
                     else
                         gen.Generator.Controller = null;
 
-                    var messpl = gen.Generator as ITLCGenPlugMessaging;
+                }
+                foreach(var pl in ApplicationPlugins)
+                {
+                    var messpl = pl as ITLCGenPlugMessaging;
                     if (messpl != null)
                     {
                         messpl.UpdateTLCGenMessaging();
@@ -104,8 +111,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(HasController && !string.IsNullOrEmpty(DataProvider.Instance.FileName))
-                    return "TLCGen - " + DataProvider.Instance.FileName;
+                if(HasController && !string.IsNullOrEmpty(TLCGenControllerDataProvider.Default.ControllerFileName))
+                    return "TLCGen - " + TLCGenControllerDataProvider.Default.ControllerFileName;
                 else
                     return "TLCGen";
             }
@@ -341,15 +348,15 @@ namespace TLCGen.ViewModels
 
         private void NewFileCommand_Executed(object prm)
         {
-            if (!ControllerHasChanged())
+            if (TLCGenControllerDataProvider.Default.NewController())
             {
-                string lastfilename = DataProvider.Instance.FileName;
-                DataProvider.Instance.SetController();
-                ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
+                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                ControllerVM = null;
+                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.SelectedTabIndex = 0;
-                OnPropertyChanged("ProgramTitle");
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                OnPropertyChanged("ProgramTitle");
             }
         }
 
@@ -360,27 +367,17 @@ namespace TLCGen.ViewModels
 
         private void OpenFileCommand_Executed(object prm)
         {
-            if (!ControllerHasChanged())
+            if(TLCGenControllerDataProvider.Default.OpenController())
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.CheckFileExists = true;
-                openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    string lastfilename = DataProvider.Instance.FileName;
-                    DataProvider.Instance.FileName = openFileDialog.FileName;
-                    if (DataProvider.Instance.LoadController())
-                    {
-                        ControllerVM = null;
-                        ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
-                        ControllerVM.LoadPluginDataFromXmlDocument(DataProvider.Instance.ControllerXml);
-                        ControllerVM.SelectedTabIndex = 0;
-                        OnPropertyChanged("ProgramTitle");
-                        Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
-                        Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                        ControllerVM.SetStatusText("regeling geopend");
-                    }
-                }
+                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                ControllerVM = null;
+                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+#warning: move the below logic to the data provider somehow!
+                //ControllerVM.LoadPluginDataFromXmlDocument(TLCGenControllerDataProvider.Default.ControllerXml);
+                ControllerVM.SelectedTabIndex = 0;
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                OnPropertyChanged("ProgramTitle");
             }
         }
 
@@ -391,70 +388,26 @@ namespace TLCGen.ViewModels
 
         private void SaveFileCommand_Executed(object prm)
         {
-            if (string.IsNullOrWhiteSpace(DataProvider.Instance.FileName))
-                SaveAsFileCommand.Execute(null);
-            else
+            if (TLCGenControllerDataProvider.Default.SaveController())
             {
-                // Save all changes to model
-#warning TODO: change to message call
-                //ControllerVM.ProcessAllChanges();
-
-                // Check data integrity: do not save wrong data
-                string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
-                if(s != null)
-                {
-                    System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
-                    return;
-                }
-
-                // Save data to disk, update saved state
-                DataProvider.Instance.SaveController(_ControllerVM.GetControllerXmlData());
-                //DataProvider.Instance.SaveController();
-
-                ControllerVM.HasChanged = false;
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                ControllerVM.SetStatusText("regeling opgeslagen");
             }
         }
 
         private bool SaveFileCommand_CanExecute(object prm)
         {
-            return ControllerVM != null && ControllerVM.HasChanged;
+            return TLCGenControllerDataProvider.Default.Controller != null &&
+                   TLCGenControllerDataProvider.Default.ControllerHasChanged;
         }
 
         private void SaveAsFileCommand_Executed(object prm)
         {
-            // Save all changes to model
-#warning TODO: change to message call
-            //ControllerVM.ProcessAllChanges();
-
-            // Check data integrity: do not save wrong data
-            string s = IntegrityChecker.IsControllerDataOK(_ControllerVM.Controller);
-            if (s != null)
+            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+            if(TLCGenControllerDataProvider.Default.SaveControllerAs())
             {
-                System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
-                return;
-            }
-
-            // Save data to disk, update saved state
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.OverwritePrompt = true;
-            saveFileDialog.Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz";
-            if (!string.IsNullOrWhiteSpace(DataProvider.Instance.FileName))
-                saveFileDialog.FileName = DataProvider.Instance.FileName;
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                string lastfilename = DataProvider.Instance.FileName;
-                DataProvider.Instance.FileName = saveFileDialog.FileName;
-
-                DataProvider.Instance.SaveController(_ControllerVM.GetControllerXmlData());
-                //DataProvider.Instance.SaveController();
-
-                ControllerVM.HasChanged = false;
-                OnPropertyChanged("ProgramTitle");
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, lastfilename));
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                ControllerVM.SetStatusText("regeling opgeslagen");
+                OnPropertyChanged("ProgramTitle");
             }
         }
 
@@ -465,9 +418,8 @@ namespace TLCGen.ViewModels
 
         private void CloseFileCommand_Executed(object prm)
         {
-            if (!ControllerHasChanged())
+            if(TLCGenControllerDataProvider.Default.CloseController())
             {
-                DataProvider.Instance.CloseController();
                 ControllerVM = null;
                 OnPropertyChanged("ProgramTitle");
             }
@@ -497,7 +449,7 @@ namespace TLCGen.ViewModels
                 throw new NotImplementedException();
 
             // Import into existing controller
-            if (!ControllerHasChanged())
+            if (!TLCGenControllerDataProvider.Default.CheckChanged())
             {
                 if (imp.ImportsIntoExisting)
                 {
@@ -523,11 +475,8 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    if (ControllerVM != null)
-                        ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
                     SetController(c2);
                     ControllerVM.ReloadController();
-                    ControllerVM.HasChanged = true;
                 }
                 // Import as new controller
                 else
@@ -545,11 +494,9 @@ namespace TLCGen.ViewModels
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
                     }
-                    if (ControllerVM != null)
-                        ControllerVM.HasChanged = false; // Set forcefully, in case the user decided to ignore changes above
-                    SetNewController(c1);
+                    TLCGenControllerDataProvider.Default.CloseController();
+                    SetController(c1);
                     ControllerVM.ReloadController();
-                    ControllerVM.HasChanged = true;
                 }
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
@@ -602,7 +549,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (ControllerHasChanged())
+            if (TLCGenControllerDataProvider.Default.CheckChanged())
             {
                 e.Cancel = true;
             }
@@ -672,31 +619,6 @@ namespace TLCGen.ViewModels
         #region Public methods
 
         /// <summary>
-        /// Checks wether or not the currently loaded Controller has changes. If it does,
-        /// the method offers the user to save them.
-        /// </summary>
-        /// <returns>True if there are unsaved changes, false if there are not or if
-        /// the user decides to discard them.</returns>
-        public bool ControllerHasChanged()
-        {
-            if (ControllerVM != null && ControllerVM.HasChanged)
-            {
-                System.Windows.MessageBoxResult r = System.Windows.MessageBox.Show("Wijzigingen opslaan?", "De regeling is gewijzigd. Opslaan?", System.Windows.MessageBoxButton.YesNoCancel);
-                if (r == System.Windows.MessageBoxResult.Yes)
-                {
-                    SaveFileCommand.Execute(null);
-                    if (ControllerVM.HasChanged)
-                        return true;
-                }
-                else if (r == System.Windows.MessageBoxResult.Cancel)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Updates the ViewModel structure, causing the View to reload all bound properties.
         /// </summary>
         public void UpdateController()
@@ -713,37 +635,16 @@ namespace TLCGen.ViewModels
         /// <returns>True if successful, false otherwise</returns>
         public bool SetController(ControllerModel cm)
         {
-            if (!ControllerHasChanged())
+            if (TLCGenControllerDataProvider.Default.SetController(cm))
             {
                 if (ControllerVM != null)
                 {
                     ControllerVM.SelectedTabIndex = 0;
                 }
-                string filename = DataProvider.Instance.FileName;
-                DataProvider.Instance.SetController(cm);
-                DataProvider.Instance.FileName = filename;
+                string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                TLCGenControllerDataProvider.Default.SetController(cm);
                 ControllerVM = new ControllerViewModel(cm);
                 ControllerVM.SelectedTabIndex = 0;
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Used to set the loaded Controller to a new instance of ControllerModel. The method also 
-        /// checks for changes, sets program title, and updates bound properties.
-        /// </summary>
-        /// <param name="cm">The instance of ControllerModel to be loaded.</param>
-        /// <returns>True if successful, false otherwise</returns>
-        public bool SetNewController(ControllerModel cm)
-        {
-            if (!ControllerHasChanged())
-            {
-                ControllerVM = null;
-                DataProvider.Instance.SetController(cm);
-                ControllerVM = new ControllerViewModel(cm);
-                ControllerVM.SelectedTabIndex = 0;
-                UpdateController();
                 return true;
             }
             return false;
@@ -781,6 +682,7 @@ namespace TLCGen.ViewModels
                 ITLCGenPlugin instpl = null;
                 if (plugin.Item1.HasFlag(TLCGenPluginElems.Generator) ||
                     plugin.Item1.HasFlag(TLCGenPluginElems.Importer) ||
+                    plugin.Item1.HasFlag(TLCGenPluginElems.ToolBarControl) ||
                     plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
                 {
                     instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
@@ -805,6 +707,7 @@ namespace TLCGen.ViewModels
                 {
                     TLCGenPluginManager.LoadAddinSettings(instpl, plugin.Item2, SettingsProvider.Default.Settings.CustomData);
                     _ApplicationPlugins.Add(instpl as ITLCGenPlugin);
+                    TLCGenPluginManager.Default.ApplicationPlugins.Add(instpl as ITLCGenPlugin);
                 }
             }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
@@ -823,21 +726,14 @@ namespace TLCGen.ViewModels
             // If we are in debug mode, the code below tries loading a file
             // called 'test.tlc' from the folder where the application runs.
 #if DEBUG
-            DataProvider.Instance.FileName = @"C:\Users\NL33478\Documents\Ontwikkeling\TLCGen_test\2017-01-17-testreg\tlcgen\12345.tlc";
-            if(!System.IO.File.Exists(DataProvider.Instance.FileName))
+            TLCGenControllerDataProvider.Default.OpenDebug();
+            if (TLCGenControllerDataProvider.Default.Controller != null)
             {
-                MessageBox.Show("huh? " + DataProvider.Instance.FileName);
-            }
-            if (DataProvider.Instance.LoadController())
-            {
-                ControllerVM = null;
-                ControllerVM = new ControllerViewModel(DataProvider.Instance.Controller);
-                ControllerVM.LoadPluginDataFromXmlDocument(DataProvider.Instance.ControllerXml);
-                ControllerVM.SelectedTabIndex = 0;
-                OnPropertyChanged("ProgramTitle");
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(DataProvider.Instance.FileName, null));
+                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                ControllerVM.SetStatusText("regeling geopend");
+                TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
+                OnPropertyChanged("ProgramTitle");
             }
 #endif
 

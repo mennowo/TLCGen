@@ -238,8 +238,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
 
-            sb.AppendLine("#define dsdummy 0");
-            sb.AppendLine("#define DSMAX   1");
+            if (controller.OVData.OVIngrepen.Count > 0 &&
+                controller.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+            {
+                int index = 0;
+                foreach(var ov in controller.OVData.OVIngrepen.Where(x => x.Vecom))
+                {
+                    sb.AppendLine($"{ts}#define ds{ov.FaseCyclus}_in  {index++}");
+                    sb.AppendLine($"{ts}#define ds{ov.FaseCyclus}_uit {index++}");
+                }
+                sb.AppendLine($"{ts}#define DSMAX    {index}");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}#define dsdummy 0");
+                sb.AppendLine($"{ts}#define DSMAX   1");
+            }
 
             return sb.ToString();
         }

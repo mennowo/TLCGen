@@ -134,6 +134,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
+            if (controller.Data.DSI)
+            {
+                sb.Append(GenerateTabCControlParametersDS(controller));
+            }
             sb.Append(GenerateTabCControlParametersModulen(controller));
             sb.AppendLine();
             if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
@@ -482,6 +486,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ---------- */");
 
             sb.Append(GetAllElementsTabCLines(Parameters));
+
+            return sb.ToString();
+        }
+
+        private string GenerateTabCControlParametersDS(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("/* Selectieve detectie */");
+            sb.AppendLine("/* ------------------- */");
+
+            if (controller.OVData.OVIngrepen.Count > 0 &&
+                controller.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+            {
+                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Vecom))
+                {
+                    sb.AppendLine($"{ts}DS_code[ds{ov.FaseCyclus}_in]  = \"ds{ov.FaseCyclus}_in\";");
+                    sb.AppendLine($"{ts}DS_code[ds{ov.FaseCyclus}_uit] = \"ds{ov.FaseCyclus}_uit\";");
+                }
+            }
+            else
+            {
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\"");
+            }
+            sb.AppendLine();
 
             return sb.ToString();
         }
