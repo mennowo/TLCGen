@@ -191,6 +191,23 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection changed
 
+        #region TLCGen Events
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            if (Detectoren?.Count == 0)
+                return;
+
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            foreach (NaloopDetectorModel ndm in _Naloop.Detectoren)
+            {
+                Detectoren.Add(ndm);
+            }
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+        }
+        
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public NaloopViewModel(NaloopModel nm)
@@ -209,6 +226,8 @@ namespace TLCGen.ViewModels
             SetNaloopTijden();
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             Tijden.CollectionChanged += Tijden_CollectionChanged;
+
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

@@ -355,23 +355,10 @@ namespace TLCGen.ViewModels
             SelectedSignaalGroepInstelling.OnSelected(selectedfiledet, selectedhiaatdet);
         }
 
-        #endregion // Private methods
-
-        #region Public methods
-
-        #endregion // Public methods
-
-        #region TLCGen TabItem overrides
-
-        public override string DisplayName
-        {
-            get { return "RoBuGrover"; }
-        }
-
-        public override void OnSelected()
+        private void UpdateFasenEnDetectoren()
         {
             Fasen.Clear();
-            foreach(FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 var fc = new RoBuGroverTabFaseViewModel(fcm.Naam);
                 Fasen.Add(fc);
@@ -395,6 +382,24 @@ namespace TLCGen.ViewModels
             {
                 OnSelectedSignaalGroepInstellingSelected();
             }
+        }
+
+        #endregion // Private methods
+
+        #region Public methods
+
+        #endregion // Public methods
+
+        #region TLCGen TabItem overrides
+
+        public override string DisplayName
+        {
+            get { return "RoBuGrover"; }
+        }
+
+        public override void OnSelected()
+        {
+            UpdateFasenEnDetectoren();
         }
 
         public override ControllerModel Controller
@@ -429,6 +434,13 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateFasenEnDetectoren();
+            SignaalGroepInstellingen.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            UpdateFasenEnDetectoren();
             SignaalGroepInstellingen.Rebuild();
         }
 
@@ -439,6 +451,7 @@ namespace TLCGen.ViewModels
         public RoBuGroverTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

@@ -36,7 +36,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFileIngreep = value;
-                _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                if (_SelectedFileIngreep != null)
+                {
+                    _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                }
                 OnPropertyChanged("SelectedFileIngreep");
             }
         }
@@ -185,6 +188,11 @@ namespace TLCGen.ViewModels
             FileIngrepen.Rebuild();
         }
 
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            FileIngrepen.Rebuild();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -192,6 +200,7 @@ namespace TLCGen.ViewModels
         public FileTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

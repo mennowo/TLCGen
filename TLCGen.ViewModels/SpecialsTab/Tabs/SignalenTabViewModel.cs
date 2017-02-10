@@ -361,6 +361,25 @@ namespace TLCGen.ViewModels
 
         private void UpdateSelectables()
         {
+            ControllerFasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                ControllerFasen.Add(fcm.Naam);
+            }
+
+            _ControllerDetectoren = new List<string>();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    _ControllerDetectoren.Add(dm.Naam);
+                }
+            }
+            foreach (DetectorModel dm in _Controller.Detectoren)
+            {
+                _ControllerDetectoren.Add(dm.Naam);
+            }
+
             string tempfc = SelectedRatelTikkerFaseToAdd;
             string tempd = SelectedRatelTikkerDetectorToAdd;
             SelectableRatelTikkerFasen.Clear();
@@ -438,26 +457,6 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                ControllerFasen.Add(fcm.Naam);
-            }
-
-            _ControllerDetectoren = new List<string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    _ControllerDetectoren.Add(dm.Naam);
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                if (dm.Type == Models.Enumerations.DetectorTypeEnum.File)
-                    _ControllerDetectoren.Add(dm.Naam);
-            }
-
             UpdateSelectables();
         }
 
@@ -492,6 +491,14 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateSelectables();
+            WaarschuwingsGroepen.Rebuild();
+            RatelTikkers.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            UpdateSelectables();
             WaarschuwingsGroepen.Rebuild();
             RatelTikkers.Rebuild();
         }
@@ -503,6 +510,7 @@ namespace TLCGen.ViewModels
         public SignalenTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

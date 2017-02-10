@@ -585,6 +585,11 @@ namespace TLCGen.ViewModels
 
         private void RefreshMyBitmapImage()
         {
+            if(_EditableBitmap == null)
+            {
+                return;
+            }
+
             using (MemoryStream memory = new MemoryStream())
             {
                 _MyBitmap = new BitmapImage();
@@ -664,6 +669,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            CollectAllIO();
+            RefreshMyBitmapImage();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            CollectAllIO();
+            RefreshMyBitmapImage();
+        }
+
         #endregion // TLCGen Message Handling
 
         #region Constructor
@@ -674,6 +691,8 @@ namespace TLCGen.ViewModels
 
             Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

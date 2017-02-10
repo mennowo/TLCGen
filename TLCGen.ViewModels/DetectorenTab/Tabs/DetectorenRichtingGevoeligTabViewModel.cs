@@ -455,6 +455,12 @@ namespace TLCGen.ViewModels
             RichtingGevoeligVerlengen.Rebuild();
         }
 
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            RichtingGevoeligeAanvragen.Rebuild();
+            RichtingGevoeligVerlengen.Rebuild();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -462,6 +468,7 @@ namespace TLCGen.ViewModels
         public DetectorenRichtingGevoeligTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
 

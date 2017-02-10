@@ -151,6 +151,24 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
+        private void UpdateFasen()
+        {
+            string temp = SelectedFaseNaam;
+            ControllerFasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                ControllerFasen.Add(fcm.Naam);
+            }
+            if (!string.IsNullOrEmpty(temp) && ControllerFasen.Contains(temp))
+            {
+                SelectedFaseNaam = temp;
+            }
+            else if (ControllerFasen.Count > 0)
+            {
+                SelectedFaseNaam = ControllerFasen.First();
+            }
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -166,20 +184,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            string temp = SelectedFaseNaam;
-            ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                ControllerFasen.Add(fcm.Naam);
-            }
-            if(!string.IsNullOrEmpty(temp) && ControllerFasen.Contains(temp))
-            {
-                SelectedFaseNaam = temp;
-            }
-            else if(ControllerFasen.Count > 0)
-            {
-                SelectedFaseNaam = ControllerFasen.First();
-            }
+            UpdateFasen();
         }
 
         public override ControllerModel Controller
@@ -210,6 +215,12 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateFasen();
+            VAOntruimenFasen.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
             VAOntruimenFasen.Rebuild();
         }
 
@@ -220,6 +231,7 @@ namespace TLCGen.ViewModels
         public VAOntruimenTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

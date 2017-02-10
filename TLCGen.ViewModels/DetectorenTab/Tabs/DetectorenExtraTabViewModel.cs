@@ -145,6 +145,7 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
+            Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         bool AddNewDetectorCommand_CanExecute(object prm)
@@ -172,6 +173,7 @@ namespace TLCGen.ViewModels
             {
                 Detectoren.Remove(SelectedDetector);
             }
+            Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         bool RemoveDetectorCommand_CanExecute(object prm)
