@@ -82,7 +82,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             bool result = vm.RemoveGroentijdenSetCommand.CanExecute(null);
 
@@ -97,7 +98,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.SelectedSet = vm.GroentijdenSets[0];
@@ -114,7 +116,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             bool result = vm.AddGroentijdenSetCommand.CanExecute(null);
 
@@ -129,7 +132,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             bool result = vm.AddGroentijdenSetCommand.CanExecute(null);
@@ -145,7 +149,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
 
@@ -160,7 +165,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
                         
@@ -181,7 +187,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -209,7 +216,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -233,7 +241,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -253,7 +262,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
 
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -273,8 +283,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -305,8 +317,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -331,8 +345,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -363,8 +379,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
 
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -389,8 +407,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -427,8 +447,10 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
-            var vmfasen = new FasenLijstTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
+            var vmfasen = new FasenLijstTabViewModel();
+            vmfasen.Controller = model;
             fasenchangedaction.Invoke(new FasenChangedMessage(model.Fasen, model.Fasen, null));
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -459,7 +481,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             model.Data.TypeGroentijden = GroentijdenTypeEnum.MaxGroentijden;
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
@@ -484,7 +507,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "06" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             model.Data.TypeGroentijden = GroentijdenTypeEnum.VerlengGroentijden;
-            var vm = new FasenGroentijdenSetsTabViewModel(model);
+            var vm = new FasenGroentijdenSetsTabViewModel();
+            vm.Controller = model;
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);

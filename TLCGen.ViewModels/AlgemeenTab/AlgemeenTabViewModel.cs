@@ -10,6 +10,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -301,6 +302,38 @@ namespace TLCGen.ViewModels
             set { }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    _ControllerData = base.Controller.Data;
+
+                    Versies.CollectionChanged -= Versies_CollectionChanged;
+                    Versies.Clear();
+                    foreach (VersieModel vm in _ControllerData.Versies)
+                    {
+                        VersieViewModel vvm = new VersieViewModel(vm);
+                        Versies.Add(vvm);
+                    }
+                    Versies.CollectionChanged += Versies_CollectionChanged;
+                }
+                else
+                {
+                    _ControllerData = null;
+                    Versies.CollectionChanged -= Versies_CollectionChanged;
+                    Versies.Clear();
+                }
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -328,16 +361,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public AlgemeenTabViewModel(ControllerModel controller) : base(controller)
+        public AlgemeenTabViewModel() : base()
         {
-            _ControllerData = controller.Data;
-
-            foreach(VersieModel vm in _ControllerData.Versies)
-            {
-                VersieViewModel vvm = new VersieViewModel(vm);
-                Versies.Add(vvm);
-            }
-            Versies.CollectionChanged += Versies_CollectionChanged;
 
         }
 

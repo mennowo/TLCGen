@@ -93,6 +93,23 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection changed
 
+        #region TLCGen Events
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            if (Detectoren?.Count == 0)
+                return;
+
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            foreach (MeeaanvraagDetectorModel ndm in _Meeaanvraag.Detectoren)
+            {
+                Detectoren.Add(ndm);
+            }
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public MeeaanvraagViewModel(MeeaanvraagModel mm)
@@ -103,6 +120,8 @@ namespace TLCGen.ViewModels
                 Detectoren.Add(d);
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

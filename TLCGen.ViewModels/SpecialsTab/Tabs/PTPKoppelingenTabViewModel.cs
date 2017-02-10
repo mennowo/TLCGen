@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -136,6 +137,35 @@ namespace TLCGen.ViewModels
         {
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+
+                    PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
+                    PTPKoppelingen.Clear();
+                    foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
+                    {
+                        PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+                    }
+                    PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
+                }
+                else
+                {
+                    PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
+                    PTPKoppelingen.Clear();
+                }
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -163,14 +193,9 @@ namespace TLCGen.ViewModels
         
         #region Constructor
 
-        public PTPKoppelingenTabViewModel(ControllerModel controller) : base(controller)
+        public PTPKoppelingenTabViewModel() : base()
         {
-            foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
-            {
-                PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
-            }
 
-            PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
         }
 
         #endregion // Constructor

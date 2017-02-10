@@ -10,7 +10,8 @@
         ToolBarControl = 0x10,
         IOElementProvider = 0x20,
         XMLNodeWriter = 0x40,
-        HasSettings = 0x80
+        HasSettings = 0x80,
+        PlugMessaging = 0x100
     }
 
     [System.AttributeUsage(System.AttributeTargets.Class)]

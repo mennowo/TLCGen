@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -360,6 +361,25 @@ namespace TLCGen.ViewModels
 
         private void UpdateSelectables()
         {
+            ControllerFasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                ControllerFasen.Add(fcm.Naam);
+            }
+
+            _ControllerDetectoren = new List<string>();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    _ControllerDetectoren.Add(dm.Naam);
+                }
+            }
+            foreach (DetectorModel dm in _Controller.Detectoren)
+            {
+                _ControllerDetectoren.Add(dm.Naam);
+            }
+
             string tempfc = SelectedRatelTikkerFaseToAdd;
             string tempd = SelectedRatelTikkerDetectorToAdd;
             SelectableRatelTikkerFasen.Clear();
@@ -437,27 +457,32 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                ControllerFasen.Add(fcm.Naam);
-            }
-
-            _ControllerDetectoren = new List<string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    _ControllerDetectoren.Add(dm.Naam);
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                if (dm.Type == Models.Enumerations.DetectorTypeEnum.File)
-                    _ControllerDetectoren.Add(dm.Naam);
-            }
-
             UpdateSelectables();
+        }
+
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
+                    RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+                }
+                else
+                {
+                    WaarschuwingsGroepen = null;
+                    RatelTikkers = null;
+                }
+                OnPropertyChanged("WaarschuwingsGroepen");
+                OnPropertyChanged("RatelTikkers");
+            }
         }
 
         #endregion // TLCGen TabItem overrides
@@ -466,6 +491,14 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateSelectables();
+            WaarschuwingsGroepen.Rebuild();
+            RatelTikkers.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            UpdateSelectables();
             WaarschuwingsGroepen.Rebuild();
             RatelTikkers.Rebuild();
         }
@@ -474,11 +507,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SignalenTabViewModel(ControllerModel controller) : base(controller)
+        public SignalenTabViewModel() : base()
         {
-            WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
-            RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

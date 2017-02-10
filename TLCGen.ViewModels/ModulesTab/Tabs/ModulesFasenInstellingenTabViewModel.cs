@@ -8,6 +8,7 @@ using TLCGen.Models;
 using TLCGen.Helpers;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -59,6 +60,27 @@ namespace TLCGen.ViewModels
         {
             
         }
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if(base.Controller != null)
+                {
+                    Fasen = new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData);
+                }
+                else
+                {
+                    Fasen = null;
+                }
+                OnPropertyChanged("Fasen");
+            }
+        }
 
         #endregion // TabItem Overrides
 
@@ -102,10 +124,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesFasenInstellingenTabViewModel(ControllerModel controller) : base(controller)
+        public ModulesFasenInstellingenTabViewModel() : base()
         {
-            Fasen = new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(controller.ModuleMolen.FasenModuleData);
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

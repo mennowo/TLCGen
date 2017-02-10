@@ -15,6 +15,8 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Operations;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -144,6 +146,7 @@ namespace TLCGen.ViewModels
             dm.Naam = newname;
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
+            Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         bool AddNewDetectorCommand_CanExecute(object prm)
@@ -153,23 +156,24 @@ namespace TLCGen.ViewModels
 
         void RemoveDetectorCommand_Executed(object prm)
         {
+            bool changed = false;
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
-                // Create temporary List cause we cannot directly remove the selection,
-                // as it will cause the selection to change while we loop it
-                List<DetectorViewModel> ldvm = new List<DetectorViewModel>();
+                changed = true;
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
-                    ldvm.Add(dvm);
-                }
-                foreach (DetectorViewModel dvm in ldvm)
-                {
-                    Detectoren.Remove(dvm);
+                    ControllerModifier.RemoveDetectorFromController(_Controller, dvm.Naam);
                 }
             }
             else if (SelectedDetector != null)
             {
-                Detectoren.Remove(SelectedDetector);
+                changed = true;
+                ControllerModifier.RemoveDetectorFromController(_Controller, SelectedDetector.Naam);
+            }
+
+            if (changed)
+            {
+                Messenger.Default.Send(new DetectorenChangedMessage());
             }
         }
 
@@ -207,6 +211,34 @@ namespace TLCGen.ViewModels
             this.Detectoren.BubbleSort();
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                    Detectoren.Clear();
+                    foreach (DetectorModel dm in base.Controller.Detectoren)
+                    {
+                        Detectoren.Add(new DetectorViewModel(dm));
+                    }
+                    Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+                }
+                else
+                {
+                    Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                    Detectoren.Clear();
+                }
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -235,14 +267,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenExtraTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenExtraTabViewModel() : base()
         {
-            foreach(DetectorModel dm in _Controller.Detectoren)
-            {
-                Detectoren.Add(new DetectorViewModel(dm));
-            }
-
-            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
         #endregion // Constructor

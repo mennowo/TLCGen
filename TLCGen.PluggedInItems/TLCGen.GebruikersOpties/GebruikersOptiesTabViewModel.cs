@@ -17,7 +17,8 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.GebruikersOpties
 {
-    [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter)]
+    [TLCGenTabItem(-1, TabItemTypeEnum.MainWindow)]
+    [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter | TLCGenPluginElems.IOElementProvider)]
     public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider
     {
         #region Constants
@@ -409,6 +410,11 @@ namespace TLCGen.GebruikersOpties
         public bool OnDeselectedPreview()
         {
             return true;
+        }
+
+        public void LoadTabs()
+        {
+
         }
 
         #endregion // ITLCGenTabItem

@@ -23,6 +23,26 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
+        public ControllerModel Controller
+        {
+            get { return _Controller; }
+            set
+            {
+                _Controller = value;
+                if (_Controller != null)
+                {
+                    _OVData = Controller.OVData;
+                    OVIngreepSGParameters =
+                        new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+                }
+                else
+                {
+                    OVIngreepSGParameters = null;
+                }
+                OnPropertyChanged("OVIngreepSGParameters");
+            }
+        }
+
         public ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel> OVIngreepSGParameters
         {
             get;
@@ -123,16 +143,12 @@ namespace TLCGen.ViewModels
 
         #endregion TLCGen events
 
+
+
         #region Constructor
 
-        public OVIngreepSGInstellingenLijstViewModel(ControllerModel controller)
+        public OVIngreepSGInstellingenLijstViewModel()
         {
-            _OVData = controller.OVData;
-            _Controller = controller;
-
-            OVIngreepSGParameters = 
-                new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(controller.OVData.OVIngreepSignaalGroepParameters);
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));

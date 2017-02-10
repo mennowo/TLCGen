@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TLCGen.Plugins;
 
 namespace TLCGen
 {
@@ -29,13 +30,12 @@ namespace TLCGen
                 var vm = e.NewValue as ViewModels.MainWindowViewModel;
                 if (vm != null)
                 {
-                    foreach (var pl in vm.ApplicationPlugins)
+                    foreach (var pl in vm.ApplicationParts)
                     {
-                        var tbpl = pl as Plugins.ITLCGenToolBar;
-                        if (tbpl != null)
+                        if ((pl.Item1 & TLCGenPluginElems.ToolBarControl) == TLCGenPluginElems.ToolBarControl)
                         {
                             var tb = new ToolBar();
-                            tb.Items.Add(tbpl.ToolBarView);
+                            tb.Items.Add((pl.Item2 as ITLCGenToolBar).ToolBarView);
                             MainToolBarTray.ToolBars.Add(tb);
                         }
                     }

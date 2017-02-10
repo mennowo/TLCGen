@@ -8,8 +8,6 @@ namespace TLCGen.Plugins
     {
         UserControl GeneratorView { get; }
 
-        ControllerModel Controller { set; }
-
         bool CanGenerateController();
         void GenerateController();
 

@@ -17,6 +17,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 using TLCGen.ViewModels.Enums;
 
 namespace TLCGen.ViewModels
@@ -391,6 +392,21 @@ namespace TLCGen.ViewModels
             foreach (DetectorModel dm in Controller.Detectoren)
             {
                 _AllDetectoren.Add(dm.Naam);
+            }
+        }
+
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                DisplayType = SynchronisatieTypeEnum.Conflict;
+                BuildConflictMatrix();
             }
         }
 
@@ -938,12 +954,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SynchronisatiesTabViewModel(ControllerModel controller) : base(controller)
+        public SynchronisatiesTabViewModel() : base()
         {
-            DisplayType = SynchronisatieTypeEnum.Conflict;
-
-            BuildConflictMatrix();
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));

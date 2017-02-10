@@ -98,7 +98,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
 
-                foreach (var plug in TLCGen.Plugins.TLCGenPluginManager.Default.LoadedPlugins)
+                foreach (var plug in TLCGen.Plugins.TLCGenPluginManager.Default.ApplicationPlugins)
                 {
                     var elemprov = plug as ITLCGenElementProvider;
                     if (elemprov != null)

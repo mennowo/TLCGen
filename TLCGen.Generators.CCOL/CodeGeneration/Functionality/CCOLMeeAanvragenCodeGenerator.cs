@@ -29,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         _MyElements.Add(
                             new CCOLElement(
-                                $"mad{dm.MeeaanvraagDetector}",
+                                $"{_hmad}{dm.MeeaanvraagDetector}",
                                 CCOLElementTypeEnum.HulpElement));
                     }
                 }
@@ -81,7 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 foreach(MeeaanvraagDetectorModel dm in ma.Detectoren)
                                 {
-                                    sb.AppendLine($"{ts}IH[hmad{dm.MeeaanvraagDetector}]= SG[fc{ma.FaseVan}] ? FALSE : IH[hmad{dm.MeeaanvraagDetector}] || D[d{dm.MeeaanvraagDetector}] && !G[fc{ma.FaseVan}] && A[fc{ma.FaseVan}];");
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]= SG[{_fcpf}{ma.FaseVan}] ? FALSE : IH[{_hpf}{_hmad}{dm.MeeaanvraagDetector}] || D[{_dpf}{dm.MeeaanvraagDetector}] && !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}];");
                                 }
                             }
                         }
@@ -94,19 +94,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             switch(ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($"{ts}mee_aanvraag(fc{ma.FaseNaar}, (bool) (!G[fc{ma.FaseVan}] && A[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (!G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($"{ts}mee_aanvraag(fc{ma.FaseNaar}, (bool) (RA[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
-                                    sb.AppendLine($"{ts}mee_aanvraag(fc{ma.FaseNaar}, (bool) (SG[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (SG[{_fcpf}{ma.FaseVan}]));");
                                     break;
                             }
                         }
                         else
                         {
-                            sb.Append($"{ts}mee_aanvraag(fc{ma.FaseNaar}, (bool) ((");
+                            sb.Append($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) ((");
                             int i = 0;
                             foreach (MeeaanvraagDetectorModel dm in ma.Detectoren)
                             {
@@ -115,19 +115,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append(" || ");
                                 }
                                 ++i;
-                                sb.Append($"H[hmad{dm.MeeaanvraagDetector}]");
+                                sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
                             }
 
                             switch (ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($") && !G[fc{ma.FaseVan}] && A[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($") && !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($") && RA[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($") && RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
-                                    sb.AppendLine($") && SG[fc{ma.FaseVan}]));");
+                                    sb.AppendLine($") && SG[{_fcpf}{ma.FaseVan}]));");
                                     break;
                             }
                         }

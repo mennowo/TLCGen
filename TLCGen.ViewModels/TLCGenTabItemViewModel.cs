@@ -34,10 +34,14 @@ namespace TLCGen.ViewModels
 
         public virtual System.Windows.DataTemplate ContentDataTemplate { get { return null; } }
 
-        public ControllerModel Controller
+        public virtual ControllerModel Controller
         {
             get { return _Controller; }
-            set { _Controller = value; }
+            set
+            {
+                _Controller = value;
+                OnPropertyChanged(null);
+            }
         }
 
         public virtual ImageSource Icon
@@ -78,11 +82,19 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
+        #region Public Methods
+        
+        public virtual void LoadTabs()
+        {
+
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
-        public TLCGenTabItemViewModel(ControllerModel controller)
+        public TLCGenTabItemViewModel()
         {
-            _Controller = controller;
         }
 
         #endregion // Constructor

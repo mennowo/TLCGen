@@ -81,7 +81,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PeriodenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.PeriodenTab)
+        public PeriodenTabViewModel() : base(TabItemTypeEnum.PeriodenTab)
         {
             
         }

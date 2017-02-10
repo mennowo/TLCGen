@@ -159,12 +159,11 @@ namespace TLCGen.Integrity
             }
 
             // Check plugins
-            foreach(var pl in TLCGenPluginManager.Default.LoadedPlugins)
+            foreach(var pl in TLCGenPluginManager.Default.ApplicationParts)
             {
-                var ipl = pl as ITLCGenElementProvider;
-                if (ipl != null)
+                if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
                 {
-                    if (!ipl.IsElementNameUnique(naam))
+                    if (!(pl as ITLCGenElementProvider).IsElementNameUnique(naam))
                         return false;
                 }
             }

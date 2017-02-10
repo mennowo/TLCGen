@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -127,7 +128,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenLijstTimersTabViewModel(ControllerModel controller) : base(controller)
+        public FasenLijstTimersTabViewModel() : base()
         {
         }
 

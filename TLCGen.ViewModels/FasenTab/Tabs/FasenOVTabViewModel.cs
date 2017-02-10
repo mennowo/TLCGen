@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -204,6 +205,20 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                _OVIngreepSGInstellingenLijstVM.Controller = value;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -212,9 +227,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenOVTabViewModel(ControllerModel controller) : base(controller)
+        public FasenOVTabViewModel() : base()
         {
-            _OVIngreepSGInstellingenLijstVM = new OVIngreepSGInstellingenLijstViewModel(controller);
+            _OVIngreepSGInstellingenLijstVM = new OVIngreepSGInstellingenLijstViewModel();
         }
 
         #endregion // Constructor

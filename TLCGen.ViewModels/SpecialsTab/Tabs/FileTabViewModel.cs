@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -35,7 +36,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFileIngreep = value;
-                _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                if (_SelectedFileIngreep != null)
+                {
+                    _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                }
                 OnPropertyChanged("SelectedFileIngreep");
             }
         }
@@ -153,6 +157,28 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
+                }
+                else
+                {
+                    FileIngrepen = null;
+                }
+                OnPropertyChanged("FileIngrepen");
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
@@ -162,14 +188,19 @@ namespace TLCGen.ViewModels
             FileIngrepen.Rebuild();
         }
 
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            FileIngrepen.Rebuild();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
 
-        public FileTabViewModel(ControllerModel controller) : base(controller)
+        public FileTabViewModel() : base()
         {
-            FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

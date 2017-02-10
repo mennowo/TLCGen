@@ -11,6 +11,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -354,23 +355,10 @@ namespace TLCGen.ViewModels
             SelectedSignaalGroepInstelling.OnSelected(selectedfiledet, selectedhiaatdet);
         }
 
-        #endregion // Private methods
-
-        #region Public methods
-
-        #endregion // Public methods
-
-        #region TLCGen TabItem overrides
-
-        public override string DisplayName
-        {
-            get { return "RoBuGrover"; }
-        }
-
-        public override void OnSelected()
+        private void UpdateFasenEnDetectoren()
         {
             Fasen.Clear();
-            foreach(FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 var fc = new RoBuGroverTabFaseViewModel(fcm.Naam);
                 Fasen.Add(fc);
@@ -396,12 +384,63 @@ namespace TLCGen.ViewModels
             }
         }
 
+        #endregion // Private methods
+
+        #region Public methods
+
+        #endregion // Public methods
+
+        #region TLCGen TabItem overrides
+
+        public override string DisplayName
+        {
+            get { return "RoBuGrover"; }
+        }
+
+        public override void OnSelected()
+        {
+            UpdateFasenEnDetectoren();
+        }
+
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
+                    SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+                }
+                else
+                {
+                    ConflictGroepen = null;
+                    SignaalGroepInstellingen = null;
+                }
+                OnPropertyChanged("ConflictGroepen");
+                OnPropertyChanged("SignaalGroepInstellingen");
+                AutomaticallySetSelectableSignalGroups = true;
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateFasenEnDetectoren();
+            SignaalGroepInstellingen.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            UpdateFasenEnDetectoren();
             SignaalGroepInstellingen.Rebuild();
         }
 
@@ -409,13 +448,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public RoBuGroverTabViewModel(ControllerModel controller) : base(controller)
+        public RoBuGroverTabViewModel() : base()
         {
-            ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
-            SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
-
-            AutomaticallySetSelectableSignalGroups = true;
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

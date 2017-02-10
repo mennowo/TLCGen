@@ -25,10 +25,28 @@ namespace TLCGen.ViewModels
         private FaseCyclusModuleViewModel _SelectedFaseCyclus;
         private ModuleViewModel _SelectedModule;
         private ObservableCollection<FaseCyclusModuleViewModel> _Fasen;
+        private ControllerModel _Controller;
 
         #endregion // Fields
 
         #region Properties
+
+        public ControllerModel Controller
+        {
+            get { return _Controller; }
+            set
+            {
+                _Controller = value;
+                Fasen.Clear();
+                if (_Controller != null)
+                {
+                    foreach (FaseCyclusModel fcm in Controller.Fasen)
+                    {
+                        Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
+                    }
+                }
+            }
+        }
 
         public ObservableCollection<FaseCyclusModuleViewModel> Fasen
         {
@@ -139,13 +157,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesTabFasenLijstViewModel(ModulesDetailsTabViewModel modulestabvm)
+        public ModulesTabFasenLijstViewModel()
         {   
-            foreach(FaseCyclusModel fcm in modulestabvm.Controller.Fasen)
-            {
-                Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
-            }
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

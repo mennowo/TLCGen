@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -133,6 +136,26 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
+        #region Private Methods
+
+        private void UpdateDetectoren()
+        {
+            Detectoren.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    Detectoren.Add(new DetectorViewModel(dm));
+                }
+            }
+            foreach (DetectorModel dm in _Controller.Detectoren)
+            {
+                Detectoren.Add(new DetectorViewModel(dm));
+            }
+        }
+
+        #endregion // Private Methods
+
         #region Public methods
 
         #endregion // Public methods
@@ -155,26 +178,25 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            Detectoren.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    Detectoren.Add(new DetectorViewModel(dm));
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                Detectoren.Add(new DetectorViewModel(dm));
-            }
+            UpdateDetectoren();
         }
 
         #endregion // TabItem Overrides
 
+        #region TLCGen Events
+        
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            UpdateDetectoren();
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
-        public DetectorenSimulatieTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenSimulatieTabViewModel() : base()
         {
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

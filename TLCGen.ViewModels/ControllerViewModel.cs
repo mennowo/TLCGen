@@ -27,11 +27,8 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private TLCGenStatusBarViewModel _StatusBarVM;
-
-        private bool _HasChanged;
+        
         private ControllerModel _Controller;
-
-        private List<ITLCGenPlugin> _LoadedPlugins;
 
         private ObservableCollection<ITLCGenTabItem> _TabItems;
         private ITLCGenTabItem _SelectedTab;
@@ -47,7 +44,15 @@ namespace TLCGen.ViewModels
         public ControllerModel Controller
         {
             get { return _Controller; }
-            set { _Controller = value; }
+            set
+            {
+                _Controller = value;
+                foreach (var tab in _TabItems)
+                {
+                    tab.Controller = value;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public ObservableCollection<ITLCGenTabItem> TabItems
@@ -245,64 +250,37 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ControllerViewModel(ControllerModel controller)
+        public ControllerViewModel()
         {
-            _Controller = controller;
-            _LoadedPlugins = new List<ITLCGenPlugin>();
-
-#warning This must be moved: to plugin manager
-
             var tabs = new SortedDictionary<int, ITLCGenTabItem>();
-            foreach(var v in TLCGenPluginManager.Default.ApplicationParts)
+            var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
+            int plugindex = 100;
+            foreach(var part in parts)
             {
-                if(v.Item1.HasFlag(TLCGenPluginElems.TabControl))
+                if((part.Item1 & TLCGenPluginElems.TabControl) == TLCGenPluginElems.TabControl)
                 {
-                    var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(v.Item2, typeof(TLCGenTabItemAttribute));
-                    if (attr != null && attr.Type == TabItemTypeEnum.MainWindow)
+                    var attr = part.Item2.GetType().GetCustomAttribute<TLCGenTabItemAttribute>();
+                    if(attr != null && attr.Type == TabItemTypeEnum.MainWindow)
                     {
-                        tabs.Add(attr.Index, (ITLCGenTabItem)Activator.CreateInstance(v.Item2, _Controller));
+                        if(attr.Index == -1)
+                        {
+                            tabs.Add(plugindex++, part.Item2 as ITLCGenTabItem);
+                        }
+                        else
+                        {
+                            tabs.Add(attr.Index, part.Item2 as ITLCGenTabItem);
+                        }
                     }
                 }
             }
-            foreach (var v in TLCGenPluginManager.Default.Plugins)
-            {
-                if (v.Item1.HasFlag(TLCGenPluginElems.TabControl) &&
-                    !v.Item1.HasFlag(TLCGenPluginElems.Generator) &&
-                    !v.Item1.HasFlag(TLCGenPluginElems.Importer) &&
-                    !v.Item1.HasFlag(TLCGenPluginElems.ToolBarControl))
-                {
-                    int i = tabs.Count;
-                    var tab = (ITLCGenTabItem)Activator.CreateInstance(v.Item2);
-                    tab.Controller = _Controller;
-                    tabs.Add(i, tab);
-                    _LoadedPlugins.Add(tab as ITLCGenPlugin);
-                }
-            }
-            foreach(var tab in TLCGenPluginManager.Default.ApplicationPlugins)
-            {
-                var tabpl = tab as ITLCGenTabItem;
-                if(tabpl != null)
-                {
-                    int i = tabs.Count;
-                    tabpl.Controller = _Controller;
-                    tabs.Add(i, tabpl);
-                    _LoadedPlugins.Add(tab as ITLCGenPlugin);
-                }
-            }
+
             foreach(var tab in tabs)
             {
                 TabItems.Add(tab.Value);
-            }
-
-            TLCGenPluginManager.Default.LoadedPlugins.Clear();
-            foreach(var pl in _LoadedPlugins)
-            {
-                TLCGenPluginManager.Default.LoadedPlugins.Add(pl);
-
-                var messpl = pl as ITLCGenPlugMessaging;
-                if(messpl != null)
+                var attr = tab.Value.GetType().GetCustomAttribute<TLCGenTabItemAttribute>();
+                if((attr.Type & TabItemTypeEnum.MainWindow) == TabItemTypeEnum.MainWindow)
                 {
-                    messpl.UpdateTLCGenMessaging();
+                    tab.Value.LoadTabs();
                 }
             }
             

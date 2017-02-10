@@ -12,9 +12,11 @@ using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging;
+using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Operations;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -184,6 +186,7 @@ namespace TLCGen.ViewModels
             dvm1.FaseCyclus = _SelectedFase.Naam;
             _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
+            Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         bool AddNewDetectorCommand_CanExecute(object prm)
@@ -211,6 +214,7 @@ namespace TLCGen.ViewModels
             if (changed)
             {
                 SelectedFaseNaam = SelectedFaseNaam;
+                Messenger.Default.Send(new DetectorenChangedMessage());
             }
         }
 
@@ -265,7 +269,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenFasenTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenFasenTabViewModel() : base()
         {
         }
 

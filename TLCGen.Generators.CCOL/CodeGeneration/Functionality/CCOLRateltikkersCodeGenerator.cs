@@ -19,6 +19,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
+#pragma warning disable 0649
         private string _usrt;
         private string _hrt;
         private string _hperiod;
@@ -26,7 +27,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmperrt;
         private string _prmperrta;
         private string _prmperrtdim;
-    
+#pragma warning restore 0649
+
         #endregion // Fields
 
         #region Properties

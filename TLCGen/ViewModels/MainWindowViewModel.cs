@@ -24,23 +24,25 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private List<IGeneratorViewModel> _Generators;
-        private List<ITLCGenPlugin> _ApplicationPlugins;
-        private IGeneratorViewModel _SelectedGenerator;
-        private TLCGenSettingsViewModel _SettingsVM;
         private ControllerViewModel _ControllerVM;
+        private TLCGenSettingsViewModel _SettingsVM;
+
+
+        private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _ApplicationParts;
+
         private List<MenuItem> _ImportMenuItems;
         private List<MenuItem> _PluginMenuItems;
+        private List<IGeneratorViewModel> _Generators;
         
-        private List<Type> XmlNodeWriterPlugins = new List<Type>();
+        private IGeneratorViewModel _SelectedGenerator;
 
         #endregion // Fields
 
         #region Properties
 
-        public List<ITLCGenPlugin> ApplicationPlugins
+        public List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts
         {
-            get { return _ApplicationPlugins; }
+            get { return _ApplicationParts; }
         }
 
         /// <summary>
@@ -55,22 +57,9 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerVM = value;
-
-                foreach(var gen in Generators)
+                foreach(var pl in ApplicationParts)
                 {
-                    if (value != null)
-                        gen.Generator.Controller = _ControllerVM.Controller;
-                    else
-                        gen.Generator.Controller = null;
-
-                }
-                foreach(var pl in ApplicationPlugins)
-                {
-                    var messpl = pl as ITLCGenPlugMessaging;
-                    if (messpl != null)
-                    {
-                        messpl.UpdateTLCGenMessaging();
-                    }
+                    pl.Item2.Controller = TLCGenControllerDataProvider.Default.Controller;
                 }
                 
                 OnPropertyChanged("ControllerVM");
@@ -84,7 +73,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public bool HasController
         {
-            get { return ControllerVM != null; }
+            get { return TLCGenControllerDataProvider.Default.Controller != null; }
         }
 
         /// <summary>
@@ -351,12 +340,13 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.NewController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                ControllerVM = null;
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                TLCGenControllerDataProvider.Default.NewController();
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
+                OnPropertyChanged("HasController");
             }
         }
 
@@ -370,14 +360,14 @@ namespace TLCGen.ViewModels
             if(TLCGenControllerDataProvider.Default.OpenController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                ControllerVM = null;
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
 #warning: move the below logic to the data provider somehow!
                 //ControllerVM.LoadPluginDataFromXmlDocument(TLCGenControllerDataProvider.Default.ControllerXml);
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
+                OnPropertyChanged("HasController");
             }
         }
 
@@ -420,7 +410,7 @@ namespace TLCGen.ViewModels
         {
             if(TLCGenControllerDataProvider.Default.CloseController())
             {
-                ControllerVM = null;
+                OnPropertyChanged("HasController");
                 OnPropertyChanged("ProgramTitle");
             }
         }
@@ -522,7 +512,7 @@ namespace TLCGen.ViewModels
                 throw new NotImplementedException();
 
             if (imp.ImportsIntoExisting)
-                return ControllerVM != null;
+                return TLCGenControllerDataProvider.Default.Controller != null;
 
             return true;
         }
@@ -555,7 +545,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                foreach (var pl in _ApplicationPlugins)
+                foreach (var pl in _ApplicationParts)
                 {
                     var setpl = pl as ITLCGenHasSettings;
                     if (setpl != null)
@@ -643,7 +633,7 @@ namespace TLCGen.ViewModels
                 }
                 string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 TLCGenControllerDataProvider.Default.SetController(cm);
-                ControllerVM = new ControllerViewModel(cm);
+                ControllerVM.Controller = cm;
                 ControllerVM.SelectedTabIndex = 0;
                 return true;
             }
@@ -656,83 +646,75 @@ namespace TLCGen.ViewModels
 
         public MainWindowViewModel()
         {
-            _ApplicationPlugins = new List<ITLCGenPlugin>();
-
             // Load application settings (defaults, etc.)
             SettingsProvider.Default.LoadApplicationSettings();
 
-            // Load tab types
-            string myfolder = System.AppDomain.CurrentDomain.BaseDirectory;
-            string nspace = "TLCGen.ViewModels";
-            
-            var q = from t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                    where t.IsClass && t.Namespace == nspace
-                    select t;
-            foreach(var type in q)
-            {
-                TLCGenPluginManager.Default.ApplicationParts.Add(new Tuple<TLCGenPluginElems, Type>(TLCGenPluginElems.TabControl, type));
-            }
-
-            // Load addins
+            // Load available applicationparts and plugins
+            TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");
             TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
-            // Load application wide plugins
-            foreach (var plugin in TLCGenPluginManager.Default.Plugins)
+            // Instantiate all parts
+            _ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
+            var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
+            foreach (var part in parts)
             {
-                ITLCGenPlugin instpl = null;
-                if (plugin.Item1.HasFlag(TLCGenPluginElems.Generator) ||
-                    plugin.Item1.HasFlag(TLCGenPluginElems.Importer) ||
-                    plugin.Item1.HasFlag(TLCGenPluginElems.ToolBarControl) ||
-                    plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
+                ITLCGenPlugin instpl = part.Item2;
+                var flags = Enum.GetValues(typeof(TLCGenPluginElems));
+                foreach(TLCGenPluginElems elem in flags)
                 {
-                    instpl = (ITLCGenPlugin)Activator.CreateInstance(plugin.Item2);
-                    if(plugin.Item1.HasFlag(TLCGenPluginElems.Generator))
+                    if ((part.Item1 & elem) == elem)
                     {
-                        Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                        switch (elem)
+                        {
+                            case TLCGenPluginElems.Generator:
+                                Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                                break;
+                            case TLCGenPluginElems.HasSettings:
+                                ((ITLCGenHasSettings)instpl).LoadSettings();
+                                break;
+                            case TLCGenPluginElems.Importer:
+                                MenuItem mi = new MenuItem();
+                                mi.Header = instpl.GetPluginName();
+                                mi.Command = ImportControllerCommand;
+                                mi.CommandParameter = instpl;
+                                ImportMenuItems.Add(mi);
+                                break;
+                            case TLCGenPluginElems.IOElementProvider:
+                                break;
+                            case TLCGenPluginElems.MenuControl:
+                                PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
+                                break;
+                            case TLCGenPluginElems.TabControl:
+                                break;
+                            case TLCGenPluginElems.ToolBarControl:
+                                break;
+                            case TLCGenPluginElems.XMLNodeWriter:
+                                break;
+                            case TLCGenPluginElems.PlugMessaging:
+                                (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
+                                break;
+                        }
                     }
-                    if(plugin.Item1.HasFlag(TLCGenPluginElems.Importer))
-                    {
-                       MenuItem mi = new MenuItem();
-                       mi.Header = instpl.GetPluginName();
-                       mi.Command = ImportControllerCommand;
-                       mi.CommandParameter = instpl;
-                       ImportMenuItems.Add(mi);
-                    }
-                    if (plugin.Item1.HasFlag(TLCGenPluginElems.MenuControl))
-                    {
-                        PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
-                    }
+                    TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);
                 }
-                if (instpl != null)
-                {
-                    TLCGenPluginManager.LoadAddinSettings(instpl, plugin.Item2, SettingsProvider.Default.Settings.CustomData);
-                    _ApplicationPlugins.Add(instpl as ITLCGenPlugin);
-                    TLCGenPluginManager.Default.ApplicationPlugins.Add(instpl as ITLCGenPlugin);
-                }
+                _ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
             }
             if (Generators.Count > 0) SelectedGenerator = Generators[0];
+            
+            // Construct the ViewModel
+            ControllerVM = new ControllerViewModel();
 
-            foreach(var pl in _ApplicationPlugins)
-            {
-                var setpl = pl as ITLCGenHasSettings;
-                if(setpl != null)
-                {
-                    setpl.LoadSettings();
-                }
-            }
-
-#warning TODO: also load menu items, tabs, etc.
-
-            // If we are in debug mode, the code below tries loading a file
-            // called 'test.tlc' from the folder where the application runs.
+            // If we are in debug mode, the code below tries loading default file
 #if DEBUG
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
             }
 #endif

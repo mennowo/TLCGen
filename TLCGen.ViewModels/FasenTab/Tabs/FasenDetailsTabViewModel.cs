@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -83,7 +84,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenDetailsTabViewModel(ControllerModel controller) : base(controller)
+        public FasenDetailsTabViewModel() : base()
         {
         }
 

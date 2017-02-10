@@ -10,6 +10,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -150,6 +151,24 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
+        private void UpdateFasen()
+        {
+            string temp = SelectedFaseNaam;
+            ControllerFasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                ControllerFasen.Add(fcm.Naam);
+            }
+            if (!string.IsNullOrEmpty(temp) && ControllerFasen.Contains(temp))
+            {
+                SelectedFaseNaam = temp;
+            }
+            else if (ControllerFasen.Count > 0)
+            {
+                SelectedFaseNaam = ControllerFasen.First();
+            }
+        }
+
         #endregion // Private methods
 
         #region Public methods
@@ -165,19 +184,28 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            string temp = SelectedFaseNaam;
-            ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            UpdateFasen();
+        }
+
+        public override ControllerModel Controller
+        {
+            get
             {
-                ControllerFasen.Add(fcm.Naam);
+                return base.Controller;
             }
-            if(!string.IsNullOrEmpty(temp) && ControllerFasen.Contains(temp))
+
+            set
             {
-                SelectedFaseNaam = temp;
-            }
-            else if(ControllerFasen.Count > 0)
-            {
-                SelectedFaseNaam = ControllerFasen.First();
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
+                }
+                else
+                {
+                    VAOntruimenFasen = null;
+                }
+                OnPropertyChanged("VAOntruimenFasen");
             }
         }
 
@@ -187,6 +215,12 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            UpdateFasen();
+            VAOntruimenFasen.Rebuild();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
             VAOntruimenFasen.Rebuild();
         }
 
@@ -194,10 +228,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public VAOntruimenTabViewModel(ControllerModel controller) : base(controller)
+        public VAOntruimenTabViewModel() : base()
         {
-            VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor

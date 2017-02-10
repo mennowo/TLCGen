@@ -487,10 +487,10 @@ namespace TLCGen.ViewModels
             }
 
             // IO from plugins
-            foreach (var v in TLCGenPluginManager.Default.LoadedPlugins)
+            foreach (var v in TLCGenPluginManager.Default.ApplicationPlugins)
             {
                 var pl = v as ITLCGenElementProvider;
-                if(v != null)
+                if(pl != null)
                 {
                     var initems = ((ITLCGenElementProvider)v).GetInputItems();
                     var outitems = ((ITLCGenElementProvider)v).GetOutputItems();
@@ -585,6 +585,11 @@ namespace TLCGen.ViewModels
 
         private void RefreshMyBitmapImage()
         {
+            if(_EditableBitmap == null)
+            {
+                return;
+            }
+
             using (MemoryStream memory = new MemoryStream())
             {
                 _MyBitmap = new BitmapImage();
@@ -664,16 +669,30 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            CollectAllIO();
+            RefreshMyBitmapImage();
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            CollectAllIO();
+            RefreshMyBitmapImage();
+        }
+
         #endregion // TLCGen Message Handling
 
         #region Constructor
 
-        public BitmapTabViewModel(ControllerModel controller) : base(controller)
+        public BitmapTabViewModel() : base()
         {
             _FloodFiller = new QueueLinearFloodFiller(null);
 
             Messenger.Default.Register(this, new Action<ControllerFileNameChangedMessage>(OnFileNameChanged));
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
         }
 
         #endregion // Constructor
