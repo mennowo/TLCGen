@@ -55,6 +55,31 @@ namespace TLCGen.ViewModels
             
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                ModuleMolenVM.Controller = value;
+                FasenLijstVM.Controller = value;
+                if (ModuleMolenVM.Modules.Count > 0)
+                {
+                    ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
+                    FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
+                }
+
+                if (FasenLijstVM.Fasen.Count > 0)
+                {
+                    FasenLijstVM.SelectedFaseCyclus = FasenLijstVM.Fasen[0];
+                }
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Public Methods
@@ -72,21 +97,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesDetailsTabViewModel(ControllerModel controller) : base(controller)
+        public ModulesDetailsTabViewModel() : base()
         {
-            _ModuleMolenVM = new ModuleMolenViewModel(_Controller, this);
-            _FasenLijstVM = new ModulesTabFasenLijstViewModel(this);
-
-            if (ModuleMolenVM.Modules.Count > 0)
-            {
-                ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
-                FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
-            }
-
-            if (FasenLijstVM.Fasen.Count > 0)
-            {
-                FasenLijstVM.SelectedFaseCyclus = FasenLijstVM.Fasen[0];
-            }
+            _ModuleMolenVM = new ModuleMolenViewModel(this);
+            _FasenLijstVM = new ModulesTabFasenLijstViewModel();
         }
 
         #endregion // Constructor

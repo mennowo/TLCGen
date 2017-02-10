@@ -172,7 +172,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.DetectieTab)
+        public DetectorenTabViewModel() : base(TabItemTypeEnum.DetectieTab)
         {
             
         }

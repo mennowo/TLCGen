@@ -394,6 +394,21 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                DisplayType = SynchronisatieTypeEnum.Conflict;
+                BuildConflictMatrix();
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Commands
@@ -938,12 +953,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SynchronisatiesTabViewModel(ControllerModel controller) : base(controller)
+        public SynchronisatiesTabViewModel() : base()
         {
-            DisplayType = SynchronisatieTypeEnum.Conflict;
-
-            BuildConflictMatrix();
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));

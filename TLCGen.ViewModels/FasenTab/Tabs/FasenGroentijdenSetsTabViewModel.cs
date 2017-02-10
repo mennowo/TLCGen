@@ -184,7 +184,14 @@ namespace TLCGen.ViewModels
         private void BuildGroentijdenMatrix()
         {
             if (GroentijdenSets == null || GroentijdenSets.Count == 0)
-                return;
+            {
+                SetNames.Clear();
+                FasenNames.Clear();
+                GroentijdenMatrix = new GroentijdViewModel[0,0];
+                OnPropertyChanged("SetNames");
+                OnPropertyChanged("FasenNames");
+                OnPropertyChanged("GroentijdenMatrix");
+            }
 
             foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
             {
@@ -253,6 +260,27 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
 
+        }
+
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                GroentijdenSets.CollectionChanged -= GroentijdenSets_CollectionChanged;
+                GroentijdenSets.Clear();
+                foreach (GroentijdenSetModel gsm in base.Controller.GroentijdenSets)
+                {
+                    GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
+                }
+                BuildGroentijdenMatrix();
+                GroentijdenSets.CollectionChanged += GroentijdenSets_CollectionChanged;
+            }
         }
 
         #endregion // TabItem Overrides
@@ -344,21 +372,12 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenGroentijdenSetsTabViewModel(ControllerModel controller) : base(controller)
+        public FasenGroentijdenSetsTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
-
-            foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)
-            {
-                GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
-            }
-
-            BuildGroentijdenMatrix();
-
-            GroentijdenSets.CollectionChanged += GroentijdenSets_CollectionChanged;
         }
 
 

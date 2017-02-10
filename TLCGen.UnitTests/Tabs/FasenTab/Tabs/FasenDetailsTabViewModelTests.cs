@@ -46,7 +46,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenDetailsTabViewModel(model);
+            var vm = new FasenDetailsTabViewModel();
+            vm.Controller = model;
 
             vm.OnSelected();
 
@@ -61,7 +62,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenDetailsTabViewModel(model);
+            var vm = new FasenDetailsTabViewModel();
+            vm.Controller = model;
 
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[3];

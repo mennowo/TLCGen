@@ -92,11 +92,28 @@ namespace TLCGen.ViewModels
             SelectedTab?.OnDeselected();
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                foreach(var tab in TabItems)
+                {
+                    tab.Controller = value;
+                }
+                base.Controller = value;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Constructor
 
-        public TLCGenMainTabItemViewModel(ControllerModel controller, TabItemTypeEnum type) : base(controller)
+        public TLCGenMainTabItemViewModel(TabItemTypeEnum type) : base()
         {
             SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
 
@@ -113,7 +130,7 @@ namespace TLCGen.ViewModels
 
             foreach (var tab in TabTypes)
             {
-                var v = Activator.CreateInstance(tab.Value, _Controller);
+                var v = Activator.CreateInstance(tab.Value);
                 TabItems.Add(v as ITLCGenTabItem);
             }
         }

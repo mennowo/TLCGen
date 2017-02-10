@@ -127,7 +127,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenLijstTimersTabViewModel(ControllerModel controller) : base(controller)
+        public FasenLijstTimersTabViewModel() : base()
         {
         }
 

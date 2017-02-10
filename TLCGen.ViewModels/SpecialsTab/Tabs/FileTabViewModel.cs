@@ -153,6 +153,21 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
+                OnPropertyChanged("FileIngrepen");
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
@@ -166,9 +181,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FileTabViewModel(ControllerModel controller) : base(controller)
+        public FileTabViewModel() : base()
         {
-            FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

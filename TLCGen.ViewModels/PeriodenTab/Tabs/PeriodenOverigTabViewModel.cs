@@ -209,6 +209,28 @@ namespace TLCGen.ViewModels
         {
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                if (Periodes != null)
+                {
+                    Periodes.CollectionChanged -= Periodes_CollectionChanged;
+                }
+                Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(base.Controller.PeriodenData.Perioden);
+                Periodes.CollectionChanged += Periodes_CollectionChanged;
+                OnPropertyChanged("Periodes");
+                ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
+                view.Filter = FilterPerioden;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Private Methods
@@ -232,14 +254,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public PeriodenOverigTabViewModel(ControllerModel controller) : base(controller)
+        public PeriodenOverigTabViewModel() : base()
         {
-            Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(controller.PeriodenData.Perioden);
-            
-            Periodes.CollectionChanged += Periodes_CollectionChanged;
-
-            ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
-            view.Filter = FilterPerioden;
         }
 
         #endregion // Constructor

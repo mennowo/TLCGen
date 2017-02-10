@@ -419,6 +419,23 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                RichtingGevoeligeAanvragen = new ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel>(base.Controller.RichtingGevoeligeAanvragen);
+                RichtingGevoeligVerlengen = new ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel>(base.Controller.RichtingGevoeligVerlengen);
+                OnPropertyChanged("RichtingGevoeligeAanvragen");
+                OnPropertyChanged("RichtingGevoeligVerlengen");
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region TLCGen Events
@@ -433,11 +450,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenRichtingGevoeligTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenRichtingGevoeligTabViewModel() : base()
         {
-            RichtingGevoeligeAanvragen = new ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel>(controller.RichtingGevoeligeAanvragen);
-            RichtingGevoeligVerlengen = new ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel>(controller.RichtingGevoeligVerlengen);
-
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

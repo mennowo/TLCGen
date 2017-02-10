@@ -10,7 +10,6 @@ namespace TLCGen.Plugins
 {
     public interface ITLCGenToolBar : ITLCGenPlugin
     {
-        ControllerModel Controller { get; set; }
         bool IsEnabled { get; set; }
         UserControl ToolBarView { get; }
     }

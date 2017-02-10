@@ -396,6 +396,24 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
+                SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+                OnPropertyChanged("ConflictGroepen");
+                OnPropertyChanged("SignaalGroepInstellingen");
+                AutomaticallySetSelectableSignalGroups = true;
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
@@ -409,12 +427,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public RoBuGroverTabViewModel(ControllerModel controller) : base(controller)
+        public RoBuGroverTabViewModel() : base()
         {
-            ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
-            SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
-
-            AutomaticallySetSelectableSignalGroups = true;
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

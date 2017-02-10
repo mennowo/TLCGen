@@ -22,6 +22,24 @@ namespace TLCGen.ViewModels
         private ModuleViewModel _SelectedModule;
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
 
+        public ControllerModel Controller
+        {
+            get { return _Controller; }
+            set
+            {
+                _Controller = value;
+                _ModuleMolen = _Controller.ModuleMolen;
+                Modules.CollectionChanged -= Modules_CollectionChanged;
+                Modules.Clear();
+                foreach (ModuleModel mm in _ModuleMolen.Modules)
+                {
+                    ModuleViewModel mvm = new ModuleViewModel(mm);
+                    Modules.Add(mvm);
+                }
+                Modules.CollectionChanged += Modules_CollectionChanged;
+            }
+        }
+
         public ObservableCollection<ModuleViewModel> Modules
         {
             get
@@ -183,7 +201,7 @@ namespace TLCGen.ViewModels
         {
             ModuleModel mm = new ModuleModel();
             mm.Naam = "ML" + (Modules.Count + 1).ToString();
-            ModuleViewModel mvm = new ModuleViewModel(_Controller, mm);
+            ModuleViewModel mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
         }
 
@@ -241,7 +259,7 @@ namespace TLCGen.ViewModels
             Modules.Clear();
             foreach (ModuleModel mm in _ModuleMolen.Modules)
             {
-                ModuleViewModel mvm = new ModuleViewModel(_Controller, mm);
+                ModuleViewModel mvm = new ModuleViewModel(mm);
                 Modules.Add(mvm);
             }
             Modules.CollectionChanged += Modules_CollectionChanged;
@@ -251,20 +269,9 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModuleMolenViewModel(ControllerModel controller, ModulesDetailsTabViewModel modulestabvm)
+        public ModuleMolenViewModel(ModulesDetailsTabViewModel mltab)
         {
-            _Controller = controller;
-            _ModulesTabVM = modulestabvm;
-            _ModuleMolen = _Controller.ModuleMolen;
-
-            foreach (ModuleModel mm in _ModuleMolen.Modules)
-            {
-                ModuleViewModel mvm = new ModuleViewModel(_Controller, mm);
-                Modules.Add(mvm);
-            }
-
-            Modules.CollectionChanged += Modules_CollectionChanged;
-
+            _ModulesTabVM = mltab;
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

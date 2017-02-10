@@ -100,7 +100,6 @@ namespace TLCGen.DataAccess
         {
             if (!CheckChanged())
             {
-                Messenger.Reset();
                 if (cm != null)
                     Controller = cm;
                 else
@@ -150,8 +149,6 @@ namespace TLCGen.DataAccess
                         }
                         if (Controller != null)
                         {
-                            Messenger.Reset();
-
                             _ControllerXml = new XmlDocument();
                             _ControllerXml.Load(ControllerFileName);
                         }
@@ -316,8 +313,6 @@ namespace TLCGen.DataAccess
                 }
                 if (Controller != null)
                 {
-                    Messenger.Reset();
-
                     _ControllerXml = new XmlDocument();
                     _ControllerXml.Load(ControllerFileName);
                 }
@@ -327,7 +322,6 @@ namespace TLCGen.DataAccess
                 }
             }
             Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
-            Messenger.Default.Send(new UpdateTabsEnabledMessage());
             return true;
         }
 #endif

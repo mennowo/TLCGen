@@ -80,7 +80,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.ModulesTab)
+        public ModulesTabViewModel() : base(TabItemTypeEnum.ModulesTab)
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }

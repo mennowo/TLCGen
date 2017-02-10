@@ -460,6 +460,23 @@ namespace TLCGen.ViewModels
             UpdateSelectables();
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
+                RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+                OnPropertyChanged("WaarschuwingsGroepen");
+                OnPropertyChanged("RatelTikkers");
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
@@ -474,10 +491,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SignalenTabViewModel(ControllerModel controller) : base(controller)
+        public SignalenTabViewModel() : base()
         {
-            WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
-            RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

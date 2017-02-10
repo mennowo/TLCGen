@@ -9,8 +9,7 @@ namespace TLCGen.Plugins
         string DisplayName { get; }
         ImageSource Icon { get; }
         DataTemplate ContentDataTemplate { get; }
-
-        ControllerModel Controller { get; set; }
+        
         bool IsEnabled { get; set; }
 
         bool CanBeEnabled();

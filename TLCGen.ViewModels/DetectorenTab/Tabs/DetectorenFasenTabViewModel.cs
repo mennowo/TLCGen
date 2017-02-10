@@ -265,7 +265,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenFasenTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenFasenTabViewModel() : base()
         {
         }
 

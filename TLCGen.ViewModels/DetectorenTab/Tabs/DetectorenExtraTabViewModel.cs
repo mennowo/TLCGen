@@ -207,6 +207,26 @@ namespace TLCGen.ViewModels
             this.Detectoren.BubbleSort();
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                Detectoren.Clear();
+                foreach (DetectorModel dm in base.Controller.Detectoren)
+                {
+                    Detectoren.Add(new DetectorViewModel(dm));
+                }
+                Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -235,14 +255,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenExtraTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenExtraTabViewModel() : base()
         {
-            foreach(DetectorModel dm in _Controller.Detectoren)
-            {
-                Detectoren.Add(new DetectorViewModel(dm));
-            }
-
-            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
 
         #endregion // Constructor

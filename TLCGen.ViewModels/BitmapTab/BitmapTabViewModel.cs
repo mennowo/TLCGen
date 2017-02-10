@@ -490,7 +490,7 @@ namespace TLCGen.ViewModels
             foreach (var v in TLCGenPluginManager.Default.LoadedPlugins)
             {
                 var pl = v as ITLCGenElementProvider;
-                if(v != null)
+                if(pl != null)
                 {
                     var initems = ((ITLCGenElementProvider)v).GetInputItems();
                     var outitems = ((ITLCGenElementProvider)v).GetOutputItems();
@@ -668,7 +668,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public BitmapTabViewModel(ControllerModel controller) : base(controller)
+        public BitmapTabViewModel() : base()
         {
             _FloodFiller = new QueueLinearFloodFiller(null);
 

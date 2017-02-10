@@ -15,6 +15,19 @@ namespace TLCGen.Importers.TabC
     [TLCGenPlugin(TLCGenPluginElems.Importer)]
     public class TabCExistingControllerImporter : ITLCGenImporter
     {
+        public ControllerModel Controller
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public bool ImportsIntoExisting { get { return true; } }
         public string Name { get { return "Importeer tab.c (in bestaande regeling)"; } }
 

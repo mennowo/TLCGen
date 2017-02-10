@@ -173,7 +173,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenSimulatieTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenSimulatieTabViewModel() : base()
         {
         }
 

@@ -145,7 +145,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.FasenTab)
+        public FasenTabViewModel() : base(TabItemTypeEnum.FasenTab)
         {
             
         }

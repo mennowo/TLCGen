@@ -47,7 +47,19 @@ namespace TLCGen.ViewModels
         public ControllerModel Controller
         {
             get { return _Controller; }
-            set { _Controller = value; }
+            set
+            {
+                _Controller = value;
+                foreach(var pl in _LoadedPlugins)
+                {
+                    pl.Controller = value;
+                }
+                foreach (var tab in _TabItems)
+                {
+                    tab.Controller = value;
+                }
+                RaisePropertyChanged();
+            }
         }
 
         public ObservableCollection<ITLCGenTabItem> TabItems
@@ -245,9 +257,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ControllerViewModel(ControllerModel controller)
+        public ControllerViewModel()
         {
-            _Controller = controller;
             _LoadedPlugins = new List<ITLCGenPlugin>();
 
 #warning This must be moved: to plugin manager
@@ -260,7 +271,7 @@ namespace TLCGen.ViewModels
                     var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(v.Item2, typeof(TLCGenTabItemAttribute));
                     if (attr != null && attr.Type == TabItemTypeEnum.MainWindow)
                     {
-                        tabs.Add(attr.Index, (ITLCGenTabItem)Activator.CreateInstance(v.Item2, _Controller));
+                        tabs.Add(attr.Index, (ITLCGenTabItem)Activator.CreateInstance(v.Item2));
                     }
                 }
             }
@@ -273,7 +284,6 @@ namespace TLCGen.ViewModels
                 {
                     int i = tabs.Count;
                     var tab = (ITLCGenTabItem)Activator.CreateInstance(v.Item2);
-                    tab.Controller = _Controller;
                     tabs.Add(i, tab);
                     _LoadedPlugins.Add(tab as ITLCGenPlugin);
                 }
@@ -284,7 +294,6 @@ namespace TLCGen.ViewModels
                 if(tabpl != null)
                 {
                     int i = tabs.Count;
-                    tabpl.Controller = _Controller;
                     tabs.Add(i, tabpl);
                     _LoadedPlugins.Add(tab as ITLCGenPlugin);
                 }

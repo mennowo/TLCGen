@@ -136,6 +136,26 @@ namespace TLCGen.ViewModels
         {
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
+                PTPKoppelingen.Clear();
+                foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
+                {
+                    PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+                }
+                PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -163,14 +183,9 @@ namespace TLCGen.ViewModels
         
         #region Constructor
 
-        public PTPKoppelingenTabViewModel(ControllerModel controller) : base(controller)
+        public PTPKoppelingenTabViewModel() : base()
         {
-            foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
-            {
-                PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
-            }
 
-            PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
         }
 
         #endregion // Constructor

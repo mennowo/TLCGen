@@ -181,6 +181,21 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
+                OnPropertyChanged("VAOntruimenFasen");
+            }
+        }
+
         #endregion // TLCGen TabItem overrides
 
         #region TLCGen Events
@@ -194,9 +209,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public VAOntruimenTabViewModel(ControllerModel controller) : base(controller)
+        public VAOntruimenTabViewModel() : base()
         {
-            VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 

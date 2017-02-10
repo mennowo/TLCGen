@@ -111,7 +111,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModuleViewModel(ControllerModel c, ModuleModel module)
+        public ModuleViewModel(ModuleModel module)
         {
             _Module = module;
 

@@ -301,6 +301,29 @@ namespace TLCGen.ViewModels
             set { }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                _ControllerData = base.Controller.Data;
+
+                Versies.CollectionChanged -= Versies_CollectionChanged;
+                Versies.Clear();
+                foreach (VersieModel vm in _ControllerData.Versies)
+                {
+                    VersieViewModel vvm = new VersieViewModel(vm);
+                    Versies.Add(vvm);
+                }
+                Versies.CollectionChanged += Versies_CollectionChanged;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region Collection Changed
@@ -328,16 +351,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public AlgemeenTabViewModel(ControllerModel controller) : base(controller)
+        public AlgemeenTabViewModel() : base()
         {
-            _ControllerData = controller.Data;
-
-            foreach(VersieModel vm in _ControllerData.Versies)
-            {
-                VersieViewModel vvm = new VersieViewModel(vm);
-                Versies.Add(vvm);
-            }
-            Versies.CollectionChanged += Versies_CollectionChanged;
 
         }
 

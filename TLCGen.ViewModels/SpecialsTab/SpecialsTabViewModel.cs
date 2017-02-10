@@ -80,7 +80,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SpecialsTabViewModel(ControllerModel controller) : base(controller, TabItemTypeEnum.SpecialsTab)
+        public SpecialsTabViewModel() : base(TabItemTypeEnum.SpecialsTab)
         {
             
         }

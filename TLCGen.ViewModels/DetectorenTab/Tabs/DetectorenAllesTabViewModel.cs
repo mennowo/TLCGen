@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public DetectorenAllesTabViewModel(ControllerModel controller) : base(controller)
+        public DetectorenAllesTabViewModel() : base()
         {
         }
 

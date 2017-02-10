@@ -221,6 +221,28 @@ namespace TLCGen.ViewModels
             return true;
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                Fasen.CollectionChanged -= Fasen_CollectionChanged;
+                Fasen.Clear();
+                foreach (FaseCyclusModel fcm in base.Controller.Fasen)
+                {
+                    var fcvm = new FaseCyclusViewModel(fcm);
+                    fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
+                    Fasen.Add(fcvm);
+                }
+                Fasen.CollectionChanged += Fasen_CollectionChanged;
+            }
+        }
+
         #endregion // TabItem Overrides
 
         #region TLCGen Event handling
@@ -303,16 +325,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenLijstTabViewModel(ControllerModel controller) : base(controller)
+        public FasenLijstTabViewModel() : base()
         {
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                var fcvm = new FaseCyclusViewModel(fcm);
-                fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
-                Fasen.Add(fcvm);
-            }
-            Fasen.CollectionChanged += Fasen_CollectionChanged;
-
             Messenger.Default.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
         }
 

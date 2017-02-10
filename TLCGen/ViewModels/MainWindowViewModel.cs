@@ -84,7 +84,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public bool HasController
         {
-            get { return ControllerVM != null; }
+            get { return TLCGenControllerDataProvider.Default.Controller != null; }
         }
 
         /// <summary>
@@ -351,12 +351,13 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.NewController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                ControllerVM = null;
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                TLCGenControllerDataProvider.Default.NewController();
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
+                OnPropertyChanged("HasController");
             }
         }
 
@@ -370,14 +371,14 @@ namespace TLCGen.ViewModels
             if(TLCGenControllerDataProvider.Default.OpenController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                ControllerVM = null;
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
 #warning: move the below logic to the data provider somehow!
                 //ControllerVM.LoadPluginDataFromXmlDocument(TLCGenControllerDataProvider.Default.ControllerXml);
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
+                OnPropertyChanged("HasController");
             }
         }
 
@@ -420,7 +421,7 @@ namespace TLCGen.ViewModels
         {
             if(TLCGenControllerDataProvider.Default.CloseController())
             {
-                ControllerVM = null;
+                OnPropertyChanged("HasController");
                 OnPropertyChanged("ProgramTitle");
             }
         }
@@ -522,7 +523,7 @@ namespace TLCGen.ViewModels
                 throw new NotImplementedException();
 
             if (imp.ImportsIntoExisting)
-                return ControllerVM != null;
+                return TLCGenControllerDataProvider.Default.Controller != null;
 
             return true;
         }
@@ -643,7 +644,7 @@ namespace TLCGen.ViewModels
                 }
                 string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 TLCGenControllerDataProvider.Default.SetController(cm);
-                ControllerVM = new ControllerViewModel(cm);
+                ControllerVM.Controller = cm;
                 ControllerVM.SelectedTabIndex = 0;
                 return true;
             }
@@ -721,6 +722,8 @@ namespace TLCGen.ViewModels
                 }
             }
 
+            ControllerVM = new ControllerViewModel();
+
 #warning TODO: also load menu items, tabs, etc.
 
             // If we are in debug mode, the code below tries loading a file
@@ -729,10 +732,12 @@ namespace TLCGen.ViewModels
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
-                ControllerVM = new ControllerViewModel(TLCGenControllerDataProvider.Default.Controller);
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 OnPropertyChanged("ProgramTitle");
             }
 #endif

@@ -83,7 +83,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenDetailsTabViewModel(ControllerModel controller) : base(controller)
+        public FasenDetailsTabViewModel() : base()
         {
         }
 
