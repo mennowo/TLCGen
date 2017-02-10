@@ -42,7 +42,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddFaseCommand_Executed_AddsFase()
         {
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.AddFaseCommand.Execute(null);
 
@@ -52,7 +53,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddFaseCommand_Executed5Times_Adds5Fasen()
         {
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
@@ -66,7 +68,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddFaseCommand_Executed5Times_5thFaseCorrectlyNamed()
         {
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.AddFaseCommand.Execute(null);
             vm.AddFaseCommand.Execute(null);
@@ -81,7 +84,8 @@ namespace TLCGen.UnitTests
         public void RemoveFaseCommand_ExecutedWithFaseSelected_RemovesFase()
         {
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
             vm.SelectedFaseCyclus = vm.Fasen[0];
 
             vm.RemoveFaseCommand.Execute(null);
@@ -97,7 +101,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.SelectedFaseCyclus = vm.Fasen[0];
             vm.RemoveFaseCommand.Execute(null);
@@ -116,7 +121,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void RemoveFaseCommand_NoFasenPresent_CannotExecute()
         {
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             bool result = vm.RemoveFaseCommand.CanExecute(null);
             
@@ -127,7 +133,8 @@ namespace TLCGen.UnitTests
         public void RemoveFaseCommand_FasenPresentAndSelected_CanExecute()
         {
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.SelectedFaseCyclus = vm.Fasen[0];
             bool result = vm.RemoveFaseCommand.CanExecute(null);
@@ -138,7 +145,8 @@ namespace TLCGen.UnitTests
         [Test]
         public void AddFaseCommand_NoFasenPresent_CanExecute()
         {
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             bool result = vm.AddFaseCommand.CanExecute(null);
 
@@ -149,7 +157,8 @@ namespace TLCGen.UnitTests
         public void AddFaseCommand_FasenPresent_CanExecute()
         {
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             bool result = vm.AddFaseCommand.CanExecute(null);
 
@@ -164,7 +173,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.Fasen[2].Naam = "07";
             vm.OnDeselected();
@@ -181,7 +191,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "07" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "08" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "09" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.Fasen[4].Naam = "05";
             vm.OnDeselected();
@@ -198,7 +209,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
 
             vm.SelectedFaseCycli.Add(vm.Fasen[0]);
             vm.SelectedFaseCycli.Add(vm.Fasen[1]);
@@ -222,7 +234,8 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            FasenLijstTabViewModel vm = new FasenLijstTabViewModel(model);
+            FasenLijstTabViewModel vm = new FasenLijstTabViewModel();
+            vm.Controller = model;
             
             vm.SelectedFaseCycli.Add(vm.Fasen[1]);
             vm.SelectedFaseCycli.Add(vm.Fasen[2]);

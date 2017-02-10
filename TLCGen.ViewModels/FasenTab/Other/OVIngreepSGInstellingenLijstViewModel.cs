@@ -29,9 +29,16 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                _OVData = Controller.OVData;
-                OVIngreepSGParameters =
-                    new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+                if (_Controller != null)
+                {
+                    _OVData = Controller.OVData;
+                    OVIngreepSGParameters =
+                        new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+                }
+                else
+                {
+                    OVIngreepSGParameters = null;
+                }
                 OnPropertyChanged("OVIngreepSGParameters");
             }
         }

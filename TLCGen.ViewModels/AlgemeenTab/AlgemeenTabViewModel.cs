@@ -10,6 +10,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -311,16 +312,25 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                _ControllerData = base.Controller.Data;
-
-                Versies.CollectionChanged -= Versies_CollectionChanged;
-                Versies.Clear();
-                foreach (VersieModel vm in _ControllerData.Versies)
+                if (base.Controller != null)
                 {
-                    VersieViewModel vvm = new VersieViewModel(vm);
-                    Versies.Add(vvm);
+                    _ControllerData = base.Controller.Data;
+
+                    Versies.CollectionChanged -= Versies_CollectionChanged;
+                    Versies.Clear();
+                    foreach (VersieModel vm in _ControllerData.Versies)
+                    {
+                        VersieViewModel vvm = new VersieViewModel(vm);
+                        Versies.Add(vvm);
+                    }
+                    Versies.CollectionChanged += Versies_CollectionChanged;
                 }
-                Versies.CollectionChanged += Versies_CollectionChanged;
+                else
+                {
+                    _ControllerData = null;
+                    Versies.CollectionChanged -= Versies_CollectionChanged;
+                    Versies.Clear();
+                }
             }
         }
 

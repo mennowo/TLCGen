@@ -15,6 +15,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Operations;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -233,13 +234,16 @@ namespace TLCGen.ViewModels
                 base.Controller = value;
                 Fasen.CollectionChanged -= Fasen_CollectionChanged;
                 Fasen.Clear();
-                foreach (FaseCyclusModel fcm in base.Controller.Fasen)
+                if (base.Controller != null)
                 {
-                    var fcvm = new FaseCyclusViewModel(fcm);
-                    fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
-                    Fasen.Add(fcvm);
+                    foreach (FaseCyclusModel fcm in base.Controller.Fasen)
+                    {
+                        var fcvm = new FaseCyclusViewModel(fcm);
+                        fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
+                        Fasen.Add(fcvm);
+                    }
+                    Fasen.CollectionChanged += Fasen_CollectionChanged;
                 }
-                Fasen.CollectionChanged += Fasen_CollectionChanged;
             }
         }
 

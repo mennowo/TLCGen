@@ -28,15 +28,24 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                _ModuleMolen = _Controller.ModuleMolen;
-                Modules.CollectionChanged -= Modules_CollectionChanged;
-                Modules.Clear();
-                foreach (ModuleModel mm in _ModuleMolen.Modules)
+                if (_Controller != null)
                 {
-                    ModuleViewModel mvm = new ModuleViewModel(mm);
-                    Modules.Add(mvm);
+                    _ModuleMolen = _Controller.ModuleMolen;
+                    Modules.CollectionChanged -= Modules_CollectionChanged;
+                    Modules.Clear();
+                    foreach (ModuleModel mm in _ModuleMolen.Modules)
+                    {
+                        ModuleViewModel mvm = new ModuleViewModel(mm);
+                        Modules.Add(mvm);
+                    }
+                    Modules.CollectionChanged += Modules_CollectionChanged;
                 }
-                Modules.CollectionChanged += Modules_CollectionChanged;
+                else
+                {
+                    _ModuleMolen = null;
+                    Modules.CollectionChanged -= Modules_CollectionChanged;
+                    Modules.Clear();
+                }
             }
         }
 

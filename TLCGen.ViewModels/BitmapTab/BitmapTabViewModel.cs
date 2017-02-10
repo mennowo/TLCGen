@@ -487,7 +487,7 @@ namespace TLCGen.ViewModels
             }
 
             // IO from plugins
-            foreach (var v in TLCGenPluginManager.Default.LoadedPlugins)
+            foreach (var v in TLCGenPluginManager.Default.ApplicationPlugins)
             {
                 var pl = v as ITLCGenElementProvider;
                 if(pl != null)

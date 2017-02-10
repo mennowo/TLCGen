@@ -8,10 +8,9 @@ namespace TLCGen.Plugins
 {
     public interface ITLCGenPluginManager
     {
-        List<Tuple<TLCGenPluginElems, Type>> Plugins { get; }
-        List<Tuple<TLCGenPluginElems, Type>> ApplicationParts { get; }
-        List<ITLCGenPlugin> LoadedPlugins { get; }
-        List<ITLCGenPlugin> ApplicationPlugins { get; }
+        List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationPlugins { get; }
+        List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts { get; }
         void LoadPlugins(string pluginpath);
+        void LoadApplicationParts(string nspace);
     }
 }

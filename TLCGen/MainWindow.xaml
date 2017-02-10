@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:TLCGen"
         xmlns:vm="clr-namespace:TLCGen.ViewModels"
         xmlns:vw="clr-namespace:TLCGen.Views"
-        xmlns:data="clr-namespace:TLCGen.DataAccess"
         mc:Ignorable="d"
         DataContext="{Binding}"
         Title="{Binding Path=ProgramTitle}" Height="550" Width="700">
@@ -126,7 +125,7 @@
                 <ContentPresenter Content="{Binding Path=SelectedGenerator.GeneratorView}" />
             </ToolBar>
         </ToolBarTray>
-        <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}">
+        <Grid Grid.Row="2" IsEnabled="{Binding Path=HasController}" Visibility="{Binding Path=HasController,Converter={StaticResource Bool2VisConv}}">
             <vw:ControllerView DataContext="{Binding Path=ControllerVM}" />
         </Grid>
         <vw:TLCGenStatusBar Grid.Row="3" DataContext="{Binding Path=ControllerVM.StatusBarVM}" />

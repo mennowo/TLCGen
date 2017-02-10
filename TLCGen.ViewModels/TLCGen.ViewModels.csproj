@@ -147,7 +147,6 @@
     <Compile Include="Templates\FaseCyclusTemplateViewModel.cs" />
     <Compile Include="Templates\TemplatesManagerViewModelT.cs" />
     <Compile Include="Templates\TemplateViewModelBase.cs" />
-    <Compile Include="TLCGenTabItemAttribute.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>

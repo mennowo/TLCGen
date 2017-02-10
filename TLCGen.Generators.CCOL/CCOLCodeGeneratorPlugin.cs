@@ -20,7 +20,10 @@ using TLCGen.Plugins;
 
 namespace TLCGen.Generators.CCOL
 {
-    [TLCGenPlugin(TLCGenPluginElems.Generator | TLCGenPluginElems.HasSettings | TLCGenPluginElems.MenuControl)]
+    [TLCGenPlugin(TLCGenPluginElems.Generator | 
+                  TLCGenPluginElems.HasSettings | 
+                  TLCGenPluginElems.MenuControl | 
+                  TLCGenPluginElems.PlugMessaging)]
     public class CCOLCodeGeneratorPlugin : ITLCGenGenerator, ITLCGenHasSettings, ITLCGenMenuItem, ITLCGenPlugMessaging
     {
         #region ITLCGenGenerator

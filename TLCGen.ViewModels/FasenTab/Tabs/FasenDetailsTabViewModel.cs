@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {

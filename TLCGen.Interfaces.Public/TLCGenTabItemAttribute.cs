@@ -1,15 +1,14 @@
-﻿namespace TLCGen.ViewModels
+﻿namespace TLCGen.Plugins
 {
     public enum TabItemTypeEnum
     {
         MainWindow,
+        AlgemeenTab,
         FasenTab,
         DetectieTab,
-        SynchronisatieTab,
         ModulesTab,
         PeriodenTab,
-        SpecialsTab,
-        BitmapTab
+        SpecialsTab
     }
 
     [System.AttributeUsage(System.AttributeTargets.Class)]

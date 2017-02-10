@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -163,7 +164,14 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
+                if (base.Controller != null)
+                {
+                    FileIngrepen = new ObservableCollectionAroundList<FileIngreepViewModel, FileIngreepModel>(_Controller.FileIngrepen);
+                }
+                else
+                {
+                    FileIngrepen = null;
+                }
                 OnPropertyChanged("FileIngrepen");
             }
         }

@@ -82,6 +82,15 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
+        #region Public Methods
+        
+        public virtual void LoadTabs()
+        {
+
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
         public TLCGenTabItemViewModel()

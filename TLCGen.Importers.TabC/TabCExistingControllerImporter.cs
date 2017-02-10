@@ -24,7 +24,7 @@ namespace TLCGen.Importers.TabC
 
             set
             {
-                throw new NotImplementedException();
+                
             }
         }
 

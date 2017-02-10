@@ -17,6 +17,7 @@ namespace TLCGen.ViewModels
 
         protected ObservableCollection<ITLCGenTabItem> _TabItems;
         protected ITLCGenTabItem _SelectedTab;
+        protected TabItemTypeEnum _TabType;
 
         #endregion // Fields
 
@@ -111,28 +112,45 @@ namespace TLCGen.ViewModels
 
         #endregion // TabItem Overrides
 
+        #region TabItem Method Overrides
+
+        public override void LoadTabs()
+        {
+            var tabs = new SortedDictionary<int, ITLCGenTabItem>();
+            var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
+            int plugindex = 100;
+            foreach (var part in parts)
+            {
+                if ((part.Item1 & TLCGenPluginElems.TabControl) == TLCGenPluginElems.TabControl)
+                {
+                    var attr = part.Item2.GetType().GetCustomAttribute<TLCGenTabItemAttribute>();
+                    if (attr != null && attr.Type == _TabType)
+                    {
+                        if (attr.Index == -1)
+                        {
+                            tabs.Add(plugindex++, part.Item2 as ITLCGenTabItem);
+                        }
+                        else
+                        {
+                            tabs.Add(attr.Index, part.Item2 as ITLCGenTabItem);
+                        }
+                    }
+                }
+            }
+
+            foreach (var tab in tabs)
+            {
+                TabItems.Add(tab.Value);
+            }
+        }
+
+        #endregion // Public Methods
+
         #region Constructor
 
         public TLCGenMainTabItemViewModel(TabItemTypeEnum type) : base()
         {
-            SortedDictionary<int, Type> TabTypes = new SortedDictionary<int, Type>();
-
-            Assembly assmbl = this.GetType().Assembly;
-            foreach (Type mytype in assmbl.GetTypes())
-            {
-                // Find CCOLCodePieceGenerator attribute, and if found, continue
-                var attr = (TLCGenTabItemAttribute)Attribute.GetCustomAttribute(mytype, typeof(TLCGenTabItemAttribute));
-                if (attr != null && attr.Type == type)
-                {
-                    TabTypes.Add(attr.Index, mytype);
-                }
-            }
-
-            foreach (var tab in TabTypes)
-            {
-                var v = Activator.CreateInstance(tab.Value);
-                TabItems.Add(v as ITLCGenTabItem);
-            }
+            _TabType = type;
         }
 
         #endregion // Constructor

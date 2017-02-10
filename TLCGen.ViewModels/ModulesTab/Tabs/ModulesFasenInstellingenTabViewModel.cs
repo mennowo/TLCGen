@@ -8,6 +8,7 @@ using TLCGen.Models;
 using TLCGen.Helpers;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -69,7 +70,14 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                Fasen = new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData);
+                if(base.Controller != null)
+                {
+                    Fasen = new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData);
+                }
+                else
+                {
+                    Fasen = null;
+                }
                 OnPropertyChanged("Fasen");
             }
         }

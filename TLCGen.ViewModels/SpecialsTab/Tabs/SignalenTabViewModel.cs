@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -470,8 +471,16 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
-                RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+                if (base.Controller != null)
+                {
+                    WaarschuwingsGroepen = new ObservableCollectionAroundList<WaarschuwingsGroepViewModel, WaarschuwingsGroepModel>(_Controller.Signalen.WaarschuwingsGroepen);
+                    RatelTikkers = new ObservableCollectionAroundList<RatelTikkerViewModel, RatelTikkerModel>(_Controller.Signalen.Rateltikkers);
+                }
+                else
+                {
+                    WaarschuwingsGroepen = null;
+                    RatelTikkers = null;
+                }
                 OnPropertyChanged("WaarschuwingsGroepen");
                 OnPropertyChanged("RatelTikkers");
             }

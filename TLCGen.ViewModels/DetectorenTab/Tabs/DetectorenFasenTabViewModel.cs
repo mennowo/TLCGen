@@ -15,6 +15,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Operations;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels

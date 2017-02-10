@@ -47,7 +47,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
 
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[3];
@@ -66,7 +67,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.OVIngrepen.Add(new OVIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
 
             vm.SelectedFaseCyclus = vm.Fasen[2];
@@ -85,7 +87,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.OVIngrepen.Add(new OVIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
 
             vm.SelectedFaseCyclus = vm.Fasen[2];
@@ -104,7 +107,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.HDIngrepen.Add(new HDIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
 
             vm.SelectedFaseCyclus = vm.Fasen[2];
@@ -123,7 +127,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.HDIngrepen.Add(new HDIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
 
             vm.SelectedFaseCyclus = vm.Fasen[2];
@@ -141,7 +146,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[2];
 
@@ -161,7 +167,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.OVIngrepen.Add(new OVIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[2];
 
@@ -179,7 +186,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[2];
 
@@ -199,7 +207,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
             model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             model.OVData.HDIngrepen.Add(new HDIngreepModel() { FaseCyclus = model.Fasen[2].Naam });
-            var vm = new FasenOVTabViewModel(model);
+            var vm = new FasenOVTabViewModel();
+            vm.Controller = model;
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[2];
 

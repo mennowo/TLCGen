@@ -11,6 +11,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -223,11 +224,18 @@ namespace TLCGen.ViewModels
                 {
                     Periodes.CollectionChanged -= Periodes_CollectionChanged;
                 }
-                Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(base.Controller.PeriodenData.Perioden);
-                Periodes.CollectionChanged += Periodes_CollectionChanged;
+                if (base.Controller != null)
+                {
+                    Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(base.Controller.PeriodenData.Perioden);
+                    Periodes.CollectionChanged += Periodes_CollectionChanged;
+                    ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
+                    view.Filter = FilterPerioden;
+                }
+                else
+                {
+                    Periodes = null;
+                }
                 OnPropertyChanged("Periodes");
-                ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
-                view.Filter = FilterPerioden;
             }
         }
 

@@ -10,6 +10,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -429,8 +430,16 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                RichtingGevoeligeAanvragen = new ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel>(base.Controller.RichtingGevoeligeAanvragen);
-                RichtingGevoeligVerlengen = new ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel>(base.Controller.RichtingGevoeligVerlengen);
+                if(base.Controller != null)
+                {
+                    RichtingGevoeligeAanvragen = new ObservableCollectionAroundList<RichtingGevoeligeAanvraagViewModel, RichtingGevoeligeAanvraagModel>(base.Controller.RichtingGevoeligeAanvragen);
+                    RichtingGevoeligVerlengen = new ObservableCollectionAroundList<RichtingGevoeligVerlengViewModel, RichtingGevoeligVerlengModel>(base.Controller.RichtingGevoeligVerlengen);
+                }
+                else
+                {
+                    RichtingGevoeligeAanvragen = null;
+                    RichtingGevoeligVerlengen = null;
+                }
                 OnPropertyChanged("RichtingGevoeligeAanvragen");
                 OnPropertyChanged("RichtingGevoeligVerlengen");
             }

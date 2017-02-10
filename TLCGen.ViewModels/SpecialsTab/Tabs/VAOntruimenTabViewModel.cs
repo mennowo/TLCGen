@@ -10,6 +10,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -191,7 +192,14 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
+                if (base.Controller != null)
+                {
+                    VAOntruimenFasen = new ObservableCollectionAroundList<VAOntruimenFaseViewModel, VAOntruimenFaseModel>(_Controller.VAOntruimenFasen);
+                }
+                else
+                {
+                    VAOntruimenFasen = null;
+                }
                 OnPropertyChanged("VAOntruimenFasen");
             }
         }

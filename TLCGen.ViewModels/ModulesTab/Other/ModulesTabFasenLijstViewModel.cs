@@ -38,9 +38,12 @@ namespace TLCGen.ViewModels
             {
                 _Controller = value;
                 Fasen.Clear();
-                foreach (FaseCyclusModel fcm in Controller.Fasen)
+                if (_Controller != null)
                 {
-                    Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
+                    foreach (FaseCyclusModel fcm in Controller.Fasen)
+                    {
+                        Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
+                    }
                 }
             }
         }

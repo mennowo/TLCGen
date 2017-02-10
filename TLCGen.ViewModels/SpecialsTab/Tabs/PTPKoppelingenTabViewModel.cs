@@ -9,6 +9,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -146,13 +147,22 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
-                PTPKoppelingen.Clear();
-                foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
+                if (base.Controller != null)
                 {
-                    PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+
+                    PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
+                    PTPKoppelingen.Clear();
+                    foreach (PTPKoppelingModel ptp in _Controller.PTPData.PTPKoppelingen)
+                    {
+                        PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+                    }
+                    PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
                 }
-                PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
+                else
+                {
+                    PTPKoppelingen.CollectionChanged -= PTPKoppelingen_CollectionChanged;
+                    PTPKoppelingen.Clear();
+                }
             }
         }
 

@@ -12,6 +12,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -272,14 +273,22 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                GroentijdenSets.CollectionChanged -= GroentijdenSets_CollectionChanged;
-                GroentijdenSets.Clear();
-                foreach (GroentijdenSetModel gsm in base.Controller.GroentijdenSets)
+                if (base.Controller != null)
                 {
-                    GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
+                    GroentijdenSets.CollectionChanged -= GroentijdenSets_CollectionChanged;
+                    GroentijdenSets.Clear();
+                    foreach (GroentijdenSetModel gsm in base.Controller.GroentijdenSets)
+                    {
+                        GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
+                    }
+                    BuildGroentijdenMatrix();
+                    GroentijdenSets.CollectionChanged += GroentijdenSets_CollectionChanged;
                 }
-                BuildGroentijdenMatrix();
-                GroentijdenSets.CollectionChanged += GroentijdenSets_CollectionChanged;
+                else
+                {
+                    GroentijdenSets.CollectionChanged -= GroentijdenSets_CollectionChanged;
+                    GroentijdenSets.Clear();
+                }
             }
         }
 
@@ -330,6 +339,7 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+            BuildGroentijdenMatrix();
         }
 
         private void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)

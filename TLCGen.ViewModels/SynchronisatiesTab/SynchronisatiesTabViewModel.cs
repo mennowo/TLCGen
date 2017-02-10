@@ -17,6 +17,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 using TLCGen.ViewModels.Enums;
 
 namespace TLCGen.ViewModels

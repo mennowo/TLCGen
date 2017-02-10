@@ -12,6 +12,7 @@ namespace TLCGen.Plugins
         
         bool IsEnabled { get; set; }
 
+        void LoadTabs();
         bool CanBeEnabled();
         void OnSelected();
         bool OnSelectedPreview();

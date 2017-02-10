@@ -15,6 +15,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Plugins;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -217,13 +218,21 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
-                Detectoren.Clear();
-                foreach (DetectorModel dm in base.Controller.Detectoren)
+                if (base.Controller != null)
                 {
-                    Detectoren.Add(new DetectorViewModel(dm));
+                    Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                    Detectoren.Clear();
+                    foreach (DetectorModel dm in base.Controller.Detectoren)
+                    {
+                        Detectoren.Add(new DetectorViewModel(dm));
+                    }
+                    Detectoren.CollectionChanged += Detectoren_CollectionChanged;
                 }
-                Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+                else
+                {
+                    Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                    Detectoren.Clear();
+                }
             }
         }
 

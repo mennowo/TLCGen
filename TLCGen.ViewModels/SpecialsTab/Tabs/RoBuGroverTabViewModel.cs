@@ -11,6 +11,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
@@ -406,8 +407,16 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
-                SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+                if (base.Controller != null)
+                {
+                    ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
+                    SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+                }
+                else
+                {
+                    ConflictGroepen = null;
+                    SignaalGroepInstellingen = null;
+                }
                 OnPropertyChanged("ConflictGroepen");
                 OnPropertyChanged("SignaalGroepInstellingen");
                 AutomaticallySetSelectableSignalGroups = true;
