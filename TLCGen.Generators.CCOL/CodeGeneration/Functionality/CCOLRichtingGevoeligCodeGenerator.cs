@@ -13,13 +13,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private List<CCOLElement> _MyElements;
 
+#pragma warning disable 0649
         private string _trgr;
         private string _trga;
         private string _trgv;
         private string _hrgv;
         private string _prmmkrg;
         private string _schrgad;
-
+#pragma warning restore 0649
         private string _tkm; // read from settings provider, comes from other code gen object
 
         public override void CollectCCOLElements(ControllerModel c)

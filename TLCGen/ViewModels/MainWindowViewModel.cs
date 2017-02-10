@@ -670,6 +670,7 @@ namespace TLCGen.ViewModels
                                 Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
                                 break;
                             case TLCGenPluginElems.HasSettings:
+                                ((ITLCGenHasSettings)instpl).LoadSettings();
                                 break;
                             case TLCGenPluginElems.Importer:
                                 MenuItem mi = new MenuItem();

@@ -60,6 +60,20 @@ namespace TLCGen.DataAccess
             private set
             {
                 _Controller = value;
+                foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
+                {
+                    if ((pl.Item1 & TLCGenPluginElems.TabControl) != TLCGenPluginElems.TabControl)
+                    {
+                        pl.Item2.Controller = value;
+                    }
+                }
+                foreach(var pl in TLCGenPluginManager.Default.ApplicationPlugins)
+                {
+                    if((pl.Item1 & TLCGenPluginElems.TabControl) != TLCGenPluginElems.TabControl)
+                    {
+                        pl.Item2.Controller = value;
+                    }
+                }
             }
         }
 

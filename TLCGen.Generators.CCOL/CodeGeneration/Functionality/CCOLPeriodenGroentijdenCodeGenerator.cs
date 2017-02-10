@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
+#pragma warning disable 0649
         private string _usperdef;
         private string _usper;
         private string _prmstkp;
@@ -31,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string _prmperbeldim;
         private string _prmpertwl;
         private string _prmpero;
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
