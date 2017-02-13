@@ -21,7 +21,9 @@ namespace TLCGen.Models
         #region Properties
         
         public override string Naam { get; set; }
+        [Browsable(false)]
         public FaseTypeEnum Type { get; set; }
+
         public int TFG { get; set; }
         public int TGG { get; set; }
         public int TGG_min { get; set; }
@@ -30,7 +32,9 @@ namespace TLCGen.Models
         public int TGL { get; set; }
         public int TGL_min { get; set; }
         public int Kopmax { get; set; }
+        [Browsable(false)]
         public bool OVIngreep { get; set; }
+        [Browsable(false)]
         public bool HDIngreep { get; set; }
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }

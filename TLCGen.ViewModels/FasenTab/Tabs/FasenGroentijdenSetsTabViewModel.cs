@@ -223,7 +223,7 @@ namespace TLCGen.ViewModels
                     // Build fasen list for row headers from first set
                     if (i == 0)
                     {
-                        FasenNames.Add(mgvm.FaseCyclus.Replace(SettingsProvider.Default.GetFaseCyclusDefinePrefix(), ""));
+                        FasenNames.Add(mgvm.FaseCyclus);
                     }
 
                     // set data in bound matrix

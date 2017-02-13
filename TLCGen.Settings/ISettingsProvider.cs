@@ -16,10 +16,7 @@ namespace TLCGen.Settings
         void LoadApplicationSettings();
         void SaveApplicationSettings();
 
-        string GetFaseCyclusDefinePrefix();
-        string GetDetectorDefinePrefix();
-
-        void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, string define);
+        void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm);
         void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, FaseTypeEnum type);
     }
 }

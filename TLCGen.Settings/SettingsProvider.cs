@@ -91,23 +91,12 @@ namespace TLCGen.Settings
 
         #region Settings Provider Methods
 
-        public string GetFaseCyclusDefinePrefix()
-        {
-            return Settings.DefaultControllerSettings.PreFixSettings.FaseCyclusDefinePrefix;
-        }
-
-        public string GetDetectorDefinePrefix()
-        {
-            return Settings.DefaultControllerSettings.PreFixSettings.DetectorDefinePrefix;
-        }
-
         /// <summary>
         /// Applies default phase settings to the phase parsed, based on the define string
         /// </summary>
-        public void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, string define)
+        public void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm)
         {
-            fcm.Type = FaseCyclusUtilities.GetFaseTypeFromDefine(define);
-            ApplyDefaultFaseCyclusSettings(fcm, fcm.Type);
+            DefaultsProvider.Default.SetDefaultsOnModel(fcm);
         }
 
         /// <summary>

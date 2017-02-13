@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
                         _FaseCyclus.Naam = value;
 
                         // set new type
-                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromDefine(value);
+                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
 
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
@@ -68,7 +68,8 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.Type = value;
 
                     // Apply new defaults
-                    SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
+                    DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus);
+                    //SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
 
                     // Set default maxgroentijd
 #warning TODO

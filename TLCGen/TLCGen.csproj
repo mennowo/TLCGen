@@ -119,6 +119,7 @@
     </ApplicationDefinition>
     <Compile Include="AutomationIds.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\TLCGenSettingsViewModel.cs" />
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
@@ -251,6 +252,9 @@
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\SimplePropertyEditor.xaml.cs">
+      <DependentUpon>SimplePropertyEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\TemplateManagerView.xaml.cs">
       <DependentUpon>TemplateManagerView.xaml</DependentUpon>
@@ -468,6 +472,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\SimplePropertyEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -79,17 +79,17 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// ViewModel for the settings of the application
         /// </summary>
-        public TLCGenSettingsViewModel SettingsVM
-        {
-            get
-            {
-                if(_SettingsVM == null)
-                {
-                    _SettingsVM = new TLCGenSettingsViewModel();
-                }
-                return _SettingsVM;
-            }
-        }
+        //public TLCGenSettingsViewModel SettingsVM
+        //{
+        //    get
+        //    {
+        //        if(_SettingsVM == null)
+        //        {
+        //            _SettingsVM = new TLCGenSettingsViewModel();
+        //        }
+        //        return _SettingsVM;
+        //    }
+        //}
 
         /// <summary>
         /// A string to be used in the View as the title of the program.
@@ -520,7 +520,7 @@ namespace TLCGen.ViewModels
         private void ShowSettingsWindowCommand_Executed(object obj)
         {
             TLCGen.Views.Dialogs.TLCGenSettingsWindow settingswin = new Views.Dialogs.TLCGenSettingsWindow();
-            settingswin.DataContext = this;
+            settingswin.DataContext = new TLCGenSettingsViewModel();
             settingswin.ShowDialog();
         }
 
@@ -562,7 +562,7 @@ namespace TLCGen.ViewModels
 #warning Make this generic, just like how settings are loaded
         private void SaveGeneratorControllerSettingsToModel()
         {
-            SettingsVM.Settings.CustomData.AddinSettings.Clear();
+            //SettingsVM.Settings.CustomData.AddinSettings.Clear();
             foreach(IGeneratorViewModel genvm in Generators)
             {
                 ITLCGenGenerator gen = genvm.Generator;
@@ -600,7 +600,8 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                SettingsVM.Settings.CustomData.AddinSettings.Add(gendata);
+#warning TODO!
+                //SettingsVM.Settings.CustomData.AddinSettings.Add(gendata);
             }
         }
 
@@ -646,8 +647,9 @@ namespace TLCGen.ViewModels
 
         public MainWindowViewModel()
         {
-            // Load application settings (defaults, etc.)
+            // Load application settings and defaults
             SettingsProvider.Default.LoadApplicationSettings();
+            DefaultsProvider.Default.LoadSettings();
 
             // Load available applicationparts and plugins
             TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");

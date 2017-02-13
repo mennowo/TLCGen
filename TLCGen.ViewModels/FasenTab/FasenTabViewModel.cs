@@ -53,9 +53,9 @@ namespace TLCGen.ViewModels
             {
                 if(_TemplateManagerVM == null)
                 {
-                    _TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
-                        (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
-                         this, $@"{SettingsProvider.Default.GetFaseCyclusDefinePrefix()}([0-9])");
+                    //_TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
+                    //    (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
+                    //     this, $@"{SettingsProvider.Default.GetFaseCyclusDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }

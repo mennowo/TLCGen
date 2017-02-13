@@ -11,7 +11,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class TLCGenSettingsViewModel : ViewModelBase
+    public class TLCGenSettingsViewModel_old : ViewModelBase
     {
         public TLCGenSettingsModel Settings
         {
@@ -22,7 +22,7 @@ namespace TLCGen.ViewModels
 
         #endregion // Public Methods
 
-        public TLCGenSettingsViewModel()
+        public TLCGenSettingsViewModel_old()
         {
             
         }

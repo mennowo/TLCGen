@@ -44,9 +44,9 @@ namespace TLCGen.ViewModels
             {
                 if (_TemplateManagerVM == null)
                 {
-                    _TemplateManagerVM = new TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel>
-                        (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\detectors\\"),
-                         this, $@"{SettingsProvider.Default.GetDetectorDefinePrefix()}([0-9])");
+                    //_TemplateManagerVM = new TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel>
+                    //    (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\detectors\\"),
+                    //     this, $@"{SettingsProvider.Default.GetDetectorDefinePrefix()}([0-9])");
                 }
                 return _TemplateManagerVM;
             }

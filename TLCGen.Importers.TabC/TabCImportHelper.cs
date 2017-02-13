@@ -59,7 +59,7 @@ namespace TLCGen.Importers.TabC
                     {
                         _fcm1 = new FaseCyclusModel();
                         _fcm1.Naam = fc1.Replace("fc", "");
-                        SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(_fcm1, fc1);
+                        DefaultsProvider.Default.SetDefaultsOnModel(_fcm1);
                         outcome.Fasen.Add(_fcm1);
                     }
 
@@ -76,7 +76,7 @@ namespace TLCGen.Importers.TabC
                     {
                         _fcm2 = new FaseCyclusModel();
                         _fcm2.Naam = fc2.Replace("fc", "");
-                        SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(_fcm2, fc2);
+                        DefaultsProvider.Default.SetDefaultsOnModel(_fcm2);
                         outcome.Fasen.Add(_fcm2);
                     }
                     outcome.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Naam, FaseNaar = _fcm2.Naam, Waarde = conf });

@@ -94,7 +94,7 @@
                 <MenuItem Header="_Import..." ItemsSource="{Binding Path=ImportMenuItems}">
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}" />
+                <MenuItem Header="Settings" Command="{Binding Path=ShowSettingsWindowCommand}" />
             </MenuItem>
             <MenuItem Header="_Plugins" ItemsSource="{Binding Path=PluginMenuItems}" Visibility="{Binding Path=IsPluginMenuVisible,Converter={StaticResource Bool2VisConv}}">
             </MenuItem>

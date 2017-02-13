@@ -4,9 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TLCGen.Views.Dialogs"
+        xmlns:vw="clr-namespace:TLCGen.Views"
+        xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+        xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
         xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
         mc:Ignorable="d"
         Title="TLCGenSettingsWindow" Height="400" Width="600" >
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -22,12 +31,33 @@
                     <WrapPanel>
                         <Label Content="Default settings voor verkeersregeling" />
                     </WrapPanel>
-                    <xc:PropertyGrid Margin="2" 
-                                     ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
-                                     Grid.Row="1" SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="Fasen">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}"
+                                          SelectedItem="{Binding Path=SelectedFaseCyclusType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedFaseCyclus}" Grid.Column="1" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Detectoren">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}"
+                                          SelectedItem="{Binding Path=SelectedDetectorType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" />
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </TabItem>
-            <TabItem Header="Generatoren settings">
+            <!--<TabItem Header="Generatoren settings">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -41,7 +71,7 @@
                                      ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
                                      Grid.Row="1" SelectedObject="{Binding ElementName=GeneratorCB,Path=SelectedItem.Generator}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
                 </Grid>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
         <WrapPanel Grid.Row="1">
             <Button IsDefault="True" Content="OK" Click="Button_Click" Margin="2" />

@@ -88,9 +88,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Type = value;
-                OnMonitoredPropertyChanged("Type");
-                OnMonitoredPropertyChanged("IsDrukknop");
+                DefaultsProvider.Default.SetDefaultsOnModel(_Detector);
+                OnMonitoredPropertyChanged(null);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
+
 #warning TODO also below...
                 //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
             }

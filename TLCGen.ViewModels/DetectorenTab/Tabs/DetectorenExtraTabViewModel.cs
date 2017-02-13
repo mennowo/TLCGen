@@ -144,6 +144,7 @@ namespace TLCGen.ViewModels
                 }
             }
             dm.Naam = newname;
+            DefaultsProvider.Default.SetDefaultsOnModel(dm);
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage());

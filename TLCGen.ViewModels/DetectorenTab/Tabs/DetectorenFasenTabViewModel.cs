@@ -182,6 +182,11 @@ namespace TLCGen.ViewModels
             }
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
+            if(_SelectedFase.Detectoren.Count >= 1)
+            {
+                _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
+            }
+            DefaultsProvider.Default.SetDefaultsOnModel(_dm);
             DetectorViewModel dvm1 = new DetectorViewModel(_dm);
             dvm1.FaseCyclus = _SelectedFase.Naam;
             _SelectedFase.Detectoren.Add(_dm);

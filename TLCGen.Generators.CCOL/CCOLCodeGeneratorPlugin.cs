@@ -92,9 +92,9 @@ namespace TLCGen.Generators.CCOL
             var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"settings.xml");
+            var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
 #if DEBUG
-            CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
+            CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
 #else
             if (File.Exists(setfile))
             {
@@ -102,7 +102,7 @@ namespace TLCGen.Generators.CCOL
             }
             else
             {
-                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\defaults.xml"));
+                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
             }
 #endif
             _Generator.LoadSettings();
@@ -114,7 +114,7 @@ namespace TLCGen.Generators.CCOL
             var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"settings.xml");
+            var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
             TLCGenSerialization.Serialize<CCOLGeneratorSettingsModel>(setfile, CCOLGeneratorSettingsProvider.Default.Settings);
         }
 

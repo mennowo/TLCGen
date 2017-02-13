@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,7 @@ namespace TLCGen.Models
 
         public DetectorSimulatieModel Simulatie { get; set; }
 
+        [Browsable(false)]
         public DetectorTypeEnum Type { get; set; }
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
         public DetectorVerlengenTypeEnum Verlengen { get; set; }

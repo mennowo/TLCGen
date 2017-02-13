@@ -68,8 +68,6 @@ namespace TLCGen.UnitTests
                     });
                 });
 
-            settingsprovider.GetFaseCyclusDefinePrefix().Returns("fc");
-
             Messenger.OverrideDefault(messenger);
             SettingsProvider.OverrideDefault(settingsprovider);
         }

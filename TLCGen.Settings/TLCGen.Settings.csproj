@@ -42,9 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DefaultsProvider.cs" />
+    <Compile Include="IDefaultsProvider.cs" />
     <Compile Include="ISettingsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsProvider.cs" />
+    <Compile Include="TLCGenDefaultsModel.cs" />
     <Compile Include="Utilities\FaseCyclusUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +63,11 @@
       <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Settings\tlcgendefaultssettings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

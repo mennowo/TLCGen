@@ -48,6 +48,7 @@
     <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
+    <Compile Include="Models\Base\HasDefaultAttribute.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerDetectorModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerModel.cs" />

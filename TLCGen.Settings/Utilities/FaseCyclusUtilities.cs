@@ -10,12 +10,6 @@ namespace TLCGen.Settings.Utilities
 {
     public static class FaseCyclusUtilities
     {
-        public static FaseTypeEnum GetFaseTypeFromDefine(string define)
-        {
-            string faseswitch = Regex.Replace(define, SettingsProvider.Default.GetFaseCyclusDefinePrefix(), "");
-            return GetFaseTypeFromNaam(faseswitch);
-        }
-
         public static FaseTypeEnum GetFaseTypeFromNaam(string naam)
         {
             if (naam.Length >= 3)
@@ -35,9 +29,9 @@ namespace TLCGen.Settings.Utilities
             return FaseTypeEnum.Fiets;
         }
 
-        public static int? GetFaseDefaultGroenTijd(string define)
+        public static int? GetFaseDefaultGroenTijd(string naam)
         {
-            return GetFaseDefaultGroenTijd(GetFaseTypeFromDefine(define));
+            return GetFaseDefaultGroenTijd(GetFaseTypeFromNaam(naam));
         }
 
         public static int? GetFaseDefaultGroenTijd(FaseTypeEnum type)
