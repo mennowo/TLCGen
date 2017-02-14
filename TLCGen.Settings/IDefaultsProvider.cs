@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
     public interface IDefaultsProvider
     {
+        ControllerModel Controller { get; set; }
         TLCGenDefaultsModel Defaults { get; }
 
         void LoadSettings();

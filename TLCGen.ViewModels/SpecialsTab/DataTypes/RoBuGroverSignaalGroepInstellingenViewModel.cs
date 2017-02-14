@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -14,7 +15,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private RoBuGroverSignaalGroepInstellingenModel _SignaalGroepInstellingen;
+        private RoBuGroverFaseCyclusInstellingenModel _SignaalGroepInstellingen;
 
         private RoBuGroverFileDetectorViewModel _SelectedFileDetector;
         private RoBuGroverHiaatDetectorViewModel _SelectedHiaatDetector;
@@ -202,6 +203,7 @@ namespace TLCGen.ViewModels
         {
             RoBuGroverFileDetectorModel d = new RoBuGroverFileDetectorModel();
             d.Detector = SelectedFileDetectorToAdd;
+            DefaultsProvider.Default.SetDefaultsOnModel(d);
             FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(d));
             UpdateSelectables();
             if (SelectableFileDetectoren.Count > 0)
@@ -231,6 +233,7 @@ namespace TLCGen.ViewModels
         {
             RoBuGroverHiaatDetectorModel d = new RoBuGroverHiaatDetectorModel();
             d.Detector = SelectedHiaatDetectorToAdd;
+            DefaultsProvider.Default.SetDefaultsOnModel(d);
             HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(d));
             UpdateSelectables();
         }
@@ -312,7 +315,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public RoBuGroverSignaalGroepInstellingenViewModel(RoBuGroverSignaalGroepInstellingenModel signaalgroepinstellingen)
+        public RoBuGroverSignaalGroepInstellingenViewModel(RoBuGroverFaseCyclusInstellingenModel signaalgroepinstellingen)
         {
             _SignaalGroepInstellingen = signaalgroepinstellingen;
 

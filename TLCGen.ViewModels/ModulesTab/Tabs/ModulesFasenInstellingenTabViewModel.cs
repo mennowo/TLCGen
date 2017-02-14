@@ -9,6 +9,7 @@ using TLCGen.Helpers;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -92,7 +93,10 @@ namespace TLCGen.ViewModels
             {
                 foreach(var f in message.AddedFasen)
                 {
-                    Fasen.Add(new FaseCyclusModuleDataViewModel(new FaseCyclusModuleDataModel() { FaseCyclus = f.Naam }));
+                    var fcmlm = new FaseCyclusModuleDataModel() { FaseCyclus = f.Naam };
+                    DefaultsProvider.Default.SetDefaultsOnModel(fcmlm);
+                    var fcmlvm = new FaseCyclusModuleDataViewModel(fcmlm);
+                    Fasen.Add(fcmlvm);
                 }
             }
 

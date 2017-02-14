@@ -9,7 +9,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class RoBuGroverSignaalGroepInstellingenModel
+    public class RoBuGroverFaseCyclusInstellingenModel
     {
         #region Properties
 
@@ -26,7 +26,7 @@ namespace TLCGen.Models
 
         #region Constructor
 
-        public RoBuGroverSignaalGroepInstellingenModel()
+        public RoBuGroverFaseCyclusInstellingenModel()
         {
             FileDetectoren = new List<RoBuGroverFileDetectorModel>();
             HiaatDetectoren = new List<RoBuGroverHiaatDetectorModel>();

@@ -38,9 +38,21 @@
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}"
-                                          SelectedItem="{Binding Path=SelectedFaseCyclusType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedFaseCyclus}" Grid.Column="1" />
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="2*" />
+                                </Grid.RowDefinitions>
+                                <DockPanel>
+                                    <Label Content="Type" DockPanel.Dock="Top" />
+                                    <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}"
+                                              SelectedItem="{Binding Path=SelectedFaseCyclusType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                </DockPanel>
+                                <DockPanel Grid.Row="1">
+                                    <Label Content="Functionaliteit" DockPanel.Dock="Top" />
+                                    <ListView ItemsSource="{Binding Path=FaseCyclusFunctionalities}"
+                                              SelectedItem="{Binding Path=SelectedFaseCyclusFunctionality,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                </DockPanel>
+                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedFaseCyclus}" Grid.Column="1" Grid.RowSpan="2" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Detectoren">
@@ -49,9 +61,21 @@
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}"
-                                          SelectedItem="{Binding Path=SelectedDetectorType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" />
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <DockPanel>
+                                    <Label Content="Type" DockPanel.Dock="Top" />
+                                    <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}"
+                                              SelectedItem="{Binding Path=SelectedDetectorType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                </DockPanel>
+                                <DockPanel Grid.Row="1">
+                                    <Label Content="Functionaliteit" DockPanel.Dock="Top" />
+                                    <ListView ItemsSource="{Binding Path=DetectorFunctionalities}"
+                                              SelectedItem="{Binding Path=SelectedDetectorFunctionality,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                </DockPanel>
+                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" Grid.RowSpan="2" />
                             </Grid>
                         </TabItem>
                     </TabControl>

@@ -2,216 +2,308 @@
 <TLCGenDefaultsModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Fasen>
     <FaseCyclus>
-      <Naam />
-      <BitmapCoordinaten />
       <Type>Auto</Type>
-      <TFG>50</TFG>
-      <TGG>40</TGG>
-      <TGG_min>40</TGG_min>
-      <TRG>20</TRG>
-      <TRG_min>20</TRG_min>
-      <TGL>30</TGL>
-      <TGL_min>30</TGL_min>
-      <Kopmax>80</Kopmax>
-      <OVIngreep>false</OVIngreep>
-      <HDIngreep>false</HDIngreep>
-      <VasteAanvraag>SchUit</VasteAanvraag>
-      <Wachtgroen>SchUit</Wachtgroen>
-      <Meeverlengen>SchAan</Meeverlengen>
-      <MeeverlengenType>To</MeeverlengenType>
-      <MeeverlengenVerschil xsi:nil="true" />
-      <Detectoren />
+      <FaseCyclus>
+        <Naam />
+        <BitmapCoordinaten />
+        <Type>Auto</Type>
+        <TFG>50</TFG>
+        <TGG>40</TGG>
+        <TGG_min>40</TGG_min>
+        <TRG>20</TRG>
+        <TRG_min>20</TRG_min>
+        <TGL>30</TGL>
+        <TGL_min>30</TGL_min>
+        <Kopmax>80</Kopmax>
+        <OVIngreep>false</OVIngreep>
+        <HDIngreep>false</HDIngreep>
+        <VasteAanvraag>SchUit</VasteAanvraag>
+        <Wachtgroen>SchUit</Wachtgroen>
+        <Meeverlengen>SchAan</Meeverlengen>
+        <MeeverlengenType>To</MeeverlengenType>
+        <MeeverlengenVerschil xsi:nil="true" />
+        <Detectoren />
+      </FaseCyclus>
+      <Groentijd>
+        <FaseCyclus />
+        <Waarde>300</Waarde>
+      </Groentijd>
+      <FaseCyclusModuleData>
+        <FaseCyclus />
+        <ModulenVooruit>0</ModulenVooruit>
+        <AlternatiefToestaan>true</AlternatiefToestaan>
+        <AlternatieveRuimte>60</AlternatieveRuimte>
+        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+      </FaseCyclusModuleData>
+      <RoBuGroverFaseCyclusInstellingen>
+        <FaseCyclus />
+        <MinGroenTijd>100</MinGroenTijd>
+        <MaxGroenTijd>500</MaxGroenTijd>
+        <FileDetectoren />
+        <HiaatDetectoren />
+      </RoBuGroverFaseCyclusInstellingen>
     </FaseCyclus>
     <FaseCyclus>
-      <Naam />
-      <BitmapCoordinaten />
       <Type>Fiets</Type>
-      <TFG>60</TFG>
-      <TGG>40</TGG>
-      <TGG_min>40</TGG_min>
-      <TRG>10</TRG>
-      <TRG_min>10</TRG_min>
-      <TGL>30</TGL>
-      <TGL_min>30</TGL_min>
-      <Kopmax>80</Kopmax>
-      <OVIngreep>false</OVIngreep>
-      <HDIngreep>false</HDIngreep>
-      <VasteAanvraag>SchUit</VasteAanvraag>
-      <Wachtgroen>SchUit</Wachtgroen>
-      <Meeverlengen>SchAan</Meeverlengen>
-      <MeeverlengenType>To</MeeverlengenType>
-      <MeeverlengenVerschil xsi:nil="true" />
-      <Detectoren />
+      <FaseCyclus>
+        <Naam />
+        <BitmapCoordinaten />
+        <Type>Fiets</Type>
+        <TFG>60</TFG>
+        <TGG>40</TGG>
+        <TGG_min>40</TGG_min>
+        <TRG>10</TRG>
+        <TRG_min>10</TRG_min>
+        <TGL>30</TGL>
+        <TGL_min>30</TGL_min>
+        <Kopmax>80</Kopmax>
+        <OVIngreep>false</OVIngreep>
+        <HDIngreep>false</HDIngreep>
+        <VasteAanvraag>SchUit</VasteAanvraag>
+        <Wachtgroen>SchUit</Wachtgroen>
+        <Meeverlengen>SchAan</Meeverlengen>
+        <MeeverlengenType>To</MeeverlengenType>
+        <MeeverlengenVerschil xsi:nil="true" />
+        <Detectoren />
+      </FaseCyclus>
+      <Groentijd>
+        <FaseCyclus />
+        <Waarde>150</Waarde>
+      </Groentijd>
+      <FaseCyclusModuleData>
+        <FaseCyclus />
+        <ModulenVooruit>0</ModulenVooruit>
+        <AlternatiefToestaan>true</AlternatiefToestaan>
+        <AlternatieveRuimte>60</AlternatieveRuimte>
+        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+      </FaseCyclusModuleData>
     </FaseCyclus>
     <FaseCyclus>
-      <Naam />
-      <BitmapCoordinaten />
       <Type>Voetganger</Type>
-      <TFG>40</TFG>
-      <TGG>50</TGG>
-      <TGG_min>40</TGG_min>
-      <TRG>10</TRG>
-      <TRG_min>10</TRG_min>
-      <TGL>30</TGL>
-      <TGL_min>30</TGL_min>
-      <Kopmax>80</Kopmax>
-      <OVIngreep>false</OVIngreep>
-      <HDIngreep>false</HDIngreep>
-      <VasteAanvraag>SchUit</VasteAanvraag>
-      <Wachtgroen>SchUit</Wachtgroen>
-      <Meeverlengen>SchAan</Meeverlengen>
-      <MeeverlengenType>Voetganger</MeeverlengenType>
-      <MeeverlengenVerschil xsi:nil="true" />
-      <Detectoren />
+      <FaseCyclus>
+        <Naam />
+        <BitmapCoordinaten />
+        <Type>Voetganger</Type>
+        <TFG>40</TFG>
+        <TGG>50</TGG>
+        <TGG_min>40</TGG_min>
+        <TRG>10</TRG>
+        <TRG_min>10</TRG_min>
+        <TGL>30</TGL>
+        <TGL_min>30</TGL_min>
+        <Kopmax>80</Kopmax>
+        <OVIngreep>false</OVIngreep>
+        <HDIngreep>false</HDIngreep>
+        <VasteAanvraag>SchUit</VasteAanvraag>
+        <Wachtgroen>SchUit</Wachtgroen>
+        <Meeverlengen>SchAan</Meeverlengen>
+        <MeeverlengenType>Voetganger</MeeverlengenType>
+        <MeeverlengenVerschil xsi:nil="true" />
+        <Detectoren />
+      </FaseCyclus>
+      <Groentijd>
+        <FaseCyclus />
+        <Waarde xsi:nil="true" />
+      </Groentijd>
+      <FaseCyclusModuleData>
+        <FaseCyclus />
+        <ModulenVooruit>0</ModulenVooruit>
+        <AlternatiefToestaan>true</AlternatiefToestaan>
+        <AlternatieveRuimte>60</AlternatieveRuimte>
+        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+      </FaseCyclusModuleData>
     </FaseCyclus>
     <FaseCyclus>
-      <Naam />
-      <BitmapCoordinaten />
       <Type>OV</Type>
-      <TFG>40</TFG>
-      <TGG>40</TGG>
-      <TGG_min>40</TGG_min>
-      <TRG>10</TRG>
-      <TRG_min>10</TRG_min>
-      <TGL>30</TGL>
-      <TGL_min>30</TGL_min>
-      <Kopmax>80</Kopmax>
-      <OVIngreep>false</OVIngreep>
-      <HDIngreep>false</HDIngreep>
-      <VasteAanvraag>SchUit</VasteAanvraag>
-      <Wachtgroen>SchUit</Wachtgroen>
-      <Meeverlengen>SchUit</Meeverlengen>
-      <MeeverlengenType>To</MeeverlengenType>
-      <MeeverlengenVerschil xsi:nil="true" />
-      <Detectoren />
+      <FaseCyclus>
+        <Naam />
+        <BitmapCoordinaten />
+        <Type>OV</Type>
+        <TFG>40</TFG>
+        <TGG>40</TGG>
+        <TGG_min>40</TGG_min>
+        <TRG>10</TRG>
+        <TRG_min>10</TRG_min>
+        <TGL>30</TGL>
+        <TGL_min>30</TGL_min>
+        <Kopmax>80</Kopmax>
+        <OVIngreep>false</OVIngreep>
+        <HDIngreep>false</HDIngreep>
+        <VasteAanvraag>SchUit</VasteAanvraag>
+        <Wachtgroen>SchUit</Wachtgroen>
+        <Meeverlengen>SchUit</Meeverlengen>
+        <MeeverlengenType>To</MeeverlengenType>
+        <MeeverlengenVerschil xsi:nil="true" />
+        <Detectoren />
+      </FaseCyclus>
+      <Groentijd>
+        <FaseCyclus />
+        <Waarde xsi:nil="true" />
+      </Groentijd>
+      <FaseCyclusModuleData>
+        <FaseCyclus />
+        <ModulenVooruit>0</ModulenVooruit>
+        <AlternatiefToestaan>true</AlternatiefToestaan>
+        <AlternatieveRuimte>60</AlternatieveRuimte>
+        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+      </FaseCyclusModuleData>
     </FaseCyclus>
   </Fasen>
   <Detectoren>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>20</TDB>
-      <TDH>30</TDH>
-      <TOG>20</TOG>
-      <TBG>360</TBG>
-      <TFL>60</TFL>
-      <CFL>45</CFL>
-      <AanvraagDirect>true</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>Kop</Type>
-      <Aanvraag>RnietTRG</Aanvraag>
-      <Verlengen>Kopmax</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>20</TDB>
+        <TDH>30</TDH>
+        <TOG>20</TOG>
+        <TBG>360</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>true</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Kop</Type>
+        <Aanvraag>RnietTRG</Aanvraag>
+        <Verlengen>Kopmax</Verlengen>
+      </Detector>
+      <RoBuGroverFileDetector>
+        <Detector />
+        <FileTijd>60</FileTijd>
+      </RoBuGroverFileDetector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>10</TDH>
-      <TOG>60</TOG>
-      <TBG>360</TBG>
-      <TFL>60</TFL>
-      <CFL>30</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>Lang</Type>
-      <Aanvraag>RnietTRG</Aanvraag>
-      <Verlengen>MK2</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>10</TDH>
+        <TOG>60</TOG>
+        <TBG>360</TBG>
+        <TFL>60</TFL>
+        <CFL>30</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Lang</Type>
+        <Aanvraag>RnietTRG</Aanvraag>
+        <Verlengen>MK2</Verlengen>
+      </Detector>
+      <RoBuGroverHiaatDetector>
+        <Detector />
+        <HiaatTijd>10</HiaatTijd>
+      </RoBuGroverHiaatDetector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>0</TDH>
-      <TOG>20</TOG>
-      <TBG>360</TBG>
-      <TFL>60</TFL>
-      <CFL>45</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>Verweg</Type>
-      <Aanvraag>Uit</Aanvraag>
-      <Verlengen>MK2</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>20</TOG>
+        <TBG>360</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Verweg</Type>
+        <Aanvraag>Uit</Aanvraag>
+        <Verlengen>MK2</Verlengen>
+      </Detector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>0</TDH>
-      <TOG>60</TOG>
-      <TBG>360</TBG>
-      <TFL>60</TFL>
-      <CFL>30</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>File</Type>
-      <Aanvraag>Geen</Aanvraag>
-      <Verlengen>Geen</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>60</TOG>
+        <TBG>360</TBG>
+        <TFL>60</TFL>
+        <CFL>30</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>File</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Detector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>0</TDH>
-      <TOG>10</TOG>
-      <TBG>1440</TBG>
-      <TFL>60</TFL>
-      <CFL>45</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>KnopBuiten</Type>
-      <Aanvraag>RoodGeel</Aanvraag>
-      <Verlengen>Geen</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>10</TOG>
+        <TBG>1440</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>KnopBuiten</Type>
+        <Aanvraag>RoodGeel</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Detector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>0</TDH>
-      <TOG>10</TOG>
-      <TBG>1440</TBG>
-      <TFL>60</TFL>
-      <CFL>45</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>true</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>KnopBinnen</Type>
-      <Aanvraag>RoodGeel</Aanvraag>
-      <Verlengen>Geen</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>10</TOG>
+        <TBG>1440</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>true</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>KnopBinnen</Type>
+        <Aanvraag>RoodGeel</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Detector>
     </Detector>
     <Detector>
-      <Naam />
-      <BitmapCoordinaten />
-      <VissimNaam />
-      <TDB>0</TDB>
-      <TDH>0</TDH>
-      <TOG>10</TOG>
-      <TBG>1440</TBG>
-      <TFL>60</TFL>
-      <CFL>30</CFL>
-      <AanvraagDirect>false</AanvraagDirect>
-      <Wachtlicht>false</Wachtlicht>
-      <WachtlichtBitmapData />
-      <Simulatie />
       <Type>Radar</Type>
-      <Aanvraag>RoodGeel</Aanvraag>
-      <Verlengen>Geen</Verlengen>
+      <Detector>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>10</TOG>
+        <TBG>1440</TBG>
+        <TFL>60</TFL>
+        <CFL>30</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Radar</Type>
+        <Aanvraag>RoodGeel</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Detector>
     </Detector>
   </Detectoren>
 </TLCGenDefaultsModel>

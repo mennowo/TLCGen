@@ -63,7 +63,16 @@ namespace TLCGen.Views
         {
             SimplePropertyEditor o = (SimplePropertyEditor)d;
             if (o.BoundObject == null)
+            {
+                o.MainGrid.Children.Clear();
+                o.MainGrid.RowDefinitions.Clear();
+                Label label = new Label();
+                label.Content = "Geen defaults voor dit object.";
+                o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                Grid.SetRow(label, 0); Grid.SetColumn(label, 0);
+                o.MainGrid.Children.Add(label);
                 return;
+            }
 
             var props = o.BoundObject.GetType().GetProperties();
             int row = 0;

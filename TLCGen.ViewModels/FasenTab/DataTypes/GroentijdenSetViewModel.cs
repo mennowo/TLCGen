@@ -13,6 +13,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -126,7 +127,7 @@ namespace TLCGen.ViewModels
         {
             GroentijdModel mgm = new GroentijdModel();
             mgm.FaseCyclus = fasename;
-            mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fasename);
+            DefaultsProvider.Default.SetDefaultsOnModel(mgm);
             Groentijden.Add(new GroentijdViewModel(mgm));
         }
 

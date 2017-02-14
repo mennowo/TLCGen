@@ -19,12 +19,12 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]
         public List<RoBuGroverConflictGroepModel> ConflictGroepen { get; set; }
         [XmlArrayItem(ElementName = "RoBuGroverSignaalGroepInstelling")]
-        public List<RoBuGroverSignaalGroepInstellingenModel> SignaalGroepInstellingen { get; set; }
+        public List<RoBuGroverFaseCyclusInstellingenModel> SignaalGroepInstellingen { get; set; }
 
         public RoBuGroverModel()
         {
             ConflictGroepen = new List<RoBuGroverConflictGroepModel>();
-            SignaalGroepInstellingen = new List<RoBuGroverSignaalGroepInstellingenModel>();
+            SignaalGroepInstellingen = new List<RoBuGroverFaseCyclusInstellingenModel>();
             BitmapData = new BitmapCoordinatenDataModel();
         }
     }

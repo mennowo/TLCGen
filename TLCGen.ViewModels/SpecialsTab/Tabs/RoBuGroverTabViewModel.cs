@@ -12,6 +12,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -118,7 +119,7 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        public ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel> SignaalGroepInstellingen
+        public ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverFaseCyclusInstellingenModel> SignaalGroepInstellingen
         {
             get;
             private set;
@@ -218,32 +219,6 @@ namespace TLCGen.ViewModels
                           SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
                     {
                         var instvm = SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclus).First();
-                        try
-                        {
-                            var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
-                            if (addfc.Type == FaseTypeEnum.Auto)
-                            {
-                                foreach (DetectorModel dm in addfc.Detectoren)
-                                {
-                                    if (dm.Type == DetectorTypeEnum.Lang)
-                                    {
-                                        var hd = new RoBuGroverHiaatDetectorModel();
-                                        hd.Detector = dm.Naam;
-                                        instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
-                                    }
-                                    if (dm.Type == DetectorTypeEnum.Kop)
-                                    {
-                                        var fd = new RoBuGroverFileDetectorModel();
-                                        fd.Detector = dm.Naam;
-                                        instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
-                                    }
-                                }
-                            }
-                        }
-                        catch
-                        {
-
-                        }
                         SignaalGroepInstellingen.Remove(instvm);
                         SignaalGroepInstellingen.BubbleSort();
                         SignaalGroepInstellingen.RebuildList();
@@ -266,8 +241,9 @@ namespace TLCGen.ViewModels
                 SelectedConflictGroep.Fasen.Add(fcvm);
                 if(!SignaalGroepInstellingen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).Any())
                 {
-                    var inst = new RoBuGroverSignaalGroepInstellingenModel();
+                    var inst = new RoBuGroverFaseCyclusInstellingenModel();
                     inst.FaseCyclus = fc.FaseCyclusNaam;
+                    DefaultsProvider.Default.SetDefaultsOnModel(inst);
                     var instvm = new RoBuGroverSignaalGroepInstellingenViewModel(inst);
                     try
                     {
@@ -278,12 +254,14 @@ namespace TLCGen.ViewModels
                             {
                                 var hd = new RoBuGroverHiaatDetectorModel();
                                 hd.Detector = dm.Naam;
+                                DefaultsProvider.Default.SetDefaultsOnModel(hd);
                                 instvm.HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(hd));
                             }
                             if (dm.Type == DetectorTypeEnum.Kop)
                             {
                                 var fd = new RoBuGroverFileDetectorModel();
                                 fd.Detector = dm.Naam;
+                                DefaultsProvider.Default.SetDefaultsOnModel(fd);
                                 instvm.FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(fd));
                             }
                         }
@@ -415,7 +393,7 @@ namespace TLCGen.ViewModels
                 if (base.Controller != null)
                 {
                     ConflictGroepen = new ObservableCollectionAroundList<RoBuGroverConflictGroepViewModel, RoBuGroverConflictGroepModel>(_Controller.RoBuGrover.ConflictGroepen);
-                    SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverSignaalGroepInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
+                    SignaalGroepInstellingen = new ObservableCollectionAroundList<RoBuGroverSignaalGroepInstellingenViewModel, RoBuGroverFaseCyclusInstellingenModel>(_Controller.RoBuGrover.SignaalGroepInstellingen);
                 }
                 else
                 {
