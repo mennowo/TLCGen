@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="TLCGen.Settings.Views.DetectorenDefaultsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:local="clr-namespace:TLCGen.Settings.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <Label Content="Type" DockPanel.Dock="Top" />
+            <ListView ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}"
+                                              SelectedItem="{Binding Path=SelectedDetectorType,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        </DockPanel>
+        <DockPanel Grid.Row="1">
+            <Label Content="Functionaliteit" DockPanel.Dock="Top" />
+            <ListView ItemsSource="{Binding Path=DetectorFunctionalities}"
+                                              SelectedItem="{Binding Path=SelectedDetectorFunctionality,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        </DockPanel>
+        <ct:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" Grid.RowSpan="2" />
+    </Grid>
+</UserControl>

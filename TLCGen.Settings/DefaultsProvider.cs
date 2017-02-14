@@ -180,66 +180,6 @@ namespace TLCGen.Settings
                     CopyAllValueProperties(frommodel, model);
                 }
             }
-            //if (props.Where(x => x.Name == "Detector").Any() ||
-            //    typename.Contains("Detector") && props.Where(x => x.Name == "Naam").Any())
-            //{
-            //    PropertyInfo prop;
-            //    var _props = props.Where(x => x.Name == "Detector");
-            //    if (_props == null || _props.Count() == 0)
-            //    {
-            //        prop = props.Where(x => x.Name == "Naam").First();
-            //    }
-            //    else
-            //    {
-            //        prop = props.Where(x => x.Name == "Detector").First();
-            //    }
-            //    var fctype = GetDetecotrTypeFromName((string)prop.GetValue(model));
-            //    var fromfc = Defaults.Fasen.Where(x => x.Type == fctype);
-            //    CopyAllValueProperties(fromfc.First().GetModel(model.GetType().ToString()), model);
-            //}
-            //switch(typename)
-            //{
-            //    case "FaseCyclusModel":
-            //        FaseCyclusModel fc = model as FaseCyclusModel;
-            //        var fromfc = Defaults.Fasen.Where(x => x.Type == fc.Type);
-            //        if (fromfc != null && fromfc.Count() > 0)
-            //        {
-            //            CopyAllValueProperties(fromfc.First().FaseCyclus, fc);
-            //        }
-            //        break;
-            //    case "FaseCyclusModuleDataModel":
-            //        var fcmltype = GetFaseCyclusTypeFromName((model as FaseCyclusModuleDataModel).FaseCyclus);
-            //        var frommlfc = Defaults.Fasen.Where(x => x.Type == fcmltype);
-            //        if (frommlfc != null && frommlfc.Count() > 0)
-            //        {
-            //            CopyAllValueProperties(frommlfc.First().FaseCyclusModuleData, (model as FaseCyclusModuleDataModel));
-            //        }
-            //        break;
-            //    case "GroentijdModel":
-            //        var fcmltype = GetFaseCyclusTypeFromName((model as GroentijdModel).FaseCyclus);
-            //        var frommlfc = Defaults.Fasen.Where(x => x.Type == fcmltype);
-            //        if (frommlfc != null && frommlfc.Count() > 0)
-            //        {
-            //            CopyAllValueProperties(frommlfc.First().FaseCyclusModuleData, (model as GroentijdModel));
-            //        }
-            //        break;
-            //    case "RoBuGroverSignaalGroepInstellingenModel":
-            //        var fcrgvtype = GetFaseCyclusTypeFromName((model as RoBuGroverFaseCyclusInstellingenModel).FaseCyclus);
-            //        var fromrgvfc = Defaults.Fasen.Where(x => x.Type == fcrgvtype);
-            //        if (fromrgvfc != null && fromrgvfc.Count() > 0)
-            //        {
-            //            CopyAllValueProperties(fromrgvfc.First().RoBuGroverSignaalGroepInstellingen, (model as RoBuGroverFaseCyclusInstellingenModel));
-            //        }
-            //        break;
-            //    case "DetectorModel":
-            //        DetectorModel d = model as DetectorModel;
-            //        var fromd = Defaults.Detectoren.Where(x => x.Type == d.Type);
-            //        if (fromd != null && fromd.Count() > 0)
-            //        {
-            //            CopyAllValueProperties(fromd.First(), d);
-            //        }
-            //        break;
-            //}
         }
 
         public void LoadSettings()
@@ -250,7 +190,7 @@ namespace TLCGen.Settings
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
 #if DEBUG
-            Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultssettings.xml"));
+            Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
 #else
             if (File.Exists(setfile))
             {
@@ -258,7 +198,7 @@ namespace TLCGen.Settings
             }
             else
             {
-                Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultssettings.xml"));
+                Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
             }
 #endif
         }
@@ -269,7 +209,7 @@ namespace TLCGen.Settings
             var setpath = Path.Combine(appdatpath, @"TLCGen\Defaults\");
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"tlcgendefaultssettings.xml");
+            var setfile = Path.Combine(setpath, @"settings.xml");
             TLCGenSerialization.Serialize<TLCGenDefaultsModel>(setfile, Defaults);
         }
 

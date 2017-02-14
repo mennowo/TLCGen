@@ -12,7 +12,7 @@
                 <Button Content="Fase toev." Margin="0,2" Command="{Binding Path=AddFaseCommand}" />
                 <Button Content="Fase verw." Margin="2,2,0,2" Command="{Binding Path=RemoveFaseCommand}" />
             </WrapPanel>
-            <local:TemplateManagerView DataContext="{Binding TemplateManagerVM}" />
+            <local:TemplateManagerView DataContext="{Binding TemplatesProviderVM}" />
         </StackPanel>
     </Grid>
 </UserControl>

@@ -58,7 +58,6 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-
         RelayCommand _AddPeriodeCommand;
         public ICommand AddPeriodeCommand
         {

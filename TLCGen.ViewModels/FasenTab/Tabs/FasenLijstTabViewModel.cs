@@ -21,7 +21,7 @@ using TLCGen.Settings;
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 0, type: TabItemTypeEnum.FasenTab)]
-    public class FasenLijstTabViewModel : TLCGenTabItemViewModel
+    public class FasenLijstTabViewModel : TLCGenTabItemViewModel, IAllowTemplates<FaseCyclusModel>
     {
         #region Fields
 
@@ -64,6 +64,19 @@ namespace TLCGen.ViewModels
                 _SelectedFaseCycli = value;
                 _SettingMultiple = false;
                 OnPropertyChanged("SelectedFaseCycli");
+            }
+        }
+
+        private TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel> _TemplatesProviderVM;
+        public TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel> TemplatesProviderVM
+        {
+            get
+            {
+                if (_TemplatesProviderVM == null)
+                {
+                    _TemplatesProviderVM = new TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel>(this);
+                }
+                return _TemplatesProviderVM;
             }
         }
 
@@ -203,7 +216,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            
+            TemplatesProviderVM.Update();
         }
 
         public override bool OnDeselectedPreview()
@@ -327,6 +340,18 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Collection Changed
+
+        #region IAllowTemplates
+
+        public void InsertItems(List<FaseCyclusModel> items)
+        {
+            foreach(var fc in items)
+            {
+                Fasen.Add(new FaseCyclusViewModel(fc));
+            }
+        }
+
+        #endregion // IAllowTemplates
 
         #region Constructor
 

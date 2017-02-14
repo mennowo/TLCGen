@@ -10,16 +10,13 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
-using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 2)]
-    public class DetectorenTabViewModel : TLCGenMainTabItemViewModel, IHaveTemplates<DetectorModel>
+    public class DetectorenTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
-
-        private TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> _TemplateManagerVM;
 
         #endregion // Fields
 
@@ -37,21 +34,7 @@ namespace TLCGen.ViewModels
                 return (DrawingImage)dict["DetectorenTabDrawingImage"];
             }
         }
-
-        public TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel> TemplateManagerVM
-        {
-            get
-            {
-                if (_TemplateManagerVM == null)
-                {
-                    //_TemplateManagerVM = new TemplatesManagerViewModelT<DetectorTemplateViewModel, DetectorModel>
-                    //    (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\detectors\\"),
-                    //     this, $@"{SettingsProvider.Default.GetDetectorDefinePrefix()}([0-9])");
-                }
-                return _TemplateManagerVM;
-            }
-        }
-
+        
         #endregion // Properties
 
         #region Commands
@@ -79,60 +62,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TabItem Overrides
-
-        #region ITabWithTemplates
-
-        public List<object> GetTemplatableItems()
-        {
-            List<object> items = new List<object>();
-            
-            switch(SelectedTab?.DisplayName)
-            {
-                case "PerFaseTab":
-#warning TODO
-                    //foreach (DetectorViewModel dvm in DetectorenFasenLijstVM.SelectedDetectoren)
-                    //    items.Add(dvm.Detector);
-                    break;
-                case "ExtraTab":
-                    //foreach (DetectorViewModel dvm in DetectorenExtraLijstVM.SelectedDetectoren)
-                    //    items.Add(dvm.Detector);
-                    break;
-            }
-            return items;
-        }
-
-        public void AddFromTemplate(List<DetectorModel> items)
-        {
-            try
-            {
-                foreach(DetectorModel dm in items)
-                {
-                    var message1 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message1);
-                    if (message1.Handled && message1.IsUnique)
-                    {
-#warning TODO
-                        //DetectorViewModel dvm = new DetectorViewModel(dm);
-                        //dvm.FaseCyclus = DetectorenFasenLijstVM?.SelectedFaseNaam;
-                        //switch (SelectedTab?.DisplayName)
-                        //{
-                        //    case "PerFaseTab":
-                        //        DetectorenFasenLijstVM?.Detectoren?.Add(dvm);
-                        //        break;
-                        //    case "ExtraTab":
-                        //        DetectorenExtraLijstVM?.Detectoren?.Add(dvm);
-                        //        break;
-                        //}
-                    }
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        #endregion // ITabWithTemplates
 
         #region Public Methods
 

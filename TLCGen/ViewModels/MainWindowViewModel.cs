@@ -522,7 +522,7 @@ namespace TLCGen.ViewModels
 
         private void ShowSettingsWindowCommand_Executed(object obj)
         {
-            TLCGen.Views.Dialogs.TLCGenSettingsWindow settingswin = new Views.Dialogs.TLCGenSettingsWindow();
+            Settings.Views.TLCGenSettingsWindow settingswin = new Settings.Views.TLCGenSettingsWindow();
             settingswin.DataContext = new TLCGenSettingsViewModel();
             settingswin.ShowDialog();
         }
@@ -559,6 +559,8 @@ namespace TLCGen.ViewModels
 
                 SaveGeneratorControllerSettingsToModel();
                 SettingsProvider.Default.SaveApplicationSettings();
+                DefaultsProvider.Default.SaveSettings();
+                TemplatesProvider.Default.SaveSettings();
             }
         }
 
@@ -654,6 +656,7 @@ namespace TLCGen.ViewModels
             // Load application settings and defaults
             SettingsProvider.Default.LoadApplicationSettings();
             DefaultsProvider.Default.LoadSettings();
+            TemplatesProvider.Default.LoadSettings();
 
             // Load available applicationparts and plugins
             TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");

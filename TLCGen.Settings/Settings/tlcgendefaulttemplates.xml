@@ -1,0 +1,69 @@
+﻿<?xml version="1.0"?>
+<TLCGenTemplatesModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FasenTemplates>
+    <FasenTemplate>
+      <Naam>Auto 1 rijbaan kop lang</Naam>
+      <Replace>fase</Replace>
+      <Fasen>
+        <Fase>
+          <Naam>fase</Naam>
+          <BitmapCoordinaten />
+          <Type>Auto</Type>
+          <TFG>50</TFG>
+          <TGG>40</TGG>
+          <TGG_min>40</TGG_min>
+          <TRG>20</TRG>
+          <TRG_min>20</TRG_min>
+          <TGL>30</TGL>
+          <TGL_min>30</TGL_min>
+          <Kopmax>80</Kopmax>
+          <OVIngreep>false</OVIngreep>
+          <HDIngreep>false</HDIngreep>
+          <VasteAanvraag>SchUit</VasteAanvraag>
+          <Wachtgroen>SchUit</Wachtgroen>
+          <Meeverlengen>SchAan</Meeverlengen>
+          <MeeverlengenType>To</MeeverlengenType>
+          <MeeverlengenVerschil xsi:nil="true" />
+          <Detectoren>
+            <Detector>
+              <Naam>fase_1</Naam>
+              <BitmapCoordinaten />
+              <VissimNaam />
+              <TDB>20</TDB>
+              <TDH>30</TDH>
+              <TOG>20</TOG>
+              <TBG>360</TBG>
+              <TFL>60</TFL>
+              <CFL>45</CFL>
+              <AanvraagDirect>true</AanvraagDirect>
+              <Wachtlicht>false</Wachtlicht>
+              <WachtlichtBitmapData />
+              <Simulatie />
+              <Type>Kop</Type>
+              <Aanvraag>RnietTRG</Aanvraag>
+              <Verlengen>Kopmax</Verlengen>
+            </Detector>
+            <Detector>
+              <Naam>fase_2</Naam>
+              <BitmapCoordinaten />
+              <VissimNaam />
+              <TDB>0</TDB>
+              <TDH>10</TDH>
+              <TOG>60</TOG>
+              <TBG>360</TBG>
+              <TFL>60</TFL>
+              <CFL>30</CFL>
+              <AanvraagDirect>false</AanvraagDirect>
+              <Wachtlicht>false</Wachtlicht>
+              <WachtlichtBitmapData />
+              <Simulatie />
+              <Type>Lang</Type>
+              <Aanvraag>RnietTRG</Aanvraag>
+              <Verlengen>MK2</Verlengen>
+            </Detector>
+          </Detectoren>
+        </Fase>
+      </Fasen>
+    </FasenTemplate>
+  </FasenTemplates>
+</TLCGenTemplatesModel>

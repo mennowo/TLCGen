@@ -18,17 +18,15 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
-using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 1)]
-    public class FasenTabViewModel : TLCGenMainTabItemViewModel, IHaveTemplates<FaseCyclusModel>
+    public class FasenTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields
         
         private IList _SelectedFaseCycli = new ArrayList();
-        private TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel> _TemplateManagerVM;
 
         #endregion // Fields
 
@@ -44,20 +42,6 @@ namespace TLCGen.ViewModels
                     ";component/" + "TabIcons.xaml");
                 dict.Source = u;
                 return (ImageSource)dict["FasenTabDrawingImage"];
-            }
-        }
-
-        public TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel> TemplateManagerVM
-        {
-            get
-            {
-                if(_TemplateManagerVM == null)
-                {
-                    //_TemplateManagerVM = new TemplatesManagerViewModelT<FaseCyclusTemplateViewModel, FaseCyclusModel>
-                    //    (System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "templates\\fasecycli\\"),
-                    //     this, $@"{SettingsProvider.Default.GetFaseCyclusDefinePrefix()}([0-9])");
-                }
-                return _TemplateManagerVM;
             }
         }
 
@@ -92,56 +76,6 @@ namespace TLCGen.ViewModels
         #region Public Methods
 
         #endregion // Public Methods
-
-        #region IHaveTemplates
-
-        public List<object> GetTemplatableItems()
-        {
-            List<object> items = new List<object>();
-            //if (SelectedFaseCycli != null)
-            //    foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
-            //        items.Add(fcvm.FaseCyclus);
-            return items;
-        }
-
-        public void AddFromTemplate(List<FaseCyclusModel> items)
-        {
-            try
-            {
-                foreach (FaseCyclusModel fcm in items)
-                {
-                    var message1 = new IsElementIdentifierUniqueRequest(fcm.Naam, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message1);
-                    if (message1.Handled && message1.IsUnique)
-                    {
-                        bool IsOK = true;
-                        foreach(DetectorModel dm in fcm.Detectoren)
-                        {
-                            var message2 = new IsElementIdentifierUniqueRequest(dm.Naam, ElementIdentifierType.Naam);
-                            Messenger.Default.Send(message2);
-                            if (!(message2.Handled && message2.IsUnique))
-                            {
-                                IsOK = false;
-                                break;
-                            }
-                        }
-                        if(IsOK)
-                        {
-                            FaseCyclusViewModel fcvm = new FaseCyclusViewModel(fcm);
-                            //Fasen.Add(fcvm);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        #endregion // IHaveTemplates
-
-        
 
         #region Constructor
 

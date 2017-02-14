@@ -10,23 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TLCGen.Views.Dialogs
+namespace TLCGen.Settings.Views
 {
     /// <summary>
-    /// Interaction logic for TLCGenSettingsWindow.xaml
+    /// Interaction logic for FasenDefaultsTabView.xaml
     /// </summary>
-    public partial class TLCGenSettingsWindow : Window
+    public partial class FasenDefaultsTabView : UserControl
     {
-        public TLCGenSettingsWindow()
+        public FasenDefaultsTabView()
         {
             InitializeComponent();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

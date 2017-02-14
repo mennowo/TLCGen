@@ -20,7 +20,6 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
-using TLCGen.ViewModels.Templates;
 
 namespace TLCGen.ViewModels
 {

@@ -12,7 +12,7 @@
         <StackPanel>
             <!--<Label Content="Templates" FontSize="9" Padding="5,1" />-->
             <WrapPanel Grid.Row="0">
-                <ComboBox ItemsSource="{Binding Path=Templates}"
+                <ComboBox ItemsSource="{Binding Path=Templates}" DisplayMemberPath="Naam"
                       SelectedItem="{Binding Path=SelectedTemplate}"
                       Margin="2" SelectedIndex="0" />
                 <Button Content="Toepassen" Margin="0,2" Command="{Binding Path=ApplyTemplateCommand}" CommandParameter="{Binding ElementName=root,Path=ApplyToItem}" />

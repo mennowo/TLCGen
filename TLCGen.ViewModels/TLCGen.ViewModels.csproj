@@ -101,6 +101,8 @@
     <Compile Include="ModulesTab\DataTypes\FaseCyclusModuleDataViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesDetailsTabViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesFasenInstellingenTabViewModel.cs" />
+    <Compile Include="Other\IAllowTemplates.cs" />
+    <Compile Include="Other\TemplateProviderViewModel.cs" />
     <Compile Include="PeriodenTab\DataTypes\PeriodeViewModel.cs" />
     <Compile Include="PeriodenTab\PeriodenTabViewModel.cs" />
     <Compile Include="ModulesTab\FaseCyclusModuleViewModel.cs" />
@@ -143,10 +145,6 @@
     <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
     <Compile Include="TLCGenMainTabItemViewModel.cs" />
     <Compile Include="TLCGenTabItemViewModel.cs" />
-    <Compile Include="Templates\DetectorTemplateViewModel.cs" />
-    <Compile Include="Templates\FaseCyclusTemplateViewModel.cs" />
-    <Compile Include="Templates\TemplatesManagerViewModelT.cs" />
-    <Compile Include="Templates\TemplateViewModelBase.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
