@@ -15,8 +15,5 @@ namespace TLCGen.Settings
 
         void LoadApplicationSettings();
         void SaveApplicationSettings();
-
-        void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm);
-        void ApplyDefaultFaseCyclusSettings(FaseCyclusModel fcm, FaseTypeEnum type);
     }
 }

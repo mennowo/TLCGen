@@ -137,6 +137,7 @@ namespace TLCGen.Settings
             var type = model.GetType();
             var typename = type.Name;
             var props = type.GetProperties();
+#warning TODO: change this, so it uses the RefersToSignalGroup and RefersToDetector attributes to find the name; that attr is there already!
             if (props.Where(x => x.Name == "FaseCyclus").Any() || 
                 typename.StartsWith("FaseCyclus") && props.Where(x => x.Name == "Naam").Any())
             {

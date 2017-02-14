@@ -85,6 +85,9 @@
       <DependentUpon>FolderTextBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimplePropertyEditor.xaml.cs">
+      <DependentUpon>SimplePropertyEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SingleClickDataGridTemplateColumn.cs" />
     <Compile Include="SpecialDataGrid.cs" />
     <Compile Include="TimeSpanUpDown24Hours.cs" />
@@ -103,6 +106,10 @@
     <Page Include="FolderTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SimplePropertyEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

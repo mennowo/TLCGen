@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
-namespace TLCGen.ViewModels
+namespace TLCGen.Settings
 {
     public class TLCGenSettingsViewModel : ViewModelBase
     {
@@ -42,7 +43,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCyclusFunctionality = value;
                 SetSelectedFaseDefaultsObject(SelectedFaseCyclusType);
-                OnPropertyChanged("SelectedFaseCyclusFunctionality");
+                RaisePropertyChanged("SelectedFaseCyclusFunctionality");
             }
         }
 
@@ -52,7 +53,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                OnPropertyChanged("SelectedFaseCyclus");
+                RaisePropertyChanged("SelectedFaseCyclus");
             }
         }
 
@@ -63,7 +64,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCyclusType = value;
                 SetSelectedFaseDefaultsObject(value);
-                OnPropertyChanged("SelectedFaseCyclusType");
+                RaisePropertyChanged("SelectedFaseCyclusType");
             }
         }
 
@@ -85,7 +86,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorFunctionality = value;
                 SetSelectedDetectorDefaultsObject(SelectedDetectorType);
-                OnPropertyChanged("SelectedDetectorFunctionality");
+                RaisePropertyChanged("SelectedDetectorFunctionality");
             }
         }
 
@@ -95,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                OnPropertyChanged("SelectedDetector");
+                RaisePropertyChanged("SelectedDetector");
             }
         }
 
@@ -106,7 +107,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectorType = value;
                 SetSelectedDetectorDefaultsObject(SelectedDetectorType);
-                OnPropertyChanged("SelectedDetectorType");
+                RaisePropertyChanged("SelectedDetectorType");
             }
         }
 

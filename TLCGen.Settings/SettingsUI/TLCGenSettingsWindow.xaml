@@ -4,11 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TLCGen.Views.Dialogs"
-        xmlns:vw="clr-namespace:TLCGen.Views"
+        xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
         xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
         xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
         xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
         mc:Ignorable="d"
         Title="TLCGenSettingsWindow" Height="400" Width="600" >
     <Window.Resources>
@@ -52,7 +51,7 @@
                                     <ListView ItemsSource="{Binding Path=FaseCyclusFunctionalities}"
                                               SelectedItem="{Binding Path=SelectedFaseCyclusFunctionality,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                                 </DockPanel>
-                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedFaseCyclus}" Grid.Column="1" Grid.RowSpan="2" />
+                                <ct:SimplePropertyEditor BoundObject="{Binding Path=SelectedFaseCyclus}" Grid.Column="1" Grid.RowSpan="2" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Detectoren">
@@ -75,7 +74,7 @@
                                     <ListView ItemsSource="{Binding Path=DetectorFunctionalities}"
                                               SelectedItem="{Binding Path=SelectedDetectorFunctionality,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                                 </DockPanel>
-                                <vw:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" Grid.RowSpan="2" />
+                                <ct:SimplePropertyEditor BoundObject="{Binding Path=SelectedDetector}" Grid.Column="1" Grid.RowSpan="2" />
                             </Grid>
                         </TabItem>
                     </TabControl>
