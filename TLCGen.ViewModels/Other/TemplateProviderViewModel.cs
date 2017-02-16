@@ -75,9 +75,11 @@ namespace TLCGen.ViewModels
         {
             List<T2> items = new List<T2>();
             TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
+            
+            // No data provided from view, but a replace value is needed for this template
             if(obj == null && !string.IsNullOrWhiteSpace(template.Replace))
             {
-                TLCGen.Dialogs.ApplyTemplateWindow dialog = new TLCGen.Dialogs.ApplyTemplateWindow();
+                var dialog = new Dialogs.ApplyTemplateWindow();
                 dialog.ShowDialog();
                 string ApplyString = dialog.TemplateApplyString;
                 if(!string.IsNullOrWhiteSpace(ApplyString))
@@ -90,14 +92,31 @@ namespace TLCGen.ViewModels
                         foreach (var item in tempitems)
                         {
                             var cloneditem = DeepCloner.DeepClone((T2)item);
-                            Helpers.ModelStringSetter.SetStringInModel(cloneditem, template.Replace, elem);
+                            ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
                             items.Add(cloneditem);
                         }
-                        _SourceVM.InsertItemsFromTemplate(items);
                     }
+                    _SourceVM.InsertItemsFromTemplate(items);
                 }
             }
-            else
+            // Data provided from view, for use with replace value
+            else if (obj != null && !string.IsNullOrWhiteSpace(template.Replace))
+            {
+                var elem = obj as string;
+                if (!string.IsNullOrWhiteSpace(elem))
+                {
+                    var tempitems = template.GetItems();
+                    foreach (var item in tempitems)
+                    {
+                        var cloneditem = DeepCloner.DeepClone((T2)item);
+                        ModelStringSetter.ReplaceStringInModel(cloneditem, template.Replace, elem);
+                        items.Add(cloneditem);
+                    }
+                    _SourceVM.InsertItemsFromTemplate(items);
+                }
+            }
+            // Fixed template
+            else if (string.IsNullOrWhiteSpace(template.Replace))
             {
                 var tempitems = template.GetItems();
                 foreach(var item in tempitems)
@@ -127,6 +146,10 @@ namespace TLCGen.ViewModels
                 {
                     Templates.Add(t as T1);
                 }
+            }
+            if(Templates.Count > 0)
+            {
+                SelectedTemplate = Templates[0];
             }
         }
 

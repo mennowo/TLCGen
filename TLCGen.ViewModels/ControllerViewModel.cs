@@ -246,6 +246,11 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public void OnControllerDataChanged(ControllerDataChangedMessage message)
+        {
+            TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
+        }
+
         #endregion // TLCGen Message handling
 
         #region Constructor
@@ -288,6 +293,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
             Messenger.Default.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
             Messenger.Default.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
+            Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
 
             SelectedTabIndex = 0;
         }

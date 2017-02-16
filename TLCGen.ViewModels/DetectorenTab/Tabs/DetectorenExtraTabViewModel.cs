@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
@@ -25,7 +26,7 @@ namespace TLCGen.ViewModels
     /// ViewModel for the list of extra detectors, not belonging to a PhaseCyclus
     /// </summary>
     [TLCGenTabItem(index: 1, type: TabItemTypeEnum.DetectieTab)]
-    public class DetectorenExtraTabViewModel : TLCGenTabItemViewModel
+    public class DetectorenExtraTabViewModel : TLCGenTabItemViewModel, IAllowTemplates<DetectorModel>
     {
         #region Fields
         
@@ -80,6 +81,19 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectoren = value;
                 OnPropertyChanged("SelectedDetectoren");
+            }
+        }
+
+        private TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel> _TemplatesProviderVM;
+        public TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel> TemplatesProviderVM
+        {
+            get
+            {
+                if (_TemplatesProviderVM == null)
+                {
+                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel>(this);
+                }
+                return _TemplatesProviderVM;
             }
         }
 
@@ -205,6 +219,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            TemplatesProviderVM.Update();
         }
 
         public override void OnDeselected()
@@ -241,6 +256,26 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TabItem Overrides
+
+        #region IAllowTemplates
+
+        public void InsertItemsFromTemplate(List<DetectorModel> items)
+        {
+            foreach (var d in items)
+            {
+                if (!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                {
+                    MessageBox.Show("Error bij toevoegen van detector met naam " + d.Naam + ".\nDe detector naam is niet uniek in de regeling.", "Error bij toepassen template");
+                    return;
+                }
+            }
+            foreach (var d in items)
+            {
+                Detectoren.Add(new DetectorViewModel(d));
+            }
+        }
+
+        #endregion // IAllowTemplates
 
         #region Collection Changed
 

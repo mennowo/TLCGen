@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
@@ -118,6 +119,19 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel> _TemplatesProviderVM;
+        public TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel> TemplatesProviderVM
+        {
+            get
+            {
+                if (_TemplatesProviderVM == null)
+                {
+                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel>(this);
+                }
+                return _TemplatesProviderVM;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -129,7 +143,7 @@ namespace TLCGen.ViewModels
             {
                 if (_AddDetectorCommand == null)
                 {
-                    _AddDetectorCommand = new RelayCommand(AddNewDetectorCommand_Executed, AddNewDetectorCommand_CanExecute);
+                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
                 }
                 return _AddDetectorCommand;
             }
@@ -153,7 +167,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewDetectorCommand_Executed(object prm)
+        void AddDetectorCommand_Executed(object prm)
         {
             DetectorModel _dm = new DetectorModel();
             string newname = "1";
@@ -162,7 +176,6 @@ namespace TLCGen.ViewModels
             {
                 if (Regex.IsMatch(dm.Naam, @"[0-9]$"))
                 {
-
                     Match m = Regex.Match(dm.Naam, @"[0-9]$");
                     string next = m.Value;
                     if (Int32.TryParse(next, out inewname))
@@ -194,7 +207,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
-        bool AddNewDetectorCommand_CanExecute(object prm)
+        bool AddDetectorCommand_CanExecute(object prm)
         {
             return _SelectedFase != null && _SelectedFase.Detectoren != null;
         }
@@ -256,6 +269,8 @@ namespace TLCGen.ViewModels
             {
                 Fasen.Add(fcm.Naam);
             }
+
+            TemplatesProviderVM.Update();
         }
 
         public override void OnDeselected()
@@ -274,10 +289,17 @@ namespace TLCGen.ViewModels
         {
             foreach(var d in items)
             {
-                if (Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                if (!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
                 {
-                    Detectoren.Add(new DetectorViewModel(d));
+                    MessageBox.Show("Error bij toevoegen van detector met naam " + d.Naam + ".\nDe detector naam is niet uniek in de regeling.", "Error bij toepassen template");
+                    return;
                 }
+            }
+            foreach(var d in items)
+            {
+                _SelectedFase.Detectoren.Add(d);
+                Detectoren.Add(new DetectorViewModel(d) { FaseCyclus = SelectedFaseNaam });
+                Messenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
 

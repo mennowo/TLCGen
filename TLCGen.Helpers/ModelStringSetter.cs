@@ -43,5 +43,39 @@ namespace TLCGen.Helpers
                 }
             }
         }
+
+        public static void ReplaceStringInModel(object obj, string oldstring, string newstring)
+        {
+            if (obj == null) return;
+            Type objType = obj.GetType();
+            PropertyInfo[] properties = objType.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                object propValue = property.GetValue(obj);
+                if (property.PropertyType == typeof(string))
+                {
+                    string propString = (string)propValue;
+                    if (propString != null && propString.Contains(oldstring))
+                    {
+                        property.SetValue(obj, propString.Replace(oldstring, newstring));
+                    }
+                }
+                else if (!objType.IsValueType)
+                {
+                    var elems = propValue as IList;
+                    if (elems != null)
+                    {
+                        foreach (var item in elems)
+                        {
+                            ReplaceStringInModel(item, oldstring, newstring);
+                        }
+                    }
+                    else
+                    {
+                        ReplaceStringInModel(propValue, oldstring, newstring);
+                    }
+                }
+            }
+        }
     }
 }

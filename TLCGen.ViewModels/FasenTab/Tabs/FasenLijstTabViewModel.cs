@@ -8,9 +8,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
@@ -345,6 +347,15 @@ namespace TLCGen.ViewModels
 
         public void InsertItemsFromTemplate(List<FaseCyclusModel> items)
         {
+            foreach (var fc in items)
+            {
+                if (!(IntegrityChecker.IsElementNaamUnique(_Controller, fc.Naam) &&
+                     (fc.Detectoren.Count == 0 || !fc.Detectoren.Where(x => IntegrityChecker.IsElementNaamUnique(_Controller, x.Naam) == false).Any())))
+                {
+                    MessageBox.Show("Error bij toevoegen van fase met naam " + fc.Naam + ".\nFase en/of bijbehorende detectie is niet uniek in de regeling.", "Error bij toepassen template");
+                    return;
+                }
+            }
             foreach(var fc in items)
             {
                 Fasen.Add(new FaseCyclusViewModel(fc));

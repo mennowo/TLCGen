@@ -16,7 +16,7 @@
             <WrapPanel >
                 <local:DetectorenToevVerw />
             </WrapPanel>
-            <local:TemplateManagerView DataContext="{Binding TemplateManagerVM}" />
+            <local:TemplateManagerView DataContext="{Binding TemplatesProviderVM}" />
         </StackPanel>
     </Grid>
 </UserControl>

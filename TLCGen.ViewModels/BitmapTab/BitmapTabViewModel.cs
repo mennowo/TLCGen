@@ -242,17 +242,7 @@ namespace TLCGen.ViewModels
 
         public override bool CanBeEnabled()
         {
-            // Set the bitmap
-            if (!string.IsNullOrWhiteSpace(_ControllerFileName) && 
-                Controller.Data != null && 
-                !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
-                BitmapFileName =
-                    System.IO.Path.Combine(
-                        System.IO.Path.GetDirectoryName(_ControllerFileName),
-                        Controller.Data.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ?
-                        Controller.Data.BitmapNaam :
-                        Controller.Data.BitmapNaam + ".bmp"
-                    );
+            SetBitmapFileName();
 
             return !string.IsNullOrWhiteSpace(BitmapFileName) && File.Exists(BitmapFileName);
         }
@@ -335,6 +325,28 @@ namespace TLCGen.ViewModels
         #endregion // Public Methods
 
         #region Private Methods
+
+        private void SetBitmapFileName()
+        {
+            // Set the bitmap
+            if (!string.IsNullOrWhiteSpace(_ControllerFileName) &&
+                Controller != null &&
+                Controller.Data != null &&
+                !string.IsNullOrWhiteSpace(Controller.Data.BitmapNaam))
+            {
+                BitmapFileName =
+                    System.IO.Path.Combine(
+                        System.IO.Path.GetDirectoryName(_ControllerFileName),
+                        Controller.Data.BitmapNaam.EndsWith(".bmp", StringComparison.CurrentCultureIgnoreCase) ?
+                        Controller.Data.BitmapNaam :
+                        Controller.Data.BitmapNaam + ".bmp"
+                    );
+            }
+            else
+            {
+                BitmapFileName = null;
+            }
+        }
 
         private void CollectAllIO()
         {
@@ -524,6 +536,13 @@ namespace TLCGen.ViewModels
 
         private void LoadBitmap()
         {
+            if(string.IsNullOrEmpty(_BitmapFileName))
+            {
+                _EditableBitmap = null;
+                RefreshMyBitmapImage();
+                return;
+            }
+
             if (File.Exists(_BitmapFileName))
             {
                 try
@@ -587,6 +606,8 @@ namespace TLCGen.ViewModels
         {
             if(_EditableBitmap == null)
             {
+                _MyBitmap = null;
+                OnPropertyChanged("MyBitmap");
                 return;
             }
 
@@ -652,6 +673,8 @@ namespace TLCGen.ViewModels
         private void OnFileNameChanged(ControllerFileNameChangedMessage message)
         {
             _ControllerFileName = message.NewFileName;
+            SetBitmapFileName();
+            RefreshMyBitmapImage();
         }
 
         private void OnRefreshBitmapRequest(RefreshBitmapRequest request)

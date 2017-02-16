@@ -130,24 +130,24 @@ namespace TLCGen.Integrity
         public static bool IsElementNaamUnique(ControllerModel _Controller, string naam)
         {
             // Check fasen
-            foreach (FaseCyclusModel fcvm in _Controller.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                if (fcvm.Naam == naam)
+                if (fcm.Naam == naam)
                     return false;
             }
 
             // Check detectie
-            foreach (FaseCyclusModel fcvm in _Controller.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                foreach (DetectorModel dvm in fcvm.Detectoren)
+                foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    if (dvm.Naam == naam)
+                    if (dm.Naam == naam)
                         return false;
                 }
             }
-            foreach (DetectorModel dvm in _Controller.Detectoren)
+            foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                if (dvm.Naam == naam)
+                if (dm.Naam == naam)
                     return false;
             }
 

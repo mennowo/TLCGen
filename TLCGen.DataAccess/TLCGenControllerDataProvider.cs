@@ -132,6 +132,7 @@ namespace TLCGen.DataAccess
             if(!CheckChanged())
             {
                 string lastfilename = ControllerFileName;
+                ControllerFileName = null;
                 SetController(new ControllerModel());
                 return true;
             }
@@ -350,38 +351,38 @@ namespace TLCGen.DataAccess
         }
 
         #endregion // Static Methods
-        
+
         #region Private Methods
 
-
-      // public XmlDocument GetControllerXmlData()
-      // {
-      //     var doc = TLCGenSerialization.SerializeToXmlDocument(_Controller);
-      //     foreach (var v in _LoadedPlugins)
-      //     {
-      //         if (v is ITLCGenXMLNodeWriter)
-      //         {
-      //             var writer = (ITLCGenXMLNodeWriter)v;
-      //             writer.SetXmlInDocument(doc);
-      //         }
-      //     }
-      //     return doc;
-      // }
-      //
-      // public void LoadPluginDataFromXmlDocument(XmlDocument document)
-      // {
-      //     if (document == null)
-      //         return;
-      //
-      //     foreach (var v in _LoadedPlugins)
-      //     {
-      //         if (v is ITLCGenXMLNodeWriter)
-      //         {
-      //             var writer = (ITLCGenXMLNodeWriter)v;
-      //             writer.GetXmlFromDocument(document);
-      //         }
-      //     }
-      // }
+#warning TODO!!!
+        // public XmlDocument GetControllerXmlData()
+        // {
+        //     var doc = TLCGenSerialization.SerializeToXmlDocument(_Controller);
+        //     foreach (var v in _LoadedPlugins)
+        //     {
+        //         if (v is ITLCGenXMLNodeWriter)
+        //         {
+        //             var writer = (ITLCGenXMLNodeWriter)v;
+        //             writer.SetXmlInDocument(doc);
+        //         }
+        //     }
+        //     return doc;
+        // }
+        //
+        // public void LoadPluginDataFromXmlDocument(XmlDocument document)
+        // {
+        //     if (document == null)
+        //         return;
+        //
+        //     foreach (var v in _LoadedPlugins)
+        //     {
+        //         if (v is ITLCGenXMLNodeWriter)
+        //         {
+        //             var writer = (ITLCGenXMLNodeWriter)v;
+        //             writer.GetXmlFromDocument(document);
+        //         }
+        //     }
+        // }
 
         #endregion // Private Methods
 
