@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Models;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -73,58 +74,39 @@ namespace TLCGen.ViewModels
         private void ApplyTemplateCommand_Executed(object obj)
         {
             List<T2> items = new List<T2>();
-            TemplateModelBase template = SelectedTemplate as TemplateModelBase;
-            if(!string.IsNullOrWhiteSpace(template.Replace))
+            TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
+            if(obj == null && !string.IsNullOrWhiteSpace(template.Replace))
             {
-#warning TODO: replace! use reflection...
+                TLCGen.Dialogs.ApplyTemplateWindow dialog = new TLCGen.Dialogs.ApplyTemplateWindow();
+                dialog.ShowDialog();
+                string ApplyString = dialog.TemplateApplyString;
+                if(!string.IsNullOrWhiteSpace(ApplyString))
+                {
+                    string list = ApplyString.Replace(" ", "");
+                    string[] elems = list.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var elem in elems)
+                    {
+                        var tempitems = template.GetItems();
+                        foreach (var item in tempitems)
+                        {
+                            var cloneditem = DeepCloner.DeepClone((T2)item);
+                            Helpers.ModelStringSetter.SetStringInModel(cloneditem, template.Replace, elem);
+                            items.Add(cloneditem);
+                        }
+                        _SourceVM.InsertItemsFromTemplate(items);
+                    }
+                }
             }
-            var tempitems = template.GetItems();
-            foreach(var item in tempitems)
+            else
             {
-                items.Add(item as T2);
+                var tempitems = template.GetItems();
+                foreach(var item in tempitems)
+                {
+                    var cloneditem = DeepCloner.DeepClone((T2)item);
+                    items.Add(cloneditem);
+                }
+                _SourceVM.InsertItemsFromTemplate(items);
             }
-            _SourceVM.InsertItems(items);
-            //TemplateViewModelBase tb = SelectedTemplate as TemplateViewModelBase;
-            //
-            //string ApplyString = (string)obj;
-            //if (tb.HasReplaceValue && string.IsNullOrWhiteSpace(ApplyString))
-            //{
-            //    TLCGen.Dialogs.ApplyTemplateWindow dialog = new TLCGen.Dialogs.ApplyTemplateWindow();
-            //    dialog.ShowDialog();
-            //    ApplyString = dialog.TemplateApplyString;
-            //}
-            //
-            //if (!tb.HasReplaceValue || !string.IsNullOrWhiteSpace(ApplyString))
-            //{
-            //    if (tb.HasReplaceValue)
-            //    {
-            //        string list = ApplyString.Replace(" ", "");
-            //        string[] elems = list.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            //        foreach (string s in elems)
-            //        {
-            //            List<object> templateitems = tb.GetItems();
-            //            List<T2> actualitems = new List<T2>();
-            //            foreach (object o in templateitems)
-            //            {
-            //                T2 oc = DeepCloner.DeepClone<T2>((T2)o);
-            //                ((ITemplatable)oc).SetAllIdentifyingNames("##", s);
-            //                actualitems.Add(oc);
-            //            }
-            //            _ContainingTab.AddFromTemplate(actualitems);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        List<object> templateitems = tb.GetItems();
-            //        List<T2> actualitems = new List<T2>();
-            //        foreach (object o in templateitems)
-            //        {
-            //            T2 oc = DeepCloner.DeepClone<T2>((T2)o);
-            //            actualitems.Add(oc);
-            //        }
-            //        _ContainingTab.AddFromTemplate(actualitems);
-            //    }
-            //}
         }
 
         #endregion // Commands Functionality
@@ -132,14 +114,14 @@ namespace TLCGen.ViewModels
         public void Update()
         {
             Templates.Clear();
-            if (typeof(T1) == typeof(FaseCyclusTemplateModel))
+            if(typeof(T2) == typeof(FaseCyclusModel))
             {
                 foreach (var t in TemplatesProvider.Default.Templates.FasenTemplates)
                 {
                     Templates.Add(t as T1);
                 }
             }
-            else if (typeof(T1) == typeof(DetectorTemplateModel))
+            if (typeof(T2) == typeof(DetectorModel))
             {
                 foreach (var t in TemplatesProvider.Default.Templates.DetectorenTemplates)
                 {

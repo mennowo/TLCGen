@@ -67,14 +67,14 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel> _TemplatesProviderVM;
-        public TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel> TemplatesProviderVM
+        private TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> _TemplatesProviderVM;
+        public TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel> TemplatesProviderVM
         {
             get
             {
                 if (_TemplatesProviderVM == null)
                 {
-                    _TemplatesProviderVM = new TemplateProviderViewModel<FaseCyclusTemplateModel, FaseCyclusModel>(this);
+                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<FaseCyclusModel>, FaseCyclusModel>(this);
                 }
                 return _TemplatesProviderVM;
             }
@@ -343,7 +343,7 @@ namespace TLCGen.ViewModels
 
         #region IAllowTemplates
 
-        public void InsertItems(List<FaseCyclusModel> items)
+        public void InsertItemsFromTemplate(List<FaseCyclusModel> items)
         {
             foreach(var fc in items)
             {

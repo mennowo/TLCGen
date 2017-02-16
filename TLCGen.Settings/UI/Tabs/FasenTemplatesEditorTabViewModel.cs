@@ -19,7 +19,7 @@ namespace TLCGen.Settings
 
         #region Properties
 
-        public ObservableCollectionAroundList<FaseCyclusTemplateViewModel, FaseCyclusTemplateModel> FasenTemplates
+        public ObservableCollectionAroundList<FaseCyclusTemplateViewModel, TLCGenTemplateModel<FaseCyclusModel>> FasenTemplates
         {
             get;
             private set;
@@ -73,13 +73,13 @@ namespace TLCGen.Settings
 
         private void AddFaseTemplateCommand_Executed(object prm)
         {
-            FaseCyclusTemplateModel fct = new FaseCyclusTemplateModel();
+            var fct = new TLCGenTemplateModel<FaseCyclusModel>();
             fct.Naam = "Nieuw template";
             fct.Replace = "fase";
-            FaseCyclusModel fc = new FaseCyclusModel();
+            var fc = new FaseCyclusModel();
             fc.Naam = "fase";
             DefaultsProvider.Default.SetDefaultsOnModel(fc);
-            fct.Fasen.Add(fc);
+            fct.Items.Add(fc);
             FasenTemplates.Add(new FaseCyclusTemplateViewModel(fct));
         }
 
@@ -104,7 +104,7 @@ namespace TLCGen.Settings
 
         public FasenTemplatesEditorTabViewModel()
         {
-            FasenTemplates = new ObservableCollectionAroundList<FaseCyclusTemplateViewModel, FaseCyclusTemplateModel>(TemplatesProvider.Default.Templates.FasenTemplates);
+            FasenTemplates = new ObservableCollectionAroundList<FaseCyclusTemplateViewModel, TLCGenTemplateModel<FaseCyclusModel>>(TemplatesProvider.Default.Templates.FasenTemplates);
         }
 
         #endregion // Constructor

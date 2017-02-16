@@ -8,6 +8,6 @@ namespace TLCGen.ViewModels
 {
     public interface IAllowTemplates<T>
     {
-        void InsertItems(List<T> items);
+        void InsertItemsFromTemplate(List<T> items);
     }
 }

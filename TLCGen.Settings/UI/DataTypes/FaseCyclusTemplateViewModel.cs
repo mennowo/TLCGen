@@ -17,7 +17,7 @@ namespace TLCGen.Settings
     {
         #region Fields
 
-        private FaseCyclusTemplateModel _Template;
+        private TLCGenTemplateModel<FaseCyclusModel> _Template;
 
         #endregion // Fields
 
@@ -33,6 +33,24 @@ namespace TLCGen.Settings
             }
         }
 
+        public string Replace
+        {
+            get { return _Template.Replace; }
+            set
+            {
+                _Template.Replace = value;
+                RaisePropertyChanged("Replace");
+            }
+        }
+
+        public bool IsReplaceAvailable
+        {
+            get
+            {
+                return Fasen.Count == 1;
+            }
+        }
+
         private FaseCyclusModel _SelectedFaseCyclus;
         public FaseCyclusModel SelectedFaseCyclus
         {
@@ -42,14 +60,17 @@ namespace TLCGen.Settings
                 _SelectedFaseCyclus = value;
                 FaseDetectoren.CollectionChanged -= FaseDetectoren_CollectionChanged;
                 FaseDetectoren.Clear();
-                foreach (DetectorModel d in _SelectedFaseCyclus.Detectoren)
+                if (value != null)
                 {
-                    FaseDetectoren.Add(d);
+                    foreach (DetectorModel d in value.Detectoren)
+                    {
+                        FaseDetectoren.Add(d);
+                    }
                 }
                 FaseDetectoren.CollectionChanged += FaseDetectoren_CollectionChanged;
 
                 if (value != null)
-                    SelectedFaseCyclusTypeString = SelectedFaseCyclus.Type.GetDescription();
+                    SelectedFaseCyclusTypeString = value.Type.GetDescription();
                 else
                     SelectedFaseCyclusTypeString = null;
 
@@ -68,9 +89,12 @@ namespace TLCGen.Settings
                 var sd = SelectedFaseCyclusDetector;
                 FaseDetectoren.CollectionChanged -= FaseDetectoren_CollectionChanged;
                 FaseDetectoren.Clear();
-                foreach (DetectorModel d in _SelectedFaseCyclus.Detectoren)
+                if (_SelectedFaseCyclus != null)
                 {
-                    FaseDetectoren.Add(d);
+                    foreach (DetectorModel d in _SelectedFaseCyclus.Detectoren)
+                    {
+                        FaseDetectoren.Add(d);
+                    }
                 }
                 FaseDetectoren.CollectionChanged += FaseDetectoren_CollectionChanged;
                 SelectedFaseCyclusDetector = sd;
@@ -239,7 +263,7 @@ namespace TLCGen.Settings
             {
                 if (_AddFaseCommand == null)
                 {
-                    _AddFaseCommand = new RelayCommand(new Action<object>(AddFaseCommand_Executed));
+                    _AddFaseCommand = new RelayCommand(new Action<object>(AddFaseCommand_Executed), new Predicate<object>(AddFaseCommand_CanExecute));
                 }
                 return _AddFaseCommand;
             }
@@ -293,8 +317,13 @@ namespace TLCGen.Settings
         private void AddFaseCommand_Executed(object prm)
         {
             FaseCyclusModel fc = new FaseCyclusModel();
-            fc.Naam = "fase";
+            fc.Naam = "fase" + (Fasen.Count + 1);
             Fasen.Add(fc);
+        }
+
+        private bool AddFaseCommand_CanExecute(object prm)
+        {
+            return string.IsNullOrEmpty(Replace);
         }
 
         void RemoveFaseCommand_Executed(object prm)
@@ -305,13 +334,13 @@ namespace TLCGen.Settings
 
         bool RemoveFaseCommand_CanExecute(object prm)
         {
-            return SelectedFaseCyclus != null;
+            return SelectedFaseCyclus != null && Fasen.Count > 1;
         }
 
         private void AddFaseDetectorCommand_Executed(object prm)
         {
             DetectorModel d = new DetectorModel();
-            d.Naam = "fase_" + FaseDetectoren.Count;
+            d.Naam = "fase_" + (FaseDetectoren.Count + 1);
             FaseDetectoren.Add(d);
         }
 
@@ -350,16 +379,17 @@ namespace TLCGen.Settings
             {
                 foreach(FaseCyclusModel fc in e.NewItems)
                 {
-                    _Template.Fasen.Add(fc);
+                    _Template.Items.Add(fc);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (FaseCyclusModel fc in e.OldItems)
                 {
-                    _Template.Fasen.Remove(fc);
+                    _Template.Items.Remove(fc);
                 }
             }
+            RaisePropertyChanged("IsReplaceAvailable");
         }
 
         private void FaseDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -384,10 +414,10 @@ namespace TLCGen.Settings
 
         #region Constructor
 
-        public FaseCyclusTemplateViewModel(FaseCyclusTemplateModel template)
+        public FaseCyclusTemplateViewModel(TLCGenTemplateModel<FaseCyclusModel> template)
         {
             _Template = template;
-            foreach(var fc in template.Fasen)
+            foreach(var fc in template.Items)
             {
                 Fasen.Add(fc);
             }

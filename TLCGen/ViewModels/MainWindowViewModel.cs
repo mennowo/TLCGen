@@ -405,7 +405,7 @@ namespace TLCGen.ViewModels
 
         private bool SaveAsFileCommand_CanExecute(object prm)
         {
-            return ControllerVM != null;
+            return TLCGenControllerDataProvider.Default.Controller != null;
         }
 
         private void CloseFileCommand_Executed(object prm)
@@ -420,7 +420,7 @@ namespace TLCGen.ViewModels
 
         private bool CloseFileCommand_CanExecute(object prm)
         {
-            return ControllerVM != null;
+            return TLCGenControllerDataProvider.Default.Controller != null;
         }
 
         private void ExitApplicationCommand_Executed(object prm)

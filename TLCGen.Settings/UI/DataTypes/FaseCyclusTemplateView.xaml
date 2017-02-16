@@ -15,8 +15,27 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Content="Fasen" />
-        <ListView ItemsSource="{Binding Path=Fasen}" SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" DisplayMemberPath="Naam" />
+        <StackPanel Orientation="Vertical">
+            <Label Content="Template naam" />
+            <TextBox Text="{Binding Path=Naam}" Margin="2" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Placeholder tekst" />
+                <ct:InfoElement>
+                    <ct:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Deze tekst wordt gebruikt bij het toepassen van de template:<LineBreak />
+                            - Laat dit veld leeg voor een vast template, met fasen met vaste namen, incl. namen van detectors.<LineBreak />
+                            - Geef hier een waarde in om de fase en detectors bij toepassen namen te geven op basis van input van de gebruiker.<LineBreak />
+                              Bij gebruik hiervan moet het template precies 1 fase hebben.
+                        </TextBlock>
+                    </ct:InfoElement.InfoPopup>
+                </ct:InfoElement>
+            </StackPanel>
+            <TextBox Text="{Binding Path=Replace}" Margin="2" IsEnabled="{Binding Path=IsReplaceAvailable}" />
+            <Label Content="Fasen" />
+            <ListView ItemsSource="{Binding Path=Fasen}" MinHeight="20" Margin="2"
+                      SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" DisplayMemberPath="Naam" />
+        </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddFaseCommand}" />
             <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveFaseCommand}" />

@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
     /// ViewModel for the View of detectors belonging to phases.
     /// </summary>
     [TLCGenTabItem(index: 0, type: TabItemTypeEnum.DetectieTab)]
-    public class DetectorenFasenTabViewModel : TLCGenTabItemViewModel
+    public class DetectorenFasenTabViewModel : TLCGenTabItemViewModel, IAllowTemplates<DetectorModel>
     {
         #region Fields
 
@@ -267,6 +267,21 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TabItem Overrides
+
+        #region IAllowTemplates
+
+        public void InsertItemsFromTemplate(List<DetectorModel> items)
+        {
+            foreach(var d in items)
+            {
+                if (Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                {
+                    Detectoren.Add(new DetectorViewModel(d));
+                }
+            }
+        }
+
+        #endregion // IAllowTemplates
 
         #region Collection Changed
 

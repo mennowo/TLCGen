@@ -72,13 +72,14 @@
     <Compile Include="Interfaces\ISettingsProvider.cs" />
     <Compile Include="Models\DetectorDefaultsModel.cs" />
     <Compile Include="Models\FaseCyclusDefaultsModel.cs" />
-    <Compile Include="Models\DetectorTemplateModel.cs" />
-    <Compile Include="Models\FaseCyclusTemplateModel.cs" />
-    <Compile Include="Models\TemplateModelBase.cs" />
+    <Compile Include="Models\TLCGenTemplateModel.cs" />
     <Compile Include="Models\TLCGenTemplatesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsProvider.cs" />
     <Compile Include="Models\TLCGenDefaultsModel.cs" />
+    <Compile Include="UI\DataTypes\DetectorTemplateView.xaml.cs">
+      <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DataTypes\DetectorTemplateViewModel.cs" />
     <Compile Include="UI\DataTypes\FaseCyclusTemplateView.xaml.cs">
       <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
@@ -92,9 +93,13 @@
       <DependentUpon>FasenDefaultsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Tabs\FasenDefaultsTabViewModel.cs" />
+    <Compile Include="UI\Tabs\DetectorenTemplatesEditorTabView.xaml.cs">
+      <DependentUpon>DetectorenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Tabs\FasenTemplatesEditorTabView.xaml.cs">
       <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Tabs\DetectorenTemplatesEditorTabViewModel.cs" />
     <Compile Include="UI\Tabs\FasenTemplatesEditorTabViewModel.cs" />
     <Compile Include="UI\TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
@@ -138,6 +143,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\DataTypes\DetectorTemplateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\DataTypes\FaseCyclusTemplateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -149,6 +158,10 @@
     <Page Include="UI\Tabs\FasenDefaultsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tabs\DetectorenTemplatesEditorTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\Tabs\FasenTemplatesEditorTabView.xaml">
       <SubType>Designer</SubType>

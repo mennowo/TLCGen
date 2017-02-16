@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TLCGen.Models;
 
 namespace TLCGen.Settings
 {
@@ -11,14 +12,14 @@ namespace TLCGen.Settings
     public class TLCGenTemplatesModel
     {
         [XmlArrayItem(ElementName = "FasenTemplate")]
-        public List<FaseCyclusTemplateModel> FasenTemplates { get; set; }
+        public List<TLCGenTemplateModel<FaseCyclusModel>> FasenTemplates { get; set; }
         [XmlArrayItem(ElementName = "DetectorenTemplate")]
-        public List<DetectorTemplateModel> DetectorenTemplates { get; set; }
+        public List<TLCGenTemplateModel<DetectorModel>> DetectorenTemplates { get; set; }
 
         public TLCGenTemplatesModel()
         {
-            FasenTemplates = new List<FaseCyclusTemplateModel>();
-            DetectorenTemplates = new List<DetectorTemplateModel>();
+            FasenTemplates = new List<TLCGenTemplateModel<FaseCyclusModel>>();
+            DetectorenTemplates = new List<TLCGenTemplateModel<DetectorModel>>();
         }
     }
 }

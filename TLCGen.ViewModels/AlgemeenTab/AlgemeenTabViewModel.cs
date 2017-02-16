@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
 
         public string Naam
         {
-            get { return _ControllerData.Naam; }
+            get { return _ControllerData?.Naam; }
             set
             {
                 _ControllerData.Naam = value;
@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
 
         public string Stad
         {
-            get { return _ControllerData.Stad; }
+            get { return _ControllerData?.Stad; }
             set
             {
                 _ControllerData.Stad = value;
@@ -61,7 +61,7 @@ namespace TLCGen.ViewModels
 
         public string Straat1
         {
-            get { return _ControllerData.Straat1; }
+            get { return _ControllerData?.Straat1; }
             set
             {
                 _ControllerData.Straat1 = value;
@@ -71,7 +71,7 @@ namespace TLCGen.ViewModels
 
         public string Straat2
         {
-            get { return _ControllerData.Straat2; }
+            get { return _ControllerData?.Straat2; }
             set
             {
                 _ControllerData.Straat2 = value;
@@ -81,7 +81,7 @@ namespace TLCGen.ViewModels
 
         public string BitmapNaam
         {
-            get { return _ControllerData.BitmapNaam; }
+            get { return _ControllerData?.BitmapNaam; }
             set
             {
                 _ControllerData.BitmapNaam = value;
@@ -92,7 +92,7 @@ namespace TLCGen.ViewModels
 
         public GroentijdenTypeEnum TypeGroentijden
         {
-            get { return _ControllerData.TypeGroentijden; }
+            get { return _ControllerData == null ? GroentijdenTypeEnum.MaxGroentijden : _ControllerData.TypeGroentijden; }
             set
             {
                 _ControllerData.TypeGroentijden = value;
@@ -103,7 +103,7 @@ namespace TLCGen.ViewModels
 
         public CCOLVersieEnum CCOLVersie
         {
-            get { return _ControllerData.CCOLVersie; }
+            get { return _ControllerData == null ? CCOLVersieEnum.CCOL8 : _ControllerData.CCOLVersie; }
             set
             {
                 _ControllerData.CCOLVersie = value;
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
 
         public KWCTypeEnum KWCType
         {
-            get { return _ControllerData.KWCType; }
+            get { return _ControllerData == null ? KWCTypeEnum.Geen : _ControllerData.KWCType; }
             set
             {
                 _ControllerData.KWCType = value;
@@ -123,7 +123,7 @@ namespace TLCGen.ViewModels
 
         public VLOGTypeEnum VLOGType
         {
-            get { return _ControllerData.VLOGType; }
+            get { return _ControllerData == null ? VLOGTypeEnum.Geen : _ControllerData.VLOGType; }
             set
             {
                 _ControllerData.VLOGType = value;
@@ -133,7 +133,7 @@ namespace TLCGen.ViewModels
 
         public bool VLOGInTestOmgeving
         {
-            get { return _ControllerData.VLOGInTestOmgeving; }
+            get { return _ControllerData == null ? false : _ControllerData.VLOGInTestOmgeving; }
             set
             {
                 _ControllerData.VLOGInTestOmgeving = value;
@@ -143,7 +143,7 @@ namespace TLCGen.ViewModels
 
         public bool ExtraMeeverlengenInWG
         {
-            get { return _ControllerData.ExtraMeeverlengenInWG; }
+            get { return _ControllerData == null ? false : _ControllerData.ExtraMeeverlengenInWG; }
             set
             {
                 _ControllerData.ExtraMeeverlengenInWG = value;
@@ -153,7 +153,7 @@ namespace TLCGen.ViewModels
 
         public AansturingWaitsignalenEnum AansturingWaitsignalen
         {
-            get { return _ControllerData.AansturingWaitsignalen; }
+            get { return _ControllerData == null ? AansturingWaitsignalenEnum.AanvraagGezet : _ControllerData.AansturingWaitsignalen; }
             set
             {
                 _ControllerData.AansturingWaitsignalen = value;
@@ -163,7 +163,7 @@ namespace TLCGen.ViewModels
 
         public OVIngreepTypeEnum OVIngreep
         {
-            get { return _ControllerData.OVIngreep; }
+            get { return _ControllerData == null ? OVIngreepTypeEnum.Geen : _ControllerData.OVIngreep; }
             set
             {
                 _ControllerData.OVIngreep = value;
@@ -175,7 +175,7 @@ namespace TLCGen.ViewModels
 
         public bool DSI
         {
-            get { return _ControllerData.DSI; }
+            get { return _ControllerData == null ? false : _ControllerData.DSI; }
             set
             {
                 _ControllerData.DSI = value;

@@ -332,7 +332,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _Controller = value;
-                OnMonitoredPropertyChanged("Controller");
+                OnPropertyChanged("Controller");
             }
         }
 

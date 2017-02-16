@@ -61,7 +61,7 @@ namespace TLCGen.Controls
 
         private static void OnBoundObjectChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            SimplePropertyEditor o = (SimplePropertyEditor)d;
+            var o = (SimplePropertyEditor)d;
             if (o.BoundObject == null)
             {
                 o.MainGrid.Children.Clear();

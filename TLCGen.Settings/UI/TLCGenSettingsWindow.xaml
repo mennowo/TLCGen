@@ -27,9 +27,9 @@
                         <TabItem Header="Fasen">
                             <local:FasenTemplatesEditorTabView DataContext="{Binding Path=FasenTemplatesEditorTabVM}" />
                         </TabItem>
-                        <!--<TabItem Header="Detectoren">
-                            <local:DetectorenDefaultsTabView DataContext="{Binding Path=DetectorenDefaultsTabVM}" />
-                        </TabItem>-->
+                        <TabItem Header="Detectoren">
+                            <local:DetectorenTemplatesEditorTabView DataContext="{Binding Path=DetectorenTemplatesEditorTabVM}" />
+                        </TabItem>
                     </TabControl>
                 </Grid>
             </TabItem>

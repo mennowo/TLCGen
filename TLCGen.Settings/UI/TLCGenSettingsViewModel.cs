@@ -57,6 +57,19 @@ namespace TLCGen.Settings
             }
         }
 
+        private DetectorenTemplatesEditorTabViewModel _DetectorenTemplatesEditorTabVM;
+        public DetectorenTemplatesEditorTabViewModel DetectorenTemplatesEditorTabVM
+        {
+            get
+            {
+                if (_DetectorenTemplatesEditorTabVM == null)
+                {
+                    _DetectorenTemplatesEditorTabVM = new DetectorenTemplatesEditorTabViewModel();
+                }
+                return _DetectorenTemplatesEditorTabVM;
+            }
+        }
+
         #endregion // Properties
 
         #region Private Methods

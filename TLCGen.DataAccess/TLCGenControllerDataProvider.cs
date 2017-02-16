@@ -389,7 +389,6 @@ namespace TLCGen.DataAccess
 
         static TLCGenControllerDataProvider()
         {
-
         }
 
         #endregion // Constructor

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TLCGen.DataAccess;
 
 namespace TLCGen.Settings
@@ -53,23 +54,30 @@ namespace TLCGen.Settings
 
         public void LoadSettings()
         {
-            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var setpath = Path.Combine(appdatpath, @"TLCGen\Templates\");
-            if (!Directory.Exists(setpath))
-                Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"settings.xml");
+            try
+            {
+                var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                var setpath = Path.Combine(appdatpath, @"TLCGen\Templates\");
+                if (!Directory.Exists(setpath))
+                    Directory.CreateDirectory(setpath);
+                var setfile = Path.Combine(setpath, @"templates.xml");
 #if DEBUG
             Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
 #else
-            if (File.Exists(setfile))
-            {
-                Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(setfile);
-            }
-            else
-            {
-                Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultssettings.xml"));
-            }
+                if (File.Exists(setfile))
+                {
+                    Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(setfile);
+                }
+                else
+                {
+                    Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
+                }
 #endif
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error while loading templates: " + e.ToString());
+            }
         }
 
         public void SaveSettings()
@@ -78,7 +86,7 @@ namespace TLCGen.Settings
             var setpath = Path.Combine(appdatpath, @"TLCGen\Templates\");
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"tlcgentemplates.xml");
+            var setfile = Path.Combine(setpath, @"templates.xml");
             TLCGenSerialization.Serialize<TLCGenTemplatesModel>(setfile, Templates);
         }
 
