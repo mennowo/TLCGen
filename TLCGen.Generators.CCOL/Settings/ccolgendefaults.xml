@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0"?>
 <CCOLGeneratorSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <VisualSettings>
+    <CCOLIncludesPaden>C:\Personal Applications\CCOL80\WIN32\INCLUDE;C:\Personal Applications\CCOL80\INCLUDE;</CCOLIncludesPaden>
+    <CCOLLibsPath>C:\Personal Applications\CCOL80\WIN32\LIB;</CCOLLibsPath>
+    <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
+    <CCOLResPath>C:\Personal Applications\CCOL80\WIN32\RES;</CCOLResPath>
+    <CCOLPreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</CCOLPreprocessorDefinitions>
+  </VisualSettings>
   <Prefixes>
     <Prefix>
       <Default>fc</Default>

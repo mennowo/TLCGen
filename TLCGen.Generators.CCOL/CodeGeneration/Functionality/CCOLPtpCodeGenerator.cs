@@ -201,18 +201,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Includes:
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
+                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
+                    }
                     return sb.ToString();
                 case CCOLRegCCodeTypeEnum.PreSystemApplication:
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
-                    sb.AppendLine($"{ts}ptp_pre_system_app();");
+                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
+                        sb.AppendLine($"{ts}ptp_pre_system_app();");
+                    }
                     return sb.ToString();
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
-                    sb.AppendLine($"{ts}ptp_post_system_app();");
+                    if (c.PTPData.PTPKoppelingen.Count > 0)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
+                        sb.AppendLine($"{ts}ptp_post_system_app();");
+                    }
                     return sb.ToString();
                 default:
                     return null;

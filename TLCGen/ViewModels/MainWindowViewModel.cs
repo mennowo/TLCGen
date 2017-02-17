@@ -410,9 +410,11 @@ namespace TLCGen.ViewModels
 
         private void CloseFileCommand_Executed(object prm)
         {
+            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
             if(TLCGenControllerDataProvider.Default.CloseController())
             {
                 DefaultsProvider.Default.Controller = null;
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 OnPropertyChanged("HasController");
                 OnPropertyChanged("ProgramTitle");
             }
@@ -550,7 +552,7 @@ namespace TLCGen.ViewModels
             {
                 foreach (var pl in _ApplicationParts)
                 {
-                    var setpl = pl as ITLCGenHasSettings;
+                    var setpl = pl.Item2 as ITLCGenHasSettings;
                     if (setpl != null)
                     {
                         setpl.SaveSettings();
