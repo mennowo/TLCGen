@@ -371,7 +371,10 @@ namespace TLCGen.ViewModels
         {
             string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
             if (s == null)
+            {
+                Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
                 return true;
+            }
             else
             {
                 MessageBox.Show(s, "Fout in conflictmatrix");
