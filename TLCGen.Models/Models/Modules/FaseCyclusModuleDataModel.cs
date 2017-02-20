@@ -8,7 +8,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class FaseCyclusModuleDataModel
+    public class FaseCyclusModuleDataModel : IComparable
     {
         #region Properties
 
@@ -19,5 +19,21 @@ namespace TLCGen.Models
         public int AlternatieveGroenTijd { get; set; }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var mlfc = obj as FaseCyclusModuleDataModel;
+            if (obj == null)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return this.FaseCyclus.CompareTo(mlfc.FaseCyclus);
+            }
+        }
+        #endregion // IComparable
     }
 }

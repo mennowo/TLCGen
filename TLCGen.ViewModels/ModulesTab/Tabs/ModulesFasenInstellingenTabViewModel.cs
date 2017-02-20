@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -124,6 +125,15 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+
+            _Controller.ModuleMolen.FasenModuleData.BubbleSort();
+            Fasen.Rebuild();
+        }
+
+        private void OnFasenSorted(FasenSortedMessage message)
+        {
+            _Controller.ModuleMolen.FasenModuleData.BubbleSort();
+            Fasen.Rebuild();
         }
 
         #endregion // TLCGen Message Handling
@@ -137,6 +147,7 @@ namespace TLCGen.ViewModels
         public ModulesFasenInstellingenTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
         }
 
         #endregion // Constructor
