@@ -13,41 +13,59 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
+#pragma warning disable 0649
+        private string _prmrgv;
+        private string _prmmin_tcyclus;
+        private string _prmmax_tcyclus;
+        private string _prmmintvg;
+        private string _prmmaxtvg;
+        private string _prmtvg_omhoog;
+        private string _prmtvg_omlaag;
+        private string _prmtvg_verschil;
+        private string _prmtvg_npr_omlaag;
+        private string _hprreal;
+        private string _schrgv;
+        private string _schrgv_snel;
+        private string _usrgv;
+        private string _tfd;
+        private string _thd;
+#pragma warning restore 0649
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
-            _MyElements.Add(new CCOLElement("rgv", 2, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("min_tcyclus", 900, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("max_tcyclus", 1500, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("tvg_omhoog", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("tvg_omlaag", 20, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("tvg_verschil", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("tvg_npr_omlaag", 50, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("rgv", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _MyElements.Add(new CCOLElement("rgvsnel", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _MyElements.Add(new CCOLElement("rgv", CCOLElementTypeEnum.Uitgang));
+            _MyElements.Add(new CCOLElement(_prmrgv, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmmin_tcyclus, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmmax_tcyclus, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_omhoog, c.RoBuGrover.GroenOphoogFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_omlaag, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_verschil, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_npr_omlaag, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_schrgv, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement(_schrgv_snel, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement(_usrgv, CCOLElementTypeEnum.Uitgang));
 
             foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren?.Count == 0 || fc.HiaatDetectoren?.Count == 0)
                     continue;
 
-                _MyElements.Add(new CCOLElement($"mintvg_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"maxtvg_{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"prreal{fc.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
+                _MyElements.Add(new CCOLElement($"{_prmmintvg}_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmmaxtvg}{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_hprreal}{fc.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
                 foreach(var d in fc.FileDetectoren)
                 {
-                    _MyElements.Add(new CCOLElement($"fd{d.Detector}", d.FileTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_tfd}{_dpf}{d.Detector}", d.FileTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
                 foreach (var d in fc.HiaatDetectoren)
                 {
-                    _MyElements.Add(new CCOLElement($"hd{d.Detector}", d.HiaatTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_thd}{_dpf}{d.Detector}", d.HiaatTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
             }
 
-            _MyBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, "usrgv"));
+            _MyBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, _uspf + _usrgv));
         }
 
         public override bool HasCCOLElements()
@@ -99,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 case CCOLRegCCodeTypeEnum.Maxgroen:
                     sb.AppendLine($"{tabspace}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
-                    sb.AppendLine($"{tabspace}if (SCH[schrgv] != 0)");
+                    sb.AppendLine($"{tabspace}if (SCH[{_schpf}{_schrgv}] != 0)");
                     sb.AppendLine($"{tabspace}{{");
                     sb.AppendLine($"{tabspace}{tabspace}int teller = 0;");
                     sb.AppendLine();
@@ -109,7 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         foreach(var fc in cg.Fasen)
                         {
 #warning Change so it uses prefix settings (also at the end!)
-                            sb.Append($"fc{fc.FaseCyclus}, ");
+                            sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
                         }
                         sb.AppendLine($"END);");
                     }
@@ -134,7 +152,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{tabspace}{tabspace}/* ================================== */");
                     sb.AppendLine($"{tabspace}{tabspace}rgv_add();");
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[usrgv] = TRUE;");
+                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[{_uspf}{_usrgv}] = TRUE;");
                     sb.AppendLine($"{tabspace}}}");
                     sb.AppendLine($"{tabspace}else");
                     sb.AppendLine($"{tabspace}{{");
@@ -142,11 +160,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if(fc.Type == Models.Enumerations.FaseTypeEnum.Auto)
                         {
-                            sb.AppendLine($"{tabspace}{tabspace}TVG_rgv[fc{fc.Naam}] = TVG_basis[fc{fc.Naam}];");
+                            sb.AppendLine($"{tabspace}{tabspace}TVG_rgv[{_fcpf}{fc.Naam}] = TVG_basis[{_fcpf}{fc.Naam}];");
                         }
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[usrgv] = FALSE;");
+                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[{_uspf}{_usrgv}] = FALSE;");
                     sb.AppendLine($"{tabspace}}}");
 
                     return sb.ToString();

@@ -13,10 +13,10 @@ namespace TLCGen.Models.Enumerations
     public enum RoBuGroverMethodeEnum
     {
         [Description("Eigen conflictgroep")]
-        EigenConflictGroep,
+        EigenConflictGroep = 2,
         [Description("Alle conflictgroepen")]
-        AlleConflictGroepen,
+        AlleConflictGroepen = 1,
         [Description("Ingesteld maximum")]
-        IngesteldMaximum
+        IngesteldMaximum = 0
     }
 }

@@ -631,13 +631,13 @@
             <Default>maxtvg</Default>
             <Setting>maxtvg</Setting>
             <Type>Parameter</Type>
-            <Description>Paramter VLOG max. aantal volledige verlenggroen</Description>
+            <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
           </Setting>
           <Setting>
             <Default>maxtfb</Default>
             <Setting>maxtfb</Setting>
             <Type>Uitgang</Type>
-            <Description>Paramter VLOG max. wachttijd na aanvraag</Description>
+            <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -970,6 +970,104 @@
             <Setting>hdinm</Setting>
             <Type>Uitgang</Type>
             <Description>Uitgang verklikken inmelding HD</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLRoBuGroverCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLRoBuGroverCodeGenerator</ClassName>
+        <Description>RoBuGrover</Description>
+        <Settings>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter type RoBuGrover</Description>
+          </Setting>
+          <Setting>
+            <Default>min_tcyclus</Default>
+            <Setting>min_tcyclus</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter minimale cyclustijd</Description>
+          </Setting>
+          <Setting>
+              <Default>max_tcyclus</Default>
+              <Setting>max_tcyclus</Setting>
+              <Type>Parameter</Type>
+              <Description>Parameter maximale cyclustijd</Description>
+          </Setting>
+          <Setting>
+              <Default>mintvg</Default>
+              <Setting>mintvg</Setting>
+              <Type>Parameter</Type>
+              <Description>Parameter minimale verlenggroentijd per fase</Description>
+          </Setting>
+          <Setting>
+              <Default>maxtvg</Default>
+              <Setting>maxtvg</Setting>
+              <Type>Parameter</Type>
+              <Description>Parameter maximale verlenggroentijd per fase</Description>
+          </Setting>
+          <Setting>
+            <Default>tvg_omhoog</Default>
+            <Setting>tvg_omhoog</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter mate ophogen TVG</Description>
+          </Setting>
+          <Setting>
+            <Default>tvg_omlaag</Default>
+            <Setting>tvg_omlaag</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter mate verlagen TVG</Description>
+          </Setting>
+          <Setting>
+            <Default>tvg_verschil</Default>
+            <Setting>tvg_verschil</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter verschil</Description>
+          </Setting>
+          <Setting>
+            <Default>tvg_npr_omlaag</Default>
+            <Setting>tvg_npr_omlaag</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter mate verlagen TVG bij niet primair</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar RoBuGrover aan/uit</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv_snel</Default>
+            <Setting>rgv_snel</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar RoBuGrover versneld ophogen/verlagen</Description>
+          </Setting>
+          <Setting>
+            <Default>fd</Default>
+            <Setting>f</Setting>
+            <Type>Timer</Type>
+            <Description>Timer file meting RoBuGrover detector</Description>
+          </Setting>
+          <Setting>
+            <Default>hd</Default>
+            <Setting>h</Setting>
+            <Type>Timer</Type>
+            <Description>Timer RoBuGrover hiaat meting RoBuGrover detector</Description>
+          </Setting>
+          <Setting>
+            <Default>rgv</Default>
+            <Setting>rgv</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang verklikken werking RoBuGrover</Description>
+          </Setting>
+          <Setting>
+            <Default>prreal</Default>
+            <Setting>prreal</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement bijhouden primaire realisatie fase</Description>
           </Setting>
         </Settings>
       </CodePieceData>

@@ -36,34 +36,9 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public int MaximaleCyclustijd
+        public RoBuGroverModel RoBuGrover
         {
-            get { return _Controller.RoBuGrover.MaximaleCyclustijd; }
-            set
-            {
-                _Controller.RoBuGrover.MaximaleCyclustijd = value;
-                OnMonitoredPropertyChanged("MaximaleCyclustijd");
-            }
-        }
-
-        public RoBuGroverMethodeEnum MethodeRobugrover
-        {
-            get { return _Controller.RoBuGrover.MethodeRoBuGrover; }
-            set
-            {
-                _Controller.RoBuGrover.MethodeRoBuGrover = value;
-                OnMonitoredPropertyChanged("MethodeRobugrover");
-            }
-        }
-
-        public bool OphogenTijdensGroen
-        {
-            get { return _Controller.RoBuGrover.OphogenTijdensGroen; }
-            set
-            {
-                _Controller.RoBuGrover.OphogenTijdensGroen = value;
-                OnMonitoredPropertyChanged("OphogenTijdensGroen");
-            }
+            get { return _Controller.RoBuGrover; }
         }
 
         public bool AutomaticallySetSelectableSignalGroups

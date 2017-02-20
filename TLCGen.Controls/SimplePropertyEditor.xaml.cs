@@ -43,6 +43,8 @@ namespace TLCGen.Controls
         }
     }
 
+    public enum PropertyDescriptionPlacementEnum { ToTheLeft, Above }
+
     /// <summary>
     /// Interaction logic for SimplePropertyEditor.xaml
     /// </summary>
@@ -66,6 +68,7 @@ namespace TLCGen.Controls
             {
                 o.MainGrid.Children.Clear();
                 o.MainGrid.RowDefinitions.Clear();
+                o.MainGrid.ColumnDefinitions.Clear();
                 Label label = new Label();
                 label.Content = "Geen defaults voor dit object.";
                 o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
@@ -78,9 +81,19 @@ namespace TLCGen.Controls
             int row = 0;
             o.MainGrid.Children.Clear();
             o.MainGrid.RowDefinitions.Clear();
+            o.MainGrid.ColumnDefinitions.Clear();
+            if(o.DescriptionPlacement == PropertyDescriptionPlacementEnum.ToTheLeft)
+            {
+                o.MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) });
+                o.MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            }
+            else
+            {
+                o.MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            }
             foreach (var prop in props)
             {
-                if(prop.PropertyType.IsValueType)
+                if (prop.PropertyType.IsValueType)
                 {
                     var attr = prop.GetCustomAttributes(typeof(BrowsableAttribute), true);
                     if (attr != null && attr.Count() == 1)
@@ -101,7 +114,7 @@ namespace TLCGen.Controls
                     {
                         label.Content = prop.Name;
                     }
-                    label.HorizontalAlignment = HorizontalAlignment.Right;
+                    label.HorizontalAlignment = o.HorizontalDescriptionPlacement;
                     UIElement editor = null;
                     
                     // edit string, int and int?
@@ -160,7 +173,16 @@ namespace TLCGen.Controls
                     {
                         o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                         Grid.SetRow(label, row); Grid.SetColumn(label, 0);
-                        Grid.SetRow(editor, row); Grid.SetColumn(editor, 1);
+                        if(o.DescriptionPlacement == PropertyDescriptionPlacementEnum.ToTheLeft)
+                        {
+                            Grid.SetRow(editor, row); Grid.SetColumn(editor, 1);
+                        }
+                        else
+                        {
+                            o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                            row++;
+                            Grid.SetRow(editor, row); Grid.SetColumn(editor, 0);
+                        }
                         o.MainGrid.Children.Add(label);
                         o.MainGrid.Children.Add(editor);
                         row++;
@@ -168,6 +190,30 @@ namespace TLCGen.Controls
                 }
             }
         }
+
+        public PropertyDescriptionPlacementEnum DescriptionPlacement
+        {
+            get { return (PropertyDescriptionPlacementEnum)GetValue(DescriptionPlacementProperty); }
+            set { SetValue(DescriptionPlacementProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for DescriptionPlacement.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DescriptionPlacementProperty =
+            DependencyProperty.Register("DescriptionPlacement", typeof(PropertyDescriptionPlacementEnum), typeof(SimplePropertyEditor), new PropertyMetadata(PropertyDescriptionPlacementEnum.ToTheLeft));
+
+
+
+        public HorizontalAlignment HorizontalDescriptionPlacement
+        {
+            get { return (HorizontalAlignment)GetValue(HorizontalDescriptionPlacementProperty); }
+            set { SetValue(HorizontalDescriptionPlacementProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HorizontalDescriptionPlacement.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HorizontalDescriptionPlacementProperty =
+            DependencyProperty.Register("HorizontalDescriptionPlacement", typeof(HorizontalAlignment), typeof(SimplePropertyEditor), new PropertyMetadata(HorizontalAlignment.Left));
+
+
 
         public SimplePropertyEditor()
         {
