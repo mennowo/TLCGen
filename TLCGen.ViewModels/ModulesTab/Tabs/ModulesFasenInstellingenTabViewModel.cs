@@ -38,6 +38,11 @@ namespace TLCGen.ViewModels
                 OnPropertyChanged("SelectedFaseCyclus");
             }
         }
+        
+        public bool HasAlternatieven
+        {
+            get { return _Controller.ModuleMolen.LangstWachtendeAlternatief; }
+        }
 
         #endregion // Properties
 
@@ -59,8 +64,9 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            
+            OnPropertyChanged("HasAlternatieven");
         }
+
         public override ControllerModel Controller
         {
             get

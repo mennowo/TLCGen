@@ -1,4 +1,7 @@
-﻿using TLCGen.Models;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
+using TLCGen.Messaging.Messages;
+using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
@@ -84,6 +87,20 @@ namespace TLCGen.ViewModels
 
         #endregion // Public Methods
 
+        #region TLCGen Message Handling
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+
+        }
+
+        private void OnConflictsChanged(ConflictsChangedMessage message)
+        {
+
+        }
+
+        #endregion // TLCGen Message Handling
+
         #region Collection Changed
 
         #endregion // Collection Changed
@@ -94,6 +111,9 @@ namespace TLCGen.ViewModels
         {
             _ModuleMolenVM = new ModuleMolenViewModel(this);
             _FasenLijstVM = new ModulesTabFasenLijstViewModel();
+
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

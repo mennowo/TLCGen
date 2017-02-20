@@ -224,6 +224,11 @@ namespace TLCGen.ViewModels
             VAOntruimenFasen.Rebuild();
         }
 
+        private void OnConflictsChanged(ConflictsChangedMessage message)
+        {
+            VAOntruimenFasen.Rebuild();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -232,6 +237,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

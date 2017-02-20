@@ -372,7 +372,12 @@ namespace TLCGen.ViewModels
             string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
             if (s == null)
             {
-                Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
+                if(_MatrixChanged == true)
+                {
+                    Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
+                    Messenger.Default.Send(new ConflictsChangedMessage());
+                }
+                _MatrixChanged = false;
                 return true;
             }
             else
@@ -744,7 +749,9 @@ namespace TLCGen.ViewModels
             
             OnPropertyChanged("ConflictMatrix");
 
-            if(ConflictMatrix != null && ConflictMatrix.Length > 0)
+            _MatrixChanged = false;
+
+            if (ConflictMatrix != null && ConflictMatrix.Length > 0)
                 SelectedSynchronisatie = ConflictMatrix[0, 0];
         }
 
@@ -755,7 +762,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void SaveConflictMatrix()
         {
-            if(ConflictMatrix == null || Fasen == null)
+            if(ConflictMatrix == null || Fasen == null || !_MatrixChanged)
             {
                 return;
             }
@@ -825,6 +832,8 @@ namespace TLCGen.ViewModels
 
         private void OnInterSignaalGroepChanged(InterSignaalGroepChangedMessage message)
         {
+            _MatrixChanged = true;
+
             // Conflict
             if (message.Conflict != null)
             {

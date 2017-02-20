@@ -5,7 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
+             x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style x:Key="AlternatievenOnlyStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=root,Path=DataContext.HasAlternatieven}" Value="false">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -23,9 +35,9 @@
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding ModulenVooruit}" Header="# vooruit" />
-                <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan}" Header="Alt. toestaan" />
-                <DataGridTextColumn Binding="{Binding AlternatieveRuimte}" Header="Alt. ruimte" />
-                <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd}" Header="Alt. groentijd" />
+                <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan}" Header="Alt. toestaan" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
+                <DataGridTextColumn Binding="{Binding AlternatieveRuimte}" Header="Alt. ruimte" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
+                <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd}" Header="Alt. groentijd" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

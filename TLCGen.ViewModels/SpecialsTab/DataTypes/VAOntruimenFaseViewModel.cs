@@ -285,6 +285,7 @@ namespace TLCGen.ViewModels
         public void Refresh()
         {
             SetSelectableDetectoren();
+            VAOntruimenDetectoren.Rebuild();
             RebuildVAOnruimenMatrix();
         }
 

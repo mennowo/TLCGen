@@ -231,6 +231,38 @@ namespace TLCGen.ViewModels
 
         #endregion // Command functionality
 
+        #region Private Methods
+
+        private void ReloadModules()
+        {
+            Modules.CollectionChanged -= Modules_CollectionChanged;
+            Modules.Clear();
+            foreach (ModuleModel mm in _ModuleMolen.Modules)
+            {
+                ModuleViewModel mvm = new ModuleViewModel(mm);
+                Modules.Add(mvm);
+            }
+            Modules.CollectionChanged += Modules_CollectionChanged;
+        }
+
+        #endregion // Private Methods
+
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            ReloadModules();
+        }
+
+        private void OnConflictsChanged(ConflictsChangedMessage message)
+        {
+            ReloadModules();
+        }
+
+        #endregion // TLCGen Events
+
+        #region Collection Changed
+
         private void Modules_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.NewItems != null && e.NewItems.Count > 0 ||
@@ -259,22 +291,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-
-        #region TLCGen Events
-
-        private void OnFasenChanged(FasenChangedMessage message)
-        {
-            Modules.CollectionChanged -= Modules_CollectionChanged;
-            Modules.Clear();
-            foreach (ModuleModel mm in _ModuleMolen.Modules)
-            {
-                ModuleViewModel mvm = new ModuleViewModel(mm);
-                Modules.Add(mvm);
-            }
-            Modules.CollectionChanged += Modules_CollectionChanged;
-        }
-
-        #endregion // TLCGen Events
+        #endregion // Collection Changed
 
         #region Constructor
 
@@ -282,6 +299,7 @@ namespace TLCGen.ViewModels
         {
             _ModulesTabVM = mltab;
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

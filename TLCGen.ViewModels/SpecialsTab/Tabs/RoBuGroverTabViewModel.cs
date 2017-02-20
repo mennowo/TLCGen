@@ -422,6 +422,13 @@ namespace TLCGen.ViewModels
             SignaalGroepInstellingen.Rebuild();
         }
 
+        private void OnConflictsChanged(ConflictsChangedMessage message)
+        {
+            UpdateFasenEnDetectoren();
+            ConflictGroepen.Rebuild();
+            SignaalGroepInstellingen.Rebuild();
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -430,6 +437,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

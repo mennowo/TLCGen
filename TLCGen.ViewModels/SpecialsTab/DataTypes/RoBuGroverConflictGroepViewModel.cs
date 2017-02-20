@@ -75,6 +75,10 @@ namespace TLCGen.ViewModels
         {
             Fasen.Rebuild();
         }
+        private void OnConflictsChanged(ConflictsChangedMessage message)
+        {
+            Fasen.Rebuild();
+        }
 
         #endregion // TLCGen Events
 
@@ -85,6 +89,7 @@ namespace TLCGen.ViewModels
             _ConflictGroep = conflictgroep;
             Fasen = new ObservableCollectionAroundList<RoBuGroverConflictGroepFaseViewModel, RoBuGroverConflictGroepFaseModel>(_ConflictGroep.Fasen);
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

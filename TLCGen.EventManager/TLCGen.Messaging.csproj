@@ -45,6 +45,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Messages\ConflictsChangedMessage.cs" />
     <Compile Include="Messages\ControllerDataChangedMessage.cs" />
     <Compile Include="Messages\ControllerHasOVChangedMessage.cs" />
     <Compile Include="Messages\DetectorenChangedMessage.cs" />
