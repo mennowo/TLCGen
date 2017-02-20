@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -126,16 +127,17 @@ namespace TLCGen.ViewModels
                     break;
                 }
             }
-            if (index >= 1)
+            if (index >= 1 && Periodes[index - 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
                 PeriodeViewModel mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index - 1, mvm);
                 SelectedPeriode = mvm;
+                Periodes.RebuildList();
+                Messenger.Default.Send(new PeriodenChangedMessage());
             }
 
-            Periodes.RebuildList();
         }
 
 
@@ -150,16 +152,17 @@ namespace TLCGen.ViewModels
                     break;
                 }
             }
-            if (index >= 0 && (index <= (Periodes.Count - 2)))
+            if (index >= 0 && (index <= (Periodes.Count - 2)) && Periodes[index + 1].Type != Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
                 PeriodeViewModel mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index + 1, mvm);
                 SelectedPeriode = mvm;
+                Periodes.RebuildList();
+                Messenger.Default.Send(new PeriodenChangedMessage());
             }
 
-            Periodes.RebuildList();
         }
 
         void AddNewPeriodeCommand_Executed(object prm)
@@ -169,7 +172,18 @@ namespace TLCGen.ViewModels
             mm.DagCode = Models.Enumerations.PeriodeDagCodeEnum.AlleDagen;
             mm.Naam = "Periode" + (Periodes.Count + 1).ToString();
             PeriodeViewModel mvm = new PeriodeViewModel(mm);
-            Periodes.Add(mvm);
+
+            if(Periodes.Where(x => x.Type != Models.Enumerations.PeriodeTypeEnum.Groentijden).Any())
+            {
+                int index = Periodes.Where(x => x.Type != Models.Enumerations.PeriodeTypeEnum.Groentijden).Count();
+                Periodes.Insert(index, mvm);
+            }
+            else
+            {
+                Periodes.Insert(0, mvm);
+            }
+
+            Periodes.RebuildList();
         }
 
         bool AddNewPeriodeCommand_CanExecute(object prm)
@@ -259,10 +273,31 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection Changed
 
+        #region TLCGen Events
+
+        private void OnPeriodenChanged(PeriodenChangedMessage message)
+        {
+            var sel = SelectedPeriode;
+            Periodes.Rebuild();
+            if (sel != null)
+            {
+                foreach (var p in Periodes)
+                {
+                    if (sel.Naam == p.Naam)
+                    {
+                        SelectedPeriode = p;
+                    }
+                }
+            }
+        }
+
+        #endregion // TLCGen Events
+
         #region Constructor
 
         public PeriodenOverigTabViewModel() : base()
         {
+            Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
         }
 
         #endregion // Constructor

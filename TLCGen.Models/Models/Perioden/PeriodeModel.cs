@@ -11,6 +11,8 @@ namespace TLCGen.Models
     [Serializable]
     public class PeriodeModel
     {
+        #region Properties
+
         public string Naam { get; set; }
         public PeriodeTypeEnum Type { get; set; }
         public PeriodeDagCodeEnum DagCode { get; set; }
@@ -21,6 +23,10 @@ namespace TLCGen.Models
         public string GroentijdenSet { get; set; } 
         public BitmapCoordinatenDataModel BitmapData { get; set; }
         public string Commentaar { get; set; }
+
+        #endregion // Properties
+
+        #region Serialization
 
         // Properties for serialization
         [XmlElement("StartTijd")]
@@ -82,11 +88,17 @@ namespace TLCGen.Models
             return BitmapData?.BitmapCoordinaten?.Count > 0;
         }
 
+        #endregion // Serialization
+
+        #region Constructor
+
         public PeriodeModel()
         {
             StartTijd = new TimeSpan();
             EindTijd = new TimeSpan();
             BitmapData = new BitmapCoordinatenDataModel();
         }
+        
+        #endregion // Constructor
     }
 }

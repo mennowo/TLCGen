@@ -16,7 +16,7 @@ using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
-    public class PeriodeViewModel : ViewModelBase, IViewModelWithItem
+    public class PeriodeViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         #region Fields
 
@@ -160,6 +160,35 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IViewModelWithItem
+
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var per = obj as PeriodeViewModel;
+            if (per == null)
+            {
+                throw new InvalidCastException();
+            }
+            else
+            {
+                if (this.Type == PeriodeTypeEnum.Groentijden && per.Type != PeriodeTypeEnum.Groentijden)
+                {
+                    return 1;
+                }
+                else if (this.Type != PeriodeTypeEnum.Groentijden && per.Type == PeriodeTypeEnum.Groentijden)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 
