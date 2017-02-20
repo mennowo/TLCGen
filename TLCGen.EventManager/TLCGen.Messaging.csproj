@@ -63,6 +63,7 @@
     <Compile Include="Requests\GetDetectorListReqeust.cs" />
     <Compile Include="Requests\IsFasenConflictingRequest.cs" />
     <Compile Include="Requests\IsElementIdentifierUniqueRequest.cs" />
+    <Compile Include="Requests\PrepareForGenerationRequest.cs" />
     <Compile Include="Requests\ProcessSynchronisationsRequest.cs" />
     <Compile Include="Requests\RefreshBitmapRequest.cs" />
     <Compile Include="Responses\GetDetectorListResponse.cs" />

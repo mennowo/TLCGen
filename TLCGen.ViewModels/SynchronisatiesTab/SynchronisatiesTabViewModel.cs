@@ -863,6 +863,14 @@ namespace TLCGen.ViewModels
                                 case "":
                                     if (cvm2.ConflictValue == "*" || cvm2.ConflictValue == "GK" || cvm2.ConflictValue == "GKL" || cvm2.ConflictValue == "FK")
                                         cvm2.ConflictValueNoMessaging = "";
+                                    else
+                                    {
+                                        int ci;
+                                        if (Int32.TryParse(cvm2.ConflictValue, out ci))
+                                        {
+                                            ConflictMatrix[fcm_from, fcm_to].ConflictValueNoMessaging = "*";
+                                        }
+                                    }
                                     break;
                                 default:
                                     int i;

@@ -651,10 +651,21 @@ namespace TLCGen.ViewModels
 
         #endregion // Public methods
 
+        #region TLCGen Messaging
+
+        private void OnPrepareForGenerationRequest(Messaging.Requests.PrepareForGenerationRequest request)
+        {
+            Messenger.Default.Send(new Messaging.Requests.ProcessSynchronisationsRequest());
+        }
+
+        #endregion // TLCGen Messaging
+
         #region Constructor
 
         public MainWindowViewModel()
         {
+            Messenger.Default.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+
             // Load application settings and defaults
             SettingsProvider.Default.LoadApplicationSettings();
             DefaultsProvider.Default.LoadSettings();
