@@ -14,6 +14,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
+#pragma warning disable 0649
+        private string _schca;
+#pragma warning restore 0649
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
@@ -25,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"ca{fcm.Naam}",
+                            $"{_schca}{fcm.Naam}",
                             fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 }
@@ -66,9 +70,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchAan ||
                             fcm.VasteAanvraag == NooitAltijdAanUitEnum.SchUit)
-                            sb.AppendLine($"{tabspace}if (SCH[schca{fcm.Naam}]) vaste_aanvraag({fcm.GetDefine()});");
+                            sb.AppendLine($"{tabspace}if (SCH[{_schpf}{_schca}{fcm.Naam}]) vaste_aanvraag({_fcpf}{fcm.Naam});");
                         else if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.Altijd)
-                            sb.AppendLine($"{tabspace}vaste_aanvraag({fcm.GetDefine()});");
+                            sb.AppendLine($"{tabspace}vaste_aanvraag({_fcpf}{fcm.Naam});");
                     }
                     sb.AppendLine("");
                     return sb.ToString();

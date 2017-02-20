@@ -116,7 +116,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (var d in fc.FileDetectoren)
                     {
-                        sb.AppendLine($"{ts}RT[{_tpf}{_tfd}{d.Detector}] = SD[{_dpf}{d.Detector}] || ED[{_dpf}{d.Detector}] || !VG[{_fcpf}{fc.FaseCyclus}]; ");
+                        sb.AppendLine($"{ts}RT[{_tpf}{_tfd}{_dpf}{d.Detector}] = SD[{_dpf}{d.Detector}] || ED[{_dpf}{d.Detector}] || !VG[{_fcpf}{fc.FaseCyclus}]; ");
                     }
                 }
             }

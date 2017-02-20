@@ -15,10 +15,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
         
-        private string _prmmlfpr; // parameter modules ahead
-        private string _prmaltg; // parameter alternative real green time
-        private string _prmaltp; // parameter alternative real space
-        private string _schaltg; // switch alternative real
+#pragma warning disable 0649
+        private string _prmmlfpr;
+        private string _prmaltg;
+        private string _prmaltp;
+        private string _schaltg;
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {

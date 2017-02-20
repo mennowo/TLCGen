@@ -628,7 +628,7 @@
         <Description>VLOG</Description>
         <Settings>
           <Setting>
-            <Default>maxtvg</Default>
+            <Default>maxtvgvlog</Default>
             <Setting>maxtvg</Setting>
             <Type>Parameter</Type>
             <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
@@ -1068,6 +1068,48 @@
             <Setting>prreal</Setting>
             <Type>HulpElement</Type>
             <Description>Hulpelement bijhouden primaire realisatie fase</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLVasteAanvraagCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLVasteAanvraagCodeGenerator</ClassName>
+        <Description>Vaste aanvragen</Description>
+        <Settings>
+          <Setting>
+            <Default>ca</Default>
+            <Setting>ca</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar cyclische aanvraag</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLWachtstandGroenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLWachtstandGroenCodeGenerator</ClassName>
+        <Description>Wachtstand groen</Description>
+        <Settings>
+          <Setting>
+            <Default>wg</Default>
+            <Setting>wg</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar wachtstand groen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLWaitsignalenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLWaitsignalenCodeGenerator</ClassName>
+        <Description>Waitsignalen</Description>
+        <Settings>
+          <Setting>
+            <Default>wt</Default>
+            <Setting>wt</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang aansturing waitsignaal</Description>
           </Setting>
         </Settings>
       </CodePieceData>

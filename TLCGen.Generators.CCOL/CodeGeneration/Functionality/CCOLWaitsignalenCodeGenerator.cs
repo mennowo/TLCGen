@@ -15,6 +15,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
+#pragma warning disable 0649
+        private string _uswt;
+#pragma warning restore 0649
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
@@ -27,8 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if(d.Wachtlicht)
                     {
-                        _MyElements.Add(new CCOLElement("wt" + d.Naam, CCOLElementTypeEnum.Uitgang));
-                        _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, "uswt" + d.Naam));
+                        _MyElements.Add(new CCOLElement(_uswt + d.Naam, CCOLElementTypeEnum.Uitgang));
+                        _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uspf + _uswt + d.Naam));
                     }
                 }
             }
@@ -80,7 +84,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             if (d.Wachtlicht)
                             {
-                                string wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine("wt" + d.Naam);
+                                string wtdef = d.WachtlichtBitmapData.GetBitmapCoordinaatOutputDefine(_uswt + d.Naam);
                                 string ddef = d.GetDefine();
                                 string fcdef = fc.GetDefine();
                                 if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik)

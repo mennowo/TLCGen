@@ -53,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
 
                 _MyElements.Add(new CCOLElement($"{_prmmintvg}_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmmaxtvg}{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmmaxtvg}_{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_hprreal}{fc.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
                 foreach(var d in fc.FileDetectoren)
                 {

@@ -13,7 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
-        private string _prmmaxtvg;
+        private string _prmmaxtvgvlog;
         private string _prmmaxtfb;
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -22,7 +22,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
-                _MyElements.Add(new CCOLElement(_prmmaxtvg, 0, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog, 0, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement(_prmmaxtfb, 0, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
             }
         }
@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
-                        sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvg}], PRM[{_prmpf}{_prmmaxtfb}]);");
+                        sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfb}]);");
                         if (c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
                         {
                             sb.AppendLine($"{ts}#ifndef AUTOMAAT");
@@ -98,7 +98,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 switch (s.Default)
                 {
-                    case "maxtvg": _prmmaxtvg = s.Setting == null ? s.Default : s.Setting; break;
+                    case "maxtvg": _prmmaxtvgvlog = s.Setting == null ? s.Default : s.Setting; break;
                     case "maxtfb": _prmmaxtfb = s.Setting == null ? s.Default : s.Setting; break;
                 }
             }

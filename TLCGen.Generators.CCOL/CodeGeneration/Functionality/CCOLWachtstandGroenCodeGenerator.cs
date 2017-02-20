@@ -14,6 +14,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
+#pragma warning disable 0649
+        private string _schwg;
+#pragma warning restore 0649
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
@@ -25,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"wg{fcm.Naam}", 
+                            $"{_schwg}{fcm.Naam}", 
                             fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, 
                             CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 }
@@ -67,7 +71,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                            sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[schwg{fcm.Naam}]));");
+                            sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                             sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
                     }
@@ -95,7 +99,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"(MK[{fcm.GetDefine()}] & ~BIT5) ||");
                                 sb.Append("".PadLeft($"{tabspace}RW[{fcm.GetDefine()}] |= (".Length));
                             }
-                            sb.AppendLine($"SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                            sb.AppendLine($"SCH[{_schpf}{_schwg}{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
