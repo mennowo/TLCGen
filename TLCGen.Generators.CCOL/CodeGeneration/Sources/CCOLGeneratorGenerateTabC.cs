@@ -67,8 +67,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#endif");
             }
 
-            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
-
             return sb.ToString();
         }
 
@@ -145,6 +143,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GenerateTabCControlParametersVLOG(controller));
                 sb.AppendLine();
             }
+
+            sb.AppendLine();
+            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
 
             sb.AppendLine("}");
 
@@ -508,7 +509,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             else
             {
-                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\"");
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
             }
             sb.AppendLine();
 
