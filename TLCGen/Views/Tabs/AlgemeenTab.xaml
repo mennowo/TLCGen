@@ -28,7 +28,7 @@
                 <TabControl Grid.Row="0" Margin="2">
                     <TabItem Header="Instellingen">
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="16">
+                            <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="18">
                                 <Label Content="Kruispunt informatie" Grid.ColumnSpan="2" FontWeight="Bold" />
                                 <Label Content="Naam/nummer" />
                                 <TextBox Margin="2" Text="{Binding Path=Naam}" />
@@ -71,6 +71,10 @@
                                     SelectedItem="{Binding Path=OVIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                                 <Label Content="DSI" />
                                 <CheckBox IsChecked="{Binding Path=DSI}" Margin="5" />
+                                <Label Content="Fixatie" />
+                                <CheckBox IsChecked="{Binding Path=FixatieMogelijk}" Margin="5" />
+                                <Label Content="Bijkomen bij fixatie" />
+                                <CheckBox IsChecked="{Binding Path=BijkomenTijdensFixatie}" Margin="5" />
                             </ag:AutoGrid>
                         </ScrollViewer>
                     </TabItem>

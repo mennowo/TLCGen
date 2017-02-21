@@ -65,7 +65,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         break;
                 }
             }
-#warning think about outputs for other periods: rt, bel, twl...
 
             // parameters
             iper = 1;
@@ -149,12 +148,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperbel > 1)    _MyElements.Add(new CCOLElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang));
             if (iperbeldim > 1) _MyElements.Add(new CCOLElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang));
             if (ipertwl > 1)    _MyElements.Add(new CCOLElement($"{_usper}{_prmpertwl}", CCOLElementTypeEnum.Uitgang));
-            if (iperrt > 1)     _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd).First().BitmapData, $"{_uspf}{_usper}{_prmperrt}"));
-            if (iperrta > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag).First().BitmapData, $"{_uspf}{_usper}{_prmperrta}"));
-            if (iperrtdim > 1)  _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen).First().BitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));
-            if (iperbel > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief).First().BitmapData, $"{_uspf}{_usper}{_prmperbel}"));
-            if (iperbeldim > 1) _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen).First().BitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
-            if (ipertwl > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten).First().BitmapData, $"{_uspf}{_usper}{_prmpertwl}"));
+            if (iperrt > 1)     _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_uspf}{_usper}{_prmperrt}"));
+            if (iperrta > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_uspf}{_usper}{_prmperrta}"));
+            if (iperrtdim > 1)  _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));
+            if (iperbel > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenActiefBitmapData, $"{_uspf}{_usper}{_prmperbel}"));
+            if (iperbeldim > 1) _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
+            if (ipertwl > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.WaarschuwingsLichtenActiefBitmapData, $"{_uspf}{_usper}{_prmpertwl}"));
 
         }
 

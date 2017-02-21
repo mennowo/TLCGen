@@ -1114,6 +1114,26 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLFixatieCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLFixatieCodeGenerator</ClassName>
+        <Description>Fixatie</Description>
+        <Settings>
+          <Setting>
+            <Default>fix</Default>
+            <Setting>fix</Setting>
+            <Type>Ingang</Type>
+            <Description>Ingang fixatie regeling</Description>
+          </Setting>
+          <Setting>
+            <Default>bmfix</Default>
+            <Setting>bmfix</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar bijkomen tijdens fixatie mogelijk</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

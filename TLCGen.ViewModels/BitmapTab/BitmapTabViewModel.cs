@@ -20,6 +20,8 @@ using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;
 using TLCGen.Messaging.Requests;
+using System.Reflection;
+using System.Collections;
 
 namespace TLCGen.ViewModels
 {
@@ -348,12 +350,141 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private BitmappedItemViewModel GetIOElementFromObject(object obj, PropertyInfo prop = null)
+        {
+            var objType = obj.GetType();
+            IOElementAttribute attr = null;
+            if (prop == null)
+            {
+                attr = objType.GetCustomAttribute<IOElementAttribute>();
+            }
+            else
+            {
+                attr = prop.GetCustomAttribute<IOElementAttribute>();
+            }
+
+            BitmappedItemViewModel bivm = null;
+            if (attr != null)
+            {
+                bool cond = true;
+                if (!string.IsNullOrWhiteSpace(attr.DisplayConditionProperty))
+                {
+                    cond = (bool)objType.GetProperty(attr.DisplayConditionProperty).GetValue(obj);
+                }
+                if (cond)
+                {
+                    string name = attr.DisplayName;
+                    if (!string.IsNullOrWhiteSpace(attr.DisplayNameProperty))
+                    {
+                        name = name + (string)objType.GetProperty(attr.DisplayNameProperty).GetValue(obj);
+                    }
+                    if (prop == null)
+                    {
+                        bivm = new BitmappedItemViewModel(obj as IOElementModel, name, attr.Type);
+                    }
+                    else
+                    {
+                        bivm = new BitmappedItemViewModel(prop.GetValue(obj) as IOElementModel, name, attr.Type);
+                    }
+                }
+            }
+            return bivm;
+        }
+
+        private List<BitmappedItemViewModel> GetAllIOElements(object obj)
+        {
+
+            var l = new List<BitmappedItemViewModel>();
+            if (obj == null) return l;
+
+            Type objType = obj.GetType();
+
+            // Object as IOElement
+            BitmappedItemViewModel bivm = GetIOElementFromObject(obj);
+            if(bivm != null)
+            {
+                l.Add(bivm);
+            }
+
+            PropertyInfo[] properties = objType.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                Type propType = property.PropertyType;
+                if (!property.PropertyType.IsValueType && property.PropertyType != typeof(string))
+                {
+                    object propValue = property.GetValue(obj);
+                    var elems = propValue as IList;
+                    if (elems != null)
+                    {
+                        foreach (var item in elems)
+                        {
+                            foreach(var i in GetAllIOElements(item))
+                            {
+                                l.Add(i);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Property as IOElement
+                        bivm = GetIOElementFromObject(obj, property);
+                        if (bivm != null)
+                        {
+                            l.Add(bivm);
+                        }
+                        foreach (var i in GetAllIOElements(propValue))
+                        {
+                            l.Add(i);
+                        }
+                    }
+                }
+            }
+            return l;
+        }
+
         private void CollectAllIO()
         {
             Fasen.Clear();
             Detectoren.Clear();
             OverigeUitgangen.Clear();
             OverigeIngangen.Clear();
+            
+            bool[] done = new bool[20];
+            for(int d = 0; d < 20; ++d) done[d] = false;
+            foreach(var per in _Controller.PeriodenData.Perioden)
+            {
+                switch(per.Type)
+                {
+                    case PeriodeTypeEnum.Groentijden:
+                    case PeriodeTypeEnum.Overig:
+                        per.BitmapDataRelevant = true;
+                        per.BitmapNaam = per.Naam;
+                        break;
+                    default:
+                        per.BitmapDataRelevant = false;
+                        break;
+                }
+            }
+
+            foreach(var i in GetAllIOElements(_Controller))
+            {
+                switch(i.IOType)
+                {
+                    case BitmappedItemTypeEnum.Fase:
+                        Fasen.Add(i);
+                        break;
+                    case BitmappedItemTypeEnum.Detector:
+                        Detectoren.Add(i);
+                        break;
+                    case BitmappedItemTypeEnum.Uitgang:
+                        OverigeUitgangen.Add(i);
+                        break;
+                    case BitmappedItemTypeEnum.Ingang:
+                        OverigeIngangen.Add(i);
+                        break;
+                }
+            }
+            return;
 
 #warning Need to change this to reflect settings prefixes etc
 
@@ -490,13 +621,13 @@ namespace TLCGen.ViewModels
             }
 
             // Segment display
-            for(int i = 0; i < 7; ++i)
-            {
-                OverigeUitgangen.Add(new BitmappedItemViewModel(
-                    _Controller.Data.SegmentenDisplayBitmapData[i], 
-                    _Controller.Data.SegmentenDisplayBitmapData[i].Naam, 
-                    BitmappedItemTypeEnum.Uitgang));
-            }
+            //for(int i = 0; i < 7; ++i)
+            //{
+            //    OverigeUitgangen.Add(new BitmappedItemViewModel(
+            //        _Controller.Data.SegmentenDisplayBitmapData[i], 
+            //        _Controller.Data.SegmentenDisplayBitmapData[i].Naam, 
+            //        BitmappedItemTypeEnum.Uitgang));
+            //}
 
             // IO from plugins
             foreach (var v in TLCGenPluginManager.Default.ApplicationPlugins)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -23,10 +24,15 @@ namespace TLCGen.Models
         public int RijTijdBeperktgehinderd { get; set; }
         public int RijTijdGehinderd { get; set; }
         public int PrioriteitsOpties { get; set; }
+        [IOElement("vchd", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel HDInmeldingBitmapData { get; set; }
+        [IOElement("hdkar_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel HDKARDummyInmeldingBitmapData { get; set; }
+        [IOElement("hdkar_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel HDKARDummyUitmeldingBitmapData { get; set; }
+        [IOElement("hdvecom_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel HDVecomDummyInmeldingBitmapData { get; set; }
+        [IOElement("hdvecom_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel HDVecomDummyUitmeldingBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]

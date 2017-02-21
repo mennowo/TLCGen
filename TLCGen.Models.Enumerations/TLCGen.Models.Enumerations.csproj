@@ -65,6 +65,7 @@
     <Compile Include="RateltikkerTypeEnum.cs" />
     <Compile Include="RichtingGevoeligVerlengenTypeEnum.cs" />
     <Compile Include="RoBuGroverMethodeEnum.cs" />
+    <Compile Include="SegmentDisplayTypeEnum.cs" />
     <Compile Include="TLCGenVersieEnum.cs" />
     <Compile Include="VLOGTypeEnum.cs" />
   </ItemGroup>

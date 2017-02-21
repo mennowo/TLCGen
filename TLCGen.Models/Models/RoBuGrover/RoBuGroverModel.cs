@@ -30,8 +30,16 @@ namespace TLCGen.Models
         public int GroenVerlaagFactorNietPrimair { get; set; }
         [Description("Ophogen tijdens groen")]
         public bool OphogenTijdensGroen { get; set; }
+
         [Browsable(false)]
+        [IOElement("rgv", BitmappedItemTypeEnum.Uitgang, "", "BitmapDataRelevant")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
+
+        [XmlIgnore]
+        public bool BitmapDataRelevant
+        {
+            get { return ConflictGroepen.Count > 0; }
+        }
 
         [Browsable(false)]
         [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]

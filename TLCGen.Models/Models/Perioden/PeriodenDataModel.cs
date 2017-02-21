@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -12,8 +13,9 @@ namespace TLCGen.Models
     {
         public string DefaultPeriodeGroentijdenSet { get; set; }
         public string DefaultPeriodeNaam { get; set; }
-        public BitmapCoordinatenDataModel DefaultPeriodeBitmapData { get; set; }
 
+        [IOElement("perdef", BitmappedItemTypeEnum.Uitgang)]
+        public BitmapCoordinatenDataModel DefaultPeriodeBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "Periode")]
         public List<PeriodeModel> Perioden { get; set; }

@@ -20,9 +20,16 @@ namespace TLCGen.Models
         public TimeSpan StartTijd { get; set; }
         [XmlIgnore]
         public TimeSpan EindTijd { get; set; }
-        public string GroentijdenSet { get; set; } 
-        public BitmapCoordinatenDataModel BitmapData { get; set; }
+        public string GroentijdenSet { get; set; }
         public string Commentaar { get; set; }
+
+        [IOElement("per", BitmappedItemTypeEnum.Uitgang, "BitmapNaam", "BitmapDataRelevant")]
+        public BitmapCoordinatenDataModel BitmapData { get; set; }
+
+        [XmlIgnore]
+        public bool BitmapDataRelevant { get; set; }
+        [XmlIgnore]
+        public string BitmapNaam { get; set; }
 
         #endregion // Properties
 

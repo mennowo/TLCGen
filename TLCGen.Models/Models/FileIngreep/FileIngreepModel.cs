@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -14,6 +15,7 @@ namespace TLCGen.Models
         public int MinimaalAantalMeldingen { get; set; }
         public int AfvalVertraging { get; set; }
         public bool EerlijkDoseren { get; set; }
+        [IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "FileDetector")]

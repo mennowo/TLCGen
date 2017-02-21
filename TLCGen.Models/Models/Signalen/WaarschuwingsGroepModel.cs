@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -14,7 +15,11 @@ namespace TLCGen.Models
         public bool Lichten { get; set; }
         public bool Bellen { get; set; }
         public string FaseCyclusVoorAansturing { get; set; }
+
+        [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel LichtenBitmapData { get; set; }
+
+        [IOElement("bel", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BellenBitmapData { get; set; }
 
         public bool ShouldSerializeLichtenBitmapData()

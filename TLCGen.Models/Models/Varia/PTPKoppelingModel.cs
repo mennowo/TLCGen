@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -16,7 +17,11 @@ namespace TLCGen.Models
         public int PortnummerAutomaatOmgeving { get; set; }
         public int NummerSource { get; set; }
         public int NummerDestination { get; set; }
+
+        [IOElement("ptpok", BitmappedItemTypeEnum.Uitgang, "TeKoppelenKruispunt")]
         public BitmapCoordinatenDataModel OkBitmapData { get; set; }
+
+        [IOElement("ptperr", BitmappedItemTypeEnum.Uitgang, "TeKoppelenKruispunt")]
         public BitmapCoordinatenDataModel ErrorBitmapData { get; set; }
 
         public PTPKoppelingModel()

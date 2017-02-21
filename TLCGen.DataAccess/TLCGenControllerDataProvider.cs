@@ -115,9 +115,17 @@ namespace TLCGen.DataAccess
             if (!CheckChanged())
             {
                 if (cm != null)
+                {
                     Controller = cm;
+                }
                 else
+                {
                     Controller = new ControllerModel();
+                }
+                if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
+                {
+                    Controller.Data.SegmentDisplayType = Controller.Data.SegmentDisplayType;
+                }
                 return true;
             }
             return false;
@@ -133,7 +141,7 @@ namespace TLCGen.DataAccess
             {
                 string lastfilename = ControllerFileName;
                 ControllerFileName = null;
-                SetController(new ControllerModel());
+                SetController(null);
                 return true;
             }
             return false;

@@ -90,8 +90,12 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateCodeCommand_Executed(object prm)
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new Messaging.Requests.PrepareForGenerationRequest());
-            _CodeGenerator.GenerateSourceFiles(_Plugin.Controller, Path.GetDirectoryName(_Plugin.ControllerFileName));
+            var prepreq = new Messaging.Requests.PrepareForGenerationRequest();
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(prepreq);
+            if (prepreq.Succes)
+            {
+                _CodeGenerator.GenerateSourceFiles(_Plugin.Controller, Path.GetDirectoryName(_Plugin.ControllerFileName));
+            }
         }
 
         private bool GenerateCodeCommand_CanExecute(object prm)

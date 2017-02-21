@@ -64,7 +64,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"kfvar.c\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.c\"    /* uitgangs elementen                */");
             sb.AppendLine($"{ts}#include \"dpvar.c\"    /* detectie elementen                */");
-            sb.AppendLine($"{ts}#include \"to_min.c\"   /* garantie-ontruimingstijden        */");
+            if (controller.Data.GarantieOntruimingsTijden)
+            {
+                sb.AppendLine($"{ts}#include \"to_min.c\"   /* garantie-ontruimingstijden        */");
+            }
             sb.AppendLine($"{ts}#include \"trg_min.c\"  /* garantie-roodtijden               */");
             sb.AppendLine($"{ts}#include \"tgg_min.c\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.c\"  /* garantie-geeltijden               */");
@@ -468,7 +471,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}AfhandelingOV();");
             }
-            sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
+            if (controller.Data.FixatieData.FixatieMogelijk)
+            {
+                sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
+            }
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_application();");
             if(controller.Data.KWCType != KWCTypeEnum.Geen)
@@ -505,8 +511,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, ts));
                 }
             }
-
             sb.AppendLine();
+
+            if (controller.Data.GarantieOntruimingsTijden)
+            {
+                sb.AppendLine($"{ts}/* minimumtijden */");
+                sb.AppendLine($"{ts}/* ------------- */");
+                sb.AppendLine($"{ts}check_to_min();");
+                sb.AppendLine();
+            }
+
             sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();
 

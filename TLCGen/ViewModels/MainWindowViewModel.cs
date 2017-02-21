@@ -655,7 +655,9 @@ namespace TLCGen.ViewModels
 
         private void OnPrepareForGenerationRequest(Messaging.Requests.PrepareForGenerationRequest request)
         {
-            Messenger.Default.Send(new Messaging.Requests.ProcessSynchronisationsRequest());
+            var procreq = new Messaging.Requests.ProcessSynchronisationsRequest();
+            Messenger.Default.Send(procreq);
+            request.Succes = procreq.Succes;
         }
 
         #endregion // TLCGen Messaging

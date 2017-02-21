@@ -15,6 +15,8 @@ namespace TLCGen.Models
         public int NaloopTijd { get; set; }
         public string FaseCyclus { get; set; }
         public List<RatelTikkerDetectorModel> Detectoren { get; set; }
+
+        [IOElement("rt", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         public bool ShouldSerializeNaloopTijd()

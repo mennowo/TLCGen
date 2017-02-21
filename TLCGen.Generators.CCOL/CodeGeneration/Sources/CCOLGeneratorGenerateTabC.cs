@@ -44,6 +44,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
             sb.AppendLine($"{ts}#include \"dpvar.h\"    /* detectie elementen                */");
+            if(controller.Data.GarantieOntruimingsTijden)
+            {
+                sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+            }
             sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
             sb.AppendLine($"{ts}#include \"trg_min.h\"  /* garantie-roodtijden               */");
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
@@ -270,9 +274,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
+
+                if(controller.Data.GarantieOntruimingsTijden)
+                {
+                    if (controller.InterSignaalGroep.Conflicten?.Count > 0)
+                    {
+                        var counters = new Dictionary<int, int>();
+                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                        {
+                            if (!counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
+                            {
+                                counters.Add(conflict.Waarde - conflict.GarantieWaarde.Value, 1);
+                            }
+                            else
+                            {
+                                counters[conflict.Waarde - conflict.GarantieWaarde.Value]++;
+                            }
+                        }
+                        int most = 0;
+                        int val = 0;
+                        foreach (var i in counters)
+                        {
+                            if (i.Value > most)
+                            {
+                                most = i.Value;
+                                val = i.Key;
+                            }
+                        }
+                        sb.AppendLine($"{ts}default_to_min({val});");
+                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                        {
+                            if((conflict.Waarde - conflict.GarantieWaarde.Value) != val)
+                                sb.AppendLine($"{ts}TO_min[{conflict.GetFaseToDefine()}][{_fcpf}{conflict.FaseNaar}] = {conflict.GarantieWaarde.Value};");
+                        }
+                    }
+                }
             }
 
-            //sb.AppendLine("default_to_min(0);");
 
             return sb.ToString();
         }

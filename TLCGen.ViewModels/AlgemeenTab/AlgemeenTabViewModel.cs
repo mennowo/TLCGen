@@ -183,6 +183,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool FixatieMogelijk
+        {
+            get { return _ControllerData == null ? false : _ControllerData.FixatieData.FixatieMogelijk; }
+            set
+            {
+                _ControllerData.FixatieData.FixatieMogelijk = value;
+                OnMonitoredPropertyChanged("FixatieMogelijk");
+            }
+        }
+
+        public bool BijkomenTijdensFixatie
+        {
+            get { return _ControllerData == null ? false : _ControllerData.FixatieData.BijkomenTijdensFixatie; }
+            set
+            {
+                _ControllerData.FixatieData.BijkomenTijdensFixatie = value;
+                OnMonitoredPropertyChanged("BijkomenTijdensFixatie");
+            }
+        }
+
         public VersieViewModel SelectedVersie
         {
             get { return _SelectedVersie; }

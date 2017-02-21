@@ -141,7 +141,6 @@ namespace TLCGen.Models.Operations
 
         public static void CorrectModelWithAlteredConflicts(object obj)
         {
-#warning This does NOT yet work as it should. Also; in order to use this nicely, add a method to check if it is needed to use this method, in the VM
             var c = obj as ControllerModel;
             if (c != null)
             {

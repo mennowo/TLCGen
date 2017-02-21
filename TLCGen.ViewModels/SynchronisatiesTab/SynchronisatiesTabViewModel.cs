@@ -369,22 +369,7 @@ namespace TLCGen.ViewModels
 
         public override bool OnDeselectedPreview()
         {
-            string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
-            if (s == null)
-            {
-                if(_MatrixChanged == true)
-                {
-                    Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
-                    Messenger.Default.Send(new ConflictsChangedMessage());
-                }
-                _MatrixChanged = false;
-                return true;
-            }
-            else
-            {
-                MessageBox.Show(s, "Fout in conflictmatrix");
-                return false;
-            }
+            return IsMatrixOK();   
         }
 
         public override void OnSelected()
@@ -564,6 +549,26 @@ namespace TLCGen.ViewModels
         #endregion // Command functionality
 
         #region Private methods
+
+        private bool IsMatrixOK()
+        {
+            string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
+            if (s == null)
+            {
+                if (_MatrixChanged == true)
+                {
+                    Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
+                    Messenger.Default.Send(new ConflictsChangedMessage());
+                }
+                _MatrixChanged = false;
+                return true;
+            }
+            else
+            {
+                MessageBox.Show(s, "Fout in conflictmatrix");
+                return false;
+            }
+        }
 
         #endregion // Private methods
 
@@ -965,9 +970,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool _IsProcessing = false;
         private void OnProcesSynchornisationsRequested(ProcessSynchronisationsRequest request)
         {
+            if (_IsProcessing)
+                return;
+
+            _IsProcessing = true;
             SaveConflictMatrix();
+            request.Succes = IsMatrixOK();
+            _IsProcessing = false;
         }
 
         #endregion // TLCGen Event handling

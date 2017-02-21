@@ -26,7 +26,7 @@ namespace TLCGen.Helpers
                         property.SetValue(obj, newstring);
                     }
                 }
-                else if (!objType.IsValueType)
+                else if (!property.PropertyType.IsValueType)
                 {
                     var elems = propValue as IList;
                     if (elems != null)
@@ -60,7 +60,7 @@ namespace TLCGen.Helpers
                         property.SetValue(obj, propString.Replace(oldstring, newstring));
                     }
                 }
-                else if (!objType.IsValueType)
+                else if (!property.PropertyType.IsValueType)
                 {
                     var elems = propValue as IList;
                     if (elems != null)

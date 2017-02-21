@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -24,7 +25,7 @@ namespace TLCGen.Models
         public string Straat2 { get; set; }
         public string BitmapNaam { get; set; }
 
-        public BitmapCoordinatenDataModel[] SegmentenDisplayBitmapData { get; set; }
+        public List<SegmentDisplayElementModel> SegmentenDisplayBitmapData { get; set; }
 
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
@@ -39,25 +40,83 @@ namespace TLCGen.Models
         public OVIngreepTypeEnum OVIngreep { get; set; }
         public bool DSI { get; set; }
 
+        private SegmentDisplayTypeEnum _SegmentDisplayType;
+        public SegmentDisplayTypeEnum SegmentDisplayType
+        {
+            get { return _SegmentDisplayType; }
+            set
+            {
+                _SegmentDisplayType = value;
+            }
+        }
+
+        public FixatieModel FixatieData { get; set; }
+
         public List<VersieModel> Versies { get; set; }
 
         #endregion // Properties
 
+        #region Public Methods
+
+        public void SetSegmentOutputs()
+        {
+            SegmentenDisplayBitmapData.Clear();
+            switch (_SegmentDisplayType)
+            {
+                case SegmentDisplayTypeEnum.EnkelDisplay:
+                    if (SegmentenDisplayBitmapData.Count == 0)
+                    {
+                        for (int i = 1; i <= 7; ++i)
+                        {
+                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segm" + i });
+                        }
+                    }
+                    break;
+                case SegmentDisplayTypeEnum.DrieCijferDisplay:
+                    if (SegmentenDisplayBitmapData.Count == 0)
+                    {
+                        for (int i = 1; i <= 7; ++i)
+                        {
+                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segma" + i });
+                        }
+                        for (int i = 1; i <= 7; ++i)
+                        {
+                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segmb" + i });
+                        }
+                        for (int i = 1; i <= 7; ++i)
+                        {
+                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segmc" + i });
+                        }
+                    }
+                    break;
+            }
+        }
+
+        #endregion // Public Methods
+
+        #region Serialization
+
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            if(SegmentenDisplayBitmapData?.Count == 0)
+            {
+                for (int i = 1; i <= 7; ++i)
+                {
+                    SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segm" + i });
+                }
+            }
+        }
+
+        #endregion // Serialization
+
         #region Constructor
 
-        public ControllerDataModel() : base()
+        public ControllerDataModel()
         {
+            FixatieData = new FixatieModel();
             Versies = new List<VersieModel>();
-            SegmentenDisplayBitmapData = new BitmapCoordinatenDataModel[7] 
-            {
-                new BitmapCoordinatenDataModel(){ Naam = "segm1" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm2" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm3" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm4" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm5" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm6" },
-                new BitmapCoordinatenDataModel(){ Naam = "segm7" }
-            };
+            SegmentenDisplayBitmapData = new List<SegmentDisplayElementModel>();
         }
 
         #endregion // Constructor

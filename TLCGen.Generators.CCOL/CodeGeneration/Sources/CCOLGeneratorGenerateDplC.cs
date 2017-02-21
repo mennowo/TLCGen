@@ -188,7 +188,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Segment display
             foreach (var item in controller.Data.SegmentenDisplayBitmapData)
             {
-                sb.Append(GetCoordinatesString(item as IOElementModel, item.GetBitmapCoordinaatOutputDefine(), "us"));
+                var _item = item.BitmapData as IOElementModel;
+                sb.Append(GetCoordinatesString(_item, _item.GetBitmapCoordinaatOutputDefine(), "us"));
             }
 
             foreach(var pgen in _PieceGenerators)

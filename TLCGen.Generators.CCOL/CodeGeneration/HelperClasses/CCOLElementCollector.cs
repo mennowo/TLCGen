@@ -68,7 +68,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Segment display elements
             foreach(var item in controller.Data.SegmentenDisplayBitmapData)
             {
-                data.Elements.Add(new CCOLElement() { Define = item.GetBitmapCoordinaatOutputDefine(), Naam = item.Naam });
+                var _item = item.BitmapData as IOElementModel;
+                data.Elements.Add(new CCOLElement() { Define = _item.GetBitmapCoordinaatOutputDefine(), Naam = item.Naam });
             }
 
             foreach (var pgen in pgens)

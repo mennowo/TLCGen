@@ -28,10 +28,15 @@ namespace TLCGen.Models
         public int GroenBewaking { get; set; }
         public int PrioriteitsOpties { get; set; }
 
+        [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
+        [IOElement("kar_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel OVKARDummyInmeldingBitmapData { get; set; }
+        [IOElement("kar_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel OVKARDummyUitmeldingBitmapData { get; set; }
+        [IOElement("vecom_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel OVVecomDummyInmeldingBitmapData { get; set; }
+        [IOElement("vecom_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel OVVecomDummyUitmeldingBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
