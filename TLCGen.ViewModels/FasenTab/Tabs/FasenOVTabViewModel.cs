@@ -186,7 +186,7 @@ namespace TLCGen.ViewModels
 
         public override bool CanBeEnabled()
         {
-            return _Controller.Data.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen;
+            return _Controller?.Data?.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen;
         }
 
         public override void OnSelected()

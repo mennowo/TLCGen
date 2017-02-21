@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,6 +125,8 @@ namespace TLCGen.DataAccess
                 }
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {
+                    // Force adding the segments; this is because this is fixed list, 
+                    // which we cannot add in the constructor for it will cause double items
                     Controller.Data.SegmentDisplayType = Controller.Data.SegmentDisplayType;
                 }
                 return true;
@@ -164,21 +167,30 @@ namespace TLCGen.DataAccess
                     ControllerFileName = openFileDialog.FileName;
                     if (!string.IsNullOrWhiteSpace(ControllerFileName))
                     {
+                        var doc = new XmlDocument();
                         if (Path.GetExtension(ControllerFileName) == ".tlcgz")
-                            Controller = TLCGenSerialization.DeSerializeGZip<ControllerModel>(ControllerFileName);
+                        {
+                            using (var fs = File.OpenRead(ControllerFileName))
+                            {
+                                using (var gz = new GZipStream(fs, CompressionMode.Decompress))
+                                {
+                                    doc.Load(gz);
+                                }
+                            }
+                        }
                         else
                         {
-                            Controller = TLCGenSerialization.DeSerialize<ControllerModel>(ControllerFileName);
+                            doc.Load(ControllerFileName);
                         }
-                        if (Controller != null)
+                        foreach (var pi in TLCGenPluginManager.Default.ApplicationPlugins)
                         {
-                            _ControllerXml = new XmlDocument();
-                            _ControllerXml.Load(ControllerFileName);
+                            if (pi.Item1.HasFlag(TLCGenPluginElems.XMLNodeWriter))
+                            {
+                                var writer = (ITLCGenXMLNodeWriter)pi.Item2;
+                                writer.GetXmlFromDocument(doc);
+                            }
                         }
-                        else
-                        {
-                            return false;
-                        }
+                        Controller = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
                     }
                     return true;
                 }
@@ -216,10 +228,30 @@ namespace TLCGen.DataAccess
                 // Save data to disk, update saved state
                 if (!string.IsNullOrWhiteSpace(ControllerFileName))
                 {
+                    var doc = TLCGenSerialization.SerializeToXmlDocument(Controller);
+                    foreach (var pi in TLCGenPluginManager.Default.ApplicationPlugins)
+                    {
+                        if (pi.Item1.HasFlag(TLCGenPluginElems.XMLNodeWriter))
+                        {
+                            var writer = (ITLCGenXMLNodeWriter)pi.Item2;
+                            writer.SetXmlInDocument(doc);
+                        }
+                    }
+
                     if (Path.GetExtension(ControllerFileName) == ".tlcgz")
-                        TLCGenSerialization.SerializeGZip(ControllerFileName, Controller);
+                    {
+                        using (var fs = File.Create(ControllerFileName))
+                        {
+                            using (var gz = new GZipStream(fs, CompressionMode.Compress))
+                            {
+                                doc.Save(gz);
+                            }
+                        }
+                    }
                     else
-                        TLCGenSerialization.Serialize(ControllerFileName, Controller);
+                    {
+                        doc.Save(ControllerFileName);
+                    }
                 }
                 else
                 {

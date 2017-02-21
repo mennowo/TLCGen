@@ -12,7 +12,7 @@ namespace TLCGen.Helpers
     {
         public static void SetStringInModel(object obj, string oldstring, string newstring)
         {
-            if (obj == null) return;
+            if (obj == null || oldstring == null || newstring == null) return;
             Type objType = obj.GetType();
             PropertyInfo[] properties = objType.GetProperties();
             foreach (PropertyInfo property in properties)
@@ -46,7 +46,7 @@ namespace TLCGen.Helpers
 
         public static void ReplaceStringInModel(object obj, string oldstring, string newstring)
         {
-            if (obj == null) return;
+            if (obj == null || oldstring == null || newstring == null) return;
             Type objType = obj.GetType();
             PropertyInfo[] properties = objType.GetProperties();
             foreach (PropertyInfo property in properties)
