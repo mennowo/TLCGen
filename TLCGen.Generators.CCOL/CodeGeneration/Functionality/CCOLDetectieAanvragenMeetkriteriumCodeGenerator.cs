@@ -29,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             List<DetectorModel> dets = new List<DetectorModel>();
             dets.AddRange(c.Fasen.SelectMany(x => x.Detectoren));
-            dets.AddRange(c.Detectoren);
+            //dets.AddRange(c.Detectoren); not for loose detectors!
 
             // Detectie aanvraag functie
             foreach (DetectorModel dm in dets)
@@ -54,6 +54,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         break;
                 }
                 _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            }
+
+            // Detectie verlengkriterium
+            foreach (DetectorModel dm in dets)
+            {
+                if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
+                    continue;
+
+                int set = 0;
+                switch (dm.Verlengen)
+                {
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.Uit:
+                        set = 0;
+                        break;
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax:
+                        set = 1;
+                        break;
+                    case Models.Enumerations.DetectorVerlengenTypeEnum.MK2:
+                        set = 3;
+                        break;
+                }
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmmk}{dm.Naam}", 
+                        set, 
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Parameter));
             }
         }
 
@@ -137,7 +164,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                             {
                                 sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
-                                sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.GetDefine()}],");
+                                sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
                             }
                         }
                         sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));

@@ -91,6 +91,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
             sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
+            if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            {
+                sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");
+            }
             sb.AppendLine();
             sb.AppendLine("#ifndef AUTOMAAT");
             sb.AppendLine("/*    #include \"ccdump.inc\" */");

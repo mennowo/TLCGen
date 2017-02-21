@@ -108,7 +108,7 @@ namespace TLCGen.ViewModels
             {
                 if (_AddDetectorCommand == null)
                 {
-                    _AddDetectorCommand = new RelayCommand(AddNewDetectorCommand_Executed, AddNewDetectorCommand_CanExecute);
+                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
                 }
                 return _AddDetectorCommand;
             }
@@ -132,7 +132,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewDetectorCommand_Executed(object prm)
+        void AddDetectorCommand_Executed(object prm)
         {
             DetectorModel dm = new DetectorModel();
             string newname = "001";
@@ -159,12 +159,13 @@ namespace TLCGen.ViewModels
             }
             dm.Naam = newname;
             DefaultsProvider.Default.SetDefaultsOnModel(dm);
+            dm.AanvraagDirect = false; // Not possible / allowed on loose detector
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
-        bool AddNewDetectorCommand_CanExecute(object prm)
+        bool AddDetectorCommand_CanExecute(object prm)
         {
             return Detectoren != null;
         }

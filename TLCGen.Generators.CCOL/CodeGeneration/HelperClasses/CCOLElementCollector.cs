@@ -91,10 +91,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             CCOLElemListData data = new CCOLElemListData();
 
             data.CCOLCode = "IS_code";
-
-            // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "isfix", Naam = "fix" });
-
+            
             foreach (var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())
@@ -212,9 +209,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             data.CCOLCode = "SCH_code";
             data.CCOLSetting = "SCH";
-
-            data.Elements.Add(new CCOLElement() { Define = "schbmfix", Naam = "bmfix", Instelling = 1 });
-
+            
             foreach (var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())
@@ -265,31 +260,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             // Collect everything
             data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = 240, TType = CCOLElementTimeTypeEnum.TS_type });
-
-            // Detectie verlengkriterium
-            foreach (DetectorModel dm in AlleDetectoren)
-            {
-                if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
-                    continue;
-
-                int set = 0;
-                switch (dm.Verlengen)
-                {
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.Uit:
-                        set = 0;
-                        break;
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax:
-                        set = 1;
-                        break;
-                    //case Models.Enumerations.DetectorVerlengenTypeEnum.MK3:
-                    //    set = 2;
-                    //    break;
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.MK2:
-                        set = 3;
-                        break;
-                }
-                data.Elements.Add(new CCOLElement() { Define = $"prmmkd{dm.Naam}", Naam = $"mkd{dm.Naam}", Instelling = set, TType = CCOLElementTimeTypeEnum.TE_type });
-            }
 
             foreach(var pgen in pgens)
             {

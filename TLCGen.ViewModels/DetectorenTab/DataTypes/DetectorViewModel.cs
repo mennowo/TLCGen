@@ -208,7 +208,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-
         public bool Wachtlicht
         {
             get { return _Detector.Wachtlicht; }
@@ -291,6 +290,14 @@ namespace TLCGen.ViewModels
             get
             {
                 return FaseCyclus == null;
+            }
+        }
+
+        public bool AanvraagDirectPossible
+        {
+            get
+            {
+                return FaseCyclus != null && (Type == DetectorTypeEnum.Kop || Type == DetectorTypeEnum.Lang);
             }
         }
 

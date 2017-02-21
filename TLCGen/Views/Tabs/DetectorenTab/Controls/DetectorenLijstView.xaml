@@ -99,7 +99,19 @@
                 <DataGridTextColumn Binding="{Binding Path=TOG,TargetNullValue={x:Static sys:String.Empty}}" Header="TOG" />
                 <DataGridTextColumn Binding="{Binding Path=TFL,TargetNullValue={x:Static sys:String.Empty}}" Header="TFL" />
                 <DataGridTextColumn Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=AanvraagDirect}" Header="Direct" CellStyle="{StaticResource DisabledIfDrukknopStyle}" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=AanvraagDirect}" Header="Direct" >
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=AanvraagDirectPossible}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
             </DataGrid.Columns>
         </controls:SpecialDataGrid>

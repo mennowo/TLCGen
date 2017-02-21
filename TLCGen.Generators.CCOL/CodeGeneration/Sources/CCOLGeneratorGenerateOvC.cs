@@ -64,6 +64,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
+            sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
             sb.AppendLine();
 
             return sb.ToString();
