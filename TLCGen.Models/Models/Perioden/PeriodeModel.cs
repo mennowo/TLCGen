@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,12 +24,15 @@ namespace TLCGen.Models
         public string GroentijdenSet { get; set; }
         public string Commentaar { get; set; }
 
+        [Browsable(false)]
         [IOElement("per", BitmappedItemTypeEnum.Uitgang, "BitmapNaam", "BitmapDataRelevant")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlIgnore]
+        [Browsable(false)]
         public bool BitmapDataRelevant { get; set; }
         [XmlIgnore]
+        [Browsable(false)]
         public string BitmapNaam { get; set; }
 
         #endregion // Properties
@@ -36,6 +40,7 @@ namespace TLCGen.Models
         #region Serialization
 
         // Properties for serialization
+        [Browsable(false)]
         [XmlElement("StartTijd")]
         public string SerializedStartTijd
         {
@@ -62,6 +67,8 @@ namespace TLCGen.Models
                 StartTijd = new TimeSpan(days, hours, Int32.Parse(parts[1]), 0);
             }
         }
+
+        [Browsable(false)]
         [XmlElement("EindTijd")]
         public string SerializedEindTijd
         {

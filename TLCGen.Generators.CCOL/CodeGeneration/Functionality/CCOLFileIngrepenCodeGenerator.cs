@@ -175,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"#define filefcmax{fi.Naam} {fi.TeDoserenSignaalGroepen.Count} // Aantal fasen die worden gedoseerd");
                                 sb.AppendLine($"static count filefc_{fi.Naam}[filefcmax{fi.Naam}]; // Opslag fasenummers");
                                 sb.AppendLine($"static count filefcmg_{fi.Naam}[filefcmax{fi.Naam}][4]; // Opslag bij fasen behorende MG parameter nummers");
-                                sb.AppendLine($"static int nogtedoseren_{fi.Naam}[filefcmax{fi.Naam}] = {0}; // Opslag nog te doseren actueel per fase");
+                                sb.AppendLine($"static int nogtedoseren_{fi.Naam}[filefcmax{fi.Naam}] = {{0}}; // Opslag nog te doseren actueel per fase");
                             }
                         }
                     }

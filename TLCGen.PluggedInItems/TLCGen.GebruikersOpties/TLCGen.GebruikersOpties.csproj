@@ -106,6 +106,10 @@
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
+      <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
       <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
       <Name>TLCGen.Generators.CCOL</Name>

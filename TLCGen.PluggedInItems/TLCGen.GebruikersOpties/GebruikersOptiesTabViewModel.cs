@@ -14,6 +14,7 @@ using System.Windows.Media;
 using TLCGen.DataAccess;
 using TLCGen.Integrity;
 using GalaSoft.MvvmLight.Messaging;
+using System.Collections;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -41,6 +42,7 @@ namespace TLCGen.GebruikersOpties
         private int _SelectedTabIndex;
 
         private object[] _SelectedOptie = new object[OptiesMax];
+        //private IList[] _SelectedOpties = new ArrayList[OptiesMax];
 
         private RelayCommand _AddGebruikersOptieCommand;
         private RelayCommand _RemoveGebruikersOptieCommand;
@@ -102,6 +104,25 @@ namespace TLCGen.GebruikersOpties
                 OnPropertyChanged("SelectedOptie");
             }
         }
+
+        //public IList SelectedOpties
+        //{
+        //    get
+        //    {
+        //        if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+        //            return _SelectedOpties[SelectedTabIndex];
+        //        else
+        //            return null;
+        //    }
+        //    set
+        //    {
+        //        if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+        //        {
+        //            _SelectedOpties[SelectedTabIndex] = value;
+        //        }
+        //        OnPropertyChanged("SelectedOpties");
+        //    }
+        //}
 
         #endregion // Properties
 
@@ -203,14 +224,59 @@ namespace TLCGen.GebruikersOpties
 
         void RemoveGebruikersOptieCommand_Executed(object prm)
         {
-            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
-                    SelectedOptie as GebruikersOptieWithIOViewModel);
-            else
-                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
-                    SelectedOptie as GebruikersOptieViewModel);
+            int index = 0;
+            //if (SelectedOpties != null && SelectedOpties.Count > 0)
+            //{
+            //    if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+            //        index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOpties[0] as GebruikersOptieWithIOViewModel);
+            //    else
+            //        ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOpties[0] as GebruikersOptieViewModel);
+            //    foreach (var o in SelectedOpties)
+            //    {
+            //        if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+            //            ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
+            //                o as GebruikersOptieWithIOViewModel);
+            //        else
+            //            ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
+            //                o as GebruikersOptieViewModel);
+            //    }
+            //}
+            //else 
+            if (SelectedOptie != null)
+            {
+                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                    index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
+                else
+                    index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOptie as GebruikersOptieViewModel);
+                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
+                        SelectedOptie as GebruikersOptieWithIOViewModel);
+                else
+                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
+                        SelectedOptie as GebruikersOptieViewModel);
+            }
 
-            SelectedOptie = null;
+            //SelectedOpties = null;
+
+            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+            {
+                int c = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count;
+                if (index >= c) index = c - 1;
+                if(index >= 0)
+                    SelectedOptie = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex])[index];
+                else
+                    SelectedOptie = null;
+            }
+            else
+            {
+                int c = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count;
+                if (index >= c) index = c - 1;
+                if(index >= 0)
+                    SelectedOptie = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex])[index];
+                else
+                    SelectedOptie = null;
+            }
+
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 

@@ -36,6 +36,7 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlIgnore]
+        [Browsable(false)]
         public bool BitmapDataRelevant
         {
             get { return ConflictGroepen.Count > 0; }
@@ -44,6 +45,7 @@ namespace TLCGen.Models
         [Browsable(false)]
         [XmlArrayItem(ElementName = "RoBuGroverConflictGroep")]
         public List<RoBuGroverConflictGroepModel> ConflictGroepen { get; set; }
+
         [Browsable(false)]
         [XmlArrayItem(ElementName = "RoBuGroverSignaalGroepInstelling")]
         public List<RoBuGroverFaseCyclusInstellingenModel> SignaalGroepInstellingen { get; set; }

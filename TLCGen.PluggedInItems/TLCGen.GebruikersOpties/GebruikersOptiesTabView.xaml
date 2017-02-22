@@ -13,10 +13,13 @@
         </Grid.RowDefinitions>
         <TabControl TabStripPlacement="Left" SelectedIndex="{Binding Path=SelectedTabIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0">
             <TabItem Header="Uitgangen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2,0,-1.6,-0.4" />
+                    <!--GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"-->
+                <local:GebruikersOptiesLijst 
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Ingangen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Hulpelementen">
                 <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
