@@ -131,6 +131,46 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int RijTijdOngehinderd
+        {
+            get { return _HDIngreep.RijTijdOngehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdOngehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdOngehinderd");
+            }
+        }
+
+        public int RijTijdBeperktgehinderd
+        {
+            get { return _HDIngreep.RijTijdBeperktgehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdBeperktgehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdBeperktgehinderd");
+            }
+        }
+
+        public int RijTijdGehinderd
+        {
+            get { return _HDIngreep.RijTijdGehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdGehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdGehinderd");
+            }
+        }
+
+        public int PrioriteitsOpties
+        {
+            get { return _HDIngreep.PrioriteitsOpties; }
+            set
+            {
+                _HDIngreep.PrioriteitsOpties = value;
+                OnMonitoredPropertyChanged("PrioriteitsOpties");
+            }
+        }
+
         #endregion // Properties
 
         #region Commands

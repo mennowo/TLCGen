@@ -40,6 +40,12 @@
             </StackPanel>
         </StackPanel>
         <Label Content="Tijden" Grid.ColumnSpan="2" FontWeight="Bold" />
+        <Label Content="Rijtijd ongehinderd" />
+        <TextBox Text="{Binding Path=RijTijdOngehinderd}" Margin="2" />
+        <Label Content="Rijtijd beperkt gehinderd" />
+        <TextBox Text="{Binding Path=RijTijdBeperktgehinderd}" Margin="2" />
+        <Label Content="Rijtijd gehinderd" />
+        <TextBox Text="{Binding Path=RijTijdGehinderd}" Margin="2" />
         <Label Content="Groenbewaking" />
         <TextBox Text="{Binding Path=GroenBewaking}" Margin="2" />
     </ag:AutoGrid>
