@@ -264,10 +264,22 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            var tfc = SelectedFaseNaam;
             Fasen.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 Fasen.Add(fcm.Naam);
+            }
+            if(tfc == null)
+            {
+                if (Fasen.Count > 0)
+                    SelectedFaseNaam = Fasen[0];
+                else
+                    SelectedFaseNaam = null;
+            }
+            else
+            {
+                SelectedFaseNaam = tfc;
             }
 
             TemplatesProviderVM.Update();
@@ -287,6 +299,9 @@ namespace TLCGen.ViewModels
 
         public void InsertItemsFromTemplate(List<DetectorModel> items)
         {
+            if (_SelectedFase == null || _Controller == null)
+                return;
+
             foreach(var d in items)
             {
                 if (!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))

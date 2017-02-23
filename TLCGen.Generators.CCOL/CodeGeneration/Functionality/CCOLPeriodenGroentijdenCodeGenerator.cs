@@ -411,6 +411,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                             }
                         }
+                        if (c.PeriodenData.DefaultPeriodeGroentijdenSet == null)
+                        {
+                            HasMG = false;
+                        }
 
                         if (HasMG)
                         {

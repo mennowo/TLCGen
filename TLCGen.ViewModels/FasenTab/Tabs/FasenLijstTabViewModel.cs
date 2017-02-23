@@ -347,6 +347,9 @@ namespace TLCGen.ViewModels
 
         public void InsertItemsFromTemplate(List<FaseCyclusModel> items)
         {
+            if (_Controller == null)
+                return;
+
             foreach (var fc in items)
             {
                 if (!(IntegrityChecker.IsElementNaamUnique(_Controller, fc.Naam) &&

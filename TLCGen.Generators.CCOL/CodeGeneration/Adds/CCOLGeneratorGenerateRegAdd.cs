@@ -62,6 +62,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
+            sb.AppendLine("void Synchronisaties_Add()");
+            sb.AppendLine("{");
+            sb.AppendLine("");
+            sb.AppendLine("}");
+            sb.AppendLine();
             sb.AppendLine("void VersneldPrimair_Add()");
             sb.AppendLine("{");
             sb.AppendLine("");

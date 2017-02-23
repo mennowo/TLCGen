@@ -344,12 +344,14 @@ namespace TLCGen.ViewModels
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;
+                    OnPropertyChanged(null);
                 }
                 else
                 {
                     _ControllerData = null;
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
+                    OnPropertyChanged(null);
                 }
             }
         }

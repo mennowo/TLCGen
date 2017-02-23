@@ -113,7 +113,7 @@
                 <Button Command="{Binding Path=SaveFileCommand}" ToolTip="Opslaan regeling (Ctrl-S)">
                     <Image Source="{StaticResource SaveFileIconDrawingImage}" Width="16" Height="16" />
                 </Button>
-                <Button Command="{Binding Path=SaveAsFileCommand}" ToolTip="Opslaan regeling (Ctrl-S)">
+                <Button Command="{Binding Path=SaveAsFileCommand}" ToolTip="Opslaan regeling als(Ctrl-Shift-S)">
                     <Image Source="{StaticResource SaveAsFileIconDrawingImage}" Width="16" Height="16"/>
                 </Button>
                 <Button Command="{Binding Path=CloseFileCommand}" ToolTip="Sluiten regeling (Ctrl-F4)">

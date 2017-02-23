@@ -173,9 +173,91 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add"), GenerateSimAdd(controller));
                 if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add")))
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add"), GenerateSysAdd(controller));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.add")) &&
+                    (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.add"), GenerateOvAdd(controller));
+
+                CopySourceIfNeeded("extra_func.c", sourcefilepath);
+                CopySourceIfNeeded("extra_func.h", sourcefilepath);
+
+                if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+                {
+                    CopySourceIfNeeded("extra_func_ov.c", sourcefilepath);
+                    CopySourceIfNeeded("extra_func_ov.h", sourcefilepath);
+                }
+
+                if(Directory.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                {
+                    try
+                    {
+                        foreach(var f in Directory.EnumerateFiles(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                        {
+                            try
+                            {
+                                var lines = File.ReadAllLines(f);
+                                if(lines != null && lines.Length > 0)
+                                {
+                                    if(lines[0].StartsWith("CONDITION="))
+                                    {
+                                        bool copy = false;
+                                        string cond = lines[0].Replace("CONDITION=", "");
+                                        switch (cond)
+                                        {
+                                            case "ALWAYS":
+                                                copy = true;
+                                                break;
+                                            case "OV":
+                                                copy = (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0);
+                                                break;
+                                            case "SYNC":
+                                                copy = (controller.InterSignaalGroep.Gelijkstarten.Count > 0 || 
+                                                        controller.InterSignaalGroep.Voorstarten.Count > 0);
+                                                break;
+                                            case "FIXATIE":
+                                                copy = (controller.Data.FixatieData.FixatieMogelijk);
+                                                break;
+                                            case "NALOPEN":
+                                                copy = (controller.InterSignaalGroep.Nalopen.Count > 0);
+                                                break;
+                                            case "RGV":
+                                                copy = (controller.RoBuGrover.SignaalGroepInstellingen.Count > 0);
+                                                break;
+                                        }
+                                        if(copy)
+                                        {
+                                            if (!File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f))))
+                                            {
+                                                string[] _lines = new string[lines.Length - 1];
+                                                Array.Copy(lines, 1, _lines, 0, lines.Length - 1);
+                                                File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), _lines);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
                 return "CCOL source code gegenereerd";
             }
             return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
+        }
+
+        private void CopySourceIfNeeded(string filename, string sourcefilepath)
+        {
+            if (!File.Exists(Path.Combine(sourcefilepath, filename)) && File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
+            {
+                File.Copy(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+            }
         }
 
         public void LoadSettings()

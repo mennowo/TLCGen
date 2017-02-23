@@ -127,7 +127,7 @@ namespace TLCGen.DataAccess
                 {
                     // Force adding the segments; this is because this is fixed list, 
                     // which we cannot add in the constructor for it will cause double items
-                    Controller.Data.SegmentDisplayType = Controller.Data.SegmentDisplayType;
+                    Controller.Data.SetSegmentOutputs();
                 }
                 return true;
             }
