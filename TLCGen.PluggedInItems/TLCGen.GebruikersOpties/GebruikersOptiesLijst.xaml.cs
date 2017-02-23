@@ -66,15 +66,14 @@ namespace TLCGen.GebruikersOpties
         public static readonly DependencyProperty GridSelectedItemProperty =
             DependencyProperty.Register("GridSelectedItem", typeof(object), typeof(GebruikersOptiesLijst), new PropertyMetadata(null));
 
-        //public IList GridSelectedItems
-        //{
-        //    get { return (IList)GetValue(GridSelectedItemsProperty); }
-        //    set { SetValue(GridSelectedItemsProperty, value); }
-        //}
-        //
-        //// Using a DependencyProperty as the backing store for GridSelectedItems.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty GridSelectedItemsProperty =
-        //    DependencyProperty.Register("GridSelectedItems", typeof(IList), typeof(GebruikersOptiesLijst), new PropertyMetadata(null));
+        public IList GridSelectedItems
+        {
+            get { return (IList)GetValue(GridSelectedItemsProperty); }
+            set { SetValue(GridSelectedItemsProperty, value); }
+        }
+        
+        public static readonly DependencyProperty GridSelectedItemsProperty =
+            DependencyProperty.Register("GridSelectedItems", typeof(IList), typeof(GebruikersOptiesLijst), new PropertyMetadata(null));
 
         public GebruikersOptiesLijst()
         {

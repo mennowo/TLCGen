@@ -26,12 +26,12 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-                  <!--ext:DataGridExtensions.SelectedItemsList="{Binding ElementName=root,Path=GridSelectedItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"-->
         <controls:SpecialDataGrid 
             x:Name="specialgrid"
                   ItemsSource="{Binding Path=GridItemsSource,ElementName=root}"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=GridSelectedItem,ElementName=root,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                  ext:DataGridExtensions.SelectedItemsList="{Binding ElementName=root,Path=GridSelectedItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >

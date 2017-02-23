@@ -34,6 +34,8 @@ namespace TLCGen.GebruikersOpties
         const int ParametersConst = 7;
         const int OptiesMax = 8;
 
+        readonly string[] OptiesNames = { "us", "is", "h", "t", "c", "sch", "m", "prm"};
+
         #endregion // Constants
 
         #region Fields
@@ -42,7 +44,17 @@ namespace TLCGen.GebruikersOpties
         private int _SelectedTabIndex;
 
         private object[] _SelectedOptie = new object[OptiesMax];
-        //private IList[] _SelectedOpties = new ArrayList[OptiesMax];
+        private IList[] _SelectedOpties = new IList[OptiesMax]
+        {
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList(),
+            new ArrayList()
+        };
 
         private RelayCommand _AddGebruikersOptieCommand;
         private RelayCommand _RemoveGebruikersOptieCommand;
@@ -105,24 +117,26 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
-        //public IList SelectedOpties
-        //{
-        //    get
-        //    {
-        //        if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
-        //            return _SelectedOpties[SelectedTabIndex];
-        //        else
-        //            return null;
-        //    }
-        //    set
-        //    {
-        //        if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
-        //        {
-        //            _SelectedOpties[SelectedTabIndex] = value;
-        //        }
-        //        OnPropertyChanged("SelectedOpties");
-        //    }
-        //}
+        public IList SelectedOpties
+        {
+            get
+            {
+                if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+                {
+                    return _SelectedOpties[SelectedTabIndex];
+                }
+                else
+                    return null;
+            }
+            set
+            {
+                if (SelectedTabIndex >= 0 && SelectedTabIndex < OptiesMax)
+                {
+                    _SelectedOpties[SelectedTabIndex] = value;
+                }
+                OnPropertyChanged("SelectedOpties");
+            }
+        }
 
         #endregion // Properties
 
@@ -188,11 +202,17 @@ namespace TLCGen.GebruikersOpties
             {
                 if(SelectedOptie != null)
                     index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                        SelectedOptie as GebruikersOptieWithIOViewModel);
+                        SelectedOptie as GebruikersOptieWithIOViewModel) + 1;
 
                 var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
+                int i = 1;
+                while(string.IsNullOrEmpty(o.Naam))
+                {
+                    o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count + i);
+                    ++i;
+                }
 
-                if(index > 0)
+                if(index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count)
                     ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
                 else
                     ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Add(o);
@@ -201,9 +221,32 @@ namespace TLCGen.GebruikersOpties
             {
                 if(SelectedOptie != null)
                     index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                        SelectedOptie as GebruikersOptieViewModel);
+                        SelectedOptie as GebruikersOptieViewModel) + 1;
+
                 var o = new GebruikersOptieViewModel(new GebruikersOptieModel());
-                if(index > 0)
+                int i = 1;
+                while (string.IsNullOrEmpty(o.Naam))
+                {
+                    o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count + i);
+                    ++i;
+                }
+                if (OptiesNames[SelectedTabIndex] == "sch" || 
+                    OptiesNames[SelectedTabIndex] == "t" || 
+                    OptiesNames[SelectedTabIndex] == "prm" || 
+                    OptiesNames[SelectedTabIndex] == "c")
+                {
+                    o.Instelling = 0;
+                }
+                if (OptiesNames[SelectedTabIndex] == "t")
+                {
+                    o.Type = CCOLElementTypeEnum.TE_type;
+                }
+                if (OptiesNames[SelectedTabIndex] == "prm")
+                {
+                    o.Type = CCOLElementTypeEnum.Geen;
+                }
+
+                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count)
                     ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
                 else
                     ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Add(o);
@@ -225,54 +268,71 @@ namespace TLCGen.GebruikersOpties
         void RemoveGebruikersOptieCommand_Executed(object prm)
         {
             int index = 0;
-            //if (SelectedOpties != null && SelectedOpties.Count > 0)
-            //{
-            //    if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-            //        index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOpties[0] as GebruikersOptieWithIOViewModel);
-            //    else
-            //        ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOpties[0] as GebruikersOptieViewModel);
-            //    foreach (var o in SelectedOpties)
-            //    {
-            //        if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-            //            ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
-            //                o as GebruikersOptieWithIOViewModel);
-            //        else
-            //            ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
-            //                o as GebruikersOptieViewModel);
-            //    }
-            //}
-            //else 
+            if (SelectedOpties != null && SelectedOpties.Count > 0)
+            {
+                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
+                {
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                    index = list.IndexOf(SelectedOpties[0] as GebruikersOptieWithIOViewModel);
+                    var rlist = new List<GebruikersOptieWithIOViewModel>();
+                    foreach (var o in SelectedOpties)
+                    {
+                        rlist.Add(o as GebruikersOptieWithIOViewModel);
+                    }
+                    foreach(var o in rlist)
+                    {
+                        list.Remove(o);
+                    }
+                }
+                else
+                {
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                    index = list.IndexOf(SelectedOpties[0] as GebruikersOptieViewModel);
+                    var rlist = new List<GebruikersOptieViewModel>();
+                    foreach (var o in SelectedOpties)
+                    {
+                        rlist.Add(o as GebruikersOptieViewModel);
+                    }
+                    foreach (var o in rlist)
+                    {
+                        list.Remove(o);
+                    }
+                }
+            }
+            else 
             if (SelectedOptie != null)
             {
                 if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                    index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
+                {
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
+                    list.Remove(SelectedOptie as GebruikersOptieWithIOViewModel);
+                }
                 else
-                    index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(SelectedOptie as GebruikersOptieViewModel);
-                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Remove(
-                        SelectedOptie as GebruikersOptieWithIOViewModel);
-                else
-                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Remove(
-                        SelectedOptie as GebruikersOptieViewModel);
+                {
+                    var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieViewModel);
+                    list.Remove(SelectedOptie as GebruikersOptieViewModel);
+                }        
             }
-
-            //SelectedOpties = null;
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
-                int c = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count;
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                int c = list.Count;
                 if (index >= c) index = c - 1;
                 if(index >= 0)
-                    SelectedOptie = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex])[index];
+                    SelectedOptie = list[index];
                 else
                     SelectedOptie = null;
             }
             else
             {
-                int c = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count;
+                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                int c = list.Count;
                 if (index >= c) index = c - 1;
                 if(index >= 0)
-                    SelectedOptie = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex])[index];
+                    SelectedOptie = list[index];
                 else
                     SelectedOptie = null;
             }
@@ -292,27 +352,62 @@ namespace TLCGen.GebruikersOpties
             int index = -1;
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                    SelectedOptie as GebruikersOptieWithIOViewModel);
-            else
-                index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                    SelectedOptie as GebruikersOptieViewModel);
-
-            if(index > 0)
             {
-                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Move(
-                        index, index - 1);
-                else
-                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Move(
-                        index, index - 1);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                {
+                    foreach (var o in SelectedOpties)
+                    {
+                        index = list.IndexOf(o as GebruikersOptieWithIOViewModel);
+                        if (index > 0)
+                        {
+                            list.Move(index, index - 1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (SelectedOptie != null)
+                {
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
+                    if (index > 0)
+                    {
+                        list.Move(index, index - 1);
+                    }
+                }
+                list.RebuildList();
             }
-
-            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
             else
-                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
-
+            {
+                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                {
+                    foreach (var o in SelectedOpties)
+                    {
+                        index = list.IndexOf(o as GebruikersOptieViewModel);
+                        if (index > 0)
+                        {
+                            list.Move(index, index - 1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (SelectedOptie != null)
+                {
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieViewModel);
+                    if (index > 0)
+                    {
+                        list.Move(index, index - 1);
+                    }
+                }
+                list.RebuildList();
+            }
+            
             SelectedOptie = optie;
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
@@ -331,31 +426,62 @@ namespace TLCGen.GebruikersOpties
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
-                index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                    SelectedOptie as GebruikersOptieWithIOViewModel);
-                max = (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count - 1);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
+                max = list.Count - 1;
+                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                {
+                    for (int i = SelectedOpties.Count - 1; i >= 0; --i)
+                    {
+                        index = list.IndexOf(SelectedOpties[i] as GebruikersOptieWithIOViewModel);
+                        if (index >= 0 && index < max)
+                        {
+                            list.Move(index, index + 1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (SelectedOptie != null)
+                {
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
+                    if (index >= 0 && index < max)
+                    {
+                        list.Move(index, index + 1);
+                    }
+                }
+                list.RebuildList();
             }
             else
             {
-                index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
-                    SelectedOptie as GebruikersOptieViewModel);
-                max = (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count - 1);
+                var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
+                max = list.Count - 1;
+                if (SelectedOpties != null && SelectedOpties.Count > 0)
+                {
+                    for (int i = SelectedOpties.Count - 1; i >= 0; --i)
+                    {
+                        index = list.IndexOf(SelectedOpties[i] as GebruikersOptieViewModel);
+                        if (index >= 0 && index < max)
+                        {
+                            list.Move(index, index + 1);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else if (SelectedOptie != null)
+                {
+                    index = list.IndexOf(SelectedOptie as GebruikersOptieViewModel);
+                    if (index >= 0 && index < max)
+                    {
+                        list.Move(index, index + 1);
+                    }
+                }
+                list.RebuildList();
             }
-
-            if (index >= 0 && index < max)
-            {
-                if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                    ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Move(
-                        index, index + 1);
-                else
-                    ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Move(
-                        index, index + 1);
-            }
-
-            if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
-                ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
-            else
-                ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).RebuildList();
 
             SelectedOptie = optie;
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
@@ -579,6 +705,7 @@ namespace TLCGen.GebruikersOpties
                     return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TS_type;
                 case CCOLElementTypeEnum.TM_type:
                     return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TM_type;
+                case CCOLElementTypeEnum.Geen:
                 default:
                     return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None;
             }

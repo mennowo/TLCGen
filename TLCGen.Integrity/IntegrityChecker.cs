@@ -163,7 +163,15 @@ namespace TLCGen.Integrity
             {
                 if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
                 {
-                    if (!(pl as ITLCGenElementProvider).IsElementNameUnique(naam))
+                    if (!(pl.Item2 as ITLCGenElementProvider).IsElementNameUnique(naam))
+                        return false;
+                }
+            }
+            foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
+            {
+                if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
+                {
+                    if (!(pl.Item2 as ITLCGenElementProvider).IsElementNameUnique(naam))
                         return false;
                 }
             }

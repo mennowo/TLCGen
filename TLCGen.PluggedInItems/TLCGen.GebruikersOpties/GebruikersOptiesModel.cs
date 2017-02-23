@@ -50,7 +50,8 @@ namespace TLCGen.GebruikersOpties
     {
         TE_type,
         TS_type,
-        TM_type
+        TM_type,
+        Geen,
     }
 
     [Serializable]

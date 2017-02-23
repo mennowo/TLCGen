@@ -98,29 +98,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
 
-                foreach (var plug in TLCGen.Plugins.TLCGenPluginManager.Default.ApplicationPlugins)
+                foreach (var pl in TLCGen.Plugins.TLCGenPluginManager.Default.ApplicationPlugins)
                 {
-                    var elemprov = plug as ITLCGenElementProvider;
-                    if (elemprov != null)
+                    if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
                     {
-                        var elems = elemprov.GetAllItems() as List<object>;
-                        if (elems != null)
+                        var elemprov = pl.Item2 as ITLCGenElementProvider;
+                        if (elemprov != null)
                         {
-                            foreach(var elem in elems)
+                            var elems = elemprov.GetAllItems() as List<object>;
+                            if (elems != null)
                             {
-                                var _elem = elem as CCOLElement;
-                                if (_elem != null)
+                                foreach (var elem in elems)
                                 {
-                                    switch (_elem.Type)
+                                    var _elem = elem as CCOLElement;
+                                    if (_elem != null)
                                     {
-                                        case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(_elem); break;
-                                        case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(_elem); break;
+                                        switch (_elem.Type)
+                                        {
+                                            case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(_elem); break;
+                                            case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(_elem); break;
+                                        }
                                     }
                                 }
                             }

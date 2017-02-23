@@ -13,31 +13,44 @@
         </Grid.RowDefinitions>
         <TabControl TabStripPlacement="Left" SelectedIndex="{Binding Path=SelectedTabIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0">
             <TabItem Header="Uitgangen">
-                    <!--GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"-->
                 <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Ingangen">
                 <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Hulpelementen">
-                <local:GebruikersOptiesLijst ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Timers">
-                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Timers}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridItemsSource="{Binding Path=Timers}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Counters">
-                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Counters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" GridItemsSource="{Binding Path=Counters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Schakelaars">
-                <local:GebruikersOptiesLijst ShowType="False" GridItemsSource="{Binding Path=Schakelaars}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" GridItemsSource="{Binding Path=Schakelaars}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Geheugenelem.">
-                <local:GebruikersOptiesLijst ShowType="False" ShowInstelling="False" GridItemsSource="{Binding Path=GeheugenElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" ShowInstelling="False" GridItemsSource="{Binding Path=GeheugenElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
             <TabItem Header="Parameters">
-                <local:GebruikersOptiesLijst GridItemsSource="{Binding Path=Parameters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridItemsSource="{Binding Path=Parameters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </TabItem>
         </TabControl>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1">
