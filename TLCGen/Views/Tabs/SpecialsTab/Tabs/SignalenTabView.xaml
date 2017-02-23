@@ -39,7 +39,7 @@
                                 <ComboBox 
                                 ItemsSource="{Binding Path=DataContext.ControllerFasen,ElementName=root}" 
                                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                SelectedItem="{Binding Path=FaseCyclusVoorAansturing,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                SelectedValue="{Binding Path=FaseCyclusVoorAansturing,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellEditingTemplate>
                     </DataGridTemplateColumn>
