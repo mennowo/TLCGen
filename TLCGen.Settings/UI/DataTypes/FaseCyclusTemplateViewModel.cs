@@ -104,6 +104,16 @@ namespace TLCGen.Settings
             }
         }
 
+        public string SelectedFaseCyclusDetectorVissimNaam
+        {
+            get { return _SelectedFaseCyclusDetector?.VissimNaam; }
+            set
+            {
+                _SelectedFaseCyclusDetector.VissimNaam = value;
+                RaisePropertyChanged("SelectedFaseCyclusDetectorVissimNaam");
+            }
+        }
+
         private DetectorModel _SelectedFaseCyclusDetector;
         public DetectorModel SelectedFaseCyclusDetector
         {
@@ -117,6 +127,7 @@ namespace TLCGen.Settings
                     SelectedDetectorTypeString = null;
 
                 RaisePropertyChanged("SelectedFaseCyclusDetectorNaam");
+                RaisePropertyChanged("SelectedFaseCyclusDetectorVissimNaam");
                 RaisePropertyChanged("SelectedFaseCyclusDetector");
                 RaisePropertyChanged("SelectedDetectorTypeString");
             }

@@ -313,7 +313,10 @@ namespace TLCGen.ViewModels
             foreach(var d in items)
             {
                 _SelectedFase.Detectoren.Add(d);
-                Detectoren.Add(new DetectorViewModel(d) { FaseCyclus = SelectedFaseNaam });
+                var dvm = new DetectorViewModel(d);
+                dvm.FaseCyclus = SelectedFaseNaam;
+                Detectoren.Add(dvm);
+
                 Messenger.Default.Send(new ControllerDataChangedMessage());
             }
         }
