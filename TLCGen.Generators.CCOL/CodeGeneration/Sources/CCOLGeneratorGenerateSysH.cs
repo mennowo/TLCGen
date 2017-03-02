@@ -42,7 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHParameters(controller));
             sb.AppendLine();
-            if (controller.Data.DSI)
+            if (controller.OVData.DSI)
             {
                 sb.Append(GenerateSysHDS(controller));
             }

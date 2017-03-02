@@ -136,7 +136,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
-            if (controller.Data.DSI)
+            if (controller.OVData.DSI)
             {
                 sb.Append(GenerateTabCControlParametersDS(controller));
             }

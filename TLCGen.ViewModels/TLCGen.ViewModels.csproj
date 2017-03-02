@@ -69,7 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlgemeenTab\AlgemeenTabViewModel.cs" />
-    <Compile Include="AlgemeenTab\VersieViewModel.cs" />
+    <Compile Include="AlgemeenTab\DataTypes\ControllerDataViewModel.cs" />
+    <Compile Include="AlgemeenTab\DataTypes\OVDataViewModel.cs" />
+    <Compile Include="AlgemeenTab\DataTypes\VersieViewModel.cs" />
+    <Compile Include="AlgemeenTab\Tabs\ControllerDataTabViewModel.cs" />
+    <Compile Include="AlgemeenTab\Tabs\OVDataTabViewModel.cs" />
+    <Compile Include="AlgemeenTab\Tabs\VersieBeheerTabViewModel.cs" />
     <Compile Include="BitmapTab\BitmappedItemViewModel.cs" />
     <Compile Include="BitmapTab\BitmapTabViewModel.cs" />
     <Compile Include="ControllerViewModel.cs" />

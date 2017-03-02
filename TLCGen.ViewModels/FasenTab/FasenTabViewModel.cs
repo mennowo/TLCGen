@@ -31,7 +31,19 @@ namespace TLCGen.ViewModels
         #endregion // Fields
 
         #region Properties
-        
+
+        #endregion // Properties
+
+        #region Commands
+
+        #endregion // Commands
+
+        #region Command functionality
+
+        #endregion // Command functionality
+
+        #region TabItem Overrides
+
         public override ImageSource Icon
         {
             get
@@ -44,18 +56,6 @@ namespace TLCGen.ViewModels
                 return (ImageSource)dict["FasenTabDrawingImage"];
             }
         }
-
-        #endregion // Properties
-
-        #region Commands
-        
-        #endregion // Commands
-
-        #region Command functionality
-
-        #endregion // Command functionality
-
-        #region TabItem Overrides
 
         public override string DisplayName
         {

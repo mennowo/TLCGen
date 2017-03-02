@@ -18,36 +18,21 @@ namespace TLCGen.Models
         [Browsable(false)]
         public string FaseCyclus { get; set; }
 
-        [Category("Opties")]
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
         //public bool MassaDetectie { get; set; }
-        [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type { get; set; }
 
-        [Category("Tijden")]
-        [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd { get; set; }
-        [Description("Rijtijd beperkt gehinderd")]
         public int RijTijdBeperktgehinderd { get; set; }
-        [Description("Rijtijd gehinderd")]
         public int RijTijdGehinderd { get; set; }
-        [Description("Ondermaximum")]
         public int OnderMaximum { get; set; }
-        [Description("Groenbewaking")]
         public int GroenBewaking { get; set; }
 
-        [Category("Prioriteitsopties")]
-        [Description("Afkappen conflicten")]
         public bool AfkappenConflicten { get; set; }
-        [Description("Afkappen conflicterend OV")]
         public bool AfkappenConflictenOV { get; set; }
-        [Description("Vasthouden groen")]
         public bool VasthoudenGroen { get; set; }
-        [Description("Tussendoor realiseren")]
         public bool TussendoorRealiseren { get; set; }
-
-        [Description("Prioriteit voor alle lijnen")]
         public bool AlleLijnen { get; set; }
 
         [Browsable(false)]

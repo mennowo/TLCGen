@@ -141,7 +141,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(
                         new CCOLElement(
                             $"{_schcheckopdsin}",
-                            0,
+                            c.OVData.CheckOpDSIN ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             CCOLElementTypeEnum.Schakelaar));
                 }
@@ -406,13 +406,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         ov.RijTijdGehinderd,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Parameter));
-#warning TODO
-                //_MyElements.Add(
-                //    new CCOLElement(
-                //        $"{_prmprio}{ov.FaseCyclus}",
-                //        ov.PrioriteitsOpties,
-                //        CCOLElementTimeTypeEnum.None,
-                //        CCOLElementTypeEnum.Parameter));
+                int opties = 0;
+                if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
+                if (ov.AfkappenConflictenOV) opties += 300;
+                if (ov.TussendoorRealiseren) opties += 20;
+                if (ov.VasthoudenGroen) opties += 3;
+                _MyElements.Add(
+                    new CCOLElement(
+                        $"{_prmprio}{ov.FaseCyclus}",
+                        opties,
+                        CCOLElementTimeTypeEnum.None,
+                        CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(
                     new CCOLElement(
                         $"{_prmomx}{ov.FaseCyclus}",

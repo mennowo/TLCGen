@@ -28,7 +28,7 @@
                 </Style>
             </Label.Style>
         </Label>
-        <ct:SimplePropertyEditor BoundObject="{Binding Path=HDIngreep}" Grid.Row="1">
+        <ct:SimplePropertyEditor BoundObject="{Binding ElementName=root,Path=DataContext}" Grid.Row="1">
             <ct:SimplePropertyEditor.Style>
                 <Style TargetType="UserControl">
                     <Setter Property="Visibility" Value="Visible" />

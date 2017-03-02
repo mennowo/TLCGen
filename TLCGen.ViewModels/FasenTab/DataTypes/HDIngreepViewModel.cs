@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,93 @@ namespace TLCGen.ViewModels
                 _HDIngreep = value;
             }
         }
+
+        [Category("Opties")]
+        public bool KAR
+        {
+            get { return _HDIngreep.KAR; }
+            set
+            {
+                _HDIngreep.KAR = value;
+                OnMonitoredPropertyChanged("KAR");
+            }
+        }
+
+        public bool Vecom
+        {
+            get { return _HDIngreep.Vecom; }
+            set
+            {
+                _HDIngreep.Vecom = value;
+                OnMonitoredPropertyChanged("Vecom");
+            }
+        }
+
+        public bool Opticom
+        {
+            get { return _HDIngreep.Opticom; }
+            set
+            {
+                _HDIngreep.Opticom = value;
+                OnMonitoredPropertyChanged("Opticom");
+            }
+        }
+
+        public bool Sirene
+        {
+            get { return _HDIngreep.Sirene; }
+            set
+            {
+                _HDIngreep.Sirene = value;
+                OnMonitoredPropertyChanged("Sirene");
+            }
+        }
+
+        [Category("Tijden")]
+        [Description("Rijtijd ongehinderd")]
+        public int RijTijdOngehinderd
+        {
+            get { return _HDIngreep.RijTijdOngehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdOngehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdOngehinderd");
+            }
+        }
+
+        [Description("Rijtijd beperkt gehinderd")]
+        public int RijTijdBeperktgehinderd
+        {
+            get { return _HDIngreep.RijTijdBeperktgehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdBeperktgehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdBeperktgehinderd");
+            }
+        }
+
+        [Description("Rijtijd gehinderd")]
+        public int RijTijdGehinderd
+        {
+            get { return _HDIngreep.RijTijdGehinderd; }
+            set
+            {
+                _HDIngreep.RijTijdGehinderd = value;
+                OnMonitoredPropertyChanged("RijTijdGehinderd");
+            }
+        }
+
+        [Description("Groenbewaking")]
+        public int GroenBewaking
+        {
+            get { return _HDIngreep.GroenBewaking; }
+            set
+            {
+                _HDIngreep.GroenBewaking = value;
+                OnMonitoredPropertyChanged("GroenBewaking");
+            }
+        }
+
 
         public ObservableCollection<string> Fasen
         {

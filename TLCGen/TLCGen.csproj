@@ -119,6 +119,12 @@
     </ApplicationDefinition>
     <Compile Include="AutomationIds.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml.cs">
+      <DependentUpon>OVDataTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabView.xaml.cs">
+      <DependentUpon>ControllerDataTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
       <DependentUpon>DetectorView.xaml</DependentUpon>
     </Compile>
@@ -258,7 +264,7 @@
     <Compile Include="Views\Tabs\SynchronisatiesTab.xaml.cs">
       <DependentUpon>SynchronisatiesTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\AlgemeenTab.xaml.cs">
+    <Compile Include="Views\Tabs\AlgemeenTab\AlgemeenTab.xaml.cs">
       <DependentUpon>AlgemeenTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ControllerView.xaml.cs">
@@ -275,6 +281,9 @@
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseView.xaml.cs">
       <DependentUpon>VAOntruimenFaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\VersieBeheerTabView.xaml.cs">
+      <DependentUpon>VersieBeheerTabView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -293,6 +302,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\TabItemTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -476,7 +493,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\AlgemeenTab.xaml">
+    <Page Include="Views\Tabs\AlgemeenTab\AlgemeenTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -497,6 +514,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\AlgemeenTab\Tabs\VersieBeheerTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

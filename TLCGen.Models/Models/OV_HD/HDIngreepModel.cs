@@ -18,20 +18,14 @@ namespace TLCGen.Models
         [Browsable(false)]
         public string FaseCyclus { get; set; }
 
-        [Category("Opties")]
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
         public bool Opticom { get; set; }
         public bool Sirene { get; set; }
 
-        [Category("Tijden")]
-        [Description("Rijtijd ongehinderd")]
         public int RijTijdOngehinderd { get; set; }
-        [Description("Rijtijd beperkt gehinderd")]
         public int RijTijdBeperktgehinderd { get; set; }
-        [Description("Rijtijd gehinderd")]
         public int RijTijdGehinderd { get; set; }
-        [Description("Groenbewaking")]
         public int GroenBewaking { get; set; }
 
         [Browsable(false)]

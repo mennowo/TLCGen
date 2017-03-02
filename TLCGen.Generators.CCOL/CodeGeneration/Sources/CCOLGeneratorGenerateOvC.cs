@@ -931,7 +931,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykaruit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykaruit}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                 }
             }
-            if (c.Data.DSI)
+            if (c.OVData.DSI)
             {
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
                 {

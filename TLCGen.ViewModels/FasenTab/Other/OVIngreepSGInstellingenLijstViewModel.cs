@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
-            if (_Controller.Data.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen)
+            if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
                 if (message.AddedFasen != null)
                 {
@@ -134,7 +134,7 @@ namespace TLCGen.ViewModels
 
         public void OnFasenSorted(FasenSortedMessage message)
         {
-            if (_Controller.Data.OVIngreep != Models.Enumerations.OVIngreepTypeEnum.Geen)
+            if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
                 OVIngreepSGParameters.BubbleSort();
                 OVIngreepSGParameters.RebuildList();
