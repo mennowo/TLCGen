@@ -188,6 +188,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public OVIngreepLijnNummerViewModel SelectedLijnNummer
         {
             get { return _SelectedLijnNummer; }
@@ -198,6 +199,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public string NewLijnNummer
         {
             get { return _NewLijnNummer; }
@@ -208,6 +210,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public ObservableCollection<OVIngreepLijnNummerViewModel> LijnNummers
         {
             get

@@ -128,8 +128,6 @@
     <Compile Include="Models\Varia\VAOntruimenNaarFaseModel.cs" />
     <Compile Include="Models\Controller\VersieModel.cs" />
     <Compile Include="Models\InterSignaalGroep\VoorstartModel.cs" />
-    <Compile Include="Operations\ControllerChecker.cs" />
-    <Compile Include="Operations\ControllerModifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\TLCGenDefaultControllerSettings.cs" />
     <Compile Include="Settings\TLCGenDefaultFaseCyclusSettings.cs" />

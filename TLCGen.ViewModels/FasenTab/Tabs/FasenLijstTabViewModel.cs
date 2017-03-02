@@ -16,7 +16,6 @@ using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
-using TLCGen.Models.Operations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 
@@ -163,7 +162,7 @@ namespace TLCGen.ViewModels
                 changed = true;
                 foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
                 {
-                    ControllerModifier.RemoveSignalGroupFromController(_Controller, fcvm.Naam);
+                    Integrity.TLCGenControllerModifier.Default.RemoveSignalGroupFromController(fcvm.Naam);
                     remfcs.Add(fcvm.FaseCyclus);
                 }
 
@@ -173,7 +172,7 @@ namespace TLCGen.ViewModels
             {
                 changed = true;
                 remfcs.Add(SelectedFaseCyclus.FaseCyclus);
-                ControllerModifier.RemoveSignalGroupFromController(_Controller, SelectedFaseCyclus.Naam);
+                Integrity.TLCGenControllerModifier.Default.RemoveSignalGroupFromController(SelectedFaseCyclus.Naam);
                 SelectedFaseCyclus = null;
             }
 

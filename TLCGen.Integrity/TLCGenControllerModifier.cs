@@ -6,12 +6,88 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Extensions;
+using TLCGen.Models;
 
-namespace TLCGen.Models.Operations
+namespace TLCGen.Integrity
 {
-    public static class ControllerModifier
+    public interface ITLCGenControllerModifier
     {
-        public static void RemoveSignalGroupFromController(object obj, string remsg)
+        ControllerModel Controller { get; set; }
+
+        void RemoveSignalGroupFromController(string remsg);
+        void RemoveDetectorFromController(string remd);
+        void CorrectModel_AlteredConflicts();
+        void CorrectModel_AlteredHDIngrepen();
+    }
+
+    public class TLCGenControllerModifier : ITLCGenControllerModifier
+    {
+        #region Fields
+
+        private static readonly object _Locker = new object();
+        private static ITLCGenControllerModifier _Default;
+
+        #endregion // Fields
+
+        #region Properties
+
+        public static ITLCGenControllerModifier Default
+        {
+            get
+            {
+                if (_Default == null)
+                {
+                    lock (_Locker)
+                    {
+                        if (_Default == null)
+                        {
+                            _Default = new TLCGenControllerModifier();
+                        }
+                    }
+                }
+                return _Default;
+            }
+        }
+
+        private ControllerModel _Controller;
+        public ControllerModel Controller
+        {
+            set { _Controller = value; }
+            get
+            {
+                return _Controller;
+            }
+        }
+
+        #endregion // Properties
+
+        #region ITLCGenControllerModifier
+
+        public void RemoveSignalGroupFromController(string remsg)
+        {
+            RemoveSignalGroupFromController(_Controller, remsg);
+        }
+
+        public void RemoveDetectorFromController(string remd)
+        {
+            RemoveDetectorFromController(_Controller, remd);
+        }
+
+        public void CorrectModel_AlteredConflicts()
+        {
+            CorrectModelWithAlteredConflicts(_Controller);
+        }
+
+        public void CorrectModel_AlteredHDIngrepen()
+        {
+            CorrectModel_AlteredHDIngrepen(_Controller);
+        }
+
+        #endregion // ITLCGenControllerModifier
+
+        #region Private Methods
+
+        private void RemoveSignalGroupFromController(object obj, string remsg)
         {
             if (obj == null) return;
             Type objType = obj.GetType();
@@ -75,7 +151,7 @@ namespace TLCGen.Models.Operations
             }
         }
 
-        public static void RemoveDetectorFromController(object obj, string remd)
+        private void RemoveDetectorFromController(object obj, string remd)
         {
             if (obj == null) return;
             Type objType = obj.GetType();
@@ -139,7 +215,7 @@ namespace TLCGen.Models.Operations
             }
         }
 
-        public static void CorrectModelWithAlteredConflicts(object obj)
+        private void CorrectModelWithAlteredConflicts(object obj)
         {
             var c = obj as ControllerModel;
             if (c != null)
@@ -237,5 +313,35 @@ namespace TLCGen.Models.Operations
                 }
             }
         }
+        
+        private void CorrectModel_AlteredHDIngrepen(ControllerModel c)
+        {
+            var remfcs = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
+            foreach(var hd in c.OVData.HDIngrepen)
+            {
+                foreach(var mfc in hd.MeerealiserendeFaseCycli)
+                {
+                    bool ok = false;
+                    foreach (var hd2 in c.OVData.HDIngrepen)
+                    {
+                        if(hd != hd2 && mfc.FaseCyclus == hd2.FaseCyclus)
+                        {
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if(!ok)
+                    {
+                        remfcs.Add(mfc);
+                    }
+                }
+                foreach(var rfc in remfcs)
+                {
+                    hd.MeerealiserendeFaseCycli.Remove(rfc);
+                }
+            }
+        }
+
+        #endregion // Private Methods
     }
 }

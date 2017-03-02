@@ -62,6 +62,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerChecker.cs" />
+    <Compile Include="TLCGenControllerModifier.cs" />
     <Compile Include="IntegrityChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -69,6 +71,10 @@
     <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
+      <Name>TLCGen.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>

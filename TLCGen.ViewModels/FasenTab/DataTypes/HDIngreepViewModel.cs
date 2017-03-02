@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -20,7 +21,6 @@ namespace TLCGen.ViewModels
 
         private HDIngreepModel _HDIngreep;
         private HDIngreepMeerealiserendeFaseCyclusViewModel _SelectedMeerealiserendeFase;
-        private ObservableCollection<HDIngreepMeerealiserendeFaseCyclusViewModel> _MeeRealiserendeFasen;
         private ObservableCollection<string> _Fasen;
         private string _SelectedFase;
         private ControllerModel _Controller;
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-
+        [Browsable(false)]
         public ObservableCollection<string> Fasen
         {
             get
@@ -137,6 +137,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public string SelectedFase
         {
             get { return _SelectedFase; }
@@ -147,6 +148,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public HDIngreepMeerealiserendeFaseCyclusViewModel SelectedMeerealiserendeFase
         {
             get { return _SelectedMeerealiserendeFase; }
@@ -157,16 +159,11 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<HDIngreepMeerealiserendeFaseCyclusViewModel> MeerealiserendeFasen
+        [Browsable(false)]
+        public ObservableCollectionAroundList<HDIngreepMeerealiserendeFaseCyclusViewModel, HDIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFasen
         {
-            get
-            {
-                if(_MeeRealiserendeFasen == null)
-                {
-                    _MeeRealiserendeFasen = new ObservableCollection<HDIngreepMeerealiserendeFaseCyclusViewModel>();
-                }
-                return _MeeRealiserendeFasen;
-            }
+            get;
+            private set;
         }
 
         #endregion // Properties
@@ -211,20 +208,15 @@ namespace TLCGen.ViewModels
                 MeerealiserendeFasen.Add(
                     new HDIngreepMeerealiserendeFaseCyclusViewModel(
                         new HDIngreepMeerealiserendeFaseCyclusModel() { FaseCyclus = SelectedFase }));
-
-
             }
 
-            Fasen.Clear();
-            foreach (FaseCyclusModel m in _Controller.Fasen)
-            {
-                if (m.Naam != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
-                    Fasen.Add(m.Naam);
-            }
-            if(Fasen.Count > 0)
-            {
-                SelectedFase = Fasen[0];
-            }
+            BuildFasenList();
+
+            _HDIngreep.MeerealiserendeFaseCycli.BubbleSort();
+            MeerealiserendeFasen.Rebuild();
+
+            if (MeerealiserendeFasen.Count > 0)
+                SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
         }
 
         bool AddNewMeerealiserendeFaseCommand_CanExecute(object prm)
@@ -235,6 +227,12 @@ namespace TLCGen.ViewModels
         void RemoveMeerealiserendeFaseCommand_Executed(object prm)
         {
             MeerealiserendeFasen.Remove(SelectedMeerealiserendeFase);
+
+            BuildFasenList();
+
+            _HDIngreep.MeerealiserendeFaseCycli.BubbleSort();
+            MeerealiserendeFasen.Rebuild();
+
             if (MeerealiserendeFasen.Count > 0)
                 SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
             else
@@ -243,32 +241,30 @@ namespace TLCGen.ViewModels
 
         bool RemoveMeerealiserendeFaseCommand_CanExecute(object prm)
         {
-            return MeerealiserendeFasen != null && MeerealiserendeFasen.Count > 0;
+            return SelectedMeerealiserendeFase != null && MeerealiserendeFasen != null && MeerealiserendeFasen.Count > 0;
         }
 
         #endregion // Command functionality
 
-        #region Collection changed
-
-        private void MeerealiserendeFasen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        #region Private Methods
+        
+        private void BuildFasenList()
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
+            Fasen.Clear();
+            foreach (FaseCyclusModel m in _Controller.Fasen)
             {
-                foreach (HDIngreepMeerealiserendeFaseCyclusViewModel mr in e.NewItems)
-                {
-                    _HDIngreep.MeerealiserendeFaseCycli.Add(mr.FaseCyclus);
-                }
+                if (m.Naam != _HDIngreep.FaseCyclus && 
+                    m.HDIngreep &&
+                    !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
+                    Fasen.Add(m.Naam);
             }
-            if (e.OldItems != null && e.OldItems.Count > 0)
+            if (Fasen.Count > 0)
             {
-                foreach (HDIngreepMeerealiserendeFaseCyclusViewModel mr in e.OldItems)
-                {
-                    _HDIngreep.MeerealiserendeFaseCycli.Remove(mr.FaseCyclus);
-                }
+                SelectedFase = Fasen[0];
             }
         }
 
-        #endregion // Collection changed
+        #endregion // Private Methods
 
         #region Constructor
 
@@ -277,23 +273,9 @@ namespace TLCGen.ViewModels
             _HDIngreep = hdingreep;
             _Controller = controller;
 
-            Fasen.Clear();
-            foreach (FaseCyclusModel m in _Controller.Fasen)
-            {
-                if (m.Naam != _HDIngreep.FaseCyclus && !(_HDIngreep.MeerealiserendeFaseCycli.Where(x => x.FaseCyclus == m.Naam).Count() > 0))
-                    Fasen.Add(m.Naam);
-            }
-            if (Fasen.Count > 0)
-            {
-                SelectedFase = Fasen[0];
-            }
+            BuildFasenList();
 
-            foreach (HDIngreepMeerealiserendeFaseCyclusModel mr in _HDIngreep.MeerealiserendeFaseCycli)
-            {
-                MeerealiserendeFasen.Add(new HDIngreepMeerealiserendeFaseCyclusViewModel(mr));
-            }
-
-            MeerealiserendeFasen.CollectionChanged += MeerealiserendeFasen_CollectionChanged;
+            MeerealiserendeFasen = new ObservableCollectionAroundList<HDIngreepMeerealiserendeFaseCyclusViewModel, HDIngreepMeerealiserendeFaseCyclusModel>(hdingreep.MeerealiserendeFaseCycli);
         }
 
         #endregion // Constructor

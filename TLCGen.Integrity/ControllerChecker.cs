@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models;
 
-namespace TLCGen.Models.Operations
+namespace TLCGen.Integrity
 {
     public static class ControllerChecker
     {

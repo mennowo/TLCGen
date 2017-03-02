@@ -798,10 +798,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     string start = $"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] |= ";
                     sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
-                    sb.Append($"{ts}" + "".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, 2, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
-                    sb.Append($"{ts}" + "".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, 2, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
+                    sb.Append("".PadRight(start.Length));
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
+                    sb.Append("".PadRight(start.Length));
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
                 }
             }
             foreach (var hd in karhdfcs)
@@ -811,10 +811,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     string start = $"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] |= ";
                     sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
-                    sb.Append($"{ts}" + "".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, 2, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
-                    sb.Append($"{ts}" + "".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, 2, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
+                    sb.Append("".PadRight(start.Length));
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
+                    sb.Append("".PadRight(start.Length));
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
                 }
             }
 
@@ -837,6 +837,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #endregion // HD ingrepen VECOM
 
+            #region HD ingrepen mee inmelden
+
+            if (c.OVData.HDIngrepen.Where(x => x.MeerealiserendeFaseCycli.Count > 0).Any())
+            {
+                sb.AppendLine($"{ts}/* Doorzetten HD inmeldingen */");
+                foreach (var hd in c.OVData.HDIngrepen)
+                {
+                    if (hd.MeerealiserendeFaseCycli.Any())
+                    {
+                        foreach (var fc in hd.MeerealiserendeFaseCycli)
+                        {
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{fc.FaseCyclus}] |= IH[{_hpf}{_hhdin}{hd.FaseCyclus}]; IH[{_hpf}{_hhduit}{fc.FaseCyclus}] |= IH[{_hpf}{_hhduit}{hd.FaseCyclus}];");
+                        }
+                    }
+                }
+            }
+
+            #endregion // HD ingrepen mee inmelden
 
             sb.AppendLine();
             sb.AppendLine("}");
@@ -943,18 +961,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
             sb.AppendLine($"{ts}/* HD ingrepen */");
-            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.KAR))
+            foreach (var hd in c.OVData.HDIngrepen.Where(x => x.KAR))
             {
                 int ifc;
                 string type = "CIF_POL";
-                if (Int32.TryParse(ov.FaseCyclus, out ifc))
+                if (Int32.TryParse(hd.FaseCyclus, out ifc))
                 {
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhdin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhdin}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, 0);");
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhduit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhduit}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, 0);");
+                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhdin}{hd.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhdin}{hd.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
+                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhduit}{hd.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhduit}{hd.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
                 }
             }
 #warning what code here?
-            //foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+            //foreach (var ov in c.OVData.HDIngrepen.Where(x => x.Vecom))
             //{
             //    string type = "CIF_POL";
             //    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomhdin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");

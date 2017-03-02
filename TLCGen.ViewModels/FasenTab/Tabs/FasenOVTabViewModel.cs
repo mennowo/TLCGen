@@ -158,6 +158,7 @@ namespace TLCGen.ViewModels
                             SelectedHDIngreep = null;
                         }
                     }
+                    Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
                 OnMonitoredPropertyChanged("SelectedFaseCyclusHDIngreep");
             }

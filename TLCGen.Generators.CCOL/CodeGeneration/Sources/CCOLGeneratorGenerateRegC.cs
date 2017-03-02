@@ -595,6 +595,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
+            sb.AppendLine("void OVSpecialSignals();");
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}OVSpecialSignals();");

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HDIngreepMeerealiserendeFaseCyclusViewModel : ViewModelBase
+    public class HDIngreepMeerealiserendeFaseCyclusViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
@@ -38,6 +39,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return _FaseCyclus;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

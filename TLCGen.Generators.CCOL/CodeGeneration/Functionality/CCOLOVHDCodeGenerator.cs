@@ -241,7 +241,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(
                     new CCOLElement(
                         $"{_prmpriohd}{hd.FaseCyclus}",
-                        5,
+                        9005,
                         CCOLElementTimeTypeEnum.None,
                         CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(
@@ -522,11 +522,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    sb.AppendLine($"{ts}/* vecom OV verklikking */");
-                    sb.AppendLine($"{ts}/* -------------------- */");
+                    sb.AppendLine($"{ts}/* OV/HD verklikking */");
+                    sb.AppendLine($"{ts}/* ----------------- */");
                     foreach(var ov in c.OVData.OVIngrepen)
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovinm}{ov.FaseCyclus}] = C[{_ctpf}{_cvc}{ov.FaseCyclus}];");
+                    }
+                    foreach (var hd in c.OVData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
                     sb.AppendLine();
                     return sb.ToString();

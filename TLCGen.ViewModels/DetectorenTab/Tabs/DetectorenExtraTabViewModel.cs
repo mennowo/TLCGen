@@ -16,7 +16,6 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
-using TLCGen.Models.Operations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 
@@ -178,13 +177,13 @@ namespace TLCGen.ViewModels
                 changed = true;
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
-                    ControllerModifier.RemoveDetectorFromController(_Controller, dvm.Naam);
+                    Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(dvm.Naam);
                 }
             }
             else if (SelectedDetector != null)
             {
                 changed = true;
-                ControllerModifier.RemoveDetectorFromController(_Controller, SelectedDetector.Naam);
+                Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(SelectedDetector.Naam);
             }
 
             if (changed)

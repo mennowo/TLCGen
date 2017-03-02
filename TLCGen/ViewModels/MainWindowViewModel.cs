@@ -341,8 +341,8 @@ namespace TLCGen.ViewModels
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 TLCGenControllerDataProvider.Default.NewController();
+                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                DefaultsProvider.Default.Controller = TLCGenControllerDataProvider.Default.Controller;
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
@@ -361,10 +361,8 @@ namespace TLCGen.ViewModels
             if(TLCGenControllerDataProvider.Default.OpenController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                DefaultsProvider.Default.Controller = TLCGenControllerDataProvider.Default.Controller;
-#warning: move the below logic to the data provider somehow!
-                //ControllerVM.LoadPluginDataFromXmlDocument(TLCGenControllerDataProvider.Default.ControllerXml);
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
@@ -539,6 +537,12 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
+        private void SetControllerForStatics(ControllerModel c)
+        {
+            DefaultsProvider.Default.Controller = c;
+            TLCGenControllerModifier.Default.Controller = c;
+        }
+
         /// <summary>
         /// Called before the application is closed. This allows to save data and settings
         /// </summary>
@@ -641,8 +645,8 @@ namespace TLCGen.ViewModels
                 }
                 string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 TLCGenControllerDataProvider.Default.SetController(cm);
+                SetControllerForStatics(cm);
                 ControllerVM.Controller = cm;
-                DefaultsProvider.Default.Controller = cm;
                 ControllerVM.SelectedTabIndex = 0;
                 return true;
             }
@@ -734,7 +738,7 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                DefaultsProvider.Default.Controller = TLCGenControllerDataProvider.Default.Controller;
+                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
 
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());

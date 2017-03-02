@@ -557,7 +557,7 @@ namespace TLCGen.ViewModels
             {
                 if (_MatrixChanged == true)
                 {
-                    Models.Operations.ControllerModifier.CorrectModelWithAlteredConflicts(_Controller);
+                    Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredConflicts();
                     Messenger.Default.Send(new ConflictsChangedMessage());
                 }
                 _MatrixChanged = false;
