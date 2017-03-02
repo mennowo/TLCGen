@@ -51,28 +51,29 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCyclus = value;
                 SelectedOVIngreep = null;
-                foreach (OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
-                {
-                    if(ovm.FaseCyclus == SelectedFaseCyclus.Naam)
-                    {
-                        SelectedOVIngreep = new OVIngreepViewModel(ovm);
-                        break;
-                    }
-                }
-
                 SelectedHDIngreep = null;
-                foreach (HDIngreepModel hdm in _Controller.OVData.HDIngrepen)
+                if (_SelectedFaseCyclus != null)
                 {
-                    if (hdm.FaseCyclus == SelectedFaseCyclus.Naam)
+                    foreach (OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
                     {
-                        SelectedHDIngreep = new HDIngreepViewModel(_Controller, hdm);
-                        break;
+                        if (ovm.FaseCyclus == SelectedFaseCyclus.Naam)
+                        {
+                            SelectedOVIngreep = new OVIngreepViewModel(ovm);
+                            break;
+                        }
+                    }
+
+                    foreach (HDIngreepModel hdm in _Controller.OVData.HDIngrepen)
+                    {
+                        if (hdm.FaseCyclus == SelectedFaseCyclus.Naam)
+                        {
+                            SelectedHDIngreep = new HDIngreepViewModel(_Controller, hdm);
+                            break;
+                        }
                     }
                 }
 
-                OnPropertyChanged("SelectedFaseCyclus");
-                OnMonitoredPropertyChanged("SelectedFaseCyclusOVIngreep");
-                OnMonitoredPropertyChanged("SelectedFaseCyclusHDIngreep");
+                OnMonitoredPropertyChanged(null);
             }
         }
 
@@ -193,6 +194,7 @@ namespace TLCGen.ViewModels
         {
             var temp = SelectedFaseCyclus;
             Fasen.Clear();
+            SelectedFaseCyclus = null;
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 var fcvm = new FaseCyclusViewModel(fcm);
@@ -202,6 +204,10 @@ namespace TLCGen.ViewModels
                     SelectedFaseCyclus = fcvm;
                     temp = null;
                 }
+            }
+            if(SelectedFaseCyclus == null && Fasen.Count > 0)
+            {
+                SelectedFaseCyclus = Fasen[0];
             }
         }
 

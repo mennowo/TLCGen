@@ -51,6 +51,16 @@ namespace TLCGen.Controls
     public partial class SimplePropertyEditor : UserControl
     {
 
+        public string NoObjectFoundDescription
+        {
+            get { return (string)GetValue(NoObjectFoundDescriptionProperty); }
+            set { SetValue(NoObjectFoundDescriptionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for NoObjectFoundDescription.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NoObjectFoundDescriptionProperty =
+            DependencyProperty.Register("NoObjectFoundDescription", typeof(string), typeof(SimplePropertyEditor), new PropertyMetadata("Geen instellingen beschikbaar."));
+
         public object BoundObject
         {
             get { return (object)GetValue(BoundObjectProperty); }
@@ -70,7 +80,7 @@ namespace TLCGen.Controls
                 o.MainGrid.RowDefinitions.Clear();
                 o.MainGrid.ColumnDefinitions.Clear();
                 Label label = new Label();
-                label.Content = "Geen defaults voor dit object.";
+                label.Content = o.NoObjectFoundDescription;
                 o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                 Grid.SetRow(label, 0); Grid.SetColumn(label, 0);
                 o.MainGrid.Children.Add(label);
@@ -104,6 +114,24 @@ namespace TLCGen.Controls
                         }
                     }
 
+                    attr = prop.GetCustomAttributes(typeof(CategoryAttribute), true);
+                    if (attr != null && attr.Count() == 1)
+                    {
+                        if (!(string.IsNullOrEmpty(((CategoryAttribute)attr.First()).Category)))
+                        {
+                            o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
+                            TextBlock _l = new TextBlock();
+                            _l.Text = ((CategoryAttribute)attr.First()).Category;
+                            _l.HorizontalAlignment = o.HorizontalDescriptionPlacement;
+                            _l.TextDecorations.Add(TextDecorations.Underline);
+                            _l.Padding = new Thickness(5);
+                            Grid.SetRow(_l, row);
+                            Grid.SetColumnSpan(_l, 2);
+                            o.MainGrid.Children.Add(_l);
+                            row++;
+                        }
+                    }
+
                     var label = new Label();
                     attr = prop.GetCustomAttributes(typeof(DescriptionAttribute), true);
                     if (attr != null && attr.Count() == 1)
@@ -115,6 +143,7 @@ namespace TLCGen.Controls
                         label.Content = prop.Name;
                     }
                     label.HorizontalAlignment = o.HorizontalDescriptionPlacement;
+
                     UIElement editor = null;
                     
                     // edit string, int and int?

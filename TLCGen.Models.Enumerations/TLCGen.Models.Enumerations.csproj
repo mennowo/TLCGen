@@ -57,6 +57,7 @@
     <Compile Include="NaloopTijdTypeEnum.cs" />
     <Compile Include="NaloopTypeEnum.cs" />
     <Compile Include="NooitAltijdAanUitEnum.cs" />
+    <Compile Include="OVIngreepPrioriteitEnum.cs" />
     <Compile Include="OVIngreepVoertuigTypeEnum.cs" />
     <Compile Include="OVIngreepTypeEnum.cs" />
     <Compile Include="PeriodeDagCodeEnum.cs" />

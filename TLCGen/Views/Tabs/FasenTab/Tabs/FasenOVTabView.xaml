@@ -26,19 +26,19 @@
                 SelectionMode="Single" />
         </DockPanel>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Column="2">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="2">
             <StackPanel Orientation="Vertical">
                 <GroupBox >
                     <GroupBox.Header>
-                        <CheckBox DockPanel.Dock="Top" Content="OV ingreep" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusOVIngreep}" />
+                        <CheckBox DockPanel.Dock="Top" Content="OV ingreep" FontWeight="Bold" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusOVIngreep}" />
                     </GroupBox.Header>
                     <DockPanel IsEnabled="{Binding Path=SelectedFaseCyclusOVIngreep}" >
-                        <local:OVIngreepView DataContext="{Binding Path=SelectedOVIngreep}" />
+                        <local:OVIngreepView DataContext="{Binding Path=SelectedOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
                     </DockPanel>
                 </GroupBox>
                 <GroupBox >
                     <GroupBox.Header>
-                        <CheckBox DockPanel.Dock="Top" Content="HD ingreep" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusHDIngreep}" />
+                        <CheckBox DockPanel.Dock="Top" Content="HD ingreep" FontWeight="Bold" Margin="5" IsChecked="{Binding Path=SelectedFaseCyclusHDIngreep}" />
                     </GroupBox.Header>
                     <DockPanel IsEnabled="{Binding Path=SelectedFaseCyclusHDIngreep}" >
                         <local:HDIngreepView DataContext="{Binding Path=SelectedHDIngreep}" />

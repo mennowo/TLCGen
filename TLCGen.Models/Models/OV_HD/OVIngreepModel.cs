@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,28 +15,58 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [Browsable(false)]
         public string FaseCyclus { get; set; }
+
+        [Category("Opties")]
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
-        public bool MassaDetectie { get; set; }
+        //public bool MassaDetectie { get; set; }
+        [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type { get; set; }
+
+        [Category("Tijden")]
+        [Description("Rijtijd ongehinderd")]
+        public int RijTijdOngehinderd { get; set; }
+        [Description("Rijtijd beperkt gehinderd")]
+        public int RijTijdBeperktgehinderd { get; set; }
+        [Description("Rijtijd gehinderd")]
+        public int RijTijdGehinderd { get; set; }
+        [Description("Ondermaximum")]
+        public int OnderMaximum { get; set; }
+        [Description("Groenbewaking")]
+        public int GroenBewaking { get; set; }
+
+        [Category("Prioriteitsopties")]
+        [Description("Afkappen conflicten")]
+        public bool AfkappenConflicten { get; set; }
+        [Description("Afkappen conflicterend OV")]
+        public bool AfkappenConflictenOV { get; set; }
+        [Description("Vasthouden groen")]
+        public bool VasthoudenGroen { get; set; }
+        [Description("Tussendoor realiseren")]
+        public bool TussendoorRealiseren { get; set; }
+
+        [Description("Prioriteit voor alle lijnen")]
         public bool AlleLijnen { get; set; }
 
-        public int RijTijdOngehinderd { get; set; }
-        public int RijTijdBeperktgehinderd { get; set; }
-        public int RijTijdGehinderd { get; set; }
-        public int OnderMaximum { get; set; }
-        public int GroenBewaking { get; set; }
-        public int PrioriteitsOpties { get; set; }
-
+        [Browsable(false)]
         [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
+
+        [Browsable(false)]
         [IOElement("kar_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel OVKARDummyInmeldingBitmapData { get; set; }
+
+        [Browsable(false)]
         [IOElement("kar_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
         public BitmapCoordinatenDataModel OVKARDummyUitmeldingBitmapData { get; set; }
+
+        [Browsable(false)]
         [IOElement("vecom_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel OVVecomDummyInmeldingBitmapData { get; set; }
+
+        [Browsable(false)]
         [IOElement("vecom_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
         public BitmapCoordinatenDataModel OVVecomDummyUitmeldingBitmapData { get; set; }
 

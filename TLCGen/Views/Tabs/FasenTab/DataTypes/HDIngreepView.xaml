@@ -5,21 +5,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
+             x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <ag:AutoGrid Grid.Row="1" ColumnCount="2" Columns="Auto,*" RowCount="14">
-        <Label Content="Instellingen" Grid.ColumnSpan="2" FontWeight="Bold" />
-        <Label Content="KAR" />
-        <CheckBox IsChecked="{Binding Path=KAR}" Margin="5" />
-        <Label Content="Vecom" />
-        <CheckBox IsChecked="{Binding Path=Vecom}" Margin="5" />
-        <Label Content="Opticom" />
-        <CheckBox IsChecked="{Binding Path=Opticom}" Margin="5" />
-        <Label Content="Sirene" />
-        <CheckBox IsChecked="{Binding Path=Sirene}" Margin="5" />
-        <StackPanel Grid.ColumnSpan="2" Orientation="Vertical">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="Geen instellingen beschikbaar" Grid.Row="0">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <ct:SimplePropertyEditor BoundObject="{Binding Path=HDIngreep}" Grid.Row="1">
+            <ct:SimplePropertyEditor.Style>
+                <Style TargetType="UserControl">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ct:SimplePropertyEditor.Style>
+        </ct:SimplePropertyEditor>
+        <StackPanel Orientation="Vertical" Grid.Row="2" >
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />
             <Label Content="Meerealiserende fasen" />
             <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeFasen}" SelectedItem="{Binding SelectedMeerealiserendeFase}" Margin="2" MinHeight="24" >
                 <ListView.ItemsPanel>
@@ -39,14 +70,5 @@
                 <Button Content="-" Command="{Binding RemoveMeerealiserendeFaseCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
             </StackPanel>
         </StackPanel>
-        <Label Content="Tijden" Grid.ColumnSpan="2" FontWeight="Bold" />
-        <Label Content="Rijtijd ongehinderd" />
-        <TextBox Text="{Binding Path=RijTijdOngehinderd}" Margin="2" />
-        <Label Content="Rijtijd beperkt gehinderd" />
-        <TextBox Text="{Binding Path=RijTijdBeperktgehinderd}" Margin="2" />
-        <Label Content="Rijtijd gehinderd" />
-        <TextBox Text="{Binding Path=RijTijdGehinderd}" Margin="2" />
-        <Label Content="Groenbewaking" />
-        <TextBox Text="{Binding Path=GroenBewaking}" Margin="2" />
-    </ag:AutoGrid>
+    </Grid>
 </UserControl>

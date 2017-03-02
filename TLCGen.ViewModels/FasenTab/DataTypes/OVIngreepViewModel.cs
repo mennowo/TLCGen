@@ -65,46 +65,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool KAR
-        {
-            get { return _OVIngreep.KAR; }
-            set
-            {
-                _OVIngreep.KAR = value;
-                OnMonitoredPropertyChanged("KAR");
-            }
-        }
-
-        public bool Vecom
-        {
-            get { return _OVIngreep.Vecom; }
-            set
-            {
-                _OVIngreep.Vecom = value;
-                OnMonitoredPropertyChanged("Vecom");
-            }
-        }
-
-        public bool MassaDetectie
-        {
-            get { return _OVIngreep.MassaDetectie; }
-            set
-            {
-                _OVIngreep.MassaDetectie = value;
-                OnMonitoredPropertyChanged("MassaDetectie");
-            }
-        }
-
-        public OVIngreepVoertuigTypeEnum Type
-        {
-            get { return _OVIngreep.Type; }
-            set
-            {
-                _OVIngreep.Type = value;
-                OnMonitoredPropertyChanged("Type");
-            }
-        }
-
         public bool AlleLijnen
         {
             get { return _OVIngreep.AlleLijnen; }
@@ -112,56 +72,6 @@ namespace TLCGen.ViewModels
             {
                 _OVIngreep.AlleLijnen = value;
                 OnMonitoredPropertyChanged("AlleLijnen");
-            }
-        }
-
-        public int RijTijdOngehinderd
-        {
-            get { return _OVIngreep.RijTijdOngehinderd; }
-            set
-            {
-                _OVIngreep.RijTijdOngehinderd = value;
-                OnMonitoredPropertyChanged("RijTijdOngehinderd");
-            }
-        }
-
-        public int RijTijdBeperktgehinderd
-        {
-            get { return _OVIngreep.RijTijdBeperktgehinderd; }
-            set
-            {
-                _OVIngreep.RijTijdBeperktgehinderd = value;
-                OnMonitoredPropertyChanged("RijTijdBeperktgehinderd");
-            }
-        }
-
-        public int RijTijdGehinderd
-        {
-            get { return _OVIngreep.RijTijdGehinderd; }
-            set
-            {
-                _OVIngreep.RijTijdGehinderd = value;
-                OnMonitoredPropertyChanged("RijTijdGehinderd");
-            }
-        }
-
-        public int OnderMaximum
-        {
-            get { return _OVIngreep.OnderMaximum; }
-            set
-            {
-                _OVIngreep.OnderMaximum = value;
-                OnMonitoredPropertyChanged("OnderMaximum");
-            }
-        }
-
-        public int GroenBewaking
-        {
-            get { return _OVIngreep.GroenBewaking; }
-            set
-            {
-                _OVIngreep.GroenBewaking = value;
-                OnMonitoredPropertyChanged("GroenBewaking");
             }
         }
 

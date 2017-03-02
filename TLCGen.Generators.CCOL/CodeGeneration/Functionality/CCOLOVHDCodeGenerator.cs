@@ -241,7 +241,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(
                     new CCOLElement(
                         $"{_prmpriohd}{hd.FaseCyclus}",
-                        hd.PrioriteitsOpties,
+                        5,
                         CCOLElementTimeTypeEnum.None,
                         CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(
@@ -406,12 +406,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         ov.RijTijdGehinderd,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(
-                    new CCOLElement(
-                        $"{_prmprio}{ov.FaseCyclus}",
-                        ov.PrioriteitsOpties,
-                        CCOLElementTimeTypeEnum.None,
-                        CCOLElementTypeEnum.Parameter));
+#warning TODO
+                //_MyElements.Add(
+                //    new CCOLElement(
+                //        $"{_prmprio}{ov.FaseCyclus}",
+                //        ov.PrioriteitsOpties,
+                //        CCOLElementTimeTypeEnum.None,
+                //        CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(
                     new CCOLElement(
                         $"{_prmomx}{ov.FaseCyclus}",
