@@ -277,14 +277,14 @@ namespace TLCGen.ViewModels
             {
                 Fasen.Add(fcm.Naam);
             }
-            if(tfc == null)
+            if(tfc == null || !Fasen.Contains(tfc))
             {
                 if (Fasen.Count > 0)
                     SelectedFaseNaam = Fasen[0];
                 else
                     SelectedFaseNaam = null;
             }
-            else
+            else if(Fasen.Contains(tfc))
             {
                 SelectedFaseNaam = tfc;
             }

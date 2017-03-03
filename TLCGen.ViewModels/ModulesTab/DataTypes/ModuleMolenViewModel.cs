@@ -212,6 +212,7 @@ namespace TLCGen.ViewModels
             mm.Naam = "ML" + (Modules.Count + 1).ToString();
             ModuleViewModel mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
+            SelectedModule = mvm;
         }
 
         bool AddNewModuleCommand_CanExecute(object prm)
@@ -221,7 +222,19 @@ namespace TLCGen.ViewModels
 
         void RemoveModuleCommand_Executed(object prm)
         {
+            int index = Modules.IndexOf(SelectedModule);
             Modules.Remove(SelectedModule);
+            if(Modules.Count > 0)
+            {
+                if(index >= Modules.Count)
+                {
+                    SelectedModule = Modules[Modules.Count - 1];
+                }
+                else
+                {
+                    SelectedModule = Modules[index];
+                }
+            }
         }
 
         bool ChangeModuleCommand_CanExecute(object prm)

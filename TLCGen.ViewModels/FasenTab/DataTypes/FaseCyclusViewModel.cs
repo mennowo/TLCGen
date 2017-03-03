@@ -50,6 +50,24 @@ namespace TLCGen.ViewModels
                         // set new type
                         this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
 
+                        foreach(var d in FaseCyclus.Detectoren)
+                        {
+                            string nd = d.Naam.Replace(oldname, value);
+                            var _message = new IsElementIdentifierUniqueRequest(nd, ElementIdentifierType.Naam);
+                            Messenger.Default.Send(_message);
+                            if (_message.Handled && _message.IsUnique)
+                            {
+                                d.Naam = nd;
+                            }
+                            nd = d.VissimNaam.Replace(oldname, value);
+                            _message = new IsElementIdentifierUniqueRequest(nd, ElementIdentifierType.VissimNaam);
+                            Messenger.Default.Send(_message);
+                            if (_message.Handled && _message.IsUnique)
+                            {
+                                d.VissimNaam = nd;
+                            }
+                        }
+
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }

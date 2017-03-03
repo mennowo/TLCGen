@@ -10,6 +10,7 @@ namespace TLCGen.Models
     [Serializable]
     public class ModuleModel
     {
+        [ModelName]
         public string Naam { get; set; }
 
         [XmlArrayItem(ElementName = "FaseCyclus")]

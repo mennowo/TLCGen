@@ -11,6 +11,7 @@ namespace TLCGen.Models
     [RefersToSignalGroup("FaseCyclusVoorAansturing")]
     public class WaarschuwingsGroepModel
     {
+        [ModelName]
         public string Naam { get; set; }
         public bool Lichten { get; set; }
         public bool Bellen { get; set; }

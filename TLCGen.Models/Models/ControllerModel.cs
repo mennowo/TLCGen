@@ -16,9 +16,6 @@ namespace TLCGen.Models
 
         #region Properties
 
-        [XmlIgnore]
-        public long NextID { get; set; }
-
         [XmlElement(ElementName = "Data")]
         public ControllerDataModel Data { get; set; }
 

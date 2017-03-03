@@ -11,6 +11,7 @@ namespace TLCGen.Models
     [Serializable]
     public class FileIngreepModel
     {
+        [ModelName]
         public string Naam { get; set; }
         public int MinimaalAantalMeldingen { get; set; }
         public int AfvalVertraging { get; set; }

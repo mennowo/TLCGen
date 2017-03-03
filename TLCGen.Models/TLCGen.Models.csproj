@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\IOElementAttribute.cs" />
+    <Compile Include="Attributes\ModelNameAttribute.cs" />
     <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />

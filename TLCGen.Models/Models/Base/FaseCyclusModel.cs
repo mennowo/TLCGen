@@ -21,6 +21,7 @@ namespace TLCGen.Models
 
         #region Properties
         
+        [ModelName]
         [Browsable(false)]
         public override string Naam { get; set; }
         [Browsable(false)]

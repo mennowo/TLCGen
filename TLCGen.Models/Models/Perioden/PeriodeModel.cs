@@ -14,6 +14,7 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [ModelName]
         public string Naam { get; set; }
         public PeriodeTypeEnum Type { get; set; }
         public PeriodeDagCodeEnum DagCode { get; set; }

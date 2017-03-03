@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Messaging;
@@ -129,53 +131,49 @@ namespace TLCGen.Integrity
         /// <returns>True if unique, false if not</returns>
         public static bool IsElementNaamUnique(ControllerModel _Controller, string naam)
         {
-            // Check fasen
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                if (fcm.Naam == naam)
-                    return false;
-            }
+            return IsElementNaamUnique((object)_Controller, naam);
+        }
 
-            // Check detectie
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+        private static bool IsElementNaamUnique(object obj, string naam)
+        {
+            if (obj == null || string.IsNullOrWhiteSpace(naam))
+                return false;
+            
+            Type objType = obj.GetType();
+            PropertyInfo[] properties = objType.GetProperties();
+            foreach (PropertyInfo property in properties)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                object propValue = property.GetValue(obj);
+                if (property.PropertyType == typeof(string))
                 {
-                    if (dm.Naam == naam)
+                    string propString = (string)propValue;
+                    if (propString == naam)
+                    {
                         return false;
+                    }
+                }
+                else if (!property.PropertyType.IsValueType)
+                {
+                    var elems = propValue as IList;
+                    if (elems != null)
+                    {
+                        foreach (var item in elems)
+                        {
+                            if(!IsElementNaamUnique(item, naam))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(!IsElementNaamUnique(propValue, naam))
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                if (dm.Naam == naam)
-                    return false;
-            }
-
-            // Check perioden
-            foreach(var p in _Controller.PeriodenData.Perioden)
-            {
-                if (p.Naam == naam)
-                    return false;
-            }
-
-            // Check plugins
-            foreach(var pl in TLCGenPluginManager.Default.ApplicationParts)
-            {
-                if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
-                {
-                    if (!(pl.Item2 as ITLCGenElementProvider).IsElementNameUnique(naam))
-                        return false;
-                }
-            }
-            foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
-            {
-                if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
-                {
-                    if (!(pl.Item2 as ITLCGenElementProvider).IsElementNameUnique(naam))
-                        return false;
-                }
-            }
-
             return true;
         }
 
