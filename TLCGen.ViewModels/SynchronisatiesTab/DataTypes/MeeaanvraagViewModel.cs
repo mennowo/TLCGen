@@ -68,6 +68,43 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private MeeaanvraagDetectorModel _SelectedDetector;
+        public MeeaanvraagDetectorModel SelectedDetector
+        {
+            get { return _SelectedDetector; }
+            set
+            {
+                _SelectedDetector = value;
+                DetectorManager.SelectedDetector = value;
+                OnPropertyChanged("SelectedDetector");
+            }
+        }
+
+        private DetectorManagerViewModel<MeeaanvraagDetectorModel, string> _DetectorManager;
+        public DetectorManagerViewModel<MeeaanvraagDetectorModel, string> DetectorManager
+        {
+            get
+            {
+                if (_DetectorManager == null && _Meeaanvraag != null && _Meeaanvraag.FaseVan != null)
+                {
+                    List<string> dets = 
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            Where(x => x.Naam == _Meeaanvraag.FaseVan).
+                            First().
+                            Detectoren.
+                            Select(x => x.Naam).
+                            ToList();
+                    _DetectorManager = new DetectorManagerViewModel<MeeaanvraagDetectorModel, string>(
+                        Detectoren,
+                        dets,
+                        (x) => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },
+                        (x) => { return !Detectoren.Where(y => y.MeeaanvraagDetector == x).Any(); }
+                        );
+                }
+                return _DetectorManager;
+            }
+        }
+
         #endregion // Properties
 
         #region Collection changed

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TLCGen.Views.DataTypes
+namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for DetectorView.xaml
+    /// Interaction logic for MeeAanvraagView.xaml
     /// </summary>
-    public partial class DetectorView : UserControl
+    public partial class MeeAanvraagView : UserControl
     {
-        public DetectorView()
+        public MeeAanvraagView()
         {
             InitializeComponent();
         }

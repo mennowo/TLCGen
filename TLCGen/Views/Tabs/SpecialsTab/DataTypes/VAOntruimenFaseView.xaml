@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" >
     <UserControl.Resources>
         <DataTemplate x:Key="MatrixCellTemplate">
             <TextBlock 
@@ -35,8 +35,10 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Label Content="Herstart VA ontr. tijdens rood" />
-        <TextBox Text="{Binding Path=VAOntrTijdensRood}" Margin="2" Grid.Column="1" />
+        <DockPanel Grid.ColumnSpan="2">
+            <Label Content="Herstart VA ontr. tijdens rood" />
+            <TextBox Text="{Binding Path=VAOntrTijdensRood}" Margin="2" Grid.Column="1" />
+        </DockPanel>
         <DataGrid
             Grid.Row="1" Grid.ColumnSpan="2" Margin="2"
             SelectionUnit="Cell"
@@ -45,7 +47,8 @@
             dg2d:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
             dg2d:ItemsSource.ColumnHeadersSource="{Binding Path=VAOntruimenMatrixColumnHeaders}"
             dg2d:ItemsSource.RowHeadersSource="{Binding Path=VAOntruimenMatrixRowHeaders}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
+        <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" RemovableDetectorsVisibility="Visible" Grid.Row="2" />
+        <!--<StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="Detectoren" />
             <ComboBox ItemsSource="{Binding Path=SelectableDetectoren}" 
                       SelectedValue="{Binding Path=SelectedDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" 
@@ -55,6 +58,6 @@
                       SelectedValue="{Binding Path=SelectedDetectorToRemove,UpdateSourceTrigger=PropertyChanged}" 
                       Margin="2" MinWidth="70" />
             <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveDetectorCommand}" CommandParameter="Remove" />
-        </StackPanel>
+        </StackPanel>-->
     </Grid>
 </UserControl>

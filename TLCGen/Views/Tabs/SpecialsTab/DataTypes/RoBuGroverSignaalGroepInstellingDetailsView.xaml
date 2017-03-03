@@ -31,13 +31,7 @@
                 <DataGridTextColumn Header="File tijd" Binding="{Binding Path=FileTijd}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
-            <ComboBox ItemsSource="{Binding Path=SelectableFileDetectoren}" 
-                      SelectedValue="{Binding Path=SelectedFileDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
-            <Button Content="+" Command="{Binding AddFileDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
-            <Button Content="-" Command="{Binding RemoveFileDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
-        </StackPanel>
-        
+        <local:DetectorManagerView DataContext="{Binding Path=FileDetectorManager}" Grid.Row="2" ShowCaption="False" />
         <Label Content="Hiaat detectors" Grid.Row="0" Grid.Column="1" />
         <DataGrid ItemsSource="{Binding Path=HiaatDetectoren}" Margin="2" Grid.Row="1" Grid.Column="1"
                   SelectedItem="{Binding Path=SelectedHiaatDetector}"
@@ -53,11 +47,6 @@
                 <DataGridTextColumn Header="Hiaat tijd" Binding="{Binding Path=HiaatTijd}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2">
-            <ComboBox ItemsSource="{Binding Path=SelectableHiaatDetectoren}" 
-                      SelectedValue="{Binding Path=SelectedHiaatDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
-            <Button Content="+" Command="{Binding AddHiaatDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
-            <Button Content="-" Command="{Binding RemoveHiaatDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
-        </StackPanel>
+        <local:DetectorManagerView DataContext="{Binding Path=HiaatDetectorManager}" Grid.Row="2" Grid.Column="1" ShowCaption="False" />
     </Grid>
 </UserControl>

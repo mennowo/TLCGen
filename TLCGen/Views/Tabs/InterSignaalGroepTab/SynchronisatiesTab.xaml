@@ -58,7 +58,7 @@
 
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
 
-        <Grid MaxWidth="250" Grid.Column="3">
+        <Grid Grid.Column="3">
             <Grid 
             Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.GarantieConflict}}" Grid.Row="1" >
                 <Grid.RowDefinitions>
@@ -123,116 +123,13 @@
             </Grid>
 
             <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Meeaanvraag}}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Meeaanvraag opties" FontWeight="Bold" Grid.Row="0" />
-                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
-                        Orientation="Vertical" Grid.Row="1">
-                    <Label Content="Type meeaanvraag:" />
-                    <ComboBox 
-                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:MeeaanvraagTypeEnum}}}"
-                    SelectedItem="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                    <CheckBox Content="Detectie afhankelijk" 
-                          IsEnabled="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijkPossible}"
-                          IsChecked="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijk}" Margin="5" />
-                    <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
-                        <Label Content="Detectors:" />
-                        <DataGrid
-                            ItemsSource="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM.Detectoren}"
-                            Margin="2" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Detector" Width="Auto">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=MeeaanvraagDetector}" Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                        <DataTemplate>
-                                            <ComboBox 
-                                                ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
-                                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                                SelectedItem="{Binding Path=MeeaanvraagDetector}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                </StackPanel>
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Meeaanvraag}}" >
+                <local:MeeAanvraagView DataContext="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <Grid 
             Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.Naloop}}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Naloop opties" FontWeight="Bold" />
-                <StackPanel HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}"
-                        Orientation="Vertical" Grid.Row="1">
-                    <Label Content="Type naloop:" />
-                    <ComboBox 
-                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopTypeEnum}}}"
-                    SelectedItem="{Binding Path=SelectedSynchronisatie.NaloopVM.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                    <Label Content="Maximale voorstart tijd:" />
-                    <xc:WatermarkTextBox 
-                        Watermark="NG"
-                        Text="{Binding Path=SelectedSynchronisatie.NaloopVM.MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
-                    <CheckBox Content="Detectie afhankelijk" 
-                          IsEnabled="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijkPossible}"
-                          IsChecked="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk}" Margin="5" />
-                    <StackPanel Orientation="Vertical" Visibility="{Binding Path=SelectedSynchronisatie.NaloopVM.DetectieAfhankelijk,Converter={StaticResource BoolToVisConv}}">
-                        <Label Content="Detectors:" />
-                        <DataGrid
-                            ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Detectoren}"
-                            Margin="2" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Detector" Width="Auto" MinWidth="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Detector}" Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                        <DataTemplate>
-                                            <ComboBox 
-                                                ItemsSource="{Binding ElementName=root,Path=DataContext.Detectoren}" 
-                                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                                SelectedItem="{Binding Path=Detector}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                </DataGridTemplateColumn>
-                                <!--<DataGridTemplateColumn Header="Type" Width="Auto" MinWidth="50" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Type}" Margin="2" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                    <DataGridTemplateColumn.CellEditingTemplate>
-                                        <DataTemplate>
-                                            <ComboBox 
-                                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NaloopDetectorTypeEnum}}}"
-                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                            SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellEditingTemplate>
-                                </DataGridTemplateColumn>-->
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <Label Content="Tijden:" />
-                    <DataGrid
-                    ItemsSource="{Binding Path=SelectedSynchronisatie.NaloopVM.Tijden}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Type" IsReadOnly="True" Foreground="DarkGray" Binding="{Binding Path=Type}"  Width="Auto" MinWidth="100" />
-                            <DataGridTextColumn Header="Waarde" Binding="{Binding Path=Waarde}" MinWidth="50" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                <local:NaloopView DataContext="{Binding Path=SelectedSynchronisatie.NaloopVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
     </Grid>

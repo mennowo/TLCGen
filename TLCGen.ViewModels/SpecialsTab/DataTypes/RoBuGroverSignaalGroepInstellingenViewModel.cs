@@ -19,12 +19,6 @@ namespace TLCGen.ViewModels
 
         private RoBuGroverFileDetectorViewModel _SelectedFileDetector;
         private RoBuGroverHiaatDetectorViewModel _SelectedHiaatDetector;
-        private string _SelectedFileDetectorToAdd;
-        private string _SelectedHiaatDetectorToAdd;
-        private List<string> _FaseFileDetectoren;
-        private List<string> _FaseHiaatDetectoren;
-        private ObservableCollection<string> _SelectableFileDetectoren;
-        private ObservableCollection<string> _SelectableHiaatDetectoren;
 
         #endregion // Fields
 
@@ -36,6 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFileDetector = value;
+                FileDetectorManager.SelectedDetector = value;
                 OnMonitoredPropertyChanged("SelectedFileDetector");
             }
         }
@@ -46,51 +41,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedHiaatDetector = value;
+                HiaatDetectorManager.SelectedDetector = value;
                 OnMonitoredPropertyChanged("SelectedHiaatDetector");
-            }
-        }
-
-        public string SelectedFileDetectorToAdd
-        {
-            get { return _SelectedFileDetectorToAdd; }
-            set
-            {
-                _SelectedFileDetectorToAdd = value;
-                OnMonitoredPropertyChanged("SelectedFileDetectorToAdd");
-            }
-        }
-
-        public string SelectedHiaatDetectorToAdd
-        {
-            get { return _SelectedHiaatDetectorToAdd; }
-            set
-            {
-                _SelectedHiaatDetectorToAdd = value;
-                OnMonitoredPropertyChanged("SelectedHiaatDetectorToAdd");
-            }
-        }
-
-        public ObservableCollection<string> SelectableFileDetectoren
-        {
-            get
-            {
-                if (_SelectableFileDetectoren == null)
-                {
-                    _SelectableFileDetectoren = new ObservableCollection<string>();
-                }
-                return _SelectableFileDetectoren;
-            }
-        }
-
-        public ObservableCollection<string> SelectableHiaatDetectoren
-        {
-            get
-            {
-                if (_SelectableHiaatDetectoren == null)
-                {
-                    _SelectableHiaatDetectoren = new ObservableCollection<string>();
-                }
-                return _SelectableHiaatDetectoren;
             }
         }
 
@@ -134,160 +86,83 @@ namespace TLCGen.ViewModels
             private set;
         }
 
+        private DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string> _FileDetectorManager;
+        public DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string> FileDetectorManager
+        {
+            get
+            {
+                if (_FileDetectorManager == null)
+                {
+                    List<string> dets =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            Where(x => x.Naam == FaseCyclus).
+                            First().
+                            Detectoren.
+                            Select(x => x.Naam).
+                            ToList();
+                    _FileDetectorManager = new DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string>(
+                        FileDetectoren,
+                        dets,
+                        (x) => 
+                        {
+                            RoBuGroverFileDetectorModel d = new RoBuGroverFileDetectorModel();
+                            d.Detector = x;
+                            DefaultsProvider.Default.SetDefaultsOnModel(d);
+                            return new RoBuGroverFileDetectorViewModel(d);
+                        },
+                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); }
+                        );
+                }
+                return _FileDetectorManager;
+            }
+        }
+
+        private DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> _HiaatDetectorManager;
+        public DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager
+        {
+            get
+            {
+                if (_HiaatDetectorManager == null)
+                {
+                    List<string> dets =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            Where(x => x.Naam == FaseCyclus).
+                            First().
+                            Detectoren.
+                            Select(x => x.Naam).
+                            ToList();
+                    _HiaatDetectorManager = new DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string>(
+                        HiaatDetectoren,
+                        dets,
+                        (x) =>
+                        {
+                            RoBuGroverHiaatDetectorModel d = new RoBuGroverHiaatDetectorModel();
+                            d.Detector = x;
+                            DefaultsProvider.Default.SetDefaultsOnModel(d);
+                            return new RoBuGroverHiaatDetectorViewModel(d);
+                        },
+                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); }
+                        );
+                }
+                return _HiaatDetectorManager;
+            }
+        }
+
         #endregion Properties
 
         #region Commands
 
-        RelayCommand _AddFileDetectorCommand;
-        public ICommand AddFileDetectorCommand
-        {
-            get
-            {
-                if (_AddFileDetectorCommand == null)
-                {
-                    _AddFileDetectorCommand = new RelayCommand(AddFileDetectorCommand_Executed, AddFileDetectorCommand_CanExecute);
-                }
-                return _AddFileDetectorCommand;
-            }
-        }
-
-        RelayCommand _RemoveFileDetectorCommand;
-        public ICommand RemoveFileDetectorCommand
-        {
-            get
-            {
-                if (_RemoveFileDetectorCommand == null)
-                {
-                    _RemoveFileDetectorCommand = new RelayCommand(RemoveFileDetectorCommand_Executed, RemoveFileDetectorCommand_CanExecute);
-                }
-                return _RemoveFileDetectorCommand;
-            }
-        }
-
-        RelayCommand _AddHiaatDetectorCommand;
-        public ICommand AddHiaatDetectorCommand
-        {
-            get
-            {
-                if (_AddHiaatDetectorCommand == null)
-                {
-                    _AddHiaatDetectorCommand = new RelayCommand(AddHiaatDetectorCommand_Executed, AddHiaatDetectorCommand_CanExecute);
-                }
-                return _AddHiaatDetectorCommand;
-            }
-        }
-
-        RelayCommand _RemoveHiaatDetectorCommand;
-        public ICommand RemoveHiaatDetectorCommand
-        {
-            get
-            {
-                if (_RemoveHiaatDetectorCommand == null)
-                {
-                    _RemoveHiaatDetectorCommand = new RelayCommand(RemoveHiaatDetectorCommand_Executed, RemoveHiaatDetectorCommand_CanExecute);
-                }
-                return _RemoveHiaatDetectorCommand;
-            }
-        }
-
         #endregion // Commands
 
         #region Command functionality
-
-        private bool AddFileDetectorCommand_CanExecute(object obj)
-        {
-            return true;
-        }
-
-        private void AddFileDetectorCommand_Executed(object obj)
-        {
-            RoBuGroverFileDetectorModel d = new RoBuGroverFileDetectorModel();
-            d.Detector = SelectedFileDetectorToAdd;
-            DefaultsProvider.Default.SetDefaultsOnModel(d);
-            FileDetectoren.Add(new RoBuGroverFileDetectorViewModel(d));
-            UpdateSelectables();
-            if (SelectableFileDetectoren.Count > 0)
-                SelectedFileDetectorToAdd = SelectableFileDetectoren[0];
-        }
-
-        private bool RemoveFileDetectorCommand_CanExecute(object obj)
-        {
-            return SelectedFileDetector != null;
-        }
-
-        private void RemoveFileDetectorCommand_Executed(object obj)
-        {
-            FileDetectoren.Remove(SelectedFileDetector);
-            SelectedFileDetector = null;
-            UpdateSelectables();
-            if (SelectableFileDetectoren.Count > 0)
-                SelectedFileDetectorToAdd = SelectableFileDetectoren[0];
-        }
-
-        private bool AddHiaatDetectorCommand_CanExecute(object obj)
-        {
-            return true;
-        }
-
-        private void AddHiaatDetectorCommand_Executed(object obj)
-        {
-            RoBuGroverHiaatDetectorModel d = new RoBuGroverHiaatDetectorModel();
-            d.Detector = SelectedHiaatDetectorToAdd;
-            DefaultsProvider.Default.SetDefaultsOnModel(d);
-            HiaatDetectoren.Add(new RoBuGroverHiaatDetectorViewModel(d));
-            UpdateSelectables();
-        }
-
-        private bool RemoveHiaatDetectorCommand_CanExecute(object obj)
-        {
-            return SelectedHiaatDetector != null;
-        }
-
-        private void RemoveHiaatDetectorCommand_Executed(object obj)
-        {
-            HiaatDetectoren.Remove(SelectedHiaatDetector);
-            SelectedHiaatDetector = null;
-            UpdateSelectables();
-        }
-
+        
         #endregion // Command functionality
 
         #region Private methods
 
-        private void UpdateSelectables()
-        {
-            SelectableFileDetectoren.Clear();
-            foreach (string s in _FaseFileDetectoren)
-            {
-                if (!FileDetectoren.Where(x => x.Detector == s).Any())
-                {
-                    SelectableFileDetectoren.Add(s);
-                }
-            }
-            if (SelectableFileDetectoren.Count > 0)
-                SelectedFileDetectorToAdd = SelectableFileDetectoren[0];
-            SelectableHiaatDetectoren.Clear();
-            foreach (string s in _FaseHiaatDetectoren)
-            {
-                if (!HiaatDetectoren.Where(x => x.Detector == s).Any())
-                {
-                    SelectableHiaatDetectoren.Add(s);
-                }
-            }
-            if (SelectableHiaatDetectoren.Count > 0)
-                SelectedHiaatDetectorToAdd = SelectableHiaatDetectoren[0];
-        }
-
         #endregion // Private methods
 
         #region Public methods
-
-        public void OnSelected(List<string> fasefildetectoren, List<string> fasehiaatdetectoren)
-        {
-            _FaseFileDetectoren = fasefildetectoren;
-            _FaseHiaatDetectoren = fasehiaatdetectoren;
-            UpdateSelectables();
-        }
 
         #endregion // Public Methods
 

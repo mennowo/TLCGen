@@ -15,16 +15,10 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private VAOntruimenFaseModel _VAOntruimenFase;
-        private ObservableCollection<string> _FaseDetectoren;
         private Dictionary<string, int> _ConflicterendeFasen;
-        private ObservableCollection<string> _SelectableDetectoren;
-        private ObservableCollection<string> _RemovableDetectoren;
 
         private ObservableCollection<string> _VAOntruimenMatrixColumnHeaders;
         private ObservableCollection<string> _VAOntruimenMatrixRowHeaders;
-
-        private string _SelectedDetectorToAdd;
-        private string _SelectedDetectorToRemove;
 
         #endregion // Fields
 
@@ -53,63 +47,6 @@ namespace TLCGen.ViewModels
         {
             get;
             private set;
-        }
-
-
-        public ObservableCollection<string> FaseDetectoren
-        {
-            get
-            {
-                if (_FaseDetectoren == null)
-                {
-                    _FaseDetectoren = new ObservableCollection<string>();
-                }
-                return _FaseDetectoren;
-            }
-        }
-
-        public ObservableCollection<string> SelectableDetectoren
-        {
-            get
-            {
-                if (_SelectableDetectoren == null)
-                {
-                    _SelectableDetectoren = new ObservableCollection<string>();
-                }
-                return _SelectableDetectoren;
-            }
-        }
-
-        public string SelectedDetectorToAdd
-        {
-            get { return _SelectedDetectorToAdd; }
-            set
-            {
-                _SelectedDetectorToAdd = value;
-                OnPropertyChanged("SelectedDetectorToAdd");
-            }
-        }
-
-        public ObservableCollection<string> RemovableDetectoren
-        {
-            get
-            {
-                if (_RemovableDetectoren == null)
-                {
-                    _RemovableDetectoren = new ObservableCollection<string>();
-                }
-                return _RemovableDetectoren;
-            }
-        }
-
-        public string SelectedDetectorToRemove
-        {
-            get { return _SelectedDetectorToRemove; }
-            set
-            {
-                _SelectedDetectorToRemove = value;
-                OnPropertyChanged("SelectedDetectorToRemove");
-            }
         }
 
         public Dictionary<string, int> ConflicterendeFasen
@@ -154,116 +91,83 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private DetectorManagerViewModel<VAOntruimenDetectorViewModel, string> _DetectorManager;
+        public DetectorManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
+        {
+            get
+            {
+                if (_DetectorManager == null)
+                {
+                    List<string> dets =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            Where(x => x.Naam == FaseCyclus).
+                            First().
+                            Detectoren.
+                            Select(x => x.Naam).
+                            ToList();
+                    _DetectorManager = new DetectorManagerViewModel<VAOntruimenDetectorViewModel, string>(
+                        VAOntruimenDetectoren,
+                        dets,
+                        (x) => 
+                        {
+                            var vad = new VAOntruimenDetectorModel();
+                            vad.Detector = x;
+                            foreach(var kv in ConflicterendeFasen)
+                            {
+                                vad.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = kv.Key });
+                            }
+                            return new VAOntruimenDetectorViewModel(vad);
+                        },
+                        (x) => 
+                        {
+                            return !VAOntruimenDetectoren.Where(y => y.Detector == x).Any();
+                        },
+                        (x) =>
+                        {
+                            VAOntruimenDetectorViewModel dvm = null;
+                            foreach(var d in VAOntruimenDetectoren)
+                            {
+                                if(d.Detector == x)
+                                {
+                                    dvm = d;
+                                    break;
+                                }
+                            }
+                            return dvm;
+                        },
+                        () => { Refresh(); },
+                        () => { Refresh(); }
+                        );
+                }
+                return _DetectorManager;
+            }
+            private set { _DetectorManager = value; }
+        }
+
         #endregion Properties
 
         #region Commands
-
-        private RelayCommand _AddDetectorCommand;
-        public ICommand AddDetectorCommand
-        {
-            get
-            {
-                if (_AddDetectorCommand == null)
-                {
-                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
-                }
-                return _AddDetectorCommand;
-            }
-        }
-
-        private RelayCommand _RemoveDetectorCommand;
-        public ICommand RemoveDetectorCommand
-        {
-            get
-            {
-                if (_RemoveDetectorCommand == null)
-                {
-                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
-                }
-                return _RemoveDetectorCommand;
-            }
-        }
 
         #endregion // Commands
 
         #region Command functionality
 
-        private bool AddDetectorCommand_CanExecute(object obj)
-        {
-            return !string.IsNullOrEmpty(SelectedDetectorToAdd);
-        }
-
-        private void AddDetectorCommand_Executed(object obj)
-        {
-            var vad = new VAOntruimenDetectorModel();
-            vad.Detector = SelectedDetectorToAdd;
-            foreach(var kv in ConflicterendeFasen)
-            {
-                vad.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = kv.Key });
-            }
-            VAOntruimenDetectoren.Add(new VAOntruimenDetectorViewModel(vad));
-
-            SetSelectableDetectoren();
-            RebuildVAOnruimenMatrix();
-        }
-
-        private bool RemoveDetectorCommand_CanExecute(object obj)
-        {
-            return !string.IsNullOrEmpty(SelectedDetectorToRemove);
-        }
-
-        private void RemoveDetectorCommand_Executed(object obj)
-        {
-            VAOntruimenDetectorViewModel dvm = null;
-            foreach(var d in VAOntruimenDetectoren)
-            {
-                if(d.Detector == SelectedDetectorToRemove)
-                {
-                    dvm = d;
-                    break;
-                }
-            }
-            if(dvm != null)
-            {
-                VAOntruimenDetectoren.Remove(dvm);
-            }
-
-            Refresh();
-        }
-
         #endregion // Command functionality
 
         #region Private methods
 
-
-
-        private void SetSelectableDetectoren()
-        {
-            SelectableDetectoren.Clear();
-            foreach (var s in FaseDetectoren)
-            {
-                if (!this.VAOntruimenDetectoren.Where(x => x.Detector == s).Any())
-                {
-                    SelectableDetectoren.Add(s);
-                }
-            }
-
-            RemovableDetectoren.Clear();
-            foreach (var d in VAOntruimenDetectoren)
-            {
-                RemovableDetectoren.Add(d.Detector);
-            }
-        }
-
         private void RebuildVAOnruimenMatrix()
         {
+            VAOntruimenMatrixColumnHeaders.Clear();
+            VAOntruimenMatrixRowHeaders.Clear();
+
             if (ConflicterendeFasen.Count == 0 || VAOntruimenDetectoren.Count == 0)
             {
+                VAOntruimenMatrix = null;
+                OnPropertyChanged("VAOntruimenMatrix");
                 return;
             }
 
-            VAOntruimenMatrixColumnHeaders.Clear();
-            VAOntruimenMatrixRowHeaders.Clear();
             VAOntruimenMatrix = new VAOntruimenNaarFaseViewModel[ConflicterendeFasen.Count, VAOntruimenDetectoren.Count];
 
             for (int d = 0; d < VAOntruimenDetectoren.Count; ++d)
@@ -284,9 +188,10 @@ namespace TLCGen.ViewModels
 
         public void Refresh()
         {
-            SetSelectableDetectoren();
             VAOntruimenDetectoren.Rebuild();
             RebuildVAOnruimenMatrix();
+            DetectorManager = null;
+            OnPropertyChanged("DetectorManager");
         }
 
         #endregion // Public Methods
@@ -307,7 +212,7 @@ namespace TLCGen.ViewModels
             _VAOntruimenFase = vaontruimenfase;
             VAOntruimenDetectoren = new ObservableCollectionAroundList<VAOntruimenDetectorViewModel, VAOntruimenDetectorModel>(vaontruimenfase.VADetectoren);
 
-            RebuildVAOnruimenMatrix();
+            Refresh();
         }
 
         #endregion // Constructor

@@ -414,7 +414,8 @@ namespace TLCGen.ViewModels
             if (_FaseCyclus.Type == FaseTypeEnum.Voetganger)
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger.GetDescription());
 
-            MeeverlengenTypeString = MeeverlengenType.GetDescription();
+            _MeeverlengenTypeString = MeeverlengenType.GetDescription();
+            OnPropertyChanged("MeeverlengenTypeString");
         }
         #endregion // Private Methods
 

@@ -33,8 +33,7 @@
         <CheckBox Grid.Column="2" IsChecked="{Binding Path=SelectedFaseHasVAOntruimen}" Margin="2" Content="Fase met VA ontruimen" />
         <Grid IsEnabled="{Binding Path=SelectedFaseHasVAOntruimen,UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" >
             
-            <local:VAOntruimenFaseView Margin="2" DataContext="{Binding Path=SelectedVAOntruimenFase}" 
-                                       />
+            <local:VAOntruimenFaseView Margin="2" DataContext="{Binding Path=SelectedVAOntruimenFase}" />
         </Grid>
     </Grid>
 </UserControl>

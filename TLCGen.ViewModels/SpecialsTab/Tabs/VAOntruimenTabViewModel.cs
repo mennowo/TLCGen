@@ -64,12 +64,13 @@ namespace TLCGen.ViewModels
                 {
                     try
                     {
-                        _SelectedVAOntruimenFase.FaseDetectoren.Clear();
-                        var selfc = Controller.Fasen.Where(x => x.Naam == SelectedFaseNaam).First();
-                        foreach (DetectorModel dm in selfc.Detectoren)
-                        {
-                            _SelectedVAOntruimenFase.FaseDetectoren.Add(dm.Naam);
-                        }
+
+                        //_SelectedVAOntruimenFase.FaseDetectoren.Clear();
+                        //var selfc = Controller.Fasen.Where(x => x.Naam == SelectedFaseNaam).First();
+                        //foreach (DetectorModel dm in selfc.Detectoren)
+                        //{
+                        //    _SelectedVAOntruimenFase.FaseDetectoren.Add(dm.Naam);
+                        //}
 
                         _SelectedVAOntruimenFase.ConflicterendeFasen.Clear();
                         foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)

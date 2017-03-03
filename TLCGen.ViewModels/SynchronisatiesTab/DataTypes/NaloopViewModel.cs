@@ -91,6 +91,44 @@ namespace TLCGen.ViewModels
             }
         }
 
+
+        private NaloopDetectorModel _SelectedDetector;
+        public NaloopDetectorModel SelectedDetector
+        {
+            get { return _SelectedDetector; }
+            set
+            {
+                _SelectedDetector = value;
+                DetectorManager.SelectedDetector = value;
+                OnPropertyChanged("SelectedDetector");
+            }
+        }
+
+        private DetectorManagerViewModel<NaloopDetectorModel, string> _DetectorManager;
+        public DetectorManagerViewModel<NaloopDetectorModel, string> DetectorManager
+        {
+            get
+            {
+                if (_DetectorManager == null && _Naloop != null && _Naloop.FaseVan != null)
+                {
+                    List<string> dets =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            Where(x => x.Naam == _Naloop.FaseVan).
+                            First().
+                            Detectoren.
+                            Select(x => x.Naam).
+                            ToList();
+                    _DetectorManager = new DetectorManagerViewModel<NaloopDetectorModel, string>(
+                        Detectoren,
+                        dets,
+                        (x) => { var md = new NaloopDetectorModel() { Detector = x }; return md; },
+                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); }
+                        );
+                }
+                return _DetectorManager;
+            }
+        }
+
         #endregion // Properties
 
         #region Private methods

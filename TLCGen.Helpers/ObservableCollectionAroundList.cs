@@ -24,7 +24,7 @@ namespace TLCGen.Helpers
         #endregion // Fields
 
         #region Properties
-
+        
         #endregion // Properties
 
         #region Collection Changed

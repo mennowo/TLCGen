@@ -106,6 +106,7 @@
     <Compile Include="ModulesTab\DataTypes\FaseCyclusModuleDataViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesDetailsTabViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesFasenInstellingenTabViewModel.cs" />
+    <Compile Include="Other\DetectorManagerViewModel.cs" />
     <Compile Include="Other\IAllowTemplates.cs" />
     <Compile Include="Other\TemplateProviderViewModel.cs" />
     <Compile Include="PeriodenTab\DataTypes\PeriodeViewModel.cs" />
@@ -144,8 +145,8 @@
     <Compile Include="SpecialsTab\Tabs\VAOntruimenTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\FileTabViewModel.cs" />
     <Compile Include="SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs" />
-    <Compile Include="SynchronisatiesTab\MeeaanvraagViewModel.cs" />
-    <Compile Include="SynchronisatiesTab\NaloopViewModel.cs" />
+    <Compile Include="SynchronisatiesTab\DataTypes\MeeaanvraagViewModel.cs" />
+    <Compile Include="SynchronisatiesTab\DataTypes\NaloopViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
     <Compile Include="TLCGenMainTabItemViewModel.cs" />

@@ -125,17 +125,14 @@
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabView.xaml.cs">
       <DependentUpon>ControllerDataTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataTypes\DetectorView.xaml.cs">
-      <DependentUpon>DetectorView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DataTypes\IGeneratorView.xaml.cs">
       <DependentUpon>IGeneratorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataTypes\NaloopView.xaml.cs">
-      <DependentUpon>NaloopView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\MeeAanvraagView.xaml.cs">
+      <DependentUpon>MeeAanvraagView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DataTypes\VisualProjectDataView.xaml.cs">
-      <DependentUpon>VisualProjectDataView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopView.xaml.cs">
+      <DependentUpon>NaloopView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabView.xaml.cs">
       <DependentUpon>ModulesFasenInstellingenTabView.xaml</DependentUpon>
@@ -205,7 +202,7 @@
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\SpecialDataGrid.cs" />
-    <Compile Include="Views\Tabs\BitmapTab.xaml.cs">
+    <Compile Include="Views\Tabs\BitmapTab\BitmapTab.xaml.cs">
       <DependentUpon>BitmapTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
@@ -255,13 +252,16 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\DetectorManagerView.xaml.cs">
+      <DependentUpon>DetectorManagerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UserControls\TemplateManagerView.xaml.cs">
       <DependentUpon>TemplateManagerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\ConflictMatrixDataGrid.xaml.cs">
       <DependentUpon>ConflictMatrixDataGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\SynchronisatiesTab.xaml.cs">
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\SynchronisatiesTab.xaml.cs">
       <DependentUpon>SynchronisatiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\AlgemeenTab.xaml.cs">
@@ -297,6 +297,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\ApplicationIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\MenuIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -313,7 +317,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataTypes\DetectorView.xaml">
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\MeeAanvraagView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -373,14 +381,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DataTypes\NaloopView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DataTypes\VisualProjectDataView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -421,7 +421,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\BitmapTab.xaml">
+    <Page Include="Views\Tabs\BitmapTab\BitmapTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -481,6 +481,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\UserControls\DetectorManagerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\UserControls\TemplateManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -489,7 +493,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\SynchronisatiesTab.xaml">
+    <Page Include="Views\Tabs\InterSignaalGroepTab\SynchronisatiesTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

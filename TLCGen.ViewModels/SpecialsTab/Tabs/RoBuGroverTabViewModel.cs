@@ -70,10 +70,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSignaalGroepInstelling = value;
-                if(value != null)
-                {
-                    OnSelectedSignaalGroepInstellingSelected();
-                }
                 OnMonitoredPropertyChanged("SelectedSignaalGroepInstelling");
             }
         }
@@ -286,33 +282,6 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        private void OnSelectedSignaalGroepInstellingSelected()
-        {
-            List<string> selectedfiledet = new List<string>();
-            if (_ControllerRGVFileDetectoren.Count > 0)
-            {
-                foreach (var d in _ControllerRGVFileDetectoren)
-                {
-                    if (d.Value == SelectedSignaalGroepInstelling.FaseCyclus)
-                    {
-                        selectedfiledet.Add(d.Key);
-                    }
-                }
-            }
-            List<string> selectedhiaatdet = new List<string>();
-            if (_ControllerRGVHiaatDetectoren.Count > 0)
-            {
-                foreach (var d in _ControllerRGVHiaatDetectoren)
-                {
-                    if (d.Value == SelectedSignaalGroepInstelling.FaseCyclus)
-                    {
-                        selectedhiaatdet.Add(d.Key);
-                    }
-                }
-            }
-            SelectedSignaalGroepInstelling.OnSelected(selectedfiledet, selectedhiaatdet);
-        }
-
         private void UpdateFasenEnDetectoren()
         {
             Fasen.Clear();
@@ -334,11 +303,6 @@ namespace TLCGen.ViewModels
                     if (dm.Type == Models.Enumerations.DetectorTypeEnum.Lang)
                         _ControllerRGVHiaatDetectoren.Add(dm.Naam, fcm.Naam);
                 }
-            }
-
-            if (SelectedSignaalGroepInstelling != null)
-            {
-                OnSelectedSignaalGroepInstellingSelected();
             }
         }
 

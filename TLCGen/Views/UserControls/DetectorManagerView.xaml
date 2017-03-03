@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="TLCGen.Views.DetectorManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             Name="root"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/ApplicationIcons.xaml" />
+                <ResourceDictionary>
+                    <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="{Binding ElementName=root,Path=Caption}" Visibility="{Binding ElementName=root,Path=ShowCaption,Converter={StaticResource Bool2VisConv}}" />
+            <ComboBox ItemsSource="{Binding SelectableDetectoren}" 
+                      SelectedValue="{Binding SelectedDetectorToAdd, UpdateSourceTrigger=PropertyChanged}" 
+                      Margin="2" MinWidth="50" />
+            <Button Margin="2" Command="{Binding AddDetectorCommand}" CommandParameter="Add" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
+            </Button>
+            <ComboBox ItemsSource="{Binding RemovableDetectoren}" Visibility="{Binding RemovableDetectorsVisibility, ElementName=root}"
+                      SelectedValue="{Binding SelectedDetectorToRemove, UpdateSourceTrigger=PropertyChanged}" 
+                      Margin="2" MinWidth="50" />
+            <Button Margin="2" Command="{Binding RemoveDetectorCommand}" CommandParameter="Remove" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>
