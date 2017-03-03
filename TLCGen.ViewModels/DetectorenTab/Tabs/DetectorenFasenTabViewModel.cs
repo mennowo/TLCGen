@@ -194,11 +194,19 @@ namespace TLCGen.ViewModels
             }
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
-            if(_SelectedFase.Detectoren.Count >= 1)
+            if(_SelectedFase.Detectoren.Count == 0)
             {
-                _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBuiten;
             }
-            DefaultsProvider.Default.SetDefaultsOnModel(_dm);
+            else
+            {
+                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
+                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
+                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
+            }
+            DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
             DetectorViewModel dvm1 = new DetectorViewModel(_dm);
             dvm1.FaseCyclus = _SelectedFase.Naam;
             _SelectedFase.Detectoren.Add(_dm);
@@ -303,7 +311,7 @@ namespace TLCGen.ViewModels
 
             foreach(var d in items)
             {
-                if (!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                if (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
                 {
                     MessageBox.Show("Error bij toevoegen van detector met naam " + d.Naam + ".\nDe detector naam is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

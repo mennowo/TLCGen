@@ -78,7 +78,7 @@ namespace TLCGen.Settings
             dtm.Replace = "fase";
             var dm = new DetectorModel();
             dm.Naam = "fase_1";
-            DefaultsProvider.Default.SetDefaultsOnModel(dm);
+            DefaultsProvider.Default.SetDefaultsOnModel(dm, "Auto");
             dtm.Items.Add(dm);
             DetectorenTemplates.Add(new DetectorTemplateViewModel(dtm));
         }

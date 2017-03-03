@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TLCGen.DataAccess;
+using System.Windows;
+using System.Xml;
+using System.Xml.Serialization;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings.Utilities;
@@ -33,13 +35,13 @@ namespace TLCGen.Settings
             }
         }
 
-        private TLCGenDefaultsModel _Settings;
+        private TLCGenDefaultsModel _Defaults;
         public TLCGenDefaultsModel Defaults
         {
-            get { return _Settings; }
+            get { return _Defaults; }
             set
             {
-                _Settings = value;
+                _Defaults = value;
             }
         }
 
@@ -132,52 +134,46 @@ namespace TLCGen.Settings
 
         #region IDefaultsProvider
 
-        public void SetDefaultsOnModel(object model)
+        public void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null)
         {
             var type = model.GetType();
-            var typename = type.Name;
-            var props = type.GetProperties();
-#warning TODO: change this, so it uses the RefersToSignalGroup and RefersToDetector attributes to find the name; that attr is there already!
-            if (props.Where(x => x.Name == "FaseCyclus").Any() || 
-                typename.StartsWith("FaseCyclus") && props.Where(x => x.Name == "Naam").Any())
+            var typename = type.FullName + "," + type.Assembly.GetName().Name;
+
+            var defs = Defaults.Defaults.Where(x => x.DataType == typename);
+
+            if (defs == null || !defs.Any())
+                return;
+
+            if(defs.Count() == 1)
             {
-                PropertyInfo prop;
-                var _props = props.Where(x => x.Name == "FaseCyclus");
-                if(_props == null || _props.Count() == 0)
-                {
-                    prop = props.Where(x => x.Name == "Naam").First();
-                }
-                else
-                {
-                    prop = props.Where(x => x.Name == "FaseCyclus").First();
-                }
-                var fctype = GetFaseCyclusTypeFromName((string)prop.GetValue(model));
-                var fromfc = Defaults.Fasen.Where(x => x.Type == fctype);
-                var frommodel = fromfc.First().GetModel(model.GetType().Name);
-                if(frommodel != null)
-                {
-                    CopyAllValueProperties(frommodel, model);
-                }
+                CopyAllValueProperties(defs.First().Data, model);
             }
-            if (props.Where(x => x.Name == "Detector").Any() ||
-                typename.StartsWith("Detector") && props.Where(x => x.Name == "Naam").Any())
+            else if(defs.Count() > 1)
             {
-                PropertyInfo prop;
-                var _props = props.Where(x => x.Name == "Detector");
-                if (_props == null || _props.Count() == 0)
+                bool found = false;
+                if (selector1 == null && selector2 == null)
                 {
-                    prop = props.Where(x => x.Name == "Naam").First();
+                    CopyAllValueProperties(defs.First().Data, model);
+                    found = true;
+                    //MessageBox.Show("Fout bij toepassen default instellingen voor " + type.Name + ":\nGeen selector bekend bij meerdere beschikbare defaults.", "Fout bij toepassen defaults");
                 }
                 else
                 {
-                    prop = props.Where(x => x.Name == "Detector").First();
+                    foreach (var def in defs)
+                    {
+                        if ((selector1 == null || selector1 == def.Selector1) &&
+                            (selector2 == null || selector2 == def.Selector2))
+                        {
+                            CopyAllValueProperties(def.Data, model);
+                            found = true;
+                            break;
+                        }
+                    }
                 }
-                var dtype = GetDetectorTypeFromName((string)prop.GetValue(model));
-                var fromd = Defaults.Detectoren.Where(x => x.Type == dtype);
-                var frommodel = fromd.First().GetModel(model.GetType().Name);
-                if (frommodel != null)
+                if (!found)
                 {
-                    CopyAllValueProperties(frommodel, model);
+                    //CopyAllValueProperties(defs.First().Data, model);
+                    //MessageBox.Show("Fout bij toepassen default instellingen voor " + type.Name + ":\nGeen passende default gevonden bij: " + selector1 + "/" + selector2 + ".", "Fout bij toepassen defaults");
                 }
             }
         }
@@ -190,7 +186,45 @@ namespace TLCGen.Settings
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
 #if DEBUG
-            Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
+            //Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
+            Defaults = new TLCGenDefaultsModel();
+            var doc = new XmlDocument();
+            XmlReader reader =
+                XmlReader.Create(
+                    Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"), 
+                    new XmlReaderSettings() { IgnoreComments = true });
+            doc.Load(reader);
+            var defs = doc.DocumentElement.SelectSingleNode("Defaults");
+            foreach(XmlNode def in defs.ChildNodes)
+            {
+                XmlNode x = def.SelectSingleNode("DataType");
+                string t = x.InnerText;
+                var type = Type.GetType(t);
+                XmlRootAttribute xRoot = new XmlRootAttribute();
+                xRoot.ElementName = "Data";
+                xRoot.IsNullable = true;
+                System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(type, xRoot);
+                //StringReader sr = new StringReader(def.SelectSingleNode("Data").OuterXml);
+                // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
+                object o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
+                //object o = ConvertNode(def.SelectSingleNode("Data"), type);
+                var item = new TLCGenDefaultModel();
+                item.DefaultName = def.SelectSingleNode("DefaultName").InnerText;
+                item.DataType = def.SelectSingleNode("DataType").InnerText;
+                item.Category = def.SelectSingleNode("Category").InnerText;
+                XmlNode n1 = def.SelectSingleNode("Selector1");
+                if (n1 != null)
+                {
+                    item.Selector1 = n1.InnerText;
+                }
+                XmlNode n2 = def.SelectSingleNode("Selector2");
+                if (n2 != null)
+                {
+                    item.Selector2 = n2.InnerText;
+                }
+                item.Data = o;
+                Defaults.Defaults.Add(item);
+            }
 #else
             if (File.Exists(setfile))
             {
@@ -203,6 +237,18 @@ namespace TLCGen.Settings
 #endif
         }
 
+        private object ConvertNode(XmlNode node, Type t)
+        {
+            MemoryStream stm = new MemoryStream();
+            StreamWriter stw = new StreamWriter(stm);
+            stw.Write(node.OuterXml);
+            stw.Flush();
+            stm.Position = 0;
+            System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(t);
+            var result = ser.Deserialize(stm);
+            return result;
+        }
+
         public void SaveSettings()
         {
             var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -210,7 +256,21 @@ namespace TLCGen.Settings
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
-            TLCGenSerialization.Serialize<TLCGenDefaultsModel>(setfile, Defaults);
+            using (FileStream fs = new FileStream(setfile, FileMode.Create, FileAccess.Write))
+            {
+                List<Type> et = new List<Type>();
+                foreach(var def in Defaults.Defaults)
+                {
+                    if(!et.Contains(def.Data.GetType()))
+                    {
+                        et.Add(def.Data.GetType());
+                    }
+                }
+
+                var serializer = new XmlSerializer(typeof(TLCGenDefaultsModel), et.ToArray());
+                serializer.Serialize(fs, Defaults);
+                fs.Close();
+            }
         }
 
         #endregion // IDefaultsProvider

@@ -15,6 +15,6 @@ namespace TLCGen.Settings
         void LoadSettings();
         void SaveSettings();
 
-        void SetDefaultsOnModel(object model);
+        void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null);
     }
 }

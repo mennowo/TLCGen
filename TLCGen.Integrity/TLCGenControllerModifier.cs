@@ -233,7 +233,7 @@ namespace TLCGen.Integrity
                                 if (mlfc1.FaseCyclus == mlfc2.FaseCyclus)
                                     continue;
 
-                                if (ControllerChecker.IsFasenConflicting(c, mlfc1.FaseCyclus, mlfc2.FaseCyclus))
+                                if (TLCGenControllerChecker.IsFasenConflicting(c, mlfc1.FaseCyclus, mlfc2.FaseCyclus))
                                 {
                                     remfcs.Add(mlfc1);
                                     break;
@@ -251,14 +251,14 @@ namespace TLCGen.Integrity
                 {
                     foreach(var ontr in c.VAOntruimenFasen)
                     {
-                        var conflicts = ControllerChecker.GetFaseConflicts(c, ontr.FaseCyclus);
+                        var conflicts = TLCGenControllerChecker.GetFaseConflicts(c, ontr.FaseCyclus);
                         foreach(var d in ontr.VADetectoren)
                         {
                             var addfcs = new List<VAOntruimenNaarFaseModel>();
                             var remfcs = new List<VAOntruimenNaarFaseModel>();
                             foreach (var fc in d.ConflicterendeFasen)
                             {
-                                if(!ControllerChecker.IsFasenConflicting(c, ontr.FaseCyclus, fc.FaseCyclus))
+                                if(!TLCGenControllerChecker.IsFasenConflicting(c, ontr.FaseCyclus, fc.FaseCyclus))
                                 {
                                     remfcs.Add(fc);
                                 }
@@ -299,7 +299,7 @@ namespace TLCGen.Integrity
                                 if (fase1.FaseCyclus == fase2.FaseCyclus)
                                     continue;
 
-                                if (!ControllerChecker.IsFasenConflicting(c, fase1.FaseCyclus, fase2.FaseCyclus))
+                                if (!TLCGenControllerChecker.IsFasenConflicting(c, fase1.FaseCyclus, fase2.FaseCyclus))
                                 {
                                     remfcs.Add(fase1);
                                 }

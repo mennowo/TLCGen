@@ -1,9 +1,13 @@
 ﻿<?xml version="1.0"?>
 <TLCGenDefaultsModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Fasen>
-    <FaseCyclus>
-      <Type>Auto</Type>
-      <FaseCyclus>
+  <Defaults>
+    <!-- FaseCycli -->
+    <Default>
+      <DefaultName>Fasecyclus auto</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Auto</Selector1>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
         <Type>Auto</Type>
@@ -23,29 +27,14 @@
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <Detectoren />
-      </FaseCyclus>
-      <Groentijd>
-        <FaseCyclus />
-        <Waarde>300</Waarde>
-      </Groentijd>
-      <FaseCyclusModuleData>
-        <FaseCyclus />
-        <ModulenVooruit>0</ModulenVooruit>
-        <AlternatiefToestaan>true</AlternatiefToestaan>
-        <AlternatieveRuimte>60</AlternatieveRuimte>
-        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
-      </FaseCyclusModuleData>
-      <RoBuGroverFaseCyclusInstellingen>
-        <FaseCyclus />
-        <MinGroenTijd>100</MinGroenTijd>
-        <MaxGroenTijd>500</MaxGroenTijd>
-        <FileDetectoren />
-        <HiaatDetectoren />
-      </RoBuGroverFaseCyclusInstellingen>
-    </FaseCyclus>
-    <FaseCyclus>
-      <Type>Fiets</Type>
-      <FaseCyclus>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Fasecyclus fiets</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Fiets</Selector1>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
         <Type>Fiets</Type>
@@ -65,22 +54,14 @@
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <Detectoren />
-      </FaseCyclus>
-      <Groentijd>
-        <FaseCyclus />
-        <Waarde>150</Waarde>
-      </Groentijd>
-      <FaseCyclusModuleData>
-        <FaseCyclus />
-        <ModulenVooruit>0</ModulenVooruit>
-        <AlternatiefToestaan>true</AlternatiefToestaan>
-        <AlternatieveRuimte>60</AlternatieveRuimte>
-        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
-      </FaseCyclusModuleData>
-    </FaseCyclus>
-    <FaseCyclus>
-      <Type>Voetganger</Type>
-      <FaseCyclus>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Fasecyclus voetganger</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Voetganger</Selector1>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
         <Type>Voetganger</Type>
@@ -100,22 +81,14 @@
         <MeeverlengenType>Voetganger</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <Detectoren />
-      </FaseCyclus>
-      <Groentijd>
-        <FaseCyclus />
-        <Waarde xsi:nil="true" />
-      </Groentijd>
-      <FaseCyclusModuleData>
-        <FaseCyclus />
-        <ModulenVooruit>0</ModulenVooruit>
-        <AlternatiefToestaan>true</AlternatiefToestaan>
-        <AlternatieveRuimte>60</AlternatieveRuimte>
-        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
-      </FaseCyclusModuleData>
-    </FaseCyclus>
-    <FaseCyclus>
-      <Type>OV</Type>
-      <FaseCyclus>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Fasecyclus voetganger</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>OV</Selector1>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
         <Type>OV</Type>
@@ -135,31 +108,90 @@
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <Detectoren />
-      </FaseCyclus>
-      <Groentijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Groentijd auto</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Auto</Selector1>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <Data xsi:type="GroentijdModel">
+        <FaseCyclus />
+        <Waarde>300</Waarde>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Groentijd fiets</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Fiets</Selector1>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <Data xsi:type="GroentijdModel">
+        <FaseCyclus />
+        <Waarde>150</Waarde>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Groentijd voetganger</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Voetganger</Selector1>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <Data xsi:type="GroentijdModel">
         <FaseCyclus />
         <Waarde xsi:nil="true" />
-      </Groentijd>
-      <FaseCyclusModuleData>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Groentijd OV</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>OV</Selector1>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <Data xsi:type="GroentijdModel">
         <FaseCyclus />
-        <ModulenVooruit>0</ModulenVooruit>
-        <AlternatiefToestaan>true</AlternatiefToestaan>
-        <AlternatieveRuimte>60</AlternatieveRuimte>
-        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
-      </FaseCyclusModuleData>
-    </FaseCyclus>
-  </Fasen>
-  <Detectoren>
-    <Detector>
-      <Type>Kop</Type>
-      <Detector>
+        <Waarde xsi:nil="true" />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RoBuGrover auto</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Auto</Selector1>
+      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <MinGroenTijd>100</MinGroenTijd>
+        <MaxGroenTijd>500</MaxGroenTijd>
+        <FileDetectoren />
+        <HiaatDetectoren />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RoBuGrover fiets</DefaultName>
+      <Category>FaseCyclus</Category>
+      <Selector1>Fiets</Selector1>
+      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <MinGroenTijd>0</MinGroenTijd>
+        <MaxGroenTijd>0</MaxGroenTijd>
+        <FileDetectoren />
+        <HiaatDetectoren />
+      </Data>
+    </Default>
+
+    <!-- Detectie -->
+    <Default>
+      <DefaultName>Koplus auto</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Kop</Selector1>
+      <Selector2>Auto</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
-        <TDB>20</TDB>
+        <TDB>10</TDB>
         <TDH>30</TDH>
-        <TOG>20</TOG>
-        <TBG>360</TBG>
+        <TOG>360</TOG>
+        <TBG>20</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>true</AanvraagDirect>
@@ -169,15 +201,15 @@
         <Type>Kop</Type>
         <Aanvraag>RnietTRG</Aanvraag>
         <Verlengen>Kopmax</Verlengen>
-      </Detector>
-      <RoBuGroverFileDetector>
-        <Detector />
-        <FileTijd>60</FileTijd>
-      </RoBuGroverFileDetector>
-    </Detector>
-    <Detector>
-      <Type>Lang</Type>
-      <Detector>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Lange lus auto</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Lang</Selector1>
+      <Selector2>Auto</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
@@ -194,22 +226,22 @@
         <Type>Lang</Type>
         <Aanvraag>RnietTRG</Aanvraag>
         <Verlengen>MK2</Verlengen>
-      </Detector>
-      <RoBuGroverHiaatDetector>
-        <Detector />
-        <HiaatTijd>10</HiaatTijd>
-      </RoBuGroverHiaatDetector>
-    </Detector>
-    <Detector>
-      <Type>Verweg</Type>
-      <Detector>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Verweg lus auto</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Verweg</Selector1>
+      <Selector2>Auto</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
         <TDB>0</TDB>
         <TDH>0</TDH>
-        <TOG>20</TOG>
-        <TBG>360</TBG>
+        <TOG>360</TOG>
+        <TBG>60</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
@@ -219,39 +251,122 @@
         <Type>Verweg</Type>
         <Aanvraag>Uit</Aanvraag>
         <Verlengen>MK2</Verlengen>
-      </Detector>
-    </Detector>
-    <Detector>
-      <Type>File</Type>
-      <Detector>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>File lus auto</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>File</Selector1>
+      <Selector2>Auto</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
         <TDB>0</TDB>
         <TDH>0</TDH>
-        <TOG>60</TOG>
-        <TBG>360</TBG>
+        <TOG>360</TOG>
+        <TBG>20</TBG>
         <TFL>60</TFL>
-        <CFL>30</CFL>
+        <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
-        <Type>File</Type>
-        <Aanvraag>Geen</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Detector>
-    </Detector>
-    <Detector>
-      <Type>KnopBuiten</Type>
-      <Detector>
+        <Type>Verweg</Type>
+        <Aanvraag>Uit</Aanvraag>
+        <Verlengen>MK2</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Koplus fiets</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Kop</Selector1>
+      <Selector2>Fiets</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>15</TDB>
+        <TDH>30</TDH>
+        <TOG>1440</TOG>
+        <TBG>10</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>true</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Kop</Type>
+        <Aanvraag>RnietTRG</Aanvraag>
+        <Verlengen>Kopmax</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Fiets drukknop buiten</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>KnopBuiten</Selector1>
+      <Selector2>Fiets</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
         <TDB>0</TDB>
         <TDH>0</TDH>
-        <TOG>10</TOG>
-        <TBG>1440</TBG>
+        <TOG>1440</TOG>
+        <TBG>10</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>KnopBuiten</Type>
+        <Aanvraag>Rood</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Voetganger drukknop binnen</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>KnopBinnen</Selector1>
+      <Selector2>Voetganger</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>1440</TOG>
+        <TBG>10</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>KnopBinnen</Type>
+        <Aanvraag>RoodGeel</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Voetganger drukknop buiten</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>File</Selector1>
+      <Selector2>Auto</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>0</TDH>
+        <TOG>1440</TOG>
+        <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
@@ -261,49 +376,105 @@
         <Type>KnopBuiten</Type>
         <Aanvraag>RoodGeel</Aanvraag>
         <Verlengen>Geen</Verlengen>
-      </Detector>
-    </Detector>
-    <Detector>
-      <Type>KnopBinnen</Type>
-      <Detector>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RoBuGrover file detector</DefaultName>
+      <Category>Detector</Category>
+      <DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Detector />
+        <FileTijd>60</FileTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>RoBuGrover hiaat lus</DefaultName>
+      <Category>Detector</Category>
+      <DataType>TLCGen.Models.RoBuGroverHiaatDetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Detector />
+        <HiaatTijd>10</HiaatTijd>
+      </Data>
+    </Default>
+
+    <!-- Overig -->
+    <Default>
+      <DefaultName>Regeling instellingen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.ControllerDataModel,TLCGen.Models</DataType>
+      <Data>
         <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
-        <TOG>10</TOG>
-        <TBG>1440</TBG>
-        <TFL>60</TFL>
-        <CFL>45</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <Wachtlicht>true</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>KnopBinnen</Type>
-        <Aanvraag>RoodGeel</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Detector>
-    </Detector>
-    <Detector>
-      <Type>Radar</Type>
-      <Detector>
-        <Naam />
-        <BitmapCoordinaten />
-        <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
-        <TOG>10</TOG>
-        <TBG>1440</TBG>
-        <TFL>60</TFL>
-        <CFL>30</CFL>
-        <AanvraagDirect>false</AanvraagDirect>
-        <Wachtlicht>false</Wachtlicht>
-        <WachtlichtBitmapData />
-        <Simulatie />
-        <Type>Radar</Type>
-        <Aanvraag>RoodGeel</Aanvraag>
-        <Verlengen>Geen</Verlengen>
-      </Detector>
-    </Detector>
-  </Detectoren>
+        <Stad />
+        <Straat1 />
+        <Straat2 />
+        <BitmapNaam />
+        <CCOLVersie>CCOL8</CCOLVersie>
+        <KWCType>Geen</KWCType>
+        <VLOGType>Filebased</VLOGType>
+        <VLOGInTestOmgeving>false</VLOGInTestOmgeving>
+        <GarantieOntruimingsTijden>true</GarantieOntruimingsTijden>
+        <ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
+        <TypeGroentijden>MaxGroentijden</TypeGroentijden>
+        <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
+        <TLCGenVersie>V0_1</TLCGenVersie>
+        <SegmentenDisplayBitmapData />
+        <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
+        <FixatieData>
+          <FixatieMogelijk>true</FixatieMogelijk>
+          <BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>
+          <FixatieBitmapData />
+        </FixatieData>
+        <Versies />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>OV ingreep</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.OVIngreepModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <KAR>true</KAR>
+        <Vecom>false</Vecom>
+        <Type>Bus</Type>
+        <RijTijdOngehinderd>200</RijTijdOngehinderd>
+        <RijTijdBeperktgehinderd>150</RijTijdBeperktgehinderd>
+        <RijTijdGehinderd>100</RijTijdGehinderd>
+        <OnderMaximum>150</OnderMaximum>
+        <GroenBewaking>300</GroenBewaking>
+        <AfkappenConflicten>true</AfkappenConflicten>
+        <AfkappenConflictenOV>false</AfkappenConflictenOV>
+        <VasthoudenGroen>true</VasthoudenGroen>
+        <TussendoorRealiseren>true</TussendoorRealiseren>
+        <AlleLijnen>false</AlleLijnen>
+        <OVInmeldingBitmapData />
+        <OVKARDummyInmeldingBitmapData />
+        <OVKARDummyUitmeldingBitmapData />
+        <OVVecomDummyInmeldingBitmapData />
+        <OVVecomDummyUitmeldingBitmapData />
+        <LijnNummers />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>HD ingreep</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.HDIngreepModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <KAR>true</KAR>
+        <Vecom>false</Vecom>
+        <Opticom>false</Opticom>
+        <Sirene>false</Sirene>
+        <RijTijdOngehinderd>200</RijTijdOngehinderd>
+        <RijTijdBeperktgehinderd>150</RijTijdBeperktgehinderd>
+        <RijTijdGehinderd>100</RijTijdGehinderd>
+        <GroenBewaking>900</GroenBewaking>
+        <HDInmeldingBitmapData />
+        <HDKARDummyInmeldingBitmapData />
+        <HDKARDummyUitmeldingBitmapData />
+        <HDVecomDummyInmeldingBitmapData />
+        <HDVecomDummyUitmeldingBitmapData />
+        <MeerealiserendeFaseCycli />
+      </Data>
+    </Default>
+  </Defaults>
 </TLCGenDefaultsModel>

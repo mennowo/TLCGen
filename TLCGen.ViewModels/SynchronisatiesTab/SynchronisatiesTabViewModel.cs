@@ -552,7 +552,7 @@ namespace TLCGen.ViewModels
 
         private bool IsMatrixOK()
         {
-            string s = Integrity.IntegrityChecker.IsConflictMatrixOK(_Controller);
+            string s = Integrity.TLCGenIntegrityChecker.IsConflictMatrixOK(_Controller);
             if (s == null)
             {
                 if (_MatrixChanged == true)

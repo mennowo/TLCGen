@@ -226,11 +226,11 @@ namespace TLCGen.ViewModels
                 switch(request.Type)
                 {
                     case ElementIdentifierType.Naam:
-                        request.IsUnique = IntegrityChecker.IsElementNaamUnique(_Controller, request.Identifier);
+                        request.IsUnique = TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, request.Identifier);
                         request.Handled = true;
                         break;
                     case ElementIdentifierType.VissimNaam:
-                        request.IsUnique = IntegrityChecker.IsElementVissimNaamUnique(_Controller, request.Identifier);
+                        request.IsUnique = TLCGenIntegrityChecker.IsElementVissimNaamUnique(_Controller, request.Identifier);
                         request.Handled = true;
                         break;
                 }
@@ -242,7 +242,7 @@ namespace TLCGen.ViewModels
             if (request.Handled == false)
             {
                 request.Handled = true;
-                request.IsConflicting = IntegrityChecker.IsFasenConflicting(_Controller, request.Define1, request.Define2);
+                request.IsConflicting = TLCGenIntegrityChecker.IsFasenConflicting(_Controller, request.Define1, request.Define2);
             }
         }
 

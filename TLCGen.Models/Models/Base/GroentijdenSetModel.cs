@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -14,6 +15,7 @@ namespace TLCGen.Models
 
         public string Naam { get; set; }
         public GroentijdenTypeEnum Type { get; set; }
+        [XmlElement(ElementName = "Groentijd")]
         public List<GroentijdModel> Groentijden { get; set; }
 
         #endregion // Properties

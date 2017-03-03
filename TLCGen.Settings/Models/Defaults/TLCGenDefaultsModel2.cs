@@ -13,10 +13,12 @@ namespace TLCGen.Settings
     [Serializable]
     public class TLCGenDefaultsModel
     {
-        [XmlArrayItem(ElementName = "FaseCyclus")]
-        public List<FaseCyclusDefaultsModel> Fasen { get; set; }
+        [XmlArrayItem(ElementName = "Default")]
+        public List<TLCGenDefaultModel> Defaults { get; set; }
 
-        [XmlArrayItem(ElementName = "Detector")]
-        public List<DetectorDefaultsModel> Detectoren { get; set; }
+        public TLCGenDefaultsModel()
+        {
+            Defaults = new List<TLCGenDefaultModel>();
+        }
     }
 }

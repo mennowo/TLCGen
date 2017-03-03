@@ -10,7 +10,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 
-namespace TLCGen.DataAccess
+namespace TLCGen.Helpers
 {
     public static class TLCGenSerialization
     {

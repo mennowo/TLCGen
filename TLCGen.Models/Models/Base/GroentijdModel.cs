@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace TLCGen.Models
     [RefersToSignalGroup("FaseCyclus")]
     public class GroentijdModel : IComparable
     {
+        [Browsable(false)]
         public string FaseCyclus { get; set; }
         public int? Waarde { get; set; }
 

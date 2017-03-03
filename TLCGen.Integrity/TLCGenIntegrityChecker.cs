@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.Integrity
 {
-    public static class IntegrityChecker
+    public static class TLCGenIntegrityChecker
     {
         /// <summary>
         /// Checks the integrity of the data in the instance of ControllerModel that is parsed in

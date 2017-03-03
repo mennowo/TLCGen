@@ -18,29 +18,16 @@ namespace TLCGen.Settings
 
         #region Properties
 
-        private FasenDefaultsTabViewModel _FasenDefaultsTabVM;
-        public FasenDefaultsTabViewModel FasenDefaultsTabVM
+        private DefaultsTabViewModel _DefaultsTabVM;
+        public DefaultsTabViewModel DefaultsTabVM
         {
             get
             {
-                if (_FasenDefaultsTabVM == null)
+                if (_DefaultsTabVM == null)
                 {
-                    _FasenDefaultsTabVM = new FasenDefaultsTabViewModel();
+                    _DefaultsTabVM = new DefaultsTabViewModel();
                 }
-                return _FasenDefaultsTabVM;
-            }
-        }
-
-        private DetectorenDefaultsTabViewModel _DetectorenDefaultsTabVM;
-        public DetectorenDefaultsTabViewModel DetectorenDefaultsTabVM
-        {
-            get
-            {
-                if (_DetectorenDefaultsTabVM == null)
-                {
-                    _DetectorenDefaultsTabVM = new DetectorenDefaultsTabViewModel();
-                }
-                return _DetectorenDefaultsTabVM;
+                return _DefaultsTabVM;
             }
         }
 

@@ -121,6 +121,10 @@
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
       <Name>TLCGen.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

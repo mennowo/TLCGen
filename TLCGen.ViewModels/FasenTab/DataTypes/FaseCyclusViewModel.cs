@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.Type = value;
 
                     // Apply new defaults
-                    DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus);
+                    DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
                     //SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
 
                     // Set default maxgroentijd

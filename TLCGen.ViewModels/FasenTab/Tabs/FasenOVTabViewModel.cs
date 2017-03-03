@@ -98,6 +98,7 @@ namespace TLCGen.ViewModels
                     if (value)
                     {
                         OVIngreepModel ov = new OVIngreepModel();
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.OVIngrepen.Add(ov);
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
@@ -146,6 +147,7 @@ namespace TLCGen.ViewModels
                     if (value)
                     {
                         HDIngreepModel hd = new HDIngreepModel();
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
                         hd.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.HDIngrepen.Add(hd);
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);

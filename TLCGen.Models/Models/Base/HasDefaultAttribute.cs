@@ -8,6 +8,11 @@ namespace TLCGen.Models
 {
     public class HasDefaultAttribute : Attribute
     {
-        public string Description { get; set; }
+        public bool HasDefault { get; set; }
+
+        public HasDefaultAttribute(bool hasdefault)
+        {
+            HasDefault = hasdefault;
+        }
     }
 }

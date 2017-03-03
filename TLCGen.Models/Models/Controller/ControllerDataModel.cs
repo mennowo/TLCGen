@@ -20,10 +20,15 @@ namespace TLCGen.Models
 
         #region Properties
 
+        [HasDefault(false)]
         public string Naam { get; set; }
+        [HasDefault(false)]
         public string Stad { get; set; }
+        [HasDefault(false)]
         public string Straat1 { get; set; }
+        [HasDefault(false)]
         public string Straat2 { get; set; }
+        [HasDefault(false)]
         public string BitmapNaam { get; set; }
 
         public CCOLVersieEnum CCOLVersie { get; set; }
@@ -55,6 +60,7 @@ namespace TLCGen.Models
 
         public FixatieModel FixatieData { get; set; }
 
+        [XmlElement(ElementName = "Versie")]
         public List<VersieModel> Versies { get; set; }
 
         #endregion // Properties

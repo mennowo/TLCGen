@@ -65,13 +65,16 @@
   <ItemGroup>
     <Compile Include="TLCGenControllerDataProvider.cs" />
     <Compile Include="ITLCGenControllerDataProvider.cs" />
-    <Compile Include="TLCGenSerialization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
+      <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
+      <Name>TLCGen.Helpers</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
       <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
@@ -88,6 +91,10 @@
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
       <Name>TLCGen.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
+      <Name>TLCGen.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

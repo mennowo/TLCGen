@@ -42,14 +42,7 @@
                     <WrapPanel>
                         <Label Content="Default settings voor verkeersregeling" />
                     </WrapPanel>
-                    <TabControl Grid.Row="1">
-                        <TabItem Header="Fasen">
-                            <local:FasenDefaultsTabView DataContext="{Binding Path=FasenDefaultsTabVM}" />
-                        </TabItem>
-                        <TabItem Header="Detectoren">
-                            <local:DetectorenDefaultsTabView DataContext="{Binding Path=DetectorenDefaultsTabVM}" />
-                        </TabItem>
-                    </TabControl>
+                    <local:DefaultsTabView DataContext="{Binding Path=DefaultsTabVM}" Grid.Row="1" />
                 </Grid>
             </TabItem>
             <!--<TabItem Header="Generatoren settings">

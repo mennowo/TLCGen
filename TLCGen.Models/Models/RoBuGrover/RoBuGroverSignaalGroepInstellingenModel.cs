@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using System.ComponentModel;
 
 namespace TLCGen.Models
 {
@@ -13,6 +14,7 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [Browsable(false)]
         public string FaseCyclus { get; set; }
         public int MinGroenTijd { get; set; }
         public int MaxGroenTijd { get; set; }

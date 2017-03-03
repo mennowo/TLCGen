@@ -54,20 +54,6 @@ namespace TLCGen.Models
 
         #endregion // Properties
 
-        #region IBelongToSignalGroup
-
-        public string SignalGroup1
-        {
-            get { return FaseCyclus; }
-        }
-
-        public string SignalGroup2
-        {
-            get { return null; }
-        }
-
-        #endregion // IBelongToSignalGroup
-
         #region Constructor
 
         public HDIngreepModel()

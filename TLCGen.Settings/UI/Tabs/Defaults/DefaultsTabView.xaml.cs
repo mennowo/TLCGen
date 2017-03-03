@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Settings.Views
 {
     /// <summary>
-    /// Interaction logic for FasenDefaultsTabView.xaml
+    /// Interaction logic for DefaultsTabView.xaml
     /// </summary>
-    public partial class FasenDefaultsTabView : UserControl
+    public partial class DefaultsTabView : UserControl
     {
-        public FasenDefaultsTabView()
+        public DefaultsTabView()
         {
             InitializeComponent();
         }

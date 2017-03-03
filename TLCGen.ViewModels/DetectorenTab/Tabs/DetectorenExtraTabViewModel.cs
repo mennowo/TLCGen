@@ -157,7 +157,7 @@ namespace TLCGen.ViewModels
                 }
             }
             dm.Naam = newname;
-            DefaultsProvider.Default.SetDefaultsOnModel(dm);
+            DefaultsProvider.Default.SetDefaultsOnModel(dm, dm.Type.ToString());
             dm.AanvraagDirect = false; // Not possible / allowed on loose detector
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
@@ -263,7 +263,7 @@ namespace TLCGen.ViewModels
         {
             foreach (var d in items)
             {
-                if (!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                if (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
                 {
                     MessageBox.Show("Error bij toevoegen van detector met naam " + d.Naam + ".\nDe detector naam is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

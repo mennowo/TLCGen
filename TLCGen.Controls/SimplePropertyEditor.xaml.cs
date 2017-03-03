@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TLCGen.Models;
 
 namespace TLCGen.Controls
 {
@@ -105,16 +106,31 @@ namespace TLCGen.Controls
             {
                 if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
                 {
-                    var attr = prop.GetCustomAttributes(typeof(BrowsableAttribute), true);
-                    if (attr != null && attr.Count() == 1)
+                    if (o.CheckBrowsable)
                     {
-                        if(!((BrowsableAttribute)attr.First()).Browsable)
+                        var _attr = prop.GetCustomAttributes(typeof(BrowsableAttribute), true);
+                        if (_attr != null && _attr.Count() == 1)
                         {
-                            continue;
+                            if (!((BrowsableAttribute)_attr.First()).Browsable)
+                            {
+                                continue;
+                            }
                         }
                     }
 
-                    attr = prop.GetCustomAttributes(typeof(CategoryAttribute), true);
+                    if (o.CheckHasDefault)
+                    {
+                        var _attr = prop.GetCustomAttributes(typeof(HasDefaultAttribute), true);
+                        if (_attr != null && _attr.Count() == 1)
+                        {
+                            if (!((HasDefaultAttribute)_attr.First()).HasDefault)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+
+                    var attr = prop.GetCustomAttributes(typeof(CategoryAttribute), true);
                     if (attr != null && attr.Count() == 1)
                     {
                         if (!(string.IsNullOrEmpty(((CategoryAttribute)attr.First()).Category)))
@@ -241,6 +257,32 @@ namespace TLCGen.Controls
         // Using a DependencyProperty as the backing store for HorizontalDescriptionPlacement.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty HorizontalDescriptionPlacementProperty =
             DependencyProperty.Register("HorizontalDescriptionPlacement", typeof(HorizontalAlignment), typeof(SimplePropertyEditor), new PropertyMetadata(HorizontalAlignment.Left));
+
+
+
+
+        public bool CheckBrowsable
+        {
+            get { return (bool)GetValue(CheckBrowsableProperty); }
+            set { SetValue(CheckBrowsableProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CheckBrowsable.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CheckBrowsableProperty =
+            DependencyProperty.Register("CheckBrowsable", typeof(bool), typeof(SimplePropertyEditor), new PropertyMetadata(true));
+
+
+
+        public bool CheckHasDefault
+        {
+            get { return (bool)GetValue(CheckHasDefaultProperty); }
+            set { SetValue(CheckHasDefaultProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CheckHasDefault.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CheckHasDefaultProperty =
+            DependencyProperty.Register("CheckHasDefault", typeof(bool), typeof(SimplePropertyEditor), new PropertyMetadata(false));
+
 
 
 

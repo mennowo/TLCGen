@@ -70,13 +70,12 @@
     <Compile Include="Interfaces\ITemplatesProvider.cs" />
     <Compile Include="Interfaces\IDefaultsProvider.cs" />
     <Compile Include="Interfaces\ISettingsProvider.cs" />
-    <Compile Include="Models\DetectorDefaultsModel.cs" />
-    <Compile Include="Models\FaseCyclusDefaultsModel.cs" />
-    <Compile Include="Models\TLCGenTemplateModel.cs" />
-    <Compile Include="Models\TLCGenTemplatesModel.cs" />
+    <Compile Include="Models\Defaults\TLCGenDefaultModel.cs" />
+    <Compile Include="Models\Defaults\TLCGenDefaultsModel2.cs" />
+    <Compile Include="Models\Templates\TLCGenTemplateModel.cs" />
+    <Compile Include="Models\Templates\TLCGenTemplatesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsProvider.cs" />
-    <Compile Include="Models\TLCGenDefaultsModel.cs" />
     <Compile Include="UI\DataTypes\DetectorTemplateView.xaml.cs">
       <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
     </Compile>
@@ -85,22 +84,21 @@
       <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DataTypes\FaseCyclusTemplateViewModel.cs" />
-    <Compile Include="UI\Tabs\DetectorenDefaultsTabView.xaml.cs">
-      <DependentUpon>DetectorenDefaultsTabView.xaml</DependentUpon>
+    <Compile Include="UI\Tabs\Defaults\DefaultsListView.xaml.cs">
+      <DependentUpon>DefaultsListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Tabs\DetectorenDefaultsTabViewModel.cs" />
-    <Compile Include="UI\Tabs\FasenDefaultsTabView.xaml.cs">
-      <DependentUpon>FasenDefaultsTabView.xaml</DependentUpon>
+    <Compile Include="UI\Tabs\Defaults\DefaultsTabView.xaml.cs">
+      <DependentUpon>DefaultsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Tabs\FasenDefaultsTabViewModel.cs" />
-    <Compile Include="UI\Tabs\DetectorenTemplatesEditorTabView.xaml.cs">
+    <Compile Include="UI\Tabs\Defaults\DefaultsTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabView.xaml.cs">
       <DependentUpon>DetectorenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Tabs\FasenTemplatesEditorTabView.xaml.cs">
+    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml.cs">
       <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Tabs\DetectorenTemplatesEditorTabViewModel.cs" />
-    <Compile Include="UI\Tabs\FasenTemplatesEditorTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabViewModel.cs" />
     <Compile Include="UI\TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -112,10 +110,6 @@
     <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
-      <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
-      <Name>TLCGen.DataAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
@@ -137,6 +131,7 @@
   <ItemGroup>
     <Content Include="Settings\tlcgendefaultdefaults.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Settings\tlcgendefaulttemplates.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -151,19 +146,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Tabs\DetectorenDefaultsTabView.xaml">
+    <Page Include="UI\Tabs\Defaults\DefaultsListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Tabs\FasenDefaultsTabView.xaml">
+    <Page Include="UI\Tabs\Defaults\DefaultsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\Tabs\DetectorenTemplatesEditorTabView.xaml">
+    <Page Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Tabs\FasenTemplatesEditorTabView.xaml">
+    <Page Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -176,7 +171,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\Controls\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -88,7 +88,15 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Type = value;
-                DefaultsProvider.Default.SetDefaultsOnModel(_Detector);
+                if(FaseCyclus != null && TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == FaseCyclus).Any())
+                {
+                    var fctype = TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == FaseCyclus).First().Type;
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString(), fctype.ToString());
+                }
+                else
+                {
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString());
+                }
                 OnMonitoredPropertyChanged(null);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
 

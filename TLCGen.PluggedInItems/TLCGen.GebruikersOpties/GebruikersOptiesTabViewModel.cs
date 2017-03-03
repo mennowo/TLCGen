@@ -505,11 +505,11 @@ namespace TLCGen.GebruikersOpties
             var o = SelectedOptie as GebruikersOptieViewModel;
             if (oio != null)
             {
-                return IntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam);
             }
             else
             {
-                return IntegrityChecker.IsElementNaamUnique(_Controller, o.Naam);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, o.Naam);
             }
         }
 

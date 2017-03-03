@@ -447,7 +447,7 @@ namespace TLCGen.ViewModels
                 if (imp.ImportsIntoExisting)
                 {
                     // Check data integrity
-                    string s1 = IntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
+                    string s1 = TLCGenIntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
@@ -462,7 +462,7 @@ namespace TLCGen.ViewModels
                         return;
 
                     // Check data integrity
-                    s1 = IntegrityChecker.IsControllerDataOK(c2);
+                    s1 = TLCGenIntegrityChecker.IsControllerDataOK(c2);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
@@ -481,7 +481,7 @@ namespace TLCGen.ViewModels
                         return;
 
                     // Check data integrity
-                    string s1 = IntegrityChecker.IsControllerDataOK(c1);
+                    string s1 = TLCGenIntegrityChecker.IsControllerDataOK(c1);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");

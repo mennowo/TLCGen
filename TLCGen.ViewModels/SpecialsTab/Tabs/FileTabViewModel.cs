@@ -87,7 +87,7 @@ namespace TLCGen.ViewModels
             FileIngreepModel fim = new FileIngreepModel();
             int i = FileIngrepen.Count + 1;
             fim.Naam = "File" + i.ToString();
-            while(!Integrity.IntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam))
+            while(!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam))
             {
                 ++i;
                 fim.Naam = "File" + i.ToString();

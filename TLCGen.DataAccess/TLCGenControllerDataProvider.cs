@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
@@ -122,6 +123,7 @@ namespace TLCGen.DataAccess
                 else
                 {
                     Controller = new ControllerModel();
+                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.Data);
                 }
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {
@@ -218,7 +220,7 @@ namespace TLCGen.DataAccess
                 //ControllerVM.ProcessAllChanges();
 
                 // Check data integrity: do not save wrong data
-                string s = IntegrityChecker.IsControllerDataOK(Controller);
+                string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
                 if (s != null)
                 {
                     System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");
@@ -271,7 +273,7 @@ namespace TLCGen.DataAccess
             //ControllerVM.ProcessAllChanges();
 
             // Check data integrity: do not save wrong data
-            string s = IntegrityChecker.IsControllerDataOK(Controller);
+            string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
             if (s != null)
             {
                 System.Windows.MessageBox.Show(s + "\n\nRegeling niet opgeslagen.", "Error bij opslaan: fout in regeling");

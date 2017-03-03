@@ -7,7 +7,7 @@ using TLCGen.Models;
 
 namespace TLCGen.Integrity
 {
-    public static class ControllerChecker
+    public static class TLCGenControllerChecker
     {
         /// <summary>
         /// Determines if this phase conflicts with the one parsed

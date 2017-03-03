@@ -62,9 +62,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerChecker.cs" />
+    <Compile Include="TLCGenControllerChecker.cs" />
     <Compile Include="TLCGenControllerModifier.cs" />
-    <Compile Include="IntegrityChecker.cs" />
+    <Compile Include="TLCGenIntegrityChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

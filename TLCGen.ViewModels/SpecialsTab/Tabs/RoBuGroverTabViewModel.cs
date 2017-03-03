@@ -218,11 +218,16 @@ namespace TLCGen.ViewModels
                 {
                     var inst = new RoBuGroverFaseCyclusInstellingenModel();
                     inst.FaseCyclus = fc.FaseCyclusNaam;
-                    DefaultsProvider.Default.SetDefaultsOnModel(inst);
+                    if (Controller.Fasen.Where(x => x.Naam == fc.FaseCyclusNaam).Any())
+                    {
+                        var type = Controller.Fasen.Where(x => x.Naam == fc.FaseCyclusNaam).First().Type.ToString();
+                        DefaultsProvider.Default.SetDefaultsOnModel(inst, type);
+                    }
                     var instvm = new RoBuGroverSignaalGroepInstellingenViewModel(inst);
                     try
                     {
                         var addfc = _Controller.Fasen.Where(x => x.Naam == instvm.FaseCyclus).First();
+                        if(addfc.Type != FaseTypeEnum.Fiets || addfc.Type == FaseTypeEnum.Voetganger)
                         foreach (DetectorModel dm in addfc.Detectoren)
                         {
                             if (dm.Type == DetectorTypeEnum.Lang)
