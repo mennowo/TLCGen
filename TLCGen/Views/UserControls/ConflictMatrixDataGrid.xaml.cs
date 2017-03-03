@@ -137,13 +137,13 @@ namespace TLCGen.Views
             if(values == null || values.Count() != 2)
                 throw new NotImplementedException();
 
-            var DisplayType = (SynchronisatieTypeEnum)values[0];
+            var DisplayType = (IntersignaalGroepTypeEnum)values[0];
             var IsEnabled = (bool)values[1];
 
             switch(DisplayType)
             {
-                case SynchronisatieTypeEnum.Conflict:
-                case SynchronisatieTypeEnum.GarantieConflict:
+                case IntersignaalGroepTypeEnum.Conflict:
+                case IntersignaalGroepTypeEnum.GarantieConflict:
                     return Visibility.Hidden;
                 default:
                     return IsEnabled ? Visibility.Visible : Visibility.Hidden;
@@ -160,18 +160,18 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            SynchronisatieTypeEnum e = (SynchronisatieTypeEnum)parameter;
+            IntersignaalGroepTypeEnum e = (IntersignaalGroepTypeEnum)parameter;
             switch(e)
             {
-                case SynchronisatieTypeEnum.Conflict:
-                case SynchronisatieTypeEnum.GarantieConflict:
+                case IntersignaalGroepTypeEnum.Conflict:
+                case IntersignaalGroepTypeEnum.GarantieConflict:
                     if (value is string)
                         return value as string;
                     else
                         return "";
-                case SynchronisatieTypeEnum.Gelijkstart:
-                case SynchronisatieTypeEnum.Voorstart:
-                case SynchronisatieTypeEnum.Naloop:
+                case IntersignaalGroepTypeEnum.Gelijkstart:
+                case IntersignaalGroepTypeEnum.Voorstart:
+                case IntersignaalGroepTypeEnum.Naloop:
                     if (value is bool)
                         return (bool)value;
                     else

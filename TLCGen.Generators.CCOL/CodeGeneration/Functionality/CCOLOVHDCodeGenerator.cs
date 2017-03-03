@@ -136,15 +136,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(prmtest1);
                 _MyElements.Add(prmtest2);
 
-                if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
-                {
-                    _MyElements.Add(
+#warning This is not nice. Need to improve!
+                //if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+                //{
+                _MyElements.Add(
                         new CCOLElement(
                             $"{_schcheckopdsin}",
                             c.OVData.CheckOpDSIN ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             CCOLElementTypeEnum.Schakelaar));
-                }
+                //}
 
                 foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
                 {

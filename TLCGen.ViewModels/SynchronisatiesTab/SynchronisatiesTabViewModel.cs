@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
         private SynchronisatieViewModel _SelectedSynchronisatie;
         private GarantieTijdConvertHelper _SelectedGarantieTijdenConvertValue;
         private bool _MatrixChanged;
-        private SynchronisatieTypeEnum _DisplayType;
+        private IntersignaalGroepTypeEnum _DisplayType;
 
         RelayCommand _DeleteValueCommand;
         RelayCommand _AddGarantieConvertValue;
@@ -46,7 +46,7 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public SynchronisatieTypeEnum DisplayType
+        public IntersignaalGroepTypeEnum DisplayType
         {
             get { return _DisplayType; }
             set
@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
                 OnPropertyChanged("SelectedSynchronisatie");
-                if (_SelectedSynchronisatie.DisplayType == SynchronisatieTypeEnum.Gelijkstart)
+                if (_SelectedSynchronisatie.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
                 {
                     OnPropertyChanged("GelijkstartDeelConflict");
                     OnPropertyChanged("GelijkstartOntruimingstijdFaseVan");
@@ -299,11 +299,11 @@ namespace TLCGen.ViewModels
             {
                 switch (DisplayType)
                 {
-                    case SynchronisatieTypeEnum.Gelijkstart:
+                    case IntersignaalGroepTypeEnum.Gelijkstart:
                         return $"Fictive ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
-                    case SynchronisatieTypeEnum.Voorstart:
+                    case IntersignaalGroepTypeEnum.Voorstart:
                         return $"Voorstarttijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
-                    case SynchronisatieTypeEnum.Meeaanvraag:
+                    case IntersignaalGroepTypeEnum.Meeaanvraag:
                         return $"Type meeaanvraag van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     default:
                         return "";
@@ -316,9 +316,9 @@ namespace TLCGen.ViewModels
             {
                 switch (DisplayType)
                 {
-                    case SynchronisatieTypeEnum.Gelijkstart:
+                    case IntersignaalGroepTypeEnum.Gelijkstart:
                         return $"Fictieve ontruimingstijd van {SelectedSynchronisatie.FaseNaar} naar {SelectedSynchronisatie.FaseVan}";
-                    case SynchronisatieTypeEnum.Voorstart:
+                    case IntersignaalGroepTypeEnum.Voorstart:
                         return $"Voorstart ontruimingstijd van {SelectedSynchronisatie.FaseVan} naar {SelectedSynchronisatie.FaseNaar}";
                     default:
                         return "";
@@ -398,7 +398,7 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                DisplayType = SynchronisatieTypeEnum.Conflict;
+                DisplayType = IntersignaalGroepTypeEnum.Conflict;
                 BuildConflictMatrix();
             }
         }
@@ -474,7 +474,7 @@ namespace TLCGen.ViewModels
         {
             return ConflictMatrix != null && 
                    Fasen != null && 
-                   DisplayType == SynchronisatieTypeEnum.GarantieConflict &&
+                   DisplayType == IntersignaalGroepTypeEnum.GarantieConflict &&
                    GarantieTijdenConvertValues != null &&
                    GarantieTijdenConvertValues.Count > 0;
         }

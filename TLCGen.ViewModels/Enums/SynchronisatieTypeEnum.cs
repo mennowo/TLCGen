@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.ViewModels.Enums
 {
     [Flags]
-    public enum SynchronisatieTypeEnum
+    public enum IntersignaalGroepTypeEnum
     {
         Conflict = 0x1,
         GarantieConflict = 0x2,

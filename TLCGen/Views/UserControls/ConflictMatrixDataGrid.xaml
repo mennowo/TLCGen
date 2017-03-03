@@ -27,7 +27,7 @@
                 <TextBlock
                     Margin="0" Padding="0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
                     IsEnabled="{Binding Path=IsEnabled}"
-                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.SomeConflict}}"
+                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
                     Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
                 </TextBlock>
                 <CheckBox
@@ -58,7 +58,7 @@
                         TextAlignment="Center"
                         IsEnabled="{Binding Path=IsEnabled}"
                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:SynchronisatieTypeEnum.SomeConflict}}"
+                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
                         Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
                 <CheckBox
                     Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"

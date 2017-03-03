@@ -19,7 +19,7 @@ namespace TLCGen.Views
             {
                 var ReferencesSelf = (bool)values[0];
                 var IsEnabled = (bool)values[1];
-                var DisplayType = (SynchronisatieTypeEnum)values[2];
+                var DisplayType = (IntersignaalGroepTypeEnum)values[2];
                 var ConflictValue = (string)values[3];
 
                 if (ReferencesSelf)
@@ -34,8 +34,8 @@ namespace TLCGen.Views
 
                 switch (DisplayType)
                 {
-                    case SynchronisatieTypeEnum.Conflict:
-                    case SynchronisatieTypeEnum.GarantieConflict:
+                    case IntersignaalGroepTypeEnum.Conflict:
+                    case IntersignaalGroepTypeEnum.GarantieConflict:
                         if (!string.IsNullOrEmpty(ConflictValue))
                         {
                             int i;
@@ -57,10 +57,10 @@ namespace TLCGen.Views
                                 return Brushes.LightBlue;
                         }
                         return null;
-                    case SynchronisatieTypeEnum.Gelijkstart:
-                    case SynchronisatieTypeEnum.Naloop:
-                    case SynchronisatieTypeEnum.Voorstart:
-                    case SynchronisatieTypeEnum.Meeaanvraag:
+                    case IntersignaalGroepTypeEnum.Gelijkstart:
+                    case IntersignaalGroepTypeEnum.Naloop:
+                    case IntersignaalGroepTypeEnum.Voorstart:
+                    case IntersignaalGroepTypeEnum.Meeaanvraag:
                         if (IsEnabled)
                             return null;
                         else

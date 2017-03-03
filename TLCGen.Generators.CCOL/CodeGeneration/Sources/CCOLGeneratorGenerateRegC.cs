@@ -107,6 +107,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
+            if (controller.InterSignaalGroep.Gelijkstarten.Any() ||
+                controller.InterSignaalGroep.Voorstarten.Any() ||
+                controller.InterSignaalGroep.Nalopen.Any())
+            {
+                sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
+            }
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Includes))

@@ -91,7 +91,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
                     return true;
@@ -106,13 +105,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
-                    // return if no synch
-                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
-                        return null;
-                    sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
-                    return sb.ToString();
-
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
                     // return if no synch
                     if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)

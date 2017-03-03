@@ -492,6 +492,7 @@ namespace TLCGen.ViewModels
                     ControllerVM.ReloadController();
                 }
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                OnPropertyChanged("HasController");
             }
         }
 
@@ -644,7 +645,6 @@ namespace TLCGen.ViewModels
                     ControllerVM.SelectedTabIndex = 0;
                 }
                 string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                TLCGenControllerDataProvider.Default.SetController(cm);
                 SetControllerForStatics(cm);
                 ControllerVM.Controller = cm;
                 ControllerVM.SelectedTabIndex = 0;

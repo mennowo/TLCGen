@@ -23,6 +23,7 @@ namespace TLCGen.Models
         public NaloopTypeEnum Type { get; set; }
         public bool DetectieAfhankelijk { get; set; }
         public int? MaximaleVoorstart { get; set; }
+        public SynchronisatieTypeEnum SynchronisatieType { get; set; }
 
         [XmlArrayItem(ElementName = "NaloopDetector")]
         public List<NaloopDetectorModel> Detectoren { get; set; }

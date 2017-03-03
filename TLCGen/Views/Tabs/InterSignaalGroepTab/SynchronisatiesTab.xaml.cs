@@ -33,8 +33,8 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            SynchronisatieTypeEnum e1 = (SynchronisatieTypeEnum)value;
-            SynchronisatieTypeEnum e2 = (SynchronisatieTypeEnum)parameter;
+            IntersignaalGroepTypeEnum e1 = (IntersignaalGroepTypeEnum)value;
+            IntersignaalGroepTypeEnum e2 = (IntersignaalGroepTypeEnum)parameter;
             if (e2.HasFlag(e1))
                 return Visibility.Visible;
             else
@@ -51,8 +51,8 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            SynchronisatieTypeEnum e1 = (SynchronisatieTypeEnum)value;
-            SynchronisatieTypeEnum e2 = (SynchronisatieTypeEnum)parameter;
+            IntersignaalGroepTypeEnum e1 = (IntersignaalGroepTypeEnum)value;
+            IntersignaalGroepTypeEnum e2 = (IntersignaalGroepTypeEnum)parameter;
             if (e2.HasFlag(e1))
                 return true;
             else
