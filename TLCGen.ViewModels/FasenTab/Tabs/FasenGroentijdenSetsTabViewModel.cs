@@ -148,6 +148,32 @@ namespace TLCGen.ViewModels
 
         void RemoveGroentijdenSetCommand_Executed(object prm)
         {
+            bool changed = false;
+            foreach(PeriodeModel p in _Controller.PeriodenData.Perioden)
+            {
+                if(p.Type == PeriodeTypeEnum.Groentijden && p.GroentijdenSet == SelectedSet.Naam)
+                {
+                    p.GroentijdenSet = null;
+                    changed = true;
+                }
+            }
+            if(_Controller.PeriodenData.DefaultPeriodeGroentijdenSet == SelectedSet.Naam)
+            {
+                if(_Controller.GroentijdenSets.Count > 0)
+                {
+                    _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = _Controller.GroentijdenSets[0].Naam;
+                }
+                else
+                {
+                    _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = null;
+                }
+                changed = true;
+            }
+            if(changed)
+            {
+                Messenger.Default.Send(new PeriodenChangedMessage());
+            }
+
             GroentijdenSets.Remove(SelectedSet);
             int i = 1;
 

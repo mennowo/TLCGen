@@ -192,6 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GetCoordinatesString(_item, _item.GetBitmapCoordinaatOutputDefine(), "us"));
             }
 
+#warning It would be nice to allow dummies for inputs
             foreach(var pgen in _PieceGenerators)
             {
                 if (pgen.HasCCOLBitmapOutputs())
@@ -199,6 +200,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     foreach (var item in pgen.GetCCOLBitmapOutputs())
                     {
                         sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                    }
+                }
+            }
+#warning It would be nice to allow dummies from other appl parts and plugins
+            foreach(var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            {
+                if((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
+                {
+                    foreach(var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems())
+                    {
+                        sb.Append(GetCoordinatesString(item, item.Naam, "us"));
                     }
                 }
             }
@@ -219,6 +231,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
+            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            {
+                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
+                {
+                    foreach (var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems())
+                    {
+                        sb.Append(GetCoordinatesString(item, item.Naam, "us"));
+                    }
+                }
+            }
+
             bool isdummy = false;
             foreach (var pgen in _PieceGenerators)
             {

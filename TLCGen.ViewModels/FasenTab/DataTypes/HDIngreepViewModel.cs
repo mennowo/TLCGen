@@ -49,16 +49,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool Vecom
-        {
-            get { return _HDIngreep.Vecom; }
-            set
-            {
-                _HDIngreep.Vecom = value;
-                OnMonitoredPropertyChanged("Vecom");
-            }
-        }
-
         public bool Opticom
         {
             get { return _HDIngreep.Opticom; }

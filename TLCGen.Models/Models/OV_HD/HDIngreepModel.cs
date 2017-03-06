@@ -19,7 +19,7 @@ namespace TLCGen.Models
         public string FaseCyclus { get; set; }
 
         public bool KAR { get; set; }
-        public bool Vecom { get; set; }
+        [Browsable(false)] // Opticom is not (yet) supported
         public bool Opticom { get; set; }
         public bool Sirene { get; set; }
 
@@ -41,14 +41,6 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel HDKARDummyUitmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("hdvecom_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
-        public BitmapCoordinatenDataModel HDVecomDummyInmeldingBitmapData { get; set; }
-
-        [Browsable(false)]
-        [IOElement("hdvecom_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
-        public BitmapCoordinatenDataModel HDVecomDummyUitmeldingBitmapData { get; set; }
-
-        [Browsable(false)]
         [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
         public List<HDIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; }
 
@@ -62,8 +54,6 @@ namespace TLCGen.Models
             HDInmeldingBitmapData = new BitmapCoordinatenDataModel();
             HDKARDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
             HDKARDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
-            HDVecomDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            HDVecomDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
         }
 
         #endregion // Constructor

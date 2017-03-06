@@ -64,6 +64,7 @@ namespace TLCGen.ViewModels
         private void AddFase(string fasename)
         {
             var prms = new OVIngreepSignaalGroepParametersModel();
+            Settings.DefaultsProvider.Default.SetDefaultsOnModel(prms);
             prms.FaseCyclus = fasename;
             OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
         }

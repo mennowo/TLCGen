@@ -231,23 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_prmrtbghd}{hd.FaseCyclus}",    hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_prmrtghd}{hd.FaseCyclus}",     hd.RijTijdGehinderd,        CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_schupinagbhd}{hd.FaseCyclus}", 0,                          CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-
-                if (hd.Vecom)
-                {
-                    var elem1 = new CCOLElement($"{_isdummyvecomhdin}{hd.FaseCyclus}",  CCOLElementTypeEnum.Ingang);
-                    var elem2 = new CCOLElement($"{_isdummyvecomhduit}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
-                    elem1.Dummy = true;
-                    elem2.Dummy = true;
-                    _MyElements.Add(elem1);
-                    _MyElements.Add(elem2);
-
-                    var iselem1 = new CCOLIOElement(hd.HDVecomDummyInmeldingBitmapData as IOElementModel,  $"{_ispf}{_isdummyvecomhdin}{hd.FaseCyclus}");
-                    var iselem2 = new CCOLIOElement(hd.HDVecomDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomhduit}{hd.FaseCyclus}");
-                    iselem1.Dummy = iselem2.Dummy = true;
-                    _MyBitmapInputs.Add(iselem1);
-                    _MyBitmapInputs.Add(iselem2);
-                }
-
+                
                 if (hd.KAR)
                 {
                     var elem1 = new CCOLElement($"{_isdummykarhdin}{hd.FaseCyclus}",  CCOLElementTypeEnum.Ingang);

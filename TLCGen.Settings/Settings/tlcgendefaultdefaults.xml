@@ -476,5 +476,20 @@
         <MeerealiserendeFaseCycli />
       </Data>
     </Default>
+    <Default>
+      <DefaultName>Conflict OV</DefaultName>
+      <Category>FaseCyclus</Category>
+      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
+        <MinimumGroentijdConflictOVRealisatie>60</MinimumGroentijdConflictOVRealisatie>
+        <PercMaxGroentijdConflictOVRealisatie>0</PercMaxGroentijdConflictOVRealisatie>
+        <PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
+        <OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
+        <OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
+        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>

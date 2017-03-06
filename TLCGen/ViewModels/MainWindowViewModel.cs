@@ -503,7 +503,15 @@ namespace TLCGen.ViewModels
 
         private void GenerateControllerCommand_Executed(object obj)
         {
-            SelectedGenerator.Generator.GenerateController();
+            string s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
+            if (s == null)
+            {
+                SelectedGenerator.Generator.GenerateController();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling");
+            }
         }
 
         private bool ImportControllerCommand_CanExecute(object obj)

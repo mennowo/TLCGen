@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.Integrity
@@ -20,12 +21,35 @@ namespace TLCGen.Integrity
         /// </summary>
         /// <param name="Controller">The instance of ControllerModel to check for integrity</param>
         /// <returns></returns>
-        public static string IsControllerDataOK(ControllerModel _Controller)
+        public static string IsControllerDataOK(ControllerModel c)
         {
-            string s = IsConflictMatrixOK(_Controller);
+            string s = IsConflictMatrixOK(c);
             if (!string.IsNullOrEmpty(s))
             {
                 return s;
+            }
+
+            s = IsGroentijdenSetDataOK(c);
+            if (!string.IsNullOrEmpty(s))
+            {
+                return s;
+            }
+
+            return null;
+        }
+
+        public static string IsGroentijdenSetDataOK(ControllerModel c)
+        {
+            if(string.IsNullOrWhiteSpace(c.PeriodenData.DefaultPeriodeGroentijdenSet))
+            {
+                return "Default groentijden set niet ingesteld.";
+            }
+            foreach(var per in c.PeriodenData.Perioden)
+            {
+                if (per.Type == PeriodeTypeEnum.Groentijden && string.IsNullOrWhiteSpace(per.GroentijdenSet))
+                {
+                    return $"Groentijden set niet ingesteld voor periode {per.Naam}.";
+                }
             }
             return null;
         }
@@ -34,16 +58,16 @@ namespace TLCGen.Integrity
         /// Checks if the ConflictMatrix is symmetrical.
         /// </summary>
         /// <returns>null if succesfull, otherwise a string stating the first error found.</returns>
-        public static string IsConflictMatrixOK(ControllerModel _Controller)
+        public static string IsConflictMatrixOK(ControllerModel c)
         {
             // Request to process all synchronisation data from matrix to model
             Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
             // Loop all conflicts
-            foreach (ConflictModel cm1 in _Controller.InterSignaalGroep.Conflicten)
+            foreach (ConflictModel cm1 in c.InterSignaalGroep.Conflicten)
             {
                 bool Found = false;
-                foreach (ConflictModel cm2 in _Controller.InterSignaalGroep.Conflicten)
+                foreach (ConflictModel cm2 in c.InterSignaalGroep.Conflicten)
                 {
                     if (cm1.FaseVan == cm2.FaseNaar && cm1.FaseNaar == cm2.FaseVan)
                     {
@@ -67,7 +91,7 @@ namespace TLCGen.Integrity
                                 if (Int32.TryParse(cm1.SerializedWaarde, out co))
                                 {
                                     // Check against guaranteed timings
-                                    if (_Controller.Data.GarantieOntruimingsTijden)
+                                    if (c.Data.GarantieOntruimingsTijden)
                                     {
                                         if (cm1.GarantieWaarde == null)
                                             return "Ontbrekende garantie ontruimingstijd van " + cm1.FaseVan + " naar " + cm1.FaseNaar + ".";
@@ -90,7 +114,7 @@ namespace TLCGen.Integrity
                                 }
                         }
 
-                        if (_Controller.Data.GarantieOntruimingsTijden)
+                        if (c.Data.GarantieOntruimingsTijden)
                         {
                             int out1;
 

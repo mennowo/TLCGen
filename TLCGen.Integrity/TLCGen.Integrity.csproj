@@ -84,6 +84,10 @@
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
       <Name>TLCGen.Plugins</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{A693DAA4-DB12-43DD-BCB8-BB039E22BBA8}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>
