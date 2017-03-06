@@ -29,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateRegCIncludes(controller));
             sb.Append(GenerateRegCTop(controller));
-            if (controller.Data.KWCType != KWCTypeEnum.Geen)
+            if (controller.Data.KWCType != KWCTypeEnum.Geen && controller.Data.KWCUitgebreid)
             {
                 sb.AppendLine();
                 sb.Append(GenerateRegCKwcApplication(controller));

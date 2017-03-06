@@ -365,25 +365,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Als een richting minder groen heeft gehad door afkappen");
             sb.AppendLine($"{ts}   dan deze instelling, dan mag de richting nog een keer");
             sb.AppendLine($"{ts}   primair realiseren (terugkomen). */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
-                        continue;
                     case Models.Enumerations.FaseTypeEnum.Fiets:
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmpmgt}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{ovfc.FaseCyclus}];");
                         break;
                 }
             }
@@ -391,50 +387,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* De minimale groentijd die een richting krijgt als");
             sb.AppendLine($"{ts}   deze mag terugkomen. */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
-                        continue;
                     case Models.Enumerations.FaseTypeEnum.Fiets:
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmognt}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{ovfc.FaseCyclus}];");
                         break;
                 }
             }
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Aantal malen niet afkappen */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
                         continue;
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
                     case Models.Enumerations.FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmnofm}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{ovfc.FaseCyclus}];");
                         break;
                 }
             }
@@ -442,26 +431,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* Onder deze groentijd mag een richting niet worden");
             sb.AppendLine($"{ts}   afgekapt, tenzij zich een nooddienst heeft ingemeld. */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{fc.Naam}] = 0;");
+                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 0;");
                         continue;
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
                     case Models.Enumerations.FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmmgcov}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{ovfc.FaseCyclus}];");
                         break;
                 }
             }
@@ -471,26 +457,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}   dit percentage van de maximum groentijd, dan");
             sb.AppendLine($"{ts}   mag de richting niet worden afgekapt, tenzij");
             sb.AppendLine($"{ts}   zich een nooddienst heeft ingemeld. */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{fc.Naam}] = 100; /* Voetgangers mogen niet worden afgekapt. */");
+                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 100; /* Voetgangers mogen niet worden afgekapt. */");
                         continue;
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
                     case Models.Enumerations.FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmpmgcov}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{ovfc.FaseCyclus}];");
                         break;
                 }
             }
@@ -498,26 +481,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* Na te zijn afgekapt, wordt het percentage");
             sb.AppendLine($"{ts}   van de maximumgroentijd verhoogd met dit ophoogpercentage. */");
-            foreach (var fc in c.Fasen)
+            foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
             {
-                bool skip = false;
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (!CCOLCodeHelper.HasSignalGroupConflictWithPT(c, ovfc.FaseCyclus))
                 {
-                    if (ov.FaseCyclus == fc.Naam)
-                        skip = true;
-                }
-                if (skip)
                     continue;
+                }
 
-                switch (fc.Type)
+                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                switch (fct)
                 {
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{fc.Naam}] = 0;");
+                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = 0;");
                         continue;
                     case Models.Enumerations.FaseTypeEnum.OV:
                     case Models.Enumerations.FaseTypeEnum.Auto:
                     case Models.Enumerations.FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmohpmg}{fc.Naam}];");
+                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{ovfc.FaseCyclus}];");
                         break;
                 }
             }

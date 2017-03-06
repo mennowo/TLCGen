@@ -108,6 +108,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLMeeverlengenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLKWCCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLVLOGCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
     <Compile Include="Settings\CCOLGeneratorSettingTypeEnum.cs" />
