@@ -142,9 +142,35 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public void OnOVIngreepSignaalGroepParametersChanged(OVIngreepSignaalGroepParametersChangedMessage message)
+        {
+            /* Set all options equal for signal groups that are synchronised */
+            foreach(var gs in _Controller.InterSignaalGroep.Gelijkstarten)
+            {
+                if(gs.FaseVan == message.SignaalGroepParameters.FaseCyclus)
+                {
+                    foreach(var fcprmvm in OVIngreepSGParameters)
+                    {
+                        if(fcprmvm.FaseCyclus == gs.FaseNaar)
+                        {
+                            fcprmvm.CopyValueNoMessaging(message.SignaalGroepParameters);
+                        }
+                    }
+                }
+                if (gs.FaseNaar == message.SignaalGroepParameters.FaseCyclus)
+                {
+                    foreach (var fcprmvm in OVIngreepSGParameters)
+                    {
+                        if (fcprmvm.FaseCyclus == gs.FaseVan)
+                        {
+                            fcprmvm.CopyValueNoMessaging(message.SignaalGroepParameters);
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion TLCGen events
-
-
 
         #region Constructor
 
@@ -153,6 +179,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            Messenger.Default.Register(this, new Action<OVIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
         }
 
         #endregion // Constructor

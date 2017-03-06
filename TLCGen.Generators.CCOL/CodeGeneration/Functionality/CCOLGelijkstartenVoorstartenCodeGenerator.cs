@@ -92,7 +92,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
+                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
                     return true;
                 default:
                     return false;
@@ -185,9 +185,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}realisation_timers(BIT4);");
+                    sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
+                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
                     sb.AppendLine($"{ts}/* set {_mpf}eerealisatie voor gelijk- of voorstartende richtingen */");
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)
@@ -199,6 +200,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, (bool) ((RA[{_fcpf}{gs.FaseNaar}] || SG[{_fcpf}{gs.FaseNaar}]) && (PR[{_fcpf}{gs.FaseNaar}] || AR[{_fcpf}{gs.FaseNaar}]) && A[{_fcpf}{gs.FaseVan}] && R[{_fcpf}{gs.FaseVan}] && !TRG[{_fcpf}{gs.FaseVan}] && !kcv({_fcpf}{gs.FaseVan})));");
                         sb.AppendLine($"{ts}set_MRLW({_fcpf}{gs.FaseNaar}, {_fcpf}{gs.FaseVan}, (bool) ((RA[{_fcpf}{gs.FaseVan}] || SG[{_fcpf}{gs.FaseVan}]) && (PR[{_fcpf}{gs.FaseVan}] || AR[{_fcpf}{gs.FaseVan}]) && A[{_fcpf}{gs.FaseNaar}] && R[{_fcpf}{gs.FaseNaar}] && !TRG[{_fcpf}{gs.FaseNaar}] && !kcv({_fcpf}{gs.FaseNaar})));");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

@@ -113,6 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case CCOLRegCCodeTypeEnum.Top:
                     sb.AppendLine($"{tabspace}/* Robuuste Groenverdeler */");
                     sb.AppendLine($"{tabspace}#include \"{c.Data.Naam}rgv.c\"");
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.Maxgroen:
@@ -166,6 +167,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[{_uspf}{_usrgv}] = FALSE;");
                     sb.AppendLine($"{tabspace}}}");
+                    sb.AppendLine();
 
                     return sb.ToString();
 

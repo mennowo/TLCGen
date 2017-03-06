@@ -98,6 +98,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                         }
                     }
+                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

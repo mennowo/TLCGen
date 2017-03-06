@@ -505,17 +505,62 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.ModuleMolen.LangstWachtendeAlternatief)
             {
+                var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+
                 sb.AppendLine($"{ts}/* Benodigde ruimte voor alternatieve realisatie tijdens een OV ingreep */");
-                foreach (var fc in c.Fasen)
+                foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
-                    sb.AppendLine($"{ts}iPRM_ALTP[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmaltp}{fc.Naam}];");
+                    Tuple<string, List<string>> hasgs = null;
+                    foreach (var gs in gelijkstarttuples)
+                    {
+                        if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                        {
+                            hasgs = gs;
+                            break;
+                        }
+                    }
+                    if (hasgs != null)
+                    {
+                        sb.Append($"{ts}iPRM_ALTP[{_fcpf}{fc.FaseCyclus}] = PRM[{_prmpf}{_prmaltp}");
+                        foreach (var ofc in hasgs.Item2)
+                        {
+                            sb.Append(ofc);
+                        }
+                        sb.AppendLine($"];");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}iPRM_ALTP[{_fcpf}{fc.FaseCyclus}] = PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}];");
+                    }
+
                 }
                 sb.AppendLine();
 
                 sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep*/");
-                foreach (var fc in c.Fasen)
+                foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
-                    sb.AppendLine($"{ts}iSCH_ALTG[{_fcpf}{fc.Naam}] = SCH[{_schpf}{_schaltg}{fc.Naam}];");
+                    Tuple<string, List<string>> hasgs = null;
+                    foreach (var gs in gelijkstarttuples)
+                    {
+                        if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                        {
+                            hasgs = gs;
+                            break;
+                        }
+                    }
+                    if (hasgs != null)
+                    {
+                        sb.Append($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}");
+                        foreach (var ofc in hasgs.Item2)
+                        {
+                            sb.Append(ofc);
+                        }
+                        sb.AppendLine($"];");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}iSCH_ALTG[{_fcpf}{fc.FaseCyclus}] = SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                    }
                 }
                 sb.AppendLine();
 

@@ -20,6 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         FileVerwerking,
         Meeverlengen,
         RealisatieAfhandelingModules,
+        RealisatieAfhandelingNaModules,
         RealisatieAfhandeling,
         Synchronisaties,
         InitApplication,

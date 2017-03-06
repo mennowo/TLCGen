@@ -210,7 +210,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach(var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems())
                     {
-                        sb.Append(GetCoordinatesString(item, item.Naam, "us"));
+                        sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
                     }
                 }
             }
@@ -235,9 +235,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
                 {
-                    foreach (var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems())
+                    foreach (var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems())
                     {
-                        sb.Append(GetCoordinatesString(item, item.Naam, "us"));
+                        sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
                     }
                 }
             }

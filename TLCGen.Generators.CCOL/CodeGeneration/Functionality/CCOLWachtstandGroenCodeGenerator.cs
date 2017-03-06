@@ -75,7 +75,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                             sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
                     }
-                    sb.AppendLine("");
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.Wachtgroen:

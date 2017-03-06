@@ -59,6 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!c.Data.VLOGInTestOmgeving)
                     {
                         sb.AppendLine("#define NO_VLOG");
+                        sb.AppendLine();
                     }
                     return sb.ToString();
 
@@ -75,6 +76,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine($"#endif");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

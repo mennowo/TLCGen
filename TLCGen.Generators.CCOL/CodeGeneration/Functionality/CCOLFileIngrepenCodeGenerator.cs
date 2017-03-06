@@ -179,6 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.InitApplication:
@@ -318,8 +319,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.SystemApplication:
@@ -329,6 +330,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usfile}{f.Naam}] = IH[{_hpf}{_hfile}{f.Naam}];");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

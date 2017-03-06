@@ -132,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
-                    sb.AppendLine("");
+                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

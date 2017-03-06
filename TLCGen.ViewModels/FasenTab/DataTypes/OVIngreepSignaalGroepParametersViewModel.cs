@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,7 +41,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.AantalKerenNietAfkappen = value;
-                OnPropertyChanged("FaseCyclus");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("AantalKerenNietAfkappen");
             }
         }
         public int MinimumGroentijdConflictOVRealisatie
@@ -49,7 +51,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.MinimumGroentijdConflictOVRealisatie = value;
-                OnPropertyChanged("FaseCyclus");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("MinimumGroentijdConflictOVRealisatie");
             }
         }
 
@@ -59,7 +62,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.PercMaxGroentijdConflictOVRealisatie = value;
-                OnPropertyChanged("FaseCyclus");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("PercMaxGroentijdConflictOVRealisatie");
             }
         }
 
@@ -69,7 +73,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.PercMaxGroentijdVoorTerugkomen = value;
-                OnPropertyChanged("PercMaxGroentijdVoorTerugkomen");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("PercMaxGroentijdVoorTerugkomen");
             }
         }
 
@@ -79,7 +84,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.OndergrensNaTerugkomen = value;
-                OnPropertyChanged("OndergrensNaTerugkomen");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("OndergrensNaTerugkomen");
             }
         }
 
@@ -89,7 +95,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.OphoogpercentageNaAfkappen = value;
-                OnPropertyChanged("OphoogpercentageNaAfkappen");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("OphoogpercentageNaAfkappen");
             }
         }
 
@@ -99,7 +106,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Parameters.BlokkeertijdNaOVIngreep = value;
-                OnPropertyChanged("BlokkeertijdNaOVIngreep");
+                SendTLCGenChangedMessage();
+                OnMonitoredPropertyChanged("BlokkeertijdNaOVIngreep");
             }
         }
 
@@ -115,9 +123,30 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
+        private void SendTLCGenChangedMessage()
+        {
+            Messenger.Default.Send(
+                    new Messaging.Messages.OVIngreepSignaalGroepParametersChangedMessage(
+                        (OVIngreepSignaalGroepParametersModel)this.GetItem()));
+        }
+
         #endregion // Private methods
 
         #region Public methods
+
+        public void CopyValueNoMessaging(OVIngreepSignaalGroepParametersModel sgprm)
+        {
+            var t = sgprm.GetType();
+            var props = t.GetProperties();
+            foreach(var prop in props)
+            {
+                if(prop.PropertyType.IsValueType)
+                {
+                    prop.SetValue(this.GetItem(), prop.GetValue(sgprm));
+                }
+            }
+            OnPropertyChanged(null);
+        }
 
         #endregion // Public methods
 

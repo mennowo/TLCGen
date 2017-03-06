@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -25,6 +26,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             return false;
+        }
+
+        public static List<Tuple<string, List<string>>> GetFasenWithGelijkStarts(ControllerModel c)
+        {
+            // Build a list of fasen with gelijkstarts belonging to them
+            var gss = new List<Tuple<string, List<string>>>();
+            foreach(var fc in c.Fasen)
+            {
+                gss.Add(new Tuple<string, List<string>>(fc.Naam, new List<string>()));
+            }
+            foreach (var i in gss)
+            {
+                i.Item2.Add(i.Item1);
+            }
+            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+            {
+                // Add on both sides, cause the matrix is symmetrical, but gelijkstarts are only present in the model list once
+                foreach(var i in gss)
+                {
+                    if(i.Item1 == gs.FaseVan)
+                    {
+                        i.Item2.Add(gs.FaseNaar);
+                    }
+                }
+                foreach (var i in gss)
+                {
+                    if (i.Item1 == gs.FaseNaar)
+                    {
+                        i.Item2.Add(gs.FaseVan);
+                    }
+                }
+            }
+            foreach(var t in gss)
+            {
+                t.Item2.BubbleSort();
+            }
+            return gss;
         }
     }
 }

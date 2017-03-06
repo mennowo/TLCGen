@@ -74,7 +74,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else if (fcm.VasteAanvraag == NooitAltijdAanUitEnum.Altijd)
                             sb.AppendLine($"{tabspace}vaste_aanvraag({_fcpf}{fcm.Naam});");
                     }
-                    sb.AppendLine("");
+                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

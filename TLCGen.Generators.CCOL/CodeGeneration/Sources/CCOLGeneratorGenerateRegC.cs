@@ -371,6 +371,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules, ts));
                 }
             }
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules, ts));
+                }
+            }
 
             sb.AppendLine();
             sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PRML, ML, ML_MAX);");

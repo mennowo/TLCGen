@@ -130,31 +130,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;
             }
-        }
-
-        public override bool HasSettings()
-        {
-            return true;
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings == null || settings.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                if (s.Default == "va") _tva = s.Setting == null ? s.Default : s.Setting;
-                if (s.Default == "vamax") _tvamax = s.Setting == null ? s.Default : s.Setting;
-            }
-
-            return base.SetSettings(settings);
         }
     }
 }

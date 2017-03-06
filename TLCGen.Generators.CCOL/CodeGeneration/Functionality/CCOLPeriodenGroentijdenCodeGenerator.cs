@@ -387,8 +387,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
-                    sb.AppendLine();
-
                     string grfunc = "";
                     switch(c.Data.TypeGroentijden)
                     {
@@ -451,6 +449,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
 
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.SystemApplication:
@@ -500,6 +499,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{ipero}] = (IH[{_hpf}{_hperiod}{ipero}] == TRUE);");
                         }
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

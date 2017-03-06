@@ -72,6 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}#include \"mv_ccol.c\"");
                         sb.AppendLine($"#endif");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.SystemApplication:
@@ -87,6 +88,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}MvSave();");
                         sb.AppendLine($"#endif");
                     }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

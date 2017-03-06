@@ -203,24 +203,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLRegCCodeTypeEnum.Includes:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
+                    sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLRegCCodeTypeEnum.PreSystemApplication:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
+                        sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_post_system_app();");
+                        sb.AppendLine();
                     }
                     return sb.ToString();
                 default:
