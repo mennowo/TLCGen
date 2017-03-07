@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
             {
                 _AutomaticallySetSelectableSignalGroups = value;
                 Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, null, AutomaticallySetSelectableSignalGroups));
-                OnPropertyChanged("AutomaticallySetSelectableSignalGroups");
+                RaisePropertyChanged("AutomaticallySetSelectableSignalGroups");
             }
         }
 
@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             {
                 var oldval = _SelectedConflictGroep;
                 _SelectedConflictGroep = value;
-                OnMonitoredPropertyChanged("SelectedConflictGroep");
+                RaisePropertyChanged<object>("SelectedConflictGroep", null, null, true);
                 Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, AutomaticallySetSelectableSignalGroups));
             }
         }
@@ -70,7 +70,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSignaalGroepInstelling = value;
-                OnMonitoredPropertyChanged("SelectedSignaalGroepInstelling");
+                RaisePropertyChanged<object>("SelectedSignaalGroepInstelling", null, null, true);
             }
         }
 
@@ -80,7 +80,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                OnPropertyChanged("SelectedFaseCyclus");
+                RaisePropertyChanged("SelectedFaseCyclus");
             }
         }
 
@@ -344,8 +344,8 @@ namespace TLCGen.ViewModels
                     ConflictGroepen = null;
                     SignaalGroepInstellingen = null;
                 }
-                OnPropertyChanged("ConflictGroepen");
-                OnPropertyChanged("SignaalGroepInstellingen");
+                RaisePropertyChanged("ConflictGroepen");
+                RaisePropertyChanged("SignaalGroepInstellingen");
                 AutomaticallySetSelectableSignalGroups = true;
             }
         }

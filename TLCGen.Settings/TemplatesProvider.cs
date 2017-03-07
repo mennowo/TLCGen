@@ -91,5 +91,14 @@ namespace TLCGen.Settings
         }
 
         #endregion // ITemplatesProvider
+
+        #region Public Methods
+
+        public static void OverrideDefault(ITemplatesProvider provider)
+        {
+            _Default = provider;
+        }
+
+        #endregion // Public Methods
     }
 }

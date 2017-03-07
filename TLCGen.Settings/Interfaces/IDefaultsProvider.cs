@@ -10,7 +10,7 @@ namespace TLCGen.Settings
     public interface IDefaultsProvider
     {
         ControllerModel Controller { get; set; }
-        TLCGenDefaultsModel Defaults { get; }
+        TLCGenDefaultsModel Defaults { get; set; }
 
         void LoadSettings();
         void SaveSettings();

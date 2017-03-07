@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedWaarschuwingsGroep = value;
-                OnPropertyChanged("SelectedWaarschuwingsGroep");
+                RaisePropertyChanged("SelectedWaarschuwingsGroep");
             }
         }
 
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRatelTikker = value;
-                OnPropertyChanged("SelectedRatelTikker");
+                RaisePropertyChanged("SelectedRatelTikker");
                 UpdateSelectables();
             }
         }
@@ -114,7 +114,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRatelTikkerDetectorToAdd = value;
-                OnPropertyChanged("SelectedRatelTikkerDetectorToAdd");
+                RaisePropertyChanged("SelectedRatelTikkerDetectorToAdd");
             }
         }
 
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRatelTikkerFaseToAdd = value;
-                OnPropertyChanged("SelectedRatelTikkerFaseToAdd");
+                RaisePropertyChanged("SelectedRatelTikkerFaseToAdd");
             }
         }
 
@@ -480,8 +480,8 @@ namespace TLCGen.ViewModels
                     WaarschuwingsGroepen = null;
                     RatelTikkers = null;
                 }
-                OnPropertyChanged("WaarschuwingsGroepen");
-                OnPropertyChanged("RatelTikkers");
+                RaisePropertyChanged("WaarschuwingsGroepen");
+                RaisePropertyChanged("RatelTikkers");
             }
         }
 

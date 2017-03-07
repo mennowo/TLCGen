@@ -49,7 +49,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                OnPropertyChanged("SelectedDetector");
+                RaisePropertyChanged("SelectedDetector");
             }
         }
 
@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                OnPropertyChanged("SelectedDetectoren");
+                RaisePropertyChanged("SelectedDetectoren");
             }
         }
 

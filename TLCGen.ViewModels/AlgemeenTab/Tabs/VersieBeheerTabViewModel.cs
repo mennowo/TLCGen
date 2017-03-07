@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedVersie = value;
-                OnPropertyChanged("SelectedVersie");
+                RaisePropertyChanged("SelectedVersie");
             }
         }
 
@@ -164,13 +164,13 @@ namespace TLCGen.ViewModels
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;
-                    OnPropertyChanged(null);
+                    RaisePropertyChanged(null);
                 }
                 else
                 {
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
-                    OnPropertyChanged(null);
+                    RaisePropertyChanged(null);
                 }
             }
         }

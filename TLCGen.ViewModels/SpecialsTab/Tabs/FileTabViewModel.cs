@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
                 {
                     _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
                 }
-                OnPropertyChanged("SelectedFileIngreep");
+                RaisePropertyChanged("SelectedFileIngreep");
             }
         }
 
@@ -175,7 +175,7 @@ namespace TLCGen.ViewModels
                 {
                     FileIngrepen = null;
                 }
-                OnPropertyChanged("FileIngrepen");
+                RaisePropertyChanged("FileIngrepen");
             }
         }
 

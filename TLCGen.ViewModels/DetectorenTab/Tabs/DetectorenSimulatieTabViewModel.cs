@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                OnPropertyChanged("SelectedDetector");
+                RaisePropertyChanged("SelectedDetector");
             }
         }
 
@@ -127,7 +127,8 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Stopline = 1800;
             }
 
-            OnMonitoredPropertyChanged(null);
+            RaisePropertyChanged(null);
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             foreach(var d in Detectoren)
             {
                 d.OnMonitoredPropertyChanged(null);

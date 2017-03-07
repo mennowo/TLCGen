@@ -147,6 +147,7 @@
     <Compile Include="SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\DataTypes\MeeaanvraagViewModel.cs" />
     <Compile Include="SynchronisatiesTab\DataTypes\NaloopViewModel.cs" />
+    <Compile Include="SynchronisatiesTab\HelperTypes\GarantieTijdConvertHelper.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
     <Compile Include="TLCGenMainTabItemViewModel.cs" />

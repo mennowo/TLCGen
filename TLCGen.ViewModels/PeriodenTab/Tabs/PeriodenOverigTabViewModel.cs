@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPeriode = value;
-                OnPropertyChanged("SelectedPeriode");
+                RaisePropertyChanged("SelectedPeriode");
             }
         }
 
@@ -248,7 +248,7 @@ namespace TLCGen.ViewModels
                 {
                     Periodes = null;
                 }
-                OnPropertyChanged("Periodes");
+                RaisePropertyChanged("Periodes");
             }
         }
 

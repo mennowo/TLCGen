@@ -85,6 +85,15 @@ namespace TLCGen.Integrity
 
         #endregion // ITLCGenControllerModifier
 
+        #region Public Methods
+
+        public static void OverrideDefault(ITLCGenControllerModifier modifier)
+        {
+            _Default = modifier;
+        }
+
+        #endregion // Public Methods
+
         #region Private Methods
 
         private void RemoveSignalGroupFromController(object obj, string remsg)

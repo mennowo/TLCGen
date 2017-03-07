@@ -20,7 +20,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
         #region Fields
 
@@ -62,8 +62,8 @@ namespace TLCGen.ViewModels
                     pl.Item2.Controller = TLCGenControllerDataProvider.Default.Controller;
                 }
                 
-                OnPropertyChanged("ControllerVM");
-                OnPropertyChanged("HasController");
+                RaisePropertyChanged("ControllerVM");
+                RaisePropertyChanged("HasController");
             }
         }
 
@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedGenerator = value;
-                OnPropertyChanged("SelectedGenerator");
+                RaisePropertyChanged("SelectedGenerator");
             }
         }
 
@@ -346,8 +346,8 @@ namespace TLCGen.ViewModels
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                OnPropertyChanged("ProgramTitle");
-                OnPropertyChanged("HasController");
+                RaisePropertyChanged("ProgramTitle");
+                RaisePropertyChanged("HasController");
             }
         }
 
@@ -366,8 +366,8 @@ namespace TLCGen.ViewModels
                 ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                OnPropertyChanged("ProgramTitle");
-                OnPropertyChanged("HasController");
+                RaisePropertyChanged("ProgramTitle");
+                RaisePropertyChanged("HasController");
             }
         }
 
@@ -397,7 +397,7 @@ namespace TLCGen.ViewModels
             {
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                OnPropertyChanged("ProgramTitle");
+                RaisePropertyChanged("ProgramTitle");
             }
         }
 
@@ -413,8 +413,8 @@ namespace TLCGen.ViewModels
             {
                 DefaultsProvider.Default.Controller = null;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                OnPropertyChanged("HasController");
-                OnPropertyChanged("ProgramTitle");
+                RaisePropertyChanged("HasController");
+                RaisePropertyChanged("ProgramTitle");
             }
         }
 
@@ -447,7 +447,7 @@ namespace TLCGen.ViewModels
                 if (imp.ImportsIntoExisting)
                 {
                     // Check data integrity
-                    string s1 = TLCGenIntegrityChecker.IsControllerDataOK(ControllerVM.Controller);
+                    string s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
@@ -462,7 +462,7 @@ namespace TLCGen.ViewModels
                         return;
 
                     // Check data integrity
-                    s1 = TLCGenIntegrityChecker.IsControllerDataOK(c2);
+                    s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
@@ -481,7 +481,7 @@ namespace TLCGen.ViewModels
                         return;
 
                     // Check data integrity
-                    string s1 = TLCGenIntegrityChecker.IsControllerDataOK(c1);
+                    string s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
@@ -492,7 +492,7 @@ namespace TLCGen.ViewModels
                     ControllerVM.ReloadController();
                 }
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                OnPropertyChanged("HasController");
+                RaisePropertyChanged("HasController");
             }
         }
 
@@ -635,7 +635,7 @@ namespace TLCGen.ViewModels
         public void UpdateController()
         {
             ControllerVM.ReloadController();
-            OnPropertyChanged(null);
+            RaisePropertyChanged(null);
         }
 
         /// <summary>
@@ -741,7 +741,7 @@ namespace TLCGen.ViewModels
             ControllerVM = new ControllerViewModel();
 
             // If we are in debug mode, the code below tries loading default file
-#if DEBUG__
+#if DEBUG
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
@@ -752,7 +752,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                OnPropertyChanged("ProgramTitle");
+                RaisePropertyChanged("ProgramTitle");
             }
 #endif
 

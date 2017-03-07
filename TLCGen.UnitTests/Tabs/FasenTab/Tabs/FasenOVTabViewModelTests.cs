@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Settings;
@@ -15,33 +16,10 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
 {
     public class FasenOVTabViewModelTests
     {
-        IMessenger messengerstub;
-        ISettingsProvider settingsproviderstub;
-        ControllerModel model;
-
-        [SetUp]
-        public void FasenTabSetup()
-        {
-            model = new ControllerModel();
-            messengerstub = Substitute.For<IMessenger>();
-            settingsproviderstub = Substitute.For<ISettingsProvider>();
-            messengerstub.
-                When(x => x.Send(Arg.Any<IsElementIdentifierUniqueRequest>())).
-                Do(c =>
-                {
-                    c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
-                    c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = model.Fasen.All(x =>
-                    {
-                        return c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier;
-                    });
-                });
-            Messenger.OverrideDefault(messengerstub);
-            SettingsProvider.OverrideDefault(settingsproviderstub);
-        }
-
         [Test]
         public void FasenOVTabSelectedFase_TabDeselectedAndSelected_SelectedFaseEqual()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -61,6 +39,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclus_SetToPhaseWithOVIngreep_SetsSelectedOVIngreep()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", OVIngreep = true });
@@ -81,6 +60,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclus_SetToPhaseWithOutOVIngreep_SetsSelectedOVIngreepToNull()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", OVIngreep = true });
@@ -101,6 +81,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclus_SetToPhaseWithHDIngreep_SetsSelectedHDIngreep()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", HDIngreep = true });
@@ -121,6 +102,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclus_SetToPhaseWithOutHDIngreep_SetsSelectedHDIngreepToNull()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", OVIngreep = true });
@@ -141,6 +123,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclusOVIngreep_SetToTrueOnPhaseWithoutIngreep_AddsIngreep()
         {
+            var model = new ControllerModel();
+            DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -161,6 +145,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclusOVIngreep_SetToFalseOnPhaseWithIngreep_RemovesIngreep()
         {
+            var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", OVIngreep = true });
@@ -181,6 +166,9 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclusHDIngreep_SetToTrueOnPhaseWithoutIngreep_AddsIngreep()
         {
+            var model = new ControllerModel();
+            DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerModifier.OverrideDefault(FakesCreator.CreateControllerModifier());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
@@ -201,6 +189,8 @@ namespace TLCGen.UnitTests.Tabs.FasenTab
         [Test]
         public void SelectedFaseCyclusHDIngreep_SetToFalseOnPhaseWithIngreep_RemovesIngreep()
         {
+            var model = new ControllerModel();
+            TLCGenControllerModifier.OverrideDefault(FakesCreator.CreateControllerModifier());
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
             model.Fasen.Add(new FaseCyclusModel() { Naam = "03", HDIngreep = true });

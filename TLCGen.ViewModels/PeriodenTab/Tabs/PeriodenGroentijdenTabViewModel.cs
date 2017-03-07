@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPeriode = value;
-                OnPropertyChanged("SelectedPeriode");
+                RaisePropertyChanged("SelectedPeriode");
             }
         }
 
@@ -61,7 +61,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
-                OnMonitoredPropertyChanged("DefaultPeriodeGroentijdenSet");
+                RaisePropertyChanged<object>("DefaultPeriodeGroentijdenSet", null, null, true);
             }
         }
 
@@ -71,7 +71,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PeriodenData.DefaultPeriodeNaam = value;
-                OnMonitoredPropertyChanged("DefaultPeriodeNaam");
+                RaisePropertyChanged<object>("DefaultPeriodeNaam", null, null, true);
             }
         }
 
@@ -247,7 +247,7 @@ namespace TLCGen.ViewModels
                 GroentijdenSets.Add(gsm.Naam);
             }
             _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = v;
-            OnPropertyChanged("DefaultPeriodeGroentijdenSet");
+            RaisePropertyChanged("DefaultPeriodeGroentijdenSet");
         }
 
         public override ControllerModel Controller
@@ -275,7 +275,7 @@ namespace TLCGen.ViewModels
                 {
                     Periodes = null;
                 }
-                OnPropertyChanged("Periodes");
+                RaisePropertyChanged("Periodes");
             }
         }
 

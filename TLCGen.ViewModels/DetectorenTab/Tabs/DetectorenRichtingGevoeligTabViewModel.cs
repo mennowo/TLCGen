@@ -136,9 +136,9 @@ namespace TLCGen.ViewModels
                         x != SelectedDetectorAanvraag1 &&
                         !(RichtingGevoeligeAanvragen.Where(y => y.FaseCyclus == SelectedFaseAanvraag && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
                 }));
-                OnPropertyChanged("SelectedFaseAanvraag");
-                OnPropertyChanged("SelectedDetectorAanvraag1");
-                OnPropertyChanged("SelectedDetectorAanvraag2");
+                RaisePropertyChanged("SelectedFaseAanvraag");
+                RaisePropertyChanged("SelectedDetectorAanvraag1");
+                RaisePropertyChanged("SelectedDetectorAanvraag2");
             }
         }
         public string SelectedDetectorAanvraag1
@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
                         x != SelectedDetectorAanvraag1 &&
                         !(RichtingGevoeligeAanvragen.Where(y => y.FaseCyclus == SelectedFaseAanvraag && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
                 }));
-                OnPropertyChanged("SelectedDetectorAanvraag1");
+                RaisePropertyChanged("SelectedDetectorAanvraag1");
             }
         }
         public string SelectedDetectorAanvraag2
@@ -164,7 +164,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorAanvraag2 = value;
-                OnPropertyChanged("SelectedDetectorAanvraag2");
+                RaisePropertyChanged("SelectedDetectorAanvraag2");
             }
         }
 
@@ -192,9 +192,9 @@ namespace TLCGen.ViewModels
                         x != SelectedDetectorVerleng1 &&
                         !(RichtingGevoeligVerlengen.Where(y => y.FaseCyclus == SelectedFaseVerleng && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
                 }));
-                OnPropertyChanged("SelectedFaseVerleng");
-                OnPropertyChanged("SelectedDetectorVerleng1");
-                OnPropertyChanged("SelectedDetectorVerleng2");
+                RaisePropertyChanged("SelectedFaseVerleng");
+                RaisePropertyChanged("SelectedDetectorVerleng1");
+                RaisePropertyChanged("SelectedDetectorVerleng2");
             }
         }
         public string SelectedDetectorVerleng1
@@ -211,7 +211,7 @@ namespace TLCGen.ViewModels
                         x != SelectedDetectorVerleng1 &&
                         !(RichtingGevoeligVerlengen.Where(y => y.FaseCyclus == SelectedFaseVerleng && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
                 }));
-                OnPropertyChanged("SelectedDetectorVerleng1");
+                RaisePropertyChanged("SelectedDetectorVerleng1");
             }
         }
         public string SelectedDetectorVerleng2
@@ -220,7 +220,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorVerleng2 = value;
-                OnPropertyChanged("SelectedDetectorVerleng2");
+                RaisePropertyChanged("SelectedDetectorVerleng2");
             }
         }
 
@@ -243,7 +243,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRichtingGevoeligeAanvraag = value;
-                OnPropertyChanged("SelectedRichtingGevoeligeAanvraag");
+                RaisePropertyChanged("SelectedRichtingGevoeligeAanvraag");
             }
         }
 
@@ -254,7 +254,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedRichtingGevoeligVerleng = value;
-                OnPropertyChanged("SelectedRichtingGevoeligVerleng");
+                RaisePropertyChanged("SelectedRichtingGevoeligVerleng");
             }
         }
 
@@ -334,9 +334,9 @@ namespace TLCGen.ViewModels
             _SelectedFaseAanvraag = null;
             _SelectedDetectorAanvraag1 = null;
             _SelectedDetectorAanvraag2 = null;
-            OnPropertyChanged("SelectedFaseAanvraag");
-            OnPropertyChanged("SelectedDetectorAanvraag1");
-            OnPropertyChanged("SelectedDetectorAanvraag2");
+            RaisePropertyChanged("SelectedFaseAanvraag");
+            RaisePropertyChanged("SelectedDetectorAanvraag1");
+            RaisePropertyChanged("SelectedDetectorAanvraag2");
 
             Messenger.Default.Send(new ControllerDataChangedMessage());
         }
@@ -357,9 +357,9 @@ namespace TLCGen.ViewModels
             _SelectedFaseVerleng = null;
             _SelectedDetectorVerleng1 = null;
             _SelectedDetectorVerleng2 = null;
-            OnPropertyChanged("SelectedFaseVerleng");
-            OnPropertyChanged("SelectedDetectorVerleng1");
-            OnPropertyChanged("SelectedDetectorVerleng2");
+            RaisePropertyChanged("SelectedFaseVerleng");
+            RaisePropertyChanged("SelectedDetectorVerleng1");
+            RaisePropertyChanged("SelectedDetectorVerleng2");
 
             Messenger.Default.Send(new ControllerDataChangedMessage());
         }
@@ -440,8 +440,8 @@ namespace TLCGen.ViewModels
                     RichtingGevoeligeAanvragen = null;
                     RichtingGevoeligVerlengen = null;
                 }
-                OnPropertyChanged("RichtingGevoeligeAanvragen");
-                OnPropertyChanged("RichtingGevoeligVerlengen");
+                RaisePropertyChanged("RichtingGevoeligeAanvragen");
+                RaisePropertyChanged("RichtingGevoeligVerlengen");
             }
         }
 

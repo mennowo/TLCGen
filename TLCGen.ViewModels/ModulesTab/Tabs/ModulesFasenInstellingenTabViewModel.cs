@@ -36,7 +36,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                OnPropertyChanged("SelectedFaseCyclus");
+                RaisePropertyChanged("SelectedFaseCyclus");
             }
         }
         
@@ -65,7 +65,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            OnPropertyChanged("HasAlternatieven");
+            RaisePropertyChanged("HasAlternatieven");
         }
 
         public override ControllerModel Controller
@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
                 {
                     Fasen = null;
                 }
-                OnPropertyChanged("Fasen");
+                RaisePropertyChanged("Fasen");
             }
         }
 

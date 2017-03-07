@@ -10,7 +10,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public abstract class TLCGenTabItemViewModel : ViewModelBase, ITLCGenTabItem
+    public abstract class TLCGenTabItemViewModel : GalaSoft.MvvmLight.ViewModelBase, ITLCGenTabItem
     {
         #region Fields
 
@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _IsEnabled = value;
-                OnPropertyChanged("IsEnabled");
+                RaisePropertyChanged("IsEnabled");
             }
         }
 
@@ -40,7 +40,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                OnPropertyChanged(null);
+                RaisePropertyChanged(null);
             }
         }
 

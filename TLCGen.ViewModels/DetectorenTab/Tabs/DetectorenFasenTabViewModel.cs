@@ -96,8 +96,8 @@ namespace TLCGen.ViewModels
                 if(Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];
 
-                OnPropertyChanged("SelectedFaseNaam");
-                OnPropertyChanged("Detectoren");
+                RaisePropertyChanged("SelectedFaseNaam");
+                RaisePropertyChanged("Detectoren");
             }
         }
 
@@ -107,7 +107,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                OnPropertyChanged("SelectedDetector");
+                RaisePropertyChanged("SelectedDetector");
             }
         }
 
@@ -117,7 +117,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                OnPropertyChanged("SelectedDetectoren");
+                RaisePropertyChanged("SelectedDetectoren");
             }
         }
 

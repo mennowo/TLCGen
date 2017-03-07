@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
                     }
                 }
 
-                OnMonitoredPropertyChanged(null);
+                RaisePropertyChanged(null);
             }
         }
 
@@ -112,7 +112,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                OnMonitoredPropertyChanged("SelectedFaseCyclusOVIngreep");
+                RaisePropertyChanged<object>("SelectedFaseCyclusOVIngreep", null, null, true);
             }
         }
 
@@ -122,7 +122,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedOVIngreep = value;
-                OnPropertyChanged("SelectedOVIngreep");
+                RaisePropertyChanged("SelectedOVIngreep");
             }
         }
 
@@ -162,7 +162,7 @@ namespace TLCGen.ViewModels
                     }
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
-                OnMonitoredPropertyChanged("SelectedFaseCyclusHDIngreep");
+                RaisePropertyChanged<object>("SelectedFaseCyclusHDIngreep", null, null, true);
             }
         }
 
@@ -172,7 +172,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedHDIngreep = value;
-                OnPropertyChanged("SelectedHDIngreep");
+                RaisePropertyChanged("SelectedHDIngreep");
             }
         }
 

@@ -133,18 +133,21 @@ namespace TLCGen.ViewModels
         public void Update()
         {
             Templates.Clear();
-            if(typeof(T2) == typeof(FaseCyclusModel))
+            if (TemplatesProvider.Default.Templates != null)
             {
-                foreach (var t in TemplatesProvider.Default.Templates.FasenTemplates)
+                if (typeof(T2) == typeof(FaseCyclusModel))
                 {
-                    Templates.Add(t as T1);
+                    foreach (var t in TemplatesProvider.Default.Templates.FasenTemplates)
+                    {
+                        Templates.Add(t as T1);
+                    }
                 }
-            }
-            if (typeof(T2) == typeof(DetectorModel))
-            {
-                foreach (var t in TemplatesProvider.Default.Templates.DetectorenTemplates)
+                if (typeof(T2) == typeof(DetectorModel))
                 {
-                    Templates.Add(t as T1);
+                    foreach (var t in TemplatesProvider.Default.Templates.DetectorenTemplates)
+                    {
+                        Templates.Add(t as T1);
+                    }
                 }
             }
             if(Templates.Count > 0)

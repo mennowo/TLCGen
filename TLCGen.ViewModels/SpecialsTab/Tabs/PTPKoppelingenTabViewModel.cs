@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PTPData.KruisingPTPNaam = value;
-                OnMonitoredPropertyChanged("KruisingPTPNaam");
+                RaisePropertyChanged<object>("KruisingPTPNaam", null, null, true);
             }
         }
 
@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedPTPKoppeling = value;
-                OnPropertyChanged("SelectedPTPKoppeling");
+                RaisePropertyChanged("SelectedPTPKoppeling");
             }
         }
 

@@ -79,6 +79,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Helpers\FakesCreator.cs" />
+    <Compile Include="Tabs\FasenTab\DataTypes\FaseCyclusViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenDetailsTabViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenLijstTabViewModelTests.cs" />
@@ -94,6 +96,10 @@
     <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
       <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
       <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
+      <Project>{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}</Project>
+      <Name>TLCGen.Integrity</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{A693DAA4-DB12-43DD-BCB8-BB039E22BBA8}</Project>
@@ -112,9 +118,7 @@
       <Name>TLCGen.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tabs\FasenTab\DataTypes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

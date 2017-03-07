@@ -215,9 +215,9 @@ namespace TLCGen.ViewModels
                 SetNames.Clear();
                 FasenNames.Clear();
                 GroentijdenMatrix = new GroentijdViewModel[0,0];
-                OnPropertyChanged("SetNames");
-                OnPropertyChanged("FasenNames");
-                OnPropertyChanged("GroentijdenMatrix");
+                RaisePropertyChanged("SetNames");
+                RaisePropertyChanged("FasenNames");
+                RaisePropertyChanged("GroentijdenMatrix");
             }
 
             foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
@@ -261,9 +261,9 @@ namespace TLCGen.ViewModels
                 }
                 i++;
             }
-            OnPropertyChanged("SetNames");
-            OnPropertyChanged("FasenNames");
-            OnPropertyChanged("GroentijdenMatrix");
+            RaisePropertyChanged("SetNames");
+            RaisePropertyChanged("FasenNames");
+            RaisePropertyChanged("GroentijdenMatrix");
         }
 
         #endregion // Private methods
@@ -322,7 +322,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        public void OnFasenChanged(FasenChangedMessage message)
         {
             if (message.AddedFasen != null && message.AddedFasen.Count > 0)
             {
@@ -348,12 +348,12 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        private void OnFasenSorted(FasenSortedMessage message)
+        public void OnFasenSorted(FasenSortedMessage message)
         {
             BuildGroentijdenMatrix();
         }
 
-        private void OnNameChanged(NameChangedMessage message)
+        public void OnNameChanged(NameChangedMessage message)
         {
             foreach(GroentijdenSetViewModel mgsvm in GroentijdenSets)
             {
@@ -370,7 +370,7 @@ namespace TLCGen.ViewModels
 
         private void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
         {
-            OnPropertyChanged("DisplayName");
+            RaisePropertyChanged("DisplayName");
             foreach (GroentijdenSetViewModel setvm in GroentijdenSets)
             {
                 setvm.Type = message.Type;

@@ -137,7 +137,7 @@ namespace TLCGen.ViewModels
                         FillMyBitmap(p, GetFillColor(true));
                     RefreshMyBitmapImage();
                 }
-                OnPropertyChanged("SelectedItem");
+                RaisePropertyChanged("SelectedItem");
             }
         }
 
@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTab = value;
-                OnPropertyChanged("SelectedTab");
+                RaisePropertyChanged("SelectedTab");
             }
         }
 
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ControllerFileName = value;
-                OnPropertyChanged("IsEnabled");
+                RaisePropertyChanged("IsEnabled");
             }
         }
 
@@ -611,7 +611,7 @@ namespace TLCGen.ViewModels
             if(_EditableBitmap == null)
             {
                 _MyBitmap = null;
-                OnPropertyChanged("MyBitmap");
+                RaisePropertyChanged("MyBitmap");
                 return;
             }
 
@@ -626,7 +626,7 @@ namespace TLCGen.ViewModels
                 MyBitmap.CacheOption = BitmapCacheOption.OnLoad;
                 MyBitmap.EndInit();
 
-                OnPropertyChanged("MyBitmap");
+                RaisePropertyChanged("MyBitmap");
             }
         }
 
