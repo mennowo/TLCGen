@@ -313,9 +313,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var fm in c.FileIngrepen)
                         {
-                            if (fm.EerlijkDoseren)
+                            if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
-                                sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
+                                sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.TeDoserenSignaalGroepen[0].FaseCyclus}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
                             }
                         }
                         sb.AppendLine($"{ts}}}");

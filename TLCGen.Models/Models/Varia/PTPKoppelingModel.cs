@@ -28,6 +28,7 @@ namespace TLCGen.Models
         {
             OkBitmapData = new BitmapCoordinatenDataModel();
             ErrorBitmapData = new BitmapCoordinatenDataModel();
+            TeKoppelenKruispunt = "";
         }
     }
 }

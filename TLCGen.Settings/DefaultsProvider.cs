@@ -228,11 +228,11 @@ namespace TLCGen.Settings
 #else
             if (File.Exists(setfile))
             {
-                Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(setfile);
+                Defaults = Helpers.TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(setfile);
             }
             else
             {
-                Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
+                Defaults = Helpers.TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
             }
 #endif
         }

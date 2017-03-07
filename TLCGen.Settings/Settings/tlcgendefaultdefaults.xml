@@ -273,9 +273,9 @@
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
-        <Type>Verweg</Type>
+        <Type>File</Type>
         <Aanvraag>Uit</Aanvraag>
-        <Verlengen>MK2</Verlengen>
+        <Verlengen>Uit</Verlengen>
       </Data>
     </Default>
     <Default>

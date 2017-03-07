@@ -83,7 +83,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseNaam = value;
-                _SelectedFase = _Controller.Fasen.Where(x => x.Naam == value).First();
+                if(_Controller != null && _Controller.Fasen.Where(x => x.Naam == value).Any())
+                {
+                    _SelectedFase = _Controller.Fasen.Where(x => x.Naam == value).First();
+                }
 
                 Detectoren.Clear();
                 foreach(DetectorModel dm in _SelectedFase.Detectoren)

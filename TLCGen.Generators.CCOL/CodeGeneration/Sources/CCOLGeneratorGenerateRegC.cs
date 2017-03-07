@@ -495,7 +495,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_application();");
-            if(controller.Data.KWCType != KWCTypeEnum.Geen)
+            if (controller.Data.KWCType != KWCTypeEnum.Geen && controller.Data.KWCUitgebreid)
             {
                 sb.AppendLine($"{ts}KwcApplication();");
             }

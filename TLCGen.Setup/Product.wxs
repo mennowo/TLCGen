@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="TLCGen.Setup" Language="1033" Version="1.0.0.0" Manufacturer="Microsoft" UpgradeCode="3c751d09-b398-4b7f-8ad9-241c33d2213b">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="TLCGen.Setup" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="TLCGen" />
+			</Directory>
+		</Directory>
+	</Fragment>
+  <Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id='MainExecutable' Guid='BA458570-4450-46AB-9975-B6C69801AAE5'>
+        <File Id='TLCGenExe' Name='TLCGen.exe' Source='TLCGen.exe' KeyPath='yes' >
+          
+        </File>
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

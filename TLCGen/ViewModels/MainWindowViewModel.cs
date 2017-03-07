@@ -741,7 +741,7 @@ namespace TLCGen.ViewModels
             ControllerVM = new ControllerViewModel();
 
             // If we are in debug mode, the code below tries loading default file
-#if DEBUG
+#if DEBUG__
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
