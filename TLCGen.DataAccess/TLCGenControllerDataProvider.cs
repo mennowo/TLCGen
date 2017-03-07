@@ -12,6 +12,7 @@ using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -216,8 +217,8 @@ namespace TLCGen.DataAccess
             else
             {
                 // Save all changes to model
-#warning TODO: change to message call
-                //ControllerVM.ProcessAllChanges();
+                // Request to process all synchronisation data from matrix to model
+                Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
                 // Check data integrity: do not save wrong data
                 string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);
@@ -269,8 +270,8 @@ namespace TLCGen.DataAccess
         public bool SaveControllerAs()
         {
             // Save all changes to model
-#warning TODO: change to message call
-            //ControllerVM.ProcessAllChanges();
+            // Request to process all synchronisation data from matrix to model
+            Messenger.Default.Send(new ProcessSynchronisationsRequest());
 
             // Check data integrity: do not save wrong data
             string s = TLCGenIntegrityChecker.IsControllerDataOK(Controller);

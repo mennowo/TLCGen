@@ -19,8 +19,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ControllerDataModel _ControllerData;
-
         #endregion // Fields
 
         #region Properties

@@ -89,9 +89,12 @@ namespace TLCGen.ViewModels
                 }
 
                 Detectoren.Clear();
-                foreach(DetectorModel dm in _SelectedFase.Detectoren)
+                if (_SelectedFase != null)
                 {
-                    Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam });
+                    foreach (DetectorModel dm in _SelectedFase.Detectoren)
+                    {
+                        Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam });
+                    }
                 }
                 if(Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];
@@ -272,6 +275,21 @@ namespace TLCGen.ViewModels
             set { }
         }
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+
+            set
+            {
+                base.Controller = value;
+                Detectoren.Clear();
+                SelectedFaseNaam = null;
+            }
+        }
+
         public override void OnSelected()
         {
             var tfc = SelectedFaseNaam;
@@ -283,15 +301,28 @@ namespace TLCGen.ViewModels
             if(tfc == null || !Fasen.Contains(tfc))
             {
                 if (Fasen.Count > 0)
+                {
                     SelectedFaseNaam = Fasen[0];
+                    if (Detectoren?.Count > 0)
+                    {
+                        SelectedDetector = Detectoren[0];
+                    }
+                }
                 else
+                {
                     SelectedFaseNaam = null;
+                    SelectedDetector = null;
+                }
             }
             else if(Fasen.Contains(tfc))
             {
                 SelectedFaseNaam = tfc;
             }
-
+            if(SelectedDetector == null && Detectoren?.Count > 0)
+            {
+                SelectedDetector = Detectoren[0];
+            }
+            
             TemplatesProviderVM.Update();
         }
 

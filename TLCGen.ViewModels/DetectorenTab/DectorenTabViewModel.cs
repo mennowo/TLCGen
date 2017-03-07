@@ -22,19 +22,6 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public DrawingImage Icon
-        {
-            get
-            {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
-                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "TabIcons.xaml");
-                dict.Source = u;
-                return (DrawingImage)dict["DetectorenTabDrawingImage"];
-            }
-        }
-        
         #endregion // Properties
 
         #region Commands
@@ -47,6 +34,19 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        public override ImageSource Icon
+        {
+            get
+            {
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "TabIcons.xaml");
+                dict.Source = u;
+                return (ImageSource)dict["DetectorenTabDrawingImage"];
+            }
+        }
+        
         public override string DisplayName
         {
             get

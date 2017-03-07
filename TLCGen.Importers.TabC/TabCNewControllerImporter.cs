@@ -46,7 +46,7 @@ namespace TLCGen.Importers.TabC
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.CheckFileExists = true;
             openFileDialog.Title = "Selecteer tab.c file voor importeren";
-            openFileDialog.Filter = "tab.c files|*tab.c|Alle files|*.*";
+            openFileDialog.Filter = "Tab.c files|*tab.c|OTTO uitvoer|*.ccol|Alle files|*.*";
 
             ControllerModel newc = new ControllerModel();
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -195,6 +196,16 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Public Methods
+
+        #region TLCGen Events
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            _DetectorManager = null;
+            OnPropertyChanged("DetectorManager");
+        }
+
+        #endregion // TLCGen Events
 
         #region IViewModelWithItem
 

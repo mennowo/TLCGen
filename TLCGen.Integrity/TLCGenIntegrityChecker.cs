@@ -60,9 +60,9 @@ namespace TLCGen.Integrity
         /// <returns>null if succesfull, otherwise a string stating the first error found.</returns>
         public static string IsConflictMatrixOK(ControllerModel c)
         {
-            // Request to process all synchronisation data from matrix to model
-            Messenger.Default.Send(new ProcessSynchronisationsRequest());
-
+            if (c == null)
+                throw new NotImplementedException("Error with IsConflictMatrixOK: ControllerModel cannot be null");
+            
             // Loop all conflicts
             foreach (ConflictModel cm1 in c.InterSignaalGroep.Conflicten)
             {

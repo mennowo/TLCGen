@@ -233,6 +233,9 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
+            _DetectorManager = null;
+            OnPropertyChanged("DetectorManager");
+
             if (Detectoren?.Count == 0)
                 return;
 

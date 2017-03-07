@@ -12,8 +12,6 @@ namespace TLCGen.Settings.Utilities
     {
         public static FaseTypeEnum GetFaseTypeFromNaam(string naam)
         {
-            if (naam.Length >= 3)
-                naam = naam.Substring(1);
             int myfase = -1;
             if (Int32.TryParse(naam, out myfase))
             {

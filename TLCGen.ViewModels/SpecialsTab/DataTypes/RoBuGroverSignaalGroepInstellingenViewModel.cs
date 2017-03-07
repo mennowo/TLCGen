@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Settings;
 
@@ -155,7 +156,7 @@ namespace TLCGen.ViewModels
         #endregion // Commands
 
         #region Command functionality
-        
+
         #endregion // Command functionality
 
         #region Private methods
@@ -165,6 +166,18 @@ namespace TLCGen.ViewModels
         #region Public methods
 
         #endregion // Public Methods
+
+        #region TLCGen Events
+
+        private void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            _FileDetectorManager = null;
+            _HiaatDetectorManager = null;
+            OnPropertyChanged("FileDetectorManager");
+            OnPropertyChanged("HiaatDetectorManager");
+        }
+
+        #endregion // TLCGen Events
 
         #region IViewModelWithItem
 

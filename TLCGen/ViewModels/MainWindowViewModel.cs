@@ -14,6 +14,7 @@ using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
@@ -446,6 +447,9 @@ namespace TLCGen.ViewModels
             {
                 if (imp.ImportsIntoExisting)
                 {
+                    // Request to process all synchronisation data from matrix to model
+                    Messenger.Default.Send(new ProcessSynchronisationsRequest());
+
                     // Check data integrity
                     string s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
                     if (s1 != null)
@@ -508,6 +512,9 @@ namespace TLCGen.ViewModels
 
         private void GenerateControllerCommand_Executed(object obj)
         {
+            // Request to process all synchronisation data from matrix to model
+            Messenger.Default.Send(new ProcessSynchronisationsRequest());
+
             string s = TLCGenIntegrityChecker.IsControllerDataOK(TLCGenControllerDataProvider.Default.Controller);
             if (s == null)
             {
@@ -747,18 +754,18 @@ namespace TLCGen.ViewModels
 
             // If we are in debug mode, the code below tries loading default file
 #if DEBUG
-            TLCGenControllerDataProvider.Default.OpenDebug();
-            if (TLCGenControllerDataProvider.Default.Controller != null)
-            {
-                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("ProgramTitle");
-            }
+            //TLCGenControllerDataProvider.Default.OpenDebug();
+            //if (TLCGenControllerDataProvider.Default.Controller != null)
+            //{
+            //    ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+            //    SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
+            //
+            //    Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
+            //    Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            //    TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
+            //    Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            //    RaisePropertyChanged("ProgramTitle");
+            //}
 #endif
 
             if (!DesignMode.IsInDesignMode)

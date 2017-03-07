@@ -617,7 +617,11 @@ namespace TLCGen.ViewModels
             if (_Controller == null ||
                 _Controller.Fasen == null ||
                 _Controller.Fasen.Count <= 0)
+            {
+                ConflictMatrix = null;
+                RaisePropertyChanged("ConflictMatrix");
                 return;
+            }
 
             int fccount = Fasen.Count;
 
@@ -627,13 +631,6 @@ namespace TLCGen.ViewModels
                 FasenNames.Add(fcvm.Naam);
             }
             RaisePropertyChanged("FasenNames");
-
-
-            if (fccount == 0)
-            {
-                ConflictMatrix = null;
-                return;
-            }
 
             ConflictMatrix = new SynchronisatieViewModel[fccount, fccount];
             for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)

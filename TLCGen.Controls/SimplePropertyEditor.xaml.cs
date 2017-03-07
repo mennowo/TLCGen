@@ -18,6 +18,16 @@ using TLCGen.Models;
 
 namespace TLCGen.Controls
 {
+    public class StringValidate : ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            bool ok = false;
+            if (value != null) ok = true;
+            return ok ? new ValidationResult(ok, "") : new ValidationResult(ok, "string may not be null");
+        }
+    }
+
     public class IntValidate : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
@@ -171,15 +181,20 @@ namespace TLCGen.Controls
                         binding.Source = o.BoundObject;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                         binding.ValidatesOnDataErrors = true;
-                        if (!(prop.PropertyType == typeof(int)))
+                        if (prop.PropertyType == typeof(int?))
                         {
                             binding.TargetNullValue = string.Empty;
                             var role = new IntNullableValidate();
                             binding.ValidationRules.Add(role);
                         }
-                        else
+                        else if (prop.PropertyType == typeof(int))
                         {
                             var role = new IntValidate();
+                            binding.ValidationRules.Add(role);
+                        }
+                        else if (prop.PropertyType == typeof(string))
+                        {
+                            var role = new StringValidate();
                             binding.ValidationRules.Add(role);
                         }
                         BindingOperations.SetBinding(editor, TextBox.TextProperty, binding);
