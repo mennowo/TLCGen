@@ -176,6 +176,33 @@
         <HiaatDetectoren />
       </Data>
     </Default>
+    <Default>
+      <DefaultName>Conflict OV</DefaultName>
+      <Category>FaseCyclus</Category>
+      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
+        <MinimumGroentijdConflictOVRealisatie>60</MinimumGroentijdConflictOVRealisatie>
+        <PercMaxGroentijdConflictOVRealisatie>0</PercMaxGroentijdConflictOVRealisatie>
+        <PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
+        <OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
+        <OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
+        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Alternatief</DefaultName>
+      <Category>FaseCyclus</Category>
+      <DataType>TLCGen.Models.FaseCyclusModuleDataModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <ModulenVooruit>1</ModulenVooruit>
+        <AlternatiefToestaan>true</AlternatiefToestaan>
+        <AlternatieveRuimte>60</AlternatieveRuimte>
+        <AlternatieveGroenTijd>60</AlternatieveGroenTijd>
+      </Data>
+    </Default>
 
     <!-- Detectie -->
     <Default>
@@ -474,21 +501,6 @@
         <HDVecomDummyInmeldingBitmapData />
         <HDVecomDummyUitmeldingBitmapData />
         <MeerealiserendeFaseCycli />
-      </Data>
-    </Default>
-    <Default>
-      <DefaultName>Conflict OV</DefaultName>
-      <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Models</DataType>
-      <Data>
-        <FaseCyclus />
-        <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
-        <MinimumGroentijdConflictOVRealisatie>60</MinimumGroentijdConflictOVRealisatie>
-        <PercMaxGroentijdConflictOVRealisatie>0</PercMaxGroentijdConflictOVRealisatie>
-        <PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
-        <OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
-        <OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
-        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
       </Data>
     </Default>
   </Defaults>
