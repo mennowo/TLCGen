@@ -7,6 +7,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    [Serializable]
     public class FixatieModel
     {
         public bool FixatieMogelijk { get; set; }

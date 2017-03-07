@@ -462,11 +462,16 @@ namespace TLCGen.ViewModels
                         return;
 
                     // Check data integrity
+                    c2.Data.GarantieOntruimingsTijden = false;
                     s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                     if (s1 != null)
                     {
                         System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                         return;
+                    }
+                    if(c1.Data.GarantieOntruimingsTijden)
+                    {
+                        MessageBox.Show("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
                     }
                     SetController(c2);
                     ControllerVM.ReloadController();
