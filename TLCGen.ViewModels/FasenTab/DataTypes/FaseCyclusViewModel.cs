@@ -342,22 +342,18 @@ namespace TLCGen.ViewModels
                 if(value == MeeVerlengenTypeEnum.Default.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.Default;
-
                 }
                 else if (value == MeeVerlengenTypeEnum.To.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.To;
-
                 }
                 else if (value == MeeVerlengenTypeEnum.MKTo.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.MKTo;
-
                 }
                 else if (value == MeeVerlengenTypeEnum.Voetganger.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.Voetganger;
-
                 }
 
                 OnPropertyChanged("MeeverlengenTypeString");

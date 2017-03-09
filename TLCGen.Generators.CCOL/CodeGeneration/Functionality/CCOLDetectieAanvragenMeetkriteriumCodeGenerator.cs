@@ -61,24 +61,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
                     continue;
-
-                int set = 0;
-                switch (dm.Verlengen)
-                {
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.Uit:
-                        set = 0;
-                        break;
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax:
-                        set = 1;
-                        break;
-                    case Models.Enumerations.DetectorVerlengenTypeEnum.MK2:
-                        set = 3;
-                        break;
-                }
+                
                 _MyElements.Add(
                     new CCOLElement(
                         $"{_prmmk}{dm.Naam}", 
-                        set, 
+                        (int)dm.Verlengen, 
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Parameter));
             }

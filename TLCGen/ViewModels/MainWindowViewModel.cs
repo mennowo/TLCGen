@@ -754,18 +754,18 @@ namespace TLCGen.ViewModels
 
             // If we are in debug mode, the code below tries loading default file
 #if DEBUG
-            //TLCGenControllerDataProvider.Default.OpenDebug();
-            //if (TLCGenControllerDataProvider.Default.Controller != null)
-            //{
-            //    ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-            //    SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-            //
-            //    Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
-            //    Messenger.Default.Send(new UpdateTabsEnabledMessage());
-            //    TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
-            //    Messenger.Default.Send(new UpdateTabsEnabledMessage());
-            //    RaisePropertyChanged("ProgramTitle");
-            //}
+            TLCGenControllerDataProvider.Default.OpenDebug();
+            if (TLCGenControllerDataProvider.Default.Controller != null)
+            {
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
+            
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                RaisePropertyChanged("ProgramTitle");
+            }
 #endif
 
             if (!DesignMode.IsInDesignMode)

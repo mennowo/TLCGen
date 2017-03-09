@@ -15,6 +15,8 @@ namespace TLCGen.Models.Enumerations
         Uit = 0,
         [Description("Kopmax")]
         Kopmax = 1,
+        [Description("1e kriterium")]
+        MK1 = 2,
         [Description("2e kriterium")]
         MK2 = 3
     }
