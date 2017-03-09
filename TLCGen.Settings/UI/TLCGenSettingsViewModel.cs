@@ -57,6 +57,19 @@ namespace TLCGen.Settings
             }
         }
 
+        private PeriodenTemplatesEditorTabViewModel _PeriodenTemplatesEditorTabVM;
+        public PeriodenTemplatesEditorTabViewModel PeriodenTemplatesEditorTabVM
+        {
+            get
+            {
+                if (_PeriodenTemplatesEditorTabVM == null)
+                {
+                    _PeriodenTemplatesEditorTabVM = new PeriodenTemplatesEditorTabViewModel();
+                }
+                return _PeriodenTemplatesEditorTabVM;
+            }
+        }
+
         #endregion // Properties
 
         #region Private Methods

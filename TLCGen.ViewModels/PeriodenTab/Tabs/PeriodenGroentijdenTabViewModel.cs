@@ -6,18 +6,21 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 0, type: TabItemTypeEnum.PeriodenTab)]
-    public class PeriodenGroentijdenTabViewModel : TLCGenTabItemViewModel
+    public class PeriodenGroentijdenTabViewModel : TLCGenTabItemViewModel, IAllowTemplates<PeriodeModel>
     {
         #region Fields
         
@@ -75,10 +78,22 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private TemplateProviderViewModel<TLCGenTemplateModel<PeriodeModel>, PeriodeModel> _TemplatesProviderVM;
+        public TemplateProviderViewModel<TLCGenTemplateModel<PeriodeModel>, PeriodeModel> TemplatesProviderVM
+        {
+            get
+            {
+                if (_TemplatesProviderVM == null)
+                {
+                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<PeriodeModel>, PeriodeModel>(this);
+                }
+                return _TemplatesProviderVM;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
-
 
         RelayCommand _AddPeriodeCommand;
         public ICommand AddPeriodeCommand
@@ -240,6 +255,8 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            TemplatesProviderVM.Update();
+
             var v = _Controller.PeriodenData.DefaultPeriodeGroentijdenSet;
             GroentijdenSets.Clear();
             foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)
@@ -299,6 +316,34 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Collection Changed
+
+        #region IAllowTemplates
+
+        public void InsertItemsFromTemplate(List<PeriodeModel> items)
+        {
+            if (_Controller == null)
+                return;
+
+            foreach (var per in items)
+            {
+                if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, per.Naam)))
+                {
+                    MessageBox.Show("Error bij toevoegen van periode met naam " + per.Naam + ".\nNaam van de periode is niet uniek in de regeling.", "Error bij toepassen template");
+                    return;
+                }
+                if(!_Controller.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet).Any())
+                {
+                    MessageBox.Show("Error bij toevoegen van periode verwijzend naar groentijdenset " + per.GroentijdenSet + ".\nDeze groentijdenset ontbreekt in de regeling.", "Error bij toepassen template");
+                    return;
+                }
+            }
+            foreach (var per in items)
+            {
+                Periodes.Add(new PeriodeViewModel(per));
+            }
+        }
+
+        #endregion // IAllowTemplates
 
         #region TLCGen Events
 

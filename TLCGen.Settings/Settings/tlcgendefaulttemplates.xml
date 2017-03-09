@@ -596,4 +596,42 @@
       </Items>
     </DetectorenTemplate>
   </DetectorenTemplates>
+  <PeriodenTemplates>
+    <PeriodeTemplate>
+      <Naam>Dag ochtend avond</Naam>
+      <Replace />
+      <Items>
+        <Item>
+          <Naam>dag</Naam>
+          <Type>Groentijden</Type>
+          <DagCode>8</DagCode>
+          <GroentijdenSet>MG2</GroentijdenSet>
+          <Commentaar>Dag periode</Commentaar>
+          <BitmapData />
+          <StartTijd>06:00</StartTijd>
+          <EindTijd>19:00</EindTijd>
+        </Item>
+        <Item>
+          <Naam>ochtend</Naam>
+          <Type>Groentijden</Type>
+          <DagCode>8</DagCode>
+          <GroentijdenSet>MG3</GroentijdenSet>
+          <Commentaar>Ochtendspits</Commentaar>
+          <BitmapData />
+          <StartTijd>07:00</StartTijd>
+          <EindTijd>09:30</EindTijd>
+        </Item>
+        <Item>
+          <Naam>avond</Naam>
+          <Type>Groentijden</Type>
+          <DagCode>8</DagCode>
+          <GroentijdenSet>MG4</GroentijdenSet>
+          <Commentaar>Avondspits</Commentaar>
+          <BitmapData />
+          <StartTijd>16:00</StartTijd>
+          <EindTijd>19:00</EindTijd>
+        </Item>
+      </Items>
+    </PeriodeTemplate>
+  </PeriodenTemplates>
 </TLCGenTemplatesModel>

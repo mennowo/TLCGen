@@ -133,6 +133,7 @@ namespace TLCGen.ViewModels
         public void Update()
         {
             Templates.Clear();
+#warning This is not so nice. Could be more generic!
             if (TemplatesProvider.Default.Templates != null)
             {
                 if (typeof(T2) == typeof(FaseCyclusModel))
@@ -145,6 +146,14 @@ namespace TLCGen.ViewModels
                 if (typeof(T2) == typeof(DetectorModel))
                 {
                     foreach (var t in TemplatesProvider.Default.Templates.DetectorenTemplates)
+                    {
+                        Templates.Add(t as T1);
+                    }
+                }
+
+                if (typeof(T2) == typeof(PeriodeModel))
+                {
+                    foreach (var t in TemplatesProvider.Default.Templates.PeriodenTemplates)
                     {
                         Templates.Add(t as T1);
                     }
