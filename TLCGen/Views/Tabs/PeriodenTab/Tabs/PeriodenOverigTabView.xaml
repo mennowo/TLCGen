@@ -34,7 +34,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=StartTijd,Mode=TwoWay}" Minimum="0" ClipValueToMinMax="True" />
+                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=StartTijd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Minimum="0" ClipValueToMinMax="True" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -46,11 +46,11 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=EindTijd,Mode=TwoWay}" Minimum="0" ClipValueToMinMax="True" />
+                            <ct:TimeSpanUpDown24Hours Value="{Binding Path=EindTijd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Minimum="0" ClipValueToMinMax="True" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+                <DataGridTextColumn Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged}" Header="Commentaar" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1">

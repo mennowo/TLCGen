@@ -7,6 +7,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
     <UserControl.Resources>
@@ -82,7 +83,20 @@
                     </Style>
                 </GroupBox.Style>
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Type meeverlengen" />
+                    <DockPanel>
+                        <Label Content="Type meeverlengen" />
+                        <ct:InfoElement>
+                            <ct:InfoElement.InfoPopup>
+                                <TextBlock>
+                                    Opties voor meeverlengen:<LineBreak />
+                                    ymmax - de default meeverleng functie<LineBreak />
+                                    ymmax_to - houdt rekening met ontruimingstijden<LineBreak />
+                                    ymmax || MK[fc] &amp;&amp; ymmax_to - default, maar bij MK kijken naar ontruimingstijden<LineBreak />
+                                    ymmax_vtg - meeverleng functie voor voetgangers
+                                </TextBlock>
+                            </ct:InfoElement.InfoPopup>
+                        </ct:InfoElement>
+                    </DockPanel>
                     <ComboBox 
                         ItemsSource="{Binding Path=MeeverlengenOpties}"
                         SelectedValue="{Binding Path=MeeverlengenTypeString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />

@@ -95,7 +95,7 @@
                         </Style>
                     </DataGridTemplateColumn.CellStyle>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+                <DataGridTextColumn Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged}" Header="Commentaar" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2">

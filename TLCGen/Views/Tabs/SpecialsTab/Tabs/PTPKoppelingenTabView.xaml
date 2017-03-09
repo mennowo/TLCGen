@@ -16,21 +16,21 @@
         <Label Content="PTP Koppelingen" FontWeight="Bold" />
         <DockPanel Grid.Row="1">
             <Label Content="Kruising PTP naam"  DockPanel.Dock="Left"/>
-            <TextBox Text="{Binding Path=KruisingPTPNaam}" Margin="2" DockPanel.Dock="Right"/>
+            <TextBox Text="{Binding Path=KruisingPTPNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" DockPanel.Dock="Right"/>
         </DockPanel>
         <DataGrid Grid.Row="2" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
-                  SelectedItem="{Binding Path=SelectedPTPKoppeling}"
+                  SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=TeKoppelenKruispunt}" />
-                <DataGridTextColumn Header="# In" Binding="{Binding Path=AantalsignalenIn}" />
-                <DataGridTextColumn Header="# Uit" Binding="{Binding Path=AantalsignalenUit}" />
-                <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving}" />
-                <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving}" />
-                <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource}" />
-                <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination}" />
+                <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=TeKoppelenKruispunt,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="# In" Binding="{Binding Path=AantalsignalenIn,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="# Uit" Binding="{Binding Path=AantalsignalenUit,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Poort simulatie" Binding="{Binding Path=PortnummerSimuatieOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="3" Orientation="Horizontal">

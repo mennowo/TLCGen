@@ -136,6 +136,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
+            sb.Append(GenerateTabCControlParametersExtraData(controller));
+            sb.AppendLine();
             if (controller.OVData.DSI)
             {
                 sb.Append(GenerateTabCControlParametersDS(controller));
@@ -670,6 +672,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateTabCControlParametersExtraData(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("/* extra data*/");
+            sb.AppendLine("/* ---------- */");
+
+            foreach(FaseCyclusModel fc in controller.Fasen)
+            {
+                switch(fc.Type)
+                {
+                    case Models.Enumerations.FaseTypeEnum.Auto:
+                        sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = MVT_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                        sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = FTS_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                        sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = VTG_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.OV:
+                        sb.AppendLine($"{ts}FC_type[{_fcpf}{fc.Naam}] = OV_type;");
+                        break;
+                }
+            }
+
+            return sb.ToString();
+        }
+
         private string GenerateTabCControlParametersDS(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
@@ -702,9 +733,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
 
-            foreach(ModuleModel mm in controller.ModuleMolen.Modules)
+            foreach (ModuleModel mm in controller.ModuleMolen.Modules)
             {
-                foreach(ModuleFaseCyclusModel mfcm in mm.Fasen)
+                foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
                 {
                     sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                 }
