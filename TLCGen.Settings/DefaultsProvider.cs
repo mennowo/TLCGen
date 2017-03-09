@@ -76,13 +76,14 @@ namespace TLCGen.Settings
 
         #region Private Methods
 
-        private void CopyAllValueProperties<T>(T from, T to)
+        private void CopyAllProperties<T>(T from, T to, bool onlyvalues = true)
         {
             var type = from.GetType();
             var props = type.GetProperties();
             foreach (PropertyInfo property in props)
             {
-                if (property.PropertyType.IsValueType)
+                if (property.PropertyType.IsValueType ||
+                    !onlyvalues)
                 {
                     object propValue = property.GetValue(from);
                     property.SetValue(to, propValue);
@@ -134,7 +135,7 @@ namespace TLCGen.Settings
 
         #region IDefaultsProvider
 
-        public void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null)
+        public void SetDefaultsOnModel(object model, string selector1 = null, string selector2 = null, bool onlyvalues = true)
         {
             var type = model.GetType();
             var typename = type.FullName + "," + type.Assembly.GetName().Name;
@@ -146,14 +147,14 @@ namespace TLCGen.Settings
 
             if(defs.Count() == 1)
             {
-                CopyAllValueProperties(defs.First().Data, model);
+                CopyAllProperties(defs.First().Data, model, onlyvalues);
             }
             else if(defs.Count() > 1)
             {
                 bool found = false;
                 if (selector1 == null && selector2 == null)
                 {
-                    CopyAllValueProperties(defs.First().Data, model);
+                    CopyAllProperties(defs.First().Data, model, onlyvalues);
                     found = true;
                     //MessageBox.Show("Fout bij toepassen default instellingen voor " + type.Name + ":\nGeen selector bekend bij meerdere beschikbare defaults.", "Fout bij toepassen defaults");
                 }
@@ -164,7 +165,7 @@ namespace TLCGen.Settings
                         if ((selector1 == null || selector1 == def.Selector1) &&
                             (selector2 == null || selector2 == def.Selector2))
                         {
-                            CopyAllValueProperties(def.Data, model);
+                            CopyAllProperties(def.Data, model, onlyvalues);
                             found = true;
                             break;
                         }

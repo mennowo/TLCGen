@@ -109,7 +109,10 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return Type == DetectorTypeEnum.KnopBinnen || Type == DetectorTypeEnum.KnopBuiten;
+                return 
+                    Type == DetectorTypeEnum.Knop ||
+                    Type == DetectorTypeEnum.KnopBinnen || 
+                    Type == DetectorTypeEnum.KnopBuiten;
             }
         }
 

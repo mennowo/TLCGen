@@ -68,9 +68,22 @@ namespace TLCGen.ViewModels
                 if(value != PeriodeTypeEnum.Groentijden)
                 {
                     GroentijdenSet = null;
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Periode, Type.ToString(), null, false);
+                    string name = _Periode.Naam;
+                    string newname = _Periode.Naam;
+                    _Periode.Naam = "";
+                    var message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
+                    Messenger.Default.Send(message);
+                    int i = 0;
+                    while (!(message.Handled && message.IsUnique))
+                    {
+                        newname = name + (i++).ToString();
+                        message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
+                        Messenger.Default.Send(message);
+                    }
+                    _Periode.Naam = newname;
                 }
-                OnMonitoredPropertyChanged("Type");
-                OnMonitoredPropertyChanged("IsPeriodeForGroentijdenSet");
+                OnMonitoredPropertyChanged(null);
             }
         }
 

@@ -331,9 +331,9 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>Fiets drukknop buiten</DefaultName>
+      <DefaultName>Fiets drukknop</DefaultName>
       <Category>Detector</Category>
-      <Selector1>KnopBuiten</Selector1>
+      <Selector1>Knop</Selector1>
       <Selector2>Fiets</Selector2>
       <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
       <Data>
@@ -501,6 +501,102 @@
         <HDVecomDummyInmeldingBitmapData />
         <HDVecomDummyUitmeldingBitmapData />
         <MeerealiserendeFaseCycli />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode rateltikkers altijd</DefaultName>
+      <Selector1>RateltikkersAltijd</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>rtaltijd</Naam>
+        <Type>RateltikkersAltijd</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar>Rateltikkers altijd actief</Commentaar>
+        <BitmapData/>
+        <StartTijd>15:30</StartTijd>
+        <EindTijd>19:00</EindTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode rateltikkers aanvraag</DefaultName>
+      <Selector1>RateltikkersAanvraag</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>rtaanvraag</Naam>
+        <Type>RateltikkersAanvraag</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar>Rateltikkers op aanvraag</Commentaar>
+        <BitmapData/>
+        <StartTijd>06:00</StartTijd>
+        <EindTijd>22:00</EindTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode rateltikkers dimmen</DefaultName>
+      <Selector1>RateltikkersDimmen</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>rtdim</Naam>
+        <Type>RateltikkersDimmen</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar>Rateltikkers dimmen</Commentaar>
+        <BitmapData/>
+        <StartTijd>19:00</StartTijd>
+        <EindTijd>07:00</EindTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode bellen actief</DefaultName>
+      <Selector1>BellenActief</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>belact</Naam>
+        <Type>BellenActief</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar>Bellen actief</Commentaar>
+        <BitmapData/>
+        <StartTijd>06:00</StartTijd>
+        <EindTijd>22:00</EindTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode bellen dimmen</DefaultName>
+      <Selector1>BellenDimmen</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>beldim</Naam>
+        <Type>BellenDimmen</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar>Bellen dimmen</Commentaar>
+        <BitmapData/>
+        <StartTijd>19:00</StartTijd>
+        <EindTijd>07:00</EindTijd>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Periode overig</DefaultName>
+      <Selector1>Overig</Selector1>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam>beldim</Naam>
+        <Type>Overig</Type>
+        <DagCode>10</DagCode>
+        <GroentijdenSet />
+        <Commentaar></Commentaar>
+        <BitmapData/>
+        <StartTijd>00:00</StartTijd>
+        <EindTijd>24:00</EindTijd>
       </Data>
     </Default>
   </Defaults>
