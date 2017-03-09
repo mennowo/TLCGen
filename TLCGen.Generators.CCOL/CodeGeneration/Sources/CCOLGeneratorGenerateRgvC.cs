@@ -146,9 +146,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
                 sb.Append($"{l}(");
+                int i = 0;
                 foreach (var d in fc.FileDetectoren)
                 {
-                    sb.Append($"!T[{_tpf}{_tfd}{_dpf}{d.Detector}] &&"); 
+                    if(i > 0)
+                    {
+                        sb.Append(" && ");
+                    }
+                    ++i;
+                    sb.Append($"!T[{_tpf}{_tfd}{_dpf}{d.Detector}]"); 
                 }
                 sb.AppendLine(");");
             }
@@ -184,12 +190,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach(var d in fc.HiaatDetectoren)
                     {
-                        sb.AppendLine($"{ts}RT[{_tpf}{_thd}{d.Detector}] = D[{_dpf}{d.Detector}];");
+                        sb.AppendLine($"{ts}RT[{_tpf}{_thd}{_dpf}{d.Detector}] = D[{_dpf}{d.Detector}];");
                     }
                     int i = 1;
                     foreach (var d in fc.HiaatDetectoren)
                     {
-                        sb.AppendLine($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (RT[{_tpf}{_tpf}{_thd}{d.Detector}] || T[{_tpf}{_thd}{d.Detector}]);");
+                        sb.AppendLine($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (RT[{_tpf}{_thd}{_dpf}{d.Detector}] || T[{_tpf}{_thd}{d.Detector}]);");
                         ++i;
                     }
                 }

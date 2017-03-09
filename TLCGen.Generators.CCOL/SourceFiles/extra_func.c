@@ -112,7 +112,7 @@ bool ym_max_vtgV1(count i)
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
 					m = TO_pointer[k][j];
-					if (m <= AUTO_MAX_FASE)
+					if (US_type[m] == MVT_type)
 					{
 						/* bereken of max groentijd is bereikt tov benodigde
 						ontruiming */
@@ -124,7 +124,7 @@ bool ym_max_vtgV1(count i)
 							break;
 						}
 					}
-					if (m > AUTO_MAX_FASE)
+					else
 					{
 						if (CV[m] && !VG[m])
 						{
