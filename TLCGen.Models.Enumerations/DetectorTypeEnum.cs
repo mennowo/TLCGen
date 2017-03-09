@@ -19,6 +19,8 @@ namespace TLCGen.Models.Enumerations
         Verweg,
         [Description("File lus")]
         File,
+        [Description("Drukknop")]
+        Knop,
         [Description("Drukknop binnen")]
         KnopBinnen,
         [Description("Drukknop buiten")]

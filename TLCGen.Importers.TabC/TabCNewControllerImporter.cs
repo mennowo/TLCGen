@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TLCGen.Extensions;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.Importers.TabC
 {
@@ -54,6 +55,8 @@ namespace TLCGen.Importers.TabC
             {
                 try
                 {
+                    DefaultsProvider.Default.SetDefaultsOnModel(newc);
+
                     string[] lines = File.ReadAllLines(openFileDialog.FileName);
                     if (lines.Count() <= 1)
                         throw new NotImplementedException("Het bestand heeft minder dan 2 regels.");
@@ -63,8 +66,12 @@ namespace TLCGen.Importers.TabC
                     NewData.Fasen.BubbleSort();
                     foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
+                        fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
+                        DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
                         newc.Fasen.Add(fcm);
-                        newc.ModuleMolen.FasenModuleData.Add(new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam });
+                        var fcdm = new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam };
+                        DefaultsProvider.Default.SetDefaultsOnModel(fcdm, fcm.Type.ToString());
+                        newc.ModuleMolen.FasenModuleData.Add(fcdm);
                     }
                     NewData.Conflicten.BubbleSort();
                     foreach (ConflictModel cm in NewData.Conflicten)

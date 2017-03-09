@@ -21,4 +21,6 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	count dr3);      /* drukknop buiten evt. naloop fase */
 void NaloopVtgV2(count fc1, count fc2, count dk, count hdk, count tnl);
 
+extern mulv * FC_type;
+
 #endif

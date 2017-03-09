@@ -46,7 +46,10 @@
             dg2d:Cell.Template="{StaticResource MatrixCellTemplate}"
             dg2d:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
             dg2d:ItemsSource.ColumnHeadersSource="{Binding Path=VAOntruimenMatrixColumnHeaders}"
-            dg2d:ItemsSource.RowHeadersSource="{Binding Path=VAOntruimenMatrixRowHeaders}"/>
+            dg2d:ItemsSource.RowHeadersSource="{Binding Path=VAOntruimenMatrixRowHeaders}"
+            PreviewKeyDown="VaOntruimenGrid_PreviewKeyDown"
+            CellEditEnding="VaOntruimenGrid_CellEditEnding"
+            BeginningEdit="VaOntruimenGrid_BeginningEdit"/>
         <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" RemovableDetectorsVisibility="Visible" Grid.Row="2" />
         <!--<StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="Detectoren" />

@@ -53,7 +53,10 @@ namespace TLCGen.ViewModels
             get { return _WaarschuwingsGroep.FaseCyclusVoorAansturing; }
             set
             {
-                _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
+                if(value != null)
+                {
+                    _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
+                }
                 OnMonitoredPropertyChanged("FaseCyclusVoorAansturing");
             }
         }

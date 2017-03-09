@@ -71,6 +71,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#endif");
             }
 
+            sb.AppendLine();
+            sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
+            sb.AppendLine();
+
             return sb.ToString();
         }
 
@@ -676,7 +680,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("/* extra data*/");
+            sb.AppendLine("/* extra data */");
             sb.AppendLine("/* ---------- */");
 
             foreach(FaseCyclusModel fc in controller.Fasen)

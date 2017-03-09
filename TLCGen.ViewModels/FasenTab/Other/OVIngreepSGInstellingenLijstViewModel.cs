@@ -9,6 +9,7 @@ using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Helpers;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -115,6 +116,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+#warning This would probably be better done right there where the "has OV" prop is set
         private void OnControllerHasOVChanged(ControllerHasOVChangedMessage message)
         {
             switch (message.Type)
@@ -126,6 +128,7 @@ namespace TLCGen.ViewModels
                     foreach(FaseCyclusModel fcm in _Controller.Fasen)
                     {
                         var prms = new OVIngreepSignaalGroepParametersModel();
+                        DefaultsProvider.Default.SetDefaultsOnModel(prms);
                         prms.FaseCyclus = fcm.Naam;
                         OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
                     }

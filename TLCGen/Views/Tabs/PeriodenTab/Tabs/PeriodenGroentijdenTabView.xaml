@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -104,5 +105,6 @@
             <Button Content="Periode omhoog" Command="{Binding Path=MovePeriodeUpCommand}" Margin="2" />
             <Button Content="Periode omlaag" Command="{Binding Path=MovePeriodeDownCommand}" Margin="2" />
         </StackPanel>
+        <local:TemplateManagerView DataContext="{Binding TemplatesProviderVM}" Grid.Row="3" />
     </Grid>
 </UserControl>

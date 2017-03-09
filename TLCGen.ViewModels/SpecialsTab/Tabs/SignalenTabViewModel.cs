@@ -362,20 +362,20 @@ namespace TLCGen.ViewModels
         private void UpdateSelectables()
         {
             ControllerFasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 ControllerFasen.Add(fcm.Naam);
             }
 
             _ControllerDetectoren = new List<string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (var dm in fcm.Detectoren)
                 {
                     _ControllerDetectoren.Add(dm.Naam);
                 }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
+            foreach (var dm in _Controller.Detectoren)
             {
                 _ControllerDetectoren.Add(dm.Naam);
             }
