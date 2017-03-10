@@ -146,10 +146,25 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
+            var sfc = SelectedFaseCyclus;
             Fasen.Clear();
-            foreach (FaseCyclusModel fcm in message.Fasen)
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
+            }
+            if(sfc != null && Fasen.Count > 0)
+            {
+                foreach(var fc in Fasen)
+                {
+                    if(fc.Naam == sfc.Naam)
+                    {
+                        SelectedFaseCyclus = sfc;
+                    }
+                }
+            }
+            else if(Fasen.Count > 0)
+            {
+                SelectedFaseCyclus = Fasen[0];
             }
         }
 

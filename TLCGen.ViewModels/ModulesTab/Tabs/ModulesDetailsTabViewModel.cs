@@ -89,16 +89,6 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Message Handling
 
-        private void OnFasenChanged(FasenChangedMessage message)
-        {
-
-        }
-
-        private void OnConflictsChanged(ConflictsChangedMessage message)
-        {
-
-        }
-
         #endregion // TLCGen Message Handling
 
         #region Collection Changed
@@ -111,9 +101,6 @@ namespace TLCGen.ViewModels
         {
             _ModuleMolenVM = new ModuleMolenViewModel(this);
             _FasenLijstVM = new ModulesTabFasenLijstViewModel();
-
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));
         }
 
         #endregion // Constructor

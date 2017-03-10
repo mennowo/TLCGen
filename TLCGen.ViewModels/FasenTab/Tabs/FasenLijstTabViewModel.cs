@@ -185,7 +185,7 @@ namespace TLCGen.ViewModels
                     Fasen.Add(new FaseCyclusViewModel(fc));
                 }
                 Fasen.CollectionChanged += Fasen_CollectionChanged;
-                Messenger.Default.Send(new FasenChangedMessage(_Controller.Fasen, null, remfcs));
+                Messenger.Default.Send(new FasenChangedMessage(null, remfcs));
             }
 
         }
@@ -333,7 +333,7 @@ namespace TLCGen.ViewModels
 
             if (!_IsSorting)
             {
-                Messenger.Default.Send(new FasenChangedMessage(_Controller.Fasen, addedfasen, removedfasen));
+                Messenger.Default.Send(new FasenChangingMessage(addedfasen, removedfasen));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 Messenger.Default.Send(new ControllerDataChangedMessage());
             }

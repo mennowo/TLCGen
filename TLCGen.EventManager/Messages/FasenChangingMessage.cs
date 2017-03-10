@@ -7,12 +7,12 @@ using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class FasenChangingMessage
+    public class FasenChangedMessage
     {
         public List<FaseCyclusModel> AddedFasen { get; private set; }
         public List<FaseCyclusModel> RemovedFasen { get; private set; }
 
-        public FasenChangingMessage(List<FaseCyclusModel> added, List<FaseCyclusModel> removed)
+        public FasenChangedMessage(List<FaseCyclusModel> added, List<FaseCyclusModel> removed)
         {
             AddedFasen = added;
             RemovedFasen = removed;

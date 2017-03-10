@@ -85,83 +85,28 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<GroentijdViewModel> Groentijden
+        public ObservableCollectionAroundList<GroentijdViewModel, GroentijdModel> Groentijden
         {
-            get
-            {
-                if (_Groentijden == null)
-                {
-                    _Groentijden = new ObservableCollection<GroentijdViewModel>();
-                }
-                return _Groentijden;
-            }
+            get;
+            private set;
         }
 
         #endregion // Properties
 
-        #region Collection Changed
-
-        private void GroentijdenSetList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (GroentijdViewModel mgvm in e.NewItems)
-                {
-                    _GroentijdenSet.Groentijden.Add(mgvm.Groentijd);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (GroentijdViewModel mgvm in e.OldItems)
-                {
-                    _GroentijdenSet.Groentijden.Remove(mgvm.Groentijd);
-                }
-            }
-        }
-
-        #endregion // Collection Changed
-
         #region Public methods
 
-        public void AddFase(string fasename)
-        {
-            GroentijdModel mgm = new GroentijdModel();
-            mgm.FaseCyclus = fasename;
-            DefaultsProvider.Default.SetDefaultsOnModel(mgm);
-            Groentijden.Add(new GroentijdViewModel(mgm));
-        }
-
-        public void RemoveFase(string fasename)
-        {
-            GroentijdViewModel _mgvm = null;
-            foreach (GroentijdViewModel mgvm in Groentijden)
-            {
-                if(mgvm.FaseCyclus == fasename)
-                {
-                    _mgvm = mgvm;
-                }
-            }
-            if(_mgvm != null)
-            {
-                Groentijden.Remove(_mgvm);
-            }
-        }
-
         #endregion // Public methods
+
+        #region TLCGen Messaging
+
+        #endregion // TLCGen Messaging
 
         #region Constructor
 
         public GroentijdenSetViewModel(GroentijdenSetModel mgsm)
         {
             _GroentijdenSet = mgsm;
-
-            foreach(GroentijdModel mgm in mgsm.Groentijden)
-            {
-                GroentijdViewModel mgvm = new GroentijdViewModel(mgm);
-                Groentijden.Add(mgvm);
-            }
-
-            Groentijden.CollectionChanged += GroentijdenSetList_CollectionChanged;
+            Groentijden = new ObservableCollectionAroundList<GroentijdViewModel, GroentijdModel>(mgsm.Groentijden);
         }
 
         #endregion // Constructor

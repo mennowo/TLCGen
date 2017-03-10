@@ -62,30 +62,6 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-        private void AddFase(string fasename)
-        {
-            var prms = new OVIngreepSignaalGroepParametersModel();
-            Settings.DefaultsProvider.Default.SetDefaultsOnModel(prms);
-            prms.FaseCyclus = fasename;
-            OVIngreepSGParameters.Add(new OVIngreepSignaalGroepParametersViewModel(prms));
-        }
-
-        private void RemoveFase(string fasedefine)
-        {
-            OVIngreepSignaalGroepParametersViewModel _prms = null;
-            foreach (OVIngreepSignaalGroepParametersViewModel prms in OVIngreepSGParameters)
-            {
-                if (prms.FaseCyclus == fasedefine)
-                {
-                    _prms = prms;
-                }
-            }
-            if (_prms != null)
-            {
-                OVIngreepSGParameters.Remove(_prms);
-            }
-        }
-
         #endregion // Private methods
 
         #region Public methods
@@ -94,30 +70,16 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        private void OnFasenChanged(FasenChangedMessage message)
+        public void OnFasenChanged(FasenChangedMessage message)
         {
             if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
-                if (message.AddedFasen != null)
-                {
-                    foreach (FaseCyclusModel fcm in message.AddedFasen)
-                    {
-                        AddFase(fcm.Naam);
-                    }
-                }
-                if (message.RemovedFasen != null)
-                {
-                    foreach (FaseCyclusModel fcm in message.RemovedFasen)
-                    {
-                        RemoveFase(fcm.Naam);
-                    }
-                }
-                OVIngreepSGParameters.BubbleSort();
+                OVIngreepSGParameters.Rebuild();
             }
         }
 
 #warning This would probably be better done right there where the "has OV" prop is set
-        private void OnControllerHasOVChanged(ControllerHasOVChangedMessage message)
+        public void OnControllerHasOVChanged(ControllerHasOVChangedMessage message)
         {
             switch (message.Type)
             {

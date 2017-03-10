@@ -34,6 +34,7 @@ namespace TLCGen.Models
                 return this.FaseCyclus.CompareTo(mlfc.FaseCyclus);
             }
         }
+
         #endregion // IComparable
     }
 }

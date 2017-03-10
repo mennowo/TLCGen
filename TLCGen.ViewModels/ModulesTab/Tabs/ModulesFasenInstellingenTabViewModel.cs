@@ -96,37 +96,6 @@ namespace TLCGen.ViewModels
 
         private void OnFasenChanged(FasenChangedMessage message)
         {
-            if(message.AddedFasen != null && message.AddedFasen.Count > 0)
-            {
-                foreach(var f in message.AddedFasen)
-                {
-                    var fcmlm = new FaseCyclusModuleDataModel() { FaseCyclus = f.Naam };
-                    DefaultsProvider.Default.SetDefaultsOnModel(fcmlm);
-                    var fcmlvm = new FaseCyclusModuleDataViewModel(fcmlm);
-                    Fasen.Add(fcmlvm);
-                }
-            }
-
-            if(message.RemovedFasen != null && message.RemovedFasen.Count > 0)
-            {
-                foreach(var f in message.RemovedFasen)
-                {
-                    FaseCyclusModuleDataViewModel fcvm = null;
-                    foreach(var _f in Fasen)
-                    {
-                        if(f.Naam == _f.FaseCyclus)
-                        {
-                            fcvm = _f;
-                        }
-                    }
-                    if (fcvm != null)
-                    {
-                        Fasen.Remove(fcvm);
-                    }
-                }
-            }
-
-            _Controller.ModuleMolen.FasenModuleData.BubbleSort();
             Fasen.Rebuild();
         }
 

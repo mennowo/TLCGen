@@ -51,6 +51,7 @@
     <Compile Include="Messages\DetectorenChangedMessage.cs" />
     <Compile Include="Messages\DetectorenExtraListChangedMessage.cs" />
     <Compile Include="Messages\FaseDetectorTypeChangedMessage.cs" />
+    <Compile Include="Messages\FasenChangingMessage.cs" />
     <Compile Include="Messages\FasenSortedMessage.cs" />
     <Compile Include="Messages\ControllerFileNameChangedMessage.cs" />
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />

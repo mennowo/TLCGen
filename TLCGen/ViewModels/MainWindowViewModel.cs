@@ -15,6 +15,7 @@ using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
@@ -26,7 +27,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ControllerViewModel _ControllerVM;
-        private TLCGenSettingsViewModel _SettingsVM;
 
 
         private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _ApplicationParts;
@@ -562,6 +562,7 @@ namespace TLCGen.ViewModels
         {
             DefaultsProvider.Default.Controller = c;
             TLCGenControllerModifier.Default.Controller = c;
+            TLCGenModelManager.Default.Controller = c;
         }
 
         /// <summary>

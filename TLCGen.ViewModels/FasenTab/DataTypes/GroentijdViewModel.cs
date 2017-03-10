@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.DataAccess;
+using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class GroentijdViewModel : ViewModelBase, IComparable
+    public class GroentijdViewModel : ViewModelBase, IComparable, IViewModelWithItem
     {
         #region Fields
         
@@ -78,6 +79,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IComparable
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return _Groentijd;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

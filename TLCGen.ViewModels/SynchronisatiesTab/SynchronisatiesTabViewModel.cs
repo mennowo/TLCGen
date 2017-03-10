@@ -832,6 +832,14 @@ namespace TLCGen.ViewModels
             BuildConflictMatrix();
         }
 
+        private void OnNameChanged(NameChangedMessage message)
+        {
+            if(Fasen.Where(x => x.Naam == message.NewName).Any())
+            {
+                BuildConflictMatrix();
+            }
+        }
+
         private void OnInterSignaalGroepChanged(InterSignaalGroepChangedMessage message)
         {
             _MatrixChanged = true;
@@ -985,10 +993,11 @@ namespace TLCGen.ViewModels
 
         public SynchronisatiesTabViewModel() : base()
         {
-            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
-            Messenger.Default.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));
-            Messenger.Default.Register(this, new Action<ProcessSynchronisationsRequest>(OnProcesSynchornisationsRequested));
+            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            MessengerInstance.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            MessengerInstance.Register(this, new Action<InterSignaalGroepChangedMessage>(OnInterSignaalGroepChanged));
+            MessengerInstance.Register(this, new Action<ProcessSynchronisationsRequest>(OnProcesSynchornisationsRequested));
         }
 
         #endregion // Constructor

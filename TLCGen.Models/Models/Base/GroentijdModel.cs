@@ -11,9 +11,15 @@ namespace TLCGen.Models
     [RefersToSignalGroup("FaseCyclus")]
     public class GroentijdModel : IComparable
     {
+        #region Properties
+
         [Browsable(false)]
         public string FaseCyclus { get; set; }
         public int? Waarde { get; set; }
+
+        #endregion // Properties
+
+        #region IComparable
 
         public int CompareTo(object obj)
         {
@@ -23,5 +29,7 @@ namespace TLCGen.Models
 
             return this.FaseCyclus.CompareTo(m.FaseCyclus);
         }
+
+        #endregion // IComparable
     }
 }

@@ -12,15 +12,10 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.UnitTests
 {
+    [TestFixture]
     public class FasenGroentijdenSetsTabViewModelTests
     {
         
-
-        [SetUp]
-        public void FasenGroentijdenSetsTabSetup()
-        {
-        }
-
         [Test]
         public void RemoveGroentijdenSetCommand_NoSetPresent_CannotExecute()
         {

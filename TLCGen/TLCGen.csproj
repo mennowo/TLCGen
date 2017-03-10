@@ -611,6 +611,10 @@
       <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
       <Name>TLCGen.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.ModelManager\TLCGen.ModelManager.csproj">
+      <Project>{3d13c9d8-5734-4904-b935-fd4bd7d944cb}</Project>
+      <Name>TLCGen.ModelManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>
       <Name>TLCGen.Models.Enumerations</Name>

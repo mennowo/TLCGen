@@ -9,7 +9,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class OVIngreepSignaalGroepParametersModel
+    public class OVIngreepSignaalGroepParametersModel : IComparable
     {
         #region Properties
 
@@ -24,5 +24,22 @@ namespace TLCGen.Models
         public int BlokkeertijdNaOVIngreep { get; set; }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var fcovprm = obj as OVIngreepSignaalGroepParametersModel;
+            if (obj == null)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return this.FaseCyclus.CompareTo(fcovprm.FaseCyclus);
+            }
+        }
+
+        #endregion // IComparable
     }
 }

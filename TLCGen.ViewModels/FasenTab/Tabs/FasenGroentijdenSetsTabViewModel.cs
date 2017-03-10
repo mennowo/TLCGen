@@ -324,27 +324,10 @@ namespace TLCGen.ViewModels
 
         public void OnFasenChanged(FasenChangedMessage message)
         {
-            if (message.AddedFasen != null && message.AddedFasen.Count > 0)
+            foreach(var set in GroentijdenSets)
             {
-                foreach (FaseCyclusModel fcm in message.AddedFasen)
-                {
-                    foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
-                    {
-                        mgsvm.AddFase(fcm.Naam);
-                    }
-                }
+                set.Groentijden.Rebuild();
             }
-            if (message.RemovedFasen != null && message.RemovedFasen.Count > 0)
-            {
-                foreach (FaseCyclusModel fcm in message.RemovedFasen)
-                {
-                    foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
-                    {
-                        mgsvm.RemoveFase(fcm.Naam);
-                    }
-                }
-            }
-
             BuildGroentijdenMatrix();
         }
 

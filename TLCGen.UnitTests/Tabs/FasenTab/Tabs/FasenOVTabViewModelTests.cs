@@ -14,6 +14,7 @@ using TLCGen.ViewModels;
 
 namespace TLCGen.UnitTests.Tabs.FasenTab
 {
+    [TestFixture]
     public class FasenOVTabViewModelTests
     {
         [Test]
