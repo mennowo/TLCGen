@@ -70,7 +70,7 @@ namespace TLCGen.ViewModels
 
         #region TLCGen events
 
-        public void OnFasenChanged(FasenChangedMessage message)
+        private void OnFasenChanged(FasenChangedMessage message)
         {
             if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
