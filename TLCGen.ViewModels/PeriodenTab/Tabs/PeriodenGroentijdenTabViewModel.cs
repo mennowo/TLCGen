@@ -255,8 +255,6 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            TemplatesProviderVM.Update();
-
             var v = _Controller.PeriodenData.DefaultPeriodeGroentijdenSet;
             GroentijdenSets.Clear();
             foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)

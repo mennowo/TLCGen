@@ -30,7 +30,7 @@
                         <TabItem Header="Detectoren">
                             <local:DetectorenTemplatesEditorTabView DataContext="{Binding Path=DetectorenTemplatesEditorTabVM}" />
                         </TabItem>
-                        <TabItem Header="Detectoren">
+                        <TabItem Header="Perioden">
                             <local:PeriodenTemplatesEditorTabView DataContext="{Binding Path=PeriodenTemplatesEditorTabVM}" />
                         </TabItem>
                     </TabControl>

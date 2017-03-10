@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Settings
@@ -81,6 +82,7 @@ namespace TLCGen.Settings
             DefaultsProvider.Default.SetDefaultsOnModel(dm, "Auto");
             dtm.Items.Add(dm);
             PeriodenTemplates.Add(new PeriodeTemplateViewModel(dtm));
+            MessengerInstance.Send(new TemplatesChangedMessage());
         }
 
         void RemovePeriodeTemplateCommand_Executed(object prm)

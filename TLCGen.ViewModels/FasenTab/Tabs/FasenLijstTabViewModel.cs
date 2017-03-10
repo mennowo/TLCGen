@@ -217,7 +217,6 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            TemplatesProviderVM.Update();
         }
 
         public override bool OnDeselectedPreview()

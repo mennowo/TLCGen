@@ -322,8 +322,6 @@ namespace TLCGen.ViewModels
             {
                 SelectedDetector = Detectoren[0];
             }
-            
-            TemplatesProviderVM.Update();
         }
 
         public override void OnDeselected()

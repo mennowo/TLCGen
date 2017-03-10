@@ -59,6 +59,7 @@
     <Compile Include="Messages\OVIngreepSignaalGroepParametersChangedMessage.cs" />
     <Compile Include="Messages\PeriodenChangedMessage.cs" />
     <Compile Include="Messages\SelectedConflictGroepChangedMessage.cs" />
+    <Compile Include="Messages\TemplatesChangedMessage.cs" />
     <Compile Include="Messages\UpdateTabsEnabledMessage.cs" />
     <Compile Include="Messages\FasenChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
