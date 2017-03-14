@@ -223,8 +223,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             string _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
             string _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
-            string _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
-            string _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
 
             sb.AppendLine($"void OVInstellingen(void) ");
             sb.AppendLine($"{{");
@@ -233,7 +231,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine();
 
-            sb.AppendLine($"{ts}/* Fasecyclus voor OV-richtingen */");
+            if (_AnyOVorHD)
+            {
+                sb.AppendLine($"{ts}/* Fasecyclus voor OV-richtingen */");
+            }
             foreach (var ov in c.OVData.OVIngrepen)
             {
                 sb.AppendLine($"{ts}iFC_OVix[ovFC{ov.FaseCyclus}] = {_fcpf}{ov.FaseCyclus};");
@@ -613,10 +614,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
-            sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
-            sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
-            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -756,7 +753,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
             string _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkarin");
             string _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkaruit");
-            
+            string _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
+            string _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
+
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
             sb.AppendLine("   Voor het in- en uitmelden zijn hulpelementen gedefinieerd.");
@@ -894,6 +893,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             #endregion // HD ingrepen mee inmelden
+
+            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
+                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any())
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
+                sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
+                sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
+            }
 
             sb.AppendLine();
             sb.AppendLine("}");

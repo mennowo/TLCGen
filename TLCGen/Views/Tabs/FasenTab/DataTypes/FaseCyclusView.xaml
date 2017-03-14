@@ -157,6 +157,12 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
+            <GroupBox Header="Detectie storing">
+                <StackPanel>
+                    <CheckBox Content="Aanvraag" Margin="5" />
+                    <CheckBox Content="Percentage groentijd" Margin="5" />
+                </StackPanel>
+            </GroupBox>
         </WrapPanel>
     </Grid>
 </UserControl>

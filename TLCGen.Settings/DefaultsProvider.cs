@@ -187,55 +187,56 @@ namespace TLCGen.Settings
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
 #if DEBUG
-            //Defaults = TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
-            Defaults = new TLCGenDefaultsModel();
-            var doc = new XmlDocument();
-            XmlReader reader =
-                XmlReader.Create(
-                    Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"), 
-                    new XmlReaderSettings() { IgnoreComments = true });
-            doc.Load(reader);
-            var defs = doc.DocumentElement.SelectSingleNode("Defaults");
-            foreach(XmlNode def in defs.ChildNodes)
-            {
-                XmlNode x = def.SelectSingleNode("DataType");
-                string t = x.InnerText;
-                var type = Type.GetType(t);
-                XmlRootAttribute xRoot = new XmlRootAttribute();
-                xRoot.ElementName = "Data";
-                xRoot.IsNullable = true;
-                System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(type, xRoot);
-                //StringReader sr = new StringReader(def.SelectSingleNode("Data").OuterXml);
-                // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
-                object o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
-                //object o = ConvertNode(def.SelectSingleNode("Data"), type);
-                var item = new TLCGenDefaultModel();
-                item.DefaultName = def.SelectSingleNode("DefaultName").InnerText;
-                item.DataType = def.SelectSingleNode("DataType").InnerText;
-                item.Category = def.SelectSingleNode("Category").InnerText;
-                XmlNode n1 = def.SelectSingleNode("Selector1");
-                if (n1 != null)
-                {
-                    item.Selector1 = n1.InnerText;
-                }
-                XmlNode n2 = def.SelectSingleNode("Selector2");
-                if (n2 != null)
-                {
-                    item.Selector2 = n2.InnerText;
-                }
-                item.Data = o;
-                Defaults.Defaults.Add(item);
-            }
+            setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
 #else
-            if (File.Exists(setfile))
+            if (!File.Exists(setfile))
             {
-                Defaults = Helpers.TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(setfile);
-            }
-            else
-            {
-                Defaults = Helpers.TLCGenSerialization.DeSerialize<TLCGenDefaultsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml"));
+                setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             }
 #endif
+            Defaults = new TLCGenDefaultsModel();
+            try
+            {
+                var doc = new XmlDocument();
+                XmlReader reader =
+                    XmlReader.Create(
+                        setfile,
+                        new XmlReaderSettings() { IgnoreComments = true });
+                doc.Load(reader);
+                var defs = doc.DocumentElement.SelectSingleNode("Defaults");
+                foreach (XmlNode def in defs.ChildNodes)
+                {
+                    XmlNode x = def.SelectSingleNode("DataType");
+                    string t = x.InnerText;
+                    var type = Type.GetType(t);
+                    XmlRootAttribute xRoot = new XmlRootAttribute();
+                    xRoot.ElementName = "Data";
+                    xRoot.IsNullable = true;
+                    System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(type, xRoot);
+                    // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
+                    object o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
+                    var item = new TLCGenDefaultModel();
+                    item.DefaultName = def.SelectSingleNode("DefaultName").InnerText;
+                    item.DataType = def.SelectSingleNode("DataType").InnerText;
+                    item.Category = def.SelectSingleNode("Category").InnerText;
+                    XmlNode n1 = def.SelectSingleNode("Selector1");
+                    if (n1 != null)
+                    {
+                        item.Selector1 = n1.InnerText;
+                    }
+                    XmlNode n2 = def.SelectSingleNode("Selector2");
+                    if (n2 != null)
+                    {
+                        item.Selector2 = n2.InnerText;
+                    }
+                    item.Data = o;
+                    Defaults.Defaults.Add(item);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("An error occured while loading the defaults:\n " + e.ToString() + "\nPlease report this.", "Error while loading defaults");
+            }
         }
 
         private object ConvertNode(XmlNode node, Type t)

@@ -340,17 +340,17 @@
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
         <TOG>1440</TOG>
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
-        <Wachtlicht>false</Wachtlicht>
+        <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
-        <Type>KnopBuiten</Type>
+        <Type>Knop</Type>
         <Aanvraag>Rood</Aanvraag>
         <Verlengen>Geen</Verlengen>
       </Data>
@@ -365,14 +365,14 @@
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
         <TOG>1440</TOG>
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
-        <Wachtlicht>false</Wachtlicht>
+        <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
         <Type>KnopBinnen</Type>
@@ -383,21 +383,21 @@
     <Default>
       <DefaultName>Voetganger drukknop buiten</DefaultName>
       <Category>Detector</Category>
-      <Selector1>File</Selector1>
-      <Selector2>Auto</Selector2>
+      <Selector1>KnopBuiten</Selector1>
+      <Selector2>Voetganger</Selector2>
       <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
         <VissimNaam />
-        <TDB>0</TDB>
-        <TDH>0</TDH>
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
         <TOG>1440</TOG>
         <TBG>10</TBG>
         <TFL>60</TFL>
         <CFL>45</CFL>
         <AanvraagDirect>false</AanvraagDirect>
-        <Wachtlicht>false</Wachtlicht>
+        <Wachtlicht>true</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
         <Type>KnopBuiten</Type>

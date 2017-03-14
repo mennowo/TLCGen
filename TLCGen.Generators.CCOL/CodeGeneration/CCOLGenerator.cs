@@ -27,15 +27,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private List<DetectorModel> AlleDetectoren;
 
-        string _uspf;
-        string _ispf;
-        string _fcpf;
-        string _dpf;
-        string _tpf;
-        string _cpf;
-        string _schpf;
-        string _prmpf;
-        string _hpf;
+        private string _uspf;
+        private string _ispf;
+        private string _fcpf;
+        private string _dpf;
+        private string _tpf;
+        private string _cpf;
+        private string _schpf;
+        private string _prmpf;
+        private string _hpf;
+
+        private bool _AnyOV;
+        private bool _AnyHD;
+        private bool _AnyOVorHD;
 
         private List<ICCOLCodePieceGenerator> _PieceGenerators;
 
@@ -65,7 +69,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Public Methods
 
-        public string GenerateSourceFiles(ControllerModel controller, string sourcefilepath)
+        public string GenerateSourceFiles(ControllerModel c, string sourcefilepath)
         {
             if (Directory.Exists(sourcefilepath))
             {
@@ -79,21 +83,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
                 _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
 
+                _AnyOV = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any();
+                _AnyHD = c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any();
+                _AnyOVorHD = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
+                             c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any();
+
                 foreach (var pgen in _PieceGenerators)
                 {
-                    pgen.CollectCCOLElements(controller);
+                    pgen.CollectCCOLElements(c);
                 }
 
                 AlleDetectoren = new List<DetectorModel>();
-                foreach (FaseCyclusModel fcm in controller.Fasen)
+                foreach (FaseCyclusModel fcm in c.Fasen)
                 {
                     foreach (DetectorModel dm in fcm.Detectoren)
                         AlleDetectoren.Add(dm);
                 }
-                foreach (DetectorModel dm in controller.Detectoren)
+                foreach (DetectorModel dm in c.Detectoren)
                     AlleDetectoren.Add(dm);
 
-                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(controller, _PieceGenerators);
+                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, _PieceGenerators);
 
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
@@ -147,43 +156,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 Schakelaars = CCOLElementLists[6];
                 Parameters = CCOLElementLists[7];
 
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.c"), GenerateRegC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.c"), GenerateTabC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.c"), GenerateDplC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.c"), GenerateSimC(controller));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.h"), GenerateSysH(controller));
-                if(controller.RoBuGrover.ConflictGroepen?.Count > 0)
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c));
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c));
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c));
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c));
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c));
+                if(c.RoBuGrover.ConflictGroepen?.Count > 0)
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}rgv.c"), GenerateRgvC(controller));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c));
                 }
-                if(controller.PTPData.PTPKoppelingen?.Count > 0)
+                if(c.PTPData.PTPKoppelingen?.Count > 0)
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ptp.c"), GeneratePtpC(controller));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c));
                 }
-                if (controller.OVData.OVIngrepen.Count > 0 ||
-                    controller.OVData.HDIngrepen.Count > 0)
+                if (c.OVData.OVIngrepen.Count > 0 ||
+                    c.OVData.HDIngrepen.Count > 0)
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.c"), GenerateOvC(controller));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c));
                 }
 
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}reg.add"), GenerateRegAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}tab.add"), GenerateTabAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}dpl.add"), GenerateDplAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sim.add"), GenerateSimAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}sys.add"), GenerateSysAdd(controller));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.add")) &&
-                    (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{controller.Data.Naam}ov.add"), GenerateOvAdd(controller));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add")))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), GenerateRegAdd(c));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add")))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), GenerateTabAdd(c));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add")))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), GenerateDplAdd(c));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add")))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), GenerateSimAdd(c));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add")))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), GenerateSysAdd(c));
+                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add")) &&
+                    (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0))
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), GenerateOvAdd(c));
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
 
-                if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+                if(c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
                 {
                     CopySourceIfNeeded("extra_func_ov.c", sourcefilepath);
                     CopySourceIfNeeded("extra_func_ov.h", sourcefilepath);
@@ -210,20 +219,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                 copy = true;
                                                 break;
                                             case "OV":
-                                                copy = (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0);
+                                                copy = (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0);
                                                 break;
                                             case "SYNC":
-                                                copy = (controller.InterSignaalGroep.Gelijkstarten.Count > 0 || 
-                                                        controller.InterSignaalGroep.Voorstarten.Count > 0);
+                                                copy = (c.InterSignaalGroep.Gelijkstarten.Count > 0 || 
+                                                        c.InterSignaalGroep.Voorstarten.Count > 0);
                                                 break;
                                             case "FIXATIE":
-                                                copy = (controller.Data.FixatieData.FixatieMogelijk);
+                                                copy = (c.Data.FixatieData.FixatieMogelijk);
                                                 break;
                                             case "NALOPEN":
-                                                copy = (controller.InterSignaalGroep.Nalopen.Count > 0);
+                                                copy = (c.InterSignaalGroep.Nalopen.Count > 0);
                                                 break;
                                             case "RGV":
-                                                copy = (controller.RoBuGrover.SignaalGroepInstellingen.Count > 0);
+                                                copy = (c.RoBuGrover.SignaalGroepInstellingen.Count > 0);
                                                 break;
                                         }
                                         if(copy)

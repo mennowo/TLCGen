@@ -369,22 +369,32 @@ namespace TLCGen.ViewModels
 
         public override bool OnDeselectedPreview()
         {
-            return IsMatrixOK();   
+            if (_Controller != null)
+            {
+                return IsMatrixOK();
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public override void OnSelected()
         {
             _AllDetectoren = new List<string>();
-            foreach (FaseCyclusModel fcm in Controller.Fasen)
+            if (Controller != null)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (FaseCyclusModel fcm in Controller.Fasen)
+                {
+                    foreach (DetectorModel dm in fcm.Detectoren)
+                    {
+                        _AllDetectoren.Add(dm.Naam);
+                    }
+                }
+                foreach (DetectorModel dm in Controller.Detectoren)
                 {
                     _AllDetectoren.Add(dm.Naam);
                 }
-            }
-            foreach (DetectorModel dm in Controller.Detectoren)
-            {
-                _AllDetectoren.Add(dm.Naam);
             }
         }
 

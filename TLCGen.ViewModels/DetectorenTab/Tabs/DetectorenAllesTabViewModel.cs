@@ -78,12 +78,16 @@ namespace TLCGen.ViewModels
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = fcm.Naam });
+                    var dvm = new DetectorViewModel(dm) { FaseCyclus = fcm.Naam };
+                    dvm.PropertyChanged += Detector_PropertyChanged;
+                    Detectoren.Add(dvm);
                 }
             }
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                Detectoren.Add(new DetectorViewModel(dm));
+                var dvm = new DetectorViewModel(dm);
+                dvm.PropertyChanged += Detector_PropertyChanged;
+                Detectoren.Add(dvm);
             }
         }
 
@@ -120,6 +124,24 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TLCGen Events
+
+        #region Event handling
+
+        private bool _SettingMultiple = false;
+        private void Detector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedDetectoren != null && SelectedDetectoren.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<DetectorViewModel>(sender, e.PropertyName, SelectedDetectoren);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event handling
 
         #region Constructor
 

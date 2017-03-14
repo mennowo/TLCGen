@@ -274,7 +274,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return _Controller.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maxgroen" : "Verlenggroen";
+                return _Controller?.Data?.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maxgroen" : "Verlenggroen";
             }
         }
 

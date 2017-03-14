@@ -242,7 +242,9 @@ namespace TLCGen.ViewModels
                     Detectoren.Clear();
                     foreach (DetectorModel dm in base.Controller.Detectoren)
                     {
-                        Detectoren.Add(new DetectorViewModel(dm));
+                        var dvm = new DetectorViewModel(dm);
+                        dvm.PropertyChanged += Detector_PropertyChanged;
+                        Detectoren.Add(dvm);
                     }
                     Detectoren.CollectionChanged += Detectoren_CollectionChanged;
                 }
@@ -276,6 +278,24 @@ namespace TLCGen.ViewModels
 
         #endregion // IAllowTemplates
 
+        #region Event handling
+
+        private bool _SettingMultiple = false;
+        private void Detector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedDetectoren != null && SelectedDetectoren.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<DetectorViewModel>(sender, e.PropertyName, SelectedDetectoren);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event handling
+
         #region Collection Changed
 
         private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -284,6 +304,7 @@ namespace TLCGen.ViewModels
             {
                 foreach (DetectorViewModel dvm in e.NewItems)
                 {
+                    dvm.PropertyChanged += Detector_PropertyChanged;
                     _Controller.Detectoren.Add(dvm.Detector);
                 }
             }

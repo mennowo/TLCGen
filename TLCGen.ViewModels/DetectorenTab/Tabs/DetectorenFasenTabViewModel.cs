@@ -93,7 +93,9 @@ namespace TLCGen.ViewModels
                 {
                     foreach (DetectorModel dm in _SelectedFase.Detectoren)
                     {
-                        Detectoren.Add(new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam });
+                        var dvm = new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam };
+                        dvm.PropertyChanged += Detector_PropertyChanged;
+                        Detectoren.Add(dvm);
                     }
                 }
                 if(Detectoren.Count > 0)
@@ -209,7 +211,7 @@ namespace TLCGen.ViewModels
             else
             {
                 if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
-                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
+                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Knop;
                 if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
             }
             DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
@@ -361,6 +363,24 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IAllowTemplates
+
+        #region Event handling
+
+        private bool _SettingMultiple = false;
+        private void Detector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedDetectoren != null && SelectedDetectoren.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<DetectorViewModel>(sender, e.PropertyName, SelectedDetectoren);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event handling
 
         #region Collection Changed
 
