@@ -33,8 +33,9 @@ namespace TLCGen.Importers.TabC
             }
 
             // Compile a list of Phases with conflicts from the file
-            foreach (string line in lines)
+            foreach (var _line in lines)
             {
+                var line = Regex.Replace(_line, @"/\*.*\*/", "");
                 if (Regex.IsMatch(line, @"^\s+TO_max\["))
                 {
                     string fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");

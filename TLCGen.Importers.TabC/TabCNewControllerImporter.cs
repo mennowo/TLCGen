@@ -55,7 +55,8 @@ namespace TLCGen.Importers.TabC
             {
                 try
                 {
-                    DefaultsProvider.Default.SetDefaultsOnModel(newc);
+                    DefaultsProvider.Default.SetDefaultsOnModel(newc.Data);
+                    newc.Data.GarantieOntruimingsTijden = false;
 
                     string[] lines = File.ReadAllLines(openFileDialog.FileName);
                     if (lines.Count() <= 1)

@@ -502,7 +502,7 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator> 
-  <CodePieceGenerator CodePiece="CCOLNalopenCodeGenerator">
+    <CodePieceGenerator CodePiece="CCOLNalopenCodeGenerator">
       <CodePieceData>
         <ClassName>CCOLNalopenCodeGenerator</ClassName>
         <Description>Nalopen</Description>
@@ -976,6 +976,30 @@
             <Setting>hdinm</Setting>
             <Type>Uitgang</Type>
             <Description>Uitgang verklikken inmelding HD</Description>
+          </Setting>
+          <Setting>
+            <Default>karmelding</Default>
+            <Setting>karmelding</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang verklikken ontvangst melding KAR</Description>
+          </Setting>
+          <Setting>
+            <Default>karog</Default>
+            <Setting>karog</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang verklikken ondergedrag KAR</Description>
+          </Setting>
+        <Setting>
+            <Default>karmelding</Default>
+            <Setting>karmelding</Setting>
+            <Type>Timer</Type>
+            <Description>Timer duur verklikking ontvangst melding KAR</Description>
+          </Setting>
+          <Setting>
+            <Default>karog</Default>
+            <Setting>karog</Setting>
+            <Type>Timer</Type>
+            <Description>Timer ondergedrag KAR</Description>
           </Setting>
         </Settings>
       </CodePieceData>

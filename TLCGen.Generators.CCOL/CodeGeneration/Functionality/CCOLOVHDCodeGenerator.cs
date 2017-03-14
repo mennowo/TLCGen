@@ -74,6 +74,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmpmgcov;
         private string _prmohpmg;
         private string _schcheckopdsin;
+        private string _uskarog;
+        private string _uskarmelding;
+        private string _tkarog;
+        private string _tkarmelding;
 #pragma warning restore 0169
 #pragma warning restore 0649
 
@@ -88,12 +92,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _MyBitmapOutputs = new List<CCOLIOElement>();
             _MyBitmapInputs = new List<CCOLIOElement>();
 
-            if(c.OVData.OVIngrepen.Count > 0)
+            if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
             {
                 /* Variables independent of signal groups */
                 _MyElements.Add(new CCOLElement($"{_prmmwta}",     0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_prmmwtfts}",   0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_prmmwtvtg}",   0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
+
+                if ((c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any()) ||
+                    (c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any()))
+                {
+                    _MyElements.Add(new CCOLElement($"{_uskarmelding}", CCOLElementTypeEnum.Uitgang));
+                    _MyElements.Add(new CCOLElement($"{_uskarog}",      CCOLElementTypeEnum.Uitgang));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KARMeldingBitmapData as IOElementModel, $"{_uspf}{_uskarmelding}"));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KAROnderGedragBitmapData as IOElementModel, $"{_uspf}{_uskarog}"));
+
+                    _MyElements.Add(new CCOLElement($"{_tkarmelding}", 15,   CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_tkarog}",      1440, CCOLElementTimeTypeEnum.TM_type, CCOLElementTypeEnum.Timer));
+                }
+            }
+            if (c.OVData.OVIngrepen.Count > 0)
+            {
+                /* Variables independent of signal groups */
                 _MyElements.Add(new CCOLElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 _MyElements.Add(new CCOLElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
 
@@ -247,6 +267,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyBitmapInputs.Add(iselem1);
                     _MyBitmapInputs.Add(iselem2);
                 }
+
+                if(!c.OVData.OVIngrepen.Where(x => x.FaseCyclus == hd.FaseCyclus).Any())
+                {
+                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                }
             }
         }
 
@@ -309,6 +335,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
                     sb.AppendLine();
+                    if ((c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any()) ||
+                        (c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any()))
+                    {
+                        sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
+                    }
                     return sb.ToString();
                 default:
                     return null;

@@ -16,6 +16,25 @@ namespace TLCGen.Models
         public bool DSI { get; set; }
         public bool CheckOpDSIN { get; set; }
 
+        [Browsable(false)]
+        [XmlIgnore]
+        public bool HasKAR
+        {
+            get
+            {
+                return this.OVIngrepen.Count > 0 && this.OVIngrepen.Where(x => x.KAR).Any() ||
+                       this.HDIngrepen.Count > 0 && this.HDIngrepen.Where(x => x.KAR).Any();
+            }
+        }
+
+        [Browsable(false)]
+        [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
+        public BitmapCoordinatenDataModel KARMeldingBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("karog", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
+        public BitmapCoordinatenDataModel KAROnderGedragBitmapData { get; set; }
+
         [XmlElement(ElementName = "OVIngreep")]
         public List<OVIngreepModel> OVIngrepen { get; set; }
         [XmlElement(ElementName = "HDIngreep")]
@@ -24,6 +43,8 @@ namespace TLCGen.Models
 
         public OVDataModel()
         {
+            KARMeldingBitmapData = new BitmapCoordinatenDataModel();
+            KAROnderGedragBitmapData = new BitmapCoordinatenDataModel();
             OVIngrepen = new List<OVIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
             OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();
