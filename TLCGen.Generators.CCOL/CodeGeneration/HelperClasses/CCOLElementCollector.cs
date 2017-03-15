@@ -113,7 +113,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLCode = "H_code";
 
             // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "hedummy", Naam = "dummy" });
 
             foreach (var pgen in pgens)
             {
@@ -124,6 +123,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         data.Elements.Add(i);
                     }
                 }
+            }
+
+            if (data.Elements.Count == 0)
+            {
+                data.Elements.Add(new CCOLElement() { Define = "hedummy", Naam = "dummy" });
             }
 
             return data;
@@ -184,11 +188,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if (data.Elements.Count == 0)
-            {
-                data.Elements.Add(new CCOLElement() { Define = "tdummy", Naam = "dummy" });
-            }
-
             foreach (var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())
@@ -198,6 +197,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         data.Elements.Add(i);
                     }
                 }
+            }
+
+            if (data.Elements.Count == 0)
+            {
+                data.Elements.Add(new CCOLElement() { Define = "tdummy", Naam = "dummy" });
             }
 
             return data;
@@ -244,8 +248,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if(data.Elements.Count == 0)
+            if (data.Elements.Count == 0)
+            {
                 data.Elements.Add(new CCOLElement() { Define = "ctdummy", Naam = "dummy" });
+            }
 
             return data;
         }

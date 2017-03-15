@@ -108,8 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
             if (controller.InterSignaalGroep.Gelijkstarten.Any() ||
-                controller.InterSignaalGroep.Voorstarten.Any() ||
-                controller.InterSignaalGroep.Nalopen.Any())
+                controller.InterSignaalGroep.Voorstarten.Any())
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
             }

@@ -82,11 +82,15 @@ namespace TLCGen.Settings
             var props = type.GetProperties();
             foreach (PropertyInfo property in props)
             {
-                if (property.PropertyType.IsValueType ||
-                    !onlyvalues)
+                var att = (HasDefaultAttribute)property.GetCustomAttribute(typeof(HasDefaultAttribute));
+                if (att == null || att.HasDefault == true)
                 {
-                    object propValue = property.GetValue(from);
-                    property.SetValue(to, propValue);
+                    if (property.PropertyType.IsValueType ||
+                        !onlyvalues)
+                    {
+                        object propValue = property.GetValue(from);
+                        property.SetValue(to, propValue);
+                    }
                 }
             }
         }

@@ -145,6 +145,7 @@ namespace TLCGen.ViewModels
         public void SetRoBuGroverDefaultsCommand_Executed()
         {
             DefaultsProvider.Default.SetDefaultsOnModel(_RoBuGrover);
+            OnMonitoredPropertyChanged(null);
         }
 
         #endregion // Command Functionality

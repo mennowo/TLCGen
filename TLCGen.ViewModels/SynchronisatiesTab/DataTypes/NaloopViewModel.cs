@@ -40,6 +40,20 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool VasteNaloop
+        {
+            get { return _Naloop.VasteNaloop; }
+            set
+            {
+                if (!value && !DetectieAfhankelijk)
+                    return;
+
+                _Naloop.VasteNaloop = value;
+                SetNaloopTijden();
+                OnMonitoredPropertyChanged("VasteNaloop");
+            }
+        }
+
         public bool DetectieAfhankelijkPossible
         {
             get { return _DetectieAfhankelijkPossible; }
@@ -50,11 +64,15 @@ namespace TLCGen.ViewModels
             }
         }
 
+
         public bool DetectieAfhankelijk
         {
             get { return _Naloop.DetectieAfhankelijk; }
             set
             {
+                if (!value && !VasteNaloop)
+                    return;
+
                 _Naloop.DetectieAfhankelijk = value;
                 SetNaloopTijden();
                 OnMonitoredPropertyChanged("DetectieAfhankelijk");
@@ -140,31 +158,46 @@ namespace TLCGen.ViewModels
             switch (_Naloop.Type)
             {
                 case NaloopTypeEnum.StartGroen:
-                    _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroen });
+                    if(_Naloop.VasteNaloop)
+                    {
+                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroen });
+                    }
                     if (_Naloop.DetectieAfhankelijk)
                     {
                         _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroenDetectie });
                     }
                     break;
                 case NaloopTypeEnum.EindeGroen:
-                    _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    if (_Naloop.VasteNaloop)
+                    {
+                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    }
                     if (_Naloop.DetectieAfhankelijk)
                     {
                         _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
                     }
-                    _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroen });
+                    if (_Naloop.VasteNaloop)
+                    {
+                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroen });
+                    }
                     if (_Naloop.DetectieAfhankelijk)
                     {
                         _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroenDetectie });
                     }
                     break;
                 case NaloopTypeEnum.CyclischVerlengGroen:
-                    _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    if (_Naloop.VasteNaloop)
+                    {
+                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                    }
                     if (_Naloop.DetectieAfhankelijk)
                     {
                         _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
                     }
-                    _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroen });
+                    if (_Naloop.VasteNaloop)
+                    {
+                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroen });
+                    }
                     if (_Naloop.DetectieAfhankelijk)
                     {
                         _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroenDetectie });

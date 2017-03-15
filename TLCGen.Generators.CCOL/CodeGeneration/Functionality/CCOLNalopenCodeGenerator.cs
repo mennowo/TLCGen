@@ -168,6 +168,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 case NaloopTypeEnum.StartGroen:
 
+#warning This needs to reflect the fixed and/or detection dep version...
 
                                     if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0)
                                     {
@@ -184,7 +185,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #warning Only first detector is used here. Does this need to change?
                                         if (bothvtg)
                                         {
-                                            sb.AppendLine($"{ts}NaloopVtg({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{_tnlsg}{vn});");
+                                            sb.AppendLine($"{ts}NaloopVtg({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{nl.Detectoren[0].Detector}, {_hpf}{_hnla}{nl.Detectoren[0].Detector}, {_tpf}{_tnlsgd}{vn});");
                                         }
                                         else
                                         {

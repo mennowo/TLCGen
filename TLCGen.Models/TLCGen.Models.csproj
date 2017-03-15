@@ -70,7 +70,7 @@
     <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
-    <Compile Include="Models\Base\HasDefaultAttribute.cs" />
+    <Compile Include="Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />

@@ -13,10 +13,12 @@ namespace TLCGen.Models
     {
         [ModelName]
         public string Naam { get; set; }
+        [HasDefault(false)]
         public int MinimaalAantalMeldingen { get; set; }
         public int AfvalVertraging { get; set; }
+        [HasDefault(false)]
         public bool EerlijkDoseren { get; set; }
-        [IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
+        [IOElement("file", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "FileDetector")]

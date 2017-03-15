@@ -95,7 +95,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Gelijkstart opties" FontWeight="Bold" Grid.Row="0" />
                 <StackPanel 
-                    HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                    HorizontalAlignment="Stretch" IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}" Grid.Row="1">
                     <CheckBox Content="Deelconflict" IsChecked="{Binding Path=GelijkstartDeelConflict}" Margin="5" />
                     <StackPanel IsEnabled="{Binding Path=GelijkstartDeelConflict}" HorizontalAlignment="Stretch">
                         <Label Content="{Binding Path=Comment1}" />
@@ -114,7 +114,7 @@
                 </Grid.RowDefinitions>
                 <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
                 <StackPanel 
-                    HorizontalAlignment="Stretch" Visibility="{Binding Path=SelectedSynchronisatie.IsCoupled,Converter={StaticResource BoolToVisConv}}" Grid.Row="1">
+                    HorizontalAlignment="Stretch" IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}" Grid.Row="1">
                     <Label Content="{Binding Path=Comment1}" />
                     <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
                     <Label Content="{Binding Path=Comment2}" />
@@ -123,12 +123,14 @@
             </Grid>
 
             <Grid 
+                IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}"
                 Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Meeaanvraag}}" >
                 <local:MeeAanvraagView DataContext="{Binding Path=SelectedSynchronisatie.MeeaanvraagVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop}}" >
+                IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}"
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop}}" >
                 <local:NaloopView DataContext="{Binding Path=SelectedSynchronisatie.NaloopVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>

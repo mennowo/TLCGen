@@ -108,7 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* detectie */");
             sb.AppendLine("/* -------- */");
 
-            int pad1 = "FCMAX".Length;
+            int pad1 = "ISMAX".Length;
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
                 foreach (DetectorModel dm in fcm.Detectoren)

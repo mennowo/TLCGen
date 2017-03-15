@@ -191,7 +191,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (fi.TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
                         {
                             any = true;
-                            sb.Append($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] |= IH[{_hpf}{_hfile}{fi.Naam}]);");
+                            sb.AppendLine($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = IH[{_hpf}{_hfile}{fi.Naam}] ? TRUE : FALSE;");
                         }
                     }
                     if (!any)

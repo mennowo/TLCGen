@@ -322,6 +322,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             int index = 0;
             int indexautom = 0;
+
             foreach (CCOLElement elem in data.Elements)
             {
                 if (elem.Dummy || (Regex.IsMatch(elem.Define, @"[A-Z]+MAX")))
@@ -416,24 +417,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
             int pad5 = data.CCOLTTypeWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
 
-            foreach (CCOLElement ce in data.Elements)
+            foreach (CCOLElement elem in data.Elements)
             {
-                if (!string.IsNullOrWhiteSpace(ce.Naam))
+                if (elem.Dummy)
+                    continue;
+
+                if (!string.IsNullOrWhiteSpace(elem.Naam))
                 {
-                    sb.Append($"{ts}{data.CCOLCode}[{ce.Define}]".PadRight(pad1));
-                    sb.Append($" = \"{ce.Naam}\";".PadRight(pad2));
-                    if (!string.IsNullOrEmpty(data.CCOLSetting) && ce.Instelling.HasValue)
+                    sb.Append($"{ts}{data.CCOLCode}[{elem.Define}]".PadRight(pad1));
+                    sb.Append($" = \"{elem.Naam}\";".PadRight(pad2));
+                    if (!string.IsNullOrEmpty(data.CCOLSetting) && elem.Instelling.HasValue)
                     {
-                        sb.Append($" {data.CCOLSetting}[{ce.Define}]".PadRight(pad3));
-                        sb.Append($" = {ce.Instelling.ToString()};".PadRight(pad4));
+                        sb.Append($" {data.CCOLSetting}[{elem.Define}]".PadRight(pad3));
+                        sb.Append($" = {elem.Instelling.ToString()};".PadRight(pad4));
                     }
-                    if (!string.IsNullOrEmpty(data.CCOLTType) && ce.TType != CCOLElementTimeTypeEnum.None)
+                    if (!string.IsNullOrEmpty(data.CCOLTType) && elem.TType != CCOLElementTimeTypeEnum.None)
                     {
-                        sb.Append($" {data.CCOLTType}[{ce.Define}]".PadRight(pad5));
-                        sb.Append($" = {ce.TType};");
+                        sb.Append($" {data.CCOLTType}[{elem.Define}]".PadRight(pad5));
+                        sb.Append($" = {elem.TType};");
                     }
                     sb.AppendLine();
                 }
+            }
+
+            if (data.Elements.Count > 0 && data.Elements.Where(x => x.Dummy).Any())
+            {
+                sb.AppendLine("#ifndef AUTOMAAT");
+                foreach (CCOLElement delem in data.Elements)
+                {
+                    if (!delem.Dummy)
+                        continue;
+                    sb.Append($"{ts}{data.CCOLCode}[{delem.Define}]".PadRight(pad1));
+                    sb.Append($" = \"{delem.Naam}\";".PadRight(pad2));
+                    if (!string.IsNullOrEmpty(data.CCOLSetting) && delem.Instelling.HasValue)
+                    {
+                        sb.Append($" {data.CCOLSetting}[{delem.Define}]".PadRight(pad3));
+                        sb.Append($" = {delem.Instelling.ToString()};".PadRight(pad4));
+                    }
+                    if (!string.IsNullOrEmpty(data.CCOLTType) && delem.TType != CCOLElementTimeTypeEnum.None)
+                    {
+                        sb.Append($" {data.CCOLTType}[{delem.Define}]".PadRight(pad5));
+                        sb.Append($" = {delem.TType};");
+                    }
+                    sb.AppendLine();
+                }
+                sb.AppendLine("#endif");
             }
 
             return sb.ToString();

@@ -10,6 +10,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -85,6 +86,7 @@ namespace TLCGen.ViewModels
         void AddNewFileIngreepCommand_Executed(object prm)
         {
             FileIngreepModel fim = new FileIngreepModel();
+            DefaultsProvider.Default.SetDefaultsOnModel(fim);
             int i = FileIngrepen.Count + 1;
             fim.Naam = "File" + i.ToString();
             while(!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam))

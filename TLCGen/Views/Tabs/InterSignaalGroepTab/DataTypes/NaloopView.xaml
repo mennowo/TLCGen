@@ -27,8 +27,7 @@
                         Watermark="NG"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
-                      IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
-                      IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />
+                      IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
             <CheckBox Content="Detectie afhankelijk" 
                       IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
                       IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />

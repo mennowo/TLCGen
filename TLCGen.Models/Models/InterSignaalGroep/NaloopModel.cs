@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public string FaseVan { get; set; }
         public string FaseNaar { get; set; }
         public NaloopTypeEnum Type { get; set; }
+        public bool VasteNaloop { get; set; }
         public bool DetectieAfhankelijk { get; set; }
         public int? MaximaleVoorstart { get; set; }
         public SynchronisatieTypeEnum SynchronisatieType { get; set; }
@@ -39,6 +40,7 @@ namespace TLCGen.Models
         {
             Detectoren = new List<NaloopDetectorModel>();
             Tijden = new List<NaloopTijdModel>();
+            VasteNaloop = true;
         }
 
         #endregion // Constructor

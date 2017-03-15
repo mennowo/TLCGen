@@ -423,6 +423,17 @@
         <HiaatTijd>10</HiaatTijd>
       </Data>
     </Default>
+    <Default>
+      <DefaultName>File ingreep detector</DefaultName>
+      <Category>Detector</Category>
+      <DataType>TLCGen.Models.FileIngreepDetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Detector />
+        <BezetTijd>35</BezetTijd>
+        <RijTijd>20</RijTijd>
+        <AfvalVertraging>120</AfvalVertraging>
+      </Data>
+    </Default>
 
     <!-- Overig -->
     <Default>
@@ -616,6 +627,20 @@
         <BitmapData />
         <ConflictGroepen />
         <SignaalGroepInstellingen />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>File ingreep</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.FileIngreepModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <MinimaalAantalMeldingen>0</MinimaalAantalMeldingen>
+        <AfvalVertraging>600</AfvalVertraging>
+        <EerlijkDoseren>false</EerlijkDoseren>
+        <BitmapData />
+        <FileDetectoren />
+        <TeDoserenSignaalGroepen />
       </Data>
     </Default>
   </Defaults>

@@ -356,7 +356,7 @@ namespace TLCGen.DataAccess
 #if DEBUG
         public bool OpenDebug()
         {
-            ControllerFileName = @"C:\Users\NL33478\Documents\Ontwikkeling\TLCGen_test\2017-01-17-testreg\tlcgen\12345.tlc";
+            ControllerFileName = @"C:\Users\NL33478\Documents\Rotterdam - Vaanweg Oldegaerde\75040.tlc";
             if (!System.IO.File.Exists(ControllerFileName))
             {
                 return false;

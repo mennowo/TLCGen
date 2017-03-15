@@ -76,11 +76,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* VA ontruimen */");
                     sb.AppendLine($"{ts}/* ============ */");
                     sb.AppendLine();
+                    sb.AppendLine($"{ts}/* herstarten maxima */");
                     foreach (var va in c.VAOntruimenFasen)
                     {
                         if (va.VADetectoren?.Count > 0)
                         {
-                            sb.AppendLine($"{ts}/* herstarten maxima */");
                             sb.AppendLine($"{ts}RT[{_tpf}{_tvamax}{va.FaseCyclus}] = !R[{_fcpf}{va.FaseCyclus}];");
                         }
                     }
@@ -108,11 +108,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}}}");
                             }
                             sb.AppendLine();
+                        }
+                    }
+
+                    sb.AppendLine($"{ts}/* afzetten X voor alle relevante fasen */");
+                    var cfasen = new List<string>();
+                    foreach (var va in c.VAOntruimenFasen)
+                    {
+                        if (va.VADetectoren?.Count > 0)
+                        {
                             var fasen = va.VADetectoren.First().ConflicterendeFasen;
                             foreach (var cf in fasen)
                             {
-                                sb.AppendLine($"{ts}X[{_fcpf}{cf.FaseCyclus}] &= ~BIT5;");
+                                if (!cfasen.Contains(cf.FaseCyclus))
+                                {
+                                    cfasen.Add(cf.FaseCyclus);
+                                }
                             }
+                        }
+                    }
+                    foreach(var fc in cfasen)
+                    {
+                        sb.AppendLine($"{ts}X[{_fcpf}{fc}] &= ~BIT8;");
+                    }
+                    sb.AppendLine();
+
+                    foreach (var va in c.VAOntruimenFasen)
+                    {
+                        if (va.VADetectoren?.Count > 0)
+                        {
+                            sb.AppendLine($"{ts}/* opzetten X voor conflicten van fase {va.FaseCyclus} */");
+                            var fasen = va.VADetectoren.First().ConflicterendeFasen;
                             foreach (var cf in fasen)
                             { 
                                 sb.Append($"{ts}if(");
@@ -126,7 +152,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append($"T[{_tpf}{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}]");
                                     ++i;
                                 }
-                                sb.AppendLine($") X[{_fcpf}{cf.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($") X[{_fcpf}{cf.FaseCyclus}] |= BIT8;");
                             }
                         }
                     }

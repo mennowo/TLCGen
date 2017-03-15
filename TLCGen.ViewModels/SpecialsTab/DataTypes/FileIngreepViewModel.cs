@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -216,6 +217,7 @@ namespace TLCGen.ViewModels
         void AddFileDetectorCommand_Executed(object prm)
         {
             FileIngreepDetectorModel fidm = new FileIngreepDetectorModel();
+            DefaultsProvider.Default.SetDefaultsOnModel(fidm);
             fidm.Detector = SelectedDetectorNaam;
             FileDetectoren.Add(new FileIngreepDetectorViewModel(fidm));
             OnMonitoredPropertyChanged("MinimaalAantalMeldingenMax");
@@ -243,6 +245,7 @@ namespace TLCGen.ViewModels
         void AddNewTeDoserenSignaalGroepCommand_Executed(object prm)
         {
             FileIngreepTeDoserenSignaalGroepModel dos = new FileIngreepTeDoserenSignaalGroepModel();
+            DefaultsProvider.Default.SetDefaultsOnModel(dos);
             dos.FaseCyclus = SelectedFaseNaam;
             TeDoserenSignaalGroepen.Add(new FileIngreepTeDoserenSignaalGroepViewModel(dos));
             UpdateSelectables();

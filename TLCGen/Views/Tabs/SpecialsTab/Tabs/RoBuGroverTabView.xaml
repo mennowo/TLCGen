@@ -128,7 +128,7 @@
             <TabItem Header="RoBuGrover instellingen">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <Button DockPanel.Dock="Right" Content="Instellen defaults" Command="{Binding Path=SetRoBuGroverDefaultsCommand}" Margin="2" />
+                        <Button DockPanel.Dock="Right" Content="Instellen defaults" Command="{Binding Path=RoBuGroverInstellingen.SetRoBuGroverDefaultsCommand}" Margin="2" />
                         <CheckBox Content="RoBuGrover aan/uit" IsChecked="{Binding Path=RoBuGroverInstellingen.RoBuGrover}" 
                                   DockPanel.Dock="Left" Margin="5"/>
                     </DockPanel>
