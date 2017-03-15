@@ -126,11 +126,19 @@
                 </Grid>
             </TabItem>
             <TabItem Header="RoBuGrover instellingen">
-                <ct:SimplePropertyEditor 
-                    HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch"
-                    BoundObject="{Binding Path=RoBuGrover}" 
-                    DescriptionPlacement="ToTheLeft" 
-                    HorizontalDescriptionPlacement="Left" />
+                <DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <Button DockPanel.Dock="Right" Content="Instellen defaults" Command="{Binding Path=SetRoBuGroverDefaultsCommand}" Margin="2" />
+                        <CheckBox Content="RoBuGrover aan/uit" IsChecked="{Binding Path=RoBuGroverInstellingen.RoBuGrover}" 
+                                  DockPanel.Dock="Left" Margin="5"/>
+                    </DockPanel>
+                    <ct:SimplePropertyEditor 
+                        DockPanel.Dock="Bottom"
+                        HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch"
+                        BoundObject="{Binding Path=RoBuGroverInstellingen}" 
+                        DescriptionPlacement="ToTheLeft" 
+                        HorizontalDescriptionPlacement="Left" />
+                </DockPanel>
             </TabItem>
         </TabControl>
         <GridSplitter HorizontalAlignment="Stretch" Height="5" Grid.Row="1" />

@@ -220,7 +220,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode: {comm} */");
                             sb.AppendLine($"{ts}/* -------------{new string('-', comm.Length)} */");
                             sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{iper}], PRM[{_prmpf}{_prmetkp}{iper}]) &&");
-                            sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{iper}]));");
+                            sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{iper}]))");
                             sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiod}] = {iper};");
                             sb.AppendLine();
                             ++iper;

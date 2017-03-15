@@ -94,6 +94,8 @@ namespace TLCGen.ViewModels
             }
             FileIngreepViewModel fivm = new FileIngreepViewModel(fim);
             FileIngrepen.Add(fivm);
+
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         bool AddNewFileIngreepCommand_CanExecute(object prm)
@@ -105,6 +107,7 @@ namespace TLCGen.ViewModels
         {
             FileIngrepen.Remove(SelectedFileIngreep);
             SelectedFileIngreep = null;
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         bool RemoveFileIngreepCommand_CanExecute(object prm)

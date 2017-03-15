@@ -186,7 +186,7 @@ namespace TLCGen.ViewModels
                     _Controller.PTPData.PTPKoppelingen.Remove(ptp.PTPKoppeling);
                 }
             };
-            Messenger.Default.Send(new ControllerDataChangedMessage());
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed

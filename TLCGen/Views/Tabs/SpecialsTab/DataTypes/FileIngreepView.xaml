@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -32,10 +33,12 @@
         <Label Content="Naam file ingreep" Grid.Column="0" />
         <TextBox Text="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" />
         <Label Content="Minimaal aantal meldingen" Grid.Row="1" />
-        <xc:IntegerUpDown Value="{Binding Path=MinimaalAantalMeldingen}" Grid.Column="1" Grid.Row="1" Margin="2" Maximum="{Binding Path=MinimaalAantalMeldingenMax}" Minimum="0" />
-        <Label Content="Eerlijk doseren" Grid.Column="0" Grid.Row="2" />
-        <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="2" Grid.Column="1" />
-        <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+        <xc:IntegerUpDown Value="{Binding Path=MinimaalAantalMeldingen,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="2" Maximum="{Binding Path=MinimaalAantalMeldingenMax,UpdateSourceTrigger=PropertyChanged}" Minimum="0" />
+        <Label Content="Afval vertragin" Grid.Row="2" />
+        <TextBox Text="{Binding Path=AfvalVertraging,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Row="2" Grid.Column="1" />
+        <Label Content="Eerlijk doseren" Grid.Column="0" Grid.Row="3" />
+        <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="3" Grid.Column="1" />
+        <DockPanel Grid.Row="4" Grid.ColumnSpan="2">
             <Label Content="File detectoren" DockPanel.Dock="Top" />
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="File detector" />
@@ -61,7 +64,7 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel Grid.Row="4" Grid.ColumnSpan="2">
+        <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
             <Label Content="Te doseren fasen" DockPanel.Dock="Top" />
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="Fase" />

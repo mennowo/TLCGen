@@ -599,5 +599,24 @@
         <EindTijd>24:00</EindTijd>
       </Data>
     </Default>
+    <Default>
+      <DefaultName>RoBuGrover instellingen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.RoBuGroverModel,TLCGen.Models</DataType>
+      <Data>
+        <RoBuGrover>true</RoBuGrover>
+        <MinimaleCyclustijd>900</MinimaleCyclustijd>
+        <MaximaleCyclustijd>1500</MaximaleCyclustijd>
+        <GroentijdVerschil>50</GroentijdVerschil>
+        <MethodeRoBuGrover>IngesteldMaximum</MethodeRoBuGrover>
+        <GroenOphoogFactor>50</GroenOphoogFactor>
+        <GroenVerlaagFactor>20</GroenVerlaagFactor>
+        <GroenVerlaagFactorNietPrimair>50</GroenVerlaagFactorNietPrimair>
+        <OphogenTijdensGroen>true</OphogenTijdensGroen>
+        <BitmapData />
+        <ConflictGroepen />
+        <SignaalGroepInstellingen />
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>

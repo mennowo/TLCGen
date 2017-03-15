@@ -176,7 +176,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_tblk}{ov.FaseCyclus}",          0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_schupinagb}{ov.FaseCyclus}",    0,                             CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 _MyElements.Add(new CCOLElement($"{_prmovstp}{ov.FaseCyclus}",      0,                             CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
                 int opties = 0;
                 if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
                 if (ov.AfkappenConflictenOV) opties += 300;
@@ -219,7 +218,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
 
-
+                // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
+                _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
                 int n = 1;
                 foreach (var l in ov.LijnNummers)
                 {
@@ -268,10 +268,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyBitmapInputs.Add(iselem2);
                 }
 
+                // For signal groups that have HD but not OV
                 if(!c.OVData.OVIngrepen.Where(x => x.FaseCyclus == hd.FaseCyclus).Any())
                 {
                     _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                     _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
             }
         }

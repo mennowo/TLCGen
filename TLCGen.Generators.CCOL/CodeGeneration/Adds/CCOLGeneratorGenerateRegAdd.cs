@@ -21,7 +21,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
-
+            sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
+            sb.AppendLine("void SpecialSignals_Add()");
+            sb.AppendLine("{");
+            sb.AppendLine("");
+            sb.AppendLine("}");
+            sb.AppendLine("#endif");
+            sb.AppendLine();
             sb.AppendLine("void post_init_application()");
             sb.AppendLine("{");
             sb.AppendLine("");

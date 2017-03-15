@@ -12,9 +12,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateRgvC(ControllerModel controller)
+        private string GenerateRgvC(ControllerModel c)
         {
-            if(controller.RoBuGrover.ConflictGroepen?.Count == 0)
+            if(c.RoBuGrover.ConflictGroepen?.Count == 0)
             {
                 return null;
             }
@@ -34,16 +34,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _tfd = CCOLGeneratorSettingsProvider.Default.GetElementName("tfd");
             string _thd = CCOLGeneratorSettingsProvider.Default.GetElementName("thd");
 
+            string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* IMPLEMENTATIE ROBUGROVER */");
             sb.AppendLine("/* ------------------------ */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "rgv.c"));
+            sb.Append(GenerateFileHeader(c.Data, "rgv.c"));
             sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
+            sb.Append(GenerateVersionHeader(c.Data));
             sb.AppendLine();
             sb.AppendLine("/* defines voor ROBUGROVER */");
-            sb.AppendLine($"#define MAX_AANTAL_CONFLICTGROEPEN {controller.RoBuGrover.ConflictGroepen.Count}");
+            sb.AppendLine($"#define MAX_AANTAL_CONFLICTGROEPEN {c.RoBuGrover.ConflictGroepen.Count}");
             sb.AppendLine("mulv TC[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine("mulv TC_max, DD_anyfase;");
             sb.AppendLine("mulv TO_ontwerp[FCMAX][FCMAX];");
@@ -65,11 +67,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{ts}static bool DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
             sb.AppendLine($"{ts}static bool MK1[FCMAX];           /* Meetkriterium op rijstrook 1 */");
-            if(controller.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 1).Any())
+            if(c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 1).Any())
             {
                 sb.AppendLine($"{ts}static bool MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
             }
-            if (controller.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 2).Any())
+            if (c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 2).Any())
             {
                 sb.AppendLine($"{ts}static bool MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
             }
@@ -94,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* ------------------------- */");
             sb.AppendLine($"{ts}if(rgvinit)");
             sb.AppendLine($"{ts}{{");
-            foreach(var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 sb.AppendLine($"{ts}{ts}TVG_rgv[{_fcpf}{fc.FaseCyclus}] = TVG_max[{_fcpf}{fc.FaseCyclus}];");
             }
@@ -103,14 +105,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* kopieer de basis waarden van TVG_max */");
             sb.AppendLine($"{ts}/* ------------------------------------ */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 sb.AppendLine($"{ts}TVG_basis[{_fcpf}{fc.FaseCyclus}] = TVG_max[{_fcpf}{fc.FaseCyclus}] > 0 ? TVG_max[{_fcpf}{fc.FaseCyclus}] : 1;");
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}/* detectiestoringen voor de fasecycli */");
             sb.AppendLine($"{ts}/* ----------------------------------- */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren.Count > 0)
                 {
@@ -123,7 +125,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}DD_anyfase = 0;");
             sb.AppendLine($"{ts}#if defined (AUTOMAAT)");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if(fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                 {
@@ -145,6 +147,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append($"(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING) || ");
                 }
                 sb.AppendLine();
+                if(c.FileIngrepen.Count > 0)
+                {
+                    bool any = false;
+                    foreach(var fi in c.FileIngrepen)
+                    {
+                        if(fi.TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
+                        {
+                            any = true;
+                            sb.Append($"{l}(IH[{_hpf}{_hfile}{fi.Naam}]) ||");
+                        }
+                    }
+                    if(any)
+                    {
+                        sb.AppendLine();
+                    }
+                }
                 sb.Append($"{l}(");
                 int i = 0;
                 foreach (var d in fc.FileDetectoren)
@@ -159,17 +177,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine(");");
             }
             sb.AppendLine($"{ts}#else");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if(fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                 {
                     continue;
                 }
-                sb.AppendLine($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = FALSE;");
+                if (c.FileIngrepen.Count > 0)
+                {
+                    bool any = false;
+                    foreach (var fi in c.FileIngrepen)
+                    {
+                        if (fi.TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
+                        {
+                            any = true;
+                            sb.Append($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] |= IH[{_hpf}{_hfile}{fi.Naam}]);");
+                        }
+                    }
+                    if (!any)
+                    {
+                        sb.AppendLine($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = FALSE;");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = FALSE;");
+                }
             }
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                 {
@@ -180,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Meetkriterium MK */");
             sb.AppendLine($"{ts}/* ---------------- */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.HiaatDetectoren.Count == 1)
                 {
@@ -195,7 +232,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     int i = 1;
                     foreach (var d in fc.HiaatDetectoren)
                     {
-                        sb.AppendLine($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (RT[{_tpf}{_thd}{_dpf}{d.Detector}] || T[{_tpf}{_thd}{d.Detector}]);");
+                        sb.AppendLine($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (RT[{_tpf}{_thd}{_dpf}{d.Detector}] || T[{_tpf}{_thd}{_dpf}{d.Detector}]);");
                         ++i;
                     }
                 }
@@ -207,7 +244,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Aanpassen verlenggroentijden op einde verlenggroen */");
             sb.AppendLine($"{ts}/* -------------------------------------------------- */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.HiaatDetectoren.Count == 1)
                 {
@@ -233,7 +270,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Verlaag de verlenggroentijd indien geen primaire realisatie in de cyclus */");
             sb.AppendLine($"{ts}/* ------------------------------------------------------------------------ */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                 {
@@ -251,7 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             StringBuilder sb2 = new StringBuilder();
             sb2.AppendLine($"{ts}#if (defined AUTOMAAT) && (!defined VISSIM)");
-            foreach(var gr in controller.RoBuGrover.ConflictGroepen)
+            foreach(var gr in c.RoBuGrover.ConflictGroepen)
             {
                 sb2.Append($"{ts}{ts}rgv_verlenggroentijd_correctie_va_arg(PRM[{_prmpf}{_prmrgv}], DD_anyfase, PRM[{_prmpf}min_tcyclus], PRM[{_prmpf}max_tcyclus], ");
                 foreach(var fc in gr.Fasen)
@@ -263,7 +300,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb2.AppendLine($"{ts}#else");
             sb2.AppendLine($"{ts}{ts}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller) TC_rgv[teller] = 0;");
             sb2.AppendLine($"{ts}{ts}teller = 0;");
-            foreach (var gr in controller.RoBuGrover.ConflictGroepen)
+            foreach (var gr in c.RoBuGrover.ConflictGroepen)
             {
                 sb2.Append($"{ts}{ts}TC_rgv[teller++] = rgv_verlenggroentijd_correctie_va_arg(PRM[{_prmpf}{_prmrgv}], DD_anyfase, PRM[{_prmpf}{_prmmin_tcyclus}], PRM[{_prmpf}{_prmmax_tcyclus}], ");
                 foreach (var fc in gr.Fasen)
@@ -278,7 +315,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#if (!defined AUTOMAAT) || (defined VISSIM)");
             sb.AppendLine($"{ts}{ts}teller = 0;");
-            foreach (var gr in controller.RoBuGrover.ConflictGroepen)
+            foreach (var gr in c.RoBuGrover.ConflictGroepen)
             {
                 sb.Append($"{ts}{ts}TC_string$[teller++] = \"");
                 int i = 0;
@@ -315,7 +352,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Kopieer de rgv-waarden naar TVG_max */");
             sb.AppendLine($"{ts}/* ----------------------------------- */");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                 {
@@ -335,7 +372,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (30, teller + 1, \"%10s\",TC_string$[teller]);");
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (41, teller + 1, \":%4d\", TC_rgv[teller]);");
             sb.AppendLine($"{ts}{ts}}}");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 sb.AppendLine($"{ts}{ts}xyprintf (30, teller+2, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
             }
@@ -343,7 +380,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}#ifndef DUURTEST");
             sb.AppendLine($"{ts}{ts}{ts}MG_Bars_init(TVG_basis, TVG_rgv, 10, 750, 0, 0);");
             sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(SYSTEM, ");
-            foreach (var fc in controller.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 sb.Append($"fc{fc.FaseCyclus}, ");
             }

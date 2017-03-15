@@ -133,6 +133,7 @@
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverConflictGroepViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverFileDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverHiaatDetectorViewModel.cs" />
+    <Compile Include="SpecialsTab\DataTypes\RoBuGroverInstellingenViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingenViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\VAOntruimenDetectorViewModel.cs" />
     <Compile Include="SpecialsTab\DataTypes\VAOntruimenFaseViewModel.cs" />

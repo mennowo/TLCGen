@@ -132,6 +132,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int AfvalVertraging
+        {
+            get { return _FileIngreep.AfvalVertraging; }
+            set
+            {
+                _FileIngreep.AfvalVertraging = value;
+                OnMonitoredPropertyChanged("AfvalVertraging");
+            }
+        }
+
         public bool EerlijkDoseren
         {
             get { return _FileIngreep.EerlijkDoseren; }

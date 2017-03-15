@@ -25,11 +25,14 @@ struct prevovkar * prevOV,  /*  9. opslag data laatste DSI bericht              
 	RT[tdh] = FALSE;
 
 	/* Kijken of lijnnummer overeenkomt met een parameter voor deze richting */
-	for (index = 0; index < bufmax; ++index)
+	if (CIF_DSI[CIF_DSI_LYN] != 0)
 	{
-		check_lijn = (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]);
-		if (check_lijn)
-			break;
+		for (index = 0; index < bufmax; ++index)
+		{
+			check_lijn = (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]);
+			if (check_lijn)
+				break;
+		}
 	}
 
 	if ((PRM[lijnparm] == 1 || check_lijn) &&  /* lijnnummer juist voor deze richting? */

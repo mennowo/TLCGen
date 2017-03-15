@@ -21,6 +21,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
+        private RoBuGroverViewModel _RoBuGroverInstellingen;
         private RoBuGroverConflictGroepViewModel _SelectedConflictGroep;
         private RoBuGroverSignaalGroepInstellingenViewModel _SelectedSignaalGroepInstelling;
 
@@ -108,6 +109,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public RoBuGroverViewModel RoBuGroverInstellingen
+        {
+            get
+            {
+                if(_RoBuGroverInstellingen == null)
+                {
+                    _RoBuGroverInstellingen = new RoBuGroverViewModel(_Controller.RoBuGrover);
+                }
+                return _RoBuGroverInstellingen;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -164,6 +177,7 @@ namespace TLCGen.ViewModels
         {
             RoBuGroverConflictGroepModel cgm = new RoBuGroverConflictGroepModel();
             ConflictGroepen.Add(new RoBuGroverConflictGroepViewModel(cgm));
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         private bool RemoveConflictGroepCommand_CanExecute(object obj)
@@ -198,6 +212,7 @@ namespace TLCGen.ViewModels
             }
 
             SelectedConflictGroep = null;
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         void AddRemoveFaseCommand_Executed(object prm)
@@ -250,11 +265,12 @@ namespace TLCGen.ViewModels
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
+                MessengerInstance.Send(new ControllerDataChangedMessage());
             }
             else if (fc.IsInConflictGroep)
             {
                 // Use custom method instead of Remove method:
-                // it removes based on Define instead of reference
+                // it removes based on name instead of reference
                 RoBuGroverConflictGroepFaseViewModel removevm = null;
                 removevm = SelectedConflictGroep.Fasen.Where(x => x.FaseCyclus == fc.FaseCyclusNaam).First();
                 SelectedConflictGroep.Fasen.Remove(removevm);
@@ -266,6 +282,7 @@ namespace TLCGen.ViewModels
                     SignaalGroepInstellingen.BubbleSort();
                     SignaalGroepInstellingen.RebuildList();
                 }
+                MessengerInstance.Send(new ControllerDataChangedMessage());
             }
             foreach (RoBuGroverTabFaseViewModel tfc in Fasen)
             {

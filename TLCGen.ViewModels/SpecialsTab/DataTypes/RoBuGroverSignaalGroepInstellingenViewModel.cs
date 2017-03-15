@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFileDetector = value;
                 FileDetectorManager.SelectedDetector = value;
-                OnMonitoredPropertyChanged("SelectedFileDetector");
+                OnPropertyChanged("SelectedFileDetector");
             }
         }
 
@@ -43,7 +43,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedHiaatDetector = value;
                 HiaatDetectorManager.SelectedDetector = value;
-                OnMonitoredPropertyChanged("SelectedHiaatDetector");
+                OnPropertyChanged("SelectedHiaatDetector");
             }
         }
 
@@ -111,7 +111,10 @@ namespace TLCGen.ViewModels
                             DefaultsProvider.Default.SetDefaultsOnModel(d);
                             return new RoBuGroverFileDetectorViewModel(d);
                         },
-                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); }
+                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
+                        null,
+                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); },
+                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); }
                         );
                 }
                 return _FileDetectorManager;
@@ -142,7 +145,10 @@ namespace TLCGen.ViewModels
                             DefaultsProvider.Default.SetDefaultsOnModel(d);
                             return new RoBuGroverHiaatDetectorViewModel(d);
                         },
-                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); }
+                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); }, 
+                        null,
+                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); },
+                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); }
                         );
                 }
                 return _HiaatDetectorManager;

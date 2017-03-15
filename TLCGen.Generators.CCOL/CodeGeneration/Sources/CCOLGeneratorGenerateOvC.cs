@@ -93,7 +93,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("} TOVRichtingIndex;");
             sb.AppendLine();
             sb.AppendLine("#include \"ov.h\"");
-            sb.AppendLine("#include \"syncvar.h\"");
+            if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
+            {
+                sb.AppendLine("#include \"syncvar.h\"");
+            }
             sb.AppendLine();
             if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
                 c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any())
@@ -699,7 +702,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 int i = 0;
                                 foreach (var d in kl)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
+                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
                                     if (i < ll.Count)
                                     {
                                         sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
@@ -716,7 +719,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 int i = 0;
                                 foreach (var d in ll)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, ");
+                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, ");
                                     if (i < kl.Count)
                                     {
                                         sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam});");
