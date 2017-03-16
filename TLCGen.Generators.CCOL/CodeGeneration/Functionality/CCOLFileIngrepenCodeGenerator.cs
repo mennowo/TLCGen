@@ -109,14 +109,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             $"{_hfile}{fd.Detector}",
                             CCOLElementTypeEnum.HulpElement));
                 }
-                foreach(var ff in fm.TeDoserenSignaalGroepen)
+                if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"{_prmfperc}{ff.FaseCyclus}",
-                            ff.DoseerPercentage,
+                            $"{_prmfperc}{fm.Naam}",
+                            fm.TeDoserenSignaalGroepen[0].DoseerPercentage,
                             CCOLElementTimeTypeEnum.None,
                             CCOLElementTypeEnum.Parameter));
+                }
+                else
+                {
+                    foreach (var ff in fm.TeDoserenSignaalGroepen)
+                    {
+                        _MyElements.Add(
+                            new CCOLElement(
+                                $"{_prmfperc}{ff.FaseCyclus}",
+                                ff.DoseerPercentage,
+                                CCOLElementTimeTypeEnum.None,
+                                CCOLElementTypeEnum.Parameter));
+                    }
                 }
             }
         }
@@ -276,7 +288,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
                                 case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
                             }
-                            sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
+                            if(fm.EerlijkDoseren)
+                            {
+                                sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
+                            }
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             string rest = "";
                             int irest = 1;
@@ -315,7 +334,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
-                                sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.TeDoserenSignaalGroepen[0].FaseCyclus}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
+                                sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
                             }
                         }
                         sb.AppendLine($"{ts}}}");

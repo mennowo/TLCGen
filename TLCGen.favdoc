@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<Favorites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <folders>
+    <Folder>
+      <name>ViewModels</name>
+      <folders />
+      <favorites />
+    </Folder>
+    <Folder>
+      <name>Settings</name>
+      <folders />
+      <favorites>
+        <Favorite>
+          <name>tlcgendefaultdefaults.xml</name>
+          <path>TLCGen.Settings\Settings\tlcgendefaultdefaults.xml</path>
+          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Settings\Settings\tlcgendefaultdefaults.xml</absolutePath>
+        </Favorite>
+        <Favorite>
+          <name>tlcgendefaulttemplates.xml</name>
+          <path>TLCGen.Settings\Settings\tlcgendefaulttemplates.xml</path>
+          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Settings\Settings\tlcgendefaulttemplates.xml</absolutePath>
+        </Favorite>
+        <Favorite>
+          <name>ccolgendefaults.xml</name>
+          <path>TLCGen.Generators.CCOL\Settings\ccolgendefaults.xml</path>
+          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Generators.CCOL\Settings\ccolgendefaults.xml</absolutePath>
+        </Favorite>
+      </favorites>
+    </Folder>
+    <Folder>
+      <name>Links</name>
+      <folders />
+      <favorites>
+        <Favorite>
+          <name>TLCGen.Views</name>
+          <path>TLCGen\Views</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
+        <Favorite>
+          <name>TLCGen.Generators.CodeGeneration</name>
+          <path>TLCGen.Generators\TLCGen.Generators.CCOL\CodeGeneration</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
+      </favorites>
+    </Folder>
+  </folders>
+  <favorites />
+</Favorites>

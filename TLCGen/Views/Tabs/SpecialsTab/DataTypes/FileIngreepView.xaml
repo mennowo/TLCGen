@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              x:Name="root"
@@ -65,7 +66,17 @@
             </DataGrid>
         </DockPanel>
         <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
-            <Label Content="Te doseren fasen" DockPanel.Dock="Top" />
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="Te doseren fasen" />
+                <ct:InfoElement>
+                    <ct:InfoElement.InfoPopup>
+                        <TextBlock>
+                            Let op: bij toepassen van "eerlijk doseren" zijn de percentages van alle fasen gelijk.<LineBreak />
+                            Bij genereren van CCOL code wordt dan een enkele percentage parameter aangemaakt.
+                        </TextBlock>
+                    </ct:InfoElement.InfoPopup>
+                </ct:InfoElement>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="Fase" />
                 <ComboBox ItemsSource="{Binding Path=SelectableFasen}" 

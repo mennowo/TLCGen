@@ -198,6 +198,29 @@ namespace TLCGen.ViewModels
             FileIngrepen.Rebuild();
         }
 
+        public void OnFileIngreepTeDoserenSignaalPercentageChanged(FileIngreepTeDoserenSignaalGroepPercentageChangedMessage message)
+        {
+
+            foreach (var fivm in FileIngrepen)
+            {
+                if (fivm.EerlijkDoseren)
+                {
+                    foreach (var tdsgvm in fivm.TeDoserenSignaalGroepen)
+                    {
+                        var tdsgm = (FileIngreepTeDoserenSignaalGroepModel)tdsgvm.GetItem();
+                        if (tdsgm == message.TeDoserenSignaalGroep)
+                        {
+                            foreach (var _tdsgvm in fivm.TeDoserenSignaalGroepen)
+                            {
+                                _tdsgvm.DoseerPercentageNoMessaging = tdsgm.DoseerPercentage;
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion // TLCGen Events
 
         #region Constructor
@@ -206,6 +229,7 @@ namespace TLCGen.ViewModels
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<FileIngreepTeDoserenSignaalGroepPercentageChangedMessage>(OnFileIngreepTeDoserenSignaalPercentageChanged));
         }
 
         #endregion // Constructor

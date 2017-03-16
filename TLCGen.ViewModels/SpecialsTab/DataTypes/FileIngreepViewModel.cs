@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Settings;
 
@@ -149,6 +150,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.EerlijkDoseren = value;
+                if(value)
+                {
+                    if(TeDoserenSignaalGroepen.Count > 1)
+                    {
+                        int dos = TeDoserenSignaalGroepen[0].DoseerPercentage;
+                        foreach(var tdsg in TeDoserenSignaalGroepen)
+                        {
+                            tdsg.DoseerPercentageNoMessaging = dos;
+                        }
+                    }
+                }
                 OnMonitoredPropertyChanged("EerlijkDoseren");
             }
         }

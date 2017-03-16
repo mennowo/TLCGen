@@ -1,9 +1,11 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -34,7 +36,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                OnPropertyChanged("DoseerPercentage");
+                OnMonitoredPropertyChanged("DoseerPercentage");
+                Messenger.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
+            }
+        }
+
+        public int DoseerPercentageNoMessaging
+        {
+            set
+            {
+                _TeDoserenSignaalGroep.DoseerPercentage = value;
+                OnMonitoredPropertyChanged("DoseerPercentage");
             }
         }
 
