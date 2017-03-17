@@ -33,6 +33,7 @@ namespace TLCGen.Models
         public int? CFL { get; set; }
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
+        public bool Dummy { get; set; }
 
         [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam", "Wachtlicht")]
         public BitmapCoordinatenDataModel WachtlichtBitmapData { get; set; }

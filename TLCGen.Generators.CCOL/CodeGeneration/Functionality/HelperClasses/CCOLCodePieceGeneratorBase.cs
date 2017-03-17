@@ -42,6 +42,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             throw new NotImplementedException();
         }
 
+        public virtual bool HasDetectors()
+        {
+            return false;
+        }
+
+        public virtual IEnumerable<DetectorModel> GetDetectors()
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual bool HasCCOLBitmapOutputs()
         {
             return false;

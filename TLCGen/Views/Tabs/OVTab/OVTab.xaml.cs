@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for OVIngreepSGInstellingenLijstView.xaml
+    /// Interaction logic for FasenTab.xaml
     /// </summary>
-    public partial class OVIngreepSGInstellingenLijstView : UserControl
+    public partial class OVTab : UserControl
     {
-        public OVIngreepSGInstellingenLijstView()
+        public OVTab()
         {
             InitializeComponent();
         }

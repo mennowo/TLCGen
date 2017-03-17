@@ -1,23 +1,20 @@
-﻿<UserControl x:Class="TLCGen.Views.DetectorenSimulatieTabView"
+﻿<UserControl x:Class="TLCGen.Views.OVSimulatieTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:re="clr-namespace:TLCGen.Views.Resources"
-             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
              mc:Ignorable="d" 
-             Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <re:SpecialDataGrid 
-                  ItemsSource="{Binding Path=Detectoren}"
+        <ct:SpecialDataGrid 
+                  ItemsSource="{Binding Path=DummyDetectoren}"
                   Grid.Row="0" Margin="0,4,4,0"
                   SelectedItem="{Binding Path=SelectedDetector}"
                   SelectionUnit="CellOrRowHeader"
@@ -25,14 +22,8 @@
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                      AncestorType={x:Type DataGridRow}}, 
-                                      Path=Item.Naam}"/>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
                 <DataGridTextColumn Binding="{Binding Path=Q1}" Header="Q1" />
                 <DataGridTextColumn Binding="{Binding Path=Q2}" Header="Q2" />
                 <DataGridTextColumn Binding="{Binding Path=Q3}" Header="Q3" />
@@ -41,7 +32,7 @@
                 <DataGridTextColumn Binding="{Binding Path=FCNr}" Header="FCNr" />
                 <DataGridTextColumn Binding="{Binding Path=VissimNaam}" Header="VISSIM naam" />
             </DataGrid.Columns>
-        </re:SpecialDataGrid>
+        </ct:SpecialDataGrid>
         <StackPanel Grid.Row="1" HorizontalAlignment="Left">
             <Button Content="Genereren nieuwe data" Command="{Binding Path=GenerateSimulationValuesCommand}" Margin="2" />
         </StackPanel>

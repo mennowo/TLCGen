@@ -968,12 +968,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             string _prmtestkarvert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarvert");
             string _prmtestkarlyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarlyn");
-            string _isdummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykarin");
-            string _isdummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykaruit");
-            string _isdummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykarhdin");
-            string _isdummykarhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummykarhduit");
-            string _isdummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummyvecomin");
-            string _isdummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("isdummyvecomuit");
+            string _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
+            string _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
+            string _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
+            string _ddummykarhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhduit");
+            string _ddummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomin");
+            string _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   OVSpecialSignals wordt aangeroepen vanuit de functie ");
@@ -995,8 +995,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (Int32.TryParse(ov.FaseCyclus, out ifc))
                 {
                     string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarin}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykaruit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummykaruit}{ov.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                 }
             }
             if (c.OVData.DSI)
@@ -1004,8 +1004,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
                 {
                     string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomin}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}] && !IS_old[{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                 }
             }
 
@@ -1017,8 +1017,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 string type = "CIF_POL";
                 if (Int32.TryParse(hd.FaseCyclus, out ifc))
                 {
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhdin}{hd.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhdin}{hd.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
-                    sb.AppendLine($"{ts}if (IS[{_ispf}{_isdummykarhduit}{hd.FaseCyclus}] && !IS_old[{_ispf}{_isdummykarhduit}{hd.FaseCyclus}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
                 }
             }
             sb.AppendLine("}");

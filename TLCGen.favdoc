@@ -41,6 +41,11 @@
           <path>TLCGen.Generators\TLCGen.Generators.CCOL\CodeGeneration</path>
           <viewKind>Solution Explorer</viewKind>
         </Favorite>
+        <Favorite>
+          <name>TLCGen.Models</name>
+          <path>TLCGen.Models\Models</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
       </favorites>
     </Folder>
   </folders>

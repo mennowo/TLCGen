@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Views.FasenTab"
+﻿<UserControl x:Class="TLCGen.Views.OVTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,17 +8,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type vm:FasenLijstTabViewModel}">
-            <local:FasenLijstTabView />
+        <DataTemplate DataType="{x:Type vm:OVFasenTabViewModel}">
+            <local:OVFasenTabView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:FasenDetailsTabViewModel}">
-            <local:FasenDetailsTabView />
+        <DataTemplate DataType="{x:Type vm:OVSignaalGroepInstellingenTabViewModel}">
+            <local:OVSignaalGroepInstellingenTabView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:FasenLijstTimersTabViewModel}">
-            <local:FasenLijstTimersTabView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:FasenGroentijdenSetsTabViewModel}">
-            <local:FasenGroentijdenSetsTabView />
+        <DataTemplate DataType="{x:Type vm:OVSimulatieTabViewModel}">
+            <local:OVSimulatieTabView />
         </DataTemplate>
     </UserControl.Resources>
     <Grid>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -42,6 +44,19 @@ namespace TLCGen.ViewModels
             {
                 _OVIngreep.KAR = value;
                 OnMonitoredPropertyChanged("KAR");
+                if(value)
+                {
+                    _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
+                    _OVIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
+                    _OVIngreep.DummyKARInmelding.Naam = "dummykarin" + _OVIngreep.FaseCyclus;
+                    _OVIngreep.DummyKARUitmelding.Naam = "dummykaruit" + _OVIngreep.FaseCyclus;
+                }
+                else
+                {
+                    _OVIngreep.DummyKARInmelding.Naam = null;
+                    _OVIngreep.DummyKARUitmelding.Naam = null;
+                }
+                Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
 
@@ -52,6 +67,19 @@ namespace TLCGen.ViewModels
             {
                 _OVIngreep.Vecom = value;
                 OnMonitoredPropertyChanged("Vecom");
+                if (value)
+                {
+                    _OVIngreep.DummyVecomInmelding = new DetectorModel() { Dummy = true };
+                    _OVIngreep.DummyVecomUitmelding = new DetectorModel() { Dummy = true };
+                    _OVIngreep.DummyVecomInmelding.Naam = "dummyvecomin" + _OVIngreep.FaseCyclus;
+                    _OVIngreep.DummyVecomUitmelding.Naam = "dummyvecomuit" + _OVIngreep.FaseCyclus;
+                }
+                else
+                {
+                    _OVIngreep.DummyVecomInmelding = null;
+                    _OVIngreep.DummyVecomUitmelding = null;
+                }
+                Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
 
@@ -234,9 +262,22 @@ namespace TLCGen.ViewModels
             {
                 if (_AddLijnNummerCommand == null)
                 {
-                    _AddLijnNummerCommand = new RelayCommand(AddNewLijnNummerCommand_Executed, AddNewLijnNummerCommand_CanExecute);
+                    _AddLijnNummerCommand = new RelayCommand(AddLijnNummerCommand_Executed, AddLijnNummerCommand_CanExecute);
                 }
                 return _AddLijnNummerCommand;
+            }
+        }
+
+        RelayCommand _Add10LijnNummersCommand;
+        public ICommand Add10LijnNummersCommand
+        {
+            get
+            {
+                if (_Add10LijnNummersCommand == null)
+                {
+                    _Add10LijnNummersCommand = new RelayCommand(Add10LijnNummersCommand_Executed, Add10LijnNummersCommand_CanExecute);
+                }
+                return _Add10LijnNummersCommand;
             }
         }
 
@@ -258,7 +299,7 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        void AddNewLijnNummerCommand_Executed(object prm)
+        void AddLijnNummerCommand_Executed(object prm)
         {
             if (!string.IsNullOrWhiteSpace(NewLijnNummer))
             {
@@ -275,7 +316,20 @@ namespace TLCGen.ViewModels
             NewLijnNummer = "";
         }
 
-        bool AddNewLijnNummerCommand_CanExecute(object prm)
+        bool AddLijnNummerCommand_CanExecute(object prm)
+        {
+            return LijnNummers != null;
+        }
+
+        void Add10LijnNummersCommand_Executed(object prm)
+        {
+            for(int i = 0; i < 10; ++i)
+            {
+                AddLijnNummerCommand.Execute(prm);
+            }
+        }
+
+        bool Add10LijnNummersCommand_CanExecute(object prm)
         {
             return LijnNummers != null;
         }

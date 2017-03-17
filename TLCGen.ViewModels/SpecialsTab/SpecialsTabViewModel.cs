@@ -23,7 +23,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 6)]
+    [TLCGenTabItem(index: 7)]
     public class SpecialsTabViewModel : TLCGenMainTabItemViewModel
     {
         #region Fields

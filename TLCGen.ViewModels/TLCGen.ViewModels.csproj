@@ -89,26 +89,28 @@
     <Compile Include="DetectorenTab\Tabs\DetectorenSimulatieTabViewModel.cs" />
     <Compile Include="Enums\SynchronisatieTypeEnum.cs" />
     <Compile Include="FasenTab\DataTypes\FaseCyclusViewModel.cs" />
-    <Compile Include="FasenTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
-    <Compile Include="FasenTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
-    <Compile Include="FasenTab\DataTypes\HDIngreepViewModel.cs" />
-    <Compile Include="FasenTab\DataTypes\OVIngreepSignaalGroepParametersViewModel.cs" />
-    <Compile Include="FasenTab\DataTypes\OVIngreepViewModel.cs" />
+    <Compile Include="OVTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
+    <Compile Include="OVTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
+    <Compile Include="OVTab\DataTypes\HDIngreepViewModel.cs" />
+    <Compile Include="OVTab\DataTypes\OVIngreepSignaalGroepParametersViewModel.cs" />
+    <Compile Include="OVTab\DataTypes\OVIngreepViewModel.cs" />
     <Compile Include="FasenTab\FasenTabViewModel.cs" />
-    <Compile Include="FasenTab\Other\OVIngreepSGInstellingenLijstViewModel.cs" />
+    <Compile Include="OVTab\Tabs\OVSignaalGroepInstellingenTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenDetailsTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenGroentijdenSetsTabViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\GroentijdenSetViewModel.cs" />
     <Compile Include="FasenTab\DataTypes\GroentijdViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenLijstTabViewModel.cs" />
     <Compile Include="FasenTab\Tabs\FasenLijstTimersTabViewModel.cs" />
-    <Compile Include="FasenTab\Tabs\FasenOVTabViewModel.cs" />
+    <Compile Include="OVTab\OVTabViewModel.cs" />
+    <Compile Include="OVTab\Tabs\OVFasenTabViewModel.cs" />
     <Compile Include="ModulesTab\DataTypes\FaseCyclusModuleDataViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesDetailsTabViewModel.cs" />
     <Compile Include="ModulesTab\Tabs\ModulesFasenInstellingenTabViewModel.cs" />
     <Compile Include="Other\DetectorManagerViewModel.cs" />
     <Compile Include="Other\IAllowTemplates.cs" />
     <Compile Include="Other\TemplateProviderViewModel.cs" />
+    <Compile Include="OVTab\Tabs\OVSimulatieTabViewModel.cs" />
     <Compile Include="PeriodenTab\DataTypes\PeriodeViewModel.cs" />
     <Compile Include="PeriodenTab\PeriodenTabViewModel.cs" />
     <Compile Include="ModulesTab\FaseCyclusModuleViewModel.cs" />
@@ -150,7 +152,7 @@
     <Compile Include="SynchronisatiesTab\DataTypes\NaloopViewModel.cs" />
     <Compile Include="SynchronisatiesTab\HelperTypes\GarantieTijdConvertHelper.cs" />
     <Compile Include="SynchronisatiesTab\SynchronisatiesTabViewModel.cs" />
-    <Compile Include="SynchronisatiesTab\SynchronisatieViewModel.cs" />
+    <Compile Include="SynchronisatiesTab\DataTypes\SynchronisatieViewModel.cs" />
     <Compile Include="TLCGenMainTabItemViewModel.cs" />
     <Compile Include="TLCGenTabItemViewModel.cs" />
     <Compile Include="ViewModelBase.cs" />
@@ -218,7 +220,9 @@
       <SubType>Designer</SubType>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FasenTab\Other\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

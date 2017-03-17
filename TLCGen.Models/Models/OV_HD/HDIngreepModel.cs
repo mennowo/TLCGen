@@ -33,12 +33,9 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel HDInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("hdkar_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
-        public BitmapCoordinatenDataModel HDKARDummyInmeldingBitmapData { get; set; }
-
+        public DetectorModel DummyKARInmelding { get; set; }
         [Browsable(false)]
-        [IOElement("hdkar_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
-        public BitmapCoordinatenDataModel HDKARDummyUitmeldingBitmapData { get; set; }
+        public DetectorModel DummyKARUitmelding { get; set; }
 
         [Browsable(false)]
         [XmlArrayItem(ElementName = "MeerealiserendeFaseCyclus")]
@@ -52,8 +49,8 @@ namespace TLCGen.Models
         {
             MeerealiserendeFaseCycli = new List<HDIngreepMeerealiserendeFaseCyclusModel>();
             HDInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            HDKARDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            HDKARDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
+            DummyKARInmelding = new DetectorModel() { Dummy = true };
+            DummyKARUitmelding = new DetectorModel() { Dummy = true };
         }
 
         #endregion // Constructor

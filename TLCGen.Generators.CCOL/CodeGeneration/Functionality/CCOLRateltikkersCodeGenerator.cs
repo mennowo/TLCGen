@@ -119,21 +119,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* uitsturing aanvraag rateltikkers */");
                     foreach (var rt in c.Signalen.Rateltikkers)
                     {
-                        string rtd1 = "NG";
-                        string rtd2 = "NG";
-                        string nlfcd = "NG";
-
-                        if (rt.Detectoren.Count > 0) rtd1 = rt.Detectoren[0].Detector;
-                        if (rt.Detectoren.Count > 1) rtd2 = rt.Detectoren[1].Detector;
-                        if (rt.Detectoren.Count > 2) nlfcd = rt.Detectoren[2].Detector;
-
                         switch (rt.Type)
                         {
                             case RateltikkerTypeEnum.Accross:
-                                sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_dpf}{rtd1}, {_dpf}{rtd2}, {_dpf}{nlfcd});");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, ");
+                                foreach (var d in rt.Detectoren)
+                                {
+                                    sb.Append($"{_dpf}{d.Detector}, ");
+                                }
+                                sb.AppendLine("END);");
                                 break;
                             case RateltikkerTypeEnum.Hoeflake:
-                                sb.AppendLine($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, {_dpf}{rtd1}, {_dpf}{rtd2}, {_dpf}{nlfcd});");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
+                                foreach (var d in rt.Detectoren)
+                                {
+                                    sb.Append($"{_dpf}{d.Detector}, ");
+                                }
+                                sb.AppendLine("END);");
                                 break;
                         }
                     }

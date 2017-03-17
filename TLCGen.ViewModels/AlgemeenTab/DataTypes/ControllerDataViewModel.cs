@@ -149,6 +149,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Fixatie mogelijk")]
+        public bool FixatieMogelijk
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.FixatieData.FixatieMogelijk; }
+            set
+            {
+                _Controller.Data.FixatieData.FixatieMogelijk = value;
+                OnMonitoredPropertyChanged("FixatieMogelijk");
+            }
+        }
+
         [Description("Bijkomen tijdens fixatie")]
         public bool BijkomenTijdensFixatie
         {

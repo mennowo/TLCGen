@@ -12,6 +12,8 @@ namespace TLCGen.Models
     [Serializable]
     public class OVDataModel
     {
+        #region Properties
+
         public OVIngreepTypeEnum OVIngreepType { get; set; }
         public bool DSI { get; set; }
         public bool CheckOpDSIN { get; set; }
@@ -35,11 +37,48 @@ namespace TLCGen.Models
         [IOElement("karog", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
         public BitmapCoordinatenDataModel KAROnderGedragBitmapData { get; set; }
 
-        [XmlElement(ElementName = "OVIngreep")]
+        [XmlArrayItem(ElementName = "OVIngreep")]
         public List<OVIngreepModel> OVIngrepen { get; set; }
-        [XmlElement(ElementName = "HDIngreep")]
+        [XmlArrayItem(ElementName = "HDIngreep")]
         public List<HDIngreepModel> HDIngrepen { get; set; }
         public List<OVIngreepSignaalGroepParametersModel> OVIngreepSignaalGroepParameters { get; set; }
+
+        #endregion // Properties
+
+        #region Public Methods
+
+        public List<DetectorModel> GetAllDummyDetectors()
+        {
+            var dets = new List<DetectorModel>();
+
+            foreach(var ov in OVIngrepen)
+            {
+                if(ov.KAR)
+                {
+                    dets.Add(ov.DummyKARInmelding);
+                    dets.Add(ov.DummyKARUitmelding);
+                }
+                if (ov.Vecom)
+                {
+                    dets.Add(ov.DummyVecomInmelding);
+                    dets.Add(ov.DummyVecomUitmelding);
+                }
+            }
+            foreach (var hd in HDIngrepen)
+            {
+                if (hd.KAR)
+                {
+                    dets.Add(hd.DummyKARInmelding);
+                    dets.Add(hd.DummyKARUitmelding);
+                }
+            }
+
+                return dets;
+        }
+
+        #endregion // Public Methods
+
+        #region Constructor
 
         public OVDataModel()
         {
@@ -49,5 +88,7 @@ namespace TLCGen.Models
             HDIngrepen = new List<HDIngreepModel>();
             OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();
         }
+        
+        #endregion // Constructor
     }
 }

@@ -474,9 +474,9 @@
         <KAR>true</KAR>
         <Vecom>false</Vecom>
         <Type>Bus</Type>
-        <RijTijdOngehinderd>200</RijTijdOngehinderd>
-        <RijTijdBeperktgehinderd>150</RijTijdBeperktgehinderd>
-        <RijTijdGehinderd>100</RijTijdGehinderd>
+        <RijTijdOngehinderd>140</RijTijdOngehinderd>
+        <RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
+        <RijTijdGehinderd>60</RijTijdGehinderd>
         <OnderMaximum>150</OnderMaximum>
         <GroenBewaking>300</GroenBewaking>
         <AfkappenConflicten>true</AfkappenConflicten>
@@ -489,7 +489,38 @@
         <OVKARDummyUitmeldingBitmapData />
         <OVVecomDummyInmeldingBitmapData />
         <OVVecomDummyUitmeldingBitmapData />
-        <LijnNummers />
+        <LijnNummers>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+          <LijnNummer>
+            <Nummer>0</Nummer>
+          </LijnNummer>
+        </LijnNummers>
       </Data>
     </Default>
     <Default>
@@ -502,9 +533,9 @@
         <Vecom>false</Vecom>
         <Opticom>false</Opticom>
         <Sirene>false</Sirene>
-        <RijTijdOngehinderd>200</RijTijdOngehinderd>
-        <RijTijdBeperktgehinderd>150</RijTijdBeperktgehinderd>
-        <RijTijdGehinderd>100</RijTijdGehinderd>
+        <RijTijdOngehinderd>0</RijTijdOngehinderd>
+        <RijTijdBeperktgehinderd>0</RijTijdBeperktgehinderd>
+        <RijTijdGehinderd>0</RijTijdGehinderd>
         <GroenBewaking>900</GroenBewaking>
         <HDInmeldingBitmapData />
         <HDKARDummyInmeldingBitmapData />

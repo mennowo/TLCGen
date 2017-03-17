@@ -102,28 +102,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* --------------- */");
 
             int index = 0;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
-                    sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
-                    sb.AppendLine($"{ts}FC_nr[{index}] = {fcm.GetDefine()};");
-                    sb.AppendLine($"{ts}S_generator[{index}] = NG;");
-                    sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
-                    sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
-                    sb.AppendLine($"{ts}Q2[{index}] = {dm.Simulatie.Q2};");
-                    sb.AppendLine($"{ts}Q3[{index}] = {dm.Simulatie.Q3};");
-                    sb.AppendLine($"{ts}Q4[{index}] = {dm.Simulatie.Q4};");
-                    sb.AppendLine();
-                    ++index;
-                }
-            }
-            foreach (DetectorModel dm in controller.Detectoren)
+            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
+            var controllerdets = controller.Detectoren;
+            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+
+            foreach (var dm in alldets)
             {
                 sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
                 sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
-                sb.AppendLine($"{ts}FC_nr[{index}] = NG;");
+                sb.AppendLine($"{ts}FC_nr[{index}] = {(dm.Simulatie.FCNr != null ? _fcpf + dm.Simulatie.FCNr : "NG")};");
                 sb.AppendLine($"{ts}S_generator[{index}] = NG;");
                 sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
                 sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");

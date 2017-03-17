@@ -121,42 +121,6 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Rateltikker">
-                <GroupBox.Style>
-                    <Style TargetType="GroupBox">
-                        <Setter Property="IsEnabled" Value="False" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=Type}" Value="Voetganger">
-                                <DataTrigger.Setters>
-                                    <Setter Property="IsEnabled" Value="True" />
-                                </DataTrigger.Setters>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </GroupBox.Style>
-                <StackPanel Orientation="Vertical">
-                    <Label Content="Type" />
-                    <ComboBox Margin="2"
-                        SelectedItem="{Binding Path=RatelTikkerType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RateltikkerTypeEnum}}}" />
-                    <StackPanel>
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Setter Property="IsEnabled" Value="False" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=RatelTikkerType,UpdateSourceTrigger=PropertyChanged}" Value="Hoeflake">
-                                        <DataTrigger.Setters>
-                                            <Setter Property="IsEnabled" Value="True" />
-                                        </DataTrigger.Setters>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <Label Content="Naloop tijd rateltikker" />
-                        <TextBox Text="{Binding Path=RatelTikkerNaloopTijd}" Margin="2" />
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
             <GroupBox Header="Detectie storing">
                 <StackPanel>
                     <CheckBox Content="Aanvraag" Margin="5" />

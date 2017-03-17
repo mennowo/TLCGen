@@ -198,6 +198,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CopySourceIfNeeded("extra_func_ov.h", sourcefilepath);
                 }
 
+                if(c.InterSignaalGroep.Nalopen.Any())
+                {
+                    CopySourceIfNeeded("nalopen.c", sourcefilepath);
+                    CopySourceIfNeeded("nalopen.h", sourcefilepath);
+                }
+
                 if(Directory.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
                 {
                     try

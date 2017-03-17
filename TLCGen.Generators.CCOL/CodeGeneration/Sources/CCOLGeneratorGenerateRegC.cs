@@ -379,7 +379,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine();
-            sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PRML, ML, ML_MAX);");
+            //if(controller.InterSignaalGroep.Nalopen.Any())
+            //{
+            //    sb.AppendLine($"{ts}YML[ML] = yml_cv_pr_nl(PRML, ML, ML_MAX);");
+            //}
+            //else
+            //{
+                sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PRML, ML, ML_MAX);");
+            //}
             sb.AppendLine();
             foreach(ModuleModel mm in controller.ModuleMolen.Modules)
             {

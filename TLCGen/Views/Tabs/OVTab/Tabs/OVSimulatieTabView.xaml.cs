@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for FasenOVTabView.xaml
+    /// Interaction logic for OVSimulatieTabView.xaml
     /// </summary>
-    public partial class FasenOVTabView : UserControl
+    public partial class OVSimulatieTabView : UserControl
     {
-        public FasenOVTabView()
+        public OVSimulatieTabView()
         {
             InitializeComponent();
         }

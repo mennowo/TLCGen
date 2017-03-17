@@ -70,6 +70,7 @@
             <StackPanel Orientation="Horizontal">
                 <TextBox Text="{Binding Path=NewLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="2" Width="50" />
                 <Button Content="+" IsDefault="True" Command="{Binding AddLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
+                <Button Content="+ 10" Command="{Binding Add10LijnNummersCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
                 <Button Content="-" Command="{Binding RemoveLijnNummerCommand}" HorizontalAlignment="Left" Margin="2" Width="30" />
             </StackPanel>
         </StackPanel>

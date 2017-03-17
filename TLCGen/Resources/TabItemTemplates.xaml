@@ -26,4 +26,7 @@
     <DataTemplate DataType="{x:Type vm:BitmapTabViewModel}">
         <vw:BitmapTab />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:OVTabViewModel}">
+        <vw:OVTab />
+    </DataTemplate>
 </ResourceDictionary>

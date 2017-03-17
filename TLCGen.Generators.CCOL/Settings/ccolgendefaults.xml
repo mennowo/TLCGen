@@ -918,54 +918,6 @@
             <Description>Parameter minimum percentage groentijd voor fase afgkapt mag worden door OV ingreep</Description>
           </Setting>
           <Setting>
-            <Default>dummykarin</Default>
-            <Setting>dummykarin</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv KAR inmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummykaruit</Default>
-            <Setting>dummykaruit</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv KAR uitmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummyvecomin</Default>
-            <Setting>dummyvecomin</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv VECOM inmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummyvecomuit</Default>
-            <Setting>dummyvecomuit</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv VECOM uitmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummykarhdin</Default>
-            <Setting>dummykarhdin</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv HD KAR inmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummykarhduit</Default>
-            <Setting>dummykarhduit</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv HD KAR uitmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummyvecomhdin</Default>
-            <Setting>dummyvecomhdin</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv HD VECOM inmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
-            <Default>dummyvecomhduit</Default>
-            <Setting>dummyvecomhduit</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang tbv HD VECOM uitmelding in testomgeving</Description>
-          </Setting>
-          <Setting>
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>

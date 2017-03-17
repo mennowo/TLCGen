@@ -109,16 +109,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* -------- */");
 
             int pad1 = "ISMAX".Length;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any())
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.GetDefine().Length > pad1) pad1 = dm.GetDefine().Length;
-                }
+                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
             }
-            foreach (DetectorModel dm in controller.Detectoren)
+            if(controller.Detectoren.Any())
             {
-                if (dm.GetDefine().Length > pad1) pad1 = dm.GetDefine().Length;
+                int _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
+                pad1 = _pad1 > pad1 ? _pad1 : pad1;
+            }
+            var ovdummies = controller.OVData.GetAllDummyDetectors();
+            if (ovdummies.Any())
+            {
+                pad1 = ovdummies.Max(x => x.GetDefine().Length);
             }
             pad1 = pad1 + $"{ts}#define  ".Length;
 
@@ -129,20 +132,74 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
+                    if (!dm.Dummy)
+                    {
+                        sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                        sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                        ++index;
+                    }
+                }
+            }
+            foreach (DetectorModel dm in controller.Detectoren)
+            {
+                if (!dm.Dummy)
+                {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                     ++index;
                 }
             }
-            foreach (DetectorModel dm in controller.Detectoren)
+
+            int autom_index = index;
+
+            /* Dummies */
+            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy).Any() ||
+                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
+                ovdummies.Any())
             {
-                sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                ++index;
+                sb.AppendLine("#ifndef AUTOMAAT");
+                foreach (FaseCyclusModel fcm in controller.Fasen)
+                {
+                    foreach (DetectorModel dm in fcm.Detectoren)
+                    {
+                        if (dm.Dummy)
+                        {
+                            sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                            sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                            ++index;
+                        }
+                    }
+                }
+                foreach (DetectorModel dm in controller.Detectoren)
+                {
+                    if (dm.Dummy)
+                    {
+                        sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                        sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                        ++index;
+                    }
+                }
+                foreach(var dm in ovdummies)
+                {
+                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    ++index;
+                }
+                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{index.ToString()} ".PadLeft(pad2));
+                sb.AppendLine("/* aantal detectoren testomgeving */");
+                sb.AppendLine("#else");
+                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{autom_index.ToString()} ".PadLeft(pad2));
+                sb.AppendLine("/* aantal detectoren automaat omgeving */");
+                sb.AppendLine("#endif");
             }
-            sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
-            sb.Append($"{index.ToString()} ".PadLeft(pad2));
-            sb.AppendLine("/* aantal fasecycli */");
+            else
+            {
+                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{index.ToString()} ".PadLeft(pad2));
+                sb.AppendLine("/* aantal fasecycli */");
+            }
 
             return sb.ToString();
         }

@@ -40,20 +40,13 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("kar_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
-        public BitmapCoordinatenDataModel OVKARDummyInmeldingBitmapData { get; set; }
-
+        public DetectorModel DummyKARInmelding { get; set; }
         [Browsable(false)]
-        [IOElement("kar_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "KAR")]
-        public BitmapCoordinatenDataModel OVKARDummyUitmeldingBitmapData { get; set; }
-
+        public DetectorModel DummyKARUitmelding { get; set; }
         [Browsable(false)]
-        [IOElement("vecom_dummy_in", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
-        public BitmapCoordinatenDataModel OVVecomDummyInmeldingBitmapData { get; set; }
-
+        public DetectorModel DummyVecomInmelding { get; set; }
         [Browsable(false)]
-        [IOElement("vecom_dummy_uit", BitmappedItemTypeEnum.Ingang, "FaseCyclus", "Vecom")]
-        public BitmapCoordinatenDataModel OVVecomDummyUitmeldingBitmapData { get; set; }
+        public DetectorModel DummyVecomUitmelding { get; set; }
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
@@ -69,10 +62,7 @@ namespace TLCGen.Models
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            OVKARDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            OVKARDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
-            OVVecomDummyInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            OVVecomDummyUitmeldingBitmapData = new BitmapCoordinatenDataModel();
+
             //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
         }
 

@@ -167,6 +167,66 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="BitmapTabDrawingImage" Drawing="{StaticResource BitmapTabDrawingGroup}" />
+  <Geometry x:Key="OVTabGeometry">F1 M16,16z M0,0z M335.77464,495.88103L340.75179,495.88103C342.65843,495.88103,344.19338,497.41597,344.19338,499.32261L344.19338,507.67979C344.19338,508.83835,343.45325,509.64861,342.52844,509.64861L334.11488,509.64861C333.09656,509.64861,332.33306,508.74485,332.33306,507.67979L332.33306,499.32261C332.33306,497.41597,333.868,495.88103,335.77464,495.88103z</Geometry>
+  <DrawingGroup x:Key="OVTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
+    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource OVTabGeometry}" />
+        <GeometryDrawing>
+          <GeometryDrawing.Brush>
+            <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.77680202,0,0,0.77680202,330.49661,498.76049" />
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Geometry>
+            <PathGeometry FillRule="Nonzero" Transform="0.77680202,0,0,0.77680202,330.49661,498.76049" Figures="M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing>
+          <GeometryDrawing.Brush>
+            <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.77680202,0,0,0.77680202,337.51837,498.76049" />
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Geometry>
+            <PathGeometry FillRule="Nonzero" Transform="0.77680202,0,0,0.77680202,337.51837,498.76049" Figures="M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFFFFFFF">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.7595" RadiusY="0.5776" Rect="335.1313,496.6044,6.2002,1.4961" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFFFFFFF">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.3876" RadiusY="0.4489" Rect="333.4274,499.1758,4.3247,4.7923" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FFFFFFFF">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.3876" RadiusY="0.4489" Rect="338.8509,499.1758,4.3247,4.7923" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF000000">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.4992" RadiusY="0.3759" Rect="333.7153,509.0642,1.987,1.8" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF000000">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.4992" RadiusY="0.3759" Rect="340.5968,509.0642,1.987,1.8" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF000000">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.3082" RadiusY="0.6313" Rect="331.5664,499.5099,1.2267,3.0232" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+        <GeometryDrawing Brush="#FF000000">
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.3082" RadiusY="0.6313" Rect="343.6846,499.5099,1.2267,3.0232" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="OVTabDrawingImage" Drawing="{StaticResource OVTabDrawingGroup}" />
   <Geometry x:Key="KlokPeriodenTabGeometry1">F1 M16,16z M0,0z M338.23883,510.01836L338.23883,508.69402</Geometry>
   <Geometry x:Key="KlokPeriodenTabGeometry2">F1 M16,16z M0,0z M331.52333,503.37265L332.84767,503.37265</Geometry>
   <Geometry x:Key="KlokPeriodenTabGeometry3">F1 M16,16z M0,0z M343.5263,503.37265L344.85064,503.37265</Geometry>

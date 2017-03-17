@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 3, type: TabItemTypeEnum.FasenTab)]
-    public class FasenOVTabViewModel : TLCGenTabItemViewModel
+    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.OVTab)]
+    public class OVFasenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
@@ -18,7 +19,7 @@ namespace TLCGen.ViewModels
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private OVIngreepViewModel _SelectedOVIngreep;
         private HDIngreepViewModel _SelectedHDIngreep;
-        private OVIngreepSGInstellingenLijstViewModel _OVIngreepSGInstellingenLijstVM;
+        private OVSignaalGroepInstellingenTabViewModel _OVIngreepSGInstellingenLijstVM;
 
         #endregion // Fields
 
@@ -33,14 +34,6 @@ namespace TLCGen.ViewModels
                     _Fasen = new ObservableCollection<FaseCyclusViewModel>();
                 }
                 return _Fasen;
-            }
-        }
-
-        public OVIngreepSGInstellingenLijstViewModel OVIngreepSGInstellingenLijstVM
-        {
-            get
-            {
-                return _OVIngreepSGInstellingenLijstVM;
             }
         }
 
@@ -102,6 +95,15 @@ namespace TLCGen.ViewModels
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.OVIngrepen.Add(ov);
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
+                        /* Trick to add dummy detectors */
+                        if (ov.KAR)
+                        {
+                            SelectedOVIngreep.KAR = true;
+                        }
+                        if(ov.Vecom)
+                        {
+                            SelectedOVIngreep.Vecom = true;
+                        }
                     }
                     else
                     {
@@ -111,6 +113,7 @@ namespace TLCGen.ViewModels
                             SelectedOVIngreep = null;
                         }
                     }
+                    MessengerInstance.Send(new OVIngrepenChangedMessage());
                 }
                 RaisePropertyChanged<object>("SelectedFaseCyclusOVIngreep", null, null, true);
             }
@@ -151,6 +154,11 @@ namespace TLCGen.ViewModels
                         hd.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.HDIngrepen.Add(hd);
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);
+                        /* Trick to add dummy detectors */
+                        if (hd.KAR)
+                        {
+                            SelectedHDIngreep.KAR = true;
+                        }
                     }
                     else
                     {
@@ -160,6 +168,7 @@ namespace TLCGen.ViewModels
                             SelectedHDIngreep = null;
                         }
                     }
+                    MessengerInstance.Send(new OVIngrepenChangedMessage());
                     Integrity.TLCGenControllerModifier.Default.CorrectModel_AlteredHDIngrepen();
                 }
                 RaisePropertyChanged<object>("SelectedFaseCyclusHDIngreep", null, null, true);
@@ -184,7 +193,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "OV/HD";
+                return "Ingrepen";
             }
         }
 
@@ -224,7 +233,6 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                _OVIngreepSGInstellingenLijstVM.Controller = value;
             }
         }
 
@@ -236,9 +244,8 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenOVTabViewModel() : base()
+        public OVFasenTabViewModel() : base()
         {
-            _OVIngreepSGInstellingenLijstVM = new OVIngreepSGInstellingenLijstViewModel();
         }
 
         #endregion // Constructor

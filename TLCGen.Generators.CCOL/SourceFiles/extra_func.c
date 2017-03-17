@@ -213,10 +213,11 @@ bool Rateltikkers(      count fc,       /* fase */
                         count has_aan_, /* hulpelement tikkers werking */
                         count has_cont_,/* hulpelement tikkers continu */
                         count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
-                        count dr1,      /* drukknop buiten deze fase */
-                        count dr2,      /* drukknop binnen deze fase */
-                        count dr3)      /* drukknop buiten evt. naloop fase */
+                        ...)            /* drukknoppen */
 {
+	va_list argpt;
+	count dkid;
+
     /* verzorgen naloop rateltikker */
     RT[tnlrt] = EGL[fc] && IH[has] || EH[has_cont_];
     
@@ -234,54 +235,57 @@ bool Rateltikkers(      count fc,       /* fase */
     /* check tikkers werking */
     if(IH[has_aan_])
     {
-        /* opzetten rateltikkers bij detectie drukknoppen */
-        if (dr1 > NG)                               IH[has] |=  D[dr1];
-        if (dr2 > NG)                               IH[has] |=  D[dr2];
-        if (dr3 > NG)                               IH[has] |=  D[dr3];
+		va_start(argpt, tnlrt);
+		while ((dkid = va_arg(argpt, va_count)) != END)
+		{
+			/* opzetten rateltikkers bij detectie drukknoppen */
+			IH[has] |= D[dkid];
+		}
     }
 
     return (IH[has]);
 }
 
 /** ------------------------------------------------------------------------------
-ACOUSTISCHE SIGNALEN:   RATELTIKKERS
-------------------------------------------------------------------------------
-Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
-------  ----------  ---     ----------                      -----------------
-1.0   21-11-2011  dze     basis                            06-12-2011
-2.0   03-01-2011  mvw     afzetten alleen als niet         23-10-2012
-rateltikkers continu
-3.0   22-11-2012  dze     verbetering code                 xx-xx-xxxx
-------------------------------------------------------------------------------
-
-De rateltikkers voor voetgangers worden in het regeltoestel afgehandeld via de
-Across-units. Deze units dragen zelf zorg voor dat de rateltikkers 'aan' blijven
-tijdens:
-1)  groen of groenknipperen van de aangesloten richting
-2)  lopen instelbare tijd (herstart tijdens groen en groenknipperen)
-
-Vanuit de applicatie worden de rateltikkers voor voetgangers aangestuurd:
-a)  van begin melding drukknop (ook indien de aanvraag dan (nog) niet ontstaat!)
-tot eerstvolgend begin groen van de bijbehorende richting;
-b)  van begin melding (buiten) drukknop tot eerstvolgend begin groen mits die
-drukknop een groene golf naar de bijbehorende richting aanvraagt;
-c)  continu tijdens een aanwezige klokperiode (MM [  mas_aan]);
-d)  continu tijdens een aanwezige schakelaar  (SCH[schas_aan]).
-Bij einde van een continue aanvraag wordt tijdens niet groen een aanvraag voor
-groen van de bijbehorende richting ingediend.
-
-Het dimsignaal voor alle rateltikkers is aanwezig:
-a)  tijdens een aanwezige klokperiode (MM [  mas_dim]);
-b)  tijdens een aanwezige schakelaar  (SCH[schas_dim]).
------------------------------------------------------------------------------- */
+    ACOUSTISCHE SIGNALEN:   RATELTIKKERS
+    ------------------------------------------------------------------------------
+    Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
+    ------  ----------  ---     ----------                      -----------------
+    1.0   21-11-2011  dze     basis                            06-12-2011
+    2.0   03-01-2011  mvw     afzetten alleen als niet         23-10-2012
+    rateltikkers continu
+    3.0   22-11-2012  dze     verbetering code                 xx-xx-xxxx
+    ------------------------------------------------------------------------------
+    
+    De rateltikkers voor voetgangers worden in het regeltoestel afgehandeld via de
+    Across-units. Deze units dragen zelf zorg voor dat de rateltikkers 'aan' blijven
+    tijdens:
+    1)  groen of groenknipperen van de aangesloten richting
+    2)  lopen instelbare tijd (herstart tijdens groen en groenknipperen)
+    
+    Vanuit de applicatie worden de rateltikkers voor voetgangers aangestuurd:
+    a)  van begin melding drukknop (ook indien de aanvraag dan (nog) niet ontstaat!)
+    tot eerstvolgend begin groen van de bijbehorende richting;
+    b)  van begin melding (buiten) drukknop tot eerstvolgend begin groen mits die
+    drukknop een groene golf naar de bijbehorende richting aanvraagt;
+    c)  continu tijdens een aanwezige klokperiode (MM [  mas_aan]);
+    d)  continu tijdens een aanwezige schakelaar  (SCH[schas_aan]).
+    Bij einde van een continue aanvraag wordt tijdens niet groen een aanvraag voor
+    groen van de bijbehorende richting ingediend.
+    
+    Het dimsignaal voor alle rateltikkers is aanwezig:
+    a)  tijdens een aanwezige klokperiode (MM [  mas_dim]);
+    b)  tijdens een aanwezige schakelaar  (SCH[schas_dim]).
+    ------------------------------------------------------------------------------ */
 bool Rateltikkers_Accross(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
-	count dr1,      /* drukknop buiten deze fase */
-	count dr2,      /* drukknop binnen deze fase */
-	count dr3)      /* drukknop buiten evt. naloop fase */
+	...)            /* drukknoppen */
 {
+	va_list argpt;
+	count dkid;
+
 	/* afzetten rateltikkers als niet continu aanvraag */
 	if (G[fc])                                          IH[has] = FALSE;
 	if (has_cont_ > NG)                                 IH[has] |= IH[has_cont_];
@@ -289,44 +293,19 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	/* check tikkers werking */
 	if (IH[has_aan_])
 	{
-		/* opzetten rateltikkers bij detectie drukknoppen */
-		if (dr1 > NG)                               IH[has] |= D[dr1];
-		if (dr2 > NG)                               IH[has] |= D[dr2];
-		if (dr3 > NG)                               IH[has] |= D[dr3];
+		va_start(argpt, has_cont_);
+		while ((dkid = va_arg(argpt, va_count)) != END)
+		{
+			/* opzetten rateltikkers bij detectie drukknoppen */
+			IH[has] |= D[dkid];
+		}
 	}
 
 	/* eenmalige aanvraag afzetten Across */
 	if (has_cont_ > NG)
 		if (EH[has_cont_])                              A[fc] |= !G[fc];
-	return (IH[has]);
-}
 
-/** ------------------------------------------------------------------------------
-    NALOOP VOETGANGERS
-    ------------------------------------------------------------------------------
-    Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
-    ------  ----------  ---     ----------                      -----------------
-      1.0   21-11-2011  dze     basis                            06-12-2011
-      2.0   08-02-2011  psn     gewijzigde syntax                23-10-2012
-    ------------------------------------------------------------------------------
-    -   Verzorgt een naloop van fc1 naar fc2 afhankelijk van gebruikte dr
-    -   Nalooptijd geldt vanaf startgroen aanvoerrichting en duurt tnl lang.
-    ------------------------------------------------------------------------------ */
-void NaloopVtgV2(count fc1, count fc2, count dk, count hdk, count tnl)
-{
-    if (SG[fc1]) IH[hdk] = FALSE;
-    IH[hdk] |= D[dk] && !G[fc1] && A[fc1];
-    RT[tnl] = SG[fc1] && H[hdk];
-    if (RT[tnl])                                                RW[fc2] |= BIT2;
-    if (RT[tnl] || T[tnl])                                      YV[fc2] |= BIT2;
-}
-void NaloopVtgV2_PR(count fc1, count fc2, count dk, count hdk, count tnl)
-{
-    if (SG[fc1]) IH[hdk] = FALSE;
-    IH[hdk] |= D[dk] && !G[fc1] && A[fc1];
-    RT[tnl] = SG[fc1] && H[hdk];
-    if (RT[tnl] && PR[fc1])                                     RW[fc2] |= BIT2;
-    if ((RT[tnl] || T[tnl]) && PR[fc1])                         YV[fc2] |= BIT2;
+	return (IH[has]);
 }
 
 /** ------------------------------------------------------------------------------

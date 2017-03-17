@@ -5,6 +5,7 @@
         MainWindow,
         AlgemeenTab,
         FasenTab,
+        OVTab,
         DetectieTab,
         ModulesTab,
         PeriodenTab,

@@ -10,39 +10,18 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Helpers;
 using TLCGen.Settings;
+using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepSGInstellingenLijstViewModel : ViewModelBase
+    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.OVTab)]
+    public class OVSignaalGroepInstellingenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
-
-        private OVDataModel _OVData;
-        private ControllerModel _Controller;
 
         #endregion // Fields
 
         #region Properties
-
-        public ControllerModel Controller
-        {
-            get { return _Controller; }
-            set
-            {
-                _Controller = value;
-                if (_Controller != null)
-                {
-                    _OVData = Controller.OVData;
-                    OVIngreepSGParameters =
-                        new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
-                }
-                else
-                {
-                    OVIngreepSGParameters = null;
-                }
-                OnPropertyChanged("OVIngreepSGParameters");
-            }
-        }
 
         public ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel> OVIngreepSGParameters
         {
@@ -51,6 +30,47 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region TabItem Overrides
+
+        public override string DisplayName
+        {
+            get
+            {
+                return "Conflicten";
+            }
+        }
+
+        public override bool CanBeEnabled()
+        {
+            return _Controller?.OVData?.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen;
+        }
+
+        public override void OnSelected()
+        {
+            
+        }
+
+        public override ControllerModel Controller
+        {
+            get { return base.Controller; }
+            set
+            {
+                base.Controller = value;
+                if (base.Controller != null)
+                {
+                    OVIngreepSGParameters =
+                        new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+                }
+                else
+                {
+                    OVIngreepSGParameters = null;
+                }
+                RaisePropertyChanged("OVIngreepSGParameters");
+            }
+        }
+
+        #endregion // TabItem Overrides
 
         #region Commands
 
@@ -139,11 +159,11 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVIngreepSGInstellingenLijstViewModel()
+        public OVSignaalGroepInstellingenTabViewModel()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
-            Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
             Messenger.Default.Register(this, new Action<OVIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
         }
 

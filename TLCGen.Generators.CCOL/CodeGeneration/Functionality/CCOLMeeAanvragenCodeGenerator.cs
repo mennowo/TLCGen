@@ -15,22 +15,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
         
+#pragma warning disable 0649
         private string _hmad; // help element meeaanvraag detector name
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
 
-            foreach (MeeaanvraagModel ma in c.InterSignaalGroep.Meeaanvragen)
+            foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
             {
                 if (ma.DetectieAfhankelijk)
                 {
-                    foreach(MeeaanvraagDetectorModel dm in ma.Detectoren)
+                    foreach(var dm in ma.Detectoren)
                     {
-                        _MyElements.Add(
-                            new CCOLElement(
-                                $"{_hmad}{dm.MeeaanvraagDetector}",
-                                CCOLElementTypeEnum.HulpElement));
+                        var elem = new CCOLElement($"{_hmad}{dm.MeeaanvraagDetector}", CCOLElementTypeEnum.HulpElement);
+                        if (_MyElements.Count == 0 || !_MyElements.Where(x => x.Naam == elem.Naam).Any())
+                        {
+                            _MyElements.Add(elem);
+                        }
                     }
                 }
             }

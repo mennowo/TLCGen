@@ -45,7 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(
                         new CCOLElement(
-                            $"{_scheerlijkdoseren}",
+                            $"{_scheerlijkdoseren}{fm.Naam}",
                             fm.EerlijkDoseren ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             CCOLElementTypeEnum.Schakelaar));
@@ -328,17 +328,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.FileIngrepen.Where(x => x.EerlijkDoseren).Any())
                     {
                         sb.AppendLine($"{ts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
-                        sb.AppendLine($"{ts}if(SCH[{_schpf}{_scheerlijkdoseren}])");
-                        sb.AppendLine($"{ts}{{");
                         foreach (var fm in c.FileIngrepen)
                         {
+                            sb.AppendLine($"{ts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
+                            sb.AppendLine($"{ts}{{");
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
                                 sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
                             }
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
                         }
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
                     }
                     return sb.ToString();
 

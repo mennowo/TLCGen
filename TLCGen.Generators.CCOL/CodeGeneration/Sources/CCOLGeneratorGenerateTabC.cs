@@ -490,22 +490,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? cflmax = 0;
             int? tflmax = 0;
 
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
+            var controllerdets = controller.Detectoren;
+            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+
+            foreach (var dm in alldets.Where(x => !x.Dummy))
             {
-                if (fcm.Detectoren?.Count > 0)
-                {
-                    foreach (DetectorModel dm in fcm.Detectoren)
-                    {
-                        if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
-                        if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
-                        if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
-                        if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
-                        if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
-                        if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
-                        if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
-                        if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
-                    }
-                }
+                if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
+                if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
+                if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
+                if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
+                if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
+                if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
+                if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
+                if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
             }
             dbmax = dbmax.ToString().Length;
             dhmax = dhmax.ToString().Length;
@@ -521,74 +520,112 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad5 = "TDH_max[] ".Length + defmax;
             int pad6 = pad1 + pad2;
 
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach(var dm in alldets)
             {
-                if (fcm.Detectoren?.Count > 0)
+                if (!dm.Dummy)
                 {
-                    foreach (DetectorModel dm in fcm.Detectoren)
-                    {
-                        sb.Append("    ");
-                        sb.Append($"D_code[{dm.GetDefine()}] ".PadRight(pad1));
-                        sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
-                        if (dm.TDB != null)
-                        {
-                            sb.Append($"TDB_max[{dm.GetDefine()}] ".PadRight(pad3));
-                            sb.Append($"= {dm.TDB}; ".PadRight(pad4));
-                        }
-                        if (dm.TDH != null)
-                        {
-                            sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
-                            sb.AppendLine($"= {dm.TDH};");
-                        }
-                        else
-                        {
-                            sb.AppendLine("");
-                        }
-
-                        if (dm.TBG != null || dm.TOG != null)
-                        {
-                            sb.Append("    ");
-                            sb.Append("".PadLeft(pad6));
-                            if (dm.TBG != null)
-                            {
-                                sb.Append($"TBG_max[{dm.GetDefine()}] ".PadRight(pad3));
-                                sb.Append($"= {dm.TBG}; ".PadRight(pad4));
-                            }
-                            if (dm.TOG != null)
-                            {
-                                sb.Append($"TOG_max[{dm.GetDefine()}] ".PadRight(pad5));
-                                sb.AppendLine($"= {dm.TOG};");
-                            }
-                            else
-                            {
-                                sb.AppendLine("");
-                            }
-                        }
-
-                        if (dm.TFL != null || dm.CFL != null)
-                        {
-                            sb.Append("    ");
-                            sb.Append("".PadLeft(pad6));
-                            if (dm.TFL != null)
-                            {
-                                sb.Append($"TFL_max[{dm.GetDefine()}] ".PadRight(pad3));
-                                sb.Append($"= {dm.TFL}; ".PadRight(pad4));
-                            }
-                            if (dm.CFL != null)
-                            {
-                                sb.Append($"CFL_max[{dm.GetDefine()}] ".PadRight(pad5));
-                                sb.AppendLine($"= {dm.CFL};");
-                            }
-                            else
-                            {
-                                sb.AppendLine("");
-                            }
-                        }
-                    }
+                    AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }
+            }
+            /* Dummies */
+            var dummydets = alldets.Where(x => x.Dummy);
+            if (dummydets.Any())
+            {
+                dbmax = dhmax = ogmax = bgmax = tflmax = cflmax = defmax = namemax = 0;
+                foreach (var dm in dummydets)
+                {
+                    if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
+                    if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
+                    if (dm.TDB != null && dm.TDB > dbmax) dbmax = dm.TDB;
+                    if (dm.TDH != null && dm.TDH > dhmax) dhmax = dm.TDH;
+                    if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
+                    if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
+                    if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
+                    if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
+                }
+                dbmax = dbmax.ToString().Length;
+                dhmax = dhmax.ToString().Length;
+                ogmax = ogmax.ToString().Length;
+                bgmax = bgmax.ToString().Length;
+                tflmax = tflmax.ToString().Length;
+                cflmax = cflmax.ToString().Length;
+                pad1 = "D_code[] ".Length + defmax;
+                pad2 = "= \"\"; ".Length + namemax;
+                pad3 = "TDB_max[] ".Length + defmax;
+                pad4 = "= ; ".Length + Math.Max(dbmax == null ? 0 : (int)dbmax, bgmax == null ? 0 : (int)bgmax);
+                pad5 = "TDH_max[] ".Length + defmax;
+                pad6 = pad1 + pad2;
+
+                sb.AppendLine("#ifndef AUTOMAAT");
+                foreach(var dm in dummydets)
+                {
+                    AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
+                }
+                sb.AppendLine("#endif");
             }
 
             return sb.ToString();
+        }
+
+        private void AppendDetectorTabString(StringBuilder sb, DetectorModel dm, int pad1, int pad2, int pad3, int pad4, int pad5, int pad6)
+        {
+            sb.Append("    ");
+            sb.Append($"D_code[{dm.GetDefine()}] ".PadRight(pad1));
+            sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
+            if (dm.TDB != null)
+            {
+                sb.Append($"TDB_max[{dm.GetDefine()}] ".PadRight(pad3));
+                sb.Append($"= {dm.TDB}; ".PadRight(pad4));
+            }
+            if (dm.TDH != null)
+            {
+                sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
+                sb.AppendLine($"= {dm.TDH};");
+            }
+            else
+            {
+                sb.AppendLine("");
+            }
+
+            if (dm.TBG != null || dm.TOG != null)
+            {
+                sb.Append("    ");
+                sb.Append("".PadLeft(pad6));
+                if (dm.TBG != null)
+                {
+                    sb.Append($"TBG_max[{dm.GetDefine()}] ".PadRight(pad3));
+                    sb.Append($"= {dm.TBG}; ".PadRight(pad4));
+                }
+                if (dm.TOG != null)
+                {
+                    sb.Append($"TOG_max[{dm.GetDefine()}] ".PadRight(pad5));
+                    sb.AppendLine($"= {dm.TOG};");
+                }
+                else
+                {
+                    sb.AppendLine("");
+                }
+            }
+
+            if (dm.TFL != null || dm.CFL != null)
+            {
+                sb.Append("    ");
+                sb.Append("".PadLeft(pad6));
+                if (dm.TFL != null)
+                {
+                    sb.Append($"TFL_max[{dm.GetDefine()}] ".PadRight(pad3));
+                    sb.Append($"= {dm.TFL}; ".PadRight(pad4));
+                }
+                if (dm.CFL != null)
+                {
+                    sb.Append($"CFL_max[{dm.GetDefine()}] ".PadRight(pad5));
+                    sb.AppendLine($"= {dm.CFL};");
+                }
+                else
+                {
+                    sb.AppendLine("");
+                }
+            }
         }
 
         private string GenerateTabCControlParametersIngangen(ControllerModel controller)

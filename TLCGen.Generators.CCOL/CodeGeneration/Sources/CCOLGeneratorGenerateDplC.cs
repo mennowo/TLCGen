@@ -168,18 +168,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* detectie */");
             sb.AppendLine($"{ts}/* -------- */");
 
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
-                }
-            }
-            foreach (DetectorModel dm in controller.Detectoren)
+            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
+            var controllerdets = controller.Detectoren;
+            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+
+            foreach (var dm in alldets)
             {
                 sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
             }
-
+            
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* overige uitgangen */");
@@ -191,8 +189,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var _item = item.BitmapData as IOElementModel;
                 sb.Append(GetCoordinatesString(_item, _item.GetBitmapCoordinaatOutputDefine(), "us"));
             }
-
-#warning It would be nice to allow dummies for inputs
+            
             foreach(var pgen in _PieceGenerators)
             {
                 if (pgen.HasCCOLBitmapOutputs())
@@ -203,7 +200,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-#warning It would be nice to allow dummies from other appl parts and plugins
+
             foreach(var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
             {
                 if((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
@@ -226,8 +223,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (var item in pgen.GetCCOLBitmapInputs())
                     {
-                        if(!item.Dummy)
-                            sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                        sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
                     }
                 }
             }
@@ -240,30 +236,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
                     }
                 }
-            }
-
-            bool isdummy = false;
-            foreach (var pgen in _PieceGenerators)
-            {
-                if (pgen.HasCCOLBitmapInputs())
-                {
-                    foreach (var item in pgen.GetCCOLBitmapInputs())
-                    {
-                        if (item.Dummy)
-                        {
-                            if(!isdummy)
-                            {
-                                sb.AppendLine("#ifndef AUTOMAAT");
-                            }
-                            isdummy = true;
-                            sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
-                        }
-                    }
-                }
-            }
-            if (isdummy)
-            {
-                sb.AppendLine("#endif AUTOMAAT");
             }
             sb.AppendLine();
 

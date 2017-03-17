@@ -119,6 +119,9 @@
     </ApplicationDefinition>
     <Compile Include="AutomationIds.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml.cs">
+      <DependentUpon>OVSignaalGroepInstellingenTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml.cs">
       <DependentUpon>OVDataTabView.xaml</DependentUpon>
     </Compile>
@@ -140,6 +143,12 @@
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabView.xaml.cs">
       <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\OVTab\OVTab.xaml.cs">
+      <DependentUpon>OVTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabView.xaml.cs">
+      <DependentUpon>OVSimulatieTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml.cs">
       <DependentUpon>PeriodenOverigTabView.xaml</DependentUpon>
     </Compile>
@@ -152,9 +161,6 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabView.xaml.cs">
       <DependentUpon>RoBuGroverTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml.cs">
-      <DependentUpon>OVIngreepSGInstellingenLijstView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepView.xaml.cs">
       <DependentUpon>FileIngreepView.xaml</DependentUpon>
     </Compile>
@@ -164,10 +170,10 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabView.xaml.cs">
       <DependentUpon>FileTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\DataTypes\HDIngreepView.xaml.cs">
+    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepView.xaml.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\DataTypes\OVIngreepView.xaml.cs">
+    <Compile Include="Views\Tabs\OVTab\DataTypes\.xaml.cs">
       <DependentUpon>OVIngreepView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\ViewModelDataTemplateSelector.cs" />
@@ -208,8 +214,8 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabView.xaml.cs">
       <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenOVTabView.xaml.cs">
-      <DependentUpon>FasenOVTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVFasenTabView.xaml.cs">
+      <DependentUpon>OVFasenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\PeriodenTab.xaml.cs">
       <DependentUpon>PeriodenTab.xaml</DependentUpon>
@@ -309,6 +315,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -333,6 +343,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\OVTab\OVTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -349,10 +367,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\Controls\OVIngreepSGInstellingenLijstView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -365,11 +379,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\DataTypes\HDIngreepView.xaml">
+    <Page Include="Views\Tabs\OVTab\DataTypes\HDIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\DataTypes\OVIngreepView.xaml">
+    <Page Include="Views\Tabs\OVTab\DataTypes\OVIngreepView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -429,7 +443,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\FasenTab\Tabs\FasenOVTabView.xaml">
+    <Page Include="Views\Tabs\OVTab\Tabs\OVFasenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

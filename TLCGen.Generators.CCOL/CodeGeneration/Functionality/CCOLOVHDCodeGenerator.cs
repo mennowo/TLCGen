@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         #region Fields
 
         private List<CCOLElement> _MyElements;
+        private List<DetectorModel> _MyDetectors;
         private List<CCOLIOElement> _MyBitmapOutputs;
         private List<CCOLIOElement> _MyBitmapInputs;
 
@@ -57,14 +58,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmovstp;
         private string _prmtestkarvert;
         private string _prmtestkarlyn;
-        private string _isdummykarin;
-        private string _isdummykaruit;
-        private string _isdummyvecomin;
-        private string _isdummyvecomuit;
-        private string _isdummykarhdin;
-        private string _isdummykarhduit;
-        private string _isdummyvecomhdin;
-        private string _isdummyvecomhduit;
         private string _schupinagb;
         private string _schupinagbhd;
         private string _prmpmgt;
@@ -89,6 +82,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
+            _MyDetectors = new List<DetectorModel>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
             _MyBitmapInputs = new List<CCOLIOElement>();
 
@@ -165,6 +159,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_hovin}{ov.FaseCyclus}",   CCOLElementTypeEnum.HulpElement));
                 _MyElements.Add(new CCOLElement($"{_hovuit}{ov.FaseCyclus}",  CCOLElementTypeEnum.HulpElement));
 
+                if (ov.KAR)
+                {
+                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                }
+
                 _MyElements.Add(new CCOLElement($"{_tbtovg}{ov.FaseCyclus}",        0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_trt}{ov.FaseCyclus}",           0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_cvc}{ov.FaseCyclus}",           999,                           CCOLElementTimeTypeEnum.CT_type,  CCOLElementTypeEnum.Counter));
@@ -183,41 +183,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (ov.VasthoudenGroen) opties += 3;
                 _MyElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", opties, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
-                if (ov.Vecom)
-                {
-                    var elem1 = new CCOLElement($"{_isdummyvecomin}{ov.FaseCyclus}",  CCOLElementTypeEnum.Ingang);
-                    var elem2 = new CCOLElement($"{_isdummyvecomuit}{ov.FaseCyclus}", CCOLElementTypeEnum.Ingang);
-                    elem1.Dummy = true;
-                    elem2.Dummy = true;
-                    _MyElements.Add(elem1);
-                    _MyElements.Add(elem2);
-
-                    var iselem1 = new CCOLIOElement(ov.OVVecomDummyInmeldingBitmapData as IOElementModel,  $"{_ispf}{_isdummyvecomin}{ov.FaseCyclus}");
-                    var iselem2 = new CCOLIOElement(ov.OVVecomDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummyvecomuit}{ov.FaseCyclus}");
-                    iselem1.Dummy = iselem2.Dummy = true;
-                    _MyBitmapInputs.Add(iselem1);
-                    _MyBitmapInputs.Add(iselem2);
-                }
-
-                if (ov.KAR)
-                {
-                    var elem1 = new CCOLElement($"{_isdummykarin}{ov.FaseCyclus}",  CCOLElementTypeEnum.Ingang);
-                    var elem2 = new CCOLElement($"{_isdummykaruit}{ov.FaseCyclus}", CCOLElementTypeEnum.Ingang);
-                    elem1.Dummy = true;
-                    elem2.Dummy = true;
-                    _MyElements.Add(elem1);
-                    _MyElements.Add(elem2);
-
-                    var iselem1 = new CCOLIOElement(ov.OVKARDummyInmeldingBitmapData as IOElementModel,  $"{_ispf}{_isdummykarin}{ov.FaseCyclus}");
-                    var iselem2 = new CCOLIOElement(ov.OVKARDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummykaruit}{ov.FaseCyclus}");
-                    iselem1.Dummy = iselem2.Dummy = true;
-                    _MyBitmapInputs.Add(iselem1);
-                    _MyBitmapInputs.Add(iselem2);
-
-                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{ov.FaseCyclus}",  15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                }
-
                 // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
                 _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
                 int n = 1;
@@ -230,6 +195,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n.ToString("00")}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                         ++n;
                     }
+                }
+
+                if(ov.KAR)
+                {
+                    _MyDetectors.Add(ov.DummyKARInmelding);
+                    _MyDetectors.Add(ov.DummyKARUitmelding);
+                }
+                if (ov.Vecom)
+                {
+                    _MyDetectors.Add(ov.DummyVecomInmelding);
+                    _MyDetectors.Add(ov.DummyVecomUitmelding);
                 }
             }
 
@@ -251,34 +227,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_prmrtbghd}{hd.FaseCyclus}",    hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_prmrtghd}{hd.FaseCyclus}",     hd.RijTijdGehinderd,        CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_schupinagbhd}{hd.FaseCyclus}", 0,                          CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-                
-                if (hd.KAR)
-                {
-                    var elem1 = new CCOLElement($"{_isdummykarhdin}{hd.FaseCyclus}",  CCOLElementTypeEnum.Ingang);
-                    var elem2 = new CCOLElement($"{_isdummykarhduit}{hd.FaseCyclus}", CCOLElementTypeEnum.Ingang);
-                    elem1.Dummy = true;
-                    elem2.Dummy = true;
-                    _MyElements.Add(elem1);
-                    _MyElements.Add(elem2);
-
-                    var iselem1 = new CCOLIOElement(hd.HDKARDummyInmeldingBitmapData as IOElementModel,  $"{_ispf}{_isdummykarhdin}{hd.FaseCyclus}");
-                    var iselem2 = new CCOLIOElement(hd.HDKARDummyUitmeldingBitmapData as IOElementModel, $"{_ispf}{_isdummykarhduit}{hd.FaseCyclus}");
-                    iselem1.Dummy = iselem2.Dummy = true;
-                    _MyBitmapInputs.Add(iselem1);
-                    _MyBitmapInputs.Add(iselem2);
-                }
 
                 // For signal groups that have HD but not OV
                 if(!c.OVData.OVIngrepen.Where(x => x.FaseCyclus == hd.FaseCyclus).Any())
                 {
-                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    if (hd.KAR)
+                    {
+                        _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                        _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    }
                     _MyElements.Add(new CCOLElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                }
+
+                if (hd.KAR)
+                {
+                    _MyDetectors.Add(hd.DummyKARInmelding);
+                    _MyDetectors.Add(hd.DummyKARUitmelding);
                 }
             }
         }
 
         public override bool HasCCOLElements()
+        {
+            return true;
+        }
+
+        public override IEnumerable<DetectorModel> GetDetectors()
+        {
+            return _MyDetectors;
+        }
+
+        public override bool HasDetectors()
         {
             return true;
         }

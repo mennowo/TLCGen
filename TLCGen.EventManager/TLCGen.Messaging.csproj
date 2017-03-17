@@ -58,6 +58,8 @@
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />
     <Compile Include="Messages\NameChangedMessage.cs" />
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
+    <Compile Include="Messages\HDIngrepenChangedMessage.cs" />
+    <Compile Include="Messages\OVIngrepenChangedMessage.cs" />
     <Compile Include="Messages\OVIngreepSignaalGroepParametersChangedMessage.cs" />
     <Compile Include="Messages\PeriodenChangedMessage.cs" />
     <Compile Include="Messages\SelectedConflictGroepChangedMessage.cs" />

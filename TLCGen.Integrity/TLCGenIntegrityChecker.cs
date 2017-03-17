@@ -161,7 +161,7 @@ namespace TLCGen.Integrity
         private static bool IsElementNaamUnique(object obj, string naam)
         {
             if (obj == null || string.IsNullOrWhiteSpace(naam))
-                return false;
+                return true;
             
             Type objType = obj.GetType();
             PropertyInfo[] properties = objType.GetProperties();

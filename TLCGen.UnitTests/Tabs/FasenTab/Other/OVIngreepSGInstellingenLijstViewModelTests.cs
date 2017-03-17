@@ -26,7 +26,7 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.Other
             model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "03" });
             model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "04" });
             model.InterSignaalGroep.Gelijkstarten.Add(new GelijkstartModel() { FaseVan = "02", FaseNaar = "03" });
-            var vm = new OVIngreepSGInstellingenLijstViewModel();
+            var vm = new OVSignaalGroepInstellingenTabViewModel();
             vm.Controller = model;
 
             vm.OVIngreepSGParameters.Where(x => x.FaseCyclus == "02").First().MinimumGroentijdConflictOVRealisatie = 55;

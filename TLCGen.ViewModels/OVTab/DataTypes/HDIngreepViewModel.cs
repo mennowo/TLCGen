@@ -46,6 +46,19 @@ namespace TLCGen.ViewModels
             {
                 _HDIngreep.KAR = value;
                 OnMonitoredPropertyChanged("KAR");
+                if (value)
+                {
+                    _HDIngreep.DummyKARInmelding.Naam = "dummyhdkarin" + _HDIngreep.FaseCyclus;
+                    _HDIngreep.DummyKARUitmelding.Naam = "dummyhdkaruit" + _HDIngreep.FaseCyclus;
+                }
+                else
+                {
+                    _HDIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
+                    _HDIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
+                    _HDIngreep.DummyKARInmelding = null;
+                    _HDIngreep.DummyKARUitmelding = null;
+                }
+                Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
 
@@ -134,7 +147,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFase = value;
-                OnMonitoredPropertyChanged("SelectedFase");
+                OnPropertyChanged("SelectedFase");
             }
         }
 

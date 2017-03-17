@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Views.OVIngreepSGInstellingenLijstView"
+﻿<UserControl x:Class="TLCGen.Views.OVSignaalGroepInstellingenTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <DockPanel Grid.ColumnSpan="3" Grid.Row="2">
+        <Label Content="Instellingen voor conflicten" DockPanel.Dock="Top" />
         <DataGrid ItemsSource="{Binding Path=OVIngreepSGParameters}"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
@@ -25,7 +26,6 @@
                 <DataGridTextColumn Header="% op na afk." Binding="{Binding OphoogpercentageNaAfkappen}" />
                 <DataGridTextColumn Header="Blokkeertijd na ov" Binding="{Binding BlokkeertijdNaOVIngreep}" />
             </DataGrid.Columns>
-            
         </DataGrid>
-    </Grid>
+    </DockPanel>
 </UserControl>

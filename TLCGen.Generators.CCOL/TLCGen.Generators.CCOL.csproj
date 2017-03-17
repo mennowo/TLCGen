@@ -244,6 +244,12 @@
     <Content Include="SourceFiles\extra_func_ov.h">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SourceFiles\nalopen.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\nalopen.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\winmg.c">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
