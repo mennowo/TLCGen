@@ -11,7 +11,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class HDIngreepModel
+    public class HDIngreepModel : IComparable
     {
         #region Properties
 
@@ -42,6 +42,23 @@ namespace TLCGen.Models
         public List<HDIngreepMeerealiserendeFaseCyclusModel> MeerealiserendeFaseCycli { get; set; }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var hd2 = obj as HDIngreepModel;
+            if(hd2 == null)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return this.FaseCyclus.CompareTo(hd2.FaseCyclus);
+            }
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 

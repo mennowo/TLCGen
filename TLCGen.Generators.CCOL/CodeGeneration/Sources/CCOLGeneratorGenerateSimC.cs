@@ -48,19 +48,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            int dpmax = 0;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    ++dpmax;
-                }
-            }
-
-            foreach (DetectorModel dm in controller.Detectoren)
-            {
-                ++dpmax;
-            }
+            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
+            var controllerdets = controller.Detectoren;
+            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+            int dpmax = alldets.Count();
 
             sb.AppendLine($"#define LNKMAX {dpmax} /* aantal links */");
 

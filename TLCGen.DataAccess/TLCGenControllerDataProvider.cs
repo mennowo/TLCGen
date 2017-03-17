@@ -363,12 +363,31 @@ namespace TLCGen.DataAccess
             }
             if (!string.IsNullOrWhiteSpace(ControllerFileName))
             {
+                var doc = new XmlDocument();
                 if (Path.GetExtension(ControllerFileName) == ".tlcgz")
-                    Controller = TLCGenSerialization.DeSerializeGZip<ControllerModel>(ControllerFileName);
+                {
+                    using (var fs = File.OpenRead(ControllerFileName))
+                    {
+                        using (var gz = new GZipStream(fs, CompressionMode.Decompress))
+                        {
+                            doc.Load(gz);
+                        }
+                    }
+                }
                 else
                 {
-                    Controller = TLCGenSerialization.DeSerialize<ControllerModel>(ControllerFileName);
+                    doc.Load(ControllerFileName);
                 }
+                foreach (var pi in TLCGenPluginManager.Default.ApplicationPlugins)
+                {
+                    if (pi.Item1.HasFlag(TLCGenPluginElems.XMLNodeWriter))
+                    {
+                        var writer = (ITLCGenXMLNodeWriter)pi.Item2;
+                        writer.GetXmlFromDocument(doc);
+                    }
+                }
+                Controller = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
+
                 if (Controller != null)
                 {
                     _ControllerXml = new XmlDocument();

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -94,6 +95,7 @@ namespace TLCGen.ViewModels
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.OVIngrepen.Add(ov);
+                        _Controller.OVData.OVIngrepen.BubbleSort();
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
                         /* Trick to add dummy detectors */
                         if (ov.KAR)
@@ -153,6 +155,7 @@ namespace TLCGen.ViewModels
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
                         hd.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.HDIngrepen.Add(hd);
+                        _Controller.OVData.HDIngrepen.BubbleSort();
                         SelectedHDIngreep = new HDIngreepViewModel(_Controller, hd);
                         /* Trick to add dummy detectors */
                         if (hd.KAR)

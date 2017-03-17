@@ -11,7 +11,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersToSignalGroup("FaseCyclus")]
-    public class OVIngreepModel
+    public class OVIngreepModel : IComparable
     {
         #region Properties
 
@@ -55,6 +55,23 @@ namespace TLCGen.Models
         //public List<OVIngreepMassaDetectieMelding> MassaDetectieMeldingen { get; set; }
 
         #endregion // Properties
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            var ov2 = obj as OVIngreepModel;
+            if (ov2 == null)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return this.FaseCyclus.CompareTo(ov2.FaseCyclus);
+            }
+        }
+
+        #endregion // IComparable
 
         #region Constructor
 

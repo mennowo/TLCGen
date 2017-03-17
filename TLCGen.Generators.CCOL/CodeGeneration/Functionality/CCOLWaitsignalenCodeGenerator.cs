@@ -25,15 +25,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
             // outputs
-            foreach (var fc in c.Fasen)
+            var alldets = c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
+            foreach (var d in alldets)
             {
-                foreach (var d in fc.Detectoren)
+                if(d.Wachtlicht)
                 {
-                    if(d.Wachtlicht)
-                    {
-                        _MyElements.Add(new CCOLElement(_uswt + d.Naam, CCOLElementTypeEnum.Uitgang));
-                        _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uspf + _uswt + d.Naam));
-                    }
+                    _MyElements.Add(new CCOLElement(_uswt + d.Naam, CCOLElementTypeEnum.Uitgang));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uspf + _uswt + d.Naam));
                 }
             }
         }

@@ -185,6 +185,8 @@ namespace TLCGen.ViewModels
                 changed = true;
                 Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(SelectedDetector.Naam);
             }
+            RebuildDetectorenList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
 
             if (changed)
             {
@@ -200,6 +202,24 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Command functionality
+
+        #region Private Methods
+
+        private void RebuildDetectorenList()
+        {
+            Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+            Detectoren.Clear();
+            foreach (DetectorModel dm in base.Controller.Detectoren)
+            {
+                var dvm = new DetectorViewModel(dm);
+                dvm.PropertyChanged += Detector_PropertyChanged;
+                Detectoren.Add(dvm);
+            }
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            RaisePropertyChanged(null);
+        }
+
+        #endregion // Private Methods
 
         #region TabItem Overrides
 
@@ -238,15 +258,7 @@ namespace TLCGen.ViewModels
                 base.Controller = value;
                 if (base.Controller != null)
                 {
-                    Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
-                    Detectoren.Clear();
-                    foreach (DetectorModel dm in base.Controller.Detectoren)
-                    {
-                        var dvm = new DetectorViewModel(dm);
-                        dvm.PropertyChanged += Detector_PropertyChanged;
-                        Detectoren.Add(dvm);
-                    }
-                    Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+                    RebuildDetectorenList();
                 }
                 else
                 {
