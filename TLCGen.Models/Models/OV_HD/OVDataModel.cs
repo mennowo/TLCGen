@@ -17,6 +17,9 @@ namespace TLCGen.Models
         public OVIngreepTypeEnum OVIngreepType { get; set; }
         public bool DSI { get; set; }
         public bool CheckOpDSIN { get; set; }
+        public int MaxWachttijdAuto { get; set; }
+        public int MaxWachttijdFiets { get; set; }
+        public int MaxWachttijdVoetganger { get; set; }
 
         [Browsable(false)]
         [XmlIgnore]

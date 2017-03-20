@@ -44,6 +44,18 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
         public int? MeeverlengenVerschil { get; set; }
+        private int _AantalRijstroken;
+        public int AantalRijstroken
+        {
+            get { return _AantalRijstroken; }
+            set
+            {
+                if(value > 0)
+                {
+                    _AantalRijstroken = value;
+                }
+            }
+        }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
@@ -73,6 +85,7 @@ namespace TLCGen.Models
         public FaseCyclusModel() : base()
         {
             Detectoren = new List<DetectorModel>();
+            AantalRijstroken = 1;
         }
 
         #endregion // Constructor

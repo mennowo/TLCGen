@@ -20,6 +20,7 @@ namespace TLCGen.SpecialsRotterdam
         #region Properties
 
         public bool ToepassenAFM { get; set; }
+        public bool PrmLoggingTfbMax { get; set; }
 
         #endregion // Properties
 

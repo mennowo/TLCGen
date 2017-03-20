@@ -14,7 +14,7 @@ namespace TLCGen.DataAccess
         bool ControllerHasChanged { get; set; }
 
         bool NewController();
-        bool OpenController();
+        bool OpenController(string controllername = null);
         bool SaveController();
         bool SaveControllerAs();
         bool CloseController();

@@ -96,6 +96,7 @@
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvraagDirectCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLDetectieStoringGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLFileIngrepenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLFixatieCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLGelijkstartenVoorstartenCodeGenerator.cs" />

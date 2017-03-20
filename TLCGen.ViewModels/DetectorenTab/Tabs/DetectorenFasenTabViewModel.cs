@@ -93,7 +93,8 @@ namespace TLCGen.ViewModels
                 {
                     foreach (DetectorModel dm in _SelectedFase.Detectoren)
                     {
-                        var dvm = new DetectorViewModel(dm) { FaseCyclus = _SelectedFaseNaam };
+                        var dvm = new DetectorViewModel(dm);
+                        dvm.FaseCyclus = value;
                         dvm.PropertyChanged += Detector_PropertyChanged;
                         Detectoren.Add(dvm);
                     }
@@ -217,6 +218,7 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
             DetectorViewModel dvm1 = new DetectorViewModel(_dm);
             dvm1.FaseCyclus = _SelectedFase.Naam;
+            dvm1.Rijstrook = 1;
             _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage());

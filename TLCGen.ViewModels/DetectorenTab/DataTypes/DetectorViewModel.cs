@@ -31,13 +31,44 @@ namespace TLCGen.ViewModels
         {
             get { return _Detector; }
         }
-        
+
+        public int? Rijstrook
+        {
+            get { return _Detector.Rijstrook; }
+            set
+            {
+                _Detector.Rijstrook = value;
+                OnMonitoredPropertyChanged("Rijstrook");
+            }
+        }
+
+        private List<int> _Rijstroken;
+        public List<int> Rijstroken
+        {
+            get
+            {
+                return _Rijstroken;
+            }
+        }
+
         public string FaseCyclus
         {
             get { return _FaseCyclus; }
             set
             {
                 _FaseCyclus = value;
+                _Rijstroken = new List<int>();
+                if (DefaultsProvider.Default.Controller != null)
+                {
+                    if (DefaultsProvider.Default.Controller.Fasen.Where(x => x.Naam == value).Any())
+                    {
+                        var f = DefaultsProvider.Default.Controller.Fasen.Where(x => x.Naam == value).First();
+                        for (int i = 0; i < f.AantalRijstroken; ++i)
+                        {
+                            _Rijstroken.Add(i + 1);
+                        }
+                    }
+                }
             }
         }
 
@@ -99,9 +130,6 @@ namespace TLCGen.ViewModels
                 }
                 OnMonitoredPropertyChanged(null);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
-
-#warning TODO also below...
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Type");
             }
         }
 
@@ -124,7 +152,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.TDB = value;
                 OnMonitoredPropertyChanged("TDB");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TDB");
             }
         }
 
@@ -136,7 +163,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.TDH = value;
                 OnMonitoredPropertyChanged("TDH");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TDH");
             }
         }
 
@@ -148,7 +174,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.TOG = value;
                 OnMonitoredPropertyChanged("TOG");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TOG");
             }
         }
 
@@ -160,7 +185,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.TBG = value;
                 OnMonitoredPropertyChanged("TBG");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TBG");
             }
         }
 
@@ -172,7 +196,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.TFL = value;
                 OnMonitoredPropertyChanged("TFL");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TBG");
             }
         }
 
@@ -184,7 +207,6 @@ namespace TLCGen.ViewModels
                 if (value == null || value >= 0)
                     _Detector.CFL = value;
                 OnMonitoredPropertyChanged("CFL");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "TBG");
             }
         }
         public DetectorAanvraagTypeEnum Aanvraag
@@ -194,7 +216,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Aanvraag = value;
                 OnMonitoredPropertyChanged("Aanvraag");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Aanvraag");
             }
         }
 
@@ -205,7 +226,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Verlengen = value;
                 OnMonitoredPropertyChanged("Verlengen");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Verlengen");
             }
         }
 
@@ -237,7 +257,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.Q1 = value;
                 OnMonitoredPropertyChanged("Q1");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "Q1");
             }
         }
 
@@ -248,7 +267,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.Q2 = value;
                 OnMonitoredPropertyChanged("Q2");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Q2");
             }
         }
 
@@ -259,7 +277,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.Q3 = value;
                 OnMonitoredPropertyChanged("Q3");
-                //_ControllerVM.SetAllSelectedElementsValue(this, "Q3");
             }
         }
 
@@ -270,7 +287,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.Q4 = value;
                 OnMonitoredPropertyChanged("Q4");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "Q4");
             }
         }
 
@@ -281,7 +297,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.Stopline = value;
                 OnMonitoredPropertyChanged("Stopline");
-               // _ControllerVM.SetAllSelectedElementsValue(this, "Stopline");
             }
         }
 
@@ -292,7 +307,6 @@ namespace TLCGen.ViewModels
             {
                 _Detector.Simulatie.FCNr = value;
                 OnMonitoredPropertyChanged("FCNr");
-              //  _ControllerVM.SetAllSelectedElementsValue(this, "FCNr");
             }
         }
 
@@ -338,7 +352,6 @@ namespace TLCGen.ViewModels
         public DetectorViewModel(DetectorModel detector)
         {
             _Detector = detector;
-
         }
 
         #endregion // Constructor

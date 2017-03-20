@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,19 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Specials.ToepassenAFM = value;
+                MessengerInstance.Send(new ControllerDataChangedMessage());
                 RaisePropertyChanged("ToepassenAFM");
+            }
+        }
+
+        public bool PrmLoggingTfbMax
+        {
+            get { return _Specials.PrmLoggingTfbMax; }
+            set
+            {
+                _Specials.PrmLoggingTfbMax = value;
+                MessengerInstance.Send(new ControllerDataChangedMessage());
+                RaisePropertyChanged("PrmLoggingTfbMax");
             }
         }
 
@@ -45,7 +58,7 @@ namespace TLCGen.SpecialsRotterdam
         #endregion // Commands
 
         #region Command Functionality
-        
+
         #endregion // Command Functionality
 
         #region Public Methods
@@ -71,6 +84,12 @@ namespace TLCGen.SpecialsRotterdam
         #endregion // TLCGen Events
 
         #region Constructor
+
+        public SpecialsRotterdamViewModel(IMessenger messenger = null) : base(messenger)
+        {
+
+        }
+
         #endregion // Constructor
     }
 }

@@ -36,7 +36,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Content="Detectoren" />
-            <local:DetectorenLijstView Grid.Row="1" Margin="2" ShowFaseCyclus="False" />
+            <local:DetectorenLijstView Grid.Row="1" Margin="2" ShowFaseCyclus="False" ShowRijstrook="True" />
         </Grid>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <WrapPanel >

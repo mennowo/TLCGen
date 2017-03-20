@@ -34,6 +34,7 @@ namespace TLCGen.Models
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
         public bool Dummy { get; set; }
+        public int? Rijstrook { get; set; }
 
         [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam", "Wachtlicht")]
         public BitmapCoordinatenDataModel WachtlichtBitmapData { get; set; }
@@ -44,6 +45,7 @@ namespace TLCGen.Models
         public DetectorTypeEnum Type { get; set; }
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
         public DetectorVerlengenTypeEnum Verlengen { get; set; }
+        public NooitAltijdAanUitEnum AanvraagBijStoring { get; set; }
 
         public bool ShouldSerializeWachtlichtBitmapData()
         {

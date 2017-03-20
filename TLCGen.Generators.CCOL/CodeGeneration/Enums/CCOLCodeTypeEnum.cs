@@ -19,6 +19,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         Wachtgroen,
         Meetkriterium,
         FileVerwerking,
+        DetectieStoring,
         Meeverlengen,
         RealisatieAfhandelingModules,
         RealisatieAfhandelingNaModules,

@@ -4,7 +4,18 @@
     <Folder>
       <name>ViewModels</name>
       <folders />
-      <favorites />
+      <favorites>
+        <Favorite>
+          <name>MainWindowViewModel.cs</name>
+          <path>TLCGen\ViewModels\MainWindowViewModel.cs</path>
+          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen\ViewModels\MainWindowViewModel.cs</absolutePath>
+        </Favorite>
+        <Favorite>
+          <name>ControllerViewModel.cs</name>
+          <path>TLCGen.ViewModels\ControllerViewModel.cs</path>
+          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.ViewModels\ControllerViewModel.cs</absolutePath>
+        </Favorite>
+      </favorites>
     </Folder>
     <Folder>
       <name>Settings</name>

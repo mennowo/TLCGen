@@ -70,6 +70,22 @@
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
                                 Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
                                 CellStyle="{StaticResource LooseDisabledIfDrukknopStyle}" />
+        <DataGridTemplateColumn x:Key="RijstrookColumn" Header="Rijstrook" Width="Auto" 
+                                CellStyle="{StaticResource LooseDisabledIfDrukknopStyle}">
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=Rijstrook}" Margin="2" />
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+            <DataGridTemplateColumn.CellEditingTemplate>
+                <DataTemplate>
+                    <ComboBox 
+                                ItemsSource="{Binding Path=Rijstroken}" 
+                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                SelectedItem="{Binding Path=Rijstrook,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                </DataTemplate>
+            </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -113,6 +129,7 @@
                     </DataGridCheckBoxColumn.CellStyle>
                 </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
+                <StaticResource ResourceKey="RijstrookColumn" />
             </DataGrid.Columns>
         </controls:SpecialDataGrid>
     </Grid>

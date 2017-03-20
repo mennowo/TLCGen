@@ -230,6 +230,19 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int AantalRijstroken
+        {
+            get { return _FaseCyclus.AantalRijstroken; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _FaseCyclus.AantalRijstroken = value;
+                }
+                OnMonitoredPropertyChanged("AantalRijstroken");
+            }
+        }
+
         public NooitAltijdAanUitEnum VasteAanvraag
         {
             get { return _FaseCyclus.VasteAanvraag; }

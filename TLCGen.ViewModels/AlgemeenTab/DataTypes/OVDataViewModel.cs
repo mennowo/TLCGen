@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -33,6 +34,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.OVIngreepType = value;
+                if(value == OVIngreepTypeEnum.Uitgebreid)
+                {
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
+                }
                 OnMonitoredPropertyChanged("OVIngreepType");
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
@@ -58,6 +63,39 @@ namespace TLCGen.ViewModels
             {
                 _Controller.OVData.CheckOpDSIN = value;
                 OnMonitoredPropertyChanged("CheckOpDSIN");
+            }
+        }
+
+        [Description("Maximale wachttijd auto")]
+        public int MaxWachttijdAuto
+        {
+            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdAuto; }
+            set
+            {
+                _Controller.OVData.MaxWachttijdAuto = value;
+                OnMonitoredPropertyChanged("MaxWachttijdAuto");
+            }
+        }
+
+        [Description("Maximale wachttijd fiets")]
+        public int MaxWachttijdFiets
+        {
+            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdFiets; }
+            set
+            {
+                _Controller.OVData.MaxWachttijdFiets = value;
+                OnMonitoredPropertyChanged("MaxWachttijdFiets");
+            }
+        }
+
+        [Description("Maximale wachttijd voetganger")]
+        public int MaxWachttijdVoetganger
+        {
+            get { return _Controller == null ? 0 : _Controller.OVData.MaxWachttijdVoetganger; }
+            set
+            {
+                _Controller.OVData.MaxWachttijdVoetganger = value;
+                OnMonitoredPropertyChanged("MaxWachttijdVoetganger");
             }
         }
 

@@ -753,6 +753,13 @@ namespace TLCGen.ViewModels
             // Construct the ViewModel
             ControllerVM = new ControllerViewModel();
 
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
+            {
+                TLCGenControllerDataProvider.Default.OpenController(args[1]);
+            }
+
             // If we are in debug mode, the code below tries loading default file
 #if DEBUG
             TLCGenControllerDataProvider.Default.OpenDebug();

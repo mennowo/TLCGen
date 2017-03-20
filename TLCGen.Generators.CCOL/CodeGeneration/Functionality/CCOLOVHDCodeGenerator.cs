@@ -89,9 +89,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
             {
                 /* Variables independent of signal groups */
-                _MyElements.Add(new CCOLElement($"{_prmmwta}",     0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmmwtfts}",   0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmmwtvtg}",   0, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmmwta}",   c.OVData.MaxWachttijdAuto,       CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmmwtfts}", c.OVData.MaxWachttijdFiets,      CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmmwtvtg}", c.OVData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
 
                 if ((c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any()) ||
                     (c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any()))

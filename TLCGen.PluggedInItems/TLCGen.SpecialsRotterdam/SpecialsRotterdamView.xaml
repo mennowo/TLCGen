@@ -8,5 +8,6 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
         <CheckBox Content="AFM code toevoegen" IsChecked="{Binding Path=ToepassenAFM}" Margin="5" />
+        <CheckBox Content="Toevoegen logging max. TFB in parameters" IsChecked="{Binding Path=PrmLoggingTfbMax}" Margin="5" />
     </StackPanel>
 </UserControl>

@@ -674,5 +674,23 @@
         <TeDoserenSignaalGroepen />
       </Data>
     </Default>
+    <Default>
+      <DefaultName>OV instellingen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.OVDataModel,TLCGen.Models</DataType>
+      <Data>
+        <OVIngreepType>Uitgebreid</OVIngreepType>
+        <DSI>true</DSI>
+        <CheckOpDSIN>false</CheckOpDSIN>
+        <MaxWachttijdAuto>120</MaxWachttijdAuto>
+        <MaxWachttijdFiets>90</MaxWachttijdFiets>
+        <MaxWachttijdVoetganger>90</MaxWachttijdVoetganger>
+        <KARMeldingBitmapData />
+        <KAROnderGedragBitmapData />
+        <OVIngrepen />
+        <HDIngrepen />
+        <OVIngreepSignaalGroepParameters />
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>

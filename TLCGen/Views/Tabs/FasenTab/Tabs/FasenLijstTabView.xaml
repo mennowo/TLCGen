@@ -33,7 +33,7 @@
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
-                <DataGridTextColumn Binding="{Binding Path=Rijstroken}" Header="Rijstroken" />
+                <DataGridTextColumn Binding="{Binding Path=AantalRijstroken}" Header="Rijstroken" />
                 <!--<DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />

@@ -151,17 +151,28 @@ namespace TLCGen.DataAccess
         /// Loads the data from the file whose location is stored in the FileName property.
         /// </summary>
         /// <returns>True if succesfull, false otherwise</returns>
-        public bool OpenController()
+        public bool OpenController(string controllername = null)
         {
             if (!CheckChanged())
             {
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                openFileDialog.CheckFileExists = true;
-                openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
-                if (openFileDialog.ShowDialog() == true)
+                if (controllername != null)
                 {
-                    string lastfilename = ControllerFileName;
-                    ControllerFileName = openFileDialog.FileName;
+                    ControllerFileName = controllername;
+                }
+                else
+                {
+
+                    OpenFileDialog openFileDialog = new OpenFileDialog();
+                    openFileDialog.CheckFileExists = true;
+                    openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
+                    if (openFileDialog.ShowDialog() == true)
+                    {
+                        string lastfilename = ControllerFileName;
+                        ControllerFileName = openFileDialog.FileName;
+                    }
+                }
+                if(ControllerFileName != null)
+                {
                     if (!string.IsNullOrWhiteSpace(ControllerFileName))
                     {
                         var doc = new XmlDocument();

@@ -10,6 +10,7 @@ using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.SpecialsRotterdam
@@ -184,22 +185,38 @@ namespace TLCGen.SpecialsRotterdam
         {
             _FasenWithDummies = new List<string>();
 
-            // Search fasen with dummies
-            foreach (var fc in c.Fasen)
-            {
-                foreach (var fc2 in c.Fasen)
-                {
-                    if(fc2.Naam.Length == 3 && fc2.Naam.StartsWith("9") && fc.Naam == fc2.Naam.Substring(1))
-                    {
-                        _FasenWithDummies.Add(fc.Naam);
-                    }
-                }
-            }
 
             _MyElements = new List<CCOLElement>();
 
+            #region AFM
+
             if (_MyModel.ToepassenAFM)
             {
+                // Search fasen with dummies
+                bool error = false;
+                foreach (var fc in c.Fasen)
+                {
+                    foreach (var fc2 in c.Fasen)
+                    {
+                        if(fc2.Naam.Length == 3 && fc2.Naam.StartsWith("9") && fc.Naam == fc2.Naam.Substring(1))
+                        {
+                            _FasenWithDummies.Add(fc.Naam);
+                            if (!error &&
+                                (fc2.Meeverlengen != NooitAltijdAanUitEnum.Nooit ||
+                                 fc2.Wachtgroen != NooitAltijdAanUitEnum.Nooit ||
+                                 fc2.VasteAanvraag != NooitAltijdAanUitEnum.Nooit ||
+                                 ((c.ModuleMolen.FasenModuleData.Any() &&
+                                   c.ModuleMolen.FasenModuleData.Where(x => x.FaseCyclus == fc2.Naam).Any() &&
+                                   c.ModuleMolen.FasenModuleData.Where(x => x.FaseCyclus == fc2.Naam).First().AlternatiefToestaan))))
+                            {
+                                error = true;
+                                MessageBox.Show($"Dummy fase {fc2.Naam} is niet juist als dummy geconfigureerd.\nControleer: nooit meeverlengen/wachtgroen/vaste aanvraag, en niet alternatief",
+                                                "AFM: Foutieve instellingen dummy fase");
+                            }
+                        }
+                    }
+                }
+
                 foreach (var fc in c.Fasen)
                 {
                     if (fc.Type == Models.Enumerations.FaseTypeEnum.Auto)
@@ -240,6 +257,21 @@ namespace TLCGen.SpecialsRotterdam
                 _MyElements.Add(new CCOLElement($"VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
             }
+
+            #endregion // AFM
+
+            #region Logging TFB max
+
+            if(_MyModel.PrmLoggingTfbMax)
+            {
+                _MyElements.Add(new CCOLElement($"tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            }
+
+            #endregion // Logging TFB max
         }
 
         public override bool HasCCOLElements()
@@ -261,6 +293,7 @@ namespace TLCGen.SpecialsRotterdam
                 case CCOLRegCCodeTypeEnum.PreApplication:
                 case CCOLRegCCodeTypeEnum.Alternatieven:
                 case CCOLRegCCodeTypeEnum.PostApplication:
+                case CCOLRegCCodeTypeEnum.PostSystemApplication:
                     return true;
                 default:
                     return false;
@@ -363,7 +396,7 @@ namespace TLCGen.SpecialsRotterdam
                     {
                         sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
                     }
-                    sb.AppendLine($"{ts}{ts}AFM_tc(prmAFM_TC,prmAFM_TCgem);");
+                    sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
                     foreach (var fc in _FasenWithDummies)
                     {
                         sb.AppendLine($"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}9{fc}, verwerken_fcs);");
@@ -387,6 +420,42 @@ namespace TLCGen.SpecialsRotterdam
                         sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
                     }
 
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine();
+                    return sb.ToString();
+
+                case CCOLRegCCodeTypeEnum.PostSystemApplication:
+                    if (!_MyModel.PrmLoggingTfbMax)
+                        return "";
+                    sb.AppendLine($"{ts}/* Onthouden hoogste tfb waarde + tijdstip */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}if (TFB_timer[fc]>PRM[{_prmpf}tfbmax])");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}#if (!defined AUTOMAAT) || (defined VISSIM)");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 0, \"Hoogste TFB waarde\");");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 1, \"------------------\");");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 2, \"Fc % s TFB:% 4d sec\", FC_code[fc], TFB_timer[fc]);");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32,3, \"Tijd % 02d\", (CIF_KLOK[CIF_UUR]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,3,     \":% 02d\", (CIF_KLOK[CIF_MINUUT]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,3,     \":% 02d\", (CIF_KLOK[CIF_SECONDE]));");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32,4, \"d.d. % 02d\", (CIF_KLOK[CIF_DAG]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,4,     \" -% 02d\", (CIF_KLOK[CIF_MAAND]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,4,     \" -% 04d\", (CIF_KLOK[CIF_JAAR]));");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}#endif");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbfc]   = fc;");
+                    sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbmax]  = TFB_timer[fc];");
+                    sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbtijd] = CIF_KLOK[CIF_UUR]*100+CIF_KLOK[CIF_MINUUT];");
+                    sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbdat]  = CIF_KLOK[CIF_DAG]*100+CIF_KLOK[CIF_MAAND];");
+                    sb.AppendLine($"{ts}{ts}{ts}PRM[{_prmpf}tfbjaar] = CIF_KLOK[CIF_JAAR];");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}{ts}{ts}CIF_PARM1WIJZAP = CIF_MEER_PARMWIJZ;");
+                    sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     return sb.ToString();

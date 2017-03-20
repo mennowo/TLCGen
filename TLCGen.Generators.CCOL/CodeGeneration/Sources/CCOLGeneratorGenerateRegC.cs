@@ -131,6 +131,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.AppendLine($"static int fc;");
+            sb.AppendLine();
+
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Top))
@@ -241,10 +244,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.MaxGroentijden:
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
-                    if(controller.InterSignaalGroep?.Nalopen?.Count > 0)
-                    {
-                        sb.AppendLine($"{ts}int fc;");
-                    }
+                    
                     foreach (var gen in _PieceGenerators)
                     {
                         if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
@@ -263,10 +263,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.VerlengGroentijden:
                     sb.AppendLine("void Verlenggroen(void)");
                     sb.AppendLine("{");
-                    if (controller.InterSignaalGroep?.Nalopen?.Count > 0)
-                    {
-                        sb.AppendLine($"{ts}int fc;");
-                    }
+                    
                     foreach (var gen in _PieceGenerators)
                     {
                         if (gen.HasCode(CCOLRegCCodeTypeEnum.Verlenggroen))
@@ -358,9 +355,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Synchronisaties(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}register count fc;");
-
-            sb.AppendLine();
+            
             foreach (var gen in _PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Synchronisaties))
