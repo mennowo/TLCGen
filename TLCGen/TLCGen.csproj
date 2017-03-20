@@ -637,10 +637,6 @@
       <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj">
-      <Project>{deae73bc-0c8e-47bf-b7ae-850617a34949}</Project>
-      <Name>TLCGen.GebruikersOpties</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
@@ -679,7 +675,8 @@
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"
 copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins\TLCGen.Generators.*.dll"
 copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"
-copy /Y "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins\TLCGen.GebruikersOpties.dll"</PostBuildEvent>
+copy /Y "$(TargetDir)..\..\..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\bin\Debug\TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins\TLCGen.GebruikersOpties.dll"
+copy /Y "$(TargetDir)..\..\..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\bin\Debug\TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins\TLCGen.SpecialsRotterdam.dll"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del /F /Q "$(TargetDir)Settings"</PreBuildEvent>

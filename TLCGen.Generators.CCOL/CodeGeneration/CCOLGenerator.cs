@@ -41,7 +41,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private bool _AnyHD;
         private bool _AnyOVorHD;
 
-        private List<ICCOLCodePieceGenerator> _PieceGenerators;
+        public static List<ICCOLCodePieceGenerator> PieceGenerators
+        {
+            get { return _PieceGenerators; }
+        }
+        private static List<ICCOLCodePieceGenerator> _PieceGenerators;
 
         public string ts
         {
@@ -304,6 +308,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
+
+            // Check if any plugins provide code
+            foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
+            {
+                Type type = pl.Item2.GetType();
+                var attr = (CCOLCodePieceGeneratorAttribute)Attribute.GetCustomAttribute(type, typeof(CCOLCodePieceGeneratorAttribute));
+                if (attr != null)
+                {
+                    var _pl = pl.Item2 as ICCOLCodePieceGenerator;
+                    _PieceGenerators.Add(_pl);
+                    if(_pl.HasSettings())
+                        _pl.SetSettings(null);
+                }
+            }
         }
 
         #endregion // Public Methods
@@ -479,6 +497,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public CCOLGenerator()
         {
+            if (_PieceGenerators != null)
+                throw new NotImplementedException();
+
             _PieceGenerators = new List<ICCOLCodePieceGenerator>();
 
             Assembly ccolgen = typeof(CCOLGenerator).Assembly;

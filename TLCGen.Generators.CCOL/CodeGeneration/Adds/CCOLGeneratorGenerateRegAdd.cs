@@ -33,7 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("void pre_application()");
+            sb.AppendLine("void PreApplication_Add()");
             sb.AppendLine("{");
             sb.AppendLine("");
             sb.AppendLine("}");
@@ -101,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("void post_application()");
+            sb.AppendLine("void PostApplication()");
             sb.AppendLine("{");
             sb.AppendLine("");
             sb.AppendLine("}");

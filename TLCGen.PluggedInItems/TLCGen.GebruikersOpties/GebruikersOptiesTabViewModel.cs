@@ -513,6 +513,30 @@ namespace TLCGen.GebruikersOpties
             }
         }
 
+        private void ResetMyGebruikersOpties()
+        {
+            MyGebruikersOpties = new GebruikersOptiesModel();
+
+            Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
+            Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Ingangen);
+            HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.HulpElementen);
+            Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Timers);
+            Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Counters);
+            Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Schakelaars);
+            GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.GeheugenElementen);
+            Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Parameters);
+
+            _AlleOpties = new object[8];
+            _AlleOpties[UitgangenConst] = Uitgangen;
+            _AlleOpties[IngangenConst] = Ingangen;
+            _AlleOpties[HulpElementenConst] = HulpElementen;
+            _AlleOpties[TimersConst] = Timers;
+            _AlleOpties[CountersConst] = Counters;
+            _AlleOpties[SchakelaarsConst] = Schakelaars;
+            _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
+            _AlleOpties[ParametersConst] = Parameters;
+        }
+
         #endregion // Private Methods
 
         #region ITLCGenTabItem
@@ -524,7 +548,11 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _Controller = value;
-                OnPropertyChanged("Controller");
+                if(value == null)
+                {
+                    ResetMyGebruikersOpties();
+                }
+                OnPropertyChanged(null);
             }
         }
 
@@ -789,26 +817,7 @@ namespace TLCGen.GebruikersOpties
 
         public GebruikersOptiesTabViewModel()
         {
-            MyGebruikersOpties = new GebruikersOptiesModel();
-
-            Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
-            Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Ingangen);
-            HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.HulpElementen);
-            Timers = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Timers);
-            Counters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Counters);
-            Schakelaars = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Schakelaars);
-            GeheugenElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.GeheugenElementen);
-            Parameters = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.Parameters);
-
-            _AlleOpties = new object[8];
-            _AlleOpties[UitgangenConst] = Uitgangen;
-            _AlleOpties[IngangenConst] = Ingangen;
-            _AlleOpties[HulpElementenConst] = HulpElementen;
-            _AlleOpties[TimersConst] = Timers;
-            _AlleOpties[CountersConst] = Counters;
-            _AlleOpties[SchakelaarsConst] = Schakelaars;
-            _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
-            _AlleOpties[ParametersConst] = Parameters;
+            ResetMyGebruikersOpties();
         }
 
         #endregion // Constructor

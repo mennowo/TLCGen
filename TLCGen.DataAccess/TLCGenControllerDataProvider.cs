@@ -65,17 +65,11 @@ namespace TLCGen.DataAccess
                 _Controller = value;
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
                 {
-                    if ((pl.Item1 & TLCGenPluginElems.TabControl) != TLCGenPluginElems.TabControl)
-                    {
-                        pl.Item2.Controller = value;
-                    }
+                    pl.Item2.Controller = value;
                 }
                 foreach(var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                 {
-                    if((pl.Item1 & TLCGenPluginElems.TabControl) != TLCGenPluginElems.TabControl)
-                    {
-                        pl.Item2.Controller = value;
-                    }
+                    pl.Item2.Controller = value;
                 }
             }
         }
@@ -386,6 +380,7 @@ namespace TLCGen.DataAccess
                         writer.GetXmlFromDocument(doc);
                     }
                 }
+
                 Controller = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
 
                 if (Controller != null)
@@ -397,6 +392,7 @@ namespace TLCGen.DataAccess
                 {
                     return false;
                 }
+
             }
             Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
             return true;

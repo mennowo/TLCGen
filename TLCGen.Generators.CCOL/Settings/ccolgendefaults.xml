@@ -562,12 +562,6 @@
             <Description>Timer detectieafhankelijke naloop tijdens cyclisch verlenggroen</Description>
           </Setting>
           <Setting>
-            <Default>nldgl</Default>
-            <Setting>nldgl</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter maximale tijd herstarten det.afh. naloop tijdens geel</Description>
-          </Setting>
-          <Setting>
             <Default>xnl</Default>
             <Setting>xnl</Setting>
             <Type>Parameter</Type>

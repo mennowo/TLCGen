@@ -25,6 +25,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfg;
         private string _tnlcv;
         private string _tnleg;
+        private string _tnlsgd;
+        private string _tnlfgd;
+        private string _tnlcvd;
+        private string _tnlegd;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -246,8 +250,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
 #warning Is this correct and desired? Need to look (also?) at other timers?
+#warning This would be better moved to the naloop generator; for that though, we need to be able to specify order in generated code elems. TODO!
                                 string tnl = "";
-                                if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.VastGroen).Any())
+                                if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie).Any())
+                                {
+                                    tnl = _tnlfgd;
+                                }
+                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie).Any())
+                                {
+                                    tnl = _tnlsgd;
+                                }
+                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie).Any())
+                                {
+                                    tnl = _tnlegd;
+                                }
+                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie).Any())
+                                {
+                                    tnl = _tnlcvd;
+                                }
+                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.VastGroen).Any())
                                 {
                                     tnl = _tnlfg;
                                 }
@@ -290,7 +311,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine();
                         }
-                        
+
+                        foreach (var gen in CCOLGenerator.PieceGenerators)
+                        {
+                            if (gen.HasCode(CCOLRegCCodeTypeEnum.Alternatieven))
+                            {
+                                sb.Append(gen.GetCode(c, CCOLRegCCodeTypeEnum.Alternatieven, ts));
+                            }
+                        }
+
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}langstwachtende_alternatief_modulen(PRML, ML, ML_MAX);");
@@ -309,6 +338,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
             _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
             _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
+            _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
 
             return base.SetSettings(settings);
         }

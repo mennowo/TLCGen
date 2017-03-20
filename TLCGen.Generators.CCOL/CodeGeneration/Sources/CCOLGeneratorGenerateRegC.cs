@@ -34,6 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.Append(GenerateRegCKwcApplication(controller));
             }
+            sb.Append(GenerateRegCPreApplication(controller));
             sb.Append(GenerateRegCKlokPerioden(controller));
             sb.Append(GenerateRegCAanvragen(controller));
             sb.Append(GenerateRegCMaxOfVerlenggroen(controller));
@@ -44,6 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
             sb.Append(GenerateRegCFileVerwerking(controller));
             sb.Append(GenerateRegCInitApplication(controller));
+            sb.Append(GenerateRegCPostApplication(controller));
             sb.Append(GenerateRegCApplication(controller));
             sb.Append(GenerateRegCSystemApplication(controller));
             sb.Append(GenerateRegCDumpApplication(controller));
@@ -159,6 +161,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}KwcApplication_Add();");
             sb.AppendLine("}");
             sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCPreApplication(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void PreApplication(void)");
+            sb.AppendLine("{");
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.PreApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PreApplication, ts));
+                }
+            }
+
+            sb.AppendLine($"{ts}PreApplication_Add();");
+            sb.AppendLine("}");
 
             return sb.ToString();
         }
@@ -470,7 +493,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}pre_application();");
+            sb.AppendLine($"{ts}PreApplication();");
             sb.AppendLine();
             sb.AppendLine($"{ts}TFB_max = PRM[prmfb];");
             sb.AppendLine($"{ts}KlokPerioden();");
@@ -500,13 +523,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
             }
             sb.AppendLine("");
-            sb.AppendLine($"{ts}post_application();");
+            sb.AppendLine($"{ts}PostApplication();");
             if (controller.Data.KWCType != KWCTypeEnum.Geen && controller.Data.KWCUitgebreid)
             {
                 sb.AppendLine($"{ts}KwcApplication();");
             }
             sb.AppendLine("}");
             sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCPostApplication(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void PostApplication(void)");
+            sb.AppendLine("{");
+
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.PostApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PostApplication, ts));
+                }
+            }
+
+            sb.AppendLine($"{ts}PostApplication_Add();");
+            sb.AppendLine("}");
 
             return sb.ToString();
         }
