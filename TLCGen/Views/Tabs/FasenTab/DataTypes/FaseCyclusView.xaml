@@ -123,8 +123,19 @@
             </GroupBox>
             <GroupBox Header="Detectie storing">
                 <StackPanel>
-                    <CheckBox Content="Aanvraag" Margin="5" />
-                    <CheckBox Content="Percentage groentijd" Margin="5" />
+                    <CheckBox Content="Aanvraag" IsChecked="{Binding Path=AanvraagBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Aanvraag bij storing op alle aanvraag detectie (op een rijstrook)" Margin="5" />
+                    <CheckBox Content="Hiaat koplus" 
+                              IsEnabled="{Binding Path=HasHiaatKoplusBijDetectieStoring}"
+                              IsChecked="{Binding Path=HiaatKoplusBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Hiaat koplus bij defect lange lus" Margin="5" />
+                    <Label IsEnabled="{Binding Path=HasHiaatKoplusBijDetectieStoring}" Content="Vervangend hiaat" />
+                    <TextBox Text="{Binding Path=VervangendHiaatKoplus,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=HiaatKoplusBijDetectieStoring}" ToolTip="Hiaat koplus bij defect lange lus" Margin="2"/>
+                    <CheckBox Content="Percentage groentijd" 
+                              IsEnabled="{Binding Path=HasPercentageGroenBijDetectieStoring}"
+                              IsChecked="{Binding Path=PercentageGroenBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Percentage groentijd bij defect kop- en lange lus op een rijstrook"  Margin="5" />
+                    <Label IsEnabled="{Binding Path=PercentageGroenBijDetectieStoring}" Content="Percentage groen" />
+                    <TextBox Text="{Binding Path=PercentageGroenBijStoring,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" 
+                             IsEnabled="{Binding Path=PercentageGroenBijDetectieStoring}" ToolTip="Hiaat koplus bij defect lange lus" Margin="2"/>
+
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

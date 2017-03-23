@@ -44,6 +44,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCSynchronisaties(controller));
             sb.Append(GenerateRegCRealisatieAfhandeling(controller));
             sb.Append(GenerateRegCFileVerwerking(controller));
+            sb.Append(GenerateRegCDetectieStoring(controller));
             sb.Append(GenerateRegCInitApplication(controller));
             sb.Append(GenerateRegCPostApplication(controller));
             sb.Append(GenerateRegCApplication(controller));
@@ -459,6 +460,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateRegCDetectieStoring(ControllerModel controller)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("void DetectieStoring(void)");
+            sb.AppendLine("{");
+            sb.AppendLine();
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.DetectieStoring))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.DetectieStoring, ts));
+                }
+            }
+            sb.AppendLine($"{ts}DetectieStoring_Add();");
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCInitApplication(ControllerModel controller)
         {
             StringBuilder sb = new StringBuilder();
@@ -470,10 +492,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");
             sb.AppendLine("");
-            if(controller.InterSignaalGroep.Voorstarten.Count > 0 ||
+            if (controller.InterSignaalGroep.Voorstarten.Count > 0 ||
                controller.InterSignaalGroep.Gelijkstarten.Count > 0)
             {
                 sb.AppendLine($"{ts}init_realisation_timers();");
+                sb.AppendLine("");
+            }
+            foreach (var gen in _PieceGenerators)
+            {
+                if (gen.HasCode(CCOLRegCCodeTypeEnum.InitApplication))
+                {
+                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.InitApplication, ts));
+                }
             }
             sb.AppendLine($"{ts}post_init_application();");
             sb.AppendLine("}");
@@ -508,6 +538,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}Synchronisaties();");
             sb.AppendLine($"{ts}RealisatieAfhandeling();");
             sb.AppendLine($"{ts}FileVerwerking();");
+            sb.AppendLine($"{ts}DetectieStoring();");
             if (controller.OVData.OVIngrepen.Count > 0 ||
                 controller.OVData.HDIngrepen.Count > 0)
             {

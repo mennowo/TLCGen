@@ -44,18 +44,12 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
         public int? MeeverlengenVerschil { get; set; }
-        private int _AantalRijstroken;
-        public int AantalRijstroken
-        {
-            get { return _AantalRijstroken; }
-            set
-            {
-                if(value > 0)
-                {
-                    _AantalRijstroken = value;
-                }
-            }
-        }
+        public int? AantalRijstroken { get; set; }
+        public bool HiaatKoplusBijDetectieStoring { get; set; }
+        public int? VervangendHiaatKoplus { get; set; }
+        public bool AanvraagBijDetectieStoring { get; set; }
+        public bool PercentageGroenBijDetectieStoring { get; set; }
+        public int? PercentageGroen { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }

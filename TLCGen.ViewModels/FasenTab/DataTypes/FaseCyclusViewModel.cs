@@ -230,7 +230,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int AantalRijstroken
+        public int? AantalRijstroken
         {
             get { return _FaseCyclus.AantalRijstroken; }
             set
@@ -290,6 +290,80 @@ namespace TLCGen.ViewModels
             {
                 _FaseCyclus.MeeverlengenVerschil = value;
                 OnMonitoredPropertyChanged("MeeverlengenVerschil");
+            }
+        }
+
+        public bool HiaatKoplusBijDetectieStoring
+        {
+            get { return _FaseCyclus.HiaatKoplusBijDetectieStoring; }
+            set
+            {
+                _FaseCyclus.HiaatKoplusBijDetectieStoring = value;
+                if(value && !VervangendHiaatKoplus.HasValue)
+                {
+                    VervangendHiaatKoplus = 25;
+                }
+                OnMonitoredPropertyChanged("HiaatKoplusBijDetectieStoring");
+            }
+        }
+
+        public bool HasHiaatKoplusBijDetectieStoring
+        {
+            get
+            {
+                return Type != FaseTypeEnum.Voetganger && Type != FaseTypeEnum.Fiets;
+            }
+        }
+
+        public bool AanvraagBijDetectieStoring
+        {
+            get { return _FaseCyclus.AanvraagBijDetectieStoring; }
+            set
+            {
+                _FaseCyclus.AanvraagBijDetectieStoring = value;
+                OnMonitoredPropertyChanged("AanvraagBijDetectieStoring");
+            }
+        }
+
+        public bool PercentageGroenBijDetectieStoring
+        {
+            get { return _FaseCyclus.PercentageGroenBijDetectieStoring; }
+            set
+            {
+                _FaseCyclus.PercentageGroenBijDetectieStoring = value;
+                if(!PercentageGroenBijStoring.HasValue)
+                {
+                    PercentageGroenBijStoring = 65;
+                }
+                OnMonitoredPropertyChanged("PercentageGroenBijDetectieStoring");
+            }
+        }
+
+        public bool HasPercentageGroenBijDetectieStoring
+        {
+            get
+            {
+                return Type != FaseTypeEnum.Voetganger;
+            }
+        }
+
+        public int? VervangendHiaatKoplus
+        {
+            get { return _FaseCyclus.VervangendHiaatKoplus; }
+            set
+            {
+                _FaseCyclus.VervangendHiaatKoplus = value;
+                OnMonitoredPropertyChanged("VervangendHiaatKoplus");
+            }
+        }
+
+        public int? PercentageGroenBijStoring
+        {
+            get { return _FaseCyclus.PercentageGroen; }
+            set
+            {
+                _FaseCyclus.PercentageGroen = value;
+                OnMonitoredPropertyChanged("PercentageGroenBijStoring");
             }
         }
 

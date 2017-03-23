@@ -1110,6 +1110,32 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLDetectieStoringGenerator">
+      <CodePieceData>
+        <ClassName>CCOLDetectieStoringGenerator</ClassName>
+        <Description>Detectie storing</Description>
+        <Settings>
+          <Setting>
+            <Default>dvak</Default>
+            <Setting>dvak</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar aanvraag bij storing op detector</Description>
+          </Setting>
+          <Setting>
+            <Default>hdv</Default>
+            <Setting>hdv</Setting>
+            <Type>Timer</Type>
+            <Description>Timer vervangend hiaat koplus bij defect lange lus</Description>
+          </Setting>
+          <Setting>
+            <Default>perc</Default>
+            <Setting>perc</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter percentage groentijd bij defect kop en lange lus</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

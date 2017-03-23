@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:re="clr-namespace:TLCGen.Views.Resources"
              xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
@@ -33,7 +34,19 @@
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:FaseTypeEnum}}}" />
-                <DataGridTextColumn Binding="{Binding Path=AantalRijstroken}" Header="Rijstroken" />
+                <DataGridTextColumn Binding="{Binding Path=AantalRijstroken,TargetNullValue={x:Static sys:String.Empty}}" Header="Rijstroken" >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=Type}" Value="Voetganger">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <!--<DataGridTextColumn Binding="{Binding Path=TFG}" Header="TFG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG}" Header="TGG" />
                 <DataGridTextColumn Binding="{Binding Path=TGG_min}" Header="TGG_min" />

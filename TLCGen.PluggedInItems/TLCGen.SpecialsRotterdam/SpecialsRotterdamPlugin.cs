@@ -219,7 +219,7 @@ namespace TLCGen.SpecialsRotterdam
 
                 foreach (var fc in c.Fasen)
                 {
-                    if (fc.Type == Models.Enumerations.FaseTypeEnum.Auto)
+                    if (fc.Type == FaseTypeEnum.Auto || fc.Type == FaseTypeEnum.OV)
                     {
                         int i = 0;
                         if (Int32.TryParse(fc.Naam, out i))
@@ -326,20 +326,12 @@ namespace TLCGen.SpecialsRotterdam
                 case CCOLRegCCodeTypeEnum.InitApplication:
                     if (!_MyModel.ToepassenAFM)
                         return "";
-                    sb.AppendLine($"{ts}AFMinit();");
-                    sb.AppendLine();
-                    sb.AppendLine("/* Initialiseer AFM routines */");
+                    sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
                     sb.AppendLine($"{ts}AFMinit();");
                     sb.AppendLine();
                     foreach (var fc in _FasenWithDummies)
                     {
                         sb.AppendLine($"{ts}AFM_fc_initfc(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}{fc}, prmAFM{fc}_FC);");
-                    }
-                    sb.AppendLine();
-                    sb.AppendLine("/* Niet bewaken schaduw fasen AFM */");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}TFB_timer[{_fcpf}9{fc}] = 0;");
                     }
                     sb.AppendLine();
                     return sb.ToString();
@@ -365,6 +357,12 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}AFMResetBits();");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Niet bewaken schaduw fasen AFM */");
+                    foreach (var fc in _FasenWithDummies)
+                    {
+                        sb.AppendLine($"{ts}TFB_timer[{_fcpf}9{fc}] = 0;");
+                    }
                     sb.AppendLine();
                     return sb.ToString();
 

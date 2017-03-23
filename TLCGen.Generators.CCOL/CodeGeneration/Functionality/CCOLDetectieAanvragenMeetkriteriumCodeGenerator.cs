@@ -104,19 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ------------------ */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
-                        bool HasA = false;
-                        if (fcm.Detectoren?.Count > 0)
-                        {
-                            foreach (DetectorModel dm in fcm.Detectoren)
-                            {
-                                if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
-                                {
-                                    HasA = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (HasA)
+                        if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen).Any())
                         {
                             sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
                             foreach (DetectorModel dm in fcm.Detectoren)

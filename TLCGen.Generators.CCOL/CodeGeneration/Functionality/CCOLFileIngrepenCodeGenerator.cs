@@ -197,7 +197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLRegCCodeTypeEnum.InitApplication:
                     if (c.FileIngrepen.Where(x => x.EerlijkDoseren).Any())
                     {
-                        sb.AppendLine("/* Initialiseren variabelen voor eerlijke filedosering */");
+                        sb.AppendLine($"{ts}/* Initialiseren variabelen voor eerlijke filedosering */");
 
                         foreach (var fi in c.FileIngrepen)
                         {
@@ -218,7 +218,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
                                             {
-                                                sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam}{fc.FaseCyclus}; ");
+                                                sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}{fc.FaseCyclus}; ");
                                                 ++j;
                                             }
                                         }
@@ -228,6 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
+                        sb.AppendLine();
                     }
                     return sb.ToString();
 

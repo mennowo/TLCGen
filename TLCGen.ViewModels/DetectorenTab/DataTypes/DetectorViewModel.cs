@@ -229,6 +229,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public NooitAltijdAanUitEnum AanvraagBijStoring
+        {
+            get { return _Detector.AanvraagBijStoring; }
+            set
+            {
+                _Detector.AanvraagBijStoring = value;
+                OnMonitoredPropertyChanged("AanvraagBijStoring");
+            }
+        }
+
         public bool AanvraagDirect
         {
             get { return _Detector.AanvraagDirect; }
