@@ -136,8 +136,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersSchakelaars(controller));
             sb.AppendLine();
-            sb.Append(GenerateTabCControlParametersTijdElementen(controller));
-            sb.AppendLine();
             sb.Append(GenerateTabCControlParametersParameters(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
