@@ -904,6 +904,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
                 sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
                 sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
+                sb.AppendLine($"{ts}if (!startkarog) startkarog = TRUE;");
             }
 
             sb.AppendLine();
