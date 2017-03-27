@@ -197,6 +197,13 @@ namespace TLCGen.Settings
             {
                 setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             }
+            if (!File.Exists(setfile))
+            {
+                MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading defaults");
+                setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+                Defaults = new TLCGenDefaultsModel();
+                return;
+            }
 #endif
             Defaults = new TLCGenDefaultsModel();
             try

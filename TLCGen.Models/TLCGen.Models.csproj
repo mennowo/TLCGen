@@ -130,19 +130,12 @@
     <Compile Include="Models\Controller\VersieModel.cs" />
     <Compile Include="Models\InterSignaalGroep\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\TLCGenDefaultControllerSettings.cs" />
-    <Compile Include="Settings\TLCGenDefaultFaseCyclusSettings.cs" />
-    <Compile Include="Settings\TLCGenDefaultPrefixSettings.cs" />
     <Compile Include="Settings\TLCGenSettingsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
       <Name>TLCGen.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">
-      <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
-      <Name>TLCGen.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>

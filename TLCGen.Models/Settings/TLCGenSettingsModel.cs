@@ -13,20 +13,10 @@ namespace TLCGen.Models.Settings
     {
         [Browsable(false)]
         public CustomDataModel CustomData { get; set; }
-
-        [ExpandableObject]
-        [Description("Default instellingen voor regeling")]
-        public TLCGenDefaultControllerSettings DefaultControllerSettings { get; set; }
-        [ExpandableObject]
-        [Description("Default instellingen voor fasen")]
-        public TLCGenDefaultFaseCyclusSettings DefaultFaseCyclusSettings { get; set; }
-
+        
         public TLCGenSettingsModel()
         {
             CustomData = new CustomDataModel();
-
-            DefaultControllerSettings = new TLCGenDefaultControllerSettings();
-            DefaultFaseCyclusSettings = new TLCGenDefaultFaseCyclusSettings();
         }
     }
 }

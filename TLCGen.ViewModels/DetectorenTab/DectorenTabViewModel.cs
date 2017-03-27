@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using TLCGen.Interfaces;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;

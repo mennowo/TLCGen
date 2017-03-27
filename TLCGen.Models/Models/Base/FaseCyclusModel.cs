@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using TLCGen.Interfaces;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models

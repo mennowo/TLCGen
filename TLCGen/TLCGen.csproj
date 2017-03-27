@@ -621,10 +621,6 @@
       <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
       <Name>TLCGen.Plugins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Interfaces\TLCGen.Interfaces.csproj">
-      <Project>{71774d52-356f-4d15-a165-8ea04d652b87}</Project>
-      <Name>TLCGen.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.ModelManager\TLCGen.ModelManager.csproj">
       <Project>{3d13c9d8-5734-4904-b935-fd4bd7d944cb}</Project>
       <Name>TLCGen.ModelManager</Name>

@@ -74,9 +74,6 @@
     <Compile Include="Requests\ProcessSynchronisationsRequest.cs" />
     <Compile Include="Requests\RefreshBitmapRequest.cs" />
     <Compile Include="Responses\GetDetectorListResponse.cs" />
-    <Compile Include="Subscriber.cs" />
-    <Compile Include="WeakAction.cs" />
-    <Compile Include="WeakActionT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">

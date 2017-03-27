@@ -68,15 +68,22 @@ namespace TLCGen.Settings
                 {
                     Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(setfile);
                 }
-                else
+                else if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
                 {
                     Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
+                }
+                else
+                {
+                    MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading defaults");
+                    setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+                    Templates = new TLCGenTemplatesModel();
+                    return;
                 }
 #endif
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error while loading templates: " + e.ToString());
+                MessageBox.Show("Error while loading templates: " + e.ToString(), "Error while loading templates");
             }
         }
 

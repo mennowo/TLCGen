@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -69,13 +70,21 @@ namespace TLCGen.Settings
         /// </summary>
         public void LoadApplicationSettings()
         {
-            string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
-            if (File.Exists(settingsfile))
+            try
             {
-                _Settings = TLCGenSerialization.DeSerialize<TLCGenSettingsModel>(settingsfile);
+                string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
+                if (File.Exists(settingsfile))
+                {
+                    _Settings = TLCGenSerialization.DeSerialize<TLCGenSettingsModel>(settingsfile);
+                }
+                if (_Settings == null)
+                    _Settings = new TLCGenSettingsModel();
             }
-            if (_Settings == null)
+            catch (Exception e)
+            {
+                MessageBox.Show("Error loading application settings:\n\n" + e.ToString() + "\n\nReverting to defaults.", "Error loading application settings");
                 _Settings = new TLCGenSettingsModel();
+            }
         }
 
         /// <summary>

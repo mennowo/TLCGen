@@ -14,7 +14,6 @@ using System.Windows.Media;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
-using TLCGen.Interfaces;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
