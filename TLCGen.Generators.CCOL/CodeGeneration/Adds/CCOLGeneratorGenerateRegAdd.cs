@@ -101,7 +101,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("void PostApplication()");
+            sb.AppendLine("void DetectieStoring_Add()");
+            sb.AppendLine("{");
+            sb.AppendLine("");
+            sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine("void PostApplication_Add()");
             sb.AppendLine("{");
             sb.AppendLine("");
             sb.AppendLine("}");

@@ -246,6 +246,10 @@ namespace TLCGen.Settings
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.File;
                     }
+                    else if (value == DetectorTypeEnum.Knop.GetDescription())
+                    {
+                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Knop;
+                    }
                     else if (value == DetectorTypeEnum.KnopBinnen.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.KnopBinnen;
@@ -445,6 +449,7 @@ namespace TLCGen.Settings
             DetectorTypeOpties.Add(DetectorTypeEnum.Lang.GetDescription());
             DetectorTypeOpties.Add(DetectorTypeEnum.Verweg.GetDescription());
             DetectorTypeOpties.Add(DetectorTypeEnum.File.GetDescription());
+            DetectorTypeOpties.Add(DetectorTypeEnum.Knop.GetDescription());
             DetectorTypeOpties.Add(DetectorTypeEnum.KnopBinnen.GetDescription());
             DetectorTypeOpties.Add(DetectorTypeEnum.KnopBuiten.GetDescription());
             DetectorTypeOpties.Add(DetectorTypeEnum.Radar.GetDescription());
