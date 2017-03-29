@@ -148,18 +148,16 @@ namespace TLCGen.SpecialsRotterdam
 
         public void GetXmlFromDocument(XmlDocument document)
         {
-            bool found = false;
             foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
                 if (node.LocalName == "SpecialsRotterdam")
                 {
                     _MyModel = XmlNodeConverter.ConvertNode<SpecialsRotterdamModel>(node);
-                    found = true;
                     break;
                 }
             }
 
-            if (!found)
+            if (_MyModel == null)
             {
                 _MyModel = new SpecialsRotterdamModel();
             }
