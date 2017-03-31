@@ -798,6 +798,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
                     switch(dm.Type)
                     {
+                        case Models.Enumerations.DetectorTypeEnum.Knop:
                         case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
                         case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
                             sb.AppendLine("DK_type;");
@@ -812,6 +813,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case Models.Enumerations.DetectorTypeEnum.Lang:
                             sb.AppendLine("DLNG_type;");
                             break;
+                        default:
+                            throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
                     }
                 }
             }
@@ -820,6 +823,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
                 switch (dm.Type)
                 {
+                    case Models.Enumerations.DetectorTypeEnum.Knop:
                     case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
                     case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
                         sb.AppendLine("DK_type;");
@@ -834,6 +838,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case Models.Enumerations.DetectorTypeEnum.Lang:
                         sb.AppendLine("DLNG_type;");
                         break;
+                    default:
+                        throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
                 }
             }
 
@@ -858,6 +864,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case Models.Enumerations.FaseTypeEnum.Voetganger:
                         sb.AppendLine("VTG_type;");
                         break;
+                    default:
+                        throw new NotImplementedException("Unknown vehicle type while generating tab.c: " + fc.Type.ToString());
                 }
             }
 

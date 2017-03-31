@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace TLCGen.Models
         public bool FixatieMogelijk { get; set; }
         public bool BijkomenTijdensFixatie { get; set; }
 
+        [Browsable(false)]
         [IOElement("fix", BitmappedItemTypeEnum.Ingang, "", "FixatieMogelijk")]
         public BitmapCoordinatenDataModel FixatieBitmapData { get; set; }
 

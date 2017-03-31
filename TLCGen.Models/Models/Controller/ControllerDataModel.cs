@@ -61,6 +61,21 @@ namespace TLCGen.Models
 
         public FixatieModel FixatieData { get; set; }
 
+        [XmlIgnore]
+        public bool FixatieMogelijk
+        {
+            get { return FixatieData.FixatieMogelijk; }
+            set { FixatieData.FixatieMogelijk = value; }
+        }
+
+        [XmlIgnore]
+        public bool BijkomenTijdensFixatie
+        {
+            get { return FixatieData.BijkomenTijdensFixatie; }
+            set { FixatieData.BijkomenTijdensFixatie = value; }
+        }
+
+
         [XmlElement(ElementName = "Versie")]
         public List<VersieModel> Versies { get; set; }
 
