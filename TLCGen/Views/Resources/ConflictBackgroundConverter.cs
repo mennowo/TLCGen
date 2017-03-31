@@ -15,7 +15,7 @@ namespace TLCGen.Views
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values != null && values.Count() == 4)
+            if (values != null && values.Count() == 4 && !values.Contains(System.Windows.DependencyProperty.UnsetValue))
             {
                 var ReferencesSelf = (bool)values[0];
                 var IsEnabled = (bool)values[1];

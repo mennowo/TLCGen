@@ -134,8 +134,12 @@ namespace TLCGen.Views
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if(values == null || values.Count() != 2)
+            if (values == null || values.Count() != 2)
                 throw new NotImplementedException();
+
+            if (values[0] == DependencyProperty.UnsetValue ||
+                values[1] == DependencyProperty.UnsetValue)
+                return null;
 
             var DisplayType = (IntersignaalGroepTypeEnum)values[0];
             var IsEnabled = (bool)values[1];

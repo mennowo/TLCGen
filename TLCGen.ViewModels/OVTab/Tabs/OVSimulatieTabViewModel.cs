@@ -170,21 +170,21 @@ namespace TLCGen.ViewModels
             {
                 if (ov.KAR)
                 {
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FCNr = ov.FaseCyclus });
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FCNr = ov.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
                 }
                 if (ov.Vecom)
                 {
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FCNr = ov.FaseCyclus });
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FCNr = ov.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
                 }
             }
             foreach (var hd in Controller.OVData.HDIngrepen)
             {
                 if (hd.KAR)
                 {
-                    DummyDetectoren.Add(new DetectorViewModel(hd.DummyKARInmelding) { FCNr = hd.FaseCyclus });
-                    DummyDetectoren.Add(new DetectorViewModel(hd.DummyKARUitmelding) { FCNr = hd.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(hd.DummyKARInmelding) { FaseCyclus = hd.FaseCyclus });
+                    DummyDetectoren.Add(new DetectorViewModel(hd.DummyKARUitmelding) { FaseCyclus = hd.FaseCyclus });
                 }
             }
         }
