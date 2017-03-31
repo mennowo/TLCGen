@@ -33,6 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"      CCOL:   {data.CCOLVersie.GetDescription()}");
             sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie.GetDescription()}");
             sb.AppendLine($"   COLLGEN:   {CCOLCodeGeneratorPlugin.GetVersion()}");
+            sb.AppendLine("*/");
 
             return sb.ToString();
         }
