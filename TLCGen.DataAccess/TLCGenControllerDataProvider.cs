@@ -162,13 +162,17 @@ namespace TLCGen.DataAccess
                 else
                 {
 
+                    string lastfilename = ControllerFileName;
                     OpenFileDialog openFileDialog = new OpenFileDialog();
                     openFileDialog.CheckFileExists = true;
                     openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
                     if (openFileDialog.ShowDialog() == true)
                     {
-                        string lastfilename = ControllerFileName;
                         ControllerFileName = openFileDialog.FileName;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
                 if(ControllerFileName != null)

@@ -10,7 +10,7 @@ namespace TLCGen.DataAccess
     public interface ITLCGenControllerDataProvider
     {
         ControllerModel Controller { get; }
-        string ControllerFileName { get; }
+        string ControllerFileName { get; set; }
         bool ControllerHasChanged { get; set; }
 
         bool NewController();

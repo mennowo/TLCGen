@@ -56,6 +56,9 @@
     <Compile Include="NewTemplateWindow.xaml.cs">
       <DependentUpon>NewTemplateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UnhandledExceptionWindow.xaml.cs">
+      <DependentUpon>UnhandledExceptionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
@@ -71,6 +74,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="NewTemplateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UnhandledExceptionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
