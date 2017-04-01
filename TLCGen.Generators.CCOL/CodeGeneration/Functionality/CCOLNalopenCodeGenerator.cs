@@ -111,6 +111,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
+                case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
                     return true;
@@ -150,6 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLRegCCodeTypeEnum.Verlenggroen:
 
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
