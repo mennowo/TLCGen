@@ -10,5 +10,10 @@ namespace TLCGen.Models
     {
         public string Naam { get; set; }
         public string Setting { get; set; }
+
+        public AddinSettingsPropertyModel()
+        {
+
+        }
     }
 }

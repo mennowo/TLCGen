@@ -790,7 +790,8 @@ namespace TLCGen.ViewModels
                 {
                     try
                     {
-                        if(string.IsNullOrWhiteSpace(TLCGenControllerDataProvider.Default.ControllerFileName))
+                        string t = TLCGenControllerDataProvider.Default.ControllerFileName;
+                        if (string.IsNullOrWhiteSpace(TLCGenControllerDataProvider.Default.ControllerFileName))
                         {
                             TLCGenControllerDataProvider.Default.ControllerFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TLC_recoverysave.tlc");
                         }
@@ -801,6 +802,10 @@ namespace TLCGen.ViewModels
                             System.IO.Path.GetFileName(TLCGenControllerDataProvider.Default.ControllerFileName));
                         TLCGenControllerDataProvider.Default.SaveController();
                         message += "De huidige regeling is hier opgeslagen:\n" + TLCGenControllerDataProvider.Default.ControllerFileName + "\n\n";
+                        if (t != null)
+                        {
+                            TLCGenControllerDataProvider.Default.ControllerFileName = t;
+                        }
                     }
                     catch
                     {
@@ -813,9 +818,6 @@ namespace TLCGen.ViewModels
                 win.DialogMessage = message;
                 win.DialogExpceptionText = e.Exception.ToString();
                 win.ShowDialog();
-
-                TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
-                System.Environment.Exit(-1);
             };
 #endif
         }
