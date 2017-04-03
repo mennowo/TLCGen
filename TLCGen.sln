@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen", "TLCGen\TLCGen.csproj", "{BFC33A68-228A-46B6-9E7D-25F41AC5C02C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DEAE73BC-0C8E-47BF-B7AE-850617A34949} = {DEAE73BC-0C8E-47BF-B7AE-850617A34949}
+		{14C1BBC3-EDA1-4D16-897D-43138ABE02DA} = {14C1BBC3-EDA1-4D16-897D-43138ABE02DA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloodFill", "FloodFill\FloodFill.csproj", "{9A33318A-1352-43C3-8275-FF20DC9B9202}"
 EndProject
