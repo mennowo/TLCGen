@@ -669,10 +669,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(TargetDir)Plugins"
-copy /Y "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins\TLCGen.Generators.*.dll"
-copy /Y "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins\TLCGen.Importers.*.dll"
-copy /Y "$(TargetDir)..\..\..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\bin\Debug\TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins\TLCGen.GebruikersOpties.dll"
-copy /Y "$(TargetDir)..\..\..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\bin\Debug\TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins\TLCGen.SpecialsRotterdam.dll"</PostBuildEvent>
+move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del /F /Q "$(TargetDir)Settings"</PreBuildEvent>
