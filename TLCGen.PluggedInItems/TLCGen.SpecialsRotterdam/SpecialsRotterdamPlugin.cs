@@ -339,11 +339,9 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_watchdog_return] != prmAFM_watchdog_return_old);");
                     sb.AppendLine("#else");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
-                    sb.AppendLine($"{ts}RT[{_tpf}TMSLeven] = TRUE;");
                     sb.AppendLine("#endif");
                     sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_watchdog];");
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}AFMLeven] = RT[{_tpf}AFMLeven];");
-                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}TMSLeven] = RT[{_tpf}TMSLeven];");
                     sb.AppendLine($"{ts}RT[tVRILeven] = !T[tVRILeven];");
                     sb.AppendLine($"{ts}if (ET[{_tpf}VRILeven])");
                     sb.AppendLine($"{ts}{{");
