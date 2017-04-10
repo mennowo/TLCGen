@@ -30,24 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0649
 
         #endregion // Fields
-
-        #region Properties
-
-
-        #endregion // Properties
-
-        #region Commands
-        #endregion // Commands
-
-        #region Command Functionality
-        #endregion // Command Functionality
-
-        #region Private Methods
-        #endregion // Private Methods
-
-        #region Public Methods
-        #endregion // Public Methods
-
+        
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
@@ -116,6 +99,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.SystemApplication:
+                    if(c.Signalen.Rateltikkers.Count == 0)
+                    {
+                        return "";
+                    }
                     sb.AppendLine($"{ts}/* uitsturing aanvraag rateltikkers */");
                     foreach (var rt in c.Signalen.Rateltikkers)
                     {

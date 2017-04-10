@@ -303,17 +303,22 @@ namespace TLCGen.ViewModels
         {
             if (!string.IsNullOrWhiteSpace(NewLijnNummer))
             {
-                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel();
-                nummer.Nummer = NewLijnNummer;
+                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
+                {
+                    Nummer = NewLijnNummer
+                };
                 LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
             }
             else
             {
-                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel();
-                nummer.Nummer = "0";
+                OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
+                {
+                    Nummer = "0"
+                };
                 LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
             }
             NewLijnNummer = "";
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool AddLijnNummerCommand_CanExecute(object prm)
@@ -345,6 +350,7 @@ namespace TLCGen.ViewModels
             {
                 LijnNummers.RemoveAt(LijnNummers.Count - 1);
             }
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         bool RemoveLijnNummerCommand_CanExecute(object prm)

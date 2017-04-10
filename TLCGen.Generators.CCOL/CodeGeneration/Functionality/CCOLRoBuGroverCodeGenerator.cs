@@ -36,6 +36,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
 
+            if (c.RoBuGrover.ConflictGroepen?.Count == 0)
+                return;
+
             _MyElements.Add(new CCOLElement(_prmrgv, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
             _MyElements.Add(new CCOLElement(_prmmin_tcyclus, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
             _MyElements.Add(new CCOLElement(_prmmax_tcyclus, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));

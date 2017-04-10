@@ -9,6 +9,13 @@
              mc:Ignorable="d" 
              x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/ApplicationIcons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <Grid.Style>
             <Style TargetType="Grid">
@@ -82,8 +89,13 @@
                 <Label Content="Fase" />
                 <ComboBox ItemsSource="{Binding Path=SelectableFasen}" 
                           SelectedValue="{Binding Path=SelectedFaseNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
-                <Button Content="Toevoegen" Command="{Binding AddTeDoserenSignaalGroepCommand}" Margin="2" />
-                <Button Content="Verwijderen" Command="{Binding RemoveTeDoserenSignaalGroepCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left" />
+                <Button Command="{Binding AddTeDoserenSignaalGroepCommand}" Margin="2" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                    <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
+                </Button>
+                <Button Command="{Binding RemoveTeDoserenSignaalGroepCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left"
+                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                    <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
+                </Button>
             </StackPanel>
             <DataGrid ItemsSource="{Binding Path=TeDoserenSignaalGroepen}" DockPanel.Dock="Bottom"
                           SelectedItem="{Binding Path=SelectedTeDoserenFase}" Margin="2"
