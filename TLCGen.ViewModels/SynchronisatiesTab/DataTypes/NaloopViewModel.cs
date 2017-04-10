@@ -109,14 +109,11 @@ namespace TLCGen.ViewModels
             }
         }
 
-
-        private NaloopDetectorModel _SelectedDetector;
         public NaloopDetectorModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get { return DetectorManager.SelectedDetector; }
             set
             {
-                _SelectedDetector = value;
                 DetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedDetector");
             }
@@ -140,7 +137,10 @@ namespace TLCGen.ViewModels
                         Detectoren,
                         dets,
                         (x) => { var md = new NaloopDetectorModel() { Detector = x }; return md; },
-                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); }
+                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); },
+                        null,
+                        () => { OnPropertyChanged("SelectedDetector"); },
+                        () => { OnPropertyChanged("SelectedDetector"); }
                         );
                 }
                 return _DetectorManager;
@@ -288,11 +288,11 @@ namespace TLCGen.ViewModels
         {
             _Naloop = nm;
 
-            foreach (NaloopDetectorModel ndm in nm.Detectoren)
+            foreach (var ndm in nm.Detectoren)
             {
                 Detectoren.Add(ndm);
             }
-            foreach(NaloopTijdModel ntm in nm.Tijden)
+            foreach(var ntm in nm.Tijden)
             {
                 Tijden.Add(ntm);
             }

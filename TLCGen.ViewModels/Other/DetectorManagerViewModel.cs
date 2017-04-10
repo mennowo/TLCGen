@@ -33,13 +33,21 @@ namespace TLCGen.ViewModels
         public T2 SelectedDetectorToAdd
         {
             get { return _SelectedDetectorToAdd; }
-            set { _SelectedDetectorToAdd = value; }
+            set
+            {
+                _SelectedDetectorToAdd = value;
+                OnPropertyChanged("SelectedDetectorToAdd");
+            }
         }
         private T2 _SelectedDetectorToRemove;
         public T2 SelectedDetectorToRemove
         {
             get { return _SelectedDetectorToRemove; }
-            set { _SelectedDetectorToRemove = value; }
+            set
+            {
+                _SelectedDetectorToRemove = value;
+                OnPropertyChanged("SelectedDetectorToRemove");
+            }
         }
 
         public T1 SelectedDetector
@@ -96,6 +104,7 @@ namespace TLCGen.ViewModels
         {
             T1 d = _GetDetectorToAdd(SelectedDetectorToAdd);
             DetectorenInCollection.Add(d);
+            SelectedDetector = d;
             Refresh();
             _AfterDetectorAddedAction?.Invoke();
         }
@@ -107,14 +116,27 @@ namespace TLCGen.ViewModels
 
         private void RemoveDetectorCommand_Executed()
         {
-            if (SelectedDetectorToRemove != null)
+            if(_SelectedDetector != null)
+            {
+                int i = DetectorenInCollection.IndexOf(_SelectedDetector);
+                DetectorenInCollection.Remove(_SelectedDetector);
+                if(i < (DetectorenInCollection.Count - 1))
+                {
+                    SelectedDetector = DetectorenInCollection[i];
+                }
+                else if (DetectorenInCollection.Count > 0)
+                {
+                    SelectedDetector = DetectorenInCollection[DetectorenInCollection.Count - 1];
+                }
+                else
+                {
+                    SelectedDetector = null;
+                }
+            }
+            else if (SelectedDetectorToRemove != null && _GetDetectorToRemove != null)
             {
                 T1 d = _GetDetectorToRemove(SelectedDetectorToRemove);
                 DetectorenInCollection.Remove(d);
-            }
-            else if(_SelectedDetector != null)
-            {
-                DetectorenInCollection.Remove(_SelectedDetector);
             }
             Refresh();
             _AfterDetectorRemovedAction?.Invoke();
@@ -127,7 +149,9 @@ namespace TLCGen.ViewModels
         private void Refresh()
         {
             var sdta = SelectedDetectorToAdd;
+            SelectedDetectorToAdd = null;
             var sdtr = SelectedDetectorToRemove;
+            SelectedDetectorToRemove = null;
 
             SelectableDetectoren.Clear();
             foreach (var d in AllDetectoren)
@@ -151,13 +175,10 @@ namespace TLCGen.ViewModels
             else if (SelectableDetectoren.Count > 0)
                 SelectedDetectorToAdd = SelectableDetectoren[0];
 
-            if (_GetDetectorToRemove != null)
-            {
-                if (sdtr != null && RemovableDetectoren.Contains(sdtr))
-                    SelectedDetectorToRemove = sdtr;
-                else if (RemovableDetectoren.Count > 0)
-                    SelectedDetectorToRemove = RemovableDetectoren[0];
-            }
+            if (sdtr != null && RemovableDetectoren.Contains(sdtr))
+                SelectedDetectorToRemove = sdtr;
+            else if (RemovableDetectoren.Count > 0)
+                SelectedDetectorToRemove = RemovableDetectoren[0];
         }
 
         #endregion // Private Methods

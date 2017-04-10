@@ -23,17 +23,13 @@ namespace TLCGen.ViewModels
 
         private ObservableCollection<string> _ControllerFasen;
         private ObservableCollection<string> _SelectableRatelTikkerFasen;
-        private ObservableCollection<string> _SelectableRatelTikkerDetectoren;
         private List<string> _ControllerDetectoren;
         private string _SelectedRatelTikkerFaseToAdd;
-        private string _SelectedRatelTikkerDetectorToAdd;
 
         private RelayCommand _AddWaarschuwingsGroepCommand;
         private RelayCommand _RemoveWaarschuwingsGroepCommand;
         private RelayCommand _AddRatelTikkerCommand;
         private RelayCommand _RemoveRatelTikkerCommand;
-        private RelayCommand _AddRatelTikkerDetectorCommand;
-        private RelayCommand _RemoveRatelTikkerDetectorCommand;
 
         #endregion // Fields
 
@@ -83,18 +79,6 @@ namespace TLCGen.ViewModels
                 return _ControllerFasen;
             }
         }
-        
-        public ObservableCollection<string> SelectableRatelTikkerDetectoren
-        {
-            get
-            {
-                if (_SelectableRatelTikkerDetectoren == null)
-                {
-                    _SelectableRatelTikkerDetectoren = new ObservableCollection<string>();
-                }
-                return _SelectableRatelTikkerDetectoren;
-            }
-        }
 
         public ObservableCollection<string> SelectableRatelTikkerFasen
         {
@@ -105,16 +89,6 @@ namespace TLCGen.ViewModels
                     _SelectableRatelTikkerFasen = new ObservableCollection<string>();
                 }
                 return _SelectableRatelTikkerFasen;
-            }
-        }
-
-        public string SelectedRatelTikkerDetectorToAdd
-        {
-            get { return _SelectedRatelTikkerDetectorToAdd; }
-            set
-            {
-                _SelectedRatelTikkerDetectorToAdd = value;
-                RaisePropertyChanged("SelectedRatelTikkerDetectorToAdd");
             }
         }
 
@@ -180,30 +154,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ICommand AddRatelTikkerDetectorCommand
-        {
-            get
-            {
-                if (_AddRatelTikkerDetectorCommand == null)
-                {
-                    _AddRatelTikkerDetectorCommand = new RelayCommand(AddRatelTikkerDetectorCommand_Executed, AddRatelTikkerDetectorCommand_CanExecute);
-                }
-                return _AddRatelTikkerDetectorCommand;
-            }
-        }
-
-        public ICommand RemoveRatelTikkerDetectorCommand
-        {
-            get
-            {
-                if (_RemoveRatelTikkerDetectorCommand == null)
-                {
-                    _RemoveRatelTikkerDetectorCommand = new RelayCommand(RemoveRatelTikkerDetectorCommand_Executed, RemoveRatelTikkerDetectorCommand_CanExecute);
-                }
-                return _RemoveRatelTikkerDetectorCommand;
-            }
-        }
-
         #endregion // Commands
 
         #region Command functionality
@@ -218,7 +168,7 @@ namespace TLCGen.ViewModels
                 ++i;
                 grm.Naam = "groep" + i.ToString();
             }
-            WaarschuwingsGroepViewModel grvm = new WaarschuwingsGroepViewModel(grm);
+            var grvm = new WaarschuwingsGroepViewModel(grm);
             WaarschuwingsGroepen.Add(grvm);
             SelectedWaarschuwingsGroep = grvm;
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
@@ -253,19 +203,24 @@ namespace TLCGen.ViewModels
         void AddRatelTikkerCommand_Executed(object prm)
         {
             int id = SelectableRatelTikkerFasen.IndexOf(SelectedRatelTikkerFaseToAdd);
-            var rtm = new RatelTikkerModel();
-            rtm.FaseCyclus = SelectedRatelTikkerFaseToAdd;
-            foreach(var fc in _Controller.Fasen)
+            var rtm = new RatelTikkerModel()
+            {
+                FaseCyclus = SelectedRatelTikkerFaseToAdd
+            };
+            foreach (var fc in _Controller.Fasen)
             {
                 if(fc.Naam == SelectedRatelTikkerFaseToAdd)
                 {
                     foreach(var d in fc.Detectoren)
                     {
+                        if(d.Type == Models.Enumerations.DetectorTypeEnum.Knop ||
+                           d.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen ||
+                           d.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)
                         rtm.Detectoren.Add(new RatelTikkerDetectorModel() { Detector = d.Naam });
                     }
                 }
             }
-            RatelTikkerViewModel rtvm = new RatelTikkerViewModel(rtm);
+            var rtvm = new RatelTikkerViewModel(rtm);
             RatelTikkers.Add(rtvm);
             SelectedRatelTikker = rtvm;
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
@@ -310,51 +265,6 @@ namespace TLCGen.ViewModels
             return SelectedRatelTikker != null;
         }
 
-        void AddRatelTikkerDetectorCommand_Executed(object prm)
-        {
-            int id = SelectedRatelTikker.Detectoren.IndexOf(SelectedRatelTikker.SelectedDetector);
-            SelectedRatelTikker.Detectoren.Add(
-                new RatelTikkerDetectorViewModel(
-                    new RatelTikkerDetectorModel()
-                    {
-                        Detector = SelectedRatelTikkerDetectorToAdd
-                    }));
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
-            SelectedRatelTikker.SelectedDetector = null;
-            UpdateSelectables();
-            if (SelectedRatelTikker.Detectoren.Count > 0)
-            {
-                id = id < 0 ? 0 : id;
-                id = id >= SelectedRatelTikker.Detectoren.Count ? SelectedRatelTikker.Detectoren.Count - 1 : id;
-                SelectedRatelTikker.SelectedDetector = SelectedRatelTikker.Detectoren[id];
-            }
-        }
-
-        bool AddRatelTikkerDetectorCommand_CanExecute(object prm)
-        {
-            return SelectedRatelTikker != null && SelectedRatelTikkerDetectorToAdd != null;
-        }
-
-        void RemoveRatelTikkerDetectorCommand_Executed(object prm)
-        {
-            int id = SelectedRatelTikker.Detectoren.IndexOf(SelectedRatelTikker.SelectedDetector);
-            SelectedRatelTikker.Detectoren.Remove(SelectedRatelTikker.SelectedDetector);
-            SelectedRatelTikker.SelectedDetector = null;
-            UpdateSelectables();
-            if (SelectedRatelTikker.Detectoren.Count > 0)
-            {
-                id = id < 0 ? 0 : id;
-                id = id >= SelectedRatelTikker.Detectoren.Count ? SelectedRatelTikker.Detectoren.Count - 1 : id;
-                SelectedRatelTikker.SelectedDetector = SelectedRatelTikker.Detectoren[id];
-            }
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
-        }
-
-        bool RemoveRatelTikkerDetectorCommand_CanExecute(object prm)
-        {
-            return SelectedRatelTikker != null;
-        }
-
         #endregion // Command functionality
 
         #region Private methods
@@ -381,7 +291,6 @@ namespace TLCGen.ViewModels
             }
 
             string tempfc = SelectedRatelTikkerFaseToAdd;
-            string tempd = SelectedRatelTikkerDetectorToAdd;
             SelectableRatelTikkerFasen.Clear();
             if (ControllerFasen.Count > 0 && RatelTikkers.Count > 0)
             {
@@ -404,41 +313,11 @@ namespace TLCGen.ViewModels
             {
                 SelectedRatelTikkerFaseToAdd = tempfc == null ?
                     SelectableRatelTikkerFasen[0] :
-                    tempd;
+                    tempfc;
             }
             else
             {
                 SelectedRatelTikkerFaseToAdd = null;
-            }
-
-            SelectableRatelTikkerDetectoren.Clear();
-            if (SelectedRatelTikker?.Detectoren.Count > 0)
-            {
-                foreach (var d in _ControllerDetectoren)
-                {
-                    if (!SelectedRatelTikker.Detectoren.Where(x => x.Detector == d).Any())
-                    {
-                        SelectableRatelTikkerDetectoren.Add(d);
-                    }
-                }
-            }
-            else
-            {
-                foreach (var d in _ControllerDetectoren)
-                {
-                    SelectableRatelTikkerDetectoren.Add(d);
-                }
-            }
-
-            if (_SelectableRatelTikkerDetectoren.Count > 0)
-            {
-                SelectedRatelTikkerDetectorToAdd = tempd == null ?
-                    SelectableRatelTikkerDetectoren[0] :
-                    tempd;
-            }
-            else
-            {
-                SelectedRatelTikkerDetectorToAdd = null;
             }
         }
 

@@ -18,19 +18,15 @@ namespace TLCGen.ViewModels
 
         private RoBuGroverFaseCyclusInstellingenModel _SignaalGroepInstellingen;
 
-        private RoBuGroverFileDetectorViewModel _SelectedFileDetector;
-        private RoBuGroverHiaatDetectorViewModel _SelectedHiaatDetector;
-
         #endregion // Fields
 
         #region Properties
 
         public RoBuGroverFileDetectorViewModel SelectedFileDetector
         {
-            get { return _SelectedFileDetector; }
+            get { return FileDetectorManager.SelectedDetector; }
             set
             {
-                _SelectedFileDetector = value;
                 FileDetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedFileDetector");
             }
@@ -38,10 +34,9 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverHiaatDetectorViewModel SelectedHiaatDetector
         {
-            get { return _SelectedHiaatDetector; }
+            get { return HiaatDetectorManager.SelectedDetector; }
             set
             {
-                _SelectedHiaatDetector = value;
                 HiaatDetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedHiaatDetector");
             }
@@ -106,15 +101,25 @@ namespace TLCGen.ViewModels
                         dets,
                         (x) => 
                         {
-                            RoBuGroverFileDetectorModel d = new RoBuGroverFileDetectorModel();
-                            d.Detector = x;
+                            var d = new RoBuGroverFileDetectorModel()
+                            {
+                                Detector = x
+                            };
                             DefaultsProvider.Default.SetDefaultsOnModel(d);
                             return new RoBuGroverFileDetectorViewModel(d);
                         },
                         (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
-                        null,
-                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); },
-                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); }
+                        (x) => { return SelectedFileDetector; },
+                        () => 
+                        {
+                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                            OnPropertyChanged("SelectedFileDetector");
+                        },
+                        () => 
+                        {
+                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                            OnPropertyChanged("SelectedFileDetector");
+                        }
                         );
                 }
                 return _FileDetectorManager;
@@ -140,15 +145,25 @@ namespace TLCGen.ViewModels
                         dets,
                         (x) =>
                         {
-                            RoBuGroverHiaatDetectorModel d = new RoBuGroverHiaatDetectorModel();
-                            d.Detector = x;
+                            var d = new RoBuGroverHiaatDetectorModel()
+                            {
+                                Detector = x
+                            };
                             DefaultsProvider.Default.SetDefaultsOnModel(d);
                             return new RoBuGroverHiaatDetectorViewModel(d);
                         },
-                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); }, 
-                        null,
-                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); },
-                        () => { GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage()); }
+                        (x) => { return !HiaatDetectoren.Where(y => y.Detector == x).Any(); },
+                        (x) => { return SelectedHiaatDetector; },
+                        () => 
+                        {
+                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                            OnPropertyChanged("SelectedHiaatDetector");
+                        },
+                        () => 
+                        {
+                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+                            OnPropertyChanged("SelectedHiaatDetector");
+                        }
                         );
                 }
                 return _HiaatDetectorManager;

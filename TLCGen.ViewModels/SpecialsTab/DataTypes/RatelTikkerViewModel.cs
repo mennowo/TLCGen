@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private RatelTikkerModel _RatelTikker;
-
-        private RatelTikkerDetectorViewModel _SelectedDetector;
 
         #endregion // Fields
 
@@ -53,10 +52,10 @@ namespace TLCGen.ViewModels
 
         public RatelTikkerDetectorViewModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get { return DetectorManager.SelectedDetector; }
             set
             {
-                _SelectedDetector = value;
+                DetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedDetector");
             }
         }
@@ -65,6 +64,36 @@ namespace TLCGen.ViewModels
         {
             get;
             private set;
+        }
+
+
+        private DetectorManagerViewModel<RatelTikkerDetectorViewModel, string> _DetectorManager;
+        public DetectorManagerViewModel<RatelTikkerDetectorViewModel, string> DetectorManager
+        {
+            get
+            {
+                if (_DetectorManager == null)
+                {
+                    List<string> dets =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen
+                            .SelectMany(x => x.Detectoren)
+                            .Where(x => x.Type == DetectorTypeEnum.Knop ||
+                                        x.Type == DetectorTypeEnum.KnopBinnen ||
+                                        x.Type == DetectorTypeEnum.KnopBuiten)
+                            .Select(x => x.Naam).
+                            ToList();
+                    _DetectorManager = new DetectorManagerViewModel<RatelTikkerDetectorViewModel, string>(
+                        Detectoren as ObservableCollection<RatelTikkerDetectorViewModel>,
+                        dets,
+                        (x) => { var rtd = new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel { Detector = x }); return rtd; },
+                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); },
+                        null,
+                        () => { OnMonitoredPropertyChanged("SelectedDetector"); },
+                        () => { OnMonitoredPropertyChanged("SelectedDetector"); }
+                        );
+                }
+                return _DetectorManager;
+            }
         }
 
         #endregion Properties

@@ -111,9 +111,11 @@ namespace TLCGen.ViewModels
                         dets,
                         (x) => 
                         {
-                            var vad = new VAOntruimenDetectorModel();
-                            vad.Detector = x;
-                            foreach(var kv in ConflicterendeFasen)
+                            var vad = new VAOntruimenDetectorModel()
+                            {
+                                Detector = x
+                            };
+                            foreach (var kv in ConflicterendeFasen)
                             {
                                 vad.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel() { FaseCyclus = kv.Key });
                             }

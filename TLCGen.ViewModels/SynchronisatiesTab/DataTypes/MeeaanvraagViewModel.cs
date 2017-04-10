@@ -67,14 +67,12 @@ namespace TLCGen.ViewModels
                 return _Detectoren;
             }
         }
-
-        private MeeaanvraagDetectorModel _SelectedDetector;
+        
         public MeeaanvraagDetectorModel SelectedDetector
         {
-            get { return _SelectedDetector; }
+            get { return DetectorManager.SelectedDetector; }
             set
             {
-                _SelectedDetector = value;
                 DetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedDetector");
             }
@@ -98,7 +96,10 @@ namespace TLCGen.ViewModels
                         Detectoren,
                         dets,
                         (x) => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },
-                        (x) => { return !Detectoren.Where(y => y.MeeaanvraagDetector == x).Any(); }
+                        (x) => { return !Detectoren.Where(y => y.MeeaanvraagDetector == x).Any(); },
+                        null,
+                        () => { OnPropertyChanged("SelectedDetector"); },
+                        () => { OnPropertyChanged("SelectedDetector"); }
                         );
                 }
                 return _DetectorManager;
@@ -155,7 +156,7 @@ namespace TLCGen.ViewModels
         public MeeaanvraagViewModel(MeeaanvraagModel mm)
         {
             _Meeaanvraag = mm;
-            foreach(MeeaanvraagDetectorModel d in _Meeaanvraag.Detectoren)
+            foreach(var d in _Meeaanvraag.Detectoren)
             {
                 Detectoren.Add(d);
             }

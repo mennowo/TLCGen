@@ -106,12 +106,13 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
+                <local:DetectorManagerView DataContext="{Binding Path=SelectedRatelTikker.DetectorManager}" Grid.Row="2" />
+                <!--<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
                     <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerDetectoren}" 
                               SelectedValue="{Binding Path=SelectedRatelTikkerDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />
                     <Button Content="+" Command="{Binding AddRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" HorizontalContentAlignment="Center" />
                     <Button Content="-" Command="{Binding RemoveRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
-                </StackPanel>
+                </StackPanel>-->
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
                 <Label Content="Fase" />
