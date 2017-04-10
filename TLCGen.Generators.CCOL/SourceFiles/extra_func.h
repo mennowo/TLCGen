@@ -20,7 +20,7 @@ void Eerlijk_doseren_V1(count hfile,            // hulpelement wel/geen file
     count aantalfc,         // aantal te doseren fasen
     count fc[],             // pointer naar array met fasenummers
     count fcmg[][4],        // pointer naar array met mg parameter index nummers
-    int nogtedoseren[])     // pointer naar array met nog te doseren waarden
+    int nogtedoseren[]);     // pointer naar array met nog te doseren waarden
 
 extern mulv FC_type[];
 
