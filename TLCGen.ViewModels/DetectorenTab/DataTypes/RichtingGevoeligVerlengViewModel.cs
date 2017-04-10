@@ -88,16 +88,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int HiaatTijd
-        {
-            get { return _RichtingGevoeligVerleng.HiaatTijd; }
-            set
-            {
-                _RichtingGevoeligVerleng.HiaatTijd = value;
-                OnMonitoredPropertyChanged("HiaatTijd");
-            }
-        }
-
         public RichtingGevoeligVerlengenTypeEnum TypeVerlengen
         {
             get { return _RichtingGevoeligVerleng.TypeVerlengen; }

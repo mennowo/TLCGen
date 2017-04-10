@@ -11,8 +11,11 @@ namespace TLCGen.Models
     [RefersToDetector("VanDetector", "NaarDetector")]
     public class RichtingGevoeligeAanvraagModel
     {
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
+        [HasDefault(false)]
         public string VanDetector { get; set; }
+        [HasDefault(false)]
         public string NaarDetector { get; set; }
         public int MaxTijdsVerschil { get; set; }
     }

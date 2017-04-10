@@ -437,6 +437,30 @@
 
     <!-- Overig -->
     <Default>
+      <DefaultName>Richtinggevoelige aanvraag</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.RichtingGevoeligeAanvraagModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <VanDetector />
+        <NaarDetector />
+        <MaxTijdsVerschil>10</MaxTijdsVerschil>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Richtinggevoelig verlengen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.RichtingGevoeligVerlengModel,TLCGen.Models</DataType>
+      <Data>
+        <FaseCyclus />
+        <VanDetector />
+        <NaarDetector />
+        <MaxTijdsVerschil>10</MaxTijdsVerschil>
+        <VerlengTijd>30</VerlengTijd>
+        <TypeVerlengen>MK2</TypeVerlengen>
+      </Data>
+    </Default>
+    <Default>
       <DefaultName>Regeling instellingen</DefaultName>
       <Category>Other</Category>
       <DataType>TLCGen.Models.ControllerDataModel,TLCGen.Models</DataType>

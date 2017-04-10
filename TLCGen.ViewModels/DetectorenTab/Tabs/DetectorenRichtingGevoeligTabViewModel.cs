@@ -11,6 +11,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -121,21 +122,24 @@ namespace TLCGen.ViewModels
                 _SelectedDetectorAanvraag1 = null;
                 _SelectedDetectorAanvraag2 = null;
                 DetectorenAanvraag1.Clear();
-                DetectorenAanvraag1.AddRange(_AlleDetectoren.Where(x =>
+                var fc = Controller.Fasen.Where(x => x.Naam == _SelectedFaseAanvraag).FirstOrDefault();
+                if (fc != null)
                 {
-                    return 
-                        x.StartsWith(value) && 
-                        x != SelectedDetectorAanvraag2 && 
-                        !(RichtingGevoeligeAanvragen.Where(y => y.FaseCyclus == SelectedFaseAanvraag && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
+                    DetectorenAanvraag1.AddRange(fc.Detectoren.Where(x => x.Type != Models.Enumerations.DetectorTypeEnum.Knop &&
+                                                                          x.Type != Models.Enumerations.DetectorTypeEnum.KnopBinnen &&
+                                                                          x.Type != Models.Enumerations.DetectorTypeEnum.KnopBuiten)
+                                                              .Select(x => x.Naam));
+                }
+                _SelectedDetectorAanvraag1 = DetectorenAanvraag1.LastOrDefault();
                 DetectorenAanvraag2.Clear();
-                DetectorenAanvraag2.AddRange(_AlleDetectoren.Where(x =>
+                if (fc != null)
                 {
-                    return 
-                        x.StartsWith(value) && 
-                        x != SelectedDetectorAanvraag1 &&
-                        !(RichtingGevoeligeAanvragen.Where(y => y.FaseCyclus == SelectedFaseAanvraag && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
+                    DetectorenAanvraag2.AddRange(fc.Detectoren.Where(x => x.Type != Models.Enumerations.DetectorTypeEnum.Knop &&
+                                                                          x.Type != Models.Enumerations.DetectorTypeEnum.KnopBinnen &&
+                                                                          x.Type != Models.Enumerations.DetectorTypeEnum.KnopBuiten)
+                                                              .Select(x => x.Naam));
+                }
+                _SelectedDetectorAanvraag2 = DetectorenAanvraag2.Where(x => x != SelectedDetectorAanvraag1).LastOrDefault();
                 RaisePropertyChanged("SelectedFaseAanvraag");
                 RaisePropertyChanged("SelectedDetectorAanvraag1");
                 RaisePropertyChanged("SelectedDetectorAanvraag2");
@@ -147,14 +151,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorAanvraag1 = value;
-                DetectorenAanvraag2.Clear();
-                DetectorenAanvraag2.AddRange(_AlleDetectoren.Where(x =>
-                {
-                    return
-                        x.StartsWith(SelectedFaseAanvraag) &&
-                        x != SelectedDetectorAanvraag1 &&
-                        !(RichtingGevoeligeAanvragen.Where(y => y.FaseCyclus == SelectedFaseAanvraag && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
                 RaisePropertyChanged("SelectedDetectorAanvraag1");
             }
         }
@@ -177,21 +173,24 @@ namespace TLCGen.ViewModels
                 _SelectedDetectorVerleng1 = null;
                 _SelectedDetectorVerleng2 = null;
                 DetectorenVerleng1.Clear();
-                DetectorenVerleng1.AddRange(_AlleDetectoren.Where(x =>
+                var fc = Controller.Fasen.Where(x => x.Naam == _SelectedFaseVerleng).FirstOrDefault();
+                if (fc != null)
                 {
-                    return
-                        x.StartsWith(value) &&
-                        x != SelectedDetectorVerleng2 &&
-                        !(RichtingGevoeligVerlengen.Where(y => y.FaseCyclus == SelectedFaseVerleng && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
+                    DetectorenVerleng1.AddRange(fc.Detectoren.Where(x => x.Type != Models.Enumerations.DetectorTypeEnum.Knop &&
+                                                                         x.Type != Models.Enumerations.DetectorTypeEnum.KnopBinnen &&
+                                                                         x.Type != Models.Enumerations.DetectorTypeEnum.KnopBuiten)
+                                                             .Select(x => x.Naam));
+                }
+                _SelectedDetectorVerleng1 = DetectorenVerleng1.LastOrDefault();
                 DetectorenVerleng2.Clear();
-                DetectorenVerleng2.AddRange(_AlleDetectoren.Where(x =>
+                if (fc != null)
                 {
-                    return
-                        x.StartsWith(value) &&
-                        x != SelectedDetectorVerleng1 &&
-                        !(RichtingGevoeligVerlengen.Where(y => y.FaseCyclus == SelectedFaseVerleng && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
+                    DetectorenVerleng2.AddRange(fc.Detectoren.Where(x => x.Type != Models.Enumerations.DetectorTypeEnum.Knop &&
+                                                                         x.Type != Models.Enumerations.DetectorTypeEnum.KnopBinnen &&
+                                                                         x.Type != Models.Enumerations.DetectorTypeEnum.KnopBuiten)
+                                                             .Select(x => x.Naam));
+                }
+                _SelectedDetectorVerleng2 = DetectorenVerleng2.Where(x => x != SelectedDetectorVerleng1).LastOrDefault();
                 RaisePropertyChanged("SelectedFaseVerleng");
                 RaisePropertyChanged("SelectedDetectorVerleng1");
                 RaisePropertyChanged("SelectedDetectorVerleng2");
@@ -203,14 +202,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectorVerleng1 = value;
-                DetectorenVerleng2.Clear();
-                DetectorenVerleng2.AddRange(_AlleDetectoren.Where(x =>
-                {
-                    return
-                        x.StartsWith(SelectedFaseVerleng) &&
-                        x != SelectedDetectorVerleng1 &&
-                        !(RichtingGevoeligVerlengen.Where(y => y.FaseCyclus == SelectedFaseVerleng && (y.VanDetector == x || y.NaarDetector == x)).Count() > 0);
-                }));
                 RaisePropertyChanged("SelectedDetectorVerleng1");
             }
         }
@@ -320,15 +311,19 @@ namespace TLCGen.ViewModels
 
         private bool AddRichtingGevoeligeAanvraag_CanExecute(object prm)
         {
-            return SelectedFaseAanvraag != null && SelectedDetectorAanvraag1 != null && SelectedDetectorAanvraag2 != null;
+            return SelectedFaseAanvraag != null && SelectedDetectorAanvraag1 != null && SelectedDetectorAanvraag2 != null &&
+                SelectedDetectorAanvraag1 != SelectedDetectorAanvraag2;
         }
 
         private void AddRichtingGevoeligeAanvraag_Executed(object prm)
         {
-            RichtingGevoeligeAanvraagModel rga = new RichtingGevoeligeAanvraagModel();
-            rga.FaseCyclus = SelectedFaseAanvraag;
-            rga.VanDetector = SelectedDetectorAanvraag1;
-            rga.NaarDetector = SelectedDetectorAanvraag2;
+            var rga = new RichtingGevoeligeAanvraagModel()
+            {
+                FaseCyclus = SelectedFaseAanvraag,
+                VanDetector = SelectedDetectorAanvraag1,
+                NaarDetector = SelectedDetectorAanvraag2
+            };
+            DefaultsProvider.Default.SetDefaultsOnModel(rga);
             RichtingGevoeligeAanvragen.Add(new RichtingGevoeligeAanvraagViewModel(rga));
 
             _SelectedFaseAanvraag = null;
@@ -348,10 +343,13 @@ namespace TLCGen.ViewModels
 
         private void AddRichtingGevoeligVerleng_Executed(object prm)
         {
-            RichtingGevoeligVerlengModel rgv = new RichtingGevoeligVerlengModel();
-            rgv.FaseCyclus = SelectedFaseVerleng;
-            rgv.VanDetector = SelectedDetectorVerleng1;
-            rgv.NaarDetector = SelectedDetectorVerleng2;
+            var rgv = new RichtingGevoeligVerlengModel()
+            {
+                FaseCyclus = SelectedFaseVerleng,
+                VanDetector = SelectedDetectorVerleng1,
+                NaarDetector = SelectedDetectorVerleng2
+            };
+            DefaultsProvider.Default.SetDefaultsOnModel(rgv);
             RichtingGevoeligVerlengen.Add(new RichtingGevoeligVerlengViewModel(rgv));
 
             _SelectedFaseVerleng = null;

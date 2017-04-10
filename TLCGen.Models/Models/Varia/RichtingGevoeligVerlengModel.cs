@@ -14,12 +14,14 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
+        [HasDefault(false)]
         public string VanDetector { get; set; }
+        [HasDefault(false)]
         public string NaarDetector { get; set; }
         public int MaxTijdsVerschil { get; set; }
         public int VerlengTijd { get; set; }
-        public int HiaatTijd { get; set; }
         public RichtingGevoeligVerlengenTypeEnum TypeVerlengen { get; set; }
 
         #endregion // Properties
