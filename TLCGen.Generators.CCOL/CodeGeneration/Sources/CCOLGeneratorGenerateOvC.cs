@@ -772,30 +772,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   ---------------------------------------------------------------- */");
             sb.AppendLine($"void InUitMelden(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}/* OV-inmeldingen */");
-            foreach (var ov in c.OVData.OVIngrepen)
+            if (c.OVData.OVIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}OVInmelden(ovFC{ov.FaseCyclus}, SH[{_hpf}{_hovin}{ov.FaseCyclus}], iInstPrioriteitsNiveau[ovFC{ov.FaseCyclus}], iInstPrioriteitsOpties[ovFC{ov.FaseCyclus}], 0, 0);");
+                sb.AppendLine($"{ts}/* OV-inmeldingen */");
+                foreach (var ov in c.OVData.OVIngrepen)
+                {
+                    sb.AppendLine($"{ts}OVInmelden(ovFC{ov.FaseCyclus}, SH[{_hpf}{_hovin}{ov.FaseCyclus}], iInstPrioriteitsNiveau[ovFC{ov.FaseCyclus}], iInstPrioriteitsOpties[ovFC{ov.FaseCyclus}], 0, 0);");
+                }
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* OV-uitmeldingen */");
+                foreach (var ov in c.OVData.OVIngrepen)
+                {
+                    sb.AppendLine($"{ts}OVUitmelden(ovFC{ov.FaseCyclus}, SH[{_hpf}{_hovuit}{ov.FaseCyclus}]);");
+                }
+                sb.AppendLine();
             }
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* OV-uitmeldingen */");
-            foreach (var ov in c.OVData.OVIngrepen)
+            if (c.OVData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}OVUitmelden(ovFC{ov.FaseCyclus}, SH[{_hpf}{_hovuit}{ov.FaseCyclus}]);");
+                sb.AppendLine($"{ts}/* HD-inmeldingen */");
+                foreach (var hd in c.OVData.HDIngrepen)
+                {
+                    sb.AppendLine($"{ts}OVInmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhdin}{hd.FaseCyclus}], iInstPrioriteitsNiveau[hdFC{hd.FaseCyclus}], iInstPrioriteitsOpties[hdFC{hd.FaseCyclus}], 0, 0);");
+                }
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* HD-uitmeldingen */");
+                foreach (var hd in c.OVData.HDIngrepen)
+                {
+                    sb.AppendLine($"{ts}OVUitmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhduit}{hd.FaseCyclus}]);");
+                }
+                sb.AppendLine();
             }
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* HD-inmeldingen */");
-            foreach (var hd in c.OVData.HDIngrepen)
-            {
-                sb.AppendLine($"{ts}OVInmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhdin}{hd.FaseCyclus}], iInstPrioriteitsNiveau[hdFC{hd.FaseCyclus}], iInstPrioriteitsOpties[hdFC{hd.FaseCyclus}], 0, 0);");
-            }
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* HD-uitmeldingen */");
-            foreach (var hd in c.OVData.HDIngrepen)
-            {
-                sb.AppendLine($"{ts}OVUitmelden(hdFC{hd.FaseCyclus}, SH[{_hpf}{_hhduit}{hd.FaseCyclus}]);");
-            }
-            sb.AppendLine();
             sb.AppendLine($"{ts}/* Opzetten hulpelementen voor in- en uitmeldingen */");
             foreach (var ov in c.OVData.OVIngrepen)
             {
@@ -989,37 +995,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();
-            sb.AppendLine($"{ts}/* OV ingrepen */");
-            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.KAR))
+            if (c.OVData.OVIngrepen.Count > 0)
             {
-                int ifc;
-                if (Int32.TryParse(ov.FaseCyclus, out ifc))
+                sb.AppendLine($"{ts}/* OV ingrepen */");
+                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.KAR))
                 {
-                    string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                    int ifc;
+                    if (Int32.TryParse(ov.FaseCyclus, out ifc))
+                    {
+                        string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                    }
                 }
-            }
-            if (c.OVData.DSI)
-            {
-                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+                if (c.OVData.DSI)
                 {
-                    string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
+                    {
+                        string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    }
                 }
+                sb.AppendLine();
             }
 
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* HD ingrepen */");
-            foreach (var hd in c.OVData.HDIngrepen.Where(x => x.KAR))
+            if (c.OVData.HDIngrepen.Count > 0)
             {
-                int ifc;
-                string type = "CIF_POL";
-                if (Int32.TryParse(hd.FaseCyclus, out ifc))
+                sb.AppendLine($"{ts}/* HD ingrepen */");
+                foreach (var hd in c.OVData.HDIngrepen.Where(x => x.KAR))
                 {
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
+                    int ifc;
+                    string type = "CIF_POL";
+                    if (Int32.TryParse(hd.FaseCyclus, out ifc))
+                    {
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
+                    }
                 }
             }
             sb.AppendLine("}");

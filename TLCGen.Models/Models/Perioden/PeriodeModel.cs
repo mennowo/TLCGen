@@ -41,7 +41,6 @@ namespace TLCGen.Models
         #region Serialization
 
         // Properties for serialization
-        [Browsable(false)]
         [XmlElement("StartTijd")]
         public string SerializedStartTijd
         {
@@ -68,8 +67,7 @@ namespace TLCGen.Models
                 StartTijd = new TimeSpan(days, hours, Int32.Parse(parts[1]), 0);
             }
         }
-
-        [Browsable(false)]
+        
         [XmlElement("EindTijd")]
         public string SerializedEindTijd
         {

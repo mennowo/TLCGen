@@ -11,7 +11,7 @@ namespace TLCGen.Models.Enumerations
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum PeriodeTypeEnum
     {
-        [Description("Groentijden")]
+        [Description("NONPUBLIC")]
         Groentijden,
         [Description("Rateltikkers altijd")]
         RateltikkersAltijd,

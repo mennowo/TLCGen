@@ -13,6 +13,7 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -56,6 +57,47 @@ namespace TLCGen.ViewModels
             {
                 _Periode.Commentaar = value;
                 OnMonitoredPropertyChanged("Commentaar");
+            }
+        }
+        
+        public string TypeAsString
+        {
+            get { return Type.GetDescription(); }
+            set
+            {
+                if(value == PeriodeTypeEnum.BellenActief.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.BellenActief;
+                }
+                else if (value == PeriodeTypeEnum.BellenDimmen.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.BellenDimmen;
+                }
+                else if (value == PeriodeTypeEnum.Overig.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.Overig;
+                }
+                else if (value == PeriodeTypeEnum.RateltikkersAanvraag.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.RateltikkersAanvraag;
+                }
+                else if (value == PeriodeTypeEnum.RateltikkersAltijd.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.RateltikkersAltijd;
+                }
+                else if (value == PeriodeTypeEnum.RateltikkersDimmen.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.RateltikkersDimmen;
+                }
+                else if (value == PeriodeTypeEnum.WaarschuwingsLichten.GetDescription())
+                {
+                    Type = PeriodeTypeEnum.WaarschuwingsLichten;
+                }
+                else
+                {
+                    throw new NotImplementedException("Unknown period type in PeriodeViewModel.cs line 100");
+                }
+                OnMonitoredPropertyChanged(null);
             }
         }
 
@@ -173,7 +215,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // IViewModelWithItem
-
 
         #region IComparable
 

@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public bool KAR { get; set; }
         [Browsable(false)] // Opticom is not (yet) supported
         public bool Opticom { get; set; }
+        [Browsable(false)] // Not (yet) used
         public bool Sirene { get; set; }
 
         public int RijTijdOngehinderd { get; set; }

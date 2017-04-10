@@ -130,6 +130,10 @@ namespace TLCGen.Settings
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Radar;
                     }
+                    else
+                    {
+                        throw new NotImplementedException("Unknown detector type in DetectorTemplateViewModel.cs line 135");
+                    }
                 }
                 RaisePropertyChanged("SelectedDetectorTypeString");
             }
@@ -266,14 +270,11 @@ namespace TLCGen.Settings
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
 
             DetectorTypeOpties.Clear();
-            DetectorTypeOpties.Add(DetectorTypeEnum.Kop.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Lang.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Verweg.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.File.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Knop.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.KnopBinnen.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.KnopBuiten.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Radar.GetDescription());
+            var descs = Enum.GetValues(typeof(DetectorTypeEnum));
+            foreach(DetectorTypeEnum d in descs)
+            {
+                DetectorTypeOpties.Add(d.GetDescription());
+            }
         }
 
         #endregion // Constructor

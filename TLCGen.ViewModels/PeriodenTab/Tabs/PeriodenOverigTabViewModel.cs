@@ -12,6 +12,7 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
@@ -295,9 +296,36 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
+
+
+        private List<string> _PeriodeTypeOpties;
+        public List<string> PeriodeTypeOpties
+        {
+            get
+            {
+                if (_PeriodeTypeOpties == null)
+                {
+                    _PeriodeTypeOpties = new List<string>();
+                }
+                return _PeriodeTypeOpties;
+            }
+        }
+
         public PeriodenOverigTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
+
+
+
+            PeriodeTypeOpties.Clear();
+            var descs = Enum.GetValues(typeof(PeriodeTypeEnum));
+            foreach (PeriodeTypeEnum d in descs)
+            {
+                if (d != PeriodeTypeEnum.Groentijden)
+                {
+                    PeriodeTypeOpties.Add(d.GetDescription());
+                }
+            }
         }
 
         #endregion // Constructor

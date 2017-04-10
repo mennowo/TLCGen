@@ -213,6 +213,10 @@ namespace TLCGen.Settings
                     {
                         SelectedFaseCyclus.Type = FaseTypeEnum.OV;
                     }
+                    else
+                    {
+                        throw new NotImplementedException("Unknown fase type in FaseCyclusTemplateViewModel.cs line 218");
+                    }
                 }
                 RaisePropertyChanged("SelectedFaseCyclusTypeString");
             }
@@ -230,17 +234,14 @@ namespace TLCGen.Settings
                     if (value == DetectorTypeEnum.Kop.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Kop;
-
                     }
                     else if (value == DetectorTypeEnum.Lang.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Lang;
-
                     }
                     else if (value == DetectorTypeEnum.Verweg.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Verweg;
-
                     }
                     else if (value == DetectorTypeEnum.File.GetDescription())
                     {
@@ -261,6 +262,10 @@ namespace TLCGen.Settings
                     else if (value == DetectorTypeEnum.Radar.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Radar;
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("Unknown detector type in FaseCyclusTemplateViewModel.cs line 268");
                     }
                 }
                 RaisePropertyChanged("SelectedDetectorTypeString");
@@ -491,20 +496,18 @@ namespace TLCGen.Settings
             Fasen.CollectionChanged += Fasen_CollectionChanged;
 
             FaseCyclusTypeOpties.Clear();
-            FaseCyclusTypeOpties.Add(FaseTypeEnum.Auto.GetDescription());
-            FaseCyclusTypeOpties.Add(FaseTypeEnum.Fiets.GetDescription());
-            FaseCyclusTypeOpties.Add(FaseTypeEnum.Voetganger.GetDescription());
-            FaseCyclusTypeOpties.Add(FaseTypeEnum.OV.GetDescription());
+            var fdescs = Enum.GetValues(typeof(FaseTypeEnum));
+            foreach (FaseTypeEnum d in fdescs)
+            {
+                FaseCyclusTypeOpties.Add(d.GetDescription());
+            }
 
             DetectorTypeOpties.Clear();
-            DetectorTypeOpties.Add(DetectorTypeEnum.Kop.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Lang.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Verweg.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.File.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Knop.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.KnopBinnen.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.KnopBuiten.GetDescription());
-            DetectorTypeOpties.Add(DetectorTypeEnum.Radar.GetDescription());
+            var descs = Enum.GetValues(typeof(DetectorTypeEnum));
+            foreach (DetectorTypeEnum d in descs)
+            {
+                DetectorTypeOpties.Add(d.GetDescription());
+            }
         }
 
         #endregion // Constructor

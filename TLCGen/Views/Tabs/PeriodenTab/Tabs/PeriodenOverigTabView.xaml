@@ -8,6 +8,7 @@
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
+             Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
@@ -20,9 +21,21 @@
             CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
-                <DataGridComboBoxColumn Header="Type" 
-                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PeriodeTypeEnum}}}" />
+                <DataGridTemplateColumn Header="Type" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=TypeAsString}" Margin="2" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                ItemsSource="{Binding Path=DataContext.PeriodeTypeOpties,ElementName=root}" 
+                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                SelectedItem="{Binding Path=TypeAsString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
                 <DataGridComboBoxColumn Header="Dag code" 
                                         SelectedItemBinding="{Binding Path=DagCode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PeriodeDagCodeEnum}}}" />
