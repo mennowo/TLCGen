@@ -15,8 +15,13 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
 	...);           /* drukknoppen */
-void NaloopVtgV2(count fc1, count fc2, count dk, count hdk, count tnl);
+void Eerlijk_doseren_V1(count hfile,            // hulpelement wel/geen file
+    count _prmperc,         // indexnummer parameter % doseren
+    count aantalfc,         // aantal te doseren fasen
+    count fc[],             // pointer naar array met fasenummers
+    count fcmg[][4],        // pointer naar array met mg parameter index nummers
+    int nogtedoseren[])     // pointer naar array met nog te doseren waarden
 
-extern mulv * FC_type;
+extern mulv FC_type[];
 
 #endif

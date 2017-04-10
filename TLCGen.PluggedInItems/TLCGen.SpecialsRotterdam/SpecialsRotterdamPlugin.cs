@@ -248,10 +248,8 @@ namespace TLCGen.SpecialsRotterdam
                 _MyElements.Add(new CCOLElement($"AFM_versie", 2, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 _MyElements.Add(new CCOLElement($"AFMLeven", CCOLElementTypeEnum.Uitgang));
-                _MyElements.Add(new CCOLElement($"TMSLeven", CCOLElementTypeEnum.Uitgang));
 
                 _MyElements.Add(new CCOLElement($"AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement($"TMSLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
             }
@@ -339,7 +337,6 @@ namespace TLCGen.SpecialsRotterdam
                         return "";
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_watchdog_return] != prmAFM_watchdog_return_old);");
-                    sb.AppendLine($"{ts}RT[{_tpf}TMSLeven] = IS_leven[{_ispf}TMS_leven] && !IS_leven_old[{_ispf}TMS_leven] || !IS_leven[{_ispf}TMS_leven] && IS_leven_old[{_ispf}TMS_leven];");
                     sb.AppendLine("#else");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
                     sb.AppendLine($"{ts}RT[{_tpf}TMSLeven] = TRUE;");
