@@ -22,7 +22,6 @@ namespace TLCGen.ViewModels
         private FileIngreepViewModel _SelectedFileIngreep;
 
         private List<string> _ControllerFasen;
-        private List<string> _ControllerFileDetectoren;
 
         private RelayCommand _AddFileIngreepCommand;
         private RelayCommand _RemoveFileIngreepCommand;
@@ -39,7 +38,7 @@ namespace TLCGen.ViewModels
                 _SelectedFileIngreep = value;
                 if (_SelectedFileIngreep != null)
                 {
-                    _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                    _SelectedFileIngreep.OnSelected(_ControllerFasen);
                 }
                 RaisePropertyChanged("SelectedFileIngreep");
             }
@@ -141,24 +140,10 @@ namespace TLCGen.ViewModels
             {
                 _ControllerFasen.Add(fcm.Naam);
             }
-            _ControllerFileDetectoren = new List<string>();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                foreach(DetectorModel dm in fcm.Detectoren)
-                {
-                    if(dm.Type == Models.Enumerations.DetectorTypeEnum.File)
-                        _ControllerFileDetectoren.Add(dm.Naam);
-                }
-            }
-            foreach (DetectorModel dm in _Controller.Detectoren)
-            {
-                if(dm.Type == Models.Enumerations.DetectorTypeEnum.File)
-                    _ControllerFileDetectoren.Add(dm.Naam);
-            }
-
+            
             if(_SelectedFileIngreep != null)
             {
-                _SelectedFileIngreep.OnSelected(_ControllerFasen, _ControllerFileDetectoren);
+                _SelectedFileIngreep.OnSelected(_ControllerFasen);
             }
         }
 

@@ -41,13 +41,14 @@
         <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="3" Grid.Column="1" />
         <DockPanel Grid.Row="4" Grid.ColumnSpan="2">
             <Label Content="File detectoren" DockPanel.Dock="Top" />
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" DockPanel.Dock="Bottom"/>
+            <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="File detector" />
                 <ComboBox ItemsSource="{Binding Path=SelectableDetectoren}" 
                           SelectedValue="{Binding Path=SelectedDetectorNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="100" />
                 <Button Content="Toevoegen" Command="{Binding AddFileDetectorCommand}" Margin="2" />
                 <Button Content="Verwijderen" Command="{Binding RemoveFileDetectorCommand}" Margin="2" DockPanel.Dock="Bottom" HorizontalAlignment="Left" />
-            </StackPanel>
+            </StackPanel>-->
             <DataGrid ItemsSource="{Binding Path=FileDetectoren}" DockPanel.Dock="Bottom"
                           SelectedItem="{Binding Path=SelectedFileDetector}" Margin="2"
                           CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
@@ -19,18 +20,12 @@ namespace TLCGen.ViewModels
         private FileIngreepModel _FileIngreep;
 
         private string _SelectedFaseNaam;
-        private string _SelectedDetectorNaam;
-
+        
         private List<string> _ControllerFasen;
-        private List<string> _ControllerDetectoren;
         private ObservableCollection<string> _SelectableFasen;
-        private ObservableCollection<string> _SelectableDetectoren;
-
+        
         private FileIngreepTeDoserenSignaalGroepViewModel _SelectedTeDoserenFase;
-        private FileIngreepDetectorViewModel _SelectedFileDetector;
-
-        private RelayCommand _AddFileDetectorCommand;
-        private RelayCommand _RemoveFileDetectorCommand;
+        
         private RelayCommand _AddTeDoserenSignaalGroepCommand;
         private RelayCommand _RemoveTeDoserenSignaalGroepCommand;
 
@@ -61,19 +56,7 @@ namespace TLCGen.ViewModels
                 return _SelectableFasen;
             }
         }
-
-        public ObservableCollection<string> SelectableDetectoren
-        {
-            get
-            {
-                if (_SelectableDetectoren == null)
-                {
-                    _SelectableDetectoren = new ObservableCollection<string>();
-                }
-                return _SelectableDetectoren;
-            }
-        }
-
+        
         public string SelectedFaseNaam
         {
             get { return _SelectedFaseNaam; }
@@ -81,16 +64,6 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseNaam = value;
                 OnPropertyChanged("SelectedFaseNaam");
-            }
-        }
-
-        public string SelectedDetectorNaam
-        {
-            get { return _SelectedDetectorNaam; }
-            set
-            {
-                _SelectedDetectorNaam = value;
-                OnPropertyChanged("SelectedDetectorNaam");
             }
         }
 
@@ -106,10 +79,10 @@ namespace TLCGen.ViewModels
 
         public FileIngreepDetectorViewModel SelectedFileDetector
         {
-            get { return _SelectedFileDetector; }
+            get { return DetectorManager.SelectedDetector; }
             set
             {
-                _SelectedFileDetector = value;
+                DetectorManager.SelectedDetector = value;
                 OnPropertyChanged("SelectedFileDetector");
             }
         }
@@ -170,34 +143,41 @@ namespace TLCGen.ViewModels
             get { return _FileIngreep.FileDetectoren.Count; }
         }
 
+        private DetectorManagerViewModel<FileIngreepDetectorViewModel, string> _DetectorManager;
+        public DetectorManagerViewModel<FileIngreepDetectorViewModel, string> DetectorManager
+        {
+            get
+            {
+                if (_DetectorManager == null)
+                {
+                    var dets1 =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen
+                            .SelectMany(x => x.Detectoren)
+                            .Where(x => x.Type == DetectorTypeEnum.File)
+                            .Select(x => x.Naam);
+                    var dets2 =
+                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren
+                            .Where(x => x.Type == DetectorTypeEnum.File)
+                            .Select(x => x.Naam);
+                    var dets = dets1.Concat(dets2).ToList();
+                    _DetectorManager = new DetectorManagerViewModel<FileIngreepDetectorViewModel, string>(
+                        FileDetectoren as ObservableCollection<FileIngreepDetectorViewModel>,
+                        dets,
+                        (x) => { var fd = new FileIngreepDetectorViewModel(new FileIngreepDetectorModel { Detector = x }); return fd; },
+                        (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
+                        null,
+                        () => { OnMonitoredPropertyChanged("SelectedFileDetector"); },
+                        () => { OnMonitoredPropertyChanged("SelectedFileDetector"); }
+                        );
+                }
+                return _DetectorManager;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
-
-        public ICommand AddFileDetectorCommand
-        {
-            get
-            {
-                if (_AddFileDetectorCommand == null)
-                {
-                    _AddFileDetectorCommand = new RelayCommand(AddFileDetectorCommand_Executed, AddFileDetectorCommand_CanExecute);
-                }
-                return _AddFileDetectorCommand;
-            }
-        }
-
-        public ICommand RemoveFileDetectorCommand
-        {
-            get
-            {
-                if (_RemoveFileDetectorCommand == null)
-                {
-                    _RemoveFileDetectorCommand = new RelayCommand(RemoveFileDetectorCommand_Executed, RemoveFileDetectorCommand_CanExecute);
-                }
-                return _RemoveFileDetectorCommand;
-            }
-        }
-
+        
         public ICommand AddTeDoserenSignaalGroepCommand
         {
             get
@@ -225,35 +205,7 @@ namespace TLCGen.ViewModels
         #endregion // Commands
 
         #region Command Functionality
-
-        void AddFileDetectorCommand_Executed(object prm)
-        {
-            FileIngreepDetectorModel fidm = new FileIngreepDetectorModel();
-            DefaultsProvider.Default.SetDefaultsOnModel(fidm);
-            fidm.Detector = SelectedDetectorNaam;
-            FileDetectoren.Add(new FileIngreepDetectorViewModel(fidm));
-            OnMonitoredPropertyChanged("MinimaalAantalMeldingenMax");
-            UpdateSelectables();
-        }
-
-        bool AddFileDetectorCommand_CanExecute(object prm)
-        {
-            return !string.IsNullOrWhiteSpace(SelectedDetectorNaam);
-        }
-
-        void RemoveFileDetectorCommand_Executed(object prm)
-        {
-            FileDetectoren.Remove(SelectedFileDetector);
-            SelectedFileDetector = null;
-            UpdateSelectables();
-        }
-
-        bool RemoveFileDetectorCommand_CanExecute(object prm)
-        {
-            return SelectedFileDetector != null;
-        }
-
-
+        
         void AddNewTeDoserenSignaalGroepCommand_Executed(object prm)
         {
             FileIngreepTeDoserenSignaalGroepModel dos = new FileIngreepTeDoserenSignaalGroepModel();
@@ -294,24 +246,15 @@ namespace TLCGen.ViewModels
                     SelectableFasen.Add(s);
                 }
             }
-            SelectableDetectoren.Clear();
-            foreach (string s in _ControllerDetectoren)
-            {
-                if (!FileDetectoren.Where(x => x.Detector == s).Any())
-                {
-                    SelectableDetectoren.Add(s);
-                }
-            }
         }
 
         #endregion // Private methods
 
         #region Public methods
 
-        public void OnSelected(List<string> controllerfasen, List<string> controllerdetectoren)
+        public void OnSelected(List<string> controllerfasen)
         {
             _ControllerFasen = controllerfasen;
-            _ControllerDetectoren = controllerdetectoren;
             UpdateSelectables();
         }
 
