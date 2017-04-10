@@ -111,11 +111,14 @@ namespace TLCGen.ViewModels
 
         public NaloopDetectorModel SelectedDetector
         {
-            get { return DetectorManager.SelectedDetector; }
+            get { return DetectorManager?.SelectedDetector; }
             set
             {
-                DetectorManager.SelectedDetector = value;
-                OnPropertyChanged("SelectedDetector");
+                if (DetectorManager != null)
+                {
+                    DetectorManager.SelectedDetector = value;
+                    OnPropertyChanged("SelectedDetector");
+                }
             }
         }
 

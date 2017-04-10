@@ -8,11 +8,8 @@ namespace TLCGen.Messaging.Requests
 {
     public class PrepareForGenerationRequest
     {
-        public bool Succes { get; set; }
-
         public PrepareForGenerationRequest()
         {
-            Succes = false;
         }
     }
 }

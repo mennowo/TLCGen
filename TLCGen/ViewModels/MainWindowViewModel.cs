@@ -344,7 +344,6 @@ namespace TLCGen.ViewModels
                 TLCGenControllerDataProvider.Default.NewController();
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
@@ -364,7 +363,6 @@ namespace TLCGen.ViewModels
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                ControllerVM.SelectedTabIndex = 0;
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
@@ -661,14 +659,9 @@ namespace TLCGen.ViewModels
         {
             if (TLCGenControllerDataProvider.Default.SetController(cm))
             {
-                if (ControllerVM != null)
-                {
-                    ControllerVM.SelectedTabIndex = 0;
-                }
                 string filename = TLCGenControllerDataProvider.Default.ControllerFileName;
                 SetControllerForStatics(cm);
                 ControllerVM.Controller = cm;
-                ControllerVM.SelectedTabIndex = 0;
                 return true;
             }
             return false;
@@ -682,7 +675,6 @@ namespace TLCGen.ViewModels
         {
             var procreq = new Messaging.Requests.ProcessSynchronisationsRequest();
             Messenger.Default.Send(procreq);
-            request.Succes = procreq.Succes;
         }
 
         #endregion // TLCGen Messaging

@@ -10,6 +10,7 @@ using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.ProjectGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Models;
 using TLCGen.ViewModels;
 
@@ -92,9 +93,14 @@ namespace TLCGen.Generators.CCOL
         {
             var prepreq = new Messaging.Requests.PrepareForGenerationRequest();
             GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(prepreq);
-            if (prepreq.Succes)
+            string s = TLCGenIntegrityChecker.IsControllerDataOK(_Plugin.Controller);
+            if (s == null)
             {
                 _CodeGenerator.GenerateSourceFiles(_Plugin.Controller, Path.GetDirectoryName(_Plugin.ControllerFileName));
+            }
+            else
+            {
+                MessageBox.Show(s, "Fout in conflictmatrix");
             }
         }
 

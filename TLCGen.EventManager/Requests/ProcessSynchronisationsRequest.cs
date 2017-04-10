@@ -8,11 +8,8 @@ namespace TLCGen.Messaging.Requests
 {
     public class ProcessSynchronisationsRequest
     {
-        public bool Succes { get; set; }
-
         public ProcessSynchronisationsRequest()
         {
-            Succes = false;
         }
     }
 }

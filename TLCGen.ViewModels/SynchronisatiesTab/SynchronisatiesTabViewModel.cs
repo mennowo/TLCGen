@@ -562,6 +562,8 @@ namespace TLCGen.ViewModels
 
         private bool IsMatrixOK()
         {
+            SaveConflictMatrix();
+
             string s = Integrity.TLCGenIntegrityChecker.IsConflictMatrixOK(_Controller);
             if (s == null)
             {
@@ -575,7 +577,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                MessageBox.Show(s, "Fout in conflictmatrix");
+                Task.Factory.StartNew(() => MessageBox.Show(s, "Fout in conflictmatrix"));
                 return false;
             }
         }
@@ -993,7 +995,6 @@ namespace TLCGen.ViewModels
 
             _IsProcessing = true;
             SaveConflictMatrix();
-            request.Succes = IsMatrixOK();
             _IsProcessing = false;
         }
 

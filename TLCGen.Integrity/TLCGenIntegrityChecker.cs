@@ -29,13 +29,6 @@ namespace TLCGen.Integrity
                 return s;
             }
 
-#warning Clean this up.
-            //s = IsGroentijdenSetDataOK(c);
-            //if (!string.IsNullOrEmpty(s))
-            //{
-            //    return s;
-            //}
-
             return null;
         }
 

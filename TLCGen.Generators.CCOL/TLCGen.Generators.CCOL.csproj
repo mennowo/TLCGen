@@ -190,6 +190,10 @@
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
       <Name>TLCGen.Helpers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
+      <Project>{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}</Project>
+      <Name>TLCGen.Integrity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
       <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
       <Name>TLCGen.Plugins</Name>

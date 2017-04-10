@@ -19,8 +19,7 @@
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 
-                    SelectedItem="{Binding Path=SelectedTab}"
-                    SelectedIndex="{Binding Path=SelectedTabIndex}"
+                    SelectedItem="{Binding Path=SelectedTab,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     TabStripPlacement="Left"
                     HorizontalContentAlignment="Left">
             <TabControl.ItemTemplate>

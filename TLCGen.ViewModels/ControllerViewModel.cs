@@ -8,7 +8,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using System.Xml;
 using TLCGen.DataAccess;
 using TLCGen.Extensions;
@@ -51,6 +53,7 @@ namespace TLCGen.ViewModels
                 {
                     tab.Controller = value;
                 }
+                SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
                 RaisePropertyChanged();
             }
         }
@@ -89,7 +92,7 @@ namespace TLCGen.ViewModels
             set
             {
                 // Take actions for current 
-                if (_SelectedTab != null)
+                if (_SelectedTab != value && _SelectedTab != null)
                 {
                     if(_SelectedTab.OnDeselectedPreview())
                     {
@@ -111,19 +114,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        /// <summary>
-        /// Index of the selected tab in the Controller View
-        /// </summary>
-        public int SelectedTabIndex
-        {
-            get { return _SelectedTabIndex; }
-            set
-            {
-                _SelectedTabIndex = value;
-                RaisePropertyChanged("SelectedTabIndex");
-            }
-        }
-
         #endregion // Properties
 
         #region Private methods
@@ -138,7 +128,7 @@ namespace TLCGen.ViewModels
         public void ReloadController()
         {
             RaisePropertyChanged(null);
-            SelectedTabIndex = 0;
+            SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }
 
         /// <summary>
@@ -301,7 +291,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
             Messenger.Default.Register(this, new Action<PropertyChangedMessageBase>(OnPropertyChangedMessageBase));
 
-            SelectedTabIndex = 0;
+            SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }
 
         #endregion // Constructor
