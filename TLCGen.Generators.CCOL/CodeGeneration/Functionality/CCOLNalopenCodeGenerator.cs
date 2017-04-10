@@ -111,8 +111,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
                     return true;
                 default:

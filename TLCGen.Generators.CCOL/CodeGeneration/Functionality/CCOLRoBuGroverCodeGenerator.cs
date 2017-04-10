@@ -93,6 +93,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
+                case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
                     return true;
                 default:
@@ -116,6 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     return sb.ToString();
 
+                case CCOLRegCCodeTypeEnum.Verlenggroen:
                 case CCOLRegCCodeTypeEnum.Maxgroen:
                     sb.AppendLine($"{tabspace}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
                     sb.AppendLine($"{tabspace}if (SCH[{_schpf}{_schrgv}] != 0)");

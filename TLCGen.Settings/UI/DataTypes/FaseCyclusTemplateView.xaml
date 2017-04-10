@@ -39,6 +39,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddFaseCommand}" />
             <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveFaseCommand}" />
+            <Button DockPanel.Dock="Bottom" Margin="2" Content="Defaults toepassen" Command="{Binding Path=ApplyDefaultsToFaseCommand}" />
         </StackPanel>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
@@ -68,6 +69,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <DockPanel>
+                        <Button DockPanel.Dock="Bottom" Margin="2" Content="Defaults toep." Command="{Binding Path=ApplyDefaultsToFaseDetectorCommand}" />
                         <Button DockPanel.Dock="Bottom" Margin="2" Content="Verwijderen" Command="{Binding Path=RemoveFaseDetectorCommand}" />
                         <Button DockPanel.Dock="Bottom" Margin="2" Content="Nieuw" Command="{Binding Path=AddFaseDetectorCommand}" />
                         <ListView DockPanel.Dock="Top"

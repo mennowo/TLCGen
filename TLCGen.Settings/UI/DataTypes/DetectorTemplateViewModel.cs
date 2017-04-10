@@ -137,7 +137,6 @@ namespace TLCGen.Settings
 
         #endregion // Properties
 
-
         #region Commands
 
 
@@ -168,10 +167,23 @@ namespace TLCGen.Settings
             }
         }
 
+        RelayCommand _ApplyDefaultsCommand;
+        public ICommand ApplyDefaultsCommand
+        {
+            get
+            {
+                if (_ApplyDefaultsCommand == null)
+                {
+                    _ApplyDefaultsCommand = new RelayCommand(new Action<object>(ApplyDefaultsCommand_Executed), new Predicate<object>(ApplyDefaultsCommand_CanExecute));
+                }
+                return _ApplyDefaultsCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Command Functionality
-        
+
         private void AddDetectorCommand_Executed(object prm)
         {
             DetectorModel d = new DetectorModel();
@@ -194,6 +206,20 @@ namespace TLCGen.Settings
         {
             return SelectedDetector != null && Detectoren.Count > 0;
         }
+
+        void ApplyDefaultsCommand_Executed(object prm)
+        {
+            var d = SelectedDetector;
+            SelectedDetector = null;
+            DefaultsProvider.Default.SetDefaultsOnModel(d, d.Type.ToString());
+            SelectedDetector = d;
+        }
+
+        bool ApplyDefaultsCommand_CanExecute(object prm)
+        {
+            return SelectedDetector != null && Detectoren.Count > 0;
+        }
+
 
         #endregion // Command Functionality
 

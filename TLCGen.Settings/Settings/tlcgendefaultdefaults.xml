@@ -151,7 +151,7 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>RoBuGrover auto</DefaultName>
+      <DefaultName>RoBuGrover auto en OV</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Auto</Selector1>
       <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
@@ -164,7 +164,7 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>RoBuGrover fiets</DefaultName>
+      <DefaultName>RoBuGrover overig</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Fiets</Selector1>
       <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
@@ -242,8 +242,8 @@
         <VissimNaam />
         <TDB>0</TDB>
         <TDH>10</TDH>
-        <TOG>60</TOG>
-        <TBG>360</TBG>
+        <TOG>360</TOG>
+        <TBG>60</TBG>
         <TFL>60</TFL>
         <CFL>30</CFL>
         <AanvraagDirect>false</AanvraagDirect>

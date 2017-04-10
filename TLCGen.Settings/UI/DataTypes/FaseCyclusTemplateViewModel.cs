@@ -311,7 +311,6 @@ namespace TLCGen.Settings
             }
         }
 
-
         RelayCommand _RemoveFaseDetectorCommand;
         public ICommand RemoveFaseDetectorCommand
         {
@@ -324,6 +323,33 @@ namespace TLCGen.Settings
                 return _RemoveFaseDetectorCommand;
             }
         }
+
+        RelayCommand _ApplyDefaultsToFaseCommand;
+        public ICommand ApplyDefaultsToFaseCommand
+        {
+            get
+            {
+                if (_ApplyDefaultsToFaseCommand == null)
+                {
+                    _ApplyDefaultsToFaseCommand = new RelayCommand(new Action<object>(ApplyDefaultsToFaseCommand_Executed), new Predicate<object>(ApplyDefaultsToFaseCommand_CanExecute));
+                }
+                return _ApplyDefaultsToFaseCommand;
+            }
+        }
+
+        RelayCommand _ApplyDefaultsToFaseDetectorCommand;
+        public ICommand ApplyDefaultsToFaseDetectorCommand
+        {
+            get
+            {
+                if (_ApplyDefaultsToFaseDetectorCommand == null)
+                {
+                    _ApplyDefaultsToFaseDetectorCommand = new RelayCommand(new Action<object>(ApplyDefaultsToFaseDetectorCommand_Executed), new Predicate<object>(ApplyDefaultsToFaseDetectorCommand_CanExecute));
+                }
+                return _ApplyDefaultsToFaseDetectorCommand;
+            }
+        }
+
 
         #endregion // Commands
 
@@ -371,6 +397,32 @@ namespace TLCGen.Settings
         }
 
         bool RemoveFaseDetectorCommand_CanExecute(object prm)
+        {
+            return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
+        }
+
+        void ApplyDefaultsToFaseCommand_Executed(object prm)
+        {
+            var fc = SelectedFaseCyclus;
+            SelectedFaseCyclus = null;
+            DefaultsProvider.Default.SetDefaultsOnModel(fc, fc.Type.ToString());
+            SelectedFaseCyclus = fc;
+        }
+
+        bool ApplyDefaultsToFaseCommand_CanExecute(object prm)
+        {
+            return SelectedFaseCyclus != null && SelectedFaseCyclus != null;
+        }
+
+        void ApplyDefaultsToFaseDetectorCommand_Executed(object prm)
+        {
+            var d = SelectedFaseCyclusDetector;
+            SelectedFaseCyclusDetector = null;
+            DefaultsProvider.Default.SetDefaultsOnModel(d, d.Type.ToString(), SelectedFaseCyclus.Type.ToString());
+            SelectedFaseCyclusDetector = d;
+        }
+
+        bool ApplyDefaultsToFaseDetectorCommand_CanExecute(object prm)
         {
             return SelectedFaseCyclus != null && SelectedFaseCyclusDetector != null;
         }

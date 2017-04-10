@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -276,8 +277,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(")");
                             sb.AppendLine($"{ts}{{");
                             sb.AppendLine($"{ts}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
-                            sb.AppendLine($"{ts}{ts}PercentageMaxGroenTijden({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
-                            sb.Append("".PadLeft($"{ts}{ts}PercentageMaxGroenTijden(".Length));
+                            string grfunc = "";
+                            switch (c.Data.TypeGroentijden)
+                            {
+                                case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
+                                case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
+                            }
+                            sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
+                            sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             int i = 0;
                             foreach(var mgsm in c.GroentijdenSets)
                             {

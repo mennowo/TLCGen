@@ -32,13 +32,18 @@
                 </ct:InfoElement>
             </StackPanel>
             <TextBox Text="{Binding Path=Replace}" Margin="2" />
-            <Label Content="Detectoren" />
-            <ListView ItemsSource="{Binding Path=Detectoren}" MinHeight="20" Margin="2"
-                      SelectedItem="{Binding Path=SelectedDetector,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" DisplayMemberPath="Naam" />
+            <DataGrid ItemsSource="{Binding Path=Detectoren}" MinHeight="20" Margin="2"
+                      SelectedItem="{Binding Path=SelectedDetector,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Naam}" Width="*" Header="Detectoren" />
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddDetectorCommand}" />
             <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveDetectorCommand}" />
+            <Button Content="Defaults toepassen" Margin="2" Command="{Binding Path=ApplyDefaultsCommand}" />
         </StackPanel>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
