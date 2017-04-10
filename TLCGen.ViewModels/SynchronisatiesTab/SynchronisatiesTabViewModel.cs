@@ -184,9 +184,9 @@ namespace TLCGen.ViewModels
             get { return _Controller.Data.GarantieOntruimingsTijden; }
             set
             {
-                RaisePropertyChanged("UseGarantieOntruimingsTijden", _Controller.Data.GarantieOntruimingsTijden, value, true);
                 _Controller.Data.GarantieOntruimingsTijden = value;
                 MatrixChanged = true;
+                RaisePropertyChanged("UseGarantieOntruimingsTijden", _Controller.Data.GarantieOntruimingsTijden, value, true);
             }
         }
 

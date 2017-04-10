@@ -51,7 +51,7 @@
                     GridSelectedItem="{Binding Path=SelectedSynchronisatie,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Grid.ColumnSpan="2" HorizontalAlignment="Left" />
                 <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Conflict}}" Grid.Row="1" >
-                    <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden}" Margin="2" />
+                    <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
                 </Grid>
             </Grid>
         </Border>
