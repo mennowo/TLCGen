@@ -196,9 +196,7 @@ namespace TLCGen.Plugins
                             }
                             if (!bFound)
                             {
-                                //#if !DEBUG
                                 System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen addin.");
-                                //#endif
                             }
                         }
                     }
@@ -207,9 +205,9 @@ namespace TLCGen.Plugins
                 {
                 }
             }
-            catch
+            catch (Exception e)
             {
-                throw new NotImplementedException();
+                throw e;
             }
         }
 
