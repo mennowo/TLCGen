@@ -22,8 +22,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
-                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog, 0, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement(_prmmaxtfb, 0, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement(_prmmaxtfb, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
             }
         }
 

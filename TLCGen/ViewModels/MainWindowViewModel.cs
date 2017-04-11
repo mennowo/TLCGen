@@ -683,76 +683,78 @@ namespace TLCGen.ViewModels
 
         public MainWindowViewModel()
         {
-            Messenger.Default.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
-
-            // Load application settings and defaults
-            SettingsProvider.Default.LoadApplicationSettings();
-            DefaultsProvider.Default.LoadSettings();
-            TemplatesProvider.Default.LoadSettings();
-
-            // Load available applicationparts and plugins
-            TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");
-            TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
-
-            // Instantiate all parts
-            _ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
-            var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
-            foreach (var part in parts)
+            try
             {
-                ITLCGenPlugin instpl = part.Item2;
-                var flags = Enum.GetValues(typeof(TLCGenPluginElems));
-                foreach(TLCGenPluginElems elem in flags)
+                Messenger.Default.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+
+                // Load application settings and defaults
+                SettingsProvider.Default.LoadApplicationSettings();
+                DefaultsProvider.Default.LoadSettings();
+                TemplatesProvider.Default.LoadSettings();
+
+                // Load available applicationparts and plugins
+                TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");
+                TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
+
+                // Instantiate all parts
+                _ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();
+                var parts = TLCGenPluginManager.Default.ApplicationParts.Concat(TLCGenPluginManager.Default.ApplicationPlugins);
+                foreach (var part in parts)
                 {
-                    if ((part.Item1 & elem) == elem)
+                    ITLCGenPlugin instpl = part.Item2;
+                    var flags = Enum.GetValues(typeof(TLCGenPluginElems));
+                    foreach (TLCGenPluginElems elem in flags)
                     {
-                        switch (elem)
+                        if ((part.Item1 & elem) == elem)
                         {
-                            case TLCGenPluginElems.Generator:
-                                Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
-                                break;
-                            case TLCGenPluginElems.HasSettings:
-                                ((ITLCGenHasSettings)instpl).LoadSettings();
-                                break;
-                            case TLCGenPluginElems.Importer:
-                                MenuItem mi = new MenuItem();
-                                mi.Header = instpl.GetPluginName();
-                                mi.Command = ImportControllerCommand;
-                                mi.CommandParameter = instpl;
-                                ImportMenuItems.Add(mi);
-                                break;
-                            case TLCGenPluginElems.IOElementProvider:
-                                break;
-                            case TLCGenPluginElems.MenuControl:
-                                PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
-                                break;
-                            case TLCGenPluginElems.TabControl:
-                                break;
-                            case TLCGenPluginElems.ToolBarControl:
-                                break;
-                            case TLCGenPluginElems.XMLNodeWriter:
-                                break;
-                            case TLCGenPluginElems.PlugMessaging:
-                                (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
-                                break;
+                            switch (elem)
+                            {
+                                case TLCGenPluginElems.Generator:
+                                    Generators.Add(new IGeneratorViewModel(instpl as ITLCGenGenerator));
+                                    break;
+                                case TLCGenPluginElems.HasSettings:
+                                    ((ITLCGenHasSettings)instpl).LoadSettings();
+                                    break;
+                                case TLCGenPluginElems.Importer:
+                                    MenuItem mi = new MenuItem();
+                                    mi.Header = instpl.GetPluginName();
+                                    mi.Command = ImportControllerCommand;
+                                    mi.CommandParameter = instpl;
+                                    ImportMenuItems.Add(mi);
+                                    break;
+                                case TLCGenPluginElems.IOElementProvider:
+                                    break;
+                                case TLCGenPluginElems.MenuControl:
+                                    PluginMenuItems.Add(((ITLCGenMenuItem)instpl).Menu);
+                                    break;
+                                case TLCGenPluginElems.TabControl:
+                                    break;
+                                case TLCGenPluginElems.ToolBarControl:
+                                    break;
+                                case TLCGenPluginElems.XMLNodeWriter:
+                                    break;
+                                case TLCGenPluginElems.PlugMessaging:
+                                    (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
+                                    break;
+                            }
                         }
+                        TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);
                     }
-                    TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);
+                    _ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
                 }
-                _ApplicationParts.Add(new Tuple<TLCGenPluginElems, ITLCGenPlugin>(part.Item1, instpl as ITLCGenPlugin));
-            }
-            if (Generators.Count > 0) SelectedGenerator = Generators[0];
-            
-            // Construct the ViewModel
-            ControllerVM = new ControllerViewModel();
+                if (Generators.Count > 0) SelectedGenerator = Generators[0];
 
-            string[] args = Environment.GetCommandLineArgs();
+                // Construct the ViewModel
+                ControllerVM = new ControllerViewModel();
 
-            if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
-            {
-                TLCGenControllerDataProvider.Default.OpenController(args[1]);
-            }
+                string[] args = Environment.GetCommandLineArgs();
 
-            // If we are in debug mode, the code below tries loading default file
+                if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
+                {
+                    TLCGenControllerDataProvider.Default.OpenController(args[1]);
+                }
+
+                // If we are in debug mode, the code below tries loading default file
 #if DEBUG
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
@@ -768,50 +770,61 @@ namespace TLCGen.ViewModels
             }
 #endif
 
-            if (!DesignMode.IsInDesignMode)
-            {
-                if(Application.Current != null && Application.Current.MainWindow != null)
-                    Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
-            }
+                if (!DesignMode.IsInDesignMode)
+                {
+                    if (Application.Current != null && Application.Current.MainWindow != null)
+                        Application.Current.MainWindow.Closing += new CancelEventHandler(MainWindow_Closing);
+                }
 
 #if !DEBUG
-            Application.Current.DispatcherUnhandledException += (o, e) =>
+                Application.Current.DispatcherUnhandledException += (o, e) =>
+                {
+                    string message = "Er is een onverwachte fout opgetreden.\n\n";
+                    if (TLCGenControllerDataProvider.Default.Controller != null)
+                    {
+                        try
+                        {
+                            string t = TLCGenControllerDataProvider.Default.ControllerFileName;
+                            if (string.IsNullOrWhiteSpace(TLCGenControllerDataProvider.Default.ControllerFileName))
+                            {
+                                TLCGenControllerDataProvider.Default.ControllerFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TLC_recoverysave.tlc");
+                            }
+                            TLCGenControllerDataProvider.Default.ControllerFileName =
+                            System.IO.Path.Combine(
+                                System.IO.Path.GetDirectoryName(TLCGenControllerDataProvider.Default.ControllerFileName),
+                                DateTime.Now.ToString("yyyyMMdd-HHmmss-", System.Globalization.CultureInfo.InvariantCulture) +
+                                System.IO.Path.GetFileName(TLCGenControllerDataProvider.Default.ControllerFileName));
+                            TLCGenControllerDataProvider.Default.SaveController();
+                            message += "De huidige regeling is hier opgeslagen:\n" + TLCGenControllerDataProvider.Default.ControllerFileName + "\n\n";
+                            if (t != null)
+                            {
+                                TLCGenControllerDataProvider.Default.ControllerFileName = t;
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                    message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
+                    var win = new TLCGen.Dialogs.UnhandledExceptionWindow();
+                    win.DialogTitle = "Onverwachte fout in TLCGen";
+                    win.DialogMessage = message;
+                    win.DialogExpceptionText = e.Exception.ToString();
+                    win.ShowDialog();
+                };
+#endif
+            }
+            catch (Exception e)
             {
                 string message = "Er is een onverwachte fout opgetreden.\n\n";
-                if(TLCGenControllerDataProvider.Default.Controller != null)
-                {
-                    try
-                    {
-                        string t = TLCGenControllerDataProvider.Default.ControllerFileName;
-                        if (string.IsNullOrWhiteSpace(TLCGenControllerDataProvider.Default.ControllerFileName))
-                        {
-                            TLCGenControllerDataProvider.Default.ControllerFileName = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "TLC_recoverysave.tlc");
-                        }
-                        TLCGenControllerDataProvider.Default.ControllerFileName =
-                        System.IO.Path.Combine(
-                            System.IO.Path.GetDirectoryName(TLCGenControllerDataProvider.Default.ControllerFileName),
-                            DateTime.Now.ToString("yyyyMMdd-HHmmss-", System.Globalization.CultureInfo.InvariantCulture) +
-                            System.IO.Path.GetFileName(TLCGenControllerDataProvider.Default.ControllerFileName));
-                        TLCGenControllerDataProvider.Default.SaveController();
-                        message += "De huidige regeling is hier opgeslagen:\n" + TLCGenControllerDataProvider.Default.ControllerFileName + "\n\n";
-                        if (t != null)
-                        {
-                            TLCGenControllerDataProvider.Default.ControllerFileName = t;
-                        }
-                    }
-                    catch
-                    {
-
-                    }
-                }
                 message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
                 var win = new TLCGen.Dialogs.UnhandledExceptionWindow();
                 win.DialogTitle = "Onverwachte fout in TLCGen";
                 win.DialogMessage = message;
-                win.DialogExpceptionText = e.Exception.ToString();
+                win.DialogExpceptionText = e.ToString();
                 win.ShowDialog();
-            };
-#endif
+            }
         }
 
 #endregion // Constructor
