@@ -182,18 +182,14 @@ namespace TLCGen.Plugins
                             Assembly assemblyInstance = null;
                             try
                             {
-                                assemblyInstance = Assembly.LoadFrom(_file);
+                                string s1 = Path.GetFileName(Path.GetDirectoryName(_file));
+                                string s2 = Path.GetFileName(_file);
+                                string s3 = Path.GetFileName(Path.GetDirectoryName(_file)) + "\\" + Path.GetFileName(_file);
+                                assemblyInstance = Assembly.LoadFrom(s3);
                             }
-                            catch
+                            catch (Exception e)
                             {
-                                try
-                                {
-                                    assemblyInstance = Assembly.UnsafeLoadFrom(_file);
-                                }
-                                catch (Exception e)
-                                {
                                     throw e;
-                                }
                             }
                             var types = assemblyInstance.GetTypes();
                             var bFound = false;
