@@ -22,6 +22,7 @@ namespace TLCGen.Models
         public int MaxWachttijdVoetganger { get; set; }
 
         [Browsable(false)]
+        [HasDefault(false)]
         [XmlIgnore]
         public bool HasKAR
         {

@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
                 }
-                OnMonitoredPropertyChanged("OVIngreepType");
+                OnMonitoredPropertyChanged(null);
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
             }

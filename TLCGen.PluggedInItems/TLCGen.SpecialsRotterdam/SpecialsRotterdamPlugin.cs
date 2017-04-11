@@ -42,6 +42,10 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Controller = value;
+                if(_Controller != null)
+                {
+                    _MyModel = new SpecialsRotterdamModel();
+                }
             }
         }
 
@@ -182,8 +186,6 @@ namespace TLCGen.SpecialsRotterdam
         public override void CollectCCOLElements(ControllerModel c)
         {
             _FasenWithDummies = new List<string>();
-
-
             _MyElements = new List<CCOLElement>();
 
             #region AFM
