@@ -175,20 +175,22 @@ namespace TLCGen.Plugins
                     // Find all Generator DLL's
                     foreach (String file in Directory.GetFiles(pluginpath))
                     {
-                        if (Path.GetExtension(file).ToLower() == ".dll")
+                        string _file = file;
+                        if (Path.GetExtension(_file).ToLower() == ".dll")
                         {
                             // Find and loop all types from the assembly
                             Assembly assemblyInstance = null;
                             try
                             {
-                                assemblyInstance = Assembly.LoadFrom(file);
+                                assemblyInstance = Assembly.LoadFrom(_file);
                             }
                             catch
                             {
                                 try
                                 {
-                                    byte[] asmdata = System.IO.File.ReadAllBytes(file);
-                                    assemblyInstance = Assembly.Load(asmdata);
+                                    var uri = new Uri(_file);
+                                    _file = uri.LocalPath;
+                                    assemblyInstance = Assembly.LoadFrom(_file);
                                 }
                                 catch(Exception e)
                                 {
@@ -212,7 +214,7 @@ namespace TLCGen.Plugins
                             }
                             if (!bFound)
                             {
-                                System.Windows.MessageBox.Show($"Library {file} wordt niet herkend als TLCGen addin.");
+                                System.Windows.MessageBox.Show($"Library {_file} wordt niet herkend als TLCGen addin.");
                             }
                         }
                     }
