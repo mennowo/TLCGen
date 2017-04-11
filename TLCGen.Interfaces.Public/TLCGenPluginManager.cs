@@ -182,10 +182,7 @@ namespace TLCGen.Plugins
                             Assembly assemblyInstance = null;
                             try
                             {
-                                string s1 = Path.GetFileName(Path.GetDirectoryName(_file));
-                                string s2 = Path.GetFileName(_file);
-                                string s3 = Path.GetFileName(Path.GetDirectoryName(_file)) + "\\" + Path.GetFileName(_file);
-                                assemblyInstance = Assembly.LoadFrom(s3);
+                                assemblyInstance = Assembly.LoadFrom(Path.GetFileName(Path.GetDirectoryName(_file)) + "\\" + Path.GetFileName(_file));
                             }
                             catch (Exception e)
                             {
