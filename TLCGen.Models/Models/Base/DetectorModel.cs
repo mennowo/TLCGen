@@ -53,6 +53,17 @@ namespace TLCGen.Models
 
         #endregion // Properties
 
+        #region Public Methods
+
+        public bool IsDrukKnop()
+        {
+            return Type == DetectorTypeEnum.Knop ||
+                   Type == DetectorTypeEnum.KnopBinnen ||
+                   Type == DetectorTypeEnum.KnopBuiten;
+        }
+
+        #endregion // Public Methods
+
         #region IComparable
 
         public int CompareTo(object obj)

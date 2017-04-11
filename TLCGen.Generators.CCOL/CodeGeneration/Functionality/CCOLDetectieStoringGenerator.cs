@@ -249,9 +249,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine(" ||");
                                 }
-                                foreach (var d in fc.Detectoren)
+                                foreach (var d in fc.Detectoren.Where(x => !x.IsDrukKnop()))
                                 {
-                                    if (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen) continue;
+                                    if (d.Verlengen == DetectorVerlengenTypeEnum.Geen) continue;
 
                                     if (d.Rijstrook == str)
                                     {

@@ -42,7 +42,7 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Controller = value;
-                if(_Controller != null)
+                if(_Controller == null)
                 {
                     _MyModel = new SpecialsRotterdamModel();
                 }
