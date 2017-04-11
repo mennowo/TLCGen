@@ -188,8 +188,7 @@ namespace TLCGen.Plugins
                             {
                                 try
                                 {
-                                    var __file = _file.Replace("file:///", "");
-                                    assemblyInstance = Assembly.LoadFrom(__file);
+                                    assemblyInstance = Assembly.UnsafeLoadFrom(_file);
                                 }
                                 catch (Exception e)
                                 {
