@@ -76,7 +76,7 @@
                                 Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridTemplateColumn x:Key="RijstrookColumn" Header="Rijstrook" Width="Auto" 
                                 Visibility="{Binding Path=ShowRijstrook, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                                CellStyle="{StaticResource LooseDisabledIfDrukknopStyle}">
+                                CellStyle="{StaticResource LooseDetectorStyle}">
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Rijstrook}" Margin="2" />
