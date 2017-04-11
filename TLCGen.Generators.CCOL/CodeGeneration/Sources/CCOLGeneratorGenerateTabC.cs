@@ -34,12 +34,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("/* include files */");
-            sb.AppendLine("/* ------------- */");
+            sb.AppendLine($"/* include files */");
+            sb.AppendLine($"/* ------------- */");
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
-#warning TODO - make includes dependent on the kind of controller and its settings
-            sb.AppendLine($"{ts}/* include files */");
-            sb.AppendLine($"{ts}/* ------------- */");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
@@ -48,12 +45,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
             }
-            sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+            if (controller.Data.GarantieOntruimingsTijden)
+            {
+                sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+            }
             sb.AppendLine($"{ts}#include \"trg_min.h\"  /* garantie-roodtijden               */");
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.h\"  /* garantie-geeltijden               */");
             sb.AppendLine($"{ts}#include \"isvar.h\"    /* ingangs elementen                 */");
-            sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
+            if (controller.OVData.DSI)
+            {
+                sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
+            }
             sb.AppendLine($"{ts}#include \"hevar.h\"    /* hulp elementen                    */");
             sb.AppendLine($"{ts}#include \"mevar.h\"    /* geheugen elementen                */");
             sb.AppendLine($"{ts}#include \"tmvar.h\"    /* tijd elementen                    */");
