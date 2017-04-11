@@ -188,11 +188,10 @@ namespace TLCGen.Plugins
                             {
                                 try
                                 {
-                                    var uri = new Uri(_file);
-                                    _file = uri.LocalPath;
-                                    assemblyInstance = Assembly.LoadFrom(_file);
+                                    var __file = _file.Replace("file:///", "");
+                                    assemblyInstance = Assembly.LoadFrom(__file);
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                     throw e;
                                 }
