@@ -178,7 +178,23 @@ namespace TLCGen.Plugins
                         if (Path.GetExtension(file).ToLower() == ".dll")
                         {
                             // Find and loop all types from the assembly
-                            var assemblyInstance = Assembly.LoadFrom(file);
+                            Assembly assemblyInstance = null;
+                            try
+                            {
+                                assemblyInstance = Assembly.LoadFrom(file);
+                            }
+                            catch
+                            {
+                                try
+                                {
+                                    byte[] asmdata = System.IO.File.ReadAllBytes(file);
+                                    assemblyInstance = Assembly.Load(asmdata);
+                                }
+                                catch(Exception e)
+                                {
+                                    throw e;
+                                }
+                            }
                             var types = assemblyInstance.GetTypes();
                             var bFound = false;
                             foreach (Type type in types)
