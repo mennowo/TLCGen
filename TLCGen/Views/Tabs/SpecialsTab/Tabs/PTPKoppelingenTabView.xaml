@@ -9,16 +9,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Content="PTP Koppelingen" FontWeight="Bold" />
-        <DockPanel Grid.Row="1">
-            <Label Content="Kruising PTP naam"  DockPanel.Dock="Left"/>
-            <TextBox Text="{Binding Path=KruisingPTPNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" DockPanel.Dock="Right"/>
-        </DockPanel>
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
                   SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -33,7 +28,7 @@
                 <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Content="Toevoegen" Command="{Binding AddPTPKoppelingCommand}" Margin="2" />
             <Button Content="Verwijderen" Command="{Binding RemovePTPKoppelingCommand}" Margin="2" />
         </StackPanel>

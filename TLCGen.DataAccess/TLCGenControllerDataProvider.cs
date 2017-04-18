@@ -291,9 +291,11 @@ namespace TLCGen.DataAccess
             }
 
             // Save data to disk, update saved state
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.OverwritePrompt = true;
-            saveFileDialog.Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz";
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                OverwritePrompt = true,
+                Filter = "TLCGen files|*.tlc|TLCGen compressed files|*.tlcgz"
+            };
             if (!string.IsNullOrWhiteSpace(ControllerFileName))
                 saveFileDialog.FileName = ControllerFileName;
             if (saveFileDialog.ShowDialog() == true)

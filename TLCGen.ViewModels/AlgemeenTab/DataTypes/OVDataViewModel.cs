@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Category("Opties OV")]
+        [Browsable(false)]
         [Description("Type OV ingreep")]
         public OVIngreepTypeEnum OVIngreepType
         {
@@ -44,6 +44,13 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool HasOV
+        {
+            get { return OVIngreepType != OVIngreepTypeEnum.Geen; }
+        }
+
+        [Category("Opties OV")]
         [Description("Regeling heeft DSI")]
         public bool DSI
         {

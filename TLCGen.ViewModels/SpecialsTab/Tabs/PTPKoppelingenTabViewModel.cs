@@ -24,17 +24,7 @@ namespace TLCGen.ViewModels
         #endregion // Fields
 
         #region Properties
-
-        public string KruisingPTPNaam
-        {
-            get { return _Controller.PTPData.KruisingPTPNaam; }
-            set
-            {
-                _Controller.PTPData.KruisingPTPNaam = value;
-                RaisePropertyChanged<object>("KruisingPTPNaam", null, null, true);
-            }
-        }
-
+        
         public ObservableCollection<PTPKoppelingViewModel> PTPKoppelingen
         {
             get

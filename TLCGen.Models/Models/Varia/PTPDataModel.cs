@@ -10,8 +10,6 @@ namespace TLCGen.Models
     [Serializable]
     public class PTPDataModel
     {
-        public string KruisingPTPNaam { get; set; }
-
         [XmlArrayItem(ElementName = "PTPKoppeling")]
         public List<PTPKoppelingModel> PTPKoppelingen { get; set; }
 

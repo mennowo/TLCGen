@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <ct:SimplePropertyEditor BoundObject="{Binding Path=OVData}" Margin="2" />
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <Label Content="Type OV ingreep" />
+        <ComboBox Margin="5"
+                  ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepTypeEnum}}}"
+                  SelectedItem="{Binding Path=OVData.OVIngreepType}" />
+        <ct:SimplePropertyEditor IsEnabled="{Binding Path=OVData.HasOV}" BoundObject="{Binding Path=OVData}" Margin="2" />
+    </StackPanel>
 </UserControl>

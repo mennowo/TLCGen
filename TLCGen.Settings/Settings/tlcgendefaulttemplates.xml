@@ -2,7 +2,7 @@
 <TLCGenTemplatesModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FasenTemplates>
     <FasenTemplate>
-      <Naam>Auto 1 rijbaan kop lang</Naam>
+      <Naam>Auto 1 rijstrook kop lang</Naam>
       <Replace>FC</Replace>
       <Items>
         <Item>
@@ -74,7 +74,7 @@
       </Items>
     </FasenTemplate>
     <FasenTemplate>
-      <Naam>Auto 1 rijbaan kop lang verweg</Naam>
+      <Naam>Auto 1 rijstrook kop lang verweg</Naam>
       <Replace>FC</Replace>
       <Items>
         <Item>
@@ -168,7 +168,7 @@
       </Items>
     </FasenTemplate>
     <FasenTemplate>
-      <Naam>Auto 2 rijbanen kop lang</Naam>
+      <Naam>Auto 2 rijstroken kop lang</Naam>
       <Replace>FC</Replace>
       <Items>
         <Item>
@@ -284,7 +284,7 @@
       </Items>
     </FasenTemplate>
     <FasenTemplate>
-      <Naam>Auto 2 rijbanen kop lang verweg</Naam>
+      <Naam>Auto 2 rijstroken kop lang verweg</Naam>
       <Replace>FC</Replace>
       <Items>
         <Item>
