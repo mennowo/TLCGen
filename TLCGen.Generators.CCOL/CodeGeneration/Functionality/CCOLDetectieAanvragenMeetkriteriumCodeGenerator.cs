@@ -69,6 +69,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Parameter));
             }
+
+            // Collect Kopmax
+            foreach (FaseCyclusModel fcm in c.Fasen)
+            {
+                bool HasKopmax = false;
+                foreach (DetectorModel dm in fcm.Detectoren)
+                {
+                    if (dm.Verlengen != Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
+                    {
+                        HasKopmax = true;
+                        break;
+                    }
+                }
+                if (HasKopmax)
+                {
+                    _MyElements.Add(new CCOLElement(
+                        $"{_tkm}{fcm.Naam}",
+                        fcm.Kopmax,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Timer));
+                }
+            }
         }
 
         public override bool HasCCOLElements()
@@ -124,7 +146,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         bool HasKopmax = false;
                         foreach (DetectorModel dm in fcm.Detectoren)
                         {
-                            if (dm.Verlengen == DetectorVerlengenTypeEnum.Kopmax)
+                            if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                             {
                                 HasKopmax = true;
                                 break;

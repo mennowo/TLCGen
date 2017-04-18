@@ -96,6 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && hf_wsg() ? BIT4 : 0;");
                                     break;
                             }
+#warning Undo |= BIT4 in case of traffic jam
                         }
                     }
                     sb.AppendLine();

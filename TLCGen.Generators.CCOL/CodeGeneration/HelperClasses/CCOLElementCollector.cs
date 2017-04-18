@@ -164,30 +164,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLSetting = "T_max";
             data.CCOLTType = "T_type";
 
-            // Collect Kopmax
-            foreach (FaseCyclusModel fcm in controller.Fasen)
-            {
-                bool HasKopmax = false;
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax)
-                    {
-                        HasKopmax = true;
-                        break;
-                    }
-                }
-                if (HasKopmax)
-                {
-                    CCOLElement elem = new CCOLElement();
-                    elem.Define = $"tkm{fcm.Naam}";
-                    elem.Naam = $"KM{fcm.Naam}";
-                    elem.Instelling = fcm.Kopmax;
-                    elem.TType = CCOLElementTimeTypeEnum.TE_type;
-
-                    data.Elements.Add(elem);
-                }
-            }
-
             foreach (var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())

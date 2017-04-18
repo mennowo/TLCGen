@@ -369,7 +369,7 @@ namespace TLCGen.ViewModels
             {
                 foreach(DetectorModel dvm in _FaseCyclus.Detectoren)
                 {
-                    if (dvm.Type == DetectorTypeEnum.Kop)
+                    if (dvm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                         return true;
                 }
                 return false;
