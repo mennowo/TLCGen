@@ -73,8 +73,8 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                                 return null;
                             break;
                         case "NOTMS":
-                            if ((plugin.Controller.PTPData.PTPKoppelingen == null ||
-                                 plugin.Controller.PTPData.PTPKoppelingen.Count == 0))
+                            if ((plugin.Controller.PTPData.PTPKoppelingen != null &&
+                                 plugin.Controller.PTPData.PTPKoppelingen.Count > 0))
                                 return null;
                             break;
                         case "SYNC":
