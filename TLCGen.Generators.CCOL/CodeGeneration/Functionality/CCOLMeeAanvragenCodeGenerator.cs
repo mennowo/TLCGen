@@ -102,6 +102,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
                                     sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
+                                case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
+                                    sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
+                                    break;
                                 case MeeaanvraagTypeEnum.Startgroen:
                                     sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (SG[{_fcpf}{ma.FaseVan}]));");
                                     break;
@@ -128,6 +131,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
                                     sb.AppendLine($") && RA[{_fcpf}{ma.FaseVan}]));");
+                                    break;
+                                case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
+                                    sb.AppendLine($") && RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
                                     sb.AppendLine($") && SG[{_fcpf}{ma.FaseVan}]));");
