@@ -189,8 +189,6 @@ namespace TLCGen.ViewModels
 
         public ControllerDataViewModel()
         {
-            int i;
-            i = 0;
         }
 
         #endregion // Constructor

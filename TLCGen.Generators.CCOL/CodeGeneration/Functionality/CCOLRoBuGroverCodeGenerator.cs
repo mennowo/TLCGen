@@ -132,7 +132,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.Append($"{tabspace}{tabspace}TC[teller++] = berekencyclustijd_va_arg(");
                         foreach(var fc in cg.Fasen)
                         {
-#warning Change so it uses prefix settings (also at the end!)
                             sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
                         }
                         sb.AppendLine($"END);");

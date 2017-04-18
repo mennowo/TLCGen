@@ -13,8 +13,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
+#pragma warning disable 0649
         private string _prmmaxtvg;
         private string _prmmaxtfb;
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {

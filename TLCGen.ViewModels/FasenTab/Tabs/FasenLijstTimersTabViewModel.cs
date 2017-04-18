@@ -63,6 +63,22 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
+        public override ControllerModel Controller
+        {
+            get
+            {
+                return base.Controller;
+            }
+            set
+            {
+                base.Controller = value;
+                if (value != null)
+                {
+                    UpdateFasen();
+                }
+            }
+        }
+
         public override string DisplayName
         {
             get
@@ -79,28 +95,17 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            var sel = SelectedFaseCyclus;
-#warning Consider to change this, so that the VM reacts to a message instead.
-
-            foreach (var fcvm in Fasen)
-            {
-                fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
-            }
-
-            Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
-            {
-                var fcvm = new FaseCyclusViewModel(fcm);
-                if (sel != null && fcvm.Naam == sel.Naam)
-                    SelectedFaseCyclus = fcvm;
-                Fasen.Add(fcvm);
-                fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
-            }
+            
         }
 
         #endregion // TabItem Overrides
 
         #region TLCGen Event handling
+
+        private void OnFasenChanged(FasenChangedMessage message)
+        {
+            UpdateFasen();
+        }
 
         #endregion // TLCGen Event handling
 
@@ -126,10 +131,35 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection Changed
 
+        #region Private Methods
+
+        private void UpdateFasen()
+        {
+            var sel = SelectedFaseCyclus;
+
+            foreach (var fcvm in Fasen)
+            {
+                fcvm.PropertyChanged -= FaseCyclus_PropertyChanged;
+            }
+
+            Fasen.Clear();
+            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            {
+                var fcvm = new FaseCyclusViewModel(fcm);
+                if (sel != null && fcvm.Naam == sel.Naam)
+                    SelectedFaseCyclus = fcvm;
+                Fasen.Add(fcvm);
+                fcvm.PropertyChanged += FaseCyclus_PropertyChanged;
+            }
+        }
+
+        #endregion // Private Methods
+
         #region Constructor
 
         public FasenLijstTimersTabViewModel() : base()
         {
+            MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Constructor

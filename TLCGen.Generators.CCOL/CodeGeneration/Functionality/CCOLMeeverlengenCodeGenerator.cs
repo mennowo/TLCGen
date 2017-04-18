@@ -14,8 +14,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLMeeverlengenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
-        
+
+#pragma warning disable 0649
         private string _schmv; // schakelaar meeverlengen naam
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {

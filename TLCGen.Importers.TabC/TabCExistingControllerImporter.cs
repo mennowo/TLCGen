@@ -86,11 +86,18 @@ namespace TLCGen.Importers.TabC
                     if (result == MessageBoxResult.Yes)
                     {
                         // Clear conflicts from Phases not in tab.c file
-#warning TODO
-                        //foreach (FaseCyclusModel fcm in newfcs)
-                        //{
-                        //    fcm.Conflicten.Clear();
-                        //}
+                        var tempcs = new List<ConflictModel>();
+                        foreach (ConflictModel cm in c.InterSignaalGroep.Conflicten)
+                        {
+                            if(newfcs.Where(x => x.Naam == cm.FaseVan || x.Naam == cm.FaseNaar).Any())
+                            {
+                                tempcs.Add(cm);
+                            }
+                        }
+                        foreach(var tc in tempcs)
+                        {
+                            c.InterSignaalGroep.Conflicten.Remove(tc);
+                        }
 
                         // Build a list of the Phases with conflicts from the tab.c file
                         TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);

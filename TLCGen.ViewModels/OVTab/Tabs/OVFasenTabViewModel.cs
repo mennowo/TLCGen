@@ -20,7 +20,6 @@ namespace TLCGen.ViewModels
         private FaseCyclusViewModel _SelectedFaseCyclus;
         private OVIngreepViewModel _SelectedOVIngreep;
         private HDIngreepViewModel _SelectedHDIngreep;
-        private OVSignaalGroepInstellingenTabViewModel _OVIngreepSGInstellingenLijstVM;
 
         #endregion // Fields
 

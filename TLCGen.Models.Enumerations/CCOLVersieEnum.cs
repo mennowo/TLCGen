@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Helpers;
 
-
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]

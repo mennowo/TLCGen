@@ -67,7 +67,12 @@ namespace TLCGen.Views
         }
 
         #region Quick edit cells
-#warning Is this needed?
+        
+        /* See XAML: 
+                 here, we need to redo what the specialdatagrid has, 
+                 cause the style for datagridcell is overwritten
+                 not sweet, but so far, found no better way
+        */
 
         public void DataGridCell_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

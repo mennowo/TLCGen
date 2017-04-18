@@ -34,7 +34,6 @@ namespace TLCGen.ViewModels
 
         private ObservableCollection<ITLCGenTabItem> _TabItems;
         private ITLCGenTabItem _SelectedTab;
-        private int _SelectedTabIndex;
 
         #endregion // Fields
 
@@ -145,12 +144,9 @@ namespace TLCGen.ViewModels
                 {
                     case "Fasen":
                         IsSetting = true;
-                        //FasenTabVM.SetAllSelectedFasenValue(o as FaseCyclusViewModel, propName);
                         break;
                     case "Detectoren":
                         IsSetting = true;
-                        //DetectorenTabVM.SetAllSelectedDetectorenValue(o as DetectorViewModel, propName);
-#warning TODO
                         break;
                 }
                 IsSetting = false;

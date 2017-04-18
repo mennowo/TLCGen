@@ -87,19 +87,7 @@ namespace TLCGen.ViewModels
 
                     // Apply new defaults
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
-                    //SettingsProvider.Default.ApplyDefaultFaseCyclusSettings(this.FaseCyclus, this.Type);
-
-                    // Set default maxgroentijd
-#warning TODO
-                    //foreach (MaxGroentijdenSetViewModel mgsvm in _Controller.MaxGroentijdenSets)
-                    //{
-                    //    foreach (MaxGroentijdViewModel mgvm in mgsvm.MaxGroentijdenSetList)
-                    //    {
-                    //        if (mgvm.FaseCyclus == this.Define)
-                    //            mgvm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultMaxGroenTijd(value);
-                    //    }
-                    //}
-
+                    
                     OnMonitoredPropertyChanged("Type");
                     if(value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
                     {

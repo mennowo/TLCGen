@@ -21,7 +21,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
         
-        private ObservableCollection<GroentijdViewModel> _Groentijden;
         private GroentijdenSetModel _GroentijdenSet;
 
         #endregion // Fields

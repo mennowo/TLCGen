@@ -13,8 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class CCOLDetectieStoringGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
-
+        
 #pragma warning disable 0649
         private string _schdvak;
         private string _thdv;

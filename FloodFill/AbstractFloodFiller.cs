@@ -38,7 +38,7 @@ namespace FloodFill
 
         //internal int timeBenchmark = 0;
         internal Stopwatch watch = new Stopwatch();
-        internal UpdateScreenDelegate UpdateScreen;
+        internal UpdateScreenDelegate UpdateScreen = null;
 
         //internal, initialized per fill
         //protected BitArray pixelsChecked;

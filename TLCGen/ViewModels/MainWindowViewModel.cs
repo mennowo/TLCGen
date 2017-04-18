@@ -631,7 +631,6 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-#warning TODO!
                 //SettingsVM.Settings.CustomData.AddinSettings.Add(gendata);
             }
         }

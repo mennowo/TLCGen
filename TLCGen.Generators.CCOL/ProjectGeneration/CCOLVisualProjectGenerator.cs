@@ -66,26 +66,22 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                         case "MV":
                             return null;
                         case "PTP":
+                        case "MS":
+                        case "KS":
                             if (!(plugin.Controller.PTPData.PTPKoppelingen != null &&
                                   plugin.Controller.PTPData.PTPKoppelingen.Count > 0))
                                 return null;
                             break;
-                        case "SYNC":
-#warning TODO
-                            //if (!model.Syncfunc)
-                            return null;
-                            //break;
-                        case "MS":
-#warning TODO
-                            //if (!model.MultiSignal)
-                                return null;
-                            //break;
                         case "NOTMS":
-                        //    if (model.MultiSignal)
-                        //        return null;
+                            if ((plugin.Controller.PTPData.PTPKoppelingen == null ||
+                                 plugin.Controller.PTPData.PTPKoppelingen.Count == 0))
+                                return null;
                             break;
-                        case "KS":
-                            return null;
+                        case "SYNC":
+                            if (!plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() &&
+                                !plugin.Controller.InterSignaalGroep.Voorstarten.Any())
+                                return null;
+                            break;
                     }
                 }
                 writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z]+__", "$1");

@@ -3,54 +3,53 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.Extensions
 {
     public static class TLCGenModelExtensions
     {
-#warning todo: use settings here!
-
         public static string GetDefine(this DetectorModel d)
         {
-            return "d" + d.Naam;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("d") + d.Naam;
         }
 
         public static string GetDefine(this FaseCyclusModel fc)
         {
-            return "fc" + fc.Naam;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("fc") + fc.Naam;
         }
 
         public static string GetFaseFromDefine(this ConflictModel conf)
         {
-            return "fc" + conf.FaseVan;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("fc") + conf.FaseVan;
         }
 
         public static string GetFaseToDefine(this ConflictModel conf)
         {
-            return "fc" + conf.FaseNaar;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("fc") + conf.FaseNaar;
         }
 
         public static string GetFaseCyclusDefine(this ModuleFaseCyclusModel mlfc)
         {
-            return "fc" + mlfc.FaseCyclus;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("fc") + mlfc.FaseCyclus;
         }
 
         public static string GetBitmapCoordinaatOutputDefine(this IOElementModel o, string name = null)
         {
             if (name != null)
             {
-                return "us" + name;
+                return CCOLGeneratorSettingsProvider.Default.GetPrefix("us") + name;
             }
             else
             {
-                return "us" + o.Naam;
+                return CCOLGeneratorSettingsProvider.Default.GetPrefix("us") + o.Naam;
             }
         }
 
         public static string GetBitmapCoordinaatInputDefine(this IOElementModel i)
         {
-            return "us" + i.Naam;
+            return CCOLGeneratorSettingsProvider.Default.GetPrefix("us") + i.Naam;
         }
     }
 }
