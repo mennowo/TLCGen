@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.ProjectGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.ViewModels;
 
@@ -97,6 +99,7 @@ namespace TLCGen.Generators.CCOL
             if (s == null)
             {
                 _CodeGenerator.GenerateSourceFiles(_Plugin.Controller, Path.GetDirectoryName(_Plugin.ControllerFileName));
+                Messenger.Default.Send(new ControllerCodeGeneratedMessage());
             }
             else
             {
@@ -115,6 +118,7 @@ namespace TLCGen.Generators.CCOL
         private void GenerateVisualProjectCommand_Executed(object prm)
         {
             _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin, VisualProjectType);
+            Messenger.Default.Send(new ControllerProjectGeneratedMessage());
         }
 
         private bool GenerateVisualProjectCommand_CanExecute(object prm)

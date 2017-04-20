@@ -27,8 +27,6 @@ namespace TLCGen.ViewModels
     public class ControllerViewModel : GalaSoft.MvvmLight.ViewModelBase
     {
         #region Fields
-
-        private TLCGenStatusBarViewModel _StatusBarVM;
         
         private ControllerModel _Controller;
 
@@ -66,19 +64,6 @@ namespace TLCGen.ViewModels
                     _TabItems = new ObservableCollection<ITLCGenTabItem>();
                 }
                 return _TabItems;
-            }
-        }
-
-        /// <summary>
-        /// ViewModel for status bar
-        /// </summary>
-        public TLCGenStatusBarViewModel StatusBarVM
-        {
-            get
-            {
-                if (_StatusBarVM == null)
-                    _StatusBarVM = new TLCGenStatusBarViewModel();
-                return _StatusBarVM;
             }
         }
 
@@ -151,15 +136,6 @@ namespace TLCGen.ViewModels
                 }
                 IsSetting = false;
             }
-        }
-
-        /// <summary>
-        /// Method to set the text of the status bar
-        /// </summary>
-        /// <param name="statustext">The text to set</param>
-        public void SetStatusText(string statustext)
-        {
-            StatusBarVM.StatusText = DateTime.Now.ToLongTimeString() + " -> " + statustext;
         }
 
         #endregion // Public methods

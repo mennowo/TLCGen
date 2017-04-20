@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Messages\ConflictsChangedMessage.cs" />
+    <Compile Include="Messages\ControllerCodeGeneratedMessage.cs" />
     <Compile Include="Messages\ControllerDataChangedMessage.cs" />
     <Compile Include="Messages\ControllerHasOVChangedMessage.cs" />
+    <Compile Include="Messages\ControllerProjectGeneratedMessage.cs" />
     <Compile Include="Messages\DetectorenChangedMessage.cs" />
     <Compile Include="Messages\DetectorenExtraListChangedMessage.cs" />
     <Compile Include="Messages\FaseDetectorTypeChangedMessage.cs" />

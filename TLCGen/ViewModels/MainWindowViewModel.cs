@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using TLCGen.DataAccess;
+using TLCGen.GuiActions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
@@ -27,7 +28,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ControllerViewModel _ControllerVM;
-
+        private TLCGenStatusBarViewModel _StatusBarVM;
 
         private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _ApplicationParts;
 
@@ -65,6 +66,19 @@ namespace TLCGen.ViewModels
                 
                 RaisePropertyChanged("ControllerVM");
                 RaisePropertyChanged("HasController");
+            }
+        }
+
+        /// <summary>
+        /// ViewModel for status bar
+        /// </summary>
+        public TLCGenStatusBarViewModel StatusBarVM
+        {
+            get
+            {
+                if (_StatusBarVM == null)
+                    _StatusBarVM = new TLCGenStatusBarViewModel();
+                return _StatusBarVM;
             }
         }
 
@@ -380,6 +394,9 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.SaveController())
             {
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                GuiActionsManager.SetStatusBarMessage(
+                    DateTime.Now.ToLongTimeString() +
+                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
             }
         }
 
@@ -397,6 +414,9 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
+                GuiActionsManager.SetStatusBarMessage(
+                    DateTime.Now.ToLongTimeString() +
+                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
             }
         }
 
@@ -414,6 +434,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
                 RaisePropertyChanged("HasController");
                 RaisePropertyChanged("ProgramTitle");
+                GuiActionsManager.SetStatusBarMessage("");
             }
         }
 
@@ -477,6 +498,9 @@ namespace TLCGen.ViewModels
                     }
                     SetController(c2);
                     ControllerVM.ReloadController();
+                    GuiActionsManager.SetStatusBarMessage(
+                        DateTime.Now.ToLongTimeString() +
+                        " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
                 }
                 // Import as new controller
                 else
@@ -497,6 +521,9 @@ namespace TLCGen.ViewModels
                     TLCGenControllerDataProvider.Default.CloseController();
                     SetController(c1);
                     ControllerVM.ReloadController();
+                    GuiActionsManager.SetStatusBarMessage(
+                        DateTime.Now.ToLongTimeString() +
+                        " - Regeling geïmporteerd");
                 }
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("HasController");
@@ -517,6 +544,7 @@ namespace TLCGen.ViewModels
             if (s == null)
             {
                 SelectedGenerator.Generator.GenerateController();
+                MessengerInstance.Send(new ControllerCodeGeneratedMessage());
             }
             else
             {
@@ -673,7 +701,21 @@ namespace TLCGen.ViewModels
         private void OnPrepareForGenerationRequest(Messaging.Requests.PrepareForGenerationRequest request)
         {
             var procreq = new Messaging.Requests.ProcessSynchronisationsRequest();
-            Messenger.Default.Send(procreq);
+            MessengerInstance.Send(procreq);
+        }
+
+        private void OnControllerCodeGenerated(ControllerCodeGeneratedMessage message)
+        {
+            GuiActionsManager.SetStatusBarMessage(
+                DateTime.Now.ToLongTimeString() +
+                " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " gegenereerd");
+        }
+
+        private void OnControllerProjectGenerated(ControllerProjectGeneratedMessage message)
+        {
+            GuiActionsManager.SetStatusBarMessage(
+                DateTime.Now.ToLongTimeString() +
+                " - Project voor regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " gegenereerd");
         }
 
         #endregion // TLCGen Messaging
@@ -684,7 +726,14 @@ namespace TLCGen.ViewModels
         {
             try
             {
-                Messenger.Default.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+                GuiActionsManager.SetStatusBarMessage = (string text) =>
+                {
+                    StatusBarVM.StatusText = text;
+                };
+
+                MessengerInstance.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+                MessengerInstance.Register(this, new Action<ControllerCodeGeneratedMessage>(OnControllerCodeGenerated));
+                MessengerInstance.Register(this, new Action<ControllerProjectGeneratedMessage>(OnControllerProjectGenerated));
 
                 // Load application settings and defaults
                 SettingsProvider.Default.LoadApplicationSettings();
@@ -761,10 +810,10 @@ namespace TLCGen.ViewModels
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
             
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                MessengerInstance.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
+                MessengerInstance.Send(new UpdateTabsEnabledMessage());
                 TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
                 RaisePropertyChanged("ProgramTitle");
             }
 #endif

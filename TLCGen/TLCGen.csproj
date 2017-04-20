@@ -573,6 +573,10 @@
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GuiActionsManager\GuiActions.csproj">
+      <Project>{7922013A-9B43-4813-A354-F1977B5788DE}</Project>
+      <Name>GuiActions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
