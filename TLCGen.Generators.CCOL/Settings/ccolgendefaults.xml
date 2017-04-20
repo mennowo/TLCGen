@@ -622,6 +622,38 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLWaarschuwingsLichtenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLWaarschuwingsLichtenCodeGenerator</ClassName>
+        <Description>Waarschuwings groepen</Description>
+        <Settings>
+          <Setting>
+            <Default>wl</Default>
+            <Setting>wl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang waarschuwingslichten actief</Description>
+          </Setting>
+          <Setting>
+            <Default>bel</Default>
+            <Setting>bel</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang bellen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>beldim</Default>
+            <Setting>beldim</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang dimmen bellen</Description>
+          </Setting>
+          <Setting>
+            <Default>belcontdim</Default>
+            <Setting>belcontdim</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar continu dimmen bellen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="CCOLVLOGCodeGenerator">
       <CodePieceData>
         <ClassName>CCOLVLOGCodeGenerator</ClassName>
