@@ -612,8 +612,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* minimumtijden */");
                 sb.AppendLine($"{ts}/* ------------- */");
                 sb.AppendLine($"{ts}check_to_min();");
-                sb.AppendLine();
             }
+            sb.AppendLine($"{ts}check_tgg_min();");
+            sb.AppendLine($"{ts}check_tgl_min();");
+            sb.AppendLine($"{ts}check_trg_min();");
+            sb.AppendLine();
 
             sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();
