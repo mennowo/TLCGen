@@ -117,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine("END);");
                                 break;
                             case RateltikkerTypeEnum.Hoeflake:
-                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = !Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
                                 foreach (var d in rt.Detectoren)
                                 {
                                     sb.Append($"{_dpf}{d.Detector}, ");
