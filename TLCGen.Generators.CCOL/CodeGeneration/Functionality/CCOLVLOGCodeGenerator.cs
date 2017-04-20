@@ -58,7 +58,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLRegCCodeTypeEnum.Top:
                     if (!c.Data.VLOGInTestOmgeving)
                     {
-                        sb.AppendLine("#define NO_VLOG");
+                        sb.AppendLine("#ifndef AUTOMAAT");
+                        sb.AppendLine($"{ts}#define NO_VLOG");
+                        sb.AppendLine("#endif");
                         sb.AppendLine();
                     }
                     return sb.ToString();
