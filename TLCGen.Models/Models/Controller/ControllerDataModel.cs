@@ -31,6 +31,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string BitmapNaam { get; set; }
 
+        public int Fasebewaking { get; set; }
         public CCOLVersieEnum CCOLVersie { get; set; }
         public KWCTypeEnum KWCType { get; set; }
         public bool KWCUitgebreid { get; set; } // Note: this is not used yet, only meant for potential future functionality

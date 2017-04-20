@@ -241,7 +241,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             data.CCOLTType = "PRM_type";
 
             // Collect everything
-            data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = 240, TType = CCOLElementTimeTypeEnum.TS_type });
+            data.Elements.Add(new CCOLElement() { Define = "prmfb", Naam = "FB", Instelling = controller.Data.Fasebewaking, TType = CCOLElementTimeTypeEnum.TS_type });
 
             foreach(var pgen in pgens)
             {

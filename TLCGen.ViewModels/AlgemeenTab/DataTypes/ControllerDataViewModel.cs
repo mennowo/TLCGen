@@ -83,6 +83,17 @@ namespace TLCGen.ViewModels
             }
         }
         [Category("Opties regeling")]
+        [Description("Fasebewaking")]
+        public int Fasebewaking
+        {
+            get { return _Controller?.Data == null ? 0 : _Controller.Data.Fasebewaking; }
+            set
+            {
+                _Controller.Data.Fasebewaking = value;
+                OnMonitoredPropertyChanged("Fasebewaking");
+            }
+        }
+
         [Description("CCOL versie")]
         public CCOLVersieEnum CCOLVersie
         {
