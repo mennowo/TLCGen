@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -132,6 +132,10 @@
     <ProjectReference Include="..\..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
       <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,6 +45,16 @@
   <ItemGroup>
     <Compile Include="YATLCCLCCodeGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Plugins\TLCGen.Plugins.csproj">
+      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
+      <Name>TLCGen.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

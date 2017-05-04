@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,6 +52,18 @@
     <ProjectReference Include="..\..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
       <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Plugins\TLCGen.Plugins.csproj">
+      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
+      <Name>TLCGen.Plugins</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>

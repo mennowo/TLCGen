@@ -94,7 +94,9 @@ namespace TLCGen.Generators.CCOL
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
 #if DEBUG
-            CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
+            var s = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(
+                Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
+            CCOLGeneratorSettingsProvider.Default.Settings = s;
 #else
             if (File.Exists(setfile))
             {

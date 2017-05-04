@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,8 +62,8 @@
     <Compile Include="TLCGenTabItemAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
   </ItemGroup>

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -33,17 +33,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -52,7 +51,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -60,32 +59,23 @@
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
-    <Reference Include="WpfAutoGrid">
-      <HintPath>..\TLCGen\Libs\WpfAutoGrid.dll</HintPath>
-    </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.DataGrid, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
     </Reference>
     <Reference Include="Xceed.Wpf.Toolkit, Version=3.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +165,10 @@
       <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
       <Name>TLCGen.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Events\TLCGen.Messaging.csproj">
+      <Project>{2dbc9d19-d683-4f87-b534-dd026b46e763}</Project>
+      <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
@@ -186,6 +180,18 @@
     <ProjectReference Include="..\..\TLCGen.Integrity\TLCGen.Integrity.csproj">
       <Project>{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}</Project>
       <Name>TLCGen.Integrity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Plugins\TLCGen.Plugins.csproj">
+      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
+      <Name>TLCGen.Plugins</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -246,7 +252,8 @@
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>del /F /Q "$(TargetDir)Settings"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -78,12 +78,12 @@
     <Compile Include="Responses\GetDetectorListResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{A693DAA4-DB12-43DD-BCB8-BB039E22BBA8}</Project>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
       <Name>TLCGen.Models.Enumerations</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
   </ItemGroup>
