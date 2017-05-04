@@ -67,9 +67,33 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FloodFill\FloodFill.csproj">
+      <Project>{9a33318a-1352-43c3-8275-ff20dc9b9202}</Project>
+      <Name>FloodFill</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
+      <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
+      <Name>TLCGen.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
+      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
+      <Name>TLCGen.Dialogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Events\TLCGen.Messaging.csproj">
       <Project>{2dbc9d19-d683-4f87-b534-dd026b46e763}</Project>
       <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
+      <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.GuiActions\TLCGen.GuiActions.csproj">
+      <Project>{7922013a-9b43-4813-a354-f1977b5788de}</Project>
+      <Name>TLCGen.GuiActions</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
@@ -82,6 +106,10 @@
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
       <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.ModelManager\TLCGen.ModelManager.csproj">
+      <Project>{ae032ace-62d7-4093-986e-6a436d8d8161}</Project>
+      <Name>TLCGen.ModelManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>

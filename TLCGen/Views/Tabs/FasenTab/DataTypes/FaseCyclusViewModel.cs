@@ -73,7 +73,8 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                RaisePropertyChanged<object>(null, broadcast: true); // Update all properties
+                RaisePropertyChanged(); // Update all properties
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -96,7 +97,8 @@ namespace TLCGen.ViewModels
                     }
                     SetMeeverlengenOpties();
 
-                    RaisePropertyChanged<object>(null, broadcast: true); // Update all properties
+                    RaisePropertyChanged(); // Update all properties
+                    RaisePropertyChanged<object>("Type", broadcast: true);
                 }
             }
         }
