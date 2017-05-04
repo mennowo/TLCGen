@@ -748,6 +748,26 @@
       <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
       <Name>TLCGen.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj">
+      <Project>{deae73bc-0c8e-47bf-b7ae-850617a34949}</Project>
+      <Name>TLCGen.GebruikersOpties</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.YATLCCLC.csproj">
+      <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
+      <Name>TLCGen.Generators.YATLCCLC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
+      <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
+      <Name>TLCGen.Importers.TabC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj">
+      <Project>{14c1bbc3-eda1-4d16-897d-43138abe02da}</Project>
+      <Name>TLCGen.SpecialsRotterdam</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Plugins\TLCGen.Plugins.csproj">
       <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
       <Name>TLCGen.Plugins</Name>
