@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
 
-        public void OnPropertyChangedMessageBase(PropertyChangedMessageBase message)
+        public void OnPropertyChangedMessageBase(MessageBase message)
         {
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
@@ -256,12 +256,12 @@ namespace TLCGen.ViewModels
                 }
             }
             
-            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
-            Messenger.Default.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
-            Messenger.Default.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
-            Messenger.Default.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
-            Messenger.Default.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
-            Messenger.Default.Register(this, new Action<PropertyChangedMessageBase>(OnPropertyChangedMessageBase));
+            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
+            MessengerInstance.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
+            MessengerInstance.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
+            MessengerInstance.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
+            MessengerInstance.Register(this, new Action<MessageBase>(OnPropertyChangedMessageBase));
 
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }
