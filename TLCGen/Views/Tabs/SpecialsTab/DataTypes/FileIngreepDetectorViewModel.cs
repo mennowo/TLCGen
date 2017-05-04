@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.BezetTijd = value;
-                RaisePropertyChanged<FileIngreepDetectorViewModel>("BezetTijd", broadcast: true);
+                RaisePropertyChanged<object>("BezetTijd", broadcast: true);
             }
         }
 
@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.RijTijd = value;
-                RaisePropertyChanged<FileIngreepDetectorViewModel>("RijTijd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijd", broadcast: true);
             }
         }
 
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.AfvalVertraging = value;
-                RaisePropertyChanged<FileIngreepDetectorViewModel>("AfvalVertraging", broadcast: true);
+                RaisePropertyChanged<object>("AfvalVertraging", broadcast: true);
             }
         }
 

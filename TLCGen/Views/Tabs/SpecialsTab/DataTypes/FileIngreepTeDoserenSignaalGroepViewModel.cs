@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<FileIngreepTeDoserenSignaalGroepViewModel>("DoseerPercentage", broadcast: true);
+                RaisePropertyChanged<object>("DoseerPercentage", broadcast: true);
                 Messenger.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
             }
         }
@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<FileIngreepTeDoserenSignaalGroepViewModel>("DoseerPercentage", broadcast: true);
+                RaisePropertyChanged<object>("DoseerPercentage", broadcast: true);
             }
         }
 

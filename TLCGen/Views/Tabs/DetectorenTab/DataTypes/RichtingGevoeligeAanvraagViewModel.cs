@@ -44,7 +44,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligeAanvraag.FaseCyclus = value;
-                RaisePropertyChanged<RichtingGevoeligeAanvraagViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 
@@ -54,7 +54,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligeAanvraag.VanDetector = value;
-                RaisePropertyChanged<RichtingGevoeligeAanvraagViewModel>("VanDetector", broadcast: true);
+                RaisePropertyChanged<object>("VanDetector", broadcast: true);
             }
         }
 
@@ -64,7 +64,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligeAanvraag.NaarDetector = value;
-                RaisePropertyChanged<RichtingGevoeligeAanvraagViewModel>("NaarDetector", broadcast: true);
+                RaisePropertyChanged<object>("NaarDetector", broadcast: true);
             }
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligeAanvraag.MaxTijdsVerschil = value;
-                RaisePropertyChanged<RichtingGevoeligeAanvraagViewModel>("MaxTijdsVerschil", broadcast: true);
+                RaisePropertyChanged<object>("MaxTijdsVerschil", broadcast: true);
             }
         }
 

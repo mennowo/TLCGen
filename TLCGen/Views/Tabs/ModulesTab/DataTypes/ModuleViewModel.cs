@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
                 {
                     _Module.Naam = value;
                 }
-                RaisePropertyChanged<ModuleViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 

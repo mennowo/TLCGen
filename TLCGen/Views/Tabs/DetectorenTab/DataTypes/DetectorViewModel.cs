@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Rijstrook = value;
-                RaisePropertyChanged<DetectorViewModel>("Rijstrook", broadcast: true);
+                RaisePropertyChanged<object>("Rijstrook", broadcast: true);
             }
         }
 
@@ -92,7 +92,7 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
                     }
                 }
-                RaisePropertyChanged<DetectorViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -110,7 +110,7 @@ namespace TLCGen.ViewModels
                         _Detector.VissimNaam = value;
                     }
                 }
-                RaisePropertyChanged<DetectorViewModel>("VissimNaam", broadcast: true);
+                RaisePropertyChanged<object>("VissimNaam", broadcast: true);
             }
         }
 
@@ -129,7 +129,7 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString());
                 }
-                RaisePropertyChanged<DetectorViewModel>(null, broadcast: true);
+                RaisePropertyChanged<object>(null, broadcast: true);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
             }
         }
@@ -152,7 +152,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDB = value;
-                RaisePropertyChanged<DetectorViewModel>("TDB", broadcast: true);
+                RaisePropertyChanged<object>("TDB", broadcast: true);
             }
         }
 
@@ -163,7 +163,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDH = value;
-                RaisePropertyChanged<DetectorViewModel>("TDH", broadcast: true);
+                RaisePropertyChanged<object>("TDH", broadcast: true);
             }
         }
 
@@ -174,7 +174,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TOG = value;
-                RaisePropertyChanged<DetectorViewModel>("TOG", broadcast: true);
+                RaisePropertyChanged<object>("TOG", broadcast: true);
             }
         }
 
@@ -185,7 +185,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TBG = value;
-                RaisePropertyChanged<DetectorViewModel>("TBG", broadcast: true);
+                RaisePropertyChanged<object>("TBG", broadcast: true);
             }
         }
 
@@ -196,7 +196,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TFL = value;
-                RaisePropertyChanged<DetectorViewModel>("TFL", broadcast: true);
+                RaisePropertyChanged<object>("TFL", broadcast: true);
             }
         }
 
@@ -207,7 +207,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.CFL = value;
-                RaisePropertyChanged<DetectorViewModel>("CFL", broadcast: true);
+                RaisePropertyChanged<object>("CFL", broadcast: true);
             }
         }
         public DetectorAanvraagTypeEnum Aanvraag
@@ -216,7 +216,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Aanvraag = value;
-                RaisePropertyChanged<DetectorViewModel>("Aanvraag", broadcast: true);
+                RaisePropertyChanged<object>("Aanvraag", broadcast: true);
             }
         }
 
@@ -226,7 +226,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Verlengen = value;
-                RaisePropertyChanged<DetectorViewModel>("Verlengen", broadcast: true);
+                RaisePropertyChanged<object>("Verlengen", broadcast: true);
             }
         }
 
@@ -236,7 +236,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.AanvraagBijStoring = value;
-                RaisePropertyChanged<DetectorViewModel>("AanvraagBijStoring", broadcast: true);
+                RaisePropertyChanged<object>("AanvraagBijStoring", broadcast: true);
             }
         }
 
@@ -246,7 +246,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.AanvraagDirect = value;
-                RaisePropertyChanged<DetectorViewModel>("AanvraagDirect", broadcast: true);
+                RaisePropertyChanged<object>("AanvraagDirect", broadcast: true);
             }
         }
 
@@ -256,7 +256,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Wachtlicht = value;
-                RaisePropertyChanged<DetectorViewModel>("Wachtlicht", broadcast: true);
+                RaisePropertyChanged<object>("Wachtlicht", broadcast: true);
             }
         }
 
@@ -267,7 +267,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.Q1 = value;
-                RaisePropertyChanged<DetectorViewModel>("Q1", broadcast: true);
+                RaisePropertyChanged<object>("Q1", broadcast: true);
             }
         }
 
@@ -277,7 +277,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.Q2 = value;
-                RaisePropertyChanged<DetectorViewModel>("Q2", broadcast: true);
+                RaisePropertyChanged<object>("Q2", broadcast: true);
             }
         }
 
@@ -287,7 +287,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.Q3 = value;
-                RaisePropertyChanged<DetectorViewModel>("Q3", broadcast: true);
+                RaisePropertyChanged<object>("Q3", broadcast: true);
             }
         }
 
@@ -297,7 +297,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.Q4 = value;
-                RaisePropertyChanged<DetectorViewModel>("Q4", broadcast: true);
+                RaisePropertyChanged<object>("Q4", broadcast: true);
             }
         }
 
@@ -307,7 +307,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.Stopline = value;
-                RaisePropertyChanged<DetectorViewModel>("Stopline", broadcast: true);
+                RaisePropertyChanged<object>("Stopline", broadcast: true);
             }
         }
 
@@ -317,7 +317,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Simulatie.FCNr = value;
-                RaisePropertyChanged<DetectorViewModel>("FCNr", broadcast: true);
+                RaisePropertyChanged<object>("FCNr", broadcast: true);
             }
         }
 

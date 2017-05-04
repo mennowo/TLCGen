@@ -43,7 +43,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.AantalKerenNietAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("AantalKerenNietAfkappen", broadcast: true);
+                RaisePropertyChanged<object>("AantalKerenNietAfkappen", broadcast: true);
             }
         }
         public int MinimumGroentijdConflictOVRealisatie
@@ -53,7 +53,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.MinimumGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("MinimumGroentijdConflictOVRealisatie", broadcast: true);
+                RaisePropertyChanged<object>("MinimumGroentijdConflictOVRealisatie", broadcast: true);
             }
         }
 
@@ -64,7 +64,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.PercMaxGroentijdConflictOVRealisatie = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("PercMaxGroentijdConflictOVRealisatie", broadcast: true);
+                RaisePropertyChanged<object>("PercMaxGroentijdConflictOVRealisatie", broadcast: true);
             }
         }
 
@@ -75,7 +75,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.PercMaxGroentijdVoorTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("PercMaxGroentijdVoorTerugkomen", broadcast: true);
+                RaisePropertyChanged<object>("PercMaxGroentijdVoorTerugkomen", broadcast: true);
             }
         }
 
@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.OndergrensNaTerugkomen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("OndergrensNaTerugkomen", broadcast: true);
+                RaisePropertyChanged<object>("OndergrensNaTerugkomen", broadcast: true);
             }
         }
 
@@ -97,7 +97,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.OphoogpercentageNaAfkappen = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("OphoogpercentageNaAfkappen", broadcast: true);
+                RaisePropertyChanged<object>("OphoogpercentageNaAfkappen", broadcast: true);
             }
         }
 
@@ -108,7 +108,7 @@ namespace TLCGen.ViewModels
             {
                 _Parameters.BlokkeertijdNaOVIngreep = value;
                 SendTLCGenChangedMessage();
-                RaisePropertyChanged<OVIngreepSignaalGroepParametersViewModel>("BlokkeertijdNaOVIngreep", broadcast: true);
+                RaisePropertyChanged<object>("BlokkeertijdNaOVIngreep", broadcast: true);
             }
         }
 

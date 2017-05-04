@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
                 if (value != _Meeaanvraag.Type)
                 {
                     _Meeaanvraag.Type = value;
-                    RaisePropertyChanged<MeeaanvraagViewModel>("Type", broadcast: true);
+                    RaisePropertyChanged<object>("Type", broadcast: true);
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Meeaanvraag.DetectieAfhankelijk = value;
-                RaisePropertyChanged<MeeaanvraagViewModel>("DetectieAfhankelijk", broadcast: true);
+                RaisePropertyChanged<object>("DetectieAfhankelijk", broadcast: true);
             }
         }
 

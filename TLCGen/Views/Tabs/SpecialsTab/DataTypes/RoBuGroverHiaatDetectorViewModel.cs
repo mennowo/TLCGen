@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HiaatDetector.Detector = value;
-                RaisePropertyChanged<RoBuGroverHiaatDetectorViewModel>("Detector", broadcast: true);
+                RaisePropertyChanged<object>("Detector", broadcast: true);
             }
         }
         public int HiaatTijd
@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HiaatDetector.HiaatTijd = value;
-                RaisePropertyChanged<RoBuGroverHiaatDetectorViewModel>("HiaatTijd", broadcast: true);
+                RaisePropertyChanged<object>("HiaatTijd", broadcast: true);
             }
         }
 

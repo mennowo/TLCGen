@@ -44,7 +44,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.KAR = value;
-                RaisePropertyChanged<OVIngreepViewModel>("KAR", broadcast: true);
+                RaisePropertyChanged<object>("KAR", broadcast: true);
                 if(value)
                 {
                     _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
@@ -67,7 +67,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.Vecom = value;
-                RaisePropertyChanged<OVIngreepViewModel>("Vecom", broadcast: true);
+                RaisePropertyChanged<object>("Vecom", broadcast: true);
                 if (value)
                 {
                     _OVIngreep.DummyVecomInmelding = new DetectorModel() { Dummy = true };
@@ -90,7 +90,7 @@ namespace TLCGen.ViewModels
         //    set
         //    {
         //        _OVIngreep.MassaDetectie = value;
-        //        RaisePropertyChanged<OVIngreepViewModel>("MassaDetectie", broadcast: true);
+        //        RaisePropertyChanged<object>("MassaDetectie", broadcast: true);
         //    }
         //}
 
@@ -101,7 +101,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.Type = value;
-                RaisePropertyChanged<OVIngreepViewModel>("Type", broadcast: true);
+                RaisePropertyChanged<object>("Type", broadcast: true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<OVIngreepViewModel>("RijTijdOngehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdOngehinderd", broadcast: true);
             }
         }
 
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<OVIngreepViewModel>("RijTijdBeperktgehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdBeperktgehinderd", broadcast: true);
             }
         }
 
@@ -135,7 +135,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<OVIngreepViewModel>("RijTijdGehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdGehinderd", broadcast: true);
             }
         }
 
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.OnderMaximum = value;
-                RaisePropertyChanged<OVIngreepViewModel>("OnderMaximum", broadcast: true);
+                RaisePropertyChanged<object>("OnderMaximum", broadcast: true);
             }
         }
 
@@ -157,7 +157,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.GroenBewaking = value;
-                RaisePropertyChanged<OVIngreepViewModel>("GroenBewaking", broadcast: true);
+                RaisePropertyChanged<object>("GroenBewaking", broadcast: true);
             }
         }
 
@@ -169,7 +169,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AfkappenConflicten = value;
-                RaisePropertyChanged<OVIngreepViewModel>("AfkappenConflicten", broadcast: true);
+                RaisePropertyChanged<object>("AfkappenConflicten", broadcast: true);
             }
         }
 
@@ -180,7 +180,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AfkappenConflictenOV = value;
-                RaisePropertyChanged<OVIngreepViewModel>("AfkappenConflictenOV", broadcast: true);
+                RaisePropertyChanged<object>("AfkappenConflictenOV", broadcast: true);
             }
         }
 
@@ -191,7 +191,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.VasthoudenGroen = value;
-                RaisePropertyChanged<OVIngreepViewModel>("VasthoudenGroen", broadcast: true);
+                RaisePropertyChanged<object>("VasthoudenGroen", broadcast: true);
             }
         }
 
@@ -202,7 +202,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.TussendoorRealiseren = value;
-                RaisePropertyChanged<OVIngreepViewModel>("TussendoorRealiseren", broadcast: true);
+                RaisePropertyChanged<object>("TussendoorRealiseren", broadcast: true);
             }
         }
 
@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AlleLijnen = value;
-                RaisePropertyChanged<OVIngreepViewModel>("AlleLijnen", broadcast: true);
+                RaisePropertyChanged<object>("AlleLijnen", broadcast: true);
             }
         }
 

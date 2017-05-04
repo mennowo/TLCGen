@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Fase.FaseCyclus = value;
-                RaisePropertyChanged<RoBuGroverConflictGroepFaseViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 

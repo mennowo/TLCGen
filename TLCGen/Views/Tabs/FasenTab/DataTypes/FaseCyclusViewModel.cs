@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>(null, broadcast: true); // Update all properties
+                RaisePropertyChanged<object>(null, broadcast: true); // Update all properties
             }
         }
 
@@ -89,14 +89,14 @@ namespace TLCGen.ViewModels
                     // Apply new defaults
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
                     
-                    RaisePropertyChanged<FaseCyclusViewModel>("Type", broadcast: true);
+                    RaisePropertyChanged<object>("Type", broadcast: true);
                     if(value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
                     {
                         MeeverlengenType = MeeVerlengenTypeEnum.Default;
                     }
                     SetMeeverlengenOpties();
 
-                    RaisePropertyChanged<FaseCyclusViewModel>(null, broadcast: true); // Update all properties
+                    RaisePropertyChanged<object>(null, broadcast: true); // Update all properties
                 }
             }
         }
@@ -110,7 +110,7 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.TFG = value;
                 else
                     _FaseCyclus.TFG = TGG;
-                RaisePropertyChanged<FaseCyclusViewModel>("TFG", broadcast: true);
+                RaisePropertyChanged<object>("TFG", broadcast: true);
             }
         }
 
@@ -127,7 +127,7 @@ namespace TLCGen.ViewModels
                 }
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGG_min;
-                RaisePropertyChanged<FaseCyclusViewModel>("TGG", broadcast: true);
+                RaisePropertyChanged<object>("TGG", broadcast: true);
             }
         }
 
@@ -142,7 +142,7 @@ namespace TLCGen.ViewModels
                     if (TGG < value)
                         TGG = value;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("TGG_min", broadcast: true);
+                RaisePropertyChanged<object>("TGG_min", broadcast: true);
             }
         }
 
@@ -157,7 +157,7 @@ namespace TLCGen.ViewModels
                 }
                 else if (value >= 0)
                     _FaseCyclus.TGG = TRG_min;
-                RaisePropertyChanged<FaseCyclusViewModel>("TRG", broadcast: true);
+                RaisePropertyChanged<object>("TRG", broadcast: true);
             }
         }
 
@@ -172,7 +172,7 @@ namespace TLCGen.ViewModels
                     if (TRG < value)
                         TRG = value;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("TRG_min", broadcast: true);
+                RaisePropertyChanged<object>("TRG_min", broadcast: true);
             }
         }
 
@@ -187,7 +187,7 @@ namespace TLCGen.ViewModels
                 }
                 else if (value >= 0)
                     _FaseCyclus.TGG = TGL_min;
-                RaisePropertyChanged<FaseCyclusViewModel>("TGL", broadcast: true);
+                RaisePropertyChanged<object>("TGL", broadcast: true);
             }
         }
 
@@ -202,7 +202,7 @@ namespace TLCGen.ViewModels
                     if (TGL < value)
                         TGL = value;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("TGL_min", broadcast: true);
+                RaisePropertyChanged<object>("TGL_min", broadcast: true);
             }
         }
 
@@ -215,7 +215,7 @@ namespace TLCGen.ViewModels
                 {
                     _FaseCyclus.Kopmax = value;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("Kopmax", broadcast: true);
+                RaisePropertyChanged<object>("Kopmax", broadcast: true);
             }
         }
 
@@ -228,7 +228,7 @@ namespace TLCGen.ViewModels
                 {
                     _FaseCyclus.AantalRijstroken = value;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("AantalRijstroken", broadcast: true);
+                RaisePropertyChanged<object>("AantalRijstroken", broadcast: true);
             }
         }
 
@@ -238,7 +238,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.VasteAanvraag = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("VasteAanvraag", broadcast: true);
+                RaisePropertyChanged<object>("VasteAanvraag", broadcast: true);
             }
         }
 
@@ -248,7 +248,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.Wachtgroen = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("Wachtgroen", broadcast: true);
+                RaisePropertyChanged<object>("Wachtgroen", broadcast: true);
             }
         }
 
@@ -258,7 +258,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.Meeverlengen = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("Meeverlengen", broadcast: true);
+                RaisePropertyChanged<object>("Meeverlengen", broadcast: true);
             }
         }
 
@@ -268,7 +268,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.MeeverlengenType = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("MeeverlengenType", broadcast: true);
+                RaisePropertyChanged<object>("MeeverlengenType", broadcast: true);
             }
         }
 
@@ -278,7 +278,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.MeeverlengenVerschil = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("MeeverlengenVerschil", broadcast: true);
+                RaisePropertyChanged<object>("MeeverlengenVerschil", broadcast: true);
             }
         }
 
@@ -292,7 +292,7 @@ namespace TLCGen.ViewModels
                 {
                     VervangendHiaatKoplus = 25;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("HiaatKoplusBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>("HiaatKoplusBijDetectieStoring", broadcast: true);
             }
         }
 
@@ -310,7 +310,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.AanvraagBijDetectieStoring = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("AanvraagBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>("AanvraagBijDetectieStoring", broadcast: true);
             }
         }
 
@@ -324,7 +324,7 @@ namespace TLCGen.ViewModels
                 {
                     PercentageGroenBijStoring = 65;
                 }
-                RaisePropertyChanged<FaseCyclusViewModel>("PercentageGroenBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>("PercentageGroenBijDetectieStoring", broadcast: true);
             }
         }
 
@@ -342,7 +342,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.VervangendHiaatKoplus = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("VervangendHiaatKoplus", broadcast: true);
+                RaisePropertyChanged<object>("VervangendHiaatKoplus", broadcast: true);
             }
         }
 
@@ -352,7 +352,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.PercentageGroen = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("PercentageGroenBijStoring", broadcast: true);
+                RaisePropertyChanged<object>("PercentageGroenBijStoring", broadcast: true);
             }
         }
 
@@ -383,7 +383,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.OVIngreep = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("OVIngreep", broadcast: true);
+                RaisePropertyChanged<object>("OVIngreep", broadcast: true);
             }
         }
 
@@ -393,7 +393,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.HDIngreep = value;
-                RaisePropertyChanged<FaseCyclusViewModel>("HDIngreep", broadcast: true);
+                RaisePropertyChanged<object>("HDIngreep", broadcast: true);
             }
         }
 

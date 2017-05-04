@@ -154,7 +154,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Send(new ControllerDataChangedMessage());
             foreach (var d in DummyDetectoren)
             {
-                d.RaisePropertyChanged<DetectorViewModel>(null);
+                d.RaisePropertyChanged<object>(null);
             }
         }
 

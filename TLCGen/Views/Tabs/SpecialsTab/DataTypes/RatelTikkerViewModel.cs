@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.Type = value;
-                RaisePropertyChanged<RatelTikkerViewModel>("Type", broadcast: true);
+                RaisePropertyChanged<object>("Type", broadcast: true);
             }
         }
 
@@ -37,7 +37,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.NaloopTijd = value;
-                RaisePropertyChanged<RatelTikkerViewModel>("NaloopTijd", broadcast: true);
+                RaisePropertyChanged<object>("NaloopTijd", broadcast: true);
             }
         }
 
@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RatelTikker.FaseCyclus = value;
-                RaisePropertyChanged<RatelTikkerViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 
@@ -89,8 +89,8 @@ namespace TLCGen.ViewModels
                         (x) => { var rtd = new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel { Detector = x }); return rtd; },
                         (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); },
                         null,
-                        () => { RaisePropertyChanged<RatelTikkerViewModel>("SelectedDetector", broadcast: true); },
-                        () => { RaisePropertyChanged<RatelTikkerViewModel>("SelectedDetector", broadcast: true); }
+                        () => { RaisePropertyChanged<object>("SelectedDetector", broadcast: true); },
+                        () => { RaisePropertyChanged<object>("SelectedDetector", broadcast: true); }
                         );
                 }
                 return _DetectorManager;

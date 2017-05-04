@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.RoBuGrover = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("RoBuGrover", broadcast: true);
+                RaisePropertyChanged<object>("RoBuGrover", broadcast: true);
             }
         }
 
@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MinimaleCyclustijd = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("MinimaleCyclustijd", broadcast: true);
+                RaisePropertyChanged<object>("MinimaleCyclustijd", broadcast: true);
             }
         }
 
@@ -52,7 +52,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MaximaleCyclustijd = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("MaximaleCyclustijd", broadcast: true);
+                RaisePropertyChanged<object>("MaximaleCyclustijd", broadcast: true);
             }
         }
 
@@ -63,7 +63,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroentijdVerschil = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("GroentijdVerschil", broadcast: true);
+                RaisePropertyChanged<object>("GroentijdVerschil", broadcast: true);
             }
         }
 
@@ -74,7 +74,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.MethodeRoBuGrover = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("MethodeRoBuGrover", broadcast: true);
+                RaisePropertyChanged<object>("MethodeRoBuGrover", broadcast: true);
             }
         }
 
@@ -85,7 +85,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenOphoogFactor = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("GroenOphoogFactor", broadcast: true);
+                RaisePropertyChanged<object>("GroenOphoogFactor", broadcast: true);
             }
         }
 
@@ -96,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenVerlaagFactor = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("GroenVerlaagFactor", broadcast: true);
+                RaisePropertyChanged<object>("GroenVerlaagFactor", broadcast: true);
             }
         }
 
@@ -107,7 +107,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.GroenVerlaagFactorNietPrimair = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("GroenVerlaagFactorNietPrimair", broadcast: true);
+                RaisePropertyChanged<object>("GroenVerlaagFactorNietPrimair", broadcast: true);
             }
         }
 
@@ -118,7 +118,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RoBuGrover.OphogenTijdensGroen = value;
-                RaisePropertyChanged<RoBuGroverInstellingenViewModel>("OphogenTijdensGroen", broadcast: true);
+                RaisePropertyChanged<object>("OphogenTijdensGroen", broadcast: true);
             }
         }
 
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
         public void SetRoBuGroverDefaultsCommand_Executed()
         {
             DefaultsProvider.Default.SetDefaultsOnModel(_RoBuGrover);
-            RaisePropertyChanged<RoBuGroverInstellingenViewModel>(null, broadcast: true);
+            RaisePropertyChanged<object>(null, broadcast: true);
         }
 
         #endregion // Command Functionality

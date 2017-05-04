@@ -193,7 +193,7 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<SynchronisatieViewModel>("ConflictValue", broadcast: true);
+                RaisePropertyChanged<object>("ConflictValue", broadcast: true);
                 RaisePropertyChanged("HasConflict");
                 RaisePropertyChanged("IsEnabled");
             }
@@ -230,7 +230,7 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<SynchronisatieViewModel>("ConflictValue", broadcast: true);
+                RaisePropertyChanged<object>("ConflictValue", broadcast: true);
                 RaisePropertyChanged("HasConflict");
                 RaisePropertyChanged("IsEnabled");
             }
@@ -261,7 +261,7 @@ namespace TLCGen.ViewModels
                     default:
                         throw new NotImplementedException();
                 }
-                RaisePropertyChanged<SynchronisatieViewModel>("IsCoupled", broadcast: true);
+                RaisePropertyChanged<object>("IsCoupled", broadcast: true);
                 RaisePropertyChanged("HasNoCoupling");
             }
         }
@@ -311,7 +311,7 @@ namespace TLCGen.ViewModels
                     default:
                         throw new NotImplementedException();
                 }
-                RaisePropertyChanged<SynchronisatieViewModel>("IsCoupled", broadcast: true);
+                RaisePropertyChanged<object>("IsCoupled", broadcast: true);
                 RaisePropertyChanged("HasNoCoupling");
             }
         }

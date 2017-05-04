@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus = value;
-                RaisePropertyChanged<HDIngreepMeerealiserendeFaseCyclusViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 
@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FaseCyclus.FaseCyclus = value;
-                RaisePropertyChanged<HDIngreepMeerealiserendeFaseCyclusViewModel>("Fase", broadcast: true);
+                RaisePropertyChanged<object>("Fase", broadcast: true);
             }
         }
 

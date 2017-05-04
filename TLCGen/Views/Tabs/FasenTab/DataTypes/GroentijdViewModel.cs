@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Groentijd.Waarde = value;
-                RaisePropertyChanged<GroentijdViewModel>("Waarde", broadcast: true);
+                RaisePropertyChanged<object>("Waarde", broadcast: true);
             }
         }
 

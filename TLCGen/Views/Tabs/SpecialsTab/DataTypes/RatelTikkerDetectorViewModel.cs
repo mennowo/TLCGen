@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Detector = value;
-                RaisePropertyChanged<RatelTikkerDetectorViewModel>("Detector", broadcast: true);
+                RaisePropertyChanged<object>("Detector", broadcast: true);
             }
         }
 

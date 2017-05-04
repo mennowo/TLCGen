@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.FaseCyclus = value;
-                RaisePropertyChanged<FaseCyclusModuleDataViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 
@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.ModulenVooruit = value;
-                RaisePropertyChanged<FaseCyclusModuleDataViewModel>("ModulenVooruit", broadcast: true);
+                RaisePropertyChanged<object>("ModulenVooruit", broadcast: true);
             }
         }
 
@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatiefToestaan = value;
-                RaisePropertyChanged<FaseCyclusModuleDataViewModel>("AlternatiefToestaan", broadcast: true);
+                RaisePropertyChanged<object>("AlternatiefToestaan", broadcast: true);
             }
         }
 
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatieveRuimte = value;
-                RaisePropertyChanged<FaseCyclusModuleDataViewModel>("AlternatieveRuimte", broadcast: true);
+                RaisePropertyChanged<object>("AlternatieveRuimte", broadcast: true);
             }
         }
 
@@ -65,7 +65,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleFaseData.AlternatieveGroenTijd = value;
-                RaisePropertyChanged<FaseCyclusModuleDataViewModel>("AlternatieveGroenTijd", broadcast: true);
+                RaisePropertyChanged<object>("AlternatieveGroenTijd", broadcast: true);
             }
         }
 

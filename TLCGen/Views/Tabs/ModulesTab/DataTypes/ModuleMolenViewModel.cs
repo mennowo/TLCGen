@@ -92,7 +92,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleMolen.LangstWachtendeAlternatief = value;
-                RaisePropertyChanged<ModuleMolenViewModel>("LangstWachtendeAlternatief", broadcast: true);
+                RaisePropertyChanged<object>("LangstWachtendeAlternatief", broadcast: true);
             }
         }
 
@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _ModuleMolen.WachtModule = value;
-                RaisePropertyChanged<ModuleMolenViewModel>("WachtModule", broadcast: true);
+                RaisePropertyChanged<object>("WachtModule", broadcast: true);
             }
         }
 

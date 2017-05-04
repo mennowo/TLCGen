@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.FaseCyclus = value;
-                RaisePropertyChanged<VAOntruimenFaseViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
         public int VAOntrTijdensRood
@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.VAOntrTijdensRood = value;
-                RaisePropertyChanged<VAOntruimenFaseViewModel>("VAOntrTijdensRood", broadcast: true);
+                RaisePropertyChanged<object>("VAOntrTijdensRood", broadcast: true);
             }
         }
 

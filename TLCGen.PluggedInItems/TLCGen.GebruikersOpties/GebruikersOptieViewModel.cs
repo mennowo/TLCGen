@@ -39,7 +39,7 @@ namespace TLCGen.GebruikersOpties
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                RaisePropertyChanged<GebruikersOptieViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
         public CCOLElementTypeEnum Type
@@ -48,7 +48,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Type = value;
-                RaisePropertyChanged<GebruikersOptieViewModel>("Type", broadcast: true);
+                RaisePropertyChanged<object>("Type", broadcast: true);
             }
         }
         public int? Instelling
@@ -57,7 +57,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Instelling = value;
-                RaisePropertyChanged<GebruikersOptieViewModel>("Instelling", broadcast: true);
+                RaisePropertyChanged<object>("Instelling", broadcast: true);
             }
         }
         public string Commentaar
@@ -66,7 +66,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Commentaar = value;
-                RaisePropertyChanged<GebruikersOptieViewModel>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
 

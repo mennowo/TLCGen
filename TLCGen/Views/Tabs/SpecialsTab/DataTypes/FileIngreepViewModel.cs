@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.Naam = value;
-                RaisePropertyChanged<FileIngreepViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -104,7 +104,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.MinimaalAantalMeldingen = value;
-                RaisePropertyChanged<FileIngreepViewModel>("MinimaalAantalMeldingen", broadcast: true);
+                RaisePropertyChanged<object>("MinimaalAantalMeldingen", broadcast: true);
             }
         }
 
@@ -114,7 +114,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileIngreep.AfvalVertraging = value;
-                RaisePropertyChanged<FileIngreepViewModel>("AfvalVertraging", broadcast: true);
+                RaisePropertyChanged<object>("AfvalVertraging", broadcast: true);
             }
         }
 
@@ -135,7 +135,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                RaisePropertyChanged<FileIngreepViewModel>("EerlijkDoseren", broadcast: true);
+                RaisePropertyChanged<object>("EerlijkDoseren", broadcast: true);
             }
         }
 
@@ -167,8 +167,8 @@ namespace TLCGen.ViewModels
                         (x) => { var fd = new FileIngreepDetectorViewModel(new FileIngreepDetectorModel { Detector = x }); return fd; },
                         (x) => { return !FileDetectoren.Where(y => y.Detector == x).Any(); },
                         null,
-                        () => { RaisePropertyChanged<FileIngreepViewModel>("SelectedFileDetector", broadcast: true); },
-                        () => { RaisePropertyChanged<FileIngreepViewModel>("SelectedFileDetector", broadcast: true); }
+                        () => { RaisePropertyChanged<object>("SelectedFileDetector", broadcast: true); },
+                        () => { RaisePropertyChanged<object>("SelectedFileDetector", broadcast: true); }
                         );
                 }
                 return _DetectorManager;

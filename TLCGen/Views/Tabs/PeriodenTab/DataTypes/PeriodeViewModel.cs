@@ -47,7 +47,7 @@ namespace TLCGen.ViewModels
                         _Periode.Naam = value;
                     }
                 }
-                RaisePropertyChanged<PeriodeViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.Commentaar = value;
-                RaisePropertyChanged<PeriodeViewModel>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
         
@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
                 {
                     throw new NotImplementedException("Unknown period type in PeriodeViewModel.cs line 100");
                 }
-                RaisePropertyChanged<PeriodeViewModel>(null, broadcast: true);
+                RaisePropertyChanged<object>(null, broadcast: true);
             }
         }
 
@@ -126,7 +126,7 @@ namespace TLCGen.ViewModels
                     }
                     _Periode.Naam = newname;
                 }
-                RaisePropertyChanged<PeriodeViewModel>(null, broadcast: true);
+                RaisePropertyChanged<object>(null, broadcast: true);
             }
         }
 
@@ -136,7 +136,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.DagCode = value;
-                RaisePropertyChanged<PeriodeViewModel>("DagCode", broadcast: true);
+                RaisePropertyChanged<object>("DagCode", broadcast: true);
             }
         }
         
@@ -146,8 +146,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.StartTijd = value;
-                RaisePropertyChanged<PeriodeViewModel>("StartTijd", broadcast: true);
-                RaisePropertyChanged<PeriodeViewModel>("StartTijdAsText", broadcast: true);
+                RaisePropertyChanged<object>("StartTijd", broadcast: true);
+                RaisePropertyChanged<object>("StartTijdAsText", broadcast: true);
             }
         }
 
@@ -157,8 +157,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.EindTijd = value;
-                RaisePropertyChanged<PeriodeViewModel>("EindTijd", broadcast: true);
-                RaisePropertyChanged<PeriodeViewModel>("EindTijdAsText", broadcast: true);
+                RaisePropertyChanged<object>("EindTijd", broadcast: true);
+                RaisePropertyChanged<object>("EindTijdAsText", broadcast: true);
             }
         }
 
@@ -194,7 +194,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.GroentijdenSet = value;
-                RaisePropertyChanged<PeriodeViewModel>("GroentijdenSet", broadcast: true);
+                RaisePropertyChanged<object>("GroentijdenSet", broadcast: true);
             }
         }
 

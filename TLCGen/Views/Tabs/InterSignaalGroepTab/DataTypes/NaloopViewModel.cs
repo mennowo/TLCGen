@@ -36,7 +36,7 @@ namespace TLCGen.ViewModels
                 {
                     _Naloop.Type = value;
                     SetNaloopTijden();
-                    RaisePropertyChanged<NaloopViewModel>("Type", broadcast: true);
+                    RaisePropertyChanged<object>("Type", broadcast: true);
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
 
                 _Naloop.VasteNaloop = value;
                 SetNaloopTijden();
-                RaisePropertyChanged<NaloopViewModel>("VasteNaloop", broadcast: true);
+                RaisePropertyChanged<object>("VasteNaloop", broadcast: true);
             }
         }
 
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
 
                 _Naloop.DetectieAfhankelijk = value;
                 SetNaloopTijden();
-                RaisePropertyChanged<NaloopViewModel>("DetectieAfhankelijk", broadcast: true);
+                RaisePropertyChanged<object>("DetectieAfhankelijk", broadcast: true);
             }
         }
 
@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Naloop.MaximaleVoorstart = value;
-                RaisePropertyChanged<NaloopViewModel>("MaximaleVoorstart", broadcast: true);
+                RaisePropertyChanged<object>("MaximaleVoorstart", broadcast: true);
             }
         }
 

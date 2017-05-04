@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -22,7 +23,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VersieEntry.Versie = value;
-                RaisePropertyChanged<VersieViewModel>("Versie", broadcast: true);
+                RaisePropertyChanged<object>("Versie", broadcast: true);
             }
         }
 
@@ -32,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VersieEntry.Datum = value;
-                RaisePropertyChanged<VersieViewModel>("Datum", broadcast: true);
+                RaisePropertyChanged<object>("Datum", broadcast: true);
             }
         }
 
@@ -42,7 +43,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VersieEntry.Ontwerper = value;
-                RaisePropertyChanged<VersieViewModel>("Ontwerper", broadcast: true);
+                RaisePropertyChanged<object>("Ontwerper", broadcast: true);
             }
         }
 
@@ -52,7 +53,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VersieEntry.Commentaar = value;
-                RaisePropertyChanged<VersieViewModel>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
 

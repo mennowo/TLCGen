@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
                 }
-                RaisePropertyChanged<OVDataViewModel>(null, broadcast: true);
+                RaisePropertyChanged<object>(null, broadcast: true);
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
@@ -54,7 +54,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.DSI = value;
-                RaisePropertyChanged<OVDataViewModel>("DSI", broadcast: true);
+                RaisePropertyChanged<object>("DSI", broadcast: true);
             }
         }
 
@@ -65,7 +65,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.CheckOpDSIN = value;
-                RaisePropertyChanged<OVDataViewModel>("CheckOpDSIN", broadcast: true);
+                RaisePropertyChanged<object>("CheckOpDSIN", broadcast: true);
             }
         }
 
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdAuto = value;
-                RaisePropertyChanged<OVDataViewModel>("MaxWachttijdAuto", broadcast: true);
+                RaisePropertyChanged<object>("MaxWachttijdAuto", broadcast: true);
             }
         }
 
@@ -87,7 +87,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdFiets = value;
-                RaisePropertyChanged<OVDataViewModel>("MaxWachttijdFiets", broadcast: true);
+                RaisePropertyChanged<object>("MaxWachttijdFiets", broadcast: true);
             }
         }
 
@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdVoetganger = value;
-                RaisePropertyChanged<OVDataViewModel>("MaxWachttijdVoetganger", broadcast: true);
+                RaisePropertyChanged<object>("MaxWachttijdVoetganger", broadcast: true);
             }
         }
 

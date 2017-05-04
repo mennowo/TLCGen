@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Naam = value;
-                RaisePropertyChanged<WaarschuwingsGroepViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -35,7 +35,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Lichten = value;
-                RaisePropertyChanged<WaarschuwingsGroepViewModel>("Lichten", broadcast: true);
+                RaisePropertyChanged<object>("Lichten", broadcast: true);
             }
         }
 
@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _WaarschuwingsGroep.Bellen = value;
-                RaisePropertyChanged<WaarschuwingsGroepViewModel>("Bellen", broadcast: true);
+                RaisePropertyChanged<object>("Bellen", broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
                 {
                     _WaarschuwingsGroep.FaseCyclusVoorAansturing = value;
                 }
-                RaisePropertyChanged<WaarschuwingsGroepViewModel>("FaseCyclusVoorAansturing", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclusVoorAansturing", broadcast: true);
             }
         }
 

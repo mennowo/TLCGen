@@ -45,7 +45,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.FaseCyclus = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 
@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.VanDetector = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("VanDetector", broadcast: true);
+                RaisePropertyChanged<object>("VanDetector", broadcast: true);
             }
         }
 
@@ -65,7 +65,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.NaarDetector = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("NaarDetector", broadcast: true);
+                RaisePropertyChanged<object>("NaarDetector", broadcast: true);
             }
         }
 
@@ -75,7 +75,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.MaxTijdsVerschil = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("MaxTijdsVerschil", broadcast: true);
+                RaisePropertyChanged<object>("MaxTijdsVerschil", broadcast: true);
             }
         }
 
@@ -85,7 +85,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.VerlengTijd = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("VerlengTijd", broadcast: true);
+                RaisePropertyChanged<object>("VerlengTijd", broadcast: true);
             }
         }
 
@@ -95,7 +95,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _RichtingGevoeligVerleng.TypeVerlengen = value;
-                RaisePropertyChanged<RichtingGevoeligVerlengViewModel>("TypeVerlengen", broadcast: true);
+                RaisePropertyChanged<object>("TypeVerlengen", broadcast: true);
             }
         }
 

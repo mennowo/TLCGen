@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileDetector.Detector = value;
-                RaisePropertyChanged<RoBuGroverFileDetectorViewModel>("Detector", broadcast: true);
+                RaisePropertyChanged<object>("Detector", broadcast: true);
             }
         }
         public int FileTijd
@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _FileDetector.FileTijd = value;
-                RaisePropertyChanged<RoBuGroverFileDetectorViewModel>("FileTijd", broadcast: true);
+                RaisePropertyChanged<object>("FileTijd", broadcast: true);
             }
         }
 

@@ -46,7 +46,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.KAR = value;
-                RaisePropertyChanged<HDIngreepViewModel>("KAR", broadcast: true);
+                RaisePropertyChanged<object>("KAR", broadcast: true);
                 if (value)
                 {
                     _HDIngreep.DummyKARInmelding.Naam = "dummyhdkarin" + _HDIngreep.FaseCyclus;
@@ -69,7 +69,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.Opticom = value;
-                RaisePropertyChanged<HDIngreepViewModel>("Opticom", broadcast: true);
+                RaisePropertyChanged<object>("Opticom", broadcast: true);
             }
         }
 
@@ -79,7 +79,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.Sirene = value;
-                RaisePropertyChanged<HDIngreepViewModel>("Sirene", broadcast: true);
+                RaisePropertyChanged<object>("Sirene", broadcast: true);
             }
         }
 
@@ -91,7 +91,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<HDIngreepViewModel>("RijTijdOngehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdOngehinderd", broadcast: true);
             }
         }
 
@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<HDIngreepViewModel>("RijTijdBeperktgehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdBeperktgehinderd", broadcast: true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<HDIngreepViewModel>("RijTijdGehinderd", broadcast: true);
+                RaisePropertyChanged<object>("RijTijdGehinderd", broadcast: true);
             }
         }
 
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.GroenBewaking = value;
-                RaisePropertyChanged<HDIngreepViewModel>("GroenBewaking", broadcast: true);
+                RaisePropertyChanged<object>("GroenBewaking", broadcast: true);
             }
         }
 

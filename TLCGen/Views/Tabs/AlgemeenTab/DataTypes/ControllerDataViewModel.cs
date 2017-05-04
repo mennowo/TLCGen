@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.Naam = value;
-                RaisePropertyChanged<ControllerDataViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.Stad = value;
-                RaisePropertyChanged<ControllerDataViewModel>("Stad", broadcast: true);
+                RaisePropertyChanged<object>("Stad", broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.Straat1 = value;
-                RaisePropertyChanged<ControllerDataViewModel>("Straat1", broadcast: true);
+                RaisePropertyChanged<object>("Straat1", broadcast: true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.Straat2 = value;
-                RaisePropertyChanged<ControllerDataViewModel>("Straat2", broadcast: true);
+                RaisePropertyChanged<object>("Straat2", broadcast: true);
             }
         }
 
@@ -79,7 +79,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.BitmapNaam = value;
-                RaisePropertyChanged<ControllerDataViewModel>("BitmapNaam", broadcast: true);
+                RaisePropertyChanged<object>("BitmapNaam", broadcast: true);
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
@@ -91,7 +91,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.Fasebewaking = value;
-                RaisePropertyChanged<ControllerDataViewModel>("Fasebewaking", broadcast: true);
+                RaisePropertyChanged<object>("Fasebewaking", broadcast: true);
             }
         }
 
@@ -102,7 +102,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.CCOLVersie = value;
-                RaisePropertyChanged<ControllerDataViewModel>("CCOLVersie", broadcast: true);
+                RaisePropertyChanged<object>("CCOLVersie", broadcast: true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.KWCType = value;
-                RaisePropertyChanged<ControllerDataViewModel>("KWCType", broadcast: true);
+                RaisePropertyChanged<object>("KWCType", broadcast: true);
             }
         }
 
@@ -124,7 +124,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.VLOGType = value;
-                RaisePropertyChanged<ControllerDataViewModel>("VLOGType", broadcast: true);
+                RaisePropertyChanged<object>("VLOGType", broadcast: true);
             }
         }
 
@@ -135,7 +135,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.VLOGInTestOmgeving = value;
-                RaisePropertyChanged<ControllerDataViewModel>("VLOGInTestOmgeving", broadcast: true);
+                RaisePropertyChanged<object>("VLOGInTestOmgeving", broadcast: true);
             }
         }
 
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.ExtraMeeverlengenInWG = value;
-                RaisePropertyChanged<ControllerDataViewModel>("ExtraMeeverlengenInWG", broadcast: true);
+                RaisePropertyChanged<object>("ExtraMeeverlengenInWG", broadcast: true);
             }
         }
 
@@ -157,7 +157,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AansturingWaitsignalen = value;
-                RaisePropertyChanged<ControllerDataViewModel>("AansturingWaitsignalen", broadcast: true);
+                RaisePropertyChanged<object>("AansturingWaitsignalen", broadcast: true);
             }
         }
 
@@ -168,7 +168,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.FixatieMogelijk = value;
-                RaisePropertyChanged<ControllerDataViewModel>("FixatieMogelijk", broadcast: true);
+                RaisePropertyChanged<object>("FixatieMogelijk", broadcast: true);
             }
         }
 
@@ -179,7 +179,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.BijkomenTijdensFixatie = value;
-                RaisePropertyChanged<ControllerDataViewModel>("BijkomenTijdensFixatie", broadcast: true);
+                RaisePropertyChanged<object>("BijkomenTijdensFixatie", broadcast: true);
             }
         }
 
@@ -190,7 +190,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.TypeGroentijden = value;
-                RaisePropertyChanged<ControllerDataViewModel>("TypeGroentijden", broadcast: true);
+                RaisePropertyChanged<object>("TypeGroentijden", broadcast: true);
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }

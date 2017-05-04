@@ -24,7 +24,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer = value;
-                RaisePropertyChanged<OVIngreepLijnNummerViewModel>("LijnNummer", broadcast: true);
+                RaisePropertyChanged<object>("LijnNummer", broadcast: true);
             }
         }
 
@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer.Nummer = value;
-                RaisePropertyChanged<OVIngreepLijnNummerViewModel>("Nummer", broadcast: true);
+                RaisePropertyChanged<object>("Nummer", broadcast: true);
             }
         }
 

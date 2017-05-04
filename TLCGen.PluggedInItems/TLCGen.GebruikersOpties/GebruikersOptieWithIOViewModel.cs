@@ -47,7 +47,7 @@ namespace TLCGen.GebruikersOpties
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                RaisePropertyChanged<GebruikersOptieViewModel>("Naam", broadcast: true);
+                RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Commentaar = value;
-                RaisePropertyChanged<GebruikersOptieViewModel>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
 

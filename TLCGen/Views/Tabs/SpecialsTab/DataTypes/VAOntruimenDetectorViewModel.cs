@@ -27,7 +27,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenDetector.Detector = value;
-                RaisePropertyChanged<VAOntruimenDetectorViewModel>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
             }
         }
 

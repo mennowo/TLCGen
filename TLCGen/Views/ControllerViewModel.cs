@@ -213,7 +213,7 @@ namespace TLCGen.ViewModels
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
 
-        public void OnPropertyChangedMessageBase(MessageBase message)
+        public void OnPropertyChangedMessageBase(PropertyChangedMessageBase message)
         {
             TLCGenControllerDataProvider.Default.ControllerHasChanged = true;
         }
@@ -261,7 +261,7 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
             MessengerInstance.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
             MessengerInstance.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
-            MessengerInstance.Register(this, new Action<MessageBase>(OnPropertyChangedMessageBase));
+            MessengerInstance.Register(this, new Action<PropertyChangedMessage<object>>(OnPropertyChangedMessageBase));
 
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }

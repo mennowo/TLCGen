@@ -29,7 +29,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.TeKoppelenKruispunt = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("TeKoppelenKruispunt", broadcast: true);
+                RaisePropertyChanged<object>("TeKoppelenKruispunt", broadcast: true);
             }
         }
         public int AantalsignalenIn
@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenIn = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("AantalsignalenIn", broadcast: true);
+                RaisePropertyChanged<object>("AantalsignalenIn", broadcast: true);
             }
         }
 
@@ -48,7 +48,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenUit = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("AantalsignalenUit", broadcast: true);
+                RaisePropertyChanged<object>("AantalsignalenUit", broadcast: true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortnummerSimuatieOmgeving = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("PortnummerSimuatieOmgeving", broadcast: true);
+                RaisePropertyChanged<object>("PortnummerSimuatieOmgeving", broadcast: true);
             }
         }
 
@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortnummerAutomaatOmgeving = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("PortnummerAutomaatOmgeving", broadcast: true);
+                RaisePropertyChanged<object>("PortnummerAutomaatOmgeving", broadcast: true);
             }
         }
 
@@ -78,7 +78,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.NummerSource = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("NummerSource", broadcast: true);
+                RaisePropertyChanged<object>("NummerSource", broadcast: true);
             }
         }
 
@@ -88,7 +88,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.NummerDestination = value;
-                RaisePropertyChanged<PTPKoppelingViewModel>("NummerDestination", broadcast: true);
+                RaisePropertyChanged<object>("NummerDestination", broadcast: true);
             }
         }
 

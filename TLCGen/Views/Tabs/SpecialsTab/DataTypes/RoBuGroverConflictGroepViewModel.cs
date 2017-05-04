@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFase = value;
-                RaisePropertyChanged<RoBuGroverConflictGroepViewModel>("SelectedFase", broadcast: true);
+                RaisePropertyChanged<object>("SelectedFase", broadcast: true);
             }
         }
 
