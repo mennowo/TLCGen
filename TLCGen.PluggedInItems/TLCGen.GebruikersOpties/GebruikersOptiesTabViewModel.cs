@@ -7,7 +7,6 @@ using System.Windows;
 using TLCGen.Models;
 using TLCGen.Helpers;
 using TLCGen.Plugins;
-using TLCGen.ViewModels;
 using System.Windows.Input;
 using System.Xml;
 using System.Windows.Media;
@@ -15,6 +14,7 @@ using TLCGen.DataAccess;
 using TLCGen.Integrity;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
+using GalaSoft.MvvmLight;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -83,7 +83,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _MyGebruikersOpties = value;
 
-                OnPropertyChanged(null);
+                RaisePropertyChanged(null);
             }
         }
 
@@ -93,8 +93,8 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _SelectedTabIndex = value;
-                OnPropertyChanged("SelectedOptie");
-                OnPropertyChanged("SelectedTabIndex");
+                RaisePropertyChanged("SelectedOptie");
+                RaisePropertyChanged("SelectedTabIndex");
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     _SelectedOptie[SelectedTabIndex] = value;
                 }
-                OnPropertyChanged("SelectedOptie");
+                RaisePropertyChanged("SelectedOptie");
             }
         }
 
@@ -134,7 +134,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     _SelectedOpties[SelectedTabIndex] = value;
                 }
-                OnPropertyChanged("SelectedOpties");
+                RaisePropertyChanged("SelectedOpties");
             }
         }
 
@@ -552,7 +552,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     ResetMyGebruikersOpties();
                 }
-                OnPropertyChanged(null);
+                RaisePropertyChanged(null);
             }
         }
 
@@ -590,7 +590,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _IsEnabled = value;
-                OnPropertyChanged("IsEnabled");
+                RaisePropertyChanged("IsEnabled");
             }
         }
 
@@ -675,7 +675,7 @@ namespace TLCGen.GebruikersOpties
                 _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
                 _AlleOpties[ParametersConst] = Parameters;
 
-                OnPropertyChanged(null);
+                RaisePropertyChanged(null);
             }
         }
 

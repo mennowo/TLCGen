@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
-using TLCGen.ViewModels;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -39,7 +39,7 @@ namespace TLCGen.GebruikersOpties
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                OnMonitoredPropertyChanged("Naam");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Naam", broadcast: true);
             }
         }
         public CCOLElementTypeEnum Type
@@ -48,7 +48,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Type = value;
-                OnMonitoredPropertyChanged("Type");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Type", broadcast: true);
             }
         }
         public int? Instelling
@@ -57,7 +57,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Instelling = value;
-                OnMonitoredPropertyChanged("Instelling");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Instelling", broadcast: true);
             }
         }
         public string Commentaar
@@ -66,7 +66,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptie.Commentaar = value;
-                OnMonitoredPropertyChanged("Commentaar");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Commentaar", broadcast: true);
             }
         }
 

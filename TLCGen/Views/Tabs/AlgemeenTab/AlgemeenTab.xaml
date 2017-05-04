@@ -4,15 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
-             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
-             xmlns:vm="clr-namespace:TLCGen.ViewModels;assembly=TLCGen.ViewModels"
-             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
-             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:AlgemeenTabViewModel}">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type vm:ControllerDataTabViewModel}">
             <local:ControllerDataTabView />

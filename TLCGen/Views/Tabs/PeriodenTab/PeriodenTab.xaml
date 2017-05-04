@@ -7,7 +7,7 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
-             xmlns:vm="clr-namespace:TLCGen.ViewModels;assembly=TLCGen.ViewModels"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              Name="root"
              d:DesignHeight="300" d:DesignWidth="300">

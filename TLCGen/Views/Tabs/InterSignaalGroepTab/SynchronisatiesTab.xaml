@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
-             xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums;assembly=TLCGen.ViewModels"
+             xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"

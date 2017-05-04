@@ -20,7 +20,7 @@
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" />
         <Grid Grid.Column="2" Grid.Row="0">
-            <local:ModuleMolenOverView DataContext="{Binding ModuleMolenVM}" />
+            <local:ModuleMolenView DataContext="{Binding ModuleMolenVM}" />
         </Grid>
     </Grid>
 </UserControl>

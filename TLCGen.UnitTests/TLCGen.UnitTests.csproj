@@ -36,17 +36,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.4.0.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.0.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.0.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -62,8 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -94,10 +90,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
-      <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
-      <Name>TLCGen.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
       <Name>TLCGen.Helpers</Name>
@@ -106,21 +98,13 @@
       <Project>{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}</Project>
       <Name>TLCGen.Integrity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{A693DAA4-DB12-43DD-BCB8-BB039E22BBA8}</Project>
-      <Name>TLCGen.Models.Enumerations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{190CA695-5E3B-42DA-B7E5-2EA56932A511}</Project>
-      <Name>TLCGen.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.ViewModels\TLCGen.ViewModels.csproj">
-      <Project>{D0D102B3-23AF-4F74-946B-96EBE262932C}</Project>
-      <Name>TLCGen.ViewModels</Name>
+    <ProjectReference Include="..\TLCGen\TLCGen.csproj">
+      <Project>{bfc33a68-228a-46b6-9e7d-25f41ac5c02c}</Project>
+      <Name>TLCGen</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

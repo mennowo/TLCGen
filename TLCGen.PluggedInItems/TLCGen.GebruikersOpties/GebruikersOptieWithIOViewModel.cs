@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
-using TLCGen.ViewModels;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -47,7 +47,7 @@ namespace TLCGen.GebruikersOpties
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                OnMonitoredPropertyChanged("Naam");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Naam", broadcast: true);
             }
         }
 
@@ -57,7 +57,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _GebruikersOptieWithOI.Commentaar = value;
-                OnMonitoredPropertyChanged("Commentaar");
+                RaisePropertyChanged<GebruikersOptieViewModel>("Commentaar", broadcast: true);
             }
         }
 

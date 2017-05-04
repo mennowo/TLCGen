@@ -114,7 +114,8 @@ namespace TLCGen.Controls
             }
             foreach (var prop in props)
             {
-                if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                if (prop.Name != "IsInDesignMode" &&
+                    (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string)))
                 {
                     if (o.CheckBrowsable)
                     {

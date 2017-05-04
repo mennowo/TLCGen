@@ -470,6 +470,7 @@
         <Straat1 />
         <Straat2 />
         <BitmapNaam />
+        <Fasebewaking>240</Fasebewaking>
         <CCOLVersie>CCOL8</CCOLVersie>
         <KWCType>Geen</KWCType>
         <VLOGType>Filebased</VLOGType>

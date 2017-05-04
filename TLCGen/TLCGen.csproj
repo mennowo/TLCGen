@@ -40,17 +40,14 @@
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.4.0.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.0.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.0.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>Libs\GongSolutions.WPF.DragDrop.dll</HintPath>
@@ -68,8 +65,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.0-alpha\lib\net45\System.Windows.Interactivity.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -118,7 +114,171 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AutomationIds.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="MainWindowViewModel.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\IntersignaalGroepTypeEnum.cs" />
+    <Compile Include="ViewModels\TLCGenMainTabItemViewModel.cs" />
+    <Compile Include="ViewModels\TLCGenTabItemViewModel.cs" />
+    <Compile Include="Views\ControllerViewModel.cs">
+      <DependentUpon>ControllerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\DetectorenTab.xaml.cs">
+      <DependentUpon>DetectorenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\SynchronisatiesTabViewModel.cs">
+      <DependentUpon>SynchronisatiesTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\FaseCyclusModuleDataViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleMolenViewModel.cs">
+      <DependentUpon>ModuleMolenView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\FaseCyclusModuleViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\ModulesTabViewModel.cs">
+      <DependentUpon>ModulesTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Other\ModulesTabFasenLijstViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabViewModel.cs">
+      <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Other\DetectorManagerViewModel.cs" />
+    <Compile Include="ViewModels\Other\IAllowTemplates.cs" />
+    <Compile Include="ViewModels\Other\IGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\Other\TemplateProviderViewModel.cs" />
+    <Compile Include="ViewModels\Other\TLCGenStatusBarViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepViewModel.cs">
+      <DependentUpon>HDIngreepView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepLijnNummerViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepSignaalGroepParametersViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\OVTabViewModel.cs">
+      <DependentUpon>OVTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVFasenTabViewModel.cs">
+      <DependentUpon>OVFasenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabViewModel.cs">
+      <DependentUpon>OVSignaalGroepInstellingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PeriodenTab\DataTypes\PeriodeViewModel.cs" />
+    <Compile Include="Views\Tabs\PeriodenTab\PeriodenTabViewModel.cs">
+      <DependentUpon>PeriodenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenGroentijdenTabViewModel.cs">
+      <DependentUpon>PeriodenGroentijdenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabViewModel.cs">
+      <DependentUpon>PeriodenOverigTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepDetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepTeDoserenSignaalGroepViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\FileIngreepViewModel.cs">
+      <DependentUpon>FileIngreepView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\PTPKoppelingViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RatelTikkerDetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RatelTikkerViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverConflictGroepFaseViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverConflictGroepViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverFileDetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverHiaatDetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverInstellingenViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingenViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenDetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseViewModel.cs">
+      <DependentUpon>VAOntruimenFaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenNaarFaseViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\WaarschuwingsGroepViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\Other\RoBuGroverTabFaseViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\SpecialsTabViewModel.cs">
+      <DependentUpon>SpecialsTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabViewModel.cs">
+      <DependentUpon>FileTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs">
+      <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\RoBuGroverTabViewModel.cs">
+      <DependentUpon>RoBuGroverTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\SignalenTabViewModel.cs">
+      <DependentUpon>SignalenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\MeeaanvraagViewModel.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopViewModel.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\SynchronisatieViewModel.cs" />
+    <Compile Include="ViewModels\HelperTypes\GarantieTijdConvertHelper.cs" />
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\FaseCyclusViewModel.cs">
+      <DependentUpon>FaseCyclusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\GroentijdenSetViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\GroentijdViewModel.cs" />
+    <Compile Include="Views\Tabs\FasenTab\FasenTabViewModel.cs">
+      <DependentUpon>FasenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenDetailsTabViewModel.cs">
+      <DependentUpon>FasenDetailsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabViewModel.cs">
+      <DependentUpon>FasenGroentijdenSetsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTabViewModel.cs">
+      <DependentUpon>FasenLijstTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\DataTypes\DetectorViewModel.cs" />
+    <Compile Include="Views\Tabs\DetectorenTab\DataTypes\RichtingGevoeligeAanvraagViewModel.cs" />
+    <Compile Include="Views\Tabs\DetectorenTab\DataTypes\RichtingGevoeligVerlengViewModel.cs" />
+    <Compile Include="Views\Tabs\DetectorenTab\DetectorenTabViewModel.cs">
+      <DependentUpon>DetectorenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenAllesTabViewModel.cs">
+      <DependentUpon>DetectorenAllesTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenExtraTabViewModel.cs">
+      <DependentUpon>DetectorenExtraTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenFasenTabViewModel.cs">
+      <DependentUpon>DetectorenFasenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenRichtingGevoeligTabViewModel.cs">
+      <DependentUpon>DetectorenRichtingGevoeligTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\ControllerDataViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\OVDataViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\DataTypes\VersieViewModel.cs" />
+    <Compile Include="Views\Tabs\BitmapTab\DataTypes\BitmappedItemViewModel.cs" />
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\ControllerDataTabViewModel.cs">
+      <DependentUpon>ControllerDataTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\OVDataTabViewModel.cs">
+      <DependentUpon>OVDataTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\AlgemeenTabViewModel.cs">
+      <DependentUpon>AlgemeenTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\AlgemeenTab\Tabs\VersieBeheerTabViewModel.cs">
+      <DependentUpon>VersieBeheerTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\BitmapTab\BitmapTabViewModel.cs">
+      <DependentUpon>BitmapTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\DetectorenTab\Tabs\DetectorenSimulatieTabViewModel.cs">
+      <DependentUpon>DetectorenSimulatieTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModel.cs">
+      <DependentUpon>FasenLijstTimersTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabViewModel.cs">
+      <DependentUpon>ModulesFasenInstellingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepViewModel.cs">
+      <DependentUpon>OVIngreepView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml.cs">
       <DependentUpon>OVSignaalGroepInstellingenTabView.xaml</DependentUpon>
     </Compile>
@@ -147,6 +307,9 @@
       <DependentUpon>OVTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabView.xaml.cs">
+      <DependentUpon>OVSimulatieTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVSimulatieTabViewModel.cs">
       <DependentUpon>OVSimulatieTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\PeriodenTab\Tabs\PeriodenOverigTabView.xaml.cs">
@@ -201,8 +364,8 @@
     <Compile Include="Views\Tabs\FasenTab\Controls\FasenToevVerw.xaml.cs">
       <DependentUpon>FasenToevVerw.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ModulesTab\Controls\ModuleMolenOverView.xaml.cs">
-      <DependentUpon>ModuleMolenOverView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleMolenView.xaml.cs">
+      <DependentUpon>ModuleMolenView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\Controls\ModulesTabFasenLijstView.xaml.cs">
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>
@@ -246,9 +409,6 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenDetailsTabView.xaml.cs">
       <DependentUpon>FasenDetailsTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\DetectorenTab\.xaml.cs">
-      <DependentUpon>DetectorenTab.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\FasenTab\FasenTab.xaml.cs">
       <DependentUpon>FasenTab.xaml</DependentUpon>
     </Compile>
@@ -257,6 +417,9 @@
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabView.xaml.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\VAOntruimenTabViewModel.cs">
+      <DependentUpon>VAOntruimenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControls\DetectorManagerView.xaml.cs">
       <DependentUpon>DetectorManagerView.xaml</DependentUpon>
@@ -308,6 +471,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\MenuIcons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\TabIcons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -427,7 +594,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ModulesTab\Controls\ModuleMolenOverView.xaml">
+    <Page Include="Views\Tabs\ModulesTab\DataTypes\ModuleMolenView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -573,10 +740,6 @@
       <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
       <Name>FloodFill</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GuiActionsManager\GuiActions.csproj">
-      <Project>{7922013A-9B43-4813-A354-F1977B5788DE}</Project>
-      <Name>GuiActions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
@@ -593,57 +756,21 @@
       <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
       <Name>TLCGen.Dialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.EventManager\TLCGen.Messaging.csproj">
-      <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
-      <Name>TLCGen.Messaging</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
-      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
-      <Name>TLCGen.Generators.CCOL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Generators.YATLCCLC\TLCGen.Generators.YATLCCLC.csproj">
-      <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
-      <Name>TLCGen.Generators.YATLCCLC</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
       <Name>TLCGen.Helpers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
-      <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
-      <Name>TLCGen.Importers.TabC</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
       <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
       <Name>TLCGen.Integrity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Interfaces.Public\TLCGen.Plugins.csproj">
-      <Project>{355E3027-7851-4EB9-9C91-3B281D01DC02}</Project>
-      <Name>TLCGen.Plugins</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.ModelManager\TLCGen.ModelManager.csproj">
-      <Project>{3d13c9d8-5734-4904-b935-fd4bd7d944cb}</Project>
-      <Name>TLCGen.ModelManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{a693daa4-db12-43dd-bcb8-bb039e22bba8}</Project>
-      <Name>TLCGen.Models.Enumerations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{190ca695-5e3b-42da-b7e5-2ea56932a511}</Project>
-      <Name>TLCGen.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.ViewModels\TLCGen.ViewModels.csproj">
-      <Project>{d0d102b3-23af-4f74-946b-96ebe262932c}</Project>
-      <Name>TLCGen.ViewModels</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
