@@ -673,7 +673,7 @@ namespace TLCGen.ViewModels
         public void UpdateController()
         {
             ControllerVM.ReloadController();
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
         }
 
         /// <summary>

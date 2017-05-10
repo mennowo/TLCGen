@@ -127,11 +127,11 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Stopline = 1800;
             }
 
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
             Messenger.Default.Send(new ControllerDataChangedMessage());
             foreach(var d in Detectoren)
             {
-                d.RaisePropertyChanged<object>(null);
+                d.RaisePropertyChanged("");
             }
         }
 

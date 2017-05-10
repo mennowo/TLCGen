@@ -74,7 +74,7 @@ namespace TLCGen.Settings
                 else
                     SelectedFaseCyclusTypeString = null;
 
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
         

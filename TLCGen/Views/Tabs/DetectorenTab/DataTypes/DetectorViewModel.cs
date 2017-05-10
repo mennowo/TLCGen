@@ -129,7 +129,7 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString());
                 }
-                RaisePropertyChanged<object>(null, broadcast: true);
+                RaisePropertyChanged<object>("", broadcast: true);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
             }
         }

@@ -164,13 +164,13 @@ namespace TLCGen.ViewModels
                         Versies.Add(vvm);
                     }
                     Versies.CollectionChanged += Versies_CollectionChanged;
-                    RaisePropertyChanged(null);
+                    RaisePropertyChanged("");
                 }
                 else
                 {
                     Versies.CollectionChanged -= Versies_CollectionChanged;
                     Versies.Clear();
-                    RaisePropertyChanged(null);
+                    RaisePropertyChanged("");
                 }
             }
         }

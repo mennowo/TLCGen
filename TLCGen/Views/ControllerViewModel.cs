@@ -111,7 +111,7 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void ReloadController()
         {
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
             SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
         }
 

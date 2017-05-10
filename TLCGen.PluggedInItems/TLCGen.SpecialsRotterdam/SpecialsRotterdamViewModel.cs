@@ -25,7 +25,7 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Specials = value;
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

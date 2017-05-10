@@ -40,7 +40,7 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedPeriode = value;
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

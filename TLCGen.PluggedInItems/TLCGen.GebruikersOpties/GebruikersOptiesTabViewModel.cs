@@ -83,7 +83,7 @@ namespace TLCGen.GebruikersOpties
             {
                 _MyGebruikersOpties = value;
 
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 
@@ -552,7 +552,7 @@ namespace TLCGen.GebruikersOpties
                 {
                     ResetMyGebruikersOpties();
                 }
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 
@@ -675,7 +675,7 @@ namespace TLCGen.GebruikersOpties
                 _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
                 _AlleOpties[ParametersConst] = Parameters;
 
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

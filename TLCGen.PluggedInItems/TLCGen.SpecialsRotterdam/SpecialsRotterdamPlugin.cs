@@ -45,6 +45,7 @@ namespace TLCGen.SpecialsRotterdam
                 if(_Controller == null)
                 {
                     _MyModel = new SpecialsRotterdamModel();
+                    _SpecialsRotterdamTabVM.Specials = _MyModel;
                 }
             }
         }
@@ -152,6 +153,8 @@ namespace TLCGen.SpecialsRotterdam
 
         public void GetXmlFromDocument(XmlDocument document)
         {
+            _MyModel = null;
+
             foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
                 if (node.LocalName == "SpecialsRotterdam")
@@ -166,7 +169,7 @@ namespace TLCGen.SpecialsRotterdam
                 _MyModel = new SpecialsRotterdamModel();
             }
             _SpecialsRotterdamTabVM.Specials = _MyModel;
-            _SpecialsRotterdamTabVM.RaisePropertyChanged(null);
+            _SpecialsRotterdamTabVM.RaisePropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)

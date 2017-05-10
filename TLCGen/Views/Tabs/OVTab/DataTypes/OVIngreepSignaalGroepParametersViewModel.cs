@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
                     prop.SetValue(this.GetItem(), prop.GetValue(sgprm));
                 }
             }
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
         }
 
         #endregion // Public methods

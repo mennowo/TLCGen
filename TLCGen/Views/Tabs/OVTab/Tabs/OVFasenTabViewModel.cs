@@ -66,7 +66,7 @@ namespace TLCGen.ViewModels
                     }
                 }
 
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

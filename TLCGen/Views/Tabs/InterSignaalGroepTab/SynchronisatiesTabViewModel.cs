@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
                         cvm.DisplayType = value;
                     }
                 }
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

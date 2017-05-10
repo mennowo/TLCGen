@@ -149,10 +149,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 if(c.FileIngrepen.Count > 0)
                 {
-                    bool any = false;
+                    var any = false;
                     foreach(var fi in c.FileIngrepen)
                     {
-                        if(fi.TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
+                        if(fi.TeDoserenSignaalGroepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                         {
                             any = true;
                             sb.Append($"{l}(IH[{_hpf}{_hfile}{fi.Naam}]) ||");
@@ -185,10 +185,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 if (c.FileIngrepen.Count > 0)
                 {
-                    bool any = false;
+                    var any = false;
                     foreach (var fi in c.FileIngrepen)
                     {
-                        if (fi.TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == fc.FaseCyclus).Any())
+                        if (fi.TeDoserenSignaalGroepen.Any(x => x.FaseCyclus == fc.FaseCyclus))
                         {
                             any = true;
                             sb.AppendLine($"{ts}{ts}DD[{_fcpf}{fc.FaseCyclus}] = IH[{_hpf}{_hfile}{fi.Naam}] ? TRUE : FALSE;");
@@ -248,7 +248,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (fc.HiaatDetectoren.Count == 1)
                 {
-                    sb.AppendLine($"{ts}rgv_verlenggroentijd2({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], (bool)(MK1[{_fcpf}{fc.FaseCyclus}]));");
+                    sb.AppendLine($"{ts}rgv_verlenggroentijd1({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], (bool)(MK1[{_fcpf}{fc.FaseCyclus}]));");
                 }
                 else if (fc.HiaatDetectoren.Count > 1)
                 {
@@ -261,7 +261,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         ++i;
                         if(i <= fc.HiaatDetectoren.Count)
                         {
-                            sb.Append(" || ");
+                            sb.Append(" && ");
                         }
                     }
                     sb.AppendLine("));");

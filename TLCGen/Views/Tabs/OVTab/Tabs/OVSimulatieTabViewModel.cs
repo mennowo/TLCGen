@@ -71,7 +71,7 @@ namespace TLCGen.ViewModels
                 {
                     _DummyDetectoren = null;
                 }
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 
@@ -150,11 +150,11 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
             Messenger.Default.Send(new ControllerDataChangedMessage());
             foreach (var d in DummyDetectoren)
             {
-                d.RaisePropertyChanged<object>(null);
+                d.RaisePropertyChanged("");
             }
         }
 

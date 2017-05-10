@@ -155,6 +155,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperbeldim > 1) _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
             if (ipertwl > 1)    _MyBitmapOutputs.Add(new CCOLIOElement(c.Signalen.WaarschuwingsLichtenActiefBitmapData, $"{_uspf}{_usper}{_prmpertwl}"));
 
+            // groentijden
+            foreach (var mgset in c.GroentijdenSets)
+            {
+                foreach (var mgm in mgset.Groentijden)
+                {
+                    if (!mgm.Waarde.HasValue)
+                        continue;
+
+                    var thisfcm = c.Fasen.FirstOrDefault(fcm => fcm.Naam == mgm.FaseCyclus);
+
+                    if (thisfcm == null)
+                        throw new NotImplementedException($"Maxgroentijd voor niet bestaande fase {mgm.FaseCyclus} opgegeven.");
+
+                    _MyElements.Add(new CCOLElement(
+                        $"{mgset.Naam.ToLower()}_{thisfcm.Naam}",
+                        mgm.Waarde.Value,
+                        CCOLElementTimeTypeEnum.TE_type, 
+                        CCOLElementTypeEnum.Parameter));
+                }
+            }
         }
 
         public override bool HasCCOLElements()

@@ -26,7 +26,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

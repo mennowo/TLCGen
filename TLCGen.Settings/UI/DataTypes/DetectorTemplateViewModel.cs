@@ -55,7 +55,7 @@ namespace TLCGen.Settings
                 else
                     SelectedDetectorTypeString = null;
 
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 

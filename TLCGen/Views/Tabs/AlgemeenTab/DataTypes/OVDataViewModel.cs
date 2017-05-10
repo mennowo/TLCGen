@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                RaisePropertyChanged(null);
+                RaisePropertyChanged("");
             }
         }
 
@@ -34,7 +34,8 @@ namespace TLCGen.ViewModels
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Controller.OVData);
                 }
-                RaisePropertyChanged<object>(null, broadcast: true);
+                RaisePropertyChanged<object>(nameof(OVIngreepType), broadcast: true);
+                RaisePropertyChanged("");
                 Messenger.Default.Send(new ControllerHasOVChangedMessage(value));
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
@@ -54,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.DSI = value;
-                RaisePropertyChanged<object>("DSI", broadcast: true);
+                RaisePropertyChanged<object>(nameof(DSI), broadcast: true);
             }
         }
 

@@ -216,7 +216,7 @@ namespace TLCGen.ViewModels
                 Detectoren.Add(dvm);
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
-            RaisePropertyChanged(null);
+            RaisePropertyChanged("");
         }
 
         #endregion // Private Methods
