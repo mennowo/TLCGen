@@ -113,11 +113,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_roBuGroverInstellingenInstellingen == null)
-                {
-                    _roBuGroverInstellingenInstellingen = new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover);
-                }
-                return _roBuGroverInstellingenInstellingen;
+                return _roBuGroverInstellingenInstellingen ?? (_roBuGroverInstellingenInstellingen =
+                           new RoBuGroverInstellingenViewModel(_Controller.RoBuGrover));
             }
         }
 
