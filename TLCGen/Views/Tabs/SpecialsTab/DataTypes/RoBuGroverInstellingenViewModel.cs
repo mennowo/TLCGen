@@ -146,7 +146,8 @@ namespace TLCGen.ViewModels
         public void SetRoBuGroverDefaultsCommand_Executed()
         {
             DefaultsProvider.Default.SetDefaultsOnModel(_RoBuGrover);
-            RaisePropertyChanged<object>("", broadcast: true);
+            RaisePropertyChanged("");
+            RaisePropertyChanged<object>(nameof(RoBuGrover), broadcast: true);
         }
 
         #endregion // Command Functionality

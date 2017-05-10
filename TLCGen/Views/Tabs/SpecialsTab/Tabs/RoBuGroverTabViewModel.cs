@@ -109,7 +109,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public RoBuGroverInstellingenViewModel RoBuGroverInstellingenInstellingen
+        public RoBuGroverInstellingenViewModel RoBuGroverInstellingen
         {
             get
             {
