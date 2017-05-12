@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,17 +12,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TLCGen.Extensions;
 
-namespace TLCGen.Views
+namespace TLCGen.Dialogs
 {
     /// <summary>
     /// Interaction logic for AboutWindow.xaml
     /// </summary>
-    public partial class AboutWindow : Window
+    public partial class NewVersionAvailableWindow : Window
     {
-        public AboutWindow()
+        public NewVersionAvailableWindow(string newver)
         {
             InitializeComponent();
+
+            UsedVersionTB.Text = Assembly.GetCallingAssembly().GetName().Version.ToString();
+            NewVersionTB.Text = newver;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -29,19 +34,9 @@ namespace TLCGen.Views
             this.Close();
         }
 
-        private void InfoHyperlink_Click(object sender, RoutedEventArgs e)
+        private void DownloadHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("mailto:menno@codingconnected.eu");
-        }
-
-        private void FontHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://www.marksimonson.com/fonts/view/anonymous-pro");
-        }
-
-        private void IconsHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("http://p.yusukekamiyamane.com/");
+            System.Diagnostics.Process.Start("https://www.codingconnected.eu/tlcgen/");
         }
     }
 }

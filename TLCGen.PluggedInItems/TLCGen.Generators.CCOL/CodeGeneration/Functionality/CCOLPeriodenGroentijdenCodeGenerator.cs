@@ -452,7 +452,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                 {
                                                     sb.Append("".PadLeft(($"{ts}{grfunc}(").Length));
                                                     sb.AppendLine(
-                                                       ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
+                                                       ($"(va_mulv) PRM[{_prmpf}{per.GroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_mulv) (MM[mperiod] == {mper}),"));
                                                 }
                                             }
                                         }
@@ -461,7 +461,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                             }
                             sb.Append("".PadLeft(($"{ts}{grfunc}(").Length));
-                            sb.AppendLine($"(va_mulv) PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}{fcm.Naam}], (va_mulv) NG, (va_count) END);");
+                            sb.AppendLine($"(va_mulv) PRM[{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fcm.Naam}], (va_mulv) NG, (va_count) END);");
                         }
                         else
                         {

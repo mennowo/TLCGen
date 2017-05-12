@@ -216,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
                                             {
-                                                sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}{fc.FaseCyclus}; ");
+                                                sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
                                                 ++j;
                                             }
                                         }
@@ -298,7 +298,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             string rest = "";
                             int irest = 1;
-                            rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}{ff.FaseCyclus}";
+                            rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{ff.FaseCyclus}";
                             foreach (PeriodeModel per in c.PeriodenData.Perioden)
                             {
                                 if (per.Type == PeriodeTypeEnum.Groentijden)
@@ -312,7 +312,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 if (mgm.FaseCyclus == ff.FaseCyclus && mgm.Waarde.HasValue)
                                                 {
                                                     ++irest;
-                                                    rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}{ff.FaseCyclus}";
+                                                    rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
                                                 }
                                             }
                                         }

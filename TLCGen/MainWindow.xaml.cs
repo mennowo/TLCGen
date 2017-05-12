@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Threading;
 using TLCGen.Plugins;
 
 namespace TLCGen
@@ -24,6 +25,8 @@ namespace TLCGen
         public MainWindow()
         {
             InitializeComponent();
+
+            DispatcherHelper.Initialize();
 
             MainToolBarTray.DataContextChanged += (s, e) =>
             {

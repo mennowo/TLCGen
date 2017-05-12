@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TLCGen.Extensions;
 
 namespace TLCGen.Dialogs
 {
@@ -22,6 +24,9 @@ namespace TLCGen.Dialogs
         public AboutWindow()
         {
             InitializeComponent();
+
+            VersionTB.Text = Assembly.GetCallingAssembly().GetName().Version.ToString();
+            DateTB.Text = Assembly.GetCallingAssembly().GetLinkerTime().ToLongDateString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

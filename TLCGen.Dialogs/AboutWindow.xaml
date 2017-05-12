@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="Over TLCGen" Width="300">
-    <!--<Window.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/MenuIcons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>-->
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,9 +23,9 @@
             <TextBlock TextWrapping="Wrap">
                 <Span FontWeight="Bold">TLCGen</Span>
                 <LineBreak />
-                Versie: 0.1
+                Versie: <TextBlock Name="VersionTB" />
                 <LineBreak />
-                Datum: 22 september 2016
+                Datum: <TextBlock Name="DateTB" />
                 <LineBreak />
                 Info: <Hyperlink Click="InfoHyperlink_Click">menno@codingconnected.eu</Hyperlink>
                 <LineBreak />
@@ -45,7 +45,7 @@
             </TextBlock>
         </StackPanel>
         <Button Grid.Row="1" HorizontalAlignment="Center" Margin="5" Click="Button_Click" IsDefault="True">
-            <!--<Image Source="{StaticResource AppIconDrawingImage}" Width="32" Height="32" />-->
+            <Image Source="{StaticResource AppIconDrawingImage}" Width="32" Height="32" />
         </Button>
     </Grid>
 </Window>

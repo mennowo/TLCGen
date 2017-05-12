@@ -3,13 +3,19 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml;
+using GalaSoft.MvvmLight.Threading;
 using TLCGen.DataAccess;
+using TLCGen.Dialogs;
 using TLCGen.GuiActions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
@@ -576,7 +582,7 @@ namespace TLCGen.ViewModels
 
         private void ShowAboutCommand_Executed(object obj)
         {
-            TLCGen.Views.AboutWindow about = new Views.AboutWindow();
+            AboutWindow about = new AboutWindow();
             about.ShowDialog();
         }
 
@@ -660,6 +666,46 @@ namespace TLCGen.ViewModels
                     }
                 }
                 //SettingsVM.Settings.CustomData.AddinSettings.Add(gendata);
+            }
+        }
+
+        public void CheckForNewVersion()
+        {
+            try
+            {
+                var webRequest = WebRequest.Create(@"http://www.codingconnected.eu:8080/latest.txt");
+                webRequest.UseDefaultCredentials = true;
+                using (var response = webRequest.GetResponse())
+                using (var content = response.GetResponseStream())
+                using (var reader = new StreamReader(content))
+                {
+                    var strContent = reader.ReadToEnd();
+                    var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+                    var newvers = strContent.Split('.');
+                    var over = 0;
+                    var nver = 0;
+                    if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+                    {
+                        for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+                        {
+                            over += Int32.Parse(oldvers[i]) * j;
+                            nver += Int32.Parse(newvers[i]) * j;
+                            j *= 10;
+                        }
+                    }
+                    if (nver > over)
+                    {
+                        DispatcherHelper.CheckBeginInvokeOnUI(new Action(() =>
+                        {
+                            var w = new NewVersionAvailableWindow(strContent);
+                            w.ShowDialog();
+                        }));
+                    }
+                }
+            }
+            catch
+            {
+                // silently fail
             }
         }
 
@@ -873,9 +919,11 @@ namespace TLCGen.ViewModels
                 win.DialogExpceptionText = e.ToString();
                 win.ShowDialog();
             }
+
+            Task.Run(() => { CheckForNewVersion(); });
         }
 
-#endregion // Constructor
+        #endregion // Constructor
 
     }
 }
