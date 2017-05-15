@@ -695,11 +695,11 @@ namespace TLCGen.ViewModels
                     }
                     if (nver > over)
                     {
-                        DispatcherHelper.CheckBeginInvokeOnUI(new Action(() =>
+                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
                         {
                             var w = new NewVersionAvailableWindow(strContent);
                             w.ShowDialog();
-                        }));
+                        });
                     }
                 }
             }

@@ -231,7 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (!fc.PercentageGroenBijDetectieStoring ||
                             !fc.PercentageGroen.HasValue || 
-                            !c.GroentijdenSets.SelectMany(x => x.Groentijden).Where(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue).Any() ||
+                            !c.GroentijdenSets.SelectMany(x => x.Groentijden).Any(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue) ||
                             fc.Detectoren.Count == 0)
                         {
                             continue;
@@ -292,7 +292,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     if (mgm.FaseCyclus == fc.Naam && mgm.Waarde.HasValue)
                                     {
                                         if (i > 0) sb.Append(", "); ++i;
-                                        sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}{fc.Naam}");
+                                        sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}_{fc.Naam}");
                                     }
                                 }
                             }
