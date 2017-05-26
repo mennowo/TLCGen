@@ -43,7 +43,7 @@ namespace TLCGen.Models
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
 
         [Browsable(false)]
-        public TLCGenVersieEnum TLCGenVersie { get; set; }
+        public string TLCGenVersie { get; set; }
 
         [Browsable(false)]
         public List<SegmentDisplayElementModel> SegmentenDisplayBitmapData { get; set; }

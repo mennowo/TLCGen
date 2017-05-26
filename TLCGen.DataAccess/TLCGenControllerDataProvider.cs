@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -241,6 +242,7 @@ namespace TLCGen.DataAccess
                 // Save data to disk, update saved state
                 if (!string.IsNullOrWhiteSpace(ControllerFileName))
                 {
+                    Controller.Data.TLCGenVersie = Assembly.GetEntryAssembly().GetName().Version.ToString();
                     var doc = TLCGenSerialization.SerializeToXmlDocument(Controller);
                     foreach (var pi in TLCGenPluginManager.Default.ApplicationPlugins)
                     {

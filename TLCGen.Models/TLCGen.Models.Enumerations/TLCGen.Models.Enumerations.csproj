@@ -68,7 +68,6 @@
     <Compile Include="RoBuGroverMethodeEnum.cs" />
     <Compile Include="SegmentDisplayTypeEnum.cs" />
     <Compile Include="SynchronisatieTypeEnum.cs" />
-    <Compile Include="TLCGenVersieEnum.cs" />
     <Compile Include="VLOGTypeEnum.cs" />
   </ItemGroup>
   <ItemGroup>

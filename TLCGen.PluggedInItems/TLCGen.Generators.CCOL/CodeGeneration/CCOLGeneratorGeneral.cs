@@ -31,8 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"   BESTAND:   {data.Naam}{fileappend}");
             sb.AppendLine($"      CCOL:   {data.CCOLVersie.GetDescription()}");
-            sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie.GetDescription()}");
-            sb.AppendLine($"   COLLGEN:   {CCOLCodeGeneratorPlugin.GetVersion()}");
+            sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie}");
+            sb.AppendLine($"   CCOLGEN:   {CCOLCodeGeneratorPlugin.GetVersion()}");
             sb.AppendLine("*/");
 
             return sb.ToString();

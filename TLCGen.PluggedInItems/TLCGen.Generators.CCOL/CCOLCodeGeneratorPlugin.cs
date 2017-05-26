@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -195,7 +196,7 @@ namespace TLCGen.Generators.CCOL
 
         public static string GetVersion()
         {
-            return "0.11 (alfa)";
+            return Assembly.GetEntryAssembly().GetName().Version.ToString();
         }
 
         #endregion // Static Public Methods
