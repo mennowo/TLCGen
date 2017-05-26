@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private string _schmv; // schakelaar meeverlengen naam
 #pragma warning restore 0649
+        private string _hfile;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -98,7 +99,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
-#warning Undo |= BIT4 in case of traffic jam
+                        }
+                    }
+                    var file = false;
+                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    {
+                        if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                        {
+                            {
+                                var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                                if (fm != null)
+                                {
+                                    if (!file)
+                                    {
+                                        file = true;
+                                        sb.AppendLine();
+                                        sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file */");
+                                    }
+                                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
+                                }
+                            }
                         }
                     }
                     sb.AppendLine();
@@ -106,6 +126,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
+        }
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+
+            return base.SetSettings(settings);
         }
     }
 }

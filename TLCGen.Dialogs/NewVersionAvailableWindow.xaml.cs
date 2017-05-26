@@ -36,7 +36,7 @@ namespace TLCGen.Dialogs
 
         private void DownloadHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.codingconnected.eu/tlcgen/");
+            System.Diagnostics.Process.Start("https://www.codingconnected.eu/software/tlcgen/");
         }
     }
 }

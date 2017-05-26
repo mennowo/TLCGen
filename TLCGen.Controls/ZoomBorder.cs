@@ -12,7 +12,7 @@ using TLCGen.Helpers;
 
 namespace TLCGen.Controls
 {
-    public class ZoomBorder : Border
+    public class ZoomViewbox : Viewbox
     {
         private UIElement child = null;
         private System.Windows.Point origin;
@@ -30,7 +30,7 @@ namespace TLCGen.Controls
         }
 
         public static readonly DependencyProperty SetResetProperty =
-            DependencyProperty.Register("SetReset", typeof(bool), typeof(ZoomBorder), new PropertyMetadata(false));
+            DependencyProperty.Register("SetReset", typeof(bool), typeof(ZoomViewbox), new PropertyMetadata(false));
 
         public RelayCommand ClickedCommand
         {
@@ -40,7 +40,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ClickedCommandProperty =
-            DependencyProperty.Register("ClickedCommand", typeof(RelayCommand), typeof(ZoomBorder), new PropertyMetadata(null));
+            DependencyProperty.Register("ClickedCommand", typeof(RelayCommand), typeof(ZoomViewbox), new PropertyMetadata(null));
 
         private TranslateTransform GetTranslateTransform(UIElement element)
         {

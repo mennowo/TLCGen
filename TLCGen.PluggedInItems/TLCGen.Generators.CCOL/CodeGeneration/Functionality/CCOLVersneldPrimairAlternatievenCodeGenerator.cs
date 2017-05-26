@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfgd;
         private string _tnlcvd;
         private string _tnlegd;
+        private string _hfile;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -312,6 +313,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
+                        yes = false;
+                        foreach (FaseCyclusModel fcm in c.Fasen)
+                        {
+                            if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                            {
+                                {
+                                    var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                                    if (fm != null)
+                                    {
+                                        if (!yes)
+                                        {
+                                            yes = true;
+                                            sb.AppendLine();
+                                            sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
+                                        }
+                                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                    }
+                                }
+                            }
+                        }
+                        if (yes)
+                        {
+                            sb.AppendLine();
+                        }
+
                         foreach (var gen in CCOLGenerator.PieceGenerators)
                         {
                             if (gen.HasCode(CCOLRegCCodeTypeEnum.Alternatieven))
@@ -342,6 +368,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
 
             return base.SetSettings(settings);
         }

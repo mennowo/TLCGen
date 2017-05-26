@@ -463,77 +463,77 @@ namespace TLCGen.ViewModels
         {
             if (obj == null)
                 throw new NotImplementedException();
-            ITLCGenImporter imp = obj as ITLCGenImporter;
+            var imp = obj as ITLCGenImporter;
             if (imp == null)
                 throw new NotImplementedException();
 
             // Import into existing controller
-            if (!TLCGenControllerDataProvider.Default.CheckChanged())
+            if (TLCGenControllerDataProvider.Default.CheckChanged()) return;
+            if (imp.ImportsIntoExisting)
             {
-                if (imp.ImportsIntoExisting)
+                // Request to process all synchronisation data from matrix to model
+                Messenger.Default.Send(new ProcessSynchronisationsRequest());
+
+                // Check data integrity
+                var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
+                if (s1 != null)
                 {
-                    // Request to process all synchronisation data from matrix to model
-                    Messenger.Default.Send(new ProcessSynchronisationsRequest());
-
-                    // Check data integrity
-                    string s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
-                    if (s1 != null)
-                    {
-                        System.Windows.MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
-                        return;
-                    }
-                    // Import to clone of original (so we can discard if wrong)
-                    ControllerModel c1 = DeepCloner.DeepClone(ControllerVM.Controller);
-                    ControllerModel c2 = imp.ImportController(c1);
-
-                    // Do nothing if the importer returned nothing
-                    if (c2 == null)
-                        return;
-
-                    // Check data integrity
-                    c2.Data.GarantieOntruimingsTijden = false;
-                    s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
-                    if (s1 != null)
-                    {
-                        System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
-                        return;
-                    }
-                    if(c1.Data.GarantieOntruimingsTijden)
-                    {
-                        MessageBox.Show("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
-                    }
-                    SetController(c2);
-                    ControllerVM.ReloadController();
-                    GuiActionsManager.SetStatusBarMessage(
-                        DateTime.Now.ToLongTimeString() +
-                        " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
+                    MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
+                    return;
                 }
-                // Import as new controller
-                else
+                // Import to clone of original (so we can discard if wrong)
+                var c1 = DeepCloner.DeepClone(ControllerVM.Controller);
+                var c2 = imp.ImportController(c1);
+
+                // Do nothing if the importer returned nothing
+                if (c2 == null)
+                    return;
+
+                // Check data integrity
+                c2.Data.GarantieOntruimingsTijden = false;
+                s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
+                if (s1 != null)
                 {
-                    ControllerModel c1 = imp.ImportController();
-
-                    // Do nothing if the importer returned nothing
-                    if (c1 == null)
-                        return;
-
-                    // Check data integrity
-                    string s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
-                    if (s1 != null)
-                    {
-                        System.Windows.MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
-                        return;
-                    }
-                    TLCGenControllerDataProvider.Default.CloseController();
-                    SetController(c1);
-                    ControllerVM.ReloadController();
-                    GuiActionsManager.SetStatusBarMessage(
-                        DateTime.Now.ToLongTimeString() +
-                        " - Regeling geïmporteerd");
+                    MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    return;
                 }
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("HasController");
+                if(c1.Data.GarantieOntruimingsTijden)
+                {
+                    MessageBox.Show("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
+                }
+                SetController(c2);
+                ControllerVM.ReloadController();
+                GuiActionsManager.SetStatusBarMessage(
+                    DateTime.Now.ToLongTimeString() +
+                    " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
             }
+            // Import as new controller
+            else
+            {
+                var c1 = imp.ImportController();
+
+                // Do nothing if the importer returned nothing
+                if (c1 == null)
+                    return;
+
+                // Check data integrity
+                var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
+                if (s1 != null)
+                {
+                    MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    return;
+                }
+                TLCGenControllerDataProvider.Default.CloseController();
+                DefaultsProvider.Default.SetDefaultsOnModel(c1.Data);
+                DefaultsProvider.Default.SetDefaultsOnModel(c1.OVData);
+                SetController(c1);
+                ControllerVM.ReloadController();
+                GuiActionsManager.SetStatusBarMessage(
+                    DateTime.Now.ToLongTimeString() +
+                    " - Regeling geïmporteerd");
+            }
+            Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            RaisePropertyChanged("HasController");
         }
 
         private bool GenerateControllerCommand_CanExecute(object obj)

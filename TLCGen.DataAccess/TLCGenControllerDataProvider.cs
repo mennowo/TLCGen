@@ -119,6 +119,7 @@ namespace TLCGen.DataAccess
                 {
                     Controller = new ControllerModel();
                     Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.Data);
+                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.OVData);
                 }
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {

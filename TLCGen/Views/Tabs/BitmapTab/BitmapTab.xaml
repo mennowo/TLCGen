@@ -134,19 +134,22 @@
             </WrapPanel>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <Grid Grid.Column="2" Margin="5,5,5,5" Background="White">
+        <Grid Grid.Column="2" Margin="5,5,5,5" Background="Transparent">
             <Grid.InputBindings>
                 <MouseBinding Gesture="RightClick" Command="{Binding ResetBitmapCommand}" CommandParameter="{Binding ElementName=zb}" />
             </Grid.InputBindings>
-            <controls:ZoomBorder ClipToBounds="True" ClickedCommand="{Binding Path=SetCoordinatesCommand}" x:Name="zb">
-                <Viewbox Stretch="None" >
+            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ClipToBounds="True">
+                <controls:ZoomViewbox
+                    Stretch="None" ClipToBounds="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    ClickedCommand="{Binding Path=SetCoordinatesCommand}" x:Name="zb" >
                     <Image 
+                        Name="__im"
                         RenderOptions.BitmapScalingMode="NearestNeighbor"
                         UseLayoutRounding="True" 
                         Source="{Binding MyBitmap, UpdateSourceTrigger=PropertyChanged}" >
                     </Image>
-                </Viewbox>
-            </controls:ZoomBorder>
+            </controls:ZoomViewbox>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

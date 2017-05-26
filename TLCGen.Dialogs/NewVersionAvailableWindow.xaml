@@ -29,7 +29,7 @@
                 <LineBreak />
                 <LineBreak />
                 Ga naar 
-                <Hyperlink Click="DownloadHyperlink_Click">https://www.codingconnected.eu/tlcgen/</Hyperlink>
+                <Hyperlink Click="DownloadHyperlink_Click">https://www.codingconnected.eu/software/tlcgen/</Hyperlink>
                 om te downloaden.
                 </TextBlock>
             </StackPanel>

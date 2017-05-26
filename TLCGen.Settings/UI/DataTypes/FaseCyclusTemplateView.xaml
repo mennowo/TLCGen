@@ -32,9 +32,14 @@
                 </ct:InfoElement>
             </StackPanel>
             <TextBox Text="{Binding Path=Replace}" Margin="2" IsEnabled="{Binding Path=IsReplaceAvailable}" />
-            <Label Content="Fasen" />
-            <ListView ItemsSource="{Binding Path=Fasen}" MinHeight="20" Margin="2"
-                      SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" DisplayMemberPath="Naam" />
+            <DataGrid ItemsSource="{Binding Path=Fasen}" MinHeight="20" Margin="2"
+                      SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" 
+                      DisplayMemberPath="Naam" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Naam}" Width="*" Header="Fasen" />
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddFaseCommand}" />

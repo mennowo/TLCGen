@@ -12,6 +12,7 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int ModulenVooruit { get; set; }
         public bool AlternatiefToestaan { get; set; }

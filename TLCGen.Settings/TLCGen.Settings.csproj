@@ -56,18 +56,24 @@
     <Compile Include="Models\Templates\TLCGenTemplatesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsProvider.cs" />
-    <Compile Include="UI\DataTypes\PeriodeTemplateViewModel.cs" />
+    <Compile Include="UI\DataTypes\DetectorTemplateViewModel.cs">
+      <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\FaseCyclusTemplateViewModel.cs">
+      <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\DataTypes\PeriodeTemplateView.xaml.cs">
       <DependentUpon>PeriodeTemplateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DataTypes\DetectorTemplateView.xaml.cs">
       <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\DataTypes\DetectorTemplateViewModel.cs" />
     <Compile Include="UI\DataTypes\FaseCyclusTemplateView.xaml.cs">
       <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\DataTypes\FaseCyclusTemplateViewModel.cs" />
+    <Compile Include="UI\DataTypes\PeriodeTemplateViewModel.cs">
+      <DependentUpon>PeriodeTemplateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Tabs\Defaults\DefaultsListView.xaml.cs">
       <DependentUpon>DefaultsListView.xaml</DependentUpon>
     </Compile>
@@ -75,7 +81,12 @@
       <DependentUpon>DefaultsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Tabs\Defaults\DefaultsTabViewModel.cs" />
-    <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>DetectorenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabView.xaml.cs">
       <DependentUpon>PeriodenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
@@ -85,8 +96,9 @@
     <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml.cs">
       <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabViewModel.cs" />
-    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>PeriodenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\TLCGenSettingsWindow.xaml.cs">
       <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
     </Compile>

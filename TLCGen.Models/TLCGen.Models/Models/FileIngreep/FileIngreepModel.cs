@@ -12,6 +12,7 @@ namespace TLCGen.Models
     public class FileIngreepModel
     {
         [ModelName]
+        [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]
         public int MinimaalAantalMeldingen { get; set; }

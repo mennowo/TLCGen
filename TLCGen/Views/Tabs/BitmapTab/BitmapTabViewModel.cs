@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -311,7 +312,7 @@ namespace TLCGen.ViewModels
 
         private void ResetBitmapCommand_Executed(object obj)
         {
-            TLCGen.Controls.ZoomBorder zb = obj as TLCGen.Controls.ZoomBorder;
+            TLCGen.Controls.ZoomViewbox zb = obj as TLCGen.Controls.ZoomViewbox;
             zb?.Reset();
         }
 
@@ -397,46 +398,34 @@ namespace TLCGen.ViewModels
             var l = new List<BitmappedItemViewModel>();
             if (obj == null) return l;
 
-            Type objType = obj.GetType();
+            var objType = obj.GetType();
 
             // Object as IOElement
-            BitmappedItemViewModel bivm = GetIOElementFromObject(obj);
+            var bivm = GetIOElementFromObject(obj);
             if(bivm != null)
             {
                 l.Add(bivm);
             }
 
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
-                Type propType = property.PropertyType;
-                if (!property.PropertyType.IsValueType && property.PropertyType != typeof(string))
+                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string)) continue;
+                var propValue = property.GetValue(obj);
+                var elems = propValue as IList;
+                if (elems != null)
                 {
-                    object propValue = property.GetValue(obj);
-                    var elems = propValue as IList;
-                    if (elems != null)
+                    l.AddRange(from object item in elems from i in GetAllIOElements(item) select i);
+                }
+                else
+                {
+                    // Property as IOElement
+                    bivm = GetIOElementFromObject(obj, property);
+                    if (bivm != null)
                     {
-                        foreach (var item in elems)
-                        {
-                            foreach(var i in GetAllIOElements(item))
-                            {
-                                l.Add(i);
-                            }
-                        }
+                        l.Add(bivm);
                     }
-                    else
-                    {
-                        // Property as IOElement
-                        bivm = GetIOElementFromObject(obj, property);
-                        if (bivm != null)
-                        {
-                            l.Add(bivm);
-                        }
-                        foreach (var i in GetAllIOElements(propValue))
-                        {
-                            l.Add(i);
-                        }
-                    }
+                    l.AddRange(GetAllIOElements(propValue));
                 }
             }
             return l;
