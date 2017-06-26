@@ -39,7 +39,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Rijstrook = value;
-                RaisePropertyChanged<object>("Rijstrook", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Rijstrook), broadcast: true);
             }
         }
 
@@ -61,9 +61,9 @@ namespace TLCGen.ViewModels
                 _Rijstroken = new List<int>();
                 if (DefaultsProvider.Default.Controller != null)
                 {
-                    if (DefaultsProvider.Default.Controller.Fasen.Where(x => x.Naam == value).Any())
+                    if (DefaultsProvider.Default.Controller.Fasen.Any(x => x.Naam == value))
                     {
-                        var f = DefaultsProvider.Default.Controller.Fasen.Where(x => x.Naam == value).First();
+                        var f = DefaultsProvider.Default.Controller.Fasen.First(x => x.Naam == value);
                         for (int i = 0; i < f.AantalRijstroken; ++i)
                         {
                             _Rijstroken.Add(i + 1);
@@ -92,7 +92,7 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangedMessage(oldname, _Detector.Naam));
                     }
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
@@ -110,7 +110,7 @@ namespace TLCGen.ViewModels
                         _Detector.VissimNaam = value;
                     }
                 }
-                RaisePropertyChanged<object>("VissimNaam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VissimNaam), broadcast: true);
             }
         }
 
@@ -120,16 +120,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Type = value;
-                if(FaseCyclus != null && TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == FaseCyclus).Any())
+                if(FaseCyclus != null && TLCGenControllerDataProvider.Default.Controller.Fasen.Any(x => x.Naam == FaseCyclus))
                 {
-                    var fctype = TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == FaseCyclus).First().Type;
+                    var fctype = TLCGenControllerDataProvider.Default.Controller.Fasen.First(x => x.Naam == FaseCyclus).Type;
                     DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString(), fctype.ToString());
                 }
                 else
                 {
                     DefaultsProvider.Default.SetDefaultsOnModel(_Detector, Type.ToString());
                 }
-                RaisePropertyChanged<object>("", broadcast: true);
+                RaisePropertyChanged(string.Empty); // Update all properties
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
                 Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
             }
         }
@@ -152,7 +153,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDB = value;
-                RaisePropertyChanged<object>("TDB", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TDB), broadcast: true);
             }
         }
 
@@ -163,7 +164,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TDH = value;
-                RaisePropertyChanged<object>("TDH", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TDH), broadcast: true);
             }
         }
 
@@ -174,7 +175,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TOG = value;
-                RaisePropertyChanged<object>("TOG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TOG), broadcast: true);
             }
         }
 
@@ -185,7 +186,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TBG = value;
-                RaisePropertyChanged<object>("TBG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TBG), broadcast: true);
             }
         }
 
@@ -196,7 +197,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.TFL = value;
-                RaisePropertyChanged<object>("TFL", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TFL), broadcast: true);
             }
         }
 
@@ -207,7 +208,7 @@ namespace TLCGen.ViewModels
             {
                 if (value == null || value >= 0)
                     _Detector.CFL = value;
-                RaisePropertyChanged<object>("CFL", broadcast: true);
+                RaisePropertyChanged<object>(nameof(CFL), broadcast: true);
             }
         }
         public DetectorAanvraagTypeEnum Aanvraag
@@ -216,7 +217,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Detector.Aanvraag = value;
-                RaisePropertyChanged<object>("Aanvraag", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Aanvraag), broadcast: true);
             }
         }
 

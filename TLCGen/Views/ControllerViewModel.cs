@@ -51,7 +51,7 @@ namespace TLCGen.ViewModels
                     tab.Controller = value;
                 }
                 SelectedTab = TabItems?.Count > 0 ? TabItems[0] : null;
-                RaisePropertyChanged();
+                RaisePropertyChanged(string.Empty);
             }
         }
 

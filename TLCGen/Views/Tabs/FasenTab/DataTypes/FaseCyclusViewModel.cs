@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new NameChangedMessage(oldname, value));
                     }
                 }
-                RaisePropertyChanged(); // Update all properties
+                RaisePropertyChanged(string.Empty); // Update all properties
                 RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
@@ -90,14 +90,13 @@ namespace TLCGen.ViewModels
                     // Apply new defaults
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
                     
-                    RaisePropertyChanged<object>("Type", broadcast: true);
                     if(value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
                     {
                         MeeverlengenType = MeeVerlengenTypeEnum.Default;
                     }
                     SetMeeverlengenOpties();
 
-                    RaisePropertyChanged(); // Update all properties
+                    RaisePropertyChanged(string.Empty); // Update all properties
                     RaisePropertyChanged<object>("Type", broadcast: true);
                 }
             }
