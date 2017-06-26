@@ -129,7 +129,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSynchronisatie = value;
-                if (_AllDetectoren != null && !string.IsNullOrEmpty(value.FaseVan))
+                if (_AllDetectoren != null && !string.IsNullOrEmpty(value?.FaseVan))
                 {
                     Detectoren.Clear();
                     foreach(var fc in _Controller.Fasen)
@@ -147,7 +147,7 @@ namespace TLCGen.ViewModels
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
                 RaisePropertyChanged("SelectedSynchronisatie");
-                if (_SelectedSynchronisatie.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
+                if (_SelectedSynchronisatie?.DisplayType == IntersignaalGroepTypeEnum.Gelijkstart)
                 {
                     RaisePropertyChanged("GelijkstartDeelConflict");
                     RaisePropertyChanged("GelijkstartOntruimingstijdFaseVan");

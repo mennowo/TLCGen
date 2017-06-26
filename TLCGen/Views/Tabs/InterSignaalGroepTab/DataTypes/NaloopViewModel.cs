@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
@@ -128,20 +129,19 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_DetectorManager == null && _Naloop != null && _Naloop.FaseVan != null)
+                if (_DetectorManager == null && _Naloop?.FaseVan != null)
                 {
-                    List<string> dets =
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            Where(x => x.Naam == _Naloop.FaseVan).
-                            First().
-                            Detectoren.
-                            Select(x => x.Naam).
-                            ToList();
+                    var dets =
+                        TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            First(x => x.Naam == _Naloop.FaseVan).
+                                Detectoren.
+                                Select(x => x.Naam).
+                                ToList();
                     _DetectorManager = new DetectorManagerViewModel<NaloopDetectorModel, string>(
                         Detectoren,
                         dets,
-                        (x) => { var md = new NaloopDetectorModel() { Detector = x }; return md; },
-                        (x) => { return !Detectoren.Where(y => y.Detector == x).Any(); },
+                        x => { var md = new NaloopDetectorModel { Detector = x }; return md; },
+                        x => { return Detectoren.All(y => y.Detector != x); },
                         null,
                         () => { RaisePropertyChanged("SelectedDetector"); },
                         () => { RaisePropertyChanged("SelectedDetector"); }
@@ -270,18 +270,19 @@ namespace TLCGen.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
+            if (Detectoren != null)
+            {
+                Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
+                Detectoren.Clear();
+                foreach (var ndm in _Naloop.Detectoren)
+                {
+                    Detectoren.Add(ndm);
+                }
+                Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            }
+
             _DetectorManager = null;
             RaisePropertyChanged("DetectorManager");
-
-            if (Detectoren?.Count == 0)
-                return;
-
-            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
-            foreach (NaloopDetectorModel ndm in _Naloop.Detectoren)
-            {
-                Detectoren.Add(ndm);
-            }
-            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
         }
         
         #endregion // TLCGen Events

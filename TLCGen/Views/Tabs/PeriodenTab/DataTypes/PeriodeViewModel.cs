@@ -98,7 +98,8 @@ namespace TLCGen.ViewModels
                 {
                     throw new NotImplementedException("Unknown period type in PeriodeViewModel.cs line 100");
                 }
-                RaisePropertyChanged<object>("", broadcast: true);
+                RaisePropertyChanged(string.Empty);
+                RaisePropertyChanged<object>(nameof(TypeAsString), broadcast: true);
             }
         }
 
@@ -126,7 +127,8 @@ namespace TLCGen.ViewModels
                     }
                     _Periode.Naam = newname;
                 }
-                RaisePropertyChanged<object>("", broadcast: true);
+                RaisePropertyChanged(string.Empty);
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }
 
