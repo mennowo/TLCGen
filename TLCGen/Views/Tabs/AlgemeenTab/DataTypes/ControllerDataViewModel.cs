@@ -153,7 +153,7 @@ namespace TLCGen.ViewModels
         [Description("Aansturing waitsignalen")]
         public AansturingWaitsignalenEnum AansturingWaitsignalen
         {
-            get { return _Controller?.Data == null ? AansturingWaitsignalenEnum.AanvraagGezet : _Controller.Data.AansturingWaitsignalen; }
+            get { return _Controller?.Data?.AansturingWaitsignalen ?? AansturingWaitsignalenEnum.AanvraagGezet; }
             set
             {
                 _Controller.Data.AansturingWaitsignalen = value;
@@ -164,7 +164,7 @@ namespace TLCGen.ViewModels
         [Description("Fixatie mogelijk")]
         public bool FixatieMogelijk
         {
-            get { return _Controller?.Data == null ? false : _Controller.Data.FixatieData.FixatieMogelijk; }
+            get { return _Controller?.Data?.FixatieData.FixatieMogelijk ?? false; }
             set
             {
                 _Controller.Data.FixatieData.FixatieMogelijk = value;
@@ -186,12 +186,23 @@ namespace TLCGen.ViewModels
         [Description("Type groentijden")]
         public GroentijdenTypeEnum TypeGroentijden
         {
-            get { return _Controller?.Data == null ? GroentijdenTypeEnum.MaxGroentijden : _Controller.Data.TypeGroentijden; }
+            get { return _Controller?.Data?.TypeGroentijden ?? GroentijdenTypeEnum.MaxGroentijden; }
             set
             {
                 _Controller.Data.TypeGroentijden = value;
                 RaisePropertyChanged<object>("TypeGroentijden", broadcast: true);
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
+            }
+        }
+
+        [Description("Type synchronisatie nalopen")]
+        public SynchronisatieTypeEnum NaloopSynchronisatieType
+        {
+            get { return _Controller?.Data?.NaloopSynchronisatieType ?? SynchronisatieTypeEnum.FictiefConflict; }
+            set
+            {
+                _Controller.Data.NaloopSynchronisatieType = value;
+                RaisePropertyChanged<object>("NaloopSynchronisatieType", broadcast: true);
             }
         }
 

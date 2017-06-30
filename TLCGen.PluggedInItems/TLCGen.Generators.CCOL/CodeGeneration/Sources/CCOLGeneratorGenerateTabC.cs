@@ -232,23 +232,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (cf.FaseVan == controller.Fasen[i].Naam &&
                                 cf.FaseNaar == controller.Fasen[j].Naam)
                             {
-                                matrix[i, j] = cf.Waarde;
+                                matrix[i, j] = cf.Waarde >= -4 ? cf.Waarde : -1;
                             }
                         }
                     }
                 }
 
-#warning When adding GK/GKL for gelijkstart/voorstart: need to define preference: i.e.  what if gelijkstart says GK and naloop FK; what to do?
                 foreach (var gs in controller.InterSignaalGroep.Gelijkstarten)
                 {
-                    var fc = controller.Fasen.Where(x => x.Naam == gs.FaseVan).First();
-                    int i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.Where(x => x.Naam == gs.FaseNaar).First();
-                    int j = controller.Fasen.IndexOf(fc2);
+                    var fc = controller.Fasen.First(x => x.Naam == gs.FaseVan);
+                    var i = controller.Fasen.IndexOf(fc);
+                    var fc2 = controller.Fasen.First(x => x.Naam == gs.FaseNaar);
+                    var j = controller.Fasen.IndexOf(fc2);
 
-                    for (int k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < controller.Fasen.Count; ++k)
                     {
-                        if (matrix[i, k] != -1 && matrix[j, k] == -1)
+                        if (matrix[i, k] > -1 && matrix[j, k] == -1)
                         {
                             matrix[k, j] = -2;
                             matrix[j, k] = -2;
@@ -257,14 +256,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 foreach (var vs in controller.InterSignaalGroep.Voorstarten)
                 {
-                    var fc = controller.Fasen.Where(x => x.Naam == vs.FaseVan).First();
-                    int i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.Where(x => x.Naam == vs.FaseNaar).First();
-                    int j = controller.Fasen.IndexOf(fc2);
+                    var fc = controller.Fasen.First(x => x.Naam == vs.FaseVan);
+                    var i = controller.Fasen.IndexOf(fc);
+                    var fc2 = controller.Fasen.First(x => x.Naam == vs.FaseNaar);
+                    var j = controller.Fasen.IndexOf(fc2);
 
-                    for (int k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < controller.Fasen.Count; ++k)
                     {
-                        if (matrix[i, k] != -1 && matrix[j, k] == -1)
+                        if (matrix[i, k] > -1 && matrix[j, k] == -1)
                         {
                             matrix[k, j] = -2;
                             matrix[j, k] = -2;
@@ -274,45 +273,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 foreach (var nl in controller.InterSignaalGroep.Nalopen)
                 {
-                    var fc = controller.Fasen.Where(x => x.Naam == nl.FaseVan).First();
-                    int i = controller.Fasen.IndexOf(fc);
-                    var fc2 = controller.Fasen.Where(x => x.Naam == nl.FaseNaar).First();
-                    int j = controller.Fasen.IndexOf(fc2);
+                    var fc = controller.Fasen.First(x => x.Naam == nl.FaseVan);
+                    var i = controller.Fasen.IndexOf(fc);
+                    var fc2 = controller.Fasen.First(x => x.Naam == nl.FaseNaar);
+                    var j = controller.Fasen.IndexOf(fc2);
 
-                    for (int k = 0; k < controller.Fasen.Count; ++k)
+                    for (var k = 0; k < controller.Fasen.Count; ++k)
                     {
-                        if (matrix[i, k] != -1 && matrix[j, k] == -1)
+                        if (matrix[j, k] > -1 && matrix[i, k] < 0)
                         {
-                            switch (nl.SynchronisatieType)
+                            switch (controller.Data.NaloopSynchronisatieType)
                             {
                                 case Models.Enumerations.SynchronisatieTypeEnum.FictiefConflict:
-                                    matrix[j, k] = -2;
-                                    matrix[k, j] = -2;
+                                    if (matrix[i, k] > -2) matrix[i, k] = -2;
+                                    if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     break;
                                 case Models.Enumerations.SynchronisatieTypeEnum.GroenConflict:
-                                    matrix[j, k] = -3;
-                                    matrix[k, j] = -3;
+                                    if (matrix[i, k] > -3) matrix[i, k] = -3;
+                                    if (matrix[k, i] > -3) matrix[k, i] = -3;
                                     break;
                                 case Models.Enumerations.SynchronisatieTypeEnum.GroenGeelConflict:
-                                    matrix[j, k] = -4;
-                                    matrix[k, j] = -3;
+                                    if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                    if (matrix[k, i] > -3) matrix[k, i] = -3;
                                     break;
                             }
                         }
                     }
                 }
 
-                for (int i = 0; i < controller.Fasen.Count; ++i)
+                for (var i = 0; i < controller.Fasen.Count; ++i)
                 {
-                    for (int j = 0; j < controller.Fasen.Count; ++j)
+                    for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
-                        if(matrix[i, j] < -1)
-                        {
-                            string k = "FK";
-                            if (matrix[i, j] == -3) k = "GK";
-                            if (matrix[i, j] == -4) k = "GKL";
-                            sb.AppendLine($"{ts}TO_max[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
-                        }
+                        if (matrix[i, j] >= -1) continue;
+                        var k = "FK";
+                        if (matrix[i, j] == -3) k = "GK";
+                        if (matrix[i, j] == -4) k = "GKL";
+                        sb.AppendLine($"{ts}TO_max[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
                     }
                 }
 

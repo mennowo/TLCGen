@@ -479,6 +479,7 @@
         <ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
         <TypeGroentijden>MaxGroentijden</TypeGroentijden>
         <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
+        <NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
         <TLCGenVersie>V0_1</TLCGenVersie>
         <SegmentenDisplayBitmapData />
         <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>

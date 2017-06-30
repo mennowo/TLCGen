@@ -78,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var nld in nl.Detectoren)
                     {
                         var elem = new CCOLElement($"{_hnla}{nld.Detector}", CCOLElementTypeEnum.HulpElement);
-                        if (_MyElements.Count == 0 || !_MyElements.Where(x => x.Naam == elem.Naam).Any())
+                        if (_MyElements.Count == 0 || _MyElements.All(x => x.Naam != elem.Naam))
                         {
                             _MyElements.Add(elem);
                         }
@@ -122,14 +122,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
-                        if (c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue).Any())
+                        if (c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue))
                         {
                             var nls = c.InterSignaalGroep.Nalopen.Where(x => x.MaximaleVoorstart.HasValue);
                             sb.AppendLine($"{ts}/* Tegenhouden voedende fietsers tot tijd t voor naloop mag komen */");

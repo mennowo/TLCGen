@@ -9,7 +9,7 @@
  **************************************************************************/
 void NaloopVtg(count fc1, count fc2, count tnl)
 {
-   RT[tnl] = SG[fc1];
+   RT[tnl] |= SG[fc1];
    if (RT[tnl])             RW[fc2] |= BIT2;
    if (RT[tnl] || T[tnl])   YV[fc2] |= BIT2;
 }

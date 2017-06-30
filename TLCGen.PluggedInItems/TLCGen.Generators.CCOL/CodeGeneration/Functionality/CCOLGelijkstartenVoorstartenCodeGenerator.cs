@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Generators.CCOL.Extensions;
-using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -109,6 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     // return if no synch
                     if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                         return null;
+                    
                     // bits reset
                     sb.AppendLine($"{ts}/* reset synchronisatiebits. */");
                     sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
@@ -122,8 +118,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     sb.AppendLine($"{ts}control_realisation_timers();");
                     sb.AppendLine();
+
                     // fictitious intergreen
-                    if (c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict).Any() ||
+                    if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.DeelConflict) ||
                         c.InterSignaalGroep.Voorstarten.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* (Her)start fictieve ontruimingstijden */");
