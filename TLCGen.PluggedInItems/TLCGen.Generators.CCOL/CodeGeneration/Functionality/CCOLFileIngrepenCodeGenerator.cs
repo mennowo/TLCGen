@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -13,8 +10,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class CCOLFileIngrepenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
+        private List<CCOLElement> _myElements;
+        private List<CCOLIOElement> _myBitmapOutputs;
 
 #pragma warning disable 0649
         private string _hfile;
@@ -34,16 +31,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var fm in c.FileIngrepen)
             {
-                _MyBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData as IOElementModel, $"{_uspf}{_usfile}{fm.Naam}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(fm.BitmapData, $"{_uspf}{_usfile}{fm.Naam}"));
 
                 if(fm.EerlijkDoseren)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_scheerlijkdoseren}{fm.Naam}",
                             fm.EerlijkDoseren ? 1 : 0,
@@ -51,28 +48,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTypeEnum.Schakelaar));
                 }
 
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_usfile}{fm.Naam}",
                         CCOLElementTypeEnum.Uitgang));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_hfile}{fm.Naam}",
                         CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_tafv}{fm.Naam}",
                         fm.AfvalVertraging,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Timer));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_schafv}{fm.Naam}",
 #warning Make this configurable via GUI (?)
                         1,
                         CCOLElementTimeTypeEnum.SCH_type,
                         CCOLElementTypeEnum.Schakelaar));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_prmfmeldmin}{fm.Naam}",
                         fm.MinimaalAantalMeldingen,
@@ -80,36 +77,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLElementTypeEnum.Parameter));
                 foreach (var fd in fm.FileDetectoren)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_hafv}{fd.Detector}",
                             CCOLElementTypeEnum.HulpElement));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_tafv}{fd.Detector}",
                             fd.AfvalVertraging,
                             CCOLElementTimeTypeEnum.TE_type,
                             CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_tbz}{fd.Detector}",
                             fd.BezetTijd,
                             CCOLElementTimeTypeEnum.TE_type,
                             CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_trij}{fd.Detector}",
                             fd.RijTijd,
                             CCOLElementTimeTypeEnum.TE_type,
                             CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_hfile}{fd.Detector}",
                             CCOLElementTypeEnum.HulpElement));
                 }
                 if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_prmfperc}{fm.Naam}",
                             fm.TeDoserenSignaalGroepen[0].DoseerPercentage,
@@ -120,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach (var ff in fm.TeDoserenSignaalGroepen)
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_prmfperc}{ff.FaseCyclus}",
                                 ff.DoseerPercentage,
@@ -138,7 +135,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapOutputs()
@@ -148,7 +145,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override bool HasCode(CCOLRegCCodeTypeEnum type)
@@ -172,7 +169,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
-                    if (c.FileIngrepen.Where(x => x.EerlijkDoseren).Any())
+                    if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
                         sb.AppendLine("/* Variabelen eerlijke filedosering */");
                         sb.AppendLine("");
@@ -184,7 +181,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"/* File ingreep {fi.Naam} */");
                                 sb.AppendLine($"#define filefcmax{fi.Naam} {fi.TeDoserenSignaalGroepen.Count} // Aantal fasen die worden gedoseerd");
                                 sb.AppendLine($"static count filefc_{fi.Naam}[filefcmax{fi.Naam}]; // Opslag fasenummers");
-                                sb.AppendLine($"static count filefcmg_{fi.Naam}[filefcmax{fi.Naam}][4]; // Opslag bij fasen behorende MG parameter nummers");
+                                sb.AppendLine($"static count filefcmg_{fi.Naam}[filefcmax{fi.Naam}][{c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden)}]; // Opslag bij fasen behorende MG parameter nummers");
                                 sb.AppendLine($"static int nogtedoseren_{fi.Naam}[filefcmax{fi.Naam}] = {{0}}; // Opslag nog te doseren actueel per fase");
                             }
                         }
@@ -193,37 +190,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.InitApplication:
-                    if (c.FileIngrepen.Where(x => x.EerlijkDoseren).Any())
+                    if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
                         sb.AppendLine($"{ts}/* Initialiseren variabelen voor eerlijke filedosering */");
 
                         foreach (var fi in c.FileIngrepen)
                         {
-                            if (fi.EerlijkDoseren)
+                            if (!fi.EerlijkDoseren) continue;
+                            var i = 0;
+                            foreach(var fc in fi.TeDoserenSignaalGroepen)
                             {
-                                int i = 0;
-                                foreach(var fc in fi.TeDoserenSignaalGroepen)
+                                sb.AppendLine($"{ts}filefc_{fi.Naam}[{i++}] = {_fcpf}{fc.FaseCyclus};");
+                            }
+                            i = 0;
+                            foreach (var fc in fi.TeDoserenSignaalGroepen)
+                            {
+                                var j = 0;
+                                foreach (var mgsm in c.GroentijdenSets)
                                 {
-                                    sb.AppendLine($"{ts}filefc_{fi.Naam}[{i++}] = {_fcpf}{fc.FaseCyclus};");
-                                }
-                                i = 0;
-                                foreach (var fc in fi.TeDoserenSignaalGroepen)
-                                {
-                                    foreach (GroentijdenSetModel mgsm in c.GroentijdenSets)
+                                    var mgm = mgsm.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                                    if (mgm?.Waarde != null)
                                     {
-                                        int j = 0;
-                                        foreach (GroentijdModel mgm in mgsm.Groentijden)
-                                        {
-                                            if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
-                                            {
-                                                sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
-                                                ++j;
-                                            }
-                                        }
+                                        sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
                                     }
-                                    ++i;
-                                    sb.AppendLine();
+                                    ++j;
                                 }
+                                ++i;
+                                sb.AppendLine();
                             }
                         }
                         sb.AppendLine();
@@ -258,7 +251,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"D[{_dpf}{fd.Detector}]");
                             ++i;
                         }
-                        sb.AppendLine($";");
+                        sb.AppendLine(";");
 
                         sb.AppendLine($"{ts}if (!(T[{_tpf}{_tafv}{fm.Naam}] || RT[{_tpf}{_tafv}{fm.Naam}]) && SCH[{_schpf}{_schafv}{fm.Naam}])");
                         sb.AppendLine($"{ts}{{");
@@ -287,14 +280,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
                                 case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
                             }
-                            if(fm.EerlijkDoseren)
-                            {
-                                sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
-                            }
+                            sb.AppendLine(fm.EerlijkDoseren
+                                ? $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
+                                : $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             string rest = "";
                             int irest = 1;
@@ -324,7 +312,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }
-                    if (c.FileIngrepen.Where(x => x.EerlijkDoseren).Any())
+                    if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
                         sb.AppendLine($"{ts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
                         foreach (var fm in c.FileIngrepen)
