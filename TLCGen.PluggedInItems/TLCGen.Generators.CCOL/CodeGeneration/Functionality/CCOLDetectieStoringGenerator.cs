@@ -232,18 +232,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (!fc.PercentageGroenBijDetectieStoring ||
                             !fc.PercentageGroen.HasValue || 
                             !c.GroentijdenSets.SelectMany(x => x.Groentijden).Any(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue) ||
-                            fc.Detectoren.Count == 0)
+                            fc.Detectoren.Count == 0 ||
+                            fc.Detectoren.All(x => x.IsDrukKnop() || x.Verlengen == DetectorVerlengenTypeEnum.Geen))
                         {
                             continue;
                         }
 
                         if (fc.AantalRijstroken.HasValue)
                         {
-                            string pre = "".PadLeft($"{ts}if (".Length);
+                            var pre = "".PadLeft($"{ts}if (".Length);
                             sb.Append($"{ts}if (");
-                            for (int str = 1; str <= fc.AantalRijstroken; ++str)
+                            for (var str = 1; str <= fc.AantalRijstroken; ++str)
                             {
-                                int det = 0;
+                                var det = 0;
                                 if (str > 1)
                                 {
                                     sb.AppendLine(" ||");

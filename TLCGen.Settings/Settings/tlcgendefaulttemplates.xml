@@ -46,6 +46,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2</Naam>
@@ -68,6 +69,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
           </Detectoren>
         </Item>
@@ -118,6 +120,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2</Naam>
@@ -140,6 +143,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_3</Naam>
@@ -162,6 +166,7 @@
               <Type>Verweg</Type>
               <Aanvraag>Uit</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
           </Detectoren>
         </Item>
@@ -212,6 +217,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_1b</Naam>
@@ -234,6 +240,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>2</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2a</Naam>
@@ -256,6 +263,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2b</Naam>
@@ -278,6 +286,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>2</Rijstrook>
             </Detector>
           </Detectoren>
         </Item>
@@ -328,6 +337,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_1b</Naam>
@@ -350,6 +360,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>2</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_1c</Naam>
@@ -372,6 +383,7 @@
               <Type>Kop</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>Kopmax</Verlengen>
+              <Rijstrook>3</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2a</Naam>
@@ -394,6 +406,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2b</Naam>
@@ -416,6 +429,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>2</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_2c</Naam>
@@ -438,6 +452,7 @@
               <Type>Lang</Type>
               <Aanvraag>RnietTRG</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>3</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_3a</Naam>
@@ -460,6 +475,7 @@
               <Type>Verweg</Type>
               <Aanvraag>Uit</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>1</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_3b</Naam>
@@ -482,6 +498,7 @@
               <Type>Verweg</Type>
               <Aanvraag>Uit</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>2</Rijstrook>
             </Detector>
             <Detector>
               <Naam>FC_3c</Naam>
@@ -504,6 +521,7 @@
               <Type>Verweg</Type>
               <Aanvraag>Uit</Aanvraag>
               <Verlengen>MK2</Verlengen>
+              <Rijstrook>3</Rijstrook>
             </Detector>
           </Detectoren>
         </Item>
@@ -536,6 +554,7 @@
           <Type>Kop</Type>
           <Aanvraag>RnietTRG</Aanvraag>
           <Verlengen>Kopmax</Verlengen>
+          <Rijstrook>1</Rijstrook>
         </Item>
       </Items>
     </DetectorenTemplate>
@@ -564,6 +583,7 @@
           <Type>Kop</Type>
           <Aanvraag>RnietTRG</Aanvraag>
           <Verlengen>Kopmax</Verlengen>
+          <Rijstrook>1</Rijstrook>
         </Item>
       </Items>
     </DetectorenTemplate>
@@ -592,6 +612,7 @@
           <Type>Lang</Type>
           <Aanvraag>RnietTRG</Aanvraag>
           <Verlengen>Kopmax</Verlengen>
+          <Rijstrook>1</Rijstrook>
         </Item>
       </Items>
     </DetectorenTemplate>
