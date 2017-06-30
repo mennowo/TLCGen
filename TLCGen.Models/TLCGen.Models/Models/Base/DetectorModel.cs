@@ -33,6 +33,7 @@ namespace TLCGen.Models
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
         public bool Dummy { get; set; }
+        [HasDefault(false)]
         public int? Rijstrook { get; set; }
 
         [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam", "Wachtlicht")]
