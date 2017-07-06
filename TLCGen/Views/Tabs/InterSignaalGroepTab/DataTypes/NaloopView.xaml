@@ -28,6 +28,8 @@
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
+            <CheckBox Content="Inrijden/lopen tijdens groen" 
+                      IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />
             <CheckBox Content="Detectie afhankelijk" 
                       IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
                       IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />

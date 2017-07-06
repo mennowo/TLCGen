@@ -282,27 +282,45 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (matrix[j, k] > -1 && matrix[i, k] < 0)
                         {
-                            switch (controller.Data.NaloopSynchronisatieType)
+                            switch (nl.Type)
                             {
-                                case Models.Enumerations.SynchronisatieTypeEnum.FictiefConflict:
+                                case Models.Enumerations.NaloopTypeEnum.StartGroen:
+                                    if (nl.InrijdenTijdensGroen)
+                                    {
+                                        if (matrix[i, k] > -2) matrix[i, k] = -2;
+                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                    }
+                                    else
+                                    {
+                                        if (matrix[i, k] > -3) matrix[i, k] = -3;
+                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                    }
+                                    break;
+                                case Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen:
                                     if (matrix[i, k] > -2) matrix[i, k] = -2;
                                     if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     break;
-                                case Models.Enumerations.SynchronisatieTypeEnum.GroenConflict:
-                                    if (matrix[i, k] > -3) matrix[i, k] = -3;
-                                    if (matrix[k, i] > -3) matrix[k, i] = -3;
-                                    break;
-                                case Models.Enumerations.SynchronisatieTypeEnum.GroenGeelConflict:
-                                    if (matrix[i, k] > -4) matrix[i, k] = -4;
-                                    if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                case Models.Enumerations.NaloopTypeEnum.EindeGroen:
+                                    if (nl.InrijdenTijdensGroen)
+                                    {
+                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        if (matrix[k, i] > -2) matrix[k, i] = -2;
+                                    }
+                                    else
+                                    {
+                                        if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        if (matrix[k, i] > -3) matrix[k, i] = -3;
+                                    }
                                     break;
                             }
                         }
                     }
                 }
-
+                sb.AppendLine();
                 for (var i = 0; i < controller.Fasen.Count; ++i)
                 {
+                    bool AppendEmptyLine;
+                    AppendEmptyLine = false;
                     for (var j = 0; j < controller.Fasen.Count; ++j)
                     {
                         if (matrix[i, j] >= -1) continue;
@@ -310,7 +328,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (matrix[i, j] == -3) k = "GK";
                         if (matrix[i, j] == -4) k = "GKL";
                         sb.AppendLine($"{ts}TO_max[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
+                        AppendEmptyLine = true;
                     }
+                    if (AppendEmptyLine) sb.AppendLine();
                 }
 
                 //if (controller.InterSignaalGroep.Gelijkstarten.Count > 0 || controller.InterSignaalGroep.Voorstarten.Count > 0)
