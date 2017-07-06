@@ -55,6 +55,15 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>("VasteNaloop", broadcast: true);
             }
         }
+        public bool InrijdenTijdensGroen
+        {
+            get { return _Naloop.InrijdenTijdensGroen; }
+            set
+            {
+                _Naloop.InrijdenTijdensGroen = value;
+                RaisePropertyChanged<object>("InrijdenTijdensGroen", broadcast: true);
+            }
+        }
 
         public bool DetectieAfhankelijkPossible
         {

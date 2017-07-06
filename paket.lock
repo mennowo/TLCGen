@@ -1,4 +1,4 @@
-FRAMEWORK: NET45
+RESTRICTION: == net45
 NUGET
   remote: https://api.nuget.org/v3/index.json
     CommonServiceLocator (1.3)

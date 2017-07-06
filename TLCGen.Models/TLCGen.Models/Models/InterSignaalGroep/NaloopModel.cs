@@ -22,6 +22,7 @@ namespace TLCGen.Models
         public string FaseNaar { get; set; }
         public NaloopTypeEnum Type { get; set; }
         public bool VasteNaloop { get; set; }
+        public bool InrijdenTijdensGroen { get; set; }
         public bool DetectieAfhankelijk { get; set; }
         public int? MaximaleVoorstart { get; set; }
 
