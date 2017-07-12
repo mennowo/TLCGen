@@ -181,7 +181,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"/* File ingreep {fi.Naam} */");
                                 sb.AppendLine($"#define filefcmax{fi.Naam} {fi.TeDoserenSignaalGroepen.Count} // Aantal fasen die worden gedoseerd");
                                 sb.AppendLine($"static count filefc_{fi.Naam}[filefcmax{fi.Naam}]; // Opslag fasenummers");
-                                sb.AppendLine($"static count filefcmg_{fi.Naam}[filefcmax{fi.Naam}][{c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden)}]; // Opslag bij fasen behorende MG parameter nummers");
+                                if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                {
+                                    sb.AppendLine($"static count filefcmg_{fi.Naam}[filefcmax{fi.Naam}][{c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1}]; // Opslag bij fasen behorende MG parameter nummers");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"static count filefcvg_{fi.Naam}[filefcmax{fi.Naam}][{c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1}]; // Opslag bij fasen behorende MG parameter nummers");
+                                }
                                 sb.AppendLine($"static int nogtedoseren_{fi.Naam}[filefcmax{fi.Naam}] = {{0}}; // Opslag nog te doseren actueel per fase");
                             }
                         }
@@ -211,7 +218,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     var mgm = mgsm.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
                                     if (mgm?.Waarde != null)
                                     {
-                                        sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                        if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                        {
+                                            sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                        }
+                                        else
+                                        {
+                                            sb.Append($"{ts}filefcvg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                        }
+                                            
                                     }
                                     ++j;
                                 }
@@ -321,7 +336,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.AppendLine($"{ts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
                                 sb.AppendLine($"{ts}{{");
-                                sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
+                                if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                {
+                                    sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam});");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam});");
+                                }
+                                    
                                 sb.AppendLine($"{ts}}}");
                             }
                             sb.AppendLine();

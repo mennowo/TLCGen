@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -50,6 +51,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
             sb.AppendLine($"{ts}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
+            sb.AppendLine();
+            sb.AppendLine("/* Aantal perioden voor max groen */");
+            sb.AppendLine("/* ------- */");
+            sb.AppendLine($"{ts}#define MPERIODMAX {controller.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");
