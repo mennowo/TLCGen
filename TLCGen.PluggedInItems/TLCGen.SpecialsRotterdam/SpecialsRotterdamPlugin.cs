@@ -231,26 +231,28 @@ namespace TLCGen.SpecialsRotterdam
                             {
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_FC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_MinGmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_MaxGmax", 80, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxMin", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxMax", 80, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Gmaxact", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Gmaxgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxAFM", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Sturing", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                                 _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Qlenght", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_relBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_relBufferVulling", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_AbsBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_RelBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_RelBufferVulling", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                             }
                         }
                     }
                 }
-                _MyElements.Add(new CCOLElement($"AFM_strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_actief", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_watchdog_return", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_versie", 2, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 _MyElements.Add(new CCOLElement($"AFMLeven", CCOLElementTypeEnum.Uitgang));
 
@@ -341,17 +343,17 @@ namespace TLCGen.SpecialsRotterdam
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
-                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_watchdog_return] != prmAFM_watchdog_return_old);");
+                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old);");
                     sb.AppendLine("#else");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
                     sb.AppendLine("#endif");
-                    sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_watchdog];");
+                    sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_Watchdog];");
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}AFMLeven] = RT[{_tpf}AFMLeven];");
                     sb.AppendLine($"{ts}RT[tVRILeven] = !T[tVRILeven];");
                     sb.AppendLine($"{ts}if (ET[{_tpf}VRILeven])");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_watchdog] < 9999) PRM[{_prmpf}AFM_watchdog]++;");
-                    sb.AppendLine($"{ts}{ts}else                            PRM[{_prmpf}AFM_watchdog] = 0;");
+                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Watchdog] < 9999) PRM[{_prmpf}AFM_Watchdog]++;");
+                    sb.AppendLine($"{ts}{ts}else                            PRM[{_prmpf}AFM_Watchdog] = 0;");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}AFMResetBits();");
@@ -368,7 +370,7 @@ namespace TLCGen.SpecialsRotterdam
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine($"{ts}/* AFM */");
-                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven])");
+                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && PRM[{_prmpf}AFM_Beschikbaar])");
                     sb.AppendLine($"{ts}{{");
                     foreach (var fc in _FasenWithDummies)
                     {
@@ -393,10 +395,15 @@ namespace TLCGen.SpecialsRotterdam
                         sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
                     }
                     sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
+                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Beschikbaar])");
+                    sb.AppendLine($"{ts}{ts}{{");
                     foreach (var fc in _FasenWithDummies)
                     {
                         sb.AppendLine($"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}9{fc}, verwerken_fcs);");
                     }
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine();
+
                     string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
                     foreach (var fc in _FasenWithDummies)
                     {
