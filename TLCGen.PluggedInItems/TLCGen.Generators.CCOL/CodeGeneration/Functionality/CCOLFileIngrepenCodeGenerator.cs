@@ -210,25 +210,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}filefc_{fi.Naam}[{i++}] = {_fcpf}{fc.FaseCyclus};");
                             }
                             i = 0;
+                            var gtt = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "mg" : "vg";
                             foreach (var fc in fi.TeDoserenSignaalGroepen)
                             {
                                 var j = 0;
-                                foreach (var mgsm in c.GroentijdenSets)
+
+                                foreach (var per in c.PeriodenData.Perioden)
                                 {
-                                    var mgm = mgsm.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
-                                    if (mgm?.Waarde != null)
+                                    if (per.Type == PeriodeTypeEnum.Groentijden)
                                     {
-                                        if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
+                                        foreach (var mgsm in c.GroentijdenSets)
                                         {
-                                            sb.Append($"{ts}filefcmg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                            if (mgsm.Naam == per.GroentijdenSet)
+                                            {
+                                                foreach (var mgm in mgsm.Groentijden)
+                                                {
+                                                    if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
+                                                    {
+                                                        sb.Append($"{ts}filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                                    }
+                                                }
+                                            }
                                         }
-                                        else
-                                        {
-                                            sb.Append($"{ts}filefcvg_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
-                                        }
-                                            
+                                        ++j;
                                     }
-                                    ++j;
                                 }
                                 ++i;
                                 sb.AppendLine();
@@ -299,26 +304,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ? $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
                                 : $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
-                            string rest = "";
-                            int irest = 1;
+                            var rest = "";
+                            var irest = 1;
                             rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{ff.FaseCyclus}";
-                            foreach (PeriodeModel per in c.PeriodenData.Perioden)
+
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                             {
-                                if (per.Type == PeriodeTypeEnum.Groentijden)
+                                foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
                                 {
-                                    foreach (GroentijdenSetModel mgsm in c.GroentijdenSets)
+                                    foreach (var mgm in mgsm.Groentijden.Where(
+                                        x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
                                     {
-                                        if (mgsm.Naam == per.GroentijdenSet)
-                                        {
-                                            foreach (GroentijdModel mgm in mgsm.Groentijden)
-                                            {
-                                                if (mgm.FaseCyclus == ff.FaseCyclus && mgm.Waarde.HasValue)
-                                                {
-                                                    ++irest;
-                                                    rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
-                                                }
-                                            }
-                                        }
+                                        ++irest;
+                                        rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
                                     }
                                 }
                             }
