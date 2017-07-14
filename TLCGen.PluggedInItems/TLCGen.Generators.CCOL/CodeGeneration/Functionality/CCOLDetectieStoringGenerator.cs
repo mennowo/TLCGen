@@ -284,6 +284,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                             }
+                            var defmg = c.GroentijdenSets.FirstOrDefault(
+                                x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                            var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                            if (defmgfc?.Waarde != null)
+                            {
+                                sb.Append($", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}");
+                            }
                             sb.AppendLine(");");
                             sb.AppendLine($"{ts}}}");
                         }

@@ -215,6 +215,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 var j = 0;
 
+                                sb.Append($"{ts}");
+
                                 foreach (var per in c.PeriodenData.Perioden)
                                 {
                                     if (per.Type == PeriodeTypeEnum.Groentijden)
@@ -227,7 +229,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 {
                                                     if (mgm.FaseCyclus == fc.FaseCyclus && mgm.Waarde.HasValue)
                                                     {
-                                                        sb.Append($"{ts}filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
+                                                        sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{mgsm.Naam.ToLower()}_{fc.FaseCyclus}; ");
                                                     }
                                                 }
                                             }
@@ -236,6 +238,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                                 ++i;
+                                var defmg = c.GroentijdenSets.FirstOrDefault(
+                                    x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                                var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                                if (defmgfc?.Waarde != null)
+                                {
+                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
+                                }
                                 sb.AppendLine();
                             }
                         }
