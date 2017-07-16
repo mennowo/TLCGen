@@ -329,7 +329,7 @@ void Eerlijk_doseren_V1(count hfile,            // hulpelement wel/geen file
                         count _prmperc,         // indexnummer parameter % doseren
                         count aantalfc,         // aantal te doseren fasen
                         count fc[],             // pointer naar array met fasenummers
-                        count fcmg[][4],        // pointer naar array met mg parameter index nummers
+                        count fcmg[][MPERIODMAX],        // pointer naar array met mg parameter index nummers
                         int nogtedoseren[])     // pointer naar array met nog te doseren waarden
 {
     int i, j, laatstedosering;
@@ -374,6 +374,56 @@ void Eerlijk_doseren_V1(count hfile,            // hulpelement wel/geen file
             TVG_max[fc[i]] = ((mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[mperiod]]])/100) > TFG_max[fc[i]])
                         ?  (mulv)(((long)(100 - nogtedoseren[i]) * (long)PRM[fcmg[i][MM[mperiod]]])/100) - TFG_max[fc[i]]
                         : 0;
+        }
+    }   
+}
+void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            // hulpelement wel/geen file
+                        count _prmperc,         // indexnummer parameter % doseren
+                        count aantalfc,         // aantal te doseren fasen
+                        count fc[],             // pointer naar array met fasenummers
+                        count fcvg[][MPERIODMAX],        // pointer naar array met mg parameter index nummers
+                        int nogtedoseren[])     // pointer naar array met nog te doseren waarden
+{
+    int i, j, laatstedosering;
+
+    // Voor elke fase mbt dit filegebied
+    for(i = 0; i < aantalfc; ++i)
+    {
+        // Als het file is, eindegroen, en het meetkriterium staat op
+        if(EG[fc[i]] && H[hfile] && MK[fc[i]])
+        {
+            // Uitrekenen laatst toegepaste dosering
+            laatstedosering = 100 - (int)(100.0 * (((float)(TFG_max[fc[i]] + TVG_timer[fc[i]])) / ((float)(PRM[fcvg[i][MM[mperiod]]]+TFG_max[fc[i]]))));
+            // Voor elke fase mbt het fileveld
+            for(j = 0; j < aantalfc; ++j)
+            {
+                // Die niet de fase is die nu EG heeft
+                if(i == j)continue;
+                // uitrekenen nogtedoseren waarde voor de andere richtingen:
+                // (tbv programmeertechnische veiligheid van het algoritme: 
+                //  alleen doen wanneer de uitkomst lager is dan het file doseer percentage)
+                if((laatstedosering - nogtedoseren[i] + nogtedoseren[j]) <= (100 - PRM[_prmperc]))
+                {
+                    // Nog te doseren is verschil tussen laatste dosering van huidige fase met EG en nogtedoseren waarde van die fase,
+                    // plus de actuele nogtedoseren waarde van fase j
+                    nogtedoseren[j] = laatstedosering - nogtedoseren[i] + nogtedoseren[j];
+                }
+            }
+            // Zet de nog te doseren waarde van de fase met EG op 0
+            nogtedoseren[i] = 0;
+        }
+        // Op eindegroen wanneer er geen file is, of wel file maar geen MK,
+        // zet actuele waarden op 0
+        if((nogtedoseren[i] && EG[fc[i]] && PR[fc[i]] && !H[hfile]) || (EG[fc[i]] && H[hfile] && !MK[fc[i]]) || nogtedoseren[i] && !A[fc[i]] && PRML[ML][fc[i]] == PRIMAIR)
+        {
+            nogtedoseren[i] = 0;
+        }
+
+        // Doseren!
+        if(nogtedoseren[i] > 0 && !H[hfile])
+        {
+            /* Toepassen eerder opgeslagen nog te doseren percentage */
+            TVG_max[fc[i]] = (mulv)(((long)(100 - nogtedoseren[i]) * (long)(PRM[fcvg[i][MM[mperiod]]]+TFG_max[fc[i]]))/100);
         }
     }   
 }

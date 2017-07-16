@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -30,17 +28,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var d in fc.Detectoren)
                 {
-                    if (d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ||
-                        d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.SchUit)
+                    if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ||
+                        d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
                     {
                         _MyElements.Add(
                             new CCOLElement(
                                 $"{_schdvak}{_dpf}{d.Naam}",
-                                d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
+                                d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
                                 CCOLElementTypeEnum.Schakelaar));
                     }
-                    if(d.Type == Models.Enumerations.DetectorTypeEnum.Kop && fc.HiaatKoplusBijDetectieStoring && fc.VervangendHiaatKoplus.HasValue)
+                    if(d.Type == DetectorTypeEnum.Kop && fc.HiaatKoplusBijDetectieStoring && fc.VervangendHiaatKoplus.HasValue)
                     {
                         _MyElements.Add(
                             new CCOLElement(
@@ -103,12 +101,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var d in fc.Detectoren)
                         {
-                            if(d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                            if(d.AanvraagBijStoring == NooitAltijdAanUitEnum.Altijd)
                             {
                                 sb.AppendLine($"{ts}{ts}A[{_fcpf}{fc.Naam}] |= (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING);");
                             }
-                            else if(d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ||
-                                    d.AanvraagBijStoring == Models.Enumerations.NooitAltijdAanUitEnum.SchUit)
+                            else if(d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ||
+                                    d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
                             {
                                 sb.AppendLine($"{ts}A[{_fcpf}{fc.Naam}] |= SCH[{_schpf}{_schdvak}{_dpf}{d.Naam}] && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING);");
                             }
@@ -125,12 +123,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (!fc.AanvraagBijDetectieStoring ||
                             fc.Detectoren.Count == 0 ||
-                            !fc.Detectoren.Where(x => x.Aanvraag != Models.Enumerations.DetectorAanvraagTypeEnum.Geen).Any())
+                            fc.Detectoren.All(x => x.Aanvraag == DetectorAanvraagTypeEnum.Geen))
                         {
                             continue;
                         }
 
-                        string pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
+                        var pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
                         sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
 
                         if (fc.AantalRijstroken.HasValue)
@@ -144,7 +142,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 foreach (var d in fc.Detectoren)
                                 {
-                                    if (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen) continue;
+                                    if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
 
                                     if (d.Rijstrook == str)
                                     {
@@ -156,14 +154,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         }
                                         else
                                         {
-                                            if (str > 1)
-                                            {
-                                                sb.Append($"{pre}((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
-                                            }
-                                            else
-                                            {
-                                                sb.Append($"((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
-                                            }
+                                            sb.Append(str > 1
+                                                ? $"{pre}((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))"
+                                                : $"((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
                                         }
                                     }
                                 }
@@ -171,10 +164,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else
                         {
-                            int det = 0;
+                            var det = 0;
                             foreach (var d in fc.Detectoren)
                             {
-                                if (d.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen) continue;
+                                if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
 
                                 det++;
                                 if (det > 1)
@@ -202,17 +195,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (!fc.HiaatKoplusBijDetectieStoring ||
                             !fc.VervangendHiaatKoplus.HasValue ||
-                            fc.Type == Models.Enumerations.FaseTypeEnum.Voetganger ||
+                            fc.Type == FaseTypeEnum.Voetganger ||
                             fc.Detectoren.Count == 0 ||
-                            !fc.Detectoren.Where(x => x.Type != Models.Enumerations.DetectorTypeEnum.Kop || x.Type == Models.Enumerations.DetectorTypeEnum.Lang).Any())
+                            !fc.Detectoren.Any(x => x.Type != DetectorTypeEnum.Kop || x.Type == DetectorTypeEnum.Lang))
                         {
                             continue;
                         }
 
-                        for (int str = 1; str <= fc.AantalRijstroken; ++str)
+                        for (var str = 1; str <= fc.AantalRijstroken; ++str)
                         {
-                            var dkl = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Kop && x.Rijstrook == str).FirstOrDefault();
-                            var dll = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Lang && x.Rijstrook == str).FirstOrDefault();
+                            var dkl = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.Kop && x.Rijstrook == str);
+                            var dll = fc.Detectoren.FirstOrDefault(x => x.Type == DetectorTypeEnum.Lang && x.Rijstrook == str);
                             if(dkl != null && dll != null)
                             {
                                 sb.AppendLine($"{ts}VervangendHiaatKoplus({_fcpf}{fc.Naam}, {_dpf}{dkl.Naam}, {_dpf}{dll.Naam}, {_tpf}{_thdv}{_dpf}{dkl.Naam});");
@@ -253,31 +246,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (d.Verlengen == DetectorVerlengenTypeEnum.Geen) continue;
 
-                                    if (d.Rijstrook == str)
+                                    if (d.Rijstrook != str) continue;
+
+                                    det++;
+                                    if (det > 1)
                                     {
-                                        det++;
-                                        if (det > 1)
-                                        {
-                                            sb.Append($" && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                                        }
-                                        else
-                                        {
-                                            if (str > 1)
-                                            {
-                                                sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                                            }
-                                            else
-                                            {
-                                                sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                                            }
-                                        }
+                                        sb.Append($" && (CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                    }
+                                    else
+                                    {
+                                        sb.Append(str > 1
+                                            ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
+                                            : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                                     }
                                 }
                             }
                             sb.AppendLine(")");
                             sb.AppendLine($"{ts}{{");
                             sb.AppendLine($"{ts}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
-                            string grfunc = "";
+                            var grfunc = "";
                             switch (c.Data.TypeGroentijden)
                             {
                                 case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
@@ -285,19 +272,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
-                            int i = 0;
-                            foreach(var mgsm in c.GroentijdenSets)
+                            var defmg = c.GroentijdenSets.FirstOrDefault(
+                                x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                            var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                            if (defmgfc?.Waarde != null)
                             {
-                                foreach (GroentijdModel mgm in mgsm.Groentijden)
+                                sb.Append($"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}, ");
+                            }
+                            var i = 0;
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                            {
+                                foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
                                 {
-                                    if (mgm.FaseCyclus == fc.Naam && mgm.Waarde.HasValue)
+                                    foreach (var unused in mgsm.Groentijden.Where(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
                                     {
                                         if (i > 0) sb.Append(", "); ++i;
                                         sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}_{fc.Naam}");
                                     }
                                 }
                             }
-                            sb.AppendLine($");");
+                            sb.AppendLine(");");
                             sb.AppendLine($"{ts}}}");
                         }
                     }
