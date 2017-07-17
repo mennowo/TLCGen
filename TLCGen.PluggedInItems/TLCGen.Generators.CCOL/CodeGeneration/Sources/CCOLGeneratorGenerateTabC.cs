@@ -445,19 +445,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
                         var counters = new Dictionary<int, int>();
-                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                        foreach (var conflict in controller.InterSignaalGroep.Conflicten)
                         {
-                            if (!counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
+                            if (conflict.GarantieWaarde.HasValue && !counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
                             {
                                 counters.Add(conflict.Waarde - conflict.GarantieWaarde.Value, 1);
                             }
-                            else
+                            else if(conflict.GarantieWaarde.HasValue)
                             {
                                 counters[conflict.Waarde - conflict.GarantieWaarde.Value]++;
                             }
                         }
-                        int most = 0;
-                        int val = 0;
+                        var most = 0;
+                        var val = 0;
                         foreach (var i in counters)
                         {
                             if (i.Value > most)
@@ -467,9 +467,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                         }
                         sb.AppendLine($"{ts}default_to_min({val});");
-                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                        foreach (var conflict in controller.InterSignaalGroep.Conflicten)
                         {
-                            if((conflict.Waarde - conflict.GarantieWaarde.Value) != val)
+                            if(conflict.GarantieWaarde.HasValue && (conflict.Waarde - conflict.GarantieWaarde.Value) != val)
                                 sb.AppendLine($"{ts}TO_min[{conflict.GetFaseToDefine()}][{_fcpf}{conflict.FaseNaar}] = {conflict.GarantieWaarde.Value};");
                         }
                     }
