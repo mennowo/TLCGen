@@ -219,11 +219,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
                                 if (defmgfc?.Waarde != null)
                                 {
-                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{0}] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
+                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][0] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
                                 }
                                 var j = 1;
                                 foreach (var per in c.PeriodenData.Perioden)
                                 {
+
+                                
                                     if (per.Type == PeriodeTypeEnum.Groentijden)
                                     {
                                         foreach (var mgsm in c.GroentijdenSets)
@@ -243,6 +245,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                                 ++i;
+                                var defmg = c.GroentijdenSets.FirstOrDefault(
+                                    x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                                var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                                if (defmgfc?.Waarde != null)
+                                {
+                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
+                                }
                                 sb.AppendLine();
                             }
                         }

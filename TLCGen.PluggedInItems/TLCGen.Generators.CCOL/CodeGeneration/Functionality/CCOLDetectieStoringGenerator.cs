@@ -272,6 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
+
                             var defmg = c.GroentijdenSets.FirstOrDefault(
                                 x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
                             var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
@@ -279,6 +280,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append($"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}, ");
                             }
+
                             var i = 0;
                             foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                             {
@@ -291,6 +293,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                             }
+
                             sb.AppendLine(");");
                             sb.AppendLine($"{ts}}}");
                         }
