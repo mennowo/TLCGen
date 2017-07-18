@@ -245,13 +245,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                                 ++i;
-                                var defmg = c.GroentijdenSets.FirstOrDefault(
-                                    x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
-                                var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
-                                if (defmgfc?.Waarde != null)
-                                {
-                                    sb.Append($"filefc{gtt}_{fi.Naam}[{i}][{j}] = {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.FaseCyclus};");
-                                }
                                 sb.AppendLine();
                             }
                         }
