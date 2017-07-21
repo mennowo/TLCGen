@@ -232,11 +232,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             if (cf.FaseVan == controller.Fasen[i].Naam &&
                                 cf.FaseNaar == controller.Fasen[j].Naam)
                             {
-                                matrix[i, j] = cf.Waarde >= -4 ? cf.Waarde : -1;
+                                if (cf.Waarde >= -4)
+                                {
+                                    switch (cf.Waarde)
+                                    {
+                                        case -4:
+                                            matrix[i, j] = -40;
+                                            break;
+                                        case -3:
+                                            matrix[i, j] = -30;
+                                            break;
+                                        case -2:
+                                            matrix[i, j] = -20;
+                                            break;
+                                        default:
+                                            matrix[i, j] = cf.Waarde;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    matrix[i, j] = -1;
+                                }
                             }
                         }
                     }
                 }
+
+                // Below: only overwrite non-user defined values
 
                 foreach (var gs in controller.InterSignaalGroep.Gelijkstarten)
                 {
@@ -280,7 +303,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     for (var k = 0; k < controller.Fasen.Count; ++k)
                     {
-                        if (matrix[j, k] > -1 && matrix[i, k] < 0)
+                        if (matrix[j, k] > -1 && matrix[i, k] < 0 && matrix [i, k] > -20)
                         {
                             switch (nl.Type)
                             {
@@ -325,8 +348,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (matrix[i, j] >= -1) continue;
                         var k = "FK";
-                        if (matrix[i, j] == -3) k = "GK";
-                        if (matrix[i, j] == -4) k = "GKL";
+                        if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
+                        if (matrix[i, j] == -4 || matrix[i, j] == -20) k = "GKL";
                         sb.AppendLine($"{ts}TO_max[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
                         AppendEmptyLine = true;
                     }
