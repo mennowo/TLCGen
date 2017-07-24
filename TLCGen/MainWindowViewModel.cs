@@ -215,6 +215,14 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
+        #region Events
+
+        public EventHandler<string> FileOpened;
+        public EventHandler<string> FileOpenFailed;
+        public EventHandler<string> FileSaved;
+
+        #endregion // Events
+
         #region Commands
 
         RelayCommand _NewFileCommand;
@@ -375,16 +383,7 @@ namespace TLCGen.ViewModels
 
         private void OpenFileCommand_Executed(object prm)
         {
-            if(TLCGenControllerDataProvider.Default.OpenController())
-            {
-                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("ProgramTitle");
-                RaisePropertyChanged("HasController");
-            }
+            LoadController();
         }
 
         private bool OpenFileCommand_CanExecute(object prm)
@@ -400,6 +399,7 @@ namespace TLCGen.ViewModels
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
+                FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
             }
         }
 
@@ -420,6 +420,7 @@ namespace TLCGen.ViewModels
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
+                FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
             }
         }
 
@@ -737,6 +738,24 @@ namespace TLCGen.ViewModels
             return false;
         }
 
+        public bool LoadController(string filename = null)
+        {
+            if (TLCGenControllerDataProvider.Default.OpenController(filename))
+            {
+                string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
+                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                RaisePropertyChanged("ProgramTitle");
+                RaisePropertyChanged("HasController");
+                FileOpened?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
+                return true;
+            }
+            if(filename != null) FileOpenFailed?.Invoke(this, filename);
+            return false;
+        }
+
         #endregion // Public methods
 
         #region TLCGen Messaging
@@ -845,16 +864,7 @@ namespace TLCGen.ViewModels
 
                 if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
                 {
-                    if (TLCGenControllerDataProvider.Default.OpenController(args[1]))
-                    {
-                        string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                        SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-                        ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                        Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                        Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                        RaisePropertyChanged("ProgramTitle");
-                        RaisePropertyChanged("HasController");
-                    }
+                    LoadController(args[1]);
                 }
 
                 // If we are in debug mode, the code below tries loading default file
@@ -963,16 +973,7 @@ namespace TLCGen.ViewModels
                     var files = d.GetFileDropList();
                     if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
                     {
-                        if (TLCGenControllerDataProvider.Default.OpenController(files[0]))
-                        {
-                            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
-                            SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-                            ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                            Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
-                            Messenger.Default.Send(new UpdateTabsEnabledMessage());
-                            RaisePropertyChanged("ProgramTitle");
-                            RaisePropertyChanged("HasController");
-                        }
+                        LoadController(files[0]);
                     }
                 }
             }

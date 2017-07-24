@@ -72,6 +72,7 @@ namespace TLCGen.Settings
         {
             try
             {
+#warning Move this to app data...   
                 string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
                 if (File.Exists(settingsfile))
                 {

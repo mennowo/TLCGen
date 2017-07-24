@@ -20,7 +20,7 @@ namespace TLCGen
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -31,27 +31,30 @@ namespace TLCGen
             MainToolBarTray.DataContextChanged += (s, e) =>
             {
                 var vm = e.NewValue as ViewModels.MainWindowViewModel;
-                if (vm != null)
+                if (vm == null) return;
+                foreach (var pl in vm.ApplicationParts)
                 {
-                    foreach (var pl in vm.ApplicationParts)
-                    {
-                        if ((pl.Item1 & TLCGenPluginElems.ToolBarControl) == TLCGenPluginElems.ToolBarControl)
-                        {
-                            var tb = new ToolBar();
-                            tb.Items.Add((pl.Item2 as ITLCGenToolBar).ToolBarView);
-                            MainToolBarTray.ToolBars.Add(tb);
-                        }
-                    }
+                    if ((pl.Item1 & TLCGenPluginElems.ToolBarControl) != TLCGenPluginElems.ToolBarControl) continue;
+                    var tb = new ToolBar();
+                    var tlcGenToolBar = pl.Item2 as ITLCGenToolBar;
+                    if (tlcGenToolBar != null) tb.Items.Add(tlcGenToolBar.ToolBarView);
+                    MainToolBarTray.ToolBars.Add(tb);
                 }
             };
 
-            ViewModels.MainWindowViewModel mvm = new ViewModels.MainWindowViewModel();
-            this.DataContext = mvm;
-        }
+            RecentFileList.MenuClick += (sender, args) =>
+            {
+                if (DataContext == null) return;
+                var mymvm = DataContext as ViewModels.MainWindowViewModel;
+                mymvm?.LoadController(args.Filepath);
+            };
 
-        private void MainWindow_OnPreviewDragEnter(object sender, DragEventArgs e)
-        {
-            int o = 0;
+            var mvm = new ViewModels.MainWindowViewModel();
+            DataContext = mvm;
+
+            mvm.FileSaved += (sender, s) => RecentFileList.InsertFile(s);
+            mvm.FileOpened += (sender, s) => RecentFileList.InsertFile(s);
+            mvm.FileOpenFailed += (sender, s) => RecentFileList.RemoveFile(s);
         }
     }
 }

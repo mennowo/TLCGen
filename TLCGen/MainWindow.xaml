@@ -7,6 +7,7 @@
         xmlns:vw="clr-namespace:TLCGen.Views"
         xmlns:vm="clr-namespace:TLCGen.ViewModels"
         xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
         AllowDrop="True"
         dd:DragDrop.IsDropTarget="True"
         dd:DragDrop.DropHandler="{Binding}"
@@ -86,6 +87,7 @@
                             Source="{StaticResource CloseFileIconDrawingImage}" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <helpers:RecentFileList x:Name="RecentFileList" MaxNumberOfFiles="10" />
                 <MenuItem Background="Transparent" Header="Exit" Command="{Binding Path=ExitApplicationCommand}" InputGestureText="Alt+F4" >
                     <MenuItem.Icon>
                         <Image 
