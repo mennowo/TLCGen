@@ -55,6 +55,8 @@ namespace TLCGen
             mvm.FileSaved += (sender, s) => RecentFileList.InsertFile(s);
             mvm.FileOpened += (sender, s) => RecentFileList.InsertFile(s);
             mvm.FileOpenFailed += (sender, s) => RecentFileList.RemoveFile(s);
+
+            mvm.CheckCommandLineArgs();
         }
     }
 }
