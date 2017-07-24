@@ -697,6 +697,12 @@ namespace TLCGen.ViewModels
             RefreshMyBitmapImage();
         }
 
+        private void OnOVIngrepenChanged(OVIngrepenChangedMessage message)
+        {
+            CollectAllIO();
+            RefreshMyBitmapImage();
+        }
+
         #endregion // TLCGen Message Handling
 
         #region Constructor
@@ -709,6 +715,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<RefreshBitmapRequest>(OnRefreshBitmapRequest));
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
         }
 
         #endregion // Constructor

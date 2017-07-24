@@ -44,7 +44,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.KAR = value;
-                RaisePropertyChanged<object>("KAR", broadcast: true);
                 if(value)
                 {
                     _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
@@ -54,9 +53,10 @@ namespace TLCGen.ViewModels
                 }
                 else
                 {
-                    _OVIngreep.DummyKARInmelding.Naam = null;
-                    _OVIngreep.DummyKARUitmelding.Naam = null;
+                    _OVIngreep.DummyKARInmelding = null;
+                    _OVIngreep.DummyKARUitmelding = null;
                 }
+                RaisePropertyChanged<object>("KAR", broadcast: true);
                 Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
@@ -67,7 +67,6 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.Vecom = value;
-                RaisePropertyChanged<object>("Vecom", broadcast: true);
                 if (value)
                 {
                     _OVIngreep.DummyVecomInmelding = new DetectorModel() { Dummy = true };
@@ -80,6 +79,7 @@ namespace TLCGen.ViewModels
                     _OVIngreep.DummyVecomInmelding = null;
                     _OVIngreep.DummyVecomUitmelding = null;
                 }
+                RaisePropertyChanged<object>("Vecom", broadcast: true);
                 Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }

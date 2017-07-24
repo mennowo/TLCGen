@@ -46,19 +46,19 @@ namespace TLCGen.ViewModels
             set
             {
                 _HDIngreep.KAR = value;
-                RaisePropertyChanged<object>("KAR", broadcast: true);
                 if (value)
                 {
+                    _HDIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
+                    _HDIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
                     _HDIngreep.DummyKARInmelding.Naam = "dummyhdkarin" + _HDIngreep.FaseCyclus;
                     _HDIngreep.DummyKARUitmelding.Naam = "dummyhdkaruit" + _HDIngreep.FaseCyclus;
                 }
                 else
                 {
-                    _HDIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
-                    _HDIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
                     _HDIngreep.DummyKARInmelding = null;
                     _HDIngreep.DummyKARUitmelding = null;
                 }
+                RaisePropertyChanged<object>("KAR", broadcast: true);
                 Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
