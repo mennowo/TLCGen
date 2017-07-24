@@ -953,7 +953,8 @@ namespace TLCGen.ViewModels
         
         public void DragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is DataObject d)
+            var d = dropInfo.Data as DataObject;
+            if (d != null)
             {
                 if (d.ContainsFileDropList())
                 {
@@ -969,7 +970,8 @@ namespace TLCGen.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.Data is DataObject d)
+            var d = dropInfo.Data as DataObject;
+            if (d != null)
             {
                 if (d.ContainsFileDropList())
                 {

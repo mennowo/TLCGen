@@ -33,6 +33,8 @@ namespace TLCGen.Helpers
         }
 
         private IPersist Persister { get; set; }
+        private int MaxPathLength { get; set; }
+        private MenuItem FileMenu { get; set; }
 
         #endregion // Private Properties
 
@@ -46,8 +48,6 @@ namespace TLCGen.Helpers
         public void UseXmlPersister(Stream stream) { Persister = new XmlPersister(stream); }
 
         public int MaxNumberOfFiles { get; set; }
-        public int MaxPathLength { get; set; }
-        public MenuItem FileMenu { get; private set; }
         
         /// <summary>
         /// Used in: String.Format( MenuItemFormat, index, filepath, displayPath );
@@ -88,12 +88,12 @@ namespace TLCGen.Helpers
 
         #region Private Methods
 
-        void HookFileMenu()
+        private void HookFileMenu()
         {
             var parent = Parent as MenuItem;
             if (parent == null) throw new ApplicationException("Parent must be a MenuItem");
 
-            if (FileMenu == parent) return;
+            if (ReferenceEquals(FileMenu, parent)) return;
 
             if (FileMenu != null) FileMenu.SubmenuOpened -= _FileMenu_SubmenuOpened;
 
@@ -106,7 +106,7 @@ namespace TLCGen.Helpers
             SetMenuItems();
         }
 
-        void SetMenuItems()
+        private void SetMenuItems()
         {
             RemoveMenuItems();
 
@@ -115,7 +115,7 @@ namespace TLCGen.Helpers
             InsertMenuItems();
         }
 
-        void RemoveMenuItems()
+        private void RemoveMenuItems()
         {
             if (_separator != null) FileMenu.Items.Remove(_separator);
 
@@ -157,7 +157,7 @@ namespace TLCGen.Helpers
 
             var shortPath = ShortenPathname(displaypath, MaxPathLength);
 
-            return String.Format(format, index, filepath, shortPath);
+            return string.Format(format, index, filepath, shortPath);
         }
 
         private void LoadRecentFiles()
