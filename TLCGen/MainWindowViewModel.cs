@@ -770,6 +770,9 @@ namespace TLCGen.ViewModels
 
         public MainWindowViewModel()
         {
+            var tmpCurDir = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
+
             try
             {
                 GuiActionsManager.SetStatusBarMessage = (string text) =>
@@ -845,11 +848,20 @@ namespace TLCGen.ViewModels
 
                 if (args.Length > 1 && args[1].ToLower().EndsWith(".tlc") && System.IO.File.Exists(args[1]))
                 {
-                    TLCGenControllerDataProvider.Default.OpenController(args[1]);
+                    if (TLCGenControllerDataProvider.Default.OpenController(args[1]))
+                    {
+                        string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                        SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
+                        ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+                        Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                        Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                        RaisePropertyChanged("ProgramTitle");
+                        RaisePropertyChanged("HasController");
+                    }
                 }
 
                 // If we are in debug mode, the code below tries loading default file
-#if DEBUG
+#if OPENDEBUG
             TLCGenControllerDataProvider.Default.OpenDebug();
             if (TLCGenControllerDataProvider.Default.Controller != null)
             {
@@ -919,6 +931,8 @@ namespace TLCGen.ViewModels
                 win.DialogExpceptionText = e.ToString();
                 win.ShowDialog();
             }
+
+            Directory.SetCurrentDirectory(tmpCurDir);
 
             Task.Run(() => { CheckForNewVersion(); });
         }
