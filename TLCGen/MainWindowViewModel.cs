@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,15 +10,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
-using System.Xml;
 using GalaSoft.MvvmLight.Threading;
+using GongSolutions.Wpf.DragDrop;
 using TLCGen.DataAccess;
 using TLCGen.Dialogs;
 using TLCGen.GuiActions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
@@ -29,7 +26,7 @@ using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
-    public class MainWindowViewModel : GalaSoft.MvvmLight.ViewModelBase
+    public class MainWindowViewModel : GalaSoft.MvvmLight.ViewModelBase, IDropTarget
     {
         #region Fields
 
@@ -939,5 +936,48 @@ namespace TLCGen.ViewModels
 
         #endregion // Constructor
 
+        #region IDropTarget
+        
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is DataObject d)
+            {
+                if (d.ContainsFileDropList())
+                {
+                    var files = d.GetFileDropList();
+                    if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
+                    {
+                        dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                        dropInfo.Effects = DragDropEffects.Copy;
+                    }
+                }
+            }
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.Data is DataObject d)
+            {
+                if (d.ContainsFileDropList())
+                {
+                    var files = d.GetFileDropList();
+                    if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
+                    {
+                        if (TLCGenControllerDataProvider.Default.OpenController(files[0]))
+                        {
+                            string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+                            SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
+                            ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
+                            Messenger.Default.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, lastfilename));
+                            Messenger.Default.Send(new UpdateTabsEnabledMessage());
+                            RaisePropertyChanged("ProgramTitle");
+                            RaisePropertyChanged("HasController");
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion // IDropTarget
     }
 }

@@ -48,5 +48,10 @@ namespace TLCGen
             ViewModels.MainWindowViewModel mvm = new ViewModels.MainWindowViewModel();
             this.DataContext = mvm;
         }
+
+        private void MainWindow_OnPreviewDragEnter(object sender, DragEventArgs e)
+        {
+            int o = 0;
+        }
     }
 }
