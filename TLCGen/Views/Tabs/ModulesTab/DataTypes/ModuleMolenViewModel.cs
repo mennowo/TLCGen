@@ -16,12 +16,18 @@ namespace TLCGen.ViewModels
 {
     public class ModuleMolenViewModel : ViewModelBase
     {
+        #region Fields
+
         private ControllerModel _Controller;
         private ModulesDetailsTabViewModel _ModulesTabVM;
         private ModuleMolenModel _ModuleMolen;
         private ObservableCollection<ModuleViewModel> _Modules;
         private ModuleViewModel _SelectedModule;
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
+
+        #endregion // Fields
+
+        #region Properties
 
         public ControllerModel Controller
         {
@@ -67,9 +73,12 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedModule = value;
-                _ModulesTabVM.SetSelectedModule(value);
-                if(value != null)
+                if (value != null)
+                {
                     SelectedModuleFase = null;
+                    _ModulesTabVM.SetSelectedModuleFase(null);
+                }
+                _ModulesTabVM.SetSelectedModule(value);
                 RaisePropertyChanged("SelectedModule");
             }
         }
@@ -79,10 +88,15 @@ namespace TLCGen.ViewModels
             get { return _SelectedModuleFase; }
             set
             {
-                _SelectedModuleFase = value;
-                if(value != null)
-                    SelectedModule = null;
+                _SelectedModuleFase = null;
                 RaisePropertyChanged("SelectedModuleFase");
+                _SelectedModuleFase = value;
+                if (value != null)
+                {
+                    _ModulesTabVM.SetSelectedModule(Modules.First(x => x.Fasen.Contains(value)));
+                    SelectedModule = null;
+                }
+                _ModulesTabVM.SetSelectedModuleFase(value);
             }
         }
 
@@ -105,6 +119,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>("WachtModule", broadcast: true);
             }
         }
+
+        #endregion // Properties
 
         #region Commands
 

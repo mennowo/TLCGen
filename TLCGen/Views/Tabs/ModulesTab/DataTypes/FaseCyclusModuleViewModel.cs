@@ -24,7 +24,8 @@ namespace TLCGen.ViewModels
 
         private FaseCyclusModel _FaseCyclus;
         private ModuleViewModel _ModuleVM;
-        
+        private ModuleFaseCyclusViewModel _ModuleFaseVM;
+
         #endregion // Fields
 
         #region Properties
@@ -45,6 +46,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ModuleFaseCyclusViewModel ModuleFaseVM
+        {
+            get { return _ModuleFaseVM; }
+            set
+            {
+                _ModuleFaseVM = value;
+                RaisePropertyChanged("ModuleFaseVM");
+                UpdateModuleInfo();
+            }
+        }
+
         /// <summary>
         /// The name of the PhaseCyclus
         /// </summary>
@@ -56,7 +68,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM
         /// </summary>
-        public bool CanBeAddedToModule
+        public bool CanBeAdded
         {
             get
             {
@@ -70,6 +82,14 @@ namespace TLCGen.ViewModels
                             return false;
                     }
                 }
+                if (_ModuleFaseVM != null)
+                {
+                    if (_ModuleFaseVM.FaseCyclusNaam == Naam) return false;
+                    IsFasenConflictingRequest request = new IsFasenConflictingRequest(this.Naam, _ModuleFaseVM.FaseCyclusNaam);
+                    Messenger.Default.Send(request);
+                    if (request.Handled && request.IsConflicting)
+                        return false;
+                }
                 return true;
             }
         }
@@ -77,7 +97,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// Indicates if this phase is or is not in the Module referenced by property ModuleVM
         /// </summary>
-        public bool IsInModule
+        public bool IsIn
         {
             get
             {
@@ -88,18 +108,27 @@ namespace TLCGen.ViewModels
                         if (mfcvm.FaseCyclusNaam == this.Naam)
                             return true;
                     }
+                    return false;
+                }
+                if (_ModuleFaseVM != null)
+                {
+                    foreach (var afcvm in _ModuleFaseVM.Alternatieven)
+                    {
+                        if (afcvm.FaseCyclus == this.Naam)
+                            return true;
+                    }
+                    return false;
                 }
                 return false;
             }
         }
+        
+        public bool HasModule { get; set; }
 
         /// <summary>
         /// Indicates that the property ModuleVM has no value
         /// </summary>
-        public bool NoModuleAvailable
-        {
-            get { return _ModuleVM == null; }
-        }
+        public bool NothingAvailable => _ModuleVM == null && _ModuleFaseVM == null;
 
         #endregion // Properties
 
@@ -123,9 +152,10 @@ namespace TLCGen.ViewModels
         /// </summary>
         public void UpdateModuleInfo()
         {
-            RaisePropertyChanged("CanBeAddedToModule");
-            RaisePropertyChanged("IsInModule");
-            RaisePropertyChanged("NoModuleAvailable"); 
+            RaisePropertyChanged("CanBeAdded");
+            RaisePropertyChanged("IsIn");
+            RaisePropertyChanged("NothingAvailable"); 
+            RaisePropertyChanged("HasModule");
         }
 
         #endregion // Public methods

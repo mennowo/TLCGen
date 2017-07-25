@@ -25,6 +25,7 @@ namespace TLCGen.ViewModels
         
         private FaseCyclusModuleViewModel _SelectedFaseCyclus;
         private ModuleViewModel _SelectedModule;
+        private ModuleFaseCyclusViewModel _SelectedModuleFase;
         private ObservableCollection<FaseCyclusModuleViewModel> _Fasen;
         private ControllerModel _Controller;
 
@@ -70,19 +71,56 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged("SelectedFaseCyclus");
             }
         }
-
+        
         public ModuleViewModel SelectedModule
         {
             get { return _SelectedModule; }
             set
             {
                 _SelectedModule = value;
+                _SelectedModuleFase = null;
                 foreach (FaseCyclusModuleViewModel fcmvm in Fasen)
                 {
                     fcmvm.ModuleVM = value;
+                    fcmvm.ModuleFaseVM = null;
+                    if (SelectedModuleFase != null ||
+                        _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)))
+                    {
+                        fcmvm.HasModule = true;
+                    }
+                    else
+                    {
+                        fcmvm.HasModule = false;
+                    }
                     fcmvm.UpdateModuleInfo();
                 }
                 RaisePropertyChanged("SelectedModule");
+            }
+        }
+
+        public ModuleFaseCyclusViewModel SelectedModuleFase
+        {
+            get => _SelectedModuleFase;
+            set
+            {
+                _SelectedModuleFase = value;
+                _SelectedModule = null;
+                foreach (var fcmvm in Fasen)
+                {
+                    fcmvm.ModuleVM = null;
+                    fcmvm.ModuleFaseVM = value;
+                    if (SelectedModuleFase != null ||
+                        _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)))
+                    {
+                        fcmvm.HasModule = true;
+                    }
+                    else
+                    {
+                        fcmvm.HasModule = false;
+                    }
+                    fcmvm.UpdateModuleInfo();
+                }
+                RaisePropertyChanged("SelectedModuleFase");
             }
         }
 
@@ -111,30 +149,61 @@ namespace TLCGen.ViewModels
         {
             FaseCyclusModuleViewModel fcmvm = prm as FaseCyclusModuleViewModel;
             SelectedFaseCyclus = fcmvm;
-            if (fcmvm.CanBeAddedToModule && !fcmvm.IsInModule)
+            if (SelectedModule != null)
             {
-                ModuleFaseCyclusModel mfcm = new ModuleFaseCyclusModel();
-                mfcm.FaseCyclus = fcmvm.Naam;
-                ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
-                SelectedModule.Fasen.Add(mfcvm);
-                SelectedModule.Fasen.BubbleSort();
+                if (fcmvm.CanBeAdded && !fcmvm.IsIn)
+                {
+                    ModuleFaseCyclusModel mfcm = new ModuleFaseCyclusModel();
+                    mfcm.FaseCyclus = fcmvm.Naam;
+                    ModuleFaseCyclusViewModel mfcvm = new ModuleFaseCyclusViewModel(mfcm);
+                    SelectedModule.Fasen.Add(mfcvm);
+                    SelectedModule.Fasen.BubbleSort();
+                }
+                else if (fcmvm.IsIn)
+                {
+                    // Use custom method instead of Remove method:
+                    // it removes based on Define instead of reference
+                    SelectedModule.RemoveFase(fcmvm.Naam);
+                    SelectedModule.Fasen.BubbleSort();
+                }
             }
-            else if (fcmvm.IsInModule)
+            else if (SelectedModuleFase != null)
             {
-                // Use custom method instead of Remove method:
-                // it removes based on Define instead of reference
-                SelectedModule.RemoveFase(fcmvm.Naam);
-                SelectedModule.Fasen.BubbleSort();
+                if (fcmvm.CanBeAdded && !fcmvm.IsIn)
+                {
+                    ModuleFaseCyclusAlternatiefModel afcm = new ModuleFaseCyclusAlternatiefModel();
+                    afcm.FaseCyclus = fcmvm.Naam;
+                    SelectedModuleFase.Alternatieven.Add(new ModuleFaseCyclusAlternatiefViewModel(afcm));
+                    SelectedModuleFase.Alternatieven.BubbleSort();
+                }
+                else if (fcmvm.IsIn)
+                {
+                    // Use custom method instead of Remove method:
+                    // it removes based on Define instead of reference
+                    var rafcm = SelectedModuleFase.Alternatieven.FirstOrDefault(x => x.FaseCyclus == fcmvm.Naam);
+                    if (rafcm != null) SelectedModuleFase.Alternatieven.Remove(rafcm);
+                    SelectedModuleFase.Alternatieven.BubbleSort();
+                }
             }
             foreach (FaseCyclusModuleViewModel _fcmvm in Fasen)
             {
+                if (SelectedModuleFase != null || 
+                    _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam)))
+                {
+                    _fcmvm.HasModule = true;
+                }
+                else
+                {
+                    _fcmvm.HasModule = false; 
+                }
                 _fcmvm.UpdateModuleInfo();
             }
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         bool AddRemoveFaseCommand_CanExecute(object prm)
         {
-            return SelectedModule != null;
+            return SelectedModule != null || SelectedModuleFase != null;
         }
 
         #endregion // Command functionality

@@ -17,9 +17,10 @@
         <ListView Grid.Row="1" Margin="2" ItemsSource="{Binding Path=Modules}" SelectedItem="{Binding Path=SelectedModule}" >
             <ListView.Resources>
                 <!--SelectedItem with focus-->
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue" Opacity=".4"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue" Opacity=".8"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="DarkBlue" />
                 <!--SelectedItem without focus-->
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="LightBlue" Opacity=".4"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="LightBlue" Opacity=".8"/>
             </ListView.Resources>
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -37,16 +38,37 @@
                         <ListView Grid.Column="1" 
                                   SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=UserControl},Path=DataContext.SelectedModuleFase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                   ItemsSource="{Binding Path=Fasen}" MinHeight="20" Background="Transparent">
+                            <ListView.Resources>
+                                <!--SelectedItem with focus-->
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue" Opacity=".8"/>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="DarkBlue" />
+                                <!--SelectedItem without focus-->
+                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey }" Color="DodgerBlue" Opacity=".8"/>
+                            </ListView.Resources>
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"></StackPanel>
+                                    <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0"></StackPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid Background="Transparent" IsEnabled="False">
-                                        <TextBlock Text="{Binding}" Background="PaleGoldenrod" Margin="1" Padding="2" FontWeight="Bold" />
-                                    </Grid>
+                                    <Border BorderThickness=".7" BorderBrush="Gold" Background="Cornsilk" CornerRadius="3" Padding="1" Margin="1" >
+                                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0" IsEnabled="False">
+                                            <TextBlock Text="{Binding}" Margin="1" Padding="2" FontWeight="Bold" />
+                                            <ListView BorderThickness="0" BorderBrush="Transparent" ItemsSource="{Binding Path=Alternatieven}" Margin="0" Padding="-2">
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal" Background="Cornsilk" Margin="0"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}" Background="Cornsilk" Margin="2" Padding="0" FontStyle="Italic" FontSize="10" />
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

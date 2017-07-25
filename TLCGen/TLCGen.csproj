@@ -105,6 +105,7 @@
       <DependentUpon>SynchronisatiesTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\DataTypes\FaseCyclusModuleDataViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleFaseCyclusAlternatiefViewModel.cs" />
     <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleFaseCyclusViewModel.cs" />
     <Compile Include="Views\Tabs\ModulesTab\DataTypes\ModuleMolenViewModel.cs">
       <DependentUpon>ModuleMolenView.xaml</DependentUpon>

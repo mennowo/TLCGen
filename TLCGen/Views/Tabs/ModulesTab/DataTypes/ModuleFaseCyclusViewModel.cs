@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
@@ -32,16 +33,9 @@ namespace TLCGen.ViewModels
             get { return _ModuleFaseCyclus.FaseCyclus; }
         }
 
-        public ObservableCollection<ModuleFaseCyclusAlternatiefModel> Alternatieven
+        public ObservableCollectionAroundList<ModuleFaseCyclusAlternatiefViewModel, ModuleFaseCyclusAlternatiefModel> Alternatieven
         {
-            get
-            {
-                if (_Alternatieven == null)
-                {
-                    _Alternatieven = new ObservableCollection<ModuleFaseCyclusAlternatiefModel>();
-                }
-                return _Alternatieven;
-            }
+            get;
         }
 
         #endregion // Properties
@@ -65,29 +59,6 @@ namespace TLCGen.ViewModels
 
         #endregion // IComparable
 
-        #region Collection Changed
-
-        private void Alternatieven_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (ModuleFaseCyclusAlternatiefModel s in e.NewItems)
-                {
-                    _ModuleFaseCyclus.Alternatieven.Add(s);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (ModuleFaseCyclusAlternatiefModel s in e.OldItems)
-                {
-                    _ModuleFaseCyclus.Alternatieven.Remove(s);
-                }
-            }
-            Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        #endregion // Collection Changed
-
         #region Public Methods
 
         #endregion // Public Methods
@@ -102,11 +73,7 @@ namespace TLCGen.ViewModels
         public ModuleFaseCyclusViewModel(ModuleFaseCyclusModel mfcm)
         {
             _ModuleFaseCyclus = mfcm;
-            foreach(ModuleFaseCyclusAlternatiefModel s in _ModuleFaseCyclus.Alternatieven)
-            {
-                Alternatieven.Add(s);
-            }
-            Alternatieven.CollectionChanged += Alternatieven_CollectionChanged;
+            Alternatieven = new ObservableCollectionAroundList<ModuleFaseCyclusAlternatiefViewModel, ModuleFaseCyclusAlternatiefModel>(mfcm.Alternatieven);
         }
 
         #endregion // Constructor

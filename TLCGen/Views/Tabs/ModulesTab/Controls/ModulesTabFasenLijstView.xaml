@@ -23,31 +23,50 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Grid.Column="0" TextAlignment="Center" Name="FaseTB">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=CanBeAddedToModule,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Background" Value="Honeydew" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=CanBeAddedToModule,UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                        <Setter Property="Background" Value="Pink" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=IsInModule,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Background" Value="PaleGoldenrod" />
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=NoModuleAvailable,UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="Background" Value="LightGray" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock TextAlignment="Center" Name="FaseTB" Grid.ColumnSpan="2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=CanBeAdded,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Background" Value="Honeydew" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=CanBeAdded,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="Background" Value="Pink" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=IsIn,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Background" Value="PaleGoldenrod" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=NothingAvailable,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="Background" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
                             <Hyperlink Foreground="Black" Command="{Binding ElementName=root,Path=DataContext.AddRemoveFaseCommand}" CommandParameter="{Binding}">
                                 <Border Width="{Binding ElementName=FaseTB, Path=ActualWidth,UpdateSourceTrigger=PropertyChanged}" BorderBrush="White" BorderThickness="2">
                                     <TextBlock Text="{Binding Path=Naam}" HorizontalAlignment="Stretch"  TextAlignment="Center" />
                                 </Border>
                             </Hyperlink>
                         </TextBlock>
+                        <Border Width="12" Height="12" CornerRadius="6" Background="MistyRose" Grid.Column="1" BorderThickness="0" Margin="3"
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasModule}" Value="true">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Foreground="HotPink" HorizontalAlignment="Center" VerticalAlignment="Center">!</TextBlock>
+                        </Border>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
