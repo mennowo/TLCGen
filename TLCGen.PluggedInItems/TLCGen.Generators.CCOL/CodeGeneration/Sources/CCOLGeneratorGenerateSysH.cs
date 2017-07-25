@@ -101,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Uitgangen, "FCMAX"));
+            sb.Append(GetAllElementsSysHLines(_uitgangen, "FCMAX"));
 
             return sb.ToString();
         }
@@ -216,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Ingangen, "DPMAX"));
+            sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX"));
 
             return sb.ToString();
         }
@@ -228,7 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(HulpElementen));
+            sb.Append(GetAllElementsSysHLines(_hulpElementen));
 
             return sb.ToString();
         }
@@ -240,7 +240,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
 
-            sb.Append(GetAllElementsSysHLines(GeheugenElementen));
+            sb.Append(GetAllElementsSysHLines(_geheugenElementen));
 
             return sb.ToString();
         }
@@ -252,7 +252,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Timers));
+            sb.Append(GetAllElementsSysHLines(_timers));
 
             return sb.ToString();
         }
@@ -264,7 +264,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsSysHLines(Counters));
+            sb.Append(GetAllElementsSysHLines(_counters));
 
             return sb.ToString();
         }
@@ -276,7 +276,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
 
-            sb.Append(GetAllElementsSysHLines(Schakelaars));
+            sb.Append(GetAllElementsSysHLines(_schakelaars));
 
             return sb.ToString();
         }
@@ -288,7 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
 
-            sb.Append(GetAllElementsSysHLines(Parameters));
+            sb.Append(GetAllElementsSysHLines(_parameters));
 
             return sb.ToString();
         }

@@ -1,10 +1,9 @@
 ﻿using System.Text;
-using TLCGen.Extensions;
 using TLCGen.Models;
 
-namespace TLCGen.Generators.CCOL.CodeGeneration
+namespace TLCGen.Generators.TLCCC.CodeGeneration
 {
-    public partial class CCOLGenerator
+    public partial class TLCCCGenerator
     {
         /// <summary>
         /// Generates a file header
@@ -26,9 +25,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"   BESTAND:   {data.Naam}{fileappend}");
-            sb.AppendLine($"      CCOL:   {data.CCOLVersie.GetDescription()}");
+            sb.AppendLine($"     TLCCC:   0.1");
             sb.AppendLine($"    TLCGEN:   {data.TLCGenVersie}");
-            sb.AppendLine($"   CCOLGEN:   {CCOLCodeGeneratorPlugin.GetVersion()}");
+            sb.AppendLine($"  TLCCCGEN:   0.1");
             sb.AppendLine("*/");
 
             return sb.ToString();
@@ -43,14 +42,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             // Set up: variables
             var sb = new StringBuilder();
-            var Distance = 3;
+            const int distance = 3;
             const string verString = "Versie";
             const string datString = "Datum";
             const string ontString = "Ontwerper";
             const string comString = "Commentaar";
-            var verLength = verString.Length + Distance;
-            var datLength = datString.Length + Distance;
-            var ontLength = ontString.Length + Distance;
+            var verLength = verString.Length + distance;
+            var datLength = datString.Length + distance;
+            var ontLength = ontString.Length + distance;
 
             // Add top
             sb.AppendLine("/****************************** Versie commentaar ***********************************");
@@ -59,17 +58,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Determine 
             foreach (var vm in data.Versies)
             {
-                if ((vm.Versie.Length + Distance) > verLength) verLength = vm.Versie.Length + Distance;
-                if ((vm.Datum.ToShortDateString().Length + Distance) > datLength) datLength = vm.Datum.ToShortDateString().Length + Distance;
-                if ((vm.Ontwerper.Length + Distance) > ontLength) ontLength = vm.Ontwerper.Length + Distance;
+                if ((vm.Versie.Length + distance) > verLength) verLength = vm.Versie.Length + distance;
+                if ((vm.Datum.ToShortDateString().Length + distance) > datLength) datLength = vm.Datum.ToShortDateString().Length + distance;
+                if ((vm.Ontwerper.Length + distance) > ontLength) ontLength = vm.Ontwerper.Length + distance;
             }
 
             // Add title line
             sb.AppendFormat(" * {0}{1}{2}{3}",
-                    verString.PadRight(verLength),
-                    datString.PadRight(datLength),
-                    ontString.PadRight(ontLength),
-                    comString);
+                verString.PadRight(verLength),
+                datString.PadRight(datLength),
+                ontString.PadRight(ontLength),
+                comString);
             sb.AppendLine();
 
             // Add version lines
@@ -88,6 +87,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine(" ************************************************************************************/");
 
             return sb.ToString();
-        }   
+        }
     }
 }

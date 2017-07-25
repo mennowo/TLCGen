@@ -510,7 +510,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* overige uitgangen */");
             sb.AppendLine("/* ----------------- */");
 
-            sb.Append(GetAllElementsTabCLines(Uitgangen));
+            sb.Append(GetAllElementsTabCLines(_uitgangen));
 
             return sb.ToString();
         }
@@ -676,7 +676,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsTabCLines(Ingangen));
+            sb.Append(GetAllElementsTabCLines(_ingangen));
 
             return sb.ToString();
         }
@@ -688,7 +688,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* hulp elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsTabCLines(HulpElementen));
+            sb.Append(GetAllElementsTabCLines(_hulpElementen));
 
             return sb.ToString();
         }
@@ -700,7 +700,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* geheugen elementen */");
             sb.AppendLine("/* ------------------ */");
             
-            sb.Append(GetAllElementsTabCLines(GeheugenElementen));
+            sb.Append(GetAllElementsTabCLines(_geheugenElementen));
 
             return sb.ToString();
         }
@@ -712,7 +712,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* tijd elementen */");
             sb.AppendLine("/* -------------- */");
 
-            sb.Append(GetAllElementsTabCLines(Timers));
+            sb.Append(GetAllElementsTabCLines(_timers));
 
             return sb.ToString();
         }
@@ -724,7 +724,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* teller elementen */");
             sb.AppendLine("/* ---------------- */");
 
-            sb.Append(GetAllElementsTabCLines(Counters));
+            sb.Append(GetAllElementsTabCLines(_counters));
 
             return sb.ToString();
         }
@@ -736,7 +736,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* schakelaars */");
             sb.AppendLine("/* ----------- */");
 
-            sb.Append(GetAllElementsTabCLines(Schakelaars));
+            sb.Append(GetAllElementsTabCLines(_schakelaars));
 
             return sb.ToString();
         }
@@ -749,7 +749,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* parameters */");
             sb.AppendLine("/* ---------- */");
 
-            sb.Append(GetAllElementsTabCLines(Parameters));
+            sb.Append(GetAllElementsTabCLines(_parameters));
 
             return sb.ToString();
         }
@@ -940,7 +940,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine();
-            foreach (var u in Uitgangen.Elements)
+            foreach (var u in _uitgangen.Elements)
             {
                 sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
             }

@@ -190,7 +190,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GetCoordinatesString(_item, _item.GetBitmapCoordinaatOutputDefine(), "us"));
             }
             
-            foreach(var pgen in _PieceGenerators)
+            foreach(var pgen in PieceGenerators)
             {
                 if (pgen.HasCCOLBitmapOutputs())
                 {
@@ -217,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
 
-            foreach (var pgen in _PieceGenerators)
+            foreach (var pgen in PieceGenerators)
             {
                 if (pgen.HasCCOLBitmapInputs())
                 {

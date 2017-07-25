@@ -66,6 +66,9 @@
     <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />
+    <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs">
+      <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings\CCOLGeneratorSettingTypeEnum.cs" />
     <Compile Include="Settings\CCOLGeneratorStringSettingModel.cs" />
     <Compile Include="Settings\CCOLGeneratorFolderSettingModel.cs" />
@@ -77,7 +80,6 @@
     <Compile Include="GeneratorUI\CCOLGeneratorView.xaml.cs">
       <DependentUpon>CCOLGeneratorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GeneratorUI\CCOLGeneratorViewModel.cs" />
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorAttribute.cs" />
     <Compile Include="CodeGeneration\Functionality\HelperClasses\CCOLCodePieceGeneratorBase.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLDetectieAanvragenMeetkriteriumCodeGenerator.cs" />

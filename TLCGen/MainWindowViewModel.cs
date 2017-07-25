@@ -954,32 +954,24 @@ namespace TLCGen.ViewModels
         public void DragOver(IDropInfo dropInfo)
         {
             var d = dropInfo.Data as DataObject;
-            if (d != null)
+            if (d == null || !d.ContainsFileDropList()) return;
+            var files = d.GetFileDropList();
+            if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
             {
-                if (d.ContainsFileDropList())
-                {
-                    var files = d.GetFileDropList();
-                    if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
-                    {
-                        dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                        dropInfo.Effects = DragDropEffects.Copy;
-                    }
-                }
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
             }
         }
 
         public void Drop(IDropInfo dropInfo)
         {
             var d = dropInfo.Data as DataObject;
-            if (d != null)
+            if (d == null || !d.ContainsFileDropList()) return;
             {
-                if (d.ContainsFileDropList())
+                var files = d.GetFileDropList();
+                if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
                 {
-                    var files = d.GetFileDropList();
-                    if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
-                    {
-                        LoadController(files[0]);
-                    }
+                    LoadController(files[0]);
                 }
             }
         }

@@ -234,7 +234,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine();
 
-            if (_AnyOVorHD)
+            if (_anyOVorHd)
             {
                 sb.AppendLine($"{ts}/* Fasecyclus voor OV-richtingen */");
             }

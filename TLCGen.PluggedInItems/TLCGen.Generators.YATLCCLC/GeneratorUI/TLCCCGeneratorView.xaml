@@ -1,30 +1,23 @@
-﻿<UserControl x:Class="TLCGen.Generators.CCOL.CCOLGeneratorView"
+﻿<UserControl x:Class="TLCGen.Generators.TLCCC.GeneratorUI.TLCCCGeneratorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
-             xmlns:proj="clr-namespace:TLCGen.Generators.CCOL.ProjectGeneration"
-             xmlns:local="clr-namespace:TLCGen.Generators.CCOL"
+             xmlns:local="clr-namespace:TLCGen.Generators.TLCCC.GeneratorUI"
              mc:Ignorable="d" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TLCGen.Generators.CCOL;component/Resources/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TLCGen.Generators.TLCCC;component/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
         <Label Content="Code:" />
-        <Button Command="{Binding Path=GenerateCodeCommand}" ToolTip="Genereer CCOL code" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+        <Button Command="{Binding Path=GenerateCodeCommand}" ToolTip="Genereer TLCCC code" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
             <Image Source="{StaticResource GenerateCodeIconDrawingImage}" Width="16" Height="16"  />
         </Button>
         <Label Content="Visual:" />
-        <ComboBox 
-            Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"
-            IsEnabled="{Binding Path=VisualCBEnabled}"
-            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type proj:VisualProjectTypeEnum}}}"
-            SelectedItem="{Binding Path=VisualProjectType}" Margin="2" />
         <Button Command="{Binding Path=GenerateVisualProjectCommand}" ToolTip="Genereer MS Visual project file" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
             <Image Source="{StaticResource GenerateVisualIconDrawingImage}" Width="16" Height="16"  />
         </Button>

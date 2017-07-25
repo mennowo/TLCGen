@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using System.Windows;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -16,16 +16,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         #region Fields
 
-        private CCOLElemListData Uitgangen;
-        private CCOLElemListData Ingangen;
-        private CCOLElemListData HulpElementen;
-        private CCOLElemListData GeheugenElementen;
-        private CCOLElemListData Timers;
-        private CCOLElemListData Counters;
-        private CCOLElemListData Schakelaars;
-        private CCOLElemListData Parameters;
+        private CCOLElemListData _uitgangen;
+        private CCOLElemListData _ingangen;
+        private CCOLElemListData _hulpElementen;
+        private CCOLElemListData _geheugenElementen;
+        private CCOLElemListData _timers;
+        private CCOLElemListData _counters;
+        private CCOLElemListData _schakelaars;
+        private CCOLElemListData _parameters;
 
-        private List<DetectorModel> AlleDetectoren;
+        private List<DetectorModel> _alleDetectoren;
 
         private string _uspf;
         private string _ispf;
@@ -37,31 +37,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string _prmpf;
         private string _hpf;
 
-        private bool _AnyOV;
-        private bool _AnyHD;
-        private bool _AnyOVorHD;
+        private bool _anyOVorHd;
 
-        public static List<ICCOLCodePieceGenerator> PieceGenerators
-        {
-            get { return _PieceGenerators; }
-        }
-        private static List<ICCOLCodePieceGenerator> _PieceGenerators;
-
-        public string ts
-        {
-            get
-            {
-                if(CCOLGeneratorSettingsProvider.Default.Settings.TabSpace == null)
-                {
-                    return "";
-                }
-                return CCOLGeneratorSettingsProvider.Default.Settings.TabSpace;
-            }
-        }
+        private string ts => CCOLGeneratorSettingsProvider.Default.Settings.TabSpace ?? "";
 
         #endregion // Fields
 
         #region Properties
+
+        public static List<ICCOLCodePieceGenerator> PieceGenerators { get; private set; }
 
         #endregion // Properties
 
@@ -87,59 +71,49 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
                 _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
 
-                _AnyOV = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any();
-                _AnyHD = c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any();
-                _AnyOVorHD = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
-                             c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any();
+                _anyOVorHd = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
+                             c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR);
 
-                foreach (var pgen in _PieceGenerators)
+                foreach (var pgen in PieceGenerators)
                 {
                     pgen.CollectCCOLElements(c);
                 }
 
-                AlleDetectoren = new List<DetectorModel>();
-                foreach (FaseCyclusModel fcm in c.Fasen)
+                _alleDetectoren = new List<DetectorModel>();
+                foreach (var fcm in c.Fasen)
                 {
-                    foreach (DetectorModel dm in fcm.Detectoren)
-                        AlleDetectoren.Add(dm);
+                    foreach (var dm in fcm.Detectoren)
+                        _alleDetectoren.Add(dm);
                 }
-                foreach (DetectorModel dm in c.Detectoren)
-                    AlleDetectoren.Add(dm);
+                foreach (var dm in c.Detectoren)
+                    _alleDetectoren.Add(dm);
 
-                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, _PieceGenerators);
+                var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
 
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
                     throw new NotImplementedException("Error collection CCOL elements from controller.");
 
-                foreach (var pl in TLCGen.Plugins.TLCGenPluginManager.Default.ApplicationPlugins)
+                foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                 {
-                    if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) == TLCGenPluginElems.IOElementProvider)
+                    if ((pl.Item1 & TLCGenPluginElems.IOElementProvider) != TLCGenPluginElems.IOElementProvider) continue;
+
+                    var elemprov = pl.Item2 as ITLCGenElementProvider;
+                    var elems = elemprov?.GetAllItems();
+                    if (elems == null) continue;
+                    foreach (var elem in elems)
                     {
-                        var elemprov = pl.Item2 as ITLCGenElementProvider;
-                        if (elemprov != null)
+                        var ccolElement = elem as CCOLElement;
+                        if (ccolElement == null) continue;
+                        switch (ccolElement.Type)
                         {
-                            var elems = elemprov.GetAllItems() as List<object>;
-                            if (elems != null)
-                            {
-                                foreach (var elem in elems)
-                                {
-                                    var _elem = elem as CCOLElement;
-                                    if (_elem != null)
-                                    {
-                                        switch (_elem.Type)
-                                        {
-                                            case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(_elem); break;
-                                            case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(_elem); break;
-                                        }
-                                    }
-                                }
-                            }
+                            case CCOLElementTypeEnum.Uitgang: CCOLElementLists[0].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.Ingang: CCOLElementLists[1].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.HulpElement: CCOLElementLists[2].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.GeheugenElement: CCOLElementLists[3].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.Timer: CCOLElementLists[4].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.Counter: CCOLElementLists[5].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.Schakelaar: CCOLElementLists[6].Elements.Add(ccolElement); break;
+                            case CCOLElementTypeEnum.Parameter: CCOLElementLists[7].Elements.Add(ccolElement); break;
                         }
                     }
                 }
@@ -151,14 +125,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     l.SetMax();
                 }
 
-                Uitgangen = CCOLElementLists[0];
-                Ingangen = CCOLElementLists[1];
-                HulpElementen = CCOLElementLists[2];
-                GeheugenElementen = CCOLElementLists[3];
-                Timers = CCOLElementLists[4];
-                Counters = CCOLElementLists[5];
-                Schakelaars = CCOLElementLists[6];
-                Parameters = CCOLElementLists[7];
+                _uitgangen = CCOLElementLists[0];
+                _ingangen = CCOLElementLists[1];
+                _hulpElementen = CCOLElementLists[2];
+                _geheugenElementen = CCOLElementLists[3];
+                _timers = CCOLElementLists[4];
+                _counters = CCOLElementLists[5];
+                _schakelaars = CCOLElementLists[6];
+                _parameters = CCOLElementLists[7];
 
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c));
@@ -208,11 +182,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CopySourceIfNeeded("nalopen.h", sourcefilepath);
                 }
 
-                if(Directory.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                if(Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
                 {
                     try
                     {
-                        foreach(var f in Directory.EnumerateFiles(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                        foreach(var f in Directory.EnumerateFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
                         {
                             try
                             {
@@ -245,27 +219,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                                 copy = (c.RoBuGrover.SignaalGroepInstellingen.Count > 0);
                                                 break;
                                         }
-                                        if(copy)
-                                        {
-                                            if (!File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f))))
-                                            {
-                                                string[] _lines = new string[lines.Length - 1];
-                                                Array.Copy(lines, 1, _lines, 0, lines.Length - 1);
-                                                File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), _lines);
-                                            }
-                                        }
+
+                                        if (!copy || File.Exists(Path.Combine(sourcefilepath, Path.GetFileName(f)))) continue;
+
+                                        var fileLines = new string[lines.Length - 1];
+                                        Array.Copy(lines, 1, fileLines, 0, lines.Length - 1);
+                                        File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines);
                                     }
                                 }
                             }
                             catch
                             {
-
+                                // ignored
                             }
                         }
                     }
                     catch
                     {
-
+                        // ignored
                     }
                 }
 
@@ -276,15 +247,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private void CopySourceIfNeeded(string filename, string sourcefilepath)
         {
-            if (!File.Exists(Path.Combine(sourcefilepath, filename)) && File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
+            if (!File.Exists(Path.Combine(sourcefilepath, filename)) && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
             {
-                File.Copy(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
             }
         }
 
         public void LoadSettings()
         {
-            foreach(var v in _PieceGenerators)
+            foreach(var v in PieceGenerators)
             {
                 if (v.HasSettings())
                 {
@@ -293,7 +264,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (!v.SetSettings(set.Item2))
                         {
-                            System.Windows.MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
+                            MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
                             return;
                         }
                     }
@@ -301,7 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (!v.SetSettings(null))
                         {
-                            System.Windows.MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
+                            MessageBox.Show($"Error with {v.GetType().Name}.\nCould not load settings; code generation will be faulty.", "Error loading CCOL code generator settings.");
                             return;
                         }
                         v.SetSettings(null);
@@ -312,15 +283,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Check if any plugins provide code
             foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
             {
-                Type type = pl.Item2.GetType();
+                var type = pl.Item2.GetType();
                 var attr = (CCOLCodePieceGeneratorAttribute)Attribute.GetCustomAttribute(type, typeof(CCOLCodePieceGeneratorAttribute));
-                if (attr != null)
-                {
-                    var _pl = pl.Item2 as ICCOLCodePieceGenerator;
-                    _PieceGenerators.Add(_pl);
-                    if(_pl.HasSettings())
-                        _pl.SetSettings(null);
-                }
+
+                if (attr == null) continue;
+
+                var genPlugin = pl.Item2 as ICCOLCodePieceGenerator;
+
+                if (genPlugin == null) continue;
+
+                PieceGenerators.Add(genPlugin);
+                if(genPlugin.HasSettings()) genPlugin.SetSettings(null);
             }
         }
 
@@ -339,76 +312,74 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         /// <returns></returns>
         private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            int pad1 = data.DefineMaxWidth + $"{ts}#define  ".Length;
-            int pad2 = data.Elements.Count.ToString().Length;
+            var pad1 = data.DefineMaxWidth + $"{ts}#define  ".Length;
+            var pad2 = data.Elements.Count.ToString().Length;
+            var index = 0;
 
-            int index = 0;
-            int indexautom = 0;
-
-            foreach (CCOLElement elem in data.Elements)
+            foreach (var elem in data.Elements)
             {
-                if (elem.Dummy || (Regex.IsMatch(elem.Define, @"[A-Z]+MAX")))
+                if (elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
                     continue;
                 
                 sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{index}".PadLeft(pad2));
                 }
                 else
                 {
                     sb.Append($"({numberdefine} + ");
-                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.Append($"{index}".PadLeft(pad2));
                     sb.AppendLine(")");
                 }
                 ++index;
             }
-            indexautom = index;
+            var indexautom = index;
 
-            if (data.Elements.Count > 0 && data.Elements.Where(x => x.Dummy).Any())
+            if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#ifndef AUTOMAAT");
-                foreach (CCOLElement elem in data.Elements)
+                foreach (var elem in data.Elements)
                 {
-                    if (!elem.Dummy || (Regex.IsMatch(elem.Define, @"[A-Z]+MAX")))
+                    if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
                         continue;
 
                     sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                     if (string.IsNullOrWhiteSpace(numberdefine))
                     {
-                        sb.AppendLine($"{indexautom.ToString()}".PadLeft(pad2));
+                        sb.AppendLine($"{indexautom}".PadLeft(pad2));
                     }
                     else
                     {
                         sb.Append($"({numberdefine} + ");
-                        sb.Append($"{indexautom.ToString()}".PadLeft(pad2));
-                        sb.AppendLine($")");
+                        sb.Append($"{indexautom}".PadLeft(pad2));
+                        sb.AppendLine(")");
                     }
                     ++indexautom;
                 }
                 sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
-                    sb.AppendLine($"{indexautom.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{indexautom}".PadLeft(pad2));
                 }
                 else
                 {
                     sb.Append($"({numberdefine} + ");
-                    sb.Append($"{indexautom.ToString()}".PadLeft(pad2));
+                    sb.Append($"{indexautom}".PadLeft(pad2));
                     sb.AppendLine(")");
                 }
                 sb.AppendLine("#else");
                 sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{index}".PadLeft(pad2));
                 }
                 else
                 {
                     sb.Append($"({numberdefine} + ");
-                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.Append($"{index}".PadLeft(pad2));
                     sb.AppendLine(")");
                 }
                 sb.AppendLine("#endif");
@@ -418,12 +389,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    sb.AppendLine($"{index}".PadLeft(pad2));
                 }
                 else
                 {
                     sb.Append($"({numberdefine} + ");
-                    sb.Append($"{index.ToString()}".PadLeft(pad2));
+                    sb.Append($"{index}".PadLeft(pad2));
                     sb.AppendLine(")");
                 }
             }
@@ -453,7 +424,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && elem.Instelling.HasValue)
                     {
                         sb.Append($" {data.CCOLSetting}[{elem.Define}]".PadRight(pad3));
-                        sb.Append($" = {elem.Instelling.ToString()};".PadRight(pad4));
+                        sb.Append($" = {elem.Instelling};".PadRight(pad4));
                     }
                     if (!string.IsNullOrEmpty(data.CCOLTType) && elem.TType != CCOLElementTimeTypeEnum.None)
                     {
@@ -464,7 +435,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if (data.Elements.Count > 0 && data.Elements.Where(x => x.Dummy).Any())
+            if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#ifndef AUTOMAAT");
                 foreach (CCOLElement delem in data.Elements)
@@ -476,7 +447,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (!string.IsNullOrEmpty(data.CCOLSetting) && delem.Instelling.HasValue)
                     {
                         sb.Append($" {data.CCOLSetting}[{delem.Define}]".PadRight(pad3));
-                        sb.Append($" = {delem.Instelling.ToString()};".PadRight(pad4));
+                        sb.Append($" = {delem.Instelling};".PadRight(pad4));
                     }
                     if (!string.IsNullOrEmpty(data.CCOLTType) && delem.TType != CCOLElementTimeTypeEnum.None)
                     {
@@ -497,10 +468,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public CCOLGenerator()
         {
-            if (_PieceGenerators != null)
+            if (PieceGenerators != null)
                 throw new NotImplementedException();
 
-            _PieceGenerators = new List<ICCOLCodePieceGenerator>();
+            PieceGenerators = new List<ICCOLCodePieceGenerator>();
 
             Assembly ccolgen = typeof(CCOLGenerator).Assembly;
             foreach (Type type in ccolgen.GetTypes())
@@ -510,7 +481,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (attr != null)
                 {
                     var v = Activator.CreateInstance(type) as ICCOLCodePieceGenerator;
-                    _PieceGenerators.Add(v);
+                    PieceGenerators.Add(v);
                 }
             }
         }

@@ -115,7 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
             }
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Includes))
                 {
@@ -135,7 +135,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"static int fc;");
             sb.AppendLine();
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Top))
                 {
@@ -154,7 +154,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void KwcApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.KwcApplication))
                 {
@@ -176,7 +176,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.PreApplication))
                 {
@@ -197,7 +197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void KlokPerioden(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.KlokPerioden))
                 {
@@ -220,7 +220,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             // Code from funcionality code piece gens
-            foreach(var gen in _PieceGenerators)
+            foreach(var gen in PieceGenerators)
             {
                 if(gen.HasCode(CCOLRegCCodeTypeEnum.Aanvragen))
                 {
@@ -246,7 +246,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
                     
-                    foreach (var gen in _PieceGenerators)
+                    foreach (var gen in PieceGenerators)
                     {
                         if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen))
                         {
@@ -265,7 +265,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine("void Verlenggroen(void)");
                     sb.AppendLine("{");
                     
-                    foreach (var gen in _PieceGenerators)
+                    foreach (var gen in PieceGenerators)
                     {
                         if (gen.HasCode(CCOLRegCCodeTypeEnum.Verlenggroen))
                         {
@@ -293,7 +293,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{ts}register count fc;");
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Wachtgroen))
                 {
@@ -313,7 +313,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Meetkriterium))
                 {
@@ -336,7 +336,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}register count fc;");
 
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Meeverlengen))
                 {
@@ -357,7 +357,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Synchronisaties(void)");
             sb.AppendLine("{");
             
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.Synchronisaties))
                 {
@@ -382,14 +382,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}register count fc;");
 
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules))
                 {
                     sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules, ts));
                 }
             }
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules))
                 {
@@ -425,7 +425,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
             sb.AppendLine($"{ts}" + "}");
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandeling))
                 {
@@ -446,7 +446,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.FileVerwerking))
                 {
@@ -467,7 +467,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.DetectieStoring))
                 {
@@ -498,7 +498,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}init_realisation_timers();");
                 sb.AppendLine("");
             }
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.InitApplication))
                 {
@@ -567,7 +567,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PostApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.PostApplication))
                 {
@@ -588,7 +588,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.PreSystemApplication))
                 {
@@ -598,7 +598,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}pre_system_application();");
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.SystemApplication))
                 {
@@ -621,7 +621,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();
 
-            foreach (var gen in _PieceGenerators)
+            foreach (var gen in PieceGenerators)
             {
                 if (gen.HasCode(CCOLRegCCodeTypeEnum.PostSystemApplication))
                 {

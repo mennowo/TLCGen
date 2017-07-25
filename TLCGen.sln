@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{F5A30D6A-976F-4B53-9796-DAE1C5CAD5D5}"
 	ProjectSection(SolutionItems) = preProject
@@ -44,7 +44,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.SpecialsRotterdam", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.CCOL", "TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj", "{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.YATLCCLC", "TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.YATLCCLC.csproj", "{1687E431-D444-4D29-AB19-3688E47FB411}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.TLCCC", "TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.TLCCC.csproj", "{1687E431-D444-4D29-AB19-3688E47FB411}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Importers.TabC", "TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj", "{CD24CD31-98FA-4F63-913E-9D3FBBD998FB}"
 EndProject
