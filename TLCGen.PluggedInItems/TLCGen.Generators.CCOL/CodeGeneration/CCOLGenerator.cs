@@ -169,8 +169,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
+                CopySourceIfNeeded("ccolfunc.c", sourcefilepath);
+                CopySourceIfNeeded("ccolfunc.h", sourcefilepath);
+                CopySourceIfNeeded("detectie.c", sourcefilepath);
+                CopySourceIfNeeded("uitstuur.c", sourcefilepath);
+                CopySourceIfNeeded("uitstuur.h", sourcefilepath);
 
-                if(c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                if (c.Data.FixatieData.FixatieMogelijk)
+                {
+                    CopySourceIfNeeded("fixatie.c", sourcefilepath);
+                    CopySourceIfNeeded("fixatie.h", sourcefilepath);
+                }
+
+                if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
                 {
                     CopySourceIfNeeded("extra_func_ov.c", sourcefilepath);
                     CopySourceIfNeeded("extra_func_ov.h", sourcefilepath);
@@ -182,7 +193,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CopySourceIfNeeded("nalopen.h", sourcefilepath);
                 }
 
-                if(Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
+                if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
+                {
+                    CopySourceIfNeeded("syncfunc.c", sourcefilepath);
+                    CopySourceIfNeeded("syncvar.c", sourcefilepath);
+                    CopySourceIfNeeded("syncvar.h", sourcefilepath);
+                }
+
+                if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
+                {
+                    CopySourceIfNeeded("ov.c", sourcefilepath);
+                    CopySourceIfNeeded("ov.h", sourcefilepath);
+                }
+
+                if (Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFilesToCopy\\")))
                 {
                     try
                     {
@@ -247,7 +271,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private void CopySourceIfNeeded(string filename, string sourcefilepath)
         {
-            if (!File.Exists(Path.Combine(sourcefilepath, filename)) && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
+            if ((!File.Exists(Path.Combine(sourcefilepath, filename)) || CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources)
+                && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
             {
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
             }

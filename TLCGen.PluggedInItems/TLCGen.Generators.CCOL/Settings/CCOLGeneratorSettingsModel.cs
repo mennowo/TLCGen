@@ -21,8 +21,11 @@ namespace TLCGen.Generators.CCOL.Settings
         [XmlArrayItem(ElementName = "CodePieceGenerator")]
         public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings { get; set; }
 
+        public bool AlwaysOverwriteSources { get; set; }
+
         [XmlIgnore]
         public string TabSpace { get; set; }
+
         public string TabSpaceSerialized
         {
             get

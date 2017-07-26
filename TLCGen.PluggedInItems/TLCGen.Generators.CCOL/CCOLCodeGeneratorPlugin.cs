@@ -102,6 +102,16 @@ namespace TLCGen.Generators.CCOL
             }
 #endif
             _Generator.LoadSettings();
+
+            if (_alwaysOverwriteSourcesMenuItem == null)
+            {
+                _alwaysOverwriteSourcesMenuItem = new MenuItem
+                {
+                    Header = "Altijd overschrijven bronbestanden"
+                };
+            }
+            _alwaysOverwriteSourcesMenuItem.IsChecked =
+                CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
         }
 
         public void SaveSettings()
@@ -118,14 +128,42 @@ namespace TLCGen.Generators.CCOL
 
         #region ITLCGenMenuItem
 
+        private MenuItem _alwaysOverwriteSourcesMenuItem;
+        private MenuItem _pluginMenuItem;
+
         public MenuItem Menu
         {
             get
             {
-                MenuItem item = new MenuItem();
-                item.Header = "CCOL instellingen";
-                item.Command = ShowSettingsCommand;
-                return item;
+                if (_pluginMenuItem == null)
+                {
+                    _pluginMenuItem = new MenuItem
+                    {
+                        Header = "CCOL code generator"
+                    };
+                    var sitem1 = new MenuItem
+                    {
+                        Header = "CCOL code generator instellingen",
+                        Command = ShowSettingsCommand
+                    };
+                    if (_alwaysOverwriteSourcesMenuItem == null)
+                    {
+                        _alwaysOverwriteSourcesMenuItem = new MenuItem
+                        {
+                            Header = "Altijd overschrijven bronbestanden"
+                        };
+                    }
+                    _alwaysOverwriteSourcesMenuItem.Click += (o, e) =>
+                    {
+                        CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources =
+                            !CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+                        _alwaysOverwriteSourcesMenuItem.IsChecked =
+                            CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+                    };
+                    _pluginMenuItem.Items.Add(sitem1);
+                    _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
+                }
+                return _pluginMenuItem;
             }
         }
 
