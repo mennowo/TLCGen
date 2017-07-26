@@ -56,6 +56,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateDplC.cs" />
+    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateRegC.cs" />
+    <Compile Include="CodeGeneration\TLCCCGeneratorGenerateTabC.cs" />
     <Compile Include="CodeGeneration\HelperClasses\TLCCCElementCollector.cs" />
     <Compile Include="CodeGeneration\HelperClasses\TLCCCElementTimeTypeEnum.cs" />
     <Compile Include="CodeGeneration\HelperClasses\TLCCCElementTypeEnum.cs" />

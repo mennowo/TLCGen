@@ -9,7 +9,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
         private string GenerateSysH(ControllerModel controller)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("/* ALGEMENE APPLICATIEFILE */");
+            sb.AppendLine("/* GENREAL APPLICATIONFILE */");
             sb.AppendLine("/* ----------------------- */");
             sb.AppendLine();
             sb.Append(GenerateFileHeader(controller.Data, "sys.h"));
