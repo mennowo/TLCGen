@@ -85,6 +85,11 @@ namespace TLCGen.ViewModels
             _FasenLijstVM.SelectedModule = mvm;
         }
 
+        public void SetSelectedModuleFase(ModuleFaseCyclusViewModel mvm)
+        {
+            _FasenLijstVM.SelectedModuleFase = mvm;
+        }
+
         #endregion // Public Methods
 
         #region TLCGen Message Handling
