@@ -100,34 +100,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _schpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("sch");
             _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
 
-            if (settings != null)
-            {
-                FieldInfo[] fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-                foreach (var s in settings.Settings)
-                {
-                    string type = CCOLGeneratorSettingsProvider.Default.GetPrefix(s.Type);
+            if (settings == null) return true;
 
-                    foreach (var field in fields)
-                    {
-                        if (field.Name == "_" + type + s.Default)
-                        {
-                            field.SetValue(this, s.Setting == null ? s.Default : s.Setting);
-                        }
-                    }
-                }
+            var fields = this.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (var s in settings.Settings)
+            {
+                var type = CCOLGeneratorSettingsProvider.Default.GetPrefix(s.Type);
+
                 foreach (var field in fields)
                 {
-                    if(__fieldregex.IsMatch(field.Name) && string.IsNullOrEmpty((string)field.GetValue(this)))
+                    if (field.Name == "_" + type + s.Default)
                     {
+                        field.SetValue(this, s.Setting ?? s.Default);
+                    }
+                }
+            }
+            foreach (var field in fields)
+            {
+                if(__fieldregex.IsMatch(field.Name) && string.IsNullOrEmpty((string)field.GetValue(this)))
+                {
 #if DEBUG
                         System.Windows.MessageBox.Show("Setting not found: [" + this.GetType().Name + "] " + field.Name);
 #endif
-                        return false;
-                    }
+                    return false;
                 }
             }
 
             return true;
+        }
+
+        public virtual List<string> GetSourcesToCopy()
+        {
+            return null;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -464,6 +465,24 @@ namespace TLCGen.SpecialsRotterdam
                     return sb.ToString();
                 default:
                     return null;
+            }
+        }
+
+        public override List<string> GetSourcesToCopy()
+        {
+            return new List<string>
+            {
+                "afmroutines.c",
+                "afmroutines.h"
+            };
+        }
+
+        private void CopySourceIfNeeded(string filename, string sourcefilepath, bool alwaysoverwrite)
+        {
+            if ((!File.Exists(Path.Combine(sourcefilepath, filename)) || alwaysoverwrite)
+                && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
+            {
+                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
             }
         }
 

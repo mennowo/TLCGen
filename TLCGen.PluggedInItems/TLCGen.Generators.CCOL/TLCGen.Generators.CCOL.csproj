@@ -189,9 +189,15 @@
     <Content Include="SourceFilesToCopy\Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SourceFiles\ccolfunc.c" />
-    <Content Include="SourceFiles\ccolfunc.h" />
-    <Content Include="SourceFiles\detectie.c" />
+    <Content Include="SourceFiles\ccolfunc.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\ccolfunc.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\detectie.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\extra_func.c">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -204,21 +210,48 @@
     <Content Include="SourceFiles\extra_func_ov.h">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SourceFiles\fixatie.c" />
-    <Content Include="SourceFiles\fixatie.h" />
+    <Content Include="SourceFiles\fixatie.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\fixatie.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\nalopen.c">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SourceFiles\nalopen.h">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="SourceFiles\ov.c" />
-    <Content Include="SourceFiles\ov.h" />
-    <Content Include="SourceFiles\syncfunc.c" />
-    <Content Include="SourceFiles\syncvar.c" />
-    <Content Include="SourceFiles\syncvar.h" />
-    <Content Include="SourceFiles\uitstuur.c" />
-    <Content Include="SourceFiles\uitstuur.h" />
+    <Content Include="SourceFiles\ov.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\ov.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\rgvfunc.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\rgvvar.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\rgv_overslag.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\syncfunc.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\syncvar.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\syncvar.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\uitstuur.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\uitstuur.h">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SourceFiles\winmg.c">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

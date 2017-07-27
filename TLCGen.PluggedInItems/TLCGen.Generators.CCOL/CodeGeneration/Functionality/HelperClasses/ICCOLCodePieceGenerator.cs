@@ -21,5 +21,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);
         bool HasSettings();
         bool SetSettings(CCOLGeneratorClassWithSettingsModel settings);
+        List<string> GetSourcesToCopy();
     }
 }
