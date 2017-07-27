@@ -100,7 +100,7 @@ namespace TLCGen.ViewModels
 
         public ModuleFaseCyclusViewModel SelectedModuleFase
         {
-            get => _SelectedModuleFase;
+            get { return _SelectedModuleFase; }
             set
             {
                 _SelectedModuleFase = value;

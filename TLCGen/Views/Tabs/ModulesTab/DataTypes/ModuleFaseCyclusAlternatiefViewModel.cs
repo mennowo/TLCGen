@@ -17,7 +17,7 @@ namespace TLCGen.ViewModels
 
         public string FaseCyclus
         {
-            get => Alternatief.FaseCyclus;
+            get { return Alternatief.FaseCyclus; }
         }
 
         #endregion // Properties
