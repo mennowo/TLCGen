@@ -1151,7 +1151,8 @@ void AfkappenStartGroen(int fc, int iStartGr) {
          TO_max[k][fc]==GK && iStartGr<=0 ||
          TO_max[k][fc]==GKL && TGK_max[k][fc] >= iStartGr
          #else
-         TO_max[k][fc]<=GK && iStartGr<=0
+         TO_max[k][fc]<=GK && iStartGr<=0 ||
+		 TO_max[k][fc]==GKL	/* PS Gooit voedende richting er direct uit */  
          #endif
         ))
     {
@@ -1179,7 +1180,7 @@ void AfkappenMG(int fc, int iStartGr) {
     k = TO_pointer[fc][i];
     if (MG[k] &&
         (TO_max[k][fc]>= 0 && (TGL_max[k]>0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr||
-         TO_max[k][fc]==GK && iStartGr<=0)) {
+         TO_max[k][fc]==GK && iStartGr<=0) ||TO_max[k][fc]==GKL) {							/* TO_max[k][fc]==GKL toegevoegd */
       Z[k]|=OV_Z_BIT;
     }
   }
@@ -1470,20 +1471,22 @@ void OVAlternatieven(void) {
       for (ov = 0; ov < ovOVMAX; ov++) {
         if (iT_GBix[ov]>=0 && iT_GBix[ov]<TMMAX &&
             iH_OVix[ov]>=0 && iH_OVix[ov]<HEMAX) {
-          PAR[fc] |= (max_tar_ov(fc, iFC_OVix[ov], iT_GBix[ov], iH_OVix[ov], END) >= iPRM_ALTP[fc]) ? OV_PAR_BIT : 0;
+          PAR[fc] |= ((max_tar_ov(fc, iFC_OVix[ov], iT_GBix[ov], iH_OVix[ov], END) >= iPRM_ALTP[fc]) || 
+			          IH[iH_OVix[ov]] && R[iFC_OVix[ov]] && (TO_max[fc][iFC_OVix[ov]]==NG) && (iPrioriteitsOpties[ov] & poBijzonderRealiseren)) ? OV_PAR_BIT : 0;
           iLWAlt|=PAR[fc];
         }
       }
     }
   }
   OVPARCorrecties();
+    #ifdef OV_ADDFILE
+      OVAlternatieven_Add();
+    #endif
+
   if (iLWAlt) {
     for (fc=0; fc<FCMAX; fc++) { /* Resetten RR Bit 5 als PAR alsnog wordt opgezet door OV */
       if (PAR[fc] && R[fc] && !ERA[fc]) RR[fc] &= ~BIT5;
     }
-    #ifdef OV_ADDFILE
-      OVAlternatieven_Add();
-    #endif
     langstwachtende_alternatief();
     for (fc=0; fc<FCMAX; fc++) { /* Alternatieve toedeling ook zetten bij alternatieve realisatie */
       if (AR[fc]) PRML[ML][fc] |= ALTERNATIEF;
