@@ -29,6 +29,17 @@ namespace TLCGen.SpecialsRotterdam
             }
         }
 
+        public bool ToevoegenOVM
+        {
+            get { return _Specials.ToevoegenOVM; }
+            set
+            {
+                _Specials.ToevoegenOVM = value;
+                MessengerInstance.Send(new ControllerDataChangedMessage());
+                RaisePropertyChanged("ToevoegenOVM");
+            }
+        }
+
         public bool ToepassenAFM
         {
             get { return _Specials.ToepassenAFM; }
@@ -84,6 +95,11 @@ namespace TLCGen.SpecialsRotterdam
         #endregion // TLCGen Events
 
         #region Constructor
+
+        public SpecialsRotterdamViewModel()
+        {
+            
+        }
 
         public SpecialsRotterdamViewModel(IMessenger messenger = null) : base(messenger)
         {

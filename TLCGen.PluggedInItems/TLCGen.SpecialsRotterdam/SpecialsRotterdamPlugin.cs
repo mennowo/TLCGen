@@ -21,7 +21,7 @@ namespace TLCGen.SpecialsRotterdam
     [TLCGenPlugin(TLCGenPluginElems.PlugMessaging | 
                   TLCGenPluginElems.TabControl | 
                   TLCGenPluginElems.XMLNodeWriter)]
-    public class RotterdamSpecialsPlugin : CCOLCodePieceGeneratorBase, ITLCGenPlugMessaging, ITLCGenTabItem, ITLCGenXMLNodeWriter
+    public class SpecialsRotterdamPlugin : CCOLCodePieceGeneratorBase, ITLCGenPlugMessaging, ITLCGenTabItem, ITLCGenXMLNodeWriter
     { 
         #region Fields
 
@@ -192,6 +192,19 @@ namespace TLCGen.SpecialsRotterdam
             _FasenWithDummies = new List<string>();
             _MyElements = new List<CCOLElement>();
 
+            #region OVM
+
+            if (_MyModel.ToevoegenOVM)
+            {
+                foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto))
+                {
+                    _MyElements.Add(new CCOLElement($"ovmextragroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                    _MyElements.Add(new CCOLElement($"ovmmindergroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                }
+            }
+
+            #endregion // OVM
+
             #region AFM
 
             if (_MyModel.ToepassenAFM)
@@ -210,8 +223,8 @@ namespace TLCGen.SpecialsRotterdam
                                  fc2.Wachtgroen != NooitAltijdAanUitEnum.Nooit ||
                                  fc2.VasteAanvraag != NooitAltijdAanUitEnum.Nooit ||
                                  ((c.ModuleMolen.FasenModuleData.Any() &&
-                                   c.ModuleMolen.FasenModuleData.Where(x => x.FaseCyclus == fc2.Naam).Any() &&
-                                   c.ModuleMolen.FasenModuleData.Where(x => x.FaseCyclus == fc2.Naam).First().AlternatiefToestaan))))
+                                   c.ModuleMolen.FasenModuleData.Any(x => x.FaseCyclus == fc2.Naam) &&
+                                   c.ModuleMolen.FasenModuleData.First(x => x.FaseCyclus == fc2.Naam).AlternatiefToestaan))))
                             {
                                 error = true;
                                 MessageBox.Show($"Dummy fase {fc2.Naam} is niet juist als dummy geconfigureerd.\nControleer: nooit meeverlengen/wachtgroen/vaste aanvraag, en niet alternatief",
@@ -247,19 +260,19 @@ namespace TLCGen.SpecialsRotterdam
                         }
                     }
                 }
-                _MyElements.Add(new CCOLElement($"AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
-                _MyElements.Add(new CCOLElement($"AFMLeven", CCOLElementTypeEnum.Uitgang));
+                _MyElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang));
 
-                _MyElements.Add(new CCOLElement($"AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement($"VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement($"AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _MyElements.Add(new CCOLElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
+                _MyElements.Add(new CCOLElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
+                _MyElements.Add(new CCOLElement("AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
             }
 
             #endregion // AFM
@@ -268,11 +281,11 @@ namespace TLCGen.SpecialsRotterdam
 
             if(_MyModel.PrmLoggingTfbMax)
             {
-                _MyElements.Add(new CCOLElement($"tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("tfbfc", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("tfbmax", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("tfbtijd", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("tfbdat", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement("tfbjaar", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
             }
 
             #endregion // Logging TFB max
@@ -382,50 +395,65 @@ namespace TLCGen.SpecialsRotterdam
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.PostApplication:
-                    if (!_MyModel.ToepassenAFM)
+                    if (!_MyModel.ToepassenAFM && !_MyModel.ToevoegenOVM)
                         return "";
-                    sb.AppendLine($"{ts}/* AFM */");
-                    foreach (var fc in _FasenWithDummies)
+                    if (_MyModel.ToepassenAFM)
                     {
-                        sb.AppendLine($"{ts}TVG_temp[{_fcpf}{fc}] = TVG_max[{_fcpf}{fc}];");
-                    }
-                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven])");
-                    sb.AppendLine($"{ts}{{");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
-                    }
-                    sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
-                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Beschikbaar])");
-                    sb.AppendLine($"{ts}{ts}{{");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}9{fc}, verwerken_fcs);");
-                    }
-                    sb.AppendLine($"{ts}{ts}}}");
-                    sb.AppendLine();
-
-                    string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        foreach (var fi in c.FileIngrepen)
+                        sb.AppendLine($"{ts}/* AFM */");
+                        foreach (var fc in _FasenWithDummies)
                         {
-                            foreach(var _fc in fi.TeDoserenSignaalGroepen)
+                            sb.AppendLine($"{ts}TVG_temp[{_fcpf}{fc}] = TVG_max[{_fcpf}{fc}];");
+                        }
+                        sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven])");
+                        sb.AppendLine($"{ts}{{");
+                        foreach (var fc in _FasenWithDummies)
+                        {
+                            sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
+                        }
+                        sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
+                        sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Beschikbaar])");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        foreach (var fc in _FasenWithDummies)
+                        {
+                            sb.AppendLine(
+                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}9{fc}, verwerken_fcs);");
+                        }
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine();
+
+                        string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+                        foreach (var fc in _FasenWithDummies)
+                        {
+                            foreach (var fi in c.FileIngrepen)
                             {
-                                if(fc == _fc.FaseCyclus)
+                                foreach (var _fc in fi.TeDoserenSignaalGroepen)
                                 {
-                                   sb.AppendLine($"{ts}{ts}if ((TVG_max[{_fcpf}{fc}] > TVG_temp[{_fcpf}{fc}]) && !SCH[{_schpf}AFMExtraGroenBijFile] && IH[{_hpf}{_hfile}{fi.Naam}]) TVG_max[{_fcpf}{fc}] = TVG_temp[{_fcpf}{fc}];");
+                                    if (fc == _fc.FaseCyclus)
+                                    {
+                                        sb.AppendLine(
+                                            $"{ts}{ts}if ((TVG_max[{_fcpf}{fc}] > TVG_temp[{_fcpf}{fc}]) && !SCH[{_schpf}AFMExtraGroenBijFile] && IH[{_hpf}{_hfile}{fi.Naam}]) TVG_max[{_fcpf}{fc}] = TVG_temp[{_fcpf}{fc}];");
+                                    }
                                 }
                             }
                         }
-                    }
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
-                    }
+                        foreach (var fc in _FasenWithDummies)
+                        {
+                            sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
+                        }
 
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+                    if (_MyModel.ToevoegenOVM)
+                    {
+                        sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
+                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto))
+                        {
+                            sb.AppendLine($"{ts}TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
+                            sb.AppendLine($"{ts}TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
+                        }
+                        sb.AppendLine();
+                    }
                     return sb.ToString();
 
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
@@ -490,7 +518,7 @@ namespace TLCGen.SpecialsRotterdam
 
         #region Constructor
 
-        public RotterdamSpecialsPlugin() : base()
+        public SpecialsRotterdamPlugin() : base()
         {
             _SpecialsRotterdamTabVM = new SpecialsRotterdamViewModel();
         }
