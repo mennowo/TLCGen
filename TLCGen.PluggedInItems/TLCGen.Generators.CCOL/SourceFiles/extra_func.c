@@ -427,3 +427,28 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            // hulpelemen
         }
     }   
 }
+
+/* Functie om type meeaanvraag op straat instelbaar te maken */
+void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition)
+{
+    if(!extra_condition)
+        return;
+
+    switch (PRM[prm])
+    {
+    case 1:
+        if (A[j]) A[i] |= BIT4;
+        break;
+    case 2:
+        if (RA[j]) A[i] |= BIT4;
+        break;
+    case 3:
+        if (RA[j] && !K[j]) A[i] |= BIT4;
+        break;
+    case 4:
+        if (SG[j]) A[i] |= BIT4;
+        break;
+    default:
+        break;
+    }
+}

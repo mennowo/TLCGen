@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
+        <CheckBox Content="OVM code toevoegen" IsChecked="{Binding Path=ToevoegenOVM}" Margin="5" />
         <CheckBox Content="AFM code toevoegen" IsChecked="{Binding Path=ToepassenAFM}" Margin="5" />
         <CheckBox Content="Toevoegen logging max. TFB in parameters" IsChecked="{Binding Path=PrmLoggingTfbMax}" Margin="5" />
     </StackPanel>

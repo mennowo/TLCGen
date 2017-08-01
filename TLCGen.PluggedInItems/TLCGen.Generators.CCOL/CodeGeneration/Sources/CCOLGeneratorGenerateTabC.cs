@@ -557,7 +557,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad1 = "D_code[] ".Length + defmax;
             int pad2 = "= \"\"; ".Length + namemax;
             int pad3 = "TDB_max[] ".Length + defmax;
-            int pad4 = "= ; ".Length + Math.Max(dbmax == null ? 0 : (int)dbmax, bgmax == null ? 0 : (int)bgmax);
+            int pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
             int pad5 = "TDH_max[] ".Length + defmax;
             int pad6 = pad1 + pad2;
 
@@ -570,10 +570,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             /* Dummies */
             var dummydets = alldets.Where(x => x.Dummy);
-            if (dummydets.Any())
+            var detectorModels = dummydets as DetectorModel[] ?? dummydets.ToArray();
+            if (detectorModels.Any())
             {
                 dbmax = dhmax = ogmax = bgmax = tflmax = cflmax = defmax = namemax = 0;
-                foreach (var dm in dummydets)
+                foreach (var dm in detectorModels)
                 {
                     if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
                     if (dm.Naam?.Length > namemax) namemax = dm.Naam.Length;
@@ -593,12 +594,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 pad1 = "D_code[] ".Length + defmax;
                 pad2 = "= \"\"; ".Length + namemax;
                 pad3 = "TDB_max[] ".Length + defmax;
-                pad4 = "= ; ".Length + Math.Max(dbmax == null ? 0 : (int)dbmax, bgmax == null ? 0 : (int)bgmax);
+                pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
                 pad5 = "TDH_max[] ".Length + defmax;
                 pad6 = pad1 + pad2;
 
                 sb.AppendLine("#ifndef AUTOMAAT");
-                foreach(var dm in dummydets)
+                foreach(var dm in detectorModels)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }

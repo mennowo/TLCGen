@@ -21,9 +21,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for ConflictMatrixView.xaml
     /// </summary>
-    public partial class SynchronisatiesTab : UserControl
+    public partial class InterSignaalGroepTab : UserControl
     {
-        public SynchronisatiesTab()
+        public InterSignaalGroepTab()
         {
             InitializeComponent();
         }

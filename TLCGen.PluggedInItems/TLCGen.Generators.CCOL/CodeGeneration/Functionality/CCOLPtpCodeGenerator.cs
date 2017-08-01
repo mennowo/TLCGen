@@ -181,16 +181,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyBitmapOutputs;
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Includes:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.PreSystemApplication:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
-                    return true;
+                    return 1;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

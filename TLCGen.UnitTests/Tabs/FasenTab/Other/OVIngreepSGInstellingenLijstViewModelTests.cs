@@ -17,22 +17,21 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.Other
         {
             var model = new ControllerModel();
 
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "01" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "02" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "03" });
-            model.Fasen.Add(new FaseCyclusModel() { Naam = "04" });
-            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "01" });
-            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "02" });
-            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "03" });
-            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel() { FaseCyclus = "04" });
-            model.InterSignaalGroep.Gelijkstarten.Add(new GelijkstartModel() { FaseVan = "02", FaseNaar = "03" });
-            var vm = new OVSignaalGroepInstellingenTabViewModel();
-            vm.Controller = model;
+            model.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel { FaseCyclus = "01" });
+            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel { FaseCyclus = "02" });
+            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel { FaseCyclus = "03" });
+            model.OVData.OVIngreepSignaalGroepParameters.Add(new OVIngreepSignaalGroepParametersModel { FaseCyclus = "04" });
+            model.InterSignaalGroep.Gelijkstarten.Add(new GelijkstartModel { FaseVan = "02", FaseNaar = "03" });
+            var vm = new OVSignaalGroepInstellingenTabViewModel { Controller = model };
 
-            vm.OVIngreepSGParameters.Where(x => x.FaseCyclus == "02").First().MinimumGroentijdConflictOVRealisatie = 55;
-            vm.OnOVIngreepSignaalGroepParametersChanged(new Messaging.Messages.OVIngreepSignaalGroepParametersChangedMessage(vm.OVIngreepSGParameters.Where(x => x.FaseCyclus == "02").First().Parameters));
+            vm.OVIngreepSGParameters.First(x => x.FaseCyclus == "02").MinimumGroentijdConflictOVRealisatie = 55;
+            vm.OnOVIngreepSignaalGroepParametersChanged(new Messaging.Messages.OVIngreepSignaalGroepParametersChangedMessage(vm.OVIngreepSGParameters.First(x => x.FaseCyclus == "02").Parameters));
             
-            Assert.AreEqual(model.OVData.OVIngreepSignaalGroepParameters.Where(x => x.FaseCyclus == "03").First().MinimumGroentijdConflictOVRealisatie, 55);
+            Assert.AreEqual(model.OVData.OVIngreepSignaalGroepParameters.First(x => x.FaseCyclus == "03").MinimumGroentijdConflictOVRealisatie, 55);
         }
     }
 }

@@ -49,14 +49,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Meeverlengen:
-                    return true;
+                    return 1;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

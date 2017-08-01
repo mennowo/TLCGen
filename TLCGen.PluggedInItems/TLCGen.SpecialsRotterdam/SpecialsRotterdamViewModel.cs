@@ -29,6 +29,17 @@ namespace TLCGen.SpecialsRotterdam
             }
         }
 
+        public bool ToevoegenOVM
+        {
+            get { return _Specials.ToevoegenOVM; }
+            set
+            {
+                _Specials.ToevoegenOVM = value;
+                MessengerInstance.Send(new ControllerDataChangedMessage());
+                RaisePropertyChanged<object>("ToevoegenOVM", null, null, true);
+            }
+        }
+
         public bool ToepassenAFM
         {
             get { return _Specials.ToepassenAFM; }
@@ -36,7 +47,7 @@ namespace TLCGen.SpecialsRotterdam
             {
                 _Specials.ToepassenAFM = value;
                 MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged("ToepassenAFM");
+                RaisePropertyChanged<object>("ToepassenAFM", null, null, true);
             }
         }
 
@@ -47,7 +58,7 @@ namespace TLCGen.SpecialsRotterdam
             {
                 _Specials.PrmLoggingTfbMax = value;
                 MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged("PrmLoggingTfbMax");
+                RaisePropertyChanged<object>("PrmLoggingTfbMax", null, null, true);
             }
         }
 
@@ -84,6 +95,11 @@ namespace TLCGen.SpecialsRotterdam
         #endregion // TLCGen Events
 
         #region Constructor
+
+        public SpecialsRotterdamViewModel()
+        {
+            
+        }
 
         public SpecialsRotterdamViewModel(IMessenger messenger = null) : base(messenger)
         {

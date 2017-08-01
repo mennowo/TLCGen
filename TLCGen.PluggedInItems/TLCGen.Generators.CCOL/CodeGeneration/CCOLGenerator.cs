@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -46,6 +47,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         #region Properties
 
         public static List<ICCOLCodePieceGenerator> PieceGenerators { get; private set; }
+        public static Dictionary<CCOLRegCCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>> OrderedPieceGenerators { get; private set; }
 
         #endregion // Properties
 
@@ -339,6 +341,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 PieceGenerators.Add(genPlugin);
                 if(genPlugin.HasSettings()) genPlugin.SetSettings(null);
+
+                var codetypes = Enum.GetValues(typeof(CCOLRegCCodeTypeEnum));
+                foreach (var codetype in codetypes)
+                {
+                    var index = genPlugin.HasCode((CCOLRegCCodeTypeEnum)codetype);
+                    if (index > 0)
+                    {
+                        OrderedPieceGenerators[(CCOLRegCCodeTypeEnum)codetype].Add(index, genPlugin);
+                    }
+                }
             }
         }
 
@@ -517,6 +529,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 throw new NotImplementedException();
 
             PieceGenerators = new List<ICCOLCodePieceGenerator>();
+            OrderedPieceGenerators = new Dictionary<CCOLRegCCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>>();
+            var codetypes = Enum.GetValues(typeof(CCOLRegCCodeTypeEnum));
+            foreach (var type in codetypes)
+            {
+                OrderedPieceGenerators.Add((CCOLRegCCodeTypeEnum)type, new SortedDictionary<int, ICCOLCodePieceGenerator>());
+            }
 
             Assembly ccolgen = typeof(CCOLGenerator).Assembly;
             foreach (Type type in ccolgen.GetTypes())
@@ -527,6 +545,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var v = Activator.CreateInstance(type) as ICCOLCodePieceGenerator;
                     PieceGenerators.Add(v);
+                    foreach (var codetype in codetypes)
+                    {
+                        var index = v.HasCode((CCOLRegCCodeTypeEnum) codetype);
+                        if (index > 0)
+                        {
+                            try
+                            {
+                                OrderedPieceGenerators[(CCOLRegCCodeTypeEnum) codetype].Add(index, v);
+                            }
+                            catch
+                            {
+                                MessageBox.Show($"Error while loading code generator {v.GetType().FullName}.\n" +
+                                                $"Is the index number for {codetype} unique?",
+                                    "Error loading code generator");
+                            }
+                        }
+                    }
                 }
             }
         }
