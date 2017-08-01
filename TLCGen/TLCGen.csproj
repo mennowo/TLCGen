@@ -54,6 +54,12 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>TLCGenStrongNameKey.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>Libs\GongSolutions.WPF.DragDrop.dll</HintPath>
@@ -688,6 +694,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="TLCGenStrongNameKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -761,6 +768,10 @@
       <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
       <Name>TLCGen.Importers.TabC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsDenHaag\TLCGen.SpecialsDenHaag.csproj">
+      <Project>{b1ab1f07-6cc3-4703-80fe-a3d35c7f6d9a}</Project>
+      <Name>TLCGen.SpecialsDenHaag</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj">
       <Project>{14c1bbc3-eda1-4d16-897d-43138abe02da}</Project>
       <Name>TLCGen.SpecialsRotterdam</Name>
@@ -810,7 +821,8 @@
 move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"</PostBuildEvent>
+move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

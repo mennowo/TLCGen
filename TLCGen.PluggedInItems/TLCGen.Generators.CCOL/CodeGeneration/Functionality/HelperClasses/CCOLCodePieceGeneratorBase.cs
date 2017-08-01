@@ -72,9 +72,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             throw new NotImplementedException();
         }
 
-        public virtual bool HasCode(CCOLRegCCodeTypeEnum type)
+        public virtual int HasCode(CCOLRegCCodeTypeEnum type)
         {
-            return false;
+            return 0;
         }
 
         public virtual string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)

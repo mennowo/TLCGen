@@ -36,7 +36,7 @@ namespace TLCGen.SpecialsRotterdam
             {
                 _Specials.ToevoegenOVM = value;
                 MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged("ToevoegenOVM");
+                RaisePropertyChanged<object>("ToevoegenOVM", null, null, true);
             }
         }
 
@@ -47,7 +47,7 @@ namespace TLCGen.SpecialsRotterdam
             {
                 _Specials.ToepassenAFM = value;
                 MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged("ToepassenAFM");
+                RaisePropertyChanged<object>("ToepassenAFM", null, null, true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace TLCGen.SpecialsRotterdam
             {
                 _Specials.PrmLoggingTfbMax = value;
                 MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged("PrmLoggingTfbMax");
+                RaisePropertyChanged<object>("PrmLoggingTfbMax", null, null, true);
             }
         }
 

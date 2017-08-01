@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTypeEnum.Parameter));
 
                     // For prmaltp and schaltg: combine if the signal group is part of a simultaneous synchronisation
-                    var gs = gelijkstarttuples.Where(x => x.Item1 == fc.FaseCyclus).First();
+                    var gs = gelijkstarttuples.First(x => x.Item1 == fc.FaseCyclus);
 
                     if (gs.Item2.Count > 1)
                     {
@@ -95,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _MyElements.Add(
                                 new CCOLElement(
                                     namealtg,
-                                    fc.AlternatiefToestaan == true ? 1 : 0,
+                                    fc.AlternatiefToestaan ? 1 : 0,
                                     CCOLElementTimeTypeEnum.SCH_type,
                                     CCOLElementTypeEnum.Schakelaar));
                         }
@@ -111,7 +112,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _MyElements.Add(
                             new CCOLElement(
                                 $"{_schaltg}{fc.FaseCyclus}",
-                                fc.AlternatiefToestaan == true ? 1 : 0,
+                                fc.AlternatiefToestaan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
                                 CCOLElementTypeEnum.Schakelaar));
                     }
@@ -130,14 +131,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
-                    return true;
+                    return 1;
                 default:
-                    return false;
+                    return 0;
             }
         }
 
@@ -253,35 +254,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #warning Is this correct and desired? Need to look (also?) at other timers?
 #warning This would be better moved to the naloop generator; for that though, we need to be able to specify order in generated code elems. TODO!
                                 string tnl = "";
-                                if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie).Any())
+                                if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
                                 {
                                     tnl = _tnlfgd;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie))
                                 {
                                     tnl = _tnlsgd;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie))
                                 {
                                     tnl = _tnlegd;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie))
                                 {
                                     tnl = _tnlcvd;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.VastGroen).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
                                 {
                                     tnl = _tnlfg;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.StartGroen).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroen))
                                 {
                                     tnl = _tnlsg;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeGroen).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroen))
                                 {
                                     tnl = _tnleg;
                                 }
-                                else if (nl.Tijden.Where(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen).Any())
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen))
                                 {
                                     tnl = _tnlcv;
                                 }
@@ -314,9 +315,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         yes = false;
-                        foreach (FaseCyclusModel fcm in c.Fasen)
+                        foreach (var fcm in c.Fasen)
                         {
-                            if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                             {
                                 {
                                     var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
@@ -338,12 +339,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
-                        foreach (var gen in CCOLGenerator.PieceGenerators)
+                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Alternatieven])
                         {
-                            if (gen.HasCode(CCOLRegCCodeTypeEnum.Alternatieven))
-                            {
-                                sb.Append(gen.GetCode(c, CCOLRegCCodeTypeEnum.Alternatieven, ts));
-                            }
+                            sb.Append(gen.Value.GetCode(c, CCOLRegCCodeTypeEnum.Alternatieven, ts));
+                            sb.AppendLine();
                         }
 
                         sb.AppendLine($"{ts}Alternatief_Add();");

@@ -80,15 +80,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Meetkriterium:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    return true;
+                    return 4;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

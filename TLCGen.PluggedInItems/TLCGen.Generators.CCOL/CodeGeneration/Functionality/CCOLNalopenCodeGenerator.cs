@@ -106,17 +106,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.Maxgroen:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
-                    return true;
+                    return 2;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

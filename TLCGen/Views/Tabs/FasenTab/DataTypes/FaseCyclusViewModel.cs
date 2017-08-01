@@ -123,11 +123,12 @@ namespace TLCGen.ViewModels
                 if (value >= 0 && value >= TGG_min)
                 {
                     _FaseCyclus.TGG = value;
-                    if (TFG < value)
-                        TFG = value;
                 }
-                else if (value >= 0)
+                else
+                {
                     _FaseCyclus.TGG = TGG_min;
+                }
+                if (TFG < _FaseCyclus.TGG) TFG = _FaseCyclus.TGG;
                 RaisePropertyChanged<object>("TGG", broadcast: true);
             }
         }
@@ -156,8 +157,8 @@ namespace TLCGen.ViewModels
                 {
                     _FaseCyclus.TRG = value;
                 }
-                else if (value >= 0)
-                    _FaseCyclus.TGG = TRG_min;
+                else
+                    _FaseCyclus.TRG = TRG_min;
                 RaisePropertyChanged<object>("TRG", broadcast: true);
             }
         }
@@ -186,8 +187,8 @@ namespace TLCGen.ViewModels
                 {
                     _FaseCyclus.TGL = value;
                 }
-                else if (value >= 0)
-                    _FaseCyclus.TGG = TGL_min;
+                else
+                    _FaseCyclus.TGL = TGL_min;
                 RaisePropertyChanged<object>("TGL", broadcast: true);
             }
         }
@@ -431,6 +432,11 @@ namespace TLCGen.ViewModels
                 else if (value == MeeVerlengenTypeEnum.Voetganger.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.Voetganger;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("MeeverlengenTypeString",
+                        "MeeverlengenTypeString was set to value that is not defined for MeeverlengenType");
                 }
 
                 RaisePropertyChanged("MeeverlengenTypeString");

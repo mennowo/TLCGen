@@ -301,19 +301,24 @@ namespace TLCGen.SpecialsRotterdam
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
+                    return 5;
                 case CCOLRegCCodeTypeEnum.InitApplication:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.PreApplication:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.Alternatieven:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.PostApplication:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
-                    return true;
+                    return 2;
                 default:
-                    return false;
+                    return 0;
             }
         }
 
@@ -503,15 +508,6 @@ namespace TLCGen.SpecialsRotterdam
                 "afmroutines.c",
                 "afmroutines.h"
             };
-        }
-
-        private void CopySourceIfNeeded(string filename, string sourcefilepath, bool alwaysoverwrite)
-        {
-            if ((!File.Exists(Path.Combine(sourcefilepath, filename)) || alwaysoverwrite)
-                && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
-            {
-                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
-            }
         }
 
         #endregion // CCOLCodePieceGenerator

@@ -195,17 +195,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _myBitmapOutputs;
         }
 
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.Maxgroen:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
+                    return 2;
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return true;
+                    return 5;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

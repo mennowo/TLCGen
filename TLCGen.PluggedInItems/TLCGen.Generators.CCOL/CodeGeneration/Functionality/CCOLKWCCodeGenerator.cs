@@ -11,16 +11,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class CCOLKWCCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        public override bool HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLRegCCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Includes:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.KwcApplication:
+                    return 1;
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return true;
+                    return 2;
                 default:
-                    return false;
+                    return 0;
             }
         }
 

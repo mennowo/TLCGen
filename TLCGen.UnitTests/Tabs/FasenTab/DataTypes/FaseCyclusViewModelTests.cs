@@ -1,8 +1,10 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿using System.Collections.Generic;
+using GalaSoft.MvvmLight.Messaging;
 using NSubstitute;
 using NUnit.Framework;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 using TLCGen.ViewModels;
 
@@ -30,17 +32,340 @@ namespace TLCGen.UnitTests.Tabs.FasenTab.DataTypes
         }
 
         [Test]
+        public void FaseCyclusViewModel_NameChanged_DetectorNamesAlsoChanged()
+        {
+            var messengermock = FakesCreator.CreateMessenger();
+            Messenger.OverrideDefault(messengermock);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel
+            {
+                Naam = "01",
+                Detectoren = new List<DetectorModel>
+                {
+                    new DetectorModel { Naam = "01_1", VissimNaam = "011"},
+                    new DetectorModel { Naam = "01_2", VissimNaam = "012"}
+                }
+            });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.Naam = "05";
+
+            Assert.AreEqual("05_1", vm.FaseCyclus.Detectoren[0].Naam);
+            Assert.AreEqual("051", vm.FaseCyclus.Detectoren[0].VissimNaam);
+            Assert.AreEqual("05_2", vm.FaseCyclus.Detectoren[1].Naam);
+            Assert.AreEqual("052", vm.FaseCyclus.Detectoren[1].VissimNaam);
+
+        }
+
+        [Test]
         public void FaseCyclusViewModel_TypeChanged_SetDefaultsOnModelCalled()
         {
             var defaultsprovidermock = FakesCreator.CreateDefaultsProvider();
             DefaultsProvider.OverrideDefault(defaultsprovidermock);
+
             var model = new ControllerModel();
             model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = Models.Enumerations.FaseTypeEnum.Auto });
             var vm = new FaseCyclusViewModel(model.Fasen[0])
             {
                 Type = Models.Enumerations.FaseTypeEnum.Fiets
             };
+
             defaultsprovidermock.Received().SetDefaultsOnModel(Arg.Is<FaseCyclusModel>(x => x.Naam == "01"), Arg.Is<string>("Fiets"));
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TypeChangedToVoetganger_MeeverlengenTypeSetToDefault()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "31", Type = FaseTypeEnum.Voetganger, MeeverlengenType = MeeVerlengenTypeEnum.Voetganger });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.Type = FaseTypeEnum.Fiets;
+            
+            Assert.AreEqual(MeeVerlengenTypeEnum.Default, vm.MeeverlengenType);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TFGSetToLowerThanZero_ValueSetToTGG()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TFG = -10;
+
+            Assert.AreEqual(40, vm.TFG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TFGSetToSmallerThanTGG_ValueSetToTGG()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TFG = 30;
+
+            Assert.AreEqual(40, vm.TFG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGSetToSmallerThanZero_ValueSetToTGGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG = 20;
+            
+            Assert.AreEqual(30, vm.TGG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGSetToSmallerThanTGGmin_ValuesSetToTGGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG = 20;
+            
+            Assert.AreEqual(30, vm.TGG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGSetToGreaterThanTFG_TFGSetToTGG()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG = 60;
+
+            Assert.AreEqual(60, vm.TFG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGminSetToLowerThanZero_ValueNotChanged()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG_min = -10;
+
+            Assert.AreEqual(30, vm.TGG_min);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGminSetToGreaterThanTGG_TGGSetToTGGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG_min = 45;
+
+            Assert.AreEqual(45, vm.TGG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGGminSetToGreaterThanTGGandTFG_TGGandTFGSetToTGGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TFG = 50, TGG = 40, TGG_min = 30 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGG_min = 60;
+
+            Assert.AreEqual(60, vm.TGG);
+            Assert.AreEqual(60, vm.TFG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TRGminSetToLowerThanZero_ValueSetToTRGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 20, TRG_min = 10});
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TRG = -10;
+
+            Assert.AreEqual(10, vm.TRG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TRGminSetToLowerThanTRGmin_ValueSetToTRGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 20, TRG_min = 10 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TRG = 5;
+
+            Assert.AreEqual(10, vm.TRG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TRGminSetToLowerThanZero_ValueNotChanged()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 40, TRG_min = 20 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TRG_min = -10;
+
+            Assert.AreEqual(20, vm.TRG_min);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TRGminSetToGreaterThanTRG_TRGSetToTRGmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TRG = 40, TRG_min = 20 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TRG_min = 50;
+
+            Assert.AreEqual(50, vm.TRG);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGLminSetToLowerThanZero_ValueSetToTGLmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 20, TGL_min = 10 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGL = -10;
+
+            Assert.AreEqual(10, vm.TGL);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGLminSetToLowerThanTGLmin_ValueSetToTGLmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 20, TGL_min = 10 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGL = 5;
+
+            Assert.AreEqual(10, vm.TGL);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGLminSetToLowerThanZero_ValueNotChanged()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 40, TGL_min = 20 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGL_min = -10;
+
+            Assert.AreEqual(20, vm.TGL_min);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_TGLminSetToGreaterThanTGL_TGLSetToTGLmin()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, TGL = 40, TGL_min = 20 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.TGL_min = 50;
+
+            Assert.AreEqual(50, vm.TGL);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_KopmaxSetToLowerThanZero_ValueNotChanged()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, Kopmax = 80});
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.Kopmax = -10;
+
+            Assert.AreEqual(80, vm.Kopmax);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_AantalRijkstrokenSetToLowerThanZero_ValueNotChanged()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.AantalRijstroken = -1;
+
+            Assert.AreEqual(3, vm.AantalRijstroken);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_HiaatKoplusBijDetectieStoringSetToTrue_VervangendHiaatKoplusSetToDefault()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.HiaatKoplusBijDetectieStoring = true;
+
+            Assert.AreEqual(25, vm.VervangendHiaatKoplus);
+        }
+
+        [Test]
+        public void FaseCyclusViewModel_PercentageGroenBijDetectieStoringSetToTrue_PercentageGroenBijStoringSetToDefault()
+        {
+            var defaultsproviderstub = FakesCreator.CreateDefaultsProvider();
+            DefaultsProvider.OverrideDefault(defaultsproviderstub);
+
+            var model = new ControllerModel();
+            model.Fasen.Add(new FaseCyclusModel() { Naam = "01", Type = FaseTypeEnum.Auto, AantalRijstroken = 3 });
+            var vm = new FaseCyclusViewModel(model.Fasen[0]);
+            vm.PercentageGroenBijDetectieStoring = true;
+
+            Assert.AreEqual(65, vm.PercentageGroenBijStoring);
         }
     }
 }
