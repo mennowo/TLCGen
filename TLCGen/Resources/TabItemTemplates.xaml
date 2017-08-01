@@ -9,7 +9,7 @@
         <vw:FasenTab />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SynchronisatiesTabViewModel}">
-        <vw:SynchronisatiesTab />
+        <vw:InterSignaalGroepTab />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ModulesTabViewModel}">
         <vw:ModulesTab />

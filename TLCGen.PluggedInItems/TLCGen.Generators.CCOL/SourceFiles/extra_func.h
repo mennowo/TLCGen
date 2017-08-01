@@ -29,6 +29,8 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            // hulpelemen
     count fcvg[][MPERIODMAX],        // pointer naar array met mg parameter index nummers
     int nogtedoseren[]);     // pointer naar array met nog te doseren waarden
 
+void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
+
 extern mulv FC_type[];
 
 #endif

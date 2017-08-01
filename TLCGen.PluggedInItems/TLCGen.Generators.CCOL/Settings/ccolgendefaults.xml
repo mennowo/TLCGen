@@ -107,6 +107,12 @@
             <Type>HulpElement</Type>
             <Description>Hulpelement onthouden detector melding meeaanvraag</Description>
           </Setting>
+          <Setting>
+            <Default>typema</Default>
+            <Setting>typema</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter om type meeaanvraag op straat in te kunnen stellen</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

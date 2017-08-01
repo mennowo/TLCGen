@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public string FaseVan { get; set; }
         public string FaseNaar { get; set; }
         public MeeaanvraagTypeEnum Type { get; set; }
+        public bool TypeInstelbaarOpStraat { get; set; }
         public bool DetectieAfhankelijk { get; set; }
 
         [XmlArrayItem(ElementName = "MeeaanvraagDetector")]

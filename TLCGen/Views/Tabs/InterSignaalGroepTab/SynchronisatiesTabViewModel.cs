@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
                 _DisplayType = value;
                 if (ConflictMatrix != null)
                 {
-                    foreach (SynchronisatieViewModel cvm in ConflictMatrix)
+                    foreach (var cvm in ConflictMatrix)
                     {
                         cvm.DisplayType = value;
                     }

@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private MeeaanvraagModel _Meeaanvraag;
+        private readonly MeeaanvraagModel _Meeaanvraag;
         private ObservableCollection<MeeaanvraagDetectorModel> _Detectoren;
         private bool _DetectieAfhankelijkPossible;
 
@@ -36,6 +36,16 @@ namespace TLCGen.ViewModels
                     _Meeaanvraag.Type = value;
                     RaisePropertyChanged<object>("Type", broadcast: true);
                 }
+            }
+        }
+
+        public bool TypeInstelbaarOpStraat
+        {
+            get { return _Meeaanvraag.TypeInstelbaarOpStraat; }
+            set
+            {
+                _Meeaanvraag.TypeInstelbaarOpStraat = value;
+                RaisePropertyChanged<object>("TypeInstelbaarOpStraat", broadcast: true);
             }
         }
 
