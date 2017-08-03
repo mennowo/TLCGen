@@ -14,8 +14,8 @@ using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.ModulesTab)]
-    public class ModulesFasenInstellingenTabViewModel : TLCGenTabItemViewModel
+    [TLCGenTabItem(index: 2, type: TabItemTypeEnum.ModulesTab)]
+    public class ModulesLangstwachtendeInstellingenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
@@ -32,60 +32,38 @@ namespace TLCGen.ViewModels
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
+            get => _SelectedFaseCyclus;
             set
             {
                 _SelectedFaseCyclus = value;
                 RaisePropertyChanged("SelectedFaseCyclus");
             }
         }
-        
-        public bool HasAlternatieven
-        {
-            get { return _Controller.ModuleMolen.LangstWachtendeAlternatief; }
-        }
 
         #endregion // Properties
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Fasen";
-            }
-        }
+        public override string DisplayName => "Langstw.alt.";
 
         public override bool IsEnabled
         {
-            get { return true; }
+            get { return _Controller.ModuleMolen.LangstWachtendeAlternatief; }
             set { }
         }
 
         public override void OnSelected()
         {
-            RaisePropertyChanged("HasAlternatieven");
         }
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
             set
             {
                 base.Controller = value;
-                if(base.Controller != null)
-                {
-                    Fasen = new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData);
-                }
-                else
-                {
-                    Fasen = null;
-                }
+                Fasen = base.Controller != null ? new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData) : null;
                 RaisePropertyChanged("Fasen");
             }
         }
@@ -113,10 +91,11 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModulesFasenInstellingenTabViewModel() : base()
+        public ModulesLangstwachtendeInstellingenTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+            MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(x => RaisePropertyChanged(string.Empty)));
         }
 
         #endregion // Constructor

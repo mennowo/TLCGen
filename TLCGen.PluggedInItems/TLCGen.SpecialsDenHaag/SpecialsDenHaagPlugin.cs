@@ -56,7 +56,7 @@ namespace TLCGen.SpecialsRotterdam
                     {
                         _SpecialsDenHaagTabVM.AlternatievenPerBlok.Add(
                             new FaseCyclusAlternatiefPerBlokViewModel(
-                                new FaseCyclusAlternatiefPerBlokModel {FaseCyclus = fc.Naam}));
+                                new FaseCyclusAlternatiefPerBlokModel {FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 15 }));
                     }
                 }
             }
@@ -205,7 +205,11 @@ namespace TLCGen.SpecialsRotterdam
             {
                 foreach (var fc in Controller.Fasen)
                 {
-                    _MyElements.Add(new CCOLElement($"altb{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                    var plfc = _MyModel.AlternatievenPerBlok.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                    if (plfc != null)
+                    {
+                        _MyElements.Add(new CCOLElement($"altb{fc.Naam}", plfc.BitWiseBlokAlternatief, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    }
                 }
             }
         }

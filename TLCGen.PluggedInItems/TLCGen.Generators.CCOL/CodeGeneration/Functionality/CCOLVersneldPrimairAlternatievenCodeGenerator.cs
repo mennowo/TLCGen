@@ -46,9 +46,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         fc.ModulenVooruit,
                         CCOLElementTimeTypeEnum.None,
                         CCOLElementTypeEnum.Parameter));
+            }
 
-                // Alternatieven
-                if (c.ModuleMolen.LangstWachtendeAlternatief)
+
+
+            // Alternatieven
+            if (c.ModuleMolen.LangstWachtendeAlternatief)
+            {
+                foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
                     _MyElements.Add(
                         new CCOLElement(
@@ -62,26 +67,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     if (gs.Item2.Count > 1)
                     {
-                        bool containsaltp = false;
-                        bool containsaltg = false;
-                        string namealtp = _prmaltp + string.Join(string.Empty, gs.Item2);
-                        string namealtg = _schaltg + string.Join(string.Empty, gs.Item2);
-                        foreach (var i in _MyElements)
-                        {
-                            if (i.Naam == namealtp)
-                            {
-                                containsaltp = true;
-                                break;
-                            }
-                        }
-                        foreach (var i in _MyElements)
-                        {
-                            if (i.Naam == namealtg)
-                            {
-                                containsaltg = true;
-                                break;
-                            }
-                        }
+                        var namealtp = _prmaltp + string.Join(string.Empty, gs.Item2);
+                        var namealtg = _schaltg + string.Join(string.Empty, gs.Item2);
+                        var containsaltp = _MyElements.Any(i => i.Naam == namealtp);
+                        var containsaltg = _MyElements.Any(i => i.Naam == namealtg);
                         if (!containsaltp)
                         {
                             _MyElements.Add(
@@ -118,7 +107,49 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
             }
-
+            else
+            {
+                // Build a list of dictionaries for signalgroups that may realize alternatively;
+                // each dictionary contains alternative signalgroups as keys, and a list of primary
+                // signalgroups under whose CV the alternative may realise
+                var altsdict =
+                    new List<Dictionary<string, List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>>>();
+                foreach (var ml in c.ModuleMolen.Modules)
+                {
+                    var altdict =
+                        new Dictionary<string, List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>>();
+                    foreach (var mlfc in ml.Fasen)
+                    {
+                        foreach (var amlfc in mlfc.Alternatieven)
+                        {
+                            if (!altdict.ContainsKey(amlfc.FaseCyclus))
+                            {
+                                altdict.Add(
+                                    amlfc.FaseCyclus, 
+                                    new List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>
+                                    {
+                                        new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc)
+                                    });
+                            }
+                        }
+                    }
+                    altsdict.Add(altdict);
+                }
+                var mlidx = 1;
+                foreach (var alts in altsdict)
+                {
+                    foreach (var altg in alts)
+                    {
+                        _MyElements.Add(
+                            new CCOLElement(
+                                $"{_prmaltg}{mlidx}{altg.Key}",
+                                altg.Value.First().Item1.AlternatieveGroenTijd,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                CCOLElementTypeEnum.Parameter));
+                    }
+                    ++mlidx;
+                }
+            }
         }
 
         public override bool HasCCOLElements()
@@ -144,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -177,20 +208,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* zet richtingen die alternatief gaan realiseren         */");
                         sb.AppendLine($"{ts}/* terug naar RV als er geen alternatieve ruimte meer is. */");
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
-                            sb.AppendLine($"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                            sb.AppendLine(
+                                $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
                         sb.AppendLine();
 
                         var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
-                        bool yes = false;
+                        var yes = false;
                         foreach (var gs in gelijkstarttuples)
                         {
-                            if(gs.Item2.Count > 1)
+                            if (gs.Item2.Count > 1)
                             {
                                 yes = true;
                                 sb.Append($"{ts}RR[{_fcpf}{gs.Item1}] |= R[{_fcpf}{gs.Item1}] && ");
                                 if (gs.Item2.Count > 1) sb.Append("(");
-                                int i = 0;
-                                foreach(var ofc in gs.Item2)
+                                var i = 0;
+                                foreach (var ofc in gs.Item2)
                                 {
                                     if (ofc == gs.Item1)
                                     {
@@ -205,14 +237,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine(" ? BIT5 : 0;");
                             }
                         }
-                        if(yes)
+                        if (yes)
                         {
                             sb.AppendLine();
                         }
 
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
-                            sb.AppendLine($"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
+                            sb.AppendLine(
+                                $"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
                         }
                         sb.AppendLine();
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
@@ -228,8 +261,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             if (hasgs != null)
                             {
-                                sb.Append($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
-                                foreach(var ofc in hasgs.Item2)
+                                sb.Append(
+                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                foreach (var ofc in hasgs.Item2)
                                 {
                                     sb.Append(ofc);
                                 }
@@ -242,7 +276,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                sb.AppendLine(
+                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                             }
                         }
                         sb.AppendLine();
@@ -253,7 +288,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
 #warning Is this correct and desired? Need to look (also?) at other timers?
 #warning This would be better moved to the naloop generator; for that though, we need to be able to specify order in generated code elems. TODO!
-                                string tnl = "";
+                                var tnl = "";
                                 if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
                                 {
                                     tnl = _tnlfgd;
@@ -286,7 +321,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     tnl = _tnlcv;
                                 }
-                                sb.AppendLine($"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && ((max_tar_to({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
+                                sb.AppendLine(
+                                    $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && ((max_tar_to({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                             }
                             sb.AppendLine();
                         }
@@ -320,7 +356,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                             {
                                 {
-                                    var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                                    var fm = c.FileIngrepen.FirstOrDefault(
+                                        x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
                                     if (fm != null)
                                     {
                                         if (!yes)
@@ -329,7 +366,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.AppendLine();
                                             sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
                                         }
-                                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                        sb.AppendLine(
+                                            $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
                                     }
                                 }
                             }
@@ -348,6 +386,122 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}langstwachtende_alternatief_modulen(PRML, ML, ML_MAX);");
+                    }
+                    else
+                    {
+                        if (c.ModuleMolen.Modules.SelectMany(x => x.Fasen).Any(x => x.Alternatieven.Any()))
+                        {
+                            sb.AppendLine($"{ts}/* alternatieve realisaties */");
+                            sb.AppendLine($"{ts}/* ------------------------ */");
+
+                            // Build a list of dictionaries for signalgroups that may realize alternatively;
+                            // each dictionary contains alternative signalgroups as keys, and a list of primary
+                            // signalgroups under whose CV the alternative may realise
+                            var modulesWithAlternatives =
+                                new List<Dictionary<string, List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>>>();
+                            foreach (var ml in c.ModuleMolen.Modules)
+                            {
+                                var altdict =
+                                    new Dictionary<string, List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>>();
+                                foreach (var mlfc in ml.Fasen)
+                                {
+                                    foreach (var amlfc in mlfc.Alternatieven)
+                                    {
+                                        if (!altdict.ContainsKey(amlfc.FaseCyclus))
+                                        {
+                                            altdict.Add(
+                                                amlfc.FaseCyclus,
+                                                new List<Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>>
+                                                {
+                                                    new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc,
+                                                        mlfc)
+                                                });
+                                        }
+                                        else
+                                        {
+                                            altdict[amlfc.FaseCyclus].Add(new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc));
+                                        }
+                                    }
+                                }
+                                modulesWithAlternatives.Add(altdict);
+                            }
+
+                            var mlidx = 1;
+                            foreach (var moduleWithAlternatives in modulesWithAlternatives)
+                            {
+                                foreach (var alternativeSignalGroup in moduleWithAlternatives)
+                                {
+                                    var pre = $"{ts}set_FARML({_fcpf}{alternativeSignalGroup.Key}, PRML, ML, ML_MAX, ML{mlidx}, "
+                                        .Length;
+                                    sb.Append(
+                                        $"{ts}set_FARML({_fcpf}{alternativeSignalGroup.Key}, PRML, ML, ML_MAX, ML{mlidx}, ");
+                                    var i = 0;
+                                    foreach (var primarySignalGroup in alternativeSignalGroup.Value)
+                                    {
+                                        if (i > 0)
+                                        {
+                                            sb.AppendLine(" || ");
+                                            sb.Append("".PadLeft(pre));
+                                        }
+                                        ++i;
+                                        sb.Append($"(bool) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
+                                    }
+                                    sb.AppendLine(");");
+                                }
+                                ++mlidx;
+                            }
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}RR[fc] &= ~BIT5;");
+                            sb.AppendLine($"{ts}{ts}FM[fc] &= ~BIT5;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
+                            mlidx = 1;
+                            foreach (var moduleWithAlternatives in modulesWithAlternatives)
+                            {
+                                foreach (var alternativeSignalGroup in moduleWithAlternatives)
+                                {
+
+                                    var pre = $"{ts}RR[{_fcpf}{alternativeSignalGroup.Key}] |= (AR[{_fcpf}{alternativeSignalGroup.Key}] && RA[{_fcpf}{alternativeSignalGroup.Key}] && "
+                                        .Length;
+                                    sb.Append(
+                                        $"{ts}RR[{_fcpf}{alternativeSignalGroup.Key}] |= (AR[{_fcpf}{alternativeSignalGroup.Key}] && RA[{_fcpf}{alternativeSignalGroup.Key}] && ");
+                                    var i = 0;
+                                    foreach (var primarySignalGroup in alternativeSignalGroup.Value)
+                                    {
+                                        if (i > 0)
+                                        {
+                                            sb.AppendLine(" && ");
+                                            sb.Append("".PadLeft(pre));
+                                        }
+                                        ++i;
+                                        sb.Append($"!(CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, " +
+                                                  $"{_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
+                                    }
+                                    sb.AppendLine(") ? BIT5 : 0;");
+                                }
+                                ++mlidx;
+                            }
+                            sb.AppendLine();
+                            mlidx = 1;
+                            foreach (var moduleWithAlternatives in modulesWithAlternatives)
+                            {
+                                foreach (var alternativeSignalGroup in moduleWithAlternatives)
+                                {
+                                    sb.AppendLine(
+                                        $"{ts}FM[{_fcpf}{alternativeSignalGroup.Key}] |= (AR[{_fcpf}{alternativeSignalGroup.Key}] && " +
+                                        $"G[{_fcpf}{alternativeSignalGroup.Key}] && fm_ar_kpr({_fcpf}{alternativeSignalGroup.Key}, PRM[{_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}])) ? BIT5 : 0;");
+                                }
+                                ++mlidx;
+                            }
+                        }
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) if (SR[fc] && AG[fc])");
+                        sb.AppendLine($"{ts}{ts}if (SR[fc] && AG[fc])");
+                        sb.AppendLine($"{ts}{ts}{ts}reset_FARML(fc, PRML, ML, ML_MAX);");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}Alternatief_Add();");
                     }
                     sb.AppendLine();
 

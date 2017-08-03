@@ -11,8 +11,14 @@
         <DataTemplate DataType="{x:Type vm:ModulesDetailsTabViewModel}">
             <local:ModulesDetailsTabView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ModulesFasenInstellingenTabViewModel}">
-            <local:ModulesFasenInstellingenTabView />
+        <DataTemplate DataType="{x:Type vm:ModulesLangstwachtendeInstellingenTabViewModel}">
+            <local:ModulesLangstwachtendeInstellingenTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ModulesVooruitRealisatiesTabViewModel}">
+            <local:ModulesVooruitRealisatiesTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ModulesAlternatievenCVInstellingenTabViewModel}">
+            <local:ModulesAlternatievenCVInstellingenTabView />
         </DataTemplate>
     </UserControl.Resources>
     <Grid>

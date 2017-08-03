@@ -13,6 +13,7 @@ namespace TLCGen.Models
         #region Properties
 
         public string FaseCyclus { get; set; }
+        public int AlternatieveGroenTijd { get; set; }
 
         #endregion // Properties
     }

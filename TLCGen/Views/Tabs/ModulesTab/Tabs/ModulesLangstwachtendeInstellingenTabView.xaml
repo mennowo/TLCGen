@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Views.ModulesFasenInstellingenTabView"
+﻿<UserControl x:Class="TLCGen.Views.ModulesLangstwachtendeInstellingenTabView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,23 +7,12 @@
              mc:Ignorable="d" 
              x:Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <Style x:Key="AlternatievenOnlyStyle" TargetType="{x:Type DataGridCell}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=root,Path=DataContext.HasAlternatieven}" Value="false">
-                    <Setter Property="IsEnabled" Value="False" />
-                    <Setter Property="Background" Value="LightGray" />
-                    <Setter Property="Foreground" Value="LightGray" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Label Content="Modules en alternatieven instellingen" />
+        <Label Content="Instellingen langstwachtende alternatief" />
         <DataGrid Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                   ItemsSource="{Binding Fasen}">
             <DataGrid.RowHeaderTemplate>
@@ -34,10 +23,9 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding ModulenVooruit}" Header="# vooruit" />
-                <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan}" Header="Alt. toestaan" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
-                <DataGridTextColumn Binding="{Binding AlternatieveRuimte}" Header="Alt. ruimte" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
-                <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd}" Header="Alt. groentijd" CellStyle="{StaticResource AlternatievenOnlyStyle}" />
+                <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan}" Header="Alt. toestaan" />
+                <DataGridTextColumn Binding="{Binding AlternatieveRuimte}" Header="Alt. ruimte" />
+                <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd}" Header="Alt. groentijd" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

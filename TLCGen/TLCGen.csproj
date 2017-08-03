@@ -124,6 +124,9 @@
     <Compile Include="Views\Tabs\ModulesTab\ModulesTabViewModel.cs">
       <DependentUpon>ModulesTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenCVInstellingenTabViewModel.cs">
+      <DependentUpon>ModulesAlternatievenCVInstellingenTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabViewModel.cs">
       <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
     </Compile>
@@ -132,6 +135,18 @@
     <Compile Include="ViewModels\Other\IGeneratorViewModel.cs" />
     <Compile Include="ViewModels\Other\TemplateProviderViewModel.cs" />
     <Compile Include="ViewModels\Other\TLCGenStatusBarViewModel.cs" />
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesLangstwachtendeInstellingenTabViewModel.cs">
+      <DependentUpon>ModulesLangstwachtendeInstellingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenCVInstellingenTabView.xaml.cs">
+      <DependentUpon>ModulesAlternatievenCVInstellingenTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesVooruitRealisatiesTabView.xaml.cs">
+      <DependentUpon>ModulesVooruitRealisatiesTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesVooruitRealisatiesTabViewModel.cs">
+      <DependentUpon>ModulesVooruitRealisatiesTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepMeerealiserendeFaseCyclusViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\HDIngreepViewModel.cs">
       <DependentUpon>HDIngreepView.xaml</DependentUpon>
@@ -257,9 +272,6 @@
     <Compile Include="Views\Tabs\FasenTab\Tabs\FasenLijstTimersTabViewModel.cs">
       <DependentUpon>FasenLijstTimersTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabViewModel.cs">
-      <DependentUpon>ModulesFasenInstellingenTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepViewModel.cs">
       <DependentUpon>OVIngreepView.xaml</DependentUpon>
     </Compile>
@@ -281,8 +293,8 @@
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopView.xaml.cs">
       <DependentUpon>NaloopView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabView.xaml.cs">
-      <DependentUpon>ModulesFasenInstellingenTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesLangstwachtendeInstellingenTabView.xaml.cs">
+      <DependentUpon>ModulesLangstwachtendeInstellingenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\Tabs\ModulesDetailsTabView.xaml.cs">
       <DependentUpon>ModulesDetailsTabView.xaml</DependentUpon>
@@ -457,6 +469,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenCVInstellingenTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesVooruitRealisatiesTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Tabs\OVTab\Tabs\OVSignaalGroepInstellingenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -477,7 +497,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesFasenInstellingenTabView.xaml">
+    <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesLangstwachtendeInstellingenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -45,8 +45,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;

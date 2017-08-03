@@ -18,9 +18,9 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for FasenInstellingenTab.xaml
     /// </summary>
-    public partial class ModulesFasenInstellingenTabView : UserControl
+    public partial class ModulesVooruitRealisatiesTabView : UserControl
     {
-        public ModulesFasenInstellingenTabView()
+        public ModulesVooruitRealisatiesTabView()
         {
             InitializeComponent();
         }

@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="TLCGen.Views.ModulesAlternatievenCVInstellingenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:dg2d="http://gu.se/DataGrid2D"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             x:Name="root"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="GroenMatrixCellTemplate">
+            <TextBlock 
+                Margin="0"
+                Padding="2"
+                TextAlignment="Center"
+                Text="{Binding Path=AlternatieveGroenTijd}" >
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=FaseCyclus}" Value="{x:Null}">
+                                <DataTrigger.Setters>
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                    <Setter Property="Background" Value="LightGray"></Setter>
+                                </DataTrigger.Setters>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </DataTemplate>
+        <DataTemplate x:Key="GroenMatrixCellEditingTemplate">
+            <controls:AutoSelectTextBox
+                Margin="0"
+                Padding="0"
+                TextAlignment="Center"
+                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                Text="{Binding Path=AlternatieveGroenTijd,Mode=TwoWay,UpdateSourceTrigger=LostFocus,TargetNullValue={x:Static sys:String.Empty}}" >
+                <controls:AutoSelectTextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=FaseCyclus}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </controls:AutoSelectTextBox.Style>
+            </controls:AutoSelectTextBox>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Content="Instellingen alternatieve groentijd onder CV" />
+        <DataGrid
+            Grid.Row="1"
+            dg2d:ItemsSource.Array2DTransposed="{Binding InstellingenMatrix}"
+            dg2d:Cell.Template="{StaticResource GroenMatrixCellTemplate}"
+            dg2d:Cell.EditingTemplate="{StaticResource GroenMatrixCellEditingTemplate}"
+            dg2d:ItemsSource.ColumnHeadersSource="{Binding Path=ModuleNames}"
+            dg2d:ItemsSource.RowHeadersSource="{Binding Path=FasenNames}"
+            HorizontalGridLinesBrush="LightGray"
+            VerticalGridLinesBrush="LightGray"
+            SelectionUnit="Cell"
+            PreviewKeyDown="DataGrid_PreviewKeyDown"
+            CellEditEnding="DataGrid2D_CellEditEnding"
+            BeginningEdit="DataGrid_BeginningEdit"
+        >
+        </DataGrid>
+    </Grid>
+</UserControl>

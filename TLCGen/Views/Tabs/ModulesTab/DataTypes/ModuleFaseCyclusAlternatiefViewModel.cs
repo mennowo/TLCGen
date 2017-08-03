@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Models;
@@ -19,6 +20,22 @@ namespace TLCGen.ViewModels
         {
             get { return Alternatief.FaseCyclus; }
         }
+
+        public int AlternatieveGroenTijd
+        {
+            get => Alternatief.AlternatieveGroenTijd;
+            set
+            {
+                Alternatief.AlternatieveGroenTijd = value; 
+                RaisePropertyChanged<object>("AlternatieveGroenTijd", true);
+                foreach (var o in Others)
+                {
+                    o.AlternatieveGroenTijd = value;
+                }
+            }
+        }
+
+        public List<ModuleFaseCyclusAlternatiefModel> Others { get; set; }
 
         #endregion // Properties
 

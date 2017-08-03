@@ -77,6 +77,7 @@ namespace TLCGen.ViewModels
 
         public ModulesTabViewModel() : base(TabItemTypeEnum.ModulesTab)
         {
+            
         }
 
         #endregion // Constructor
