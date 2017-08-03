@@ -4,8 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             x:Name="root"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -53,9 +57,9 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderThickness=".7" BorderBrush="Gold" Background="Cornsilk" CornerRadius="3" Padding="1" Margin="1" >
-                                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0" IsEnabled="False">
+                                        <StackPanel Orientation="Horizontal" Background="Transparent" Margin="0" IsEnabled="False" >
                                             <TextBlock Text="{Binding}" Margin="1" Padding="2" FontWeight="Bold" />
-                                            <ListView BorderThickness="0" BorderBrush="Transparent" ItemsSource="{Binding Path=Alternatieven}" Margin="0" Padding="-2">
+                                            <ListView BorderThickness="0" BorderBrush="Transparent" ItemsSource="{Binding Path=Alternatieven}" Margin="0" Padding="-2" Visibility="{Binding Path=DataContext.NotLangstWachtendeAlternatief,ElementName=root,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource booleanToVisibilityConverter}}">
                                                 <ListView.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel Orientation="Horizontal" Background="Cornsilk" Margin="0"></StackPanel>

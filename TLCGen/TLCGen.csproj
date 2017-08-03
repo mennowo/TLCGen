@@ -107,6 +107,12 @@
     <Compile Include="Views\Tabs\DetectorenTab\DetectorenTab.xaml.cs">
       <DependentUpon>DetectorenTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\MeeaanvraagViewModel.cs">
+      <DependentUpon>MeeAanvraagView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopViewModel.cs">
+      <DependentUpon>NaloopView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\SynchronisatiesTabViewModel.cs">
       <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
     </Compile>
@@ -208,8 +214,6 @@
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\SignalenTabViewModel.cs">
       <DependentUpon>SignalenTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\MeeaanvraagViewModel.cs" />
-    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopViewModel.cs" />
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\SynchronisatieViewModel.cs" />
     <Compile Include="ViewModels\HelperTypes\GarantieTijdConvertHelper.cs" />
     <Compile Include="Views\Tabs\FasenTab\DataTypes\FaseCyclusViewModel.cs">
