@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -104,8 +105,11 @@ namespace TLCGen.Controls
             {
                 o.MainGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
             }
+            var visibilityConverter = new BooleanToVisibilityConverter();
             foreach (var prop in props)
             {
+                PropertyInfo browsableCondition = null;
+                PropertyInfo enabledCondition = null;
                 if (prop.Name != "IsInDesignMode" &&
                     (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string)))
                 {
@@ -126,9 +130,7 @@ namespace TLCGen.Controls
                             {
                                 var checkprop = ((BrowsableConditionAttribute) _attr.First()).ConditionPropertyName;
                                 {
-                                    var p = props.FirstOrDefault(x => x.Name == checkprop);
-                                    if(p != null && p.PropertyType == typeof(bool) && !(bool)p.GetValue(o.BoundObject))
-                                        continue;
+                                    browsableCondition = props.FirstOrDefault(x => x.Name == checkprop);
                                 }
                             }
                         }
@@ -145,19 +147,13 @@ namespace TLCGen.Controls
                             }
                         }
                     }
-
-                    bool enabled = true;
+                    
                     var attr = prop.GetCustomAttributes(typeof(EnabledConditionAttribute), true);
                     if (attr != null && attr.Count() == 1)
                     {
                         var checkprop = ((EnabledConditionAttribute)attr.First()).ConditionPropertyName;
                         {
-                            var p = props.FirstOrDefault(x => x.Name == checkprop);
-                            if (p != null && p.PropertyType == typeof(bool))
-                            {
-                                enabled = (bool) p.GetValue(o.BoundObject);
-                            }
-
+                            enabledCondition = props.FirstOrDefault(x => x.Name == checkprop);
                         }
                     }
 
@@ -196,7 +192,7 @@ namespace TLCGen.Controls
                     // edit string, int and int?
                     if(prop.PropertyType == typeof(string) || prop.PropertyType == typeof(int) || prop.PropertyType == typeof(int?))
                     {
-                        editor = new TextBox() { Margin = new Thickness(2), IsEnabled = enabled };
+                        editor = new TextBox() { Margin = new Thickness(2) };
                         var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
@@ -224,7 +220,7 @@ namespace TLCGen.Controls
                     // edit bool
                     if(prop.PropertyType == typeof(bool))
                     {
-                        editor = new CheckBox() { Margin = new Thickness(5), IsEnabled = enabled };
+                        editor = new CheckBox() { Margin = new Thickness(5) };
                         var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
@@ -235,7 +231,7 @@ namespace TLCGen.Controls
                     // edit enums
                     if (prop.PropertyType.IsEnum)
                     {
-                        editor = new ComboBox() { Margin = new Thickness(2), IsEnabled = enabled };
+                        editor = new ComboBox() { Margin = new Thickness(2) };
                         var items = new List<object>();
                         var _items = prop.PropertyType.GetEnumValues();
                         foreach(var s in _items)
@@ -252,6 +248,24 @@ namespace TLCGen.Controls
 
                     if (editor != null)
                     {
+                        if (enabledCondition != null)
+                        {
+                            var enabledBinding = new Binding();
+                            enabledBinding.Path = new PropertyPath(enabledCondition.Name);
+                            enabledBinding.Source = o.BoundObject;
+                            enabledBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                            BindingOperations.SetBinding(editor, IsEnabledProperty, enabledBinding);
+                        }
+                        if (browsableCondition != null)
+                        {
+                            var visibleBinding = new Binding();
+                            visibleBinding.Path = new PropertyPath(browsableCondition.Name);
+                            visibleBinding.Source = o.BoundObject;
+                            visibleBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                            visibleBinding.Converter = visibilityConverter;
+                            BindingOperations.SetBinding(editor, VisibilityProperty, visibleBinding);
+                        }
+
                         o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                         Grid.SetRow(label, row); Grid.SetColumn(label, 0);
                         if(o.DescriptionPlacement == PropertyDescriptionPlacementEnum.ToTheLeft)

@@ -119,6 +119,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        //[Description("Min. rijtijd versn. inm.")]
+        //[EnabledCondition("VersneldeInmeldingKoplus")]
+        //public int MinimaleRijtijdVoorVersneldeInmelding
+        //{
+        //    get => _OVIngreep.MinimaleRijtijdVoorVersneldeInmelding;
+        //    set
+        //    {
+        //        _OVIngreep.MinimaleRijtijdVoorVersneldeInmelding = value;
+        //        RaisePropertyChanged<object>("MinimaleRijtijdVoorVersneldeInmelding", broadcast: true);
+        //    }
+        //}
+
         [Browsable(false)]
         public bool HasKoplus
         {
