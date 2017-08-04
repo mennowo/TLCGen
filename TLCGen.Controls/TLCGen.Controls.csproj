@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoSelectTextBox.cs" />
+    <Compile Include="BrowsableConditionAttribute.cs" />
+    <Compile Include="EnabledConditionAttribute.cs" />
     <Compile Include="FolderTextBox.xaml.cs">
       <DependentUpon>FolderTextBox.xaml</DependentUpon>
     </Compile>

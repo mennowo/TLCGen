@@ -22,9 +22,8 @@ namespace TLCGen.Controls
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            bool ok = false;
-            if (value != null) ok = true;
-            return ok ? new ValidationResult(ok, "") : new ValidationResult(ok, "string may not be null");
+            bool ok = value != null;
+            return ok ? new ValidationResult(true, "") : new ValidationResult(false, "string may not be null");
         }
     }
 
@@ -32,11 +31,10 @@ namespace TLCGen.Controls
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            bool ok = false;
-            int i;
-            if(value != null)
-                ok = Int32.TryParse((string)value, out i);
-            return ok ? new ValidationResult(ok, "") : new ValidationResult(ok, "not int");
+            var ok = false;
+            if (value != null)
+                ok = int.TryParse((string)value, out int i);
+            return ok ? new ValidationResult(true, "") : new ValidationResult(false, "not int");
         }
     }
 
@@ -44,13 +42,8 @@ namespace TLCGen.Controls
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
-            bool ok = false;
-            int i;
-            if (string.IsNullOrEmpty((string)value))
-                ok = true;
-            else
-                ok = Int32.TryParse((string)value, out i);
-            return ok ? new ValidationResult(ok, "") : new ValidationResult(ok, "not int");
+            var ok = string.IsNullOrEmpty((string)value) || int.TryParse((string)value, out int i);
+            return ok ? new ValidationResult(true, "") : new ValidationResult(false, "not int");
         }
     }
 
@@ -90,8 +83,7 @@ namespace TLCGen.Controls
                 o.MainGrid.Children.Clear();
                 o.MainGrid.RowDefinitions.Clear();
                 o.MainGrid.ColumnDefinitions.Clear();
-                Label label = new Label();
-                label.Content = o.NoObjectFoundDescription;
+                var label = new Label { Content = o.NoObjectFoundDescription };
                 o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
                 Grid.SetRow(label, 0); Grid.SetColumn(label, 0);
                 o.MainGrid.Children.Add(label);
@@ -99,7 +91,7 @@ namespace TLCGen.Controls
             }
 
             var props = o.BoundObject.GetType().GetProperties();
-            int row = 0;
+            var row = 0;
             o.MainGrid.Children.Clear();
             o.MainGrid.RowDefinitions.Clear();
             o.MainGrid.ColumnDefinitions.Clear();
@@ -122,9 +114,22 @@ namespace TLCGen.Controls
                         var _attr = prop.GetCustomAttributes(typeof(BrowsableAttribute), true);
                         if (_attr != null && _attr.Count() == 1)
                         {
-                            if (!((BrowsableAttribute)_attr.First()).Browsable)
+                            if (!((BrowsableAttribute) _attr.First()).Browsable)
                             {
                                 continue;
+                            }
+                        }
+                        else
+                        {
+                            _attr = prop.GetCustomAttributes(typeof(BrowsableConditionAttribute), true);
+                            if (_attr != null && _attr.Count() == 1)
+                            {
+                                var checkprop = ((BrowsableConditionAttribute) _attr.First()).ConditionPropertyName;
+                                {
+                                    var p = props.FirstOrDefault(x => x.Name == checkprop);
+                                    if(p != null && p.PropertyType == typeof(bool) && !(bool)p.GetValue(o.BoundObject))
+                                        continue;
+                                }
                             }
                         }
                     }
@@ -141,13 +146,28 @@ namespace TLCGen.Controls
                         }
                     }
 
-                    var attr = prop.GetCustomAttributes(typeof(CategoryAttribute), true);
+                    bool enabled = true;
+                    var attr = prop.GetCustomAttributes(typeof(EnabledConditionAttribute), true);
+                    if (attr != null && attr.Count() == 1)
+                    {
+                        var checkprop = ((EnabledConditionAttribute)attr.First()).ConditionPropertyName;
+                        {
+                            var p = props.FirstOrDefault(x => x.Name == checkprop);
+                            if (p != null && p.PropertyType == typeof(bool))
+                            {
+                                enabled = (bool) p.GetValue(o.BoundObject);
+                            }
+
+                        }
+                    }
+
+                    attr = prop.GetCustomAttributes(typeof(CategoryAttribute), true);
                     if (attr != null && attr.Count() == 1)
                     {
                         if (!(string.IsNullOrEmpty(((CategoryAttribute)attr.First()).Category)))
                         {
                             o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
-                            TextBlock _l = new TextBlock();
+                            var _l = new TextBlock();
                             _l.Text = ((CategoryAttribute)attr.First()).Category;
                             _l.HorizontalAlignment = o.HorizontalDescriptionPlacement;
                             _l.TextDecorations.Add(TextDecorations.Underline);
@@ -176,8 +196,8 @@ namespace TLCGen.Controls
                     // edit string, int and int?
                     if(prop.PropertyType == typeof(string) || prop.PropertyType == typeof(int) || prop.PropertyType == typeof(int?))
                     {
-                        editor = new TextBox() { Margin = new Thickness(2) };
-                        Binding binding = new Binding();
+                        editor = new TextBox() { Margin = new Thickness(2), IsEnabled = enabled };
+                        var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
@@ -204,8 +224,8 @@ namespace TLCGen.Controls
                     // edit bool
                     if(prop.PropertyType == typeof(bool))
                     {
-                        editor = new CheckBox() { Margin = new Thickness(5) };
-                        Binding binding = new Binding();
+                        editor = new CheckBox() { Margin = new Thickness(5), IsEnabled = enabled };
+                        var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
@@ -215,15 +235,15 @@ namespace TLCGen.Controls
                     // edit enums
                     if (prop.PropertyType.IsEnum)
                     {
-                        editor = new ComboBox() { Margin = new Thickness(2) };
-                        List<object> items = new List<object>();
+                        editor = new ComboBox() { Margin = new Thickness(2), IsEnabled = enabled };
+                        var items = new List<object>();
                         var _items = prop.PropertyType.GetEnumValues();
                         foreach(var s in _items)
                         {
                             items.Add(s);
                         }
                         ((ComboBox)editor).ItemsSource = items;
-                        Binding binding = new Binding();
+                        var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;

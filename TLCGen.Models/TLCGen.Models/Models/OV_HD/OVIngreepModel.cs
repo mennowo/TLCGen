@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
@@ -22,6 +19,7 @@ namespace TLCGen.Models
         public bool Vecom { get; set; }
         //public bool MassaDetectie { get; set; }
         public OVIngreepVoertuigTypeEnum Type { get; set; }
+        public bool VersneldeInmeldingKoplus { get; set; }
 
         public int RijTijdOngehinderd { get; set; }
         public int RijTijdBeperktgehinderd { get; set; }

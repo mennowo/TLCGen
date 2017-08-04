@@ -8,8 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using TLCGen.Controls;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -102,6 +104,28 @@ namespace TLCGen.ViewModels
             {
                 _OVIngreep.Type = value;
                 RaisePropertyChanged<object>("Type", broadcast: true);
+            }
+        }
+
+        [Description("Versnelde inmelding koplus")]
+        [EnabledCondition("HasKoplus")]
+        public bool VersneldeInmeldingKoplus
+        {
+            get => _OVIngreep.VersneldeInmeldingKoplus;
+            set
+            {
+                _OVIngreep.VersneldeInmeldingKoplus = value;
+                RaisePropertyChanged<object>("VersneldeInmeldingKoplus", broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool HasKoplus
+        {
+            get
+            {
+                var fc = TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == _OVIngreep.FaseCyclus);
+                return fc != null && fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop);
             }
         }
 

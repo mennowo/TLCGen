@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -98,8 +99,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#include \"syncvar.h\"");
             }
             sb.AppendLine();
-            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
-                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any())
+            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
+                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
             {
                 bool any = false;
                 var done = new List<string>();
@@ -626,6 +627,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             StringBuilder sb = new StringBuilder();
 
             string _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
+            string _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -736,7 +738,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-            sb.AppendLine($"}}");
+            sb.AppendLine();
+            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.VersneldeInmeldingKoplus))
+            {
+                var fc = c.Fasen.FirstOrDefault(x => x.Naam == ov.FaseCyclus);
+                if (fc != null && fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop))
+                {
+                    var d = fc.Detectoren.First(x => x.Type == DetectorTypeEnum.Kop);
+                    sb.AppendLine(
+                        $"{ts}if (DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
+                }
+            }
+            sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
