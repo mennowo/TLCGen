@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -58,6 +60,7 @@ namespace TLCGen.ViewModels
             }
         }
         
+        [Browsable(false)]
         public string SelectedFaseNaam
         {
             get { return _SelectedFaseNaam; }
@@ -98,13 +101,51 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int MinimaalAantalMeldingen
+        public bool MetingPerLus
         {
-            get { return _FileIngreep.MinimaalAantalMeldingen; }
+            get => _FileIngreep.MetingPerLus;
             set
             {
-                _FileIngreep.MinimaalAantalMeldingen = value;
-                RaisePropertyChanged<object>("MinimaalAantalMeldingen", broadcast: true);
+                _FileIngreep.MetingPerLus = value;
+                RaisePropertyChanged<object>("MetingPerLus", broadcast: true);
+            }
+        }
+
+        public bool MetingPerLusAvailable
+        {
+            get => _FileIngreep.FileDetectoren.Count > 1;
+        }
+
+        public bool MetingPerStrookAvailable
+        {
+            get
+            {
+                var detectorDict = new Dictionary<int, List<string>>();
+                foreach (var fmd in FileDetectoren)
+                {
+                    var d = TLCGenModelManager.Default.Controller.Fasen.SelectMany(x => x.Detectoren).FirstOrDefault(x => x.Naam == fmd.Detector) ??
+                            TLCGenModelManager.Default.Controller.Detectoren.FirstOrDefault(x => x.Naam == fmd.Detector);
+                    if (d?.Rijstrook == null) continue;
+                    if (!detectorDict.ContainsKey(d.Rijstrook.Value))
+                    {
+                        detectorDict.Add(d.Rijstrook.Value, new List<string> { fmd.Detector });
+                    }
+                    else
+                    {
+                        detectorDict[d.Rijstrook.Value].Add(fmd.Detector);
+                    }
+                }
+                return detectorDict.Count > 1;
+            } 
+        }
+
+        public bool MetingPerStrook
+        {
+            get => _FileIngreep.MetingPerStrook;
+            set
+            {
+                _FileIngreep.MetingPerStrook = value;
+                RaisePropertyChanged<object>("MetingPerStrook", broadcast: true);
             }
         }
 
@@ -240,9 +281,9 @@ namespace TLCGen.ViewModels
         private void UpdateSelectables()
         {
             SelectableFasen.Clear();
-            foreach (string s in _ControllerFasen)
+            foreach (var s in _ControllerFasen)
             {
-                if (!TeDoserenSignaalGroepen.Where(x => x.FaseCyclus == s).Any())
+                if (TeDoserenSignaalGroepen.All(x => x.FaseCyclus != s))
                 {
                     SelectableFasen.Add(s);
                 }
@@ -257,6 +298,7 @@ namespace TLCGen.ViewModels
         {
             _ControllerFasen = controllerfasen;
             UpdateSelectables();
+            RaisePropertyChanged("MetingPerStrookAvailable");
         }
 
         #endregion // Public methods
@@ -270,13 +312,42 @@ namespace TLCGen.ViewModels
 
         #endregion // IViewModelWithItem
 
+        #region TLCGen Messenging
+
+        public void OnDetectorenChanged(DetectorenChangedMessage message)
+        {
+            _DetectorManager = null;
+        }
+
+        public void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
+        {
+            _DetectorManager = null;
+            if (message.Type != DetectorTypeEnum.File)
+            {
+                var d = FileDetectoren.FirstOrDefault(x => x.Detector == message.DetectorDefine);
+                if (d != null)
+                {
+                    FileDetectoren.Remove(d);
+                }
+            }
+        }
+
+        #endregion // TLCGen MEssenging
+
         #region Constructor
 
         public FileIngreepViewModel(FileIngreepModel fileingreep)
         {
             _FileIngreep = fileingreep;
 
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChanged);
+
             FileDetectoren = new ObservableCollectionAroundList<FileIngreepDetectorViewModel, FileIngreepDetectorModel>(_FileIngreep.FileDetectoren);
+            FileDetectoren.CollectionChanged += (o, e) =>
+            {
+                RaisePropertyChanged("MetingPerLusAvailable");
+            };
             TeDoserenSignaalGroepen = new ObservableCollectionAroundList<FileIngreepTeDoserenSignaalGroepViewModel, FileIngreepTeDoserenSignaalGroepModel>(_FileIngreep.TeDoserenSignaalGroepen);
         }
 

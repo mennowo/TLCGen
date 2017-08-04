@@ -500,10 +500,16 @@
             <Description>Parameter doseerpercentage</Description>
           </Setting>
           <Setting>
-            <Default>fmeldmin</Default>
-            <Setting>fmeldmin</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter minimum aantal meldingen</Description>
+            <Default>parlus</Default>
+            <Setting>parlus</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar parallele file meldingen per lus</Description>
+          </Setting>
+          <Setting>
+            <Default>parstrook</Default>
+            <Setting>parstrook</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar parallele file meldingen per strook</Description>
           </Setting>
         </Settings>
       </CodePieceData>

@@ -15,7 +15,9 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]
-        public int MinimaalAantalMeldingen { get; set; }
+        public bool MetingPerLus { get; set; }
+        [HasDefault(false)]
+        public bool MetingPerStrook { get; set; }
         public int AfvalVertraging { get; set; }
         [HasDefault(false)]
         public bool EerlijkDoseren { get; set; }
