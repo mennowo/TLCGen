@@ -84,7 +84,7 @@ namespace TLCGen.SpecialsDenHaag
                 {
                     AlternatievenPerBlok.Add(
                         new FaseCyclusAlternatiefPerBlokViewModel(
-                            new FaseCyclusAlternatiefPerBlokModel {FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 15 }));
+                            new FaseCyclusAlternatiefPerBlokModel {FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 1023 }));
                 }
             }
             if (message.RemovedFasen?.Count > 0)
