@@ -402,6 +402,16 @@ namespace TLCGen.SpecialsRotterdam
                 case CCOLRegCCodeTypeEnum.PostApplication:
                     if (!_MyModel.ToepassenAFM && !_MyModel.ToevoegenOVM)
                         return "";
+                    if (_MyModel.ToevoegenOVM)
+                    {
+                        sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
+                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
+                        {
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
+                        }
+                        sb.AppendLine();
+                    }
                     if (_MyModel.ToepassenAFM)
                     {
                         sb.AppendLine($"{ts}/* AFM */");
@@ -447,16 +457,6 @@ namespace TLCGen.SpecialsRotterdam
                         }
 
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
-                    }
-                    if (_MyModel.ToevoegenOVM)
-                    {
-                        sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
-                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
-                        {
-                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
-                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
-                        }
                         sb.AppendLine();
                     }
                     return sb.ToString();
