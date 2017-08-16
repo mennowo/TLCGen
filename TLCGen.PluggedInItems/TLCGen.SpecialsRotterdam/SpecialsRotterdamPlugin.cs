@@ -196,7 +196,7 @@ namespace TLCGen.SpecialsRotterdam
 
             if (_MyModel.ToevoegenOVM)
             {
-                foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto))
+                foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
                 {
                     _MyElements.Add(new CCOLElement($"ovmextragroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
                     _MyElements.Add(new CCOLElement($"ovmmindergroen_{fc.Naam}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
@@ -452,10 +452,10 @@ namespace TLCGen.SpecialsRotterdam
                     if (_MyModel.ToevoegenOVM)
                     {
                         sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
-                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto))
+                        foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Auto && !(x.Naam.Length == 3 && x.Naam.StartsWith("9"))))
                         {
-                            sb.AppendLine($"{ts}TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
-                            sb.AppendLine($"{ts}TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
+                            sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
                         }
                         sb.AppendLine();
                     }
