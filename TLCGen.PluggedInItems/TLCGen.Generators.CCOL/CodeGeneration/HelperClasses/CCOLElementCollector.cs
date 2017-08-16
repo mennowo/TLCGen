@@ -16,14 +16,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static void AddAllMaxElements(CCOLElemListData[] lists)
         {
-            lists[0].Elements.Add(new CCOLElement() { Define = "USMAX" });
-            lists[1].Elements.Add(new CCOLElement() { Define = "ISMAX" });
-            lists[2].Elements.Add(new CCOLElement() { Define = "HEMAX" });
-            lists[3].Elements.Add(new CCOLElement() { Define = "MEMAX" });
-            lists[4].Elements.Add(new CCOLElement() { Define = "TMMAX" });
-            lists[5].Elements.Add(new CCOLElement() { Define = "CTMAX" });
-            lists[6].Elements.Add(new CCOLElement() { Define = "SCHMAX" });
-            lists[7].Elements.Add(new CCOLElement() { Define = "PRMMAX" });
+            lists[0].Elements.Add(new CCOLElement() { Define = "USMAX1" });
+            lists[1].Elements.Add(new CCOLElement() { Define = "ISMAX1" });
+            lists[2].Elements.Add(new CCOLElement() { Define = "HEMAX1" });
+            lists[3].Elements.Add(new CCOLElement() { Define = "MEMAX1" });
+            lists[4].Elements.Add(new CCOLElement() { Define = "TMMAX1" });
+            lists[5].Elements.Add(new CCOLElement() { Define = "CTMAX1" });
+            lists[6].Elements.Add(new CCOLElement() { Define = "SCHMAX1" });
+            lists[7].Elements.Add(new CCOLElement() { Define = "PRMMAX1" });
         }
 
         public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)

@@ -47,6 +47,10 @@ namespace TLCGen.Models
         public DetectorVerlengenTypeEnum Verlengen { get; set; }
         public NooitAltijdAanUitEnum AanvraagBijStoring { get; set; }
 
+        public NooitAltijdAanUitEnum VeiligheidsGroen { get; set; }
+        public int VeiligheidsGroenMinMG { get; set; }
+        public int VeiligheidsGroenTijdsduur { get; set; }
+
         public bool ShouldSerializeWachtlichtBitmapData()
         {
             return Wachtlicht;

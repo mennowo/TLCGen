@@ -50,7 +50,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
-            sb.AppendLine($"{ts}#define MLMAX {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
+            sb.AppendLine($"{ts}#define MLMAX1 {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
             sb.AppendLine();
             sb.AppendLine("/* Aantal perioden voor max groen */");
             sb.AppendLine("/* ------- */");

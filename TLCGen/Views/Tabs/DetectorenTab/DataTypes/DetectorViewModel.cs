@@ -261,6 +261,35 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public NooitAltijdAanUitEnum VeiligheidsGroen
+        {
+            get { return _Detector.VeiligheidsGroen; }
+            set
+            {
+                _Detector.VeiligheidsGroen = value;
+                RaisePropertyChanged<object>("VeiligheidsGroen", broadcast: true);
+            }
+        }
+
+        public int VeiligheidsGroenMinMG
+        {
+            get { return _Detector.VeiligheidsGroenMinMG; }
+            set
+            {
+                _Detector.VeiligheidsGroenMinMG = value; 
+                RaisePropertyChanged<object>("VeiligheidsGroenMinMG", broadcast: true);
+            }
+        }
+
+        public int VeiligheidsGroenTijdsduur
+        {
+            get { return _Detector.VeiligheidsGroenTijdsduur; }
+            set
+            {
+                _Detector.VeiligheidsGroenTijdsduur = value;
+                RaisePropertyChanged<object>("VeiligheidsGroenTijdsduur", broadcast: true);
+            }
+        }
 
         public int Q1
         {

@@ -63,6 +63,7 @@
     <Compile Include="Models\ControllerModel.cs" />
     <Compile Include="Models\Base\DetectorModel.cs" />
     <Compile Include="Models\Varia\BitmapCoordinatenDataModel.cs" />
+    <Compile Include="Models\Varia\DetectorVeiligheidsGroenModel.cs" />
     <Compile Include="Models\Varia\DetectorSimulatieModel.cs" />
     <Compile Include="Models\Base\FaseCyclusModel.cs" />
     <Compile Include="Models\FileIngreep\FileIngreepDetectorModel.cs" />

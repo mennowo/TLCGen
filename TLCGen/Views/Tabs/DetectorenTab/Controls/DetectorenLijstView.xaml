@@ -12,7 +12,7 @@
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              Name="root"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
         <Style TargetType="{x:Type DataGridCell}" x:Key="LooseDetectorStyle">
@@ -74,6 +74,36 @@
                                 SelectedItemBinding="{Binding Path=AanvraagBijStoring,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                                 Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridComboBoxColumn x:Key="VeiligheidsGroenColumn" Header="Veiligheidsgroen" 
+                                SelectedItemBinding="{Binding Path=VeiligheidsGroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                                Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn x:Key="VeiligheidsGroenMinMGColumn" Header="Veil.gr.min.MG" 
+                            Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                            Binding="{Binding Path=VeiligheidsGroenMinMG,FallbackValue=Geen,TargetNullValue=Geen}" >
+            <DataGridTextColumn.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>                    
+             </DataGridTextColumn.CellStyle>
+        </DataGridTextColumn>
+        <DataGridTextColumn x:Key="VeiligheidsGroenTijdsduurColumn" Header="Veil.gr.duur" 
+                            Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                            Binding="{Binding Path=VeiligheidsGroenTijdsduur,FallbackValue=Geen,TargetNullValue=Geen}" >
+            <DataGridTextColumn.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGridTextColumn.CellStyle>
+        </DataGridTextColumn>
         <DataGridTemplateColumn x:Key="RijstrookColumn" Header="Rijstrook" Width="Auto" 
                                 Visibility="{Binding Path=ShowRijstrook, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
                                 CellStyle="{StaticResource LooseDetectorStyle}">
@@ -100,6 +130,7 @@
         <controls:SpecialDataGrid 
             x:Name="specialgrid"
                   ItemsSource="{Binding Path=Detectoren}"
+            FrozenColumnCount="1"
                   Grid.Row="0"
                   SelectedItem="{Binding Path=SelectedDetector}"
                   ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedDetectoren,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
@@ -136,6 +167,9 @@
                 <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
                 <StaticResource ResourceKey="RijstrookColumn" />
                 <StaticResource ResourceKey="StoringColumn" />
+                <StaticResource ResourceKey="VeiligheidsGroenColumn" />
+                <StaticResource ResourceKey="VeiligheidsGroenMinMGColumn" />
+                <StaticResource ResourceKey="VeiligheidsGroenTijdsduurColumn" />
             </DataGrid.Columns>
         </controls:SpecialDataGrid>
     </Grid>
