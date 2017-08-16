@@ -324,7 +324,41 @@ namespace TLCGen.ViewModels
 
         public void OnFasenChanged(FasenChangedMessage message)
         {
-            foreach(var set in GroentijdenSets)
+            if (message.AddedFasen != null)
+            {
+                foreach (var fcm in message.AddedFasen)
+                {
+                    foreach (var set in Controller.GroentijdenSets)
+                    {
+                        var mgm = new GroentijdModel {FaseCyclus = fcm.Naam};
+                        DefaultsProvider.Default.SetDefaultsOnModel(mgm, fcm.Type.ToString());
+                        set.Groentijden.Add(mgm);
+                    }
+                }
+            }
+            if (message.RemovedFasen != null)
+            {
+                foreach (var fcm in message.RemovedFasen)
+                {
+                    foreach (var set in Controller.GroentijdenSets)
+                    {
+                        GroentijdModel mgm = null;
+                        foreach (var mgvm in set.Groentijden)
+                        {
+                            if (mgvm.FaseCyclus == fcm.Naam)
+                            {
+                                mgm = mgvm;
+                            }
+                        }
+                        if (mgm != null)
+                        {
+                            set.Groentijden.Remove(mgm);
+                        }
+                    }
+                }
+            }
+
+            foreach (var set in GroentijdenSets)
             {
                 set.Groentijden.Rebuild();
             }
@@ -351,7 +385,7 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
-        private void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
+        public void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
         {
             RaisePropertyChanged("DisplayName");
             foreach (GroentijdenSetViewModel setvm in GroentijdenSets)

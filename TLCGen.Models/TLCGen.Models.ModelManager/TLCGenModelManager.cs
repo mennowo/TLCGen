@@ -69,7 +69,7 @@ namespace TLCGen.ModelManagement
         {
             if (message.AddedFasen != null)
             {
-                foreach (FaseCyclusModel fcm in message.AddedFasen)
+                foreach (var fcm in message.AddedFasen)
                 {
                     // PT Conflict prms
                     if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
@@ -78,15 +78,6 @@ namespace TLCGen.ModelManagement
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(prms);
                         prms.FaseCyclus = fcm.Naam;
                         Controller.OVData.OVIngreepSignaalGroepParameters.Add(prms);
-                    }
-
-                    // Green times
-                    foreach(var set in Controller.GroentijdenSets)
-                    {
-                        GroentijdModel mgm = new GroentijdModel();
-                        mgm.FaseCyclus = fcm.Naam;
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(mgm, fcm.Type.ToString());
-                        set.Groentijden.Add(mgm);
                     }
 
                     // Module settings
@@ -113,23 +104,6 @@ namespace TLCGen.ModelManagement
                         if (_prms != null)
                         {
                             Controller.OVData.OVIngreepSignaalGroepParameters.Remove(_prms);
-                        }
-                    }
-
-                    // Green times
-                    foreach(var set in Controller.GroentijdenSets)
-                    {
-                        GroentijdModel _mgm = null;
-                        foreach (GroentijdModel mgvm in set.Groentijden)
-                        {
-                            if (mgvm.FaseCyclus == fcm.Naam)
-                            {
-                                _mgm = mgvm;
-                            }
-                        }
-                        if (_mgm != null)
-                        {
-                            set.Groentijden.Remove(_mgm);
                         }
                     }
 

@@ -118,24 +118,23 @@ namespace TLCGen.ViewModels
 
         void AddNewFaseCommand_Executed(object prm)
         {
-            FaseCyclusModel fcm = new FaseCyclusModel();
-            string newname = "01";
-            int inewname = 1;
-            foreach (FaseCyclusViewModel fcvm in Fasen)
+            var fcm = new FaseCyclusModel();
+            var newname = "01";
+            foreach (var fcvm in Fasen)
             {
                 if (Regex.IsMatch(fcvm.Naam, @"[0-9]+"))
                 {
-                    Match m = Regex.Match(fcvm.Naam, @"[0-9]+");
-                    string next = m.Value;
-                    if (Int32.TryParse(next, out inewname))
+                    var m = Regex.Match(fcvm.Naam, @"[0-9]+");
+                    var next = m.Value;
+                    if (int.TryParse(next, out int inewname))
                     {
                         IsElementIdentifierUniqueRequest message;
                         do
                         {
-                            newname = (inewname < 10 ? "0" : "") + inewname.ToString();
+                            inewname++;
+                            newname = (inewname < 10 ? "0" : "") + inewname;
                             message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
                             Messenger.Default.Send(message);
-                            inewname++;
                         }
                         while (!message.IsUnique);
                     }
@@ -144,8 +143,9 @@ namespace TLCGen.ViewModels
             fcm.Naam = newname;
             fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
-            FaseCyclusViewModel fcvm1 = new FaseCyclusViewModel(fcm);
+            var fcvm1 = new FaseCyclusViewModel(fcm);
             Fasen.Add(fcvm1);
+            Messenger.Default.Send(new FasenChangedMessage(new List<FaseCyclusModel>{fcm},  null));
         }
 
         bool AddNewFaseCommand_CanExecute(object prm)
@@ -162,7 +162,7 @@ namespace TLCGen.ViewModels
                 changed = true;
                 foreach (FaseCyclusViewModel fcvm in SelectedFaseCycli)
                 {
-                    Integrity.TLCGenControllerModifier.Default.RemoveSignalGroupFromController(fcvm.Naam);
+                    TLCGenControllerModifier.Default.RemoveSignalGroupFromController(fcvm.Naam);
                     remfcs.Add(fcvm.FaseCyclus);
                 }
 
@@ -172,7 +172,7 @@ namespace TLCGen.ViewModels
             {
                 changed = true;
                 remfcs.Add(SelectedFaseCyclus.FaseCyclus);
-                Integrity.TLCGenControllerModifier.Default.RemoveSignalGroupFromController(SelectedFaseCyclus.Naam);
+                TLCGenControllerModifier.Default.RemoveSignalGroupFromController(SelectedFaseCyclus.Naam);
                 SelectedFaseCyclus = null;
             }
 

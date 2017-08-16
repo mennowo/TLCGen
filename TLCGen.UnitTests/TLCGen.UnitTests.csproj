@@ -54,7 +54,9 @@
   <ItemGroup>
     <Compile Include="Helpers\FakesCreator.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\FaseCyclusViewModelTests.cs" />
-    <Compile Include="Tabs\FasenTab\Other\OVIngreepSGInstellingenLijstViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\DataTypes\GroentijdenSetViewModelTests.cs" />
+    <Compile Include="Tabs\FasenTab\DataTypes\GroentijdViewModelTests.cs" />
+    <Compile Include="Tabs\OVIngreepSGInstellingenLijstViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenDetailsTabViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenGroentijdenSetsTabViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\Tabs\FasenLijstTabViewModelTests.cs" />
@@ -127,6 +129,9 @@
       <Project>{bfc33a68-228a-46b6-9e7d-25f41ac5c02c}</Project>
       <Name>TLCGen</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tabs\DetectorenTab\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
