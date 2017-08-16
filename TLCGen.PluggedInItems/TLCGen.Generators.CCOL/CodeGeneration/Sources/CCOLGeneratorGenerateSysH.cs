@@ -87,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                 ++index;
             }
-            sb.Append($"{ts}#define FCMAX ".PadRight(pad1));
+            sb.Append($"{ts}#define FCMAX1 ".PadRight(pad1));
             sb.Append($"{index.ToString()} ".PadLeft(pad2));
             sb.AppendLine("/* aantal fasecycli */");
 
@@ -190,18 +190,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                     ++index;
                 }
-                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
                 sb.Append($"{index.ToString()} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal detectoren testomgeving */");
                 sb.AppendLine("#else");
-                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
                 sb.Append($"{autom_index.ToString()} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal detectoren automaat omgeving */");
                 sb.AppendLine("#endif");
             }
             else
             {
-                sb.Append($"{ts}#define DPMAX ".PadRight(pad1));
+                sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
                 sb.Append($"{index.ToString()} ".PadLeft(pad2));
                 sb.AppendLine("/* aantal fasecycli */");
             }
