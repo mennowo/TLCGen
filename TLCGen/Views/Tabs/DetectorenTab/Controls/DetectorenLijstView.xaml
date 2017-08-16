@@ -77,12 +77,13 @@
         <DataGridComboBoxColumn x:Key="VeiligheidsGroenColumn" Header="Veiligheidsgroen" 
                                 SelectedItemBinding="{Binding Path=VeiligheidsGroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                                Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+                                CellStyle="{StaticResource LooseDetectorStyle}"
+                                Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridTextColumn x:Key="VeiligheidsGroenMinMGColumn" Header="Veil.gr.min.MG" 
-                            Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
                             Binding="{Binding Path=VeiligheidsGroenMinMG,FallbackValue=Geen,TargetNullValue=Geen}" >
             <DataGridTextColumn.CellStyle>
-                <Style TargetType="DataGridCell">
+                <Style TargetType="DataGridCell" BasedOn="{StaticResource LooseDetectorStyle}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
                             <Setter Property="IsEnabled" Value="False" />
@@ -92,10 +93,10 @@
              </DataGridTextColumn.CellStyle>
         </DataGridTextColumn>
         <DataGridTextColumn x:Key="VeiligheidsGroenTijdsduurColumn" Header="Veil.gr.duur" 
-                            Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+                            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
                             Binding="{Binding Path=VeiligheidsGroenTijdsduur,FallbackValue=Geen,TargetNullValue=Geen}" >
             <DataGridTextColumn.CellStyle>
-                <Style TargetType="DataGridCell">
+                <Style TargetType="DataGridCell" BasedOn="{StaticResource LooseDetectorStyle}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
                             <Setter Property="IsEnabled" Value="False" />
