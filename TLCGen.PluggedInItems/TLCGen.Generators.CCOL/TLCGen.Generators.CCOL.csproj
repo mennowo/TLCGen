@@ -53,6 +53,7 @@
     <Compile Include="CodeGeneration\Functionality\CCOLFileIngrepenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLFixatieCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLGelijkstartenVoorstartenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\CCOLVeiligheidsGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLNalopenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLOVHDCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\CCOLPtpCodeGenerator.cs" />

@@ -115,12 +115,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
             }
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Includes])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Includes) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Includes, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Includes, ts));
             }
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}reg.add\"");
             sb.AppendLine();
@@ -135,12 +132,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"static int fc;");
             sb.AppendLine();
 
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Top])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Top) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Top, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Top, ts));
             }
             sb.AppendLine();
 
@@ -154,14 +148,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void KwcApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.KwcApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.KwcApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.KwcApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.KwcApplication, ts));
             }
-
+            
             sb.AppendLine($"{ts}KwcApplication_Add();");
             sb.AppendLine("}");
             sb.AppendLine();
@@ -176,12 +167,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.PreApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.PreApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PreApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.PreApplication, ts));
             }
 
             sb.AppendLine($"{ts}PreApplication_Add();");
@@ -197,12 +185,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void KlokPerioden(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.KlokPerioden])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.KlokPerioden) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.KlokPerioden, ts));
             }
 
             sb.AppendLine($"{ts}KlokPerioden_Add();");
@@ -219,16 +204,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine();
 
-            // Code from funcionality code piece gens
-            foreach(var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Aanvragen])
             {
-                if(gen.HasCode(CCOLRegCCodeTypeEnum.Aanvragen) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Aanvragen, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Aanvragen, ts));
             }
-            
-            // Add file
+
             sb.AppendLine($"{ts}Aanvragen_Add();");
             sb.AppendLine("}");
             sb.AppendLine();
@@ -245,13 +225,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.MaxGroentijden:
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
-                    
-                    foreach (var gen in PieceGenerators)
+
+                    foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Maxgroen])
                     {
-                        if (gen.HasCode(CCOLRegCCodeTypeEnum.Maxgroen) > 0)
-                        {
-                            sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, ts));
-                        }
+                        sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Maxgroen, ts));
                     }
 
                     // Add file
@@ -264,13 +241,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.VerlengGroentijden:
                     sb.AppendLine("void Verlenggroen(void)");
                     sb.AppendLine("{");
-                    
-                    foreach (var gen in PieceGenerators)
+
+                    foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Verlenggroen])
                     {
-                        if (gen.HasCode(CCOLRegCCodeTypeEnum.Verlenggroen) > 0)
-                        {
-                            sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Verlenggroen, ts));
-                        }
+                        sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Verlenggroen, ts));
                     }
 
                     // Add file
@@ -293,12 +267,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{ts}register count fc;");
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Wachtgroen])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Wachtgroen) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Wachtgroen, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Wachtgroen, ts));
             }
             sb.AppendLine($"{ts}Wachtgroen_Add();");
             sb.AppendLine("}");
@@ -313,12 +284,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Meetkriterium])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Meetkriterium) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Meetkriterium, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Meetkriterium, ts));
             }
             sb.AppendLine($"{ts}Meetkriterium_Add();");
             sb.AppendLine("}");
@@ -336,12 +304,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}register count fc;");
 
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Meeverlengen])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Meeverlengen) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Meeverlengen, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Meeverlengen, ts));
             }
 
             sb.AppendLine($"{ts}Meeverlengen_Add();");
@@ -356,13 +321,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Synchronisaties(void)");
             sb.AppendLine("{");
-            
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Synchronisaties])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.Synchronisaties) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.Synchronisaties, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.Synchronisaties, ts));
             }
 
             sb.AppendLine($"{ts}Synchronisaties_Add();");
@@ -382,19 +344,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}register count fc;");
 
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules, ts));
             }
-            foreach (var gen in PieceGenerators)
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules, ts));
             }
 
             sb.AppendLine();
@@ -425,12 +381,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
             sb.AppendLine($"{ts}" + "}");
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+            
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.RealisatieAfhandeling])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.RealisatieAfhandeling) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandeling, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.RealisatieAfhandeling, ts));
             }
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
             sb.AppendLine("}");
@@ -446,12 +400,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.FileVerwerking])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.FileVerwerking) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.FileVerwerking, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.FileVerwerking, ts));
             }
             sb.AppendLine($"{ts}FileVerwerking_Add();");
             sb.AppendLine("}");
@@ -467,12 +419,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
             sb.AppendLine();
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.DetectieStoring])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.DetectieStoring) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.DetectieStoring, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.DetectieStoring, ts));
             }
             sb.AppendLine($"{ts}DetectieStoring_Add();");
             sb.AppendLine("}");
@@ -498,12 +448,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}init_realisation_timers();");
                 sb.AppendLine("");
             }
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.InitApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.InitApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.InitApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.InitApplication, ts));
             }
             sb.AppendLine($"{ts}post_init_application();");
             sb.AppendLine("}");
@@ -567,12 +515,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PostApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.PostApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.PostApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PostApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.PostApplication, ts));
             }
 
             sb.AppendLine($"{ts}PostApplication_Add();");
@@ -588,22 +534,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.PreSystemApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.PreSystemApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PreSystemApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.PreSystemApplication, ts));
             }
 
             sb.AppendLine($"{ts}pre_system_application();");
 
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.SystemApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.SystemApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.SystemApplication, ts));
             }
             sb.AppendLine();
 
@@ -621,12 +563,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
             sb.AppendLine();
 
-            foreach (var gen in PieceGenerators)
+
+            foreach (var gen in OrderedPieceGenerators[CCOLRegCCodeTypeEnum.PostSystemApplication])
             {
-                if (gen.HasCode(CCOLRegCCodeTypeEnum.PostSystemApplication) > 0)
-                {
-                    sb.Append(gen.GetCode(controller, CCOLRegCCodeTypeEnum.PostSystemApplication, ts));
-                }
+                sb.Append(gen.Value.GetCode(controller, CCOLRegCCodeTypeEnum.PostSystemApplication, ts));
             }
 
             sb.AppendLine($"{ts}post_system_application();");
