@@ -358,6 +358,28 @@ namespace TLCGen.ViewModels
             }
         }
 
+
+        public int VeiligheidsGroenMinMG
+        {
+            get { return _FaseCyclus.VeiligheidsGroenMinMG; }
+            set
+            {
+                _FaseCyclus.VeiligheidsGroenMinMG = value;
+                RaisePropertyChanged<object>("VeiligheidsGroenMinMG", broadcast: true);
+            }
+        }
+
+        public int VeiligheidsGroenTijdsduur
+        {
+            get { return _FaseCyclus.VeiligheidsGroenTijdsduur; }
+            set
+            {
+                _FaseCyclus.VeiligheidsGroenTijdsduur = value;
+                RaisePropertyChanged<object>("VeiligheidsGroenTijdsduur", broadcast: true);
+            }
+        }
+
+
         public int DetectorCount
         {
             get
@@ -370,12 +392,15 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                foreach(DetectorModel dvm in _FaseCyclus.Detectoren)
-                {
-                    if (dvm.Verlengen != DetectorVerlengenTypeEnum.Geen)
-                        return true;
-                }
-                return false;
+                return _FaseCyclus.Detectoren.Any(dvm => dvm.Verlengen != DetectorVerlengenTypeEnum.Geen);
+            }
+        }
+
+        public bool HasVeiligheidsGroen
+        {
+            get
+            {
+                return _FaseCyclus.Detectoren.Any(dvm => dvm.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit);
             }
         }
 
@@ -478,6 +503,11 @@ namespace TLCGen.ViewModels
         public void UpdateHasKopmax()
         {
             RaisePropertyChanged("HasKopmax");
+        }
+
+        public void UpdateHasVeiligheidsGroen()
+        {
+            RaisePropertyChanged("HasVeiligheidsGroen");
         }
 
         #endregion // Public methods

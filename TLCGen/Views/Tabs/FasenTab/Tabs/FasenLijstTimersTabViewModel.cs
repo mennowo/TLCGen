@@ -106,6 +106,22 @@ namespace TLCGen.ViewModels
         {
             UpdateFasen();
         }
+        
+        private void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
+        {
+            foreach (var fcm in Fasen)
+            {
+                fcm.UpdateHasKopmax();
+            }
+        }
+
+        private void OnFaseDetectorVeiligheidsGroenChanged(FaseDetectorVeiligheidsGroenChangedMessage message)
+        {
+            foreach (var fcm in Fasen)
+            {
+                fcm.UpdateHasVeiligheidsGroen();
+            }
+        }
 
         #endregion // TLCGen Event handling
 
@@ -160,6 +176,8 @@ namespace TLCGen.ViewModels
         public FasenLijstTimersTabViewModel() : base()
         {
             MessengerInstance.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChanged));
+            Messenger.Default.Register(this, new Action<FaseDetectorVeiligheidsGroenChangedMessage>(OnFaseDetectorVeiligheidsGroenChanged));
         }
 
         #endregion // Constructor

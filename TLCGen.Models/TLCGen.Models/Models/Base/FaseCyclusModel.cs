@@ -49,6 +49,8 @@ namespace TLCGen.Models
         public bool AanvraagBijDetectieStoring { get; set; }
         public bool PercentageGroenBijDetectieStoring { get; set; }
         public int? PercentageGroen { get; set; }
+        public int VeiligheidsGroenMinMG { get; set; }
+        public int VeiligheidsGroenTijdsduur { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }

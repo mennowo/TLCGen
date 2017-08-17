@@ -79,32 +79,6 @@
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                                 CellStyle="{StaticResource LooseDetectorStyle}"
                                 Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridTextColumn x:Key="VeiligheidsGroenMinMGColumn" Header="Veil.gr.min.MG" 
-                            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                            Binding="{Binding Path=VeiligheidsGroenMinMG,FallbackValue=Geen,TargetNullValue=Geen}" >
-            <DataGridTextColumn.CellStyle>
-                <Style TargetType="DataGridCell" BasedOn="{StaticResource LooseDetectorStyle}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>                    
-             </DataGridTextColumn.CellStyle>
-        </DataGridTextColumn>
-        <DataGridTextColumn x:Key="VeiligheidsGroenTijdsduurColumn" Header="Veil.gr.duur" 
-                            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                            Binding="{Binding Path=VeiligheidsGroenTijdsduur,FallbackValue=Geen,TargetNullValue=Geen}" >
-            <DataGridTextColumn.CellStyle>
-                <Style TargetType="DataGridCell" BasedOn="{StaticResource LooseDetectorStyle}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
-                            <Setter Property="IsEnabled" Value="False" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGridTextColumn.CellStyle>
-        </DataGridTextColumn>
         <DataGridTemplateColumn x:Key="RijstrookColumn" Header="Rijstrook" Width="Auto" 
                                 Visibility="{Binding Path=ShowRijstrook, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
                                 CellStyle="{StaticResource LooseDetectorStyle}">
@@ -169,8 +143,6 @@
                 <StaticResource ResourceKey="RijstrookColumn" />
                 <StaticResource ResourceKey="StoringColumn" />
                 <StaticResource ResourceKey="VeiligheidsGroenColumn" />
-                <StaticResource ResourceKey="VeiligheidsGroenMinMGColumn" />
-                <StaticResource ResourceKey="VeiligheidsGroenTijdsduurColumn" />
             </DataGrid.Columns>
         </controls:SpecialDataGrid>
     </Grid>

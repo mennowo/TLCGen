@@ -52,6 +52,32 @@
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=VeiligheidsGroenMinMG}" Header="Veil.gr.min.MG"  >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasVeiligheidsGroen}" Value="false">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=VeiligheidsGroenTijdsduur}" Header="Veil.gr.duur"  >
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="{x:Type DataGridCell}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasVeiligheidsGroen}" Value="false">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

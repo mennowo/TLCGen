@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
-using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -20,37 +19,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tvga; // veiligheidsgroen min. tijdsduur in MG
         private string _tvgb; // tijdsduur veiligheidsgroen
 #pragma warning restore 0649
-        private string _hfile;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
             _MyElements = new List<CCOLElement>();
 
-            foreach (var dm in c.Fasen.SelectMany(x => x.Detectoren))
+            foreach (var fcm in c.Fasen)
             {
-                if (dm.VeiligheidsGroen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                if(fcm.Detectoren.Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
                 {
-                    if (dm.VeiligheidsGroen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                    foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Altijd))
                     {
                         _MyElements.Add(
                             new CCOLElement(
                                 $"{_schvg}{dm.Naam}",
-                                (dm.VeiligheidsGroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0),
+                                dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
                                 CCOLElementTypeEnum.Schakelaar));
                     }
                     _MyElements.Add(
-                        new CCOLElement(
-                            $"{_tvga}{dm.Naam}",
-                            dm.VeiligheidsGroenMinMG,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(
-                        new CCOLElement(
-                            $"{_tvgb}{dm.Naam}",
-                            dm.VeiligheidsGroenTijdsduur,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            new CCOLElement(
+                                $"{_tvga}{fcm.Naam}",
+                                fcm.VeiligheidsGroenMinMG,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                CCOLElementTypeEnum.Timer));
+                        _MyElements.Add(
+                            new CCOLElement(
+                                $"{_tvgb}{fcm.Naam}",
+                                fcm.VeiligheidsGroenTijdsduur,
+                                CCOLElementTimeTypeEnum.TE_type,
+                                CCOLElementTypeEnum.Timer));
                 }
             }
         }
@@ -78,7 +76,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch (type)
             {
@@ -110,13 +108,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
-        }
-
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
-
-            return base.SetSettings(settings);
         }
     }
 }
