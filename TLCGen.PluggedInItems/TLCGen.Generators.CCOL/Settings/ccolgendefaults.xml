@@ -1180,6 +1180,32 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="CCOLVeiligheidsGroenCodeGenerator">
+      <CodePieceData>
+        <ClassName>CCOLVeiligheidsGroenCodeGenerator</ClassName>
+        <Description>Veiligheidsgroen</Description>
+        <Settings>
+          <Setting>
+            <Default>vg</Default>
+            <Setting>vg</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar veiligheidsgroen</Description>
+          </Setting>
+          <Setting>
+            <Default>vga</Default>
+            <Setting>vga</Setting>
+            <Type>Timer</Type>
+            <Description>Minimale tijdsduur MG voor veiligheidsgroen</Description>
+          </Setting>
+          <Setting>
+            <Default>vgb</Default>
+            <Setting>vgb</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur veiligheidsgroen</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>
