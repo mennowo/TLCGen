@@ -39,6 +39,8 @@
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop}}" />
             <RadioButton Content="Meeaanvragen" GroupName="SynchronisatieType" Margin="5"
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Meeaanvraag}}" />
+            <RadioButton Content="Late release" GroupName="SynchronisatieType" Margin="5"
+                         IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.LateRelease}}" />
         </StackPanel>
         <Border BorderBrush="Black" BorderThickness="0.25" Grid.Column="1" >
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top">

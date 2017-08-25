@@ -15,7 +15,8 @@ namespace TLCGen.ViewModels.Enums
         Voorstart = 0x8,
         Naloop = 0x10,
         Meeaanvraag = 0x20,
+        LateRelease = 0x40,
         SomeConflict = Conflict | GarantieConflict,
-        SomeSynchronisatie = Gelijkstart | Voorstart | Naloop | Meeaanvraag
+        SomeSynchronisatie = Gelijkstart | Voorstart | Naloop | Meeaanvraag | LateRelease
     }
 }

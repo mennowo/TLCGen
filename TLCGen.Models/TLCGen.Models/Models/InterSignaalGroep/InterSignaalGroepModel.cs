@@ -25,6 +25,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Meeaanvraag")]
         public List<MeeaanvraagModel> Meeaanvragen { get; set; }
 
+        [XmlArrayItem(ElementName = "LateRelease")]
+        public List<LateReleaseModel> LateReleases { get; set; }
+
         public InterSignaalGroepModel()
         {
             Conflicten = new List<ConflictModel>();
@@ -32,6 +35,7 @@ namespace TLCGen.Models
             Gelijkstarten = new List<GelijkstartModel>();
             Nalopen = new List<NaloopModel>();
             Meeaanvragen = new List<MeeaanvraagModel>();
+            LateReleases = new List<LateReleaseModel>();
         }
     }
 }

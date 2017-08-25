@@ -23,6 +23,7 @@ namespace TLCGen.ViewModels
         private GelijkstartModel _Gelijkstart;
         private VoorstartModel _Voorstart;
         private MeeaanvraagModel _Meeaanvraag;
+        private LateReleaseModel _LateRelease;
 
         private bool _HasConflict;
         private bool _HasGarantieConflict;
@@ -30,6 +31,7 @@ namespace TLCGen.ViewModels
         private bool _HasNaloop;
         private bool _HasVoorstart;
         private bool _HasMeeaanvraag;
+        private bool _HasLateRelease;
 
         private string _FaseVan;
         private string _FaseNaar;
@@ -112,7 +114,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _Meeaanvraag = value;
-                _HasMeeaanvraag = true;
+                _HasMeeaanvraag = _Meeaanvraag != null;
+            }
+        }
+
+        public LateReleaseModel LateRelease
+        {
+            get { return _LateRelease; }
+            set
+            {
+                _LateRelease = value;
+                _HasLateRelease = _LateRelease != null;
             }
         }
 
@@ -258,6 +270,9 @@ namespace TLCGen.ViewModels
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         HasMeeaanvraag = value;
                         break;
+                    case IntersignaalGroepTypeEnum.LateRelease:
+                        HasLateRelease = value;
+                        break;
                     default:
                         throw new NotImplementedException();
                 }
@@ -280,8 +295,10 @@ namespace TLCGen.ViewModels
                         return HasNaloop;
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         return HasMeeaanvraag;
+                    case IntersignaalGroepTypeEnum.LateRelease:
+                        return HasLateRelease;
                     default:
-                        return HasGelijkstart || HasVoorstart || HasNaloop || HasMeeaanvraag;
+                        return HasGelijkstart || HasVoorstart || HasNaloop || HasMeeaanvraag || HasLateRelease;
                 }
             }
             set
@@ -306,7 +323,11 @@ namespace TLCGen.ViewModels
                         break;
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         HasMeeaanvraag = value;
-                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Naloop, value));
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.Meeaanvraag, value));
+                        break;
+                    case IntersignaalGroepTypeEnum.LateRelease:
+                        HasLateRelease = value;
+                        Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.LateRelease, value));
                         break;
                     default:
                         throw new NotImplementedException();
@@ -381,6 +402,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool HasLateRelease
+        {
+            get { return _HasLateRelease; }
+            set
+            {
+                _HasLateRelease = value;
+                RaisePropertyChanged("HasLateRelease");
+                RaisePropertyChanged("IsCoupled");
+            }
+        }
+
         private bool _HasOppositeVoorstart;
         public bool HasOppositeVoorstart
         {
@@ -417,6 +449,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool _HasOppositeLateRelease;
+        public bool HasOppositeLateRelease
+        {
+            get { return _HasOppositeLateRelease; }
+            set
+            {
+                _HasOppositeLateRelease = value;
+                RaisePropertyChanged("HasOppositeLateRelease");
+                RaisePropertyChanged("IsEnabled");
+            }
+        }
+
         public bool IsEnabled
         {
             get
@@ -431,9 +475,11 @@ namespace TLCGen.ViewModels
                     case IntersignaalGroepTypeEnum.GarantieConflict:
                         return HasNoCoupling && !HasOppositeVoorstart && !HasOppositeNaloop && !HasOppositeMeeaanvraag;
                     case IntersignaalGroepTypeEnum.Gelijkstart:
-                        return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart;
+                        return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart && !HasOppositeLateRelease;
                     case IntersignaalGroepTypeEnum.Voorstart:
                         return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeVoorstart;
+                    case IntersignaalGroepTypeEnum.LateRelease:
+                        return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeLateRelease;
                     case IntersignaalGroepTypeEnum.Naloop:
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         return !HasConflict && !HasGarantieConflict;
@@ -444,7 +490,7 @@ namespace TLCGen.ViewModels
 
         public bool HasNoCoupling
         {
-            get { return !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart || HasMeeaanvraag); }
+            get { return !(HasVoorstart || HasGelijkstart || HasNaloop || HasOppositeVoorstart || HasMeeaanvraag || HasLateRelease); }
         }
 
         public bool ReferencesSelf
@@ -630,15 +676,19 @@ namespace TLCGen.ViewModels
                     break;
                 case IntersignaalGroepTypeEnum.Gelijkstart:
                     propertyInfo = _Gelijkstart.GetType().GetProperty(property);
-                    propertyInfo.SetValue(_Conflict, val);
+                    propertyInfo.SetValue(_Gelijkstart, val);
                     break;
                 case IntersignaalGroepTypeEnum.Naloop:
                     propertyInfo = _Naloop.GetType().GetProperty(property);
-                    propertyInfo.SetValue(_Conflict, val);
+                    propertyInfo.SetValue(_Naloop, val);
                     break;
                 case IntersignaalGroepTypeEnum.Voorstart:
                     propertyInfo = _Voorstart.GetType().GetProperty(property);
-                    propertyInfo.SetValue(_Conflict, val);
+                    propertyInfo.SetValue(_Voorstart, val);
+                    break;
+                case IntersignaalGroepTypeEnum.LateRelease:
+                    propertyInfo = _LateRelease.GetType().GetProperty(property);
+                    propertyInfo.SetValue(_LateRelease, val);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -668,6 +718,10 @@ namespace TLCGen.ViewModels
                     propertyInfo = _Voorstart.GetType().GetProperty(property);
                     returnval = (T)propertyInfo.GetValue(_Voorstart);
                     break;
+                case IntersignaalGroepTypeEnum.LateRelease:
+                    propertyInfo = _LateRelease.GetType().GetProperty(property);
+                    returnval = (T)propertyInfo.GetValue(_LateRelease);
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -680,7 +734,7 @@ namespace TLCGen.ViewModels
 
         public bool IsOK()
         {
-            if ((HasConflict || HasGarantieConflict) && (HasVoorstart || HasNaloop || HasGelijkstart || HasMeeaanvraag))
+            if ((HasConflict || HasGarantieConflict) && (HasVoorstart || HasNaloop || HasGelijkstart || HasMeeaanvraag | HasLateRelease))
                 return false;
             if (HasVoorstart && HasGelijkstart)
                 return false;
@@ -698,6 +752,7 @@ namespace TLCGen.ViewModels
             _Voorstart = new VoorstartModel();
             _Naloop = new NaloopModel();
             _Meeaanvraag = new MeeaanvraagModel();
+            _LateRelease = new LateReleaseModel();
 
             _InterSignaalGroepElements = new Dictionary<IntersignaalGroepTypeEnum, IInterSignaalGroepElement>();
             _InterSignaalGroepElements.Add(IntersignaalGroepTypeEnum.Conflict, _Conflict as IInterSignaalGroepElement);
@@ -706,6 +761,7 @@ namespace TLCGen.ViewModels
             _InterSignaalGroepElements.Add(IntersignaalGroepTypeEnum.Voorstart, _Voorstart as IInterSignaalGroepElement);
             _InterSignaalGroepElements.Add(IntersignaalGroepTypeEnum.Naloop, _Naloop as IInterSignaalGroepElement);
             _InterSignaalGroepElements.Add(IntersignaalGroepTypeEnum.Meeaanvraag, _Meeaanvraag as IInterSignaalGroepElement);
+            _InterSignaalGroepElements.Add(IntersignaalGroepTypeEnum.LateRelease, _LateRelease as IInterSignaalGroepElement);
 
             ReferencesSelf = referencetoself;
             if (ReferencesSelf) _Conflict.Waarde = -5;

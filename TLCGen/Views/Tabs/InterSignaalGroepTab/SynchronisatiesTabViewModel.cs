@@ -722,7 +722,6 @@ namespace TLCGen.ViewModels
                 }
             }
 
-
             foreach (VoorstartModel vm in _Controller.InterSignaalGroep.Voorstarten)
             {
                 foreach (SynchronisatieViewModel svm in ConflictMatrix)
@@ -735,6 +734,25 @@ namespace TLCGen.ViewModels
                             if (svm_opp.FaseVan == vm.FaseNaar && svm_opp.FaseNaar == vm.FaseVan)
                             {
                                 svm_opp.HasOppositeVoorstart = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (LateReleaseModel lrm in _Controller.InterSignaalGroep.LateReleases)
+            {
+                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                {
+                    if (svm.FaseVan == lrm.FaseVan && svm.FaseNaar == lrm.FaseNaar)
+                    {
+                        svm.LateRelease = lrm;
+                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        {
+                            if (svm_opp.FaseVan == lrm.FaseNaar && svm_opp.FaseNaar == lrm.FaseVan)
+                            {
+                                svm_opp.HasOppositeLateRelease = true;
                                 break;
                             }
                         }
@@ -790,6 +808,7 @@ namespace TLCGen.ViewModels
             _Controller.InterSignaalGroep.Gelijkstarten.RemoveAll();
             _Controller.InterSignaalGroep.Nalopen.RemoveAll();
             _Controller.InterSignaalGroep.Meeaanvragen.RemoveAll();
+            _Controller.InterSignaalGroep.LateReleases.RemoveAll();
             bool[,] gelijkstartsaved = new bool[fccount, fccount];
             for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
             {
@@ -822,6 +841,11 @@ namespace TLCGen.ViewModels
                     {
                         _Controller.InterSignaalGroep.Meeaanvragen.Add(ConflictMatrix[fcvm_from, fcvm_to].Meeaanvraag);
                     }
+
+                    if (ConflictMatrix[fcvm_from, fcvm_to].HasLateRelease)
+                    {
+                        _Controller.InterSignaalGroep.LateReleases.Add(ConflictMatrix[fcvm_from, fcvm_to].LateRelease);
+                    }
                 }
             }
         }
@@ -846,7 +870,7 @@ namespace TLCGen.ViewModels
 
         private void OnNameChanged(NameChangedMessage message)
         {
-            if(Fasen.Where(x => x.Naam == message.NewName).Any())
+            if(Fasen.Any(x => x.Naam == message.NewName))
             {
                 BuildConflictMatrix();
             }
@@ -945,6 +969,24 @@ namespace TLCGen.ViewModels
                         {
                             var cvm2 = ConflictMatrix[fcm_to, fcm_from];
                             cvm2.HasOppositeVoorstart = message.IsCoupled;
+                        }
+                    }
+                }
+            }
+
+            // LateRelease
+            if (message.LateRelease != null)
+            {
+                int fccount = Fasen.Count;
+                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                {
+                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    {
+                        if (Fasen[fcm_from].Naam == message.LateRelease.FaseVan &&
+                            Fasen[fcm_to].Naam == message.LateRelease.FaseNaar)
+                        {
+                            var cvm2 = ConflictMatrix[fcm_to, fcm_from];
+                            cvm2.HasOppositeLateRelease = message.IsCoupled;
                         }
                     }
                 }
