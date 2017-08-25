@@ -48,6 +48,36 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int HuidigeVersieMajor
+        {
+            get => _Controller?.Data?.HuidigeVersieMajor ?? 0;
+            set
+            {
+                _Controller.Data.HuidigeVersieMajor = value;
+                RaisePropertyChanged<object>("HuidigeVersieMajor", broadcast: true);
+            }
+        }
+
+        public int HuidigeVersieMinor
+        {
+            get => _Controller?.Data?.HuidigeVersieMinor ?? 0;
+            set
+            {
+                _Controller.Data.HuidigeVersieMinor = value;
+                RaisePropertyChanged<object>("HuidigeVersieMinor", broadcast: true);
+            }
+        }
+
+        public int HuidigeVersieRevision
+        {
+            get => _Controller?.Data?.HuidigeVersieRevision ?? 0;
+            set
+            {
+                _Controller.Data.HuidigeVersieRevision = value;
+                RaisePropertyChanged<object>("HuidigeVersieRevision", broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -87,20 +117,31 @@ namespace TLCGen.ViewModels
             VersieModel vm = new VersieModel();
             vm.Datum = DateTime.Now;
             string nextver = null;
+            int nextmajor = 1, nextminor = 0;
             if (Versies != null && Versies.Count > 0)
             {
                 Match m = Regex.Match(Versies[Versies.Count - 1].Versie, @"([0-9]+)\.([0-9]+)\.([0-9]+)");
                 if (m.Groups.Count == 4)
                 {
+                    string majver = m.Groups[1].Value;
                     string midver = m.Groups[2].Value;
+                    int nextmajver;
                     int nextmidver;
+                    if (Int32.TryParse(majver, out nextmajver))
+                    {
+                        nextmajor = nextmajver;
+                    }
                     if (Int32.TryParse(midver, out nextmidver))
                     {
+                        nextminor = nextmidver + 1;
                         nextver = m.Groups[1].Value + "." + (nextmidver + 1).ToString() + ".0";
                     }
                 }
             }
-            vm.Versie = nextver == null ? "1.0.0" : nextver;
+            HuidigeVersieMajor = nextmajor;
+            HuidigeVersieMinor = nextminor;
+            HuidigeVersieRevision = 0;
+            vm.Versie = nextver ?? "1.0.0";
             vm.Ontwerper = Environment.UserName;
             VersieViewModel vvm = new VersieViewModel(vm);
             Versies.Add(vvm);

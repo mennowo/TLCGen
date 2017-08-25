@@ -84,7 +84,7 @@
       </Data>
     </Default>
     <Default>
-      <DefaultName>Fasecyclus voetganger</DefaultName>
+      <DefaultName>Fasecyclus ov</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>OV</Selector1>
       <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>

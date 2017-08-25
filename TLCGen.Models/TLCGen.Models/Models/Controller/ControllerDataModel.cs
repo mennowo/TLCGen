@@ -43,6 +43,10 @@ namespace TLCGen.Models
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
         public SynchronisatieTypeEnum NaloopSynchronisatieType { get; set; }
 
+        public int HuidigeVersieMajor { get; set; }
+        public int HuidigeVersieMinor { get; set; }
+        public int HuidigeVersieRevision { get; set; }
+
         [Browsable(false)]
         public string TLCGenVersie { get; set; }
 
@@ -50,15 +54,12 @@ namespace TLCGen.Models
         public List<SegmentDisplayElementModel> SegmentenDisplayBitmapData { get; set; }
 
         // Note: this is a feature for future use; it is not yet disclosed to the user
-        private SegmentDisplayTypeEnum _SegmentDisplayType;
+        private SegmentDisplayTypeEnum _segmentDisplayType;
         [Browsable(false)]
         public SegmentDisplayTypeEnum SegmentDisplayType
         {
-            get { return _SegmentDisplayType; }
-            set
-            {
-                _SegmentDisplayType = value;
-            }
+            get => _segmentDisplayType;
+            set => _segmentDisplayType = value;
         }
 
         public FixatieModel FixatieData { get; set; }
@@ -66,15 +67,15 @@ namespace TLCGen.Models
         [XmlIgnore]
         public bool FixatieMogelijk
         {
-            get { return FixatieData.FixatieMogelijk; }
-            set { FixatieData.FixatieMogelijk = value; }
+            get => FixatieData.FixatieMogelijk;
+            set => FixatieData.FixatieMogelijk = value;
         }
 
         [XmlIgnore]
         public bool BijkomenTijdensFixatie
         {
-            get { return FixatieData.BijkomenTijdensFixatie; }
-            set { FixatieData.BijkomenTijdensFixatie = value; }
+            get => FixatieData.BijkomenTijdensFixatie;
+            set => FixatieData.BijkomenTijdensFixatie = value;
         }
 
 
@@ -88,7 +89,7 @@ namespace TLCGen.Models
         public void SetSegmentOutputs()
         {
             SegmentenDisplayBitmapData.Clear();
-            switch (_SegmentDisplayType)
+            switch (_segmentDisplayType)
             {
                 case SegmentDisplayTypeEnum.EnkelDisplay:
                     if (SegmentenDisplayBitmapData.Count == 0)

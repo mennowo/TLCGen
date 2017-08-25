@@ -13,7 +13,19 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label FontWeight="Bold" Content="Versies" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="30" />
+                <ColumnDefinition Width="*" MinWidth="200" />
+            </Grid.ColumnDefinitions>
+            <Label FontWeight="Bold" Content="Versies" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                <Label FontWeight="Bold" Content="Huidige versie" />
+                <TextBox Margin="2" Text="{Binding Path=HuidigeVersieMajor}" MinWidth="30" />
+                <TextBox Margin="2" Text="{Binding Path=HuidigeVersieMinor}" MinWidth="30"/>
+                <TextBox Margin="2" Text="{Binding Path=HuidigeVersieRevision}" MinWidth="30"/>
+            </StackPanel>
+        </Grid>
         <DataGrid Grid.Row="1" Margin="2"
                                       ItemsSource="{Binding Versies}"
                                       SelectedItem="{Binding SelectedVersie}"
