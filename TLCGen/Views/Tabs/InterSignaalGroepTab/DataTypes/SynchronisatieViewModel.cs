@@ -477,9 +477,9 @@ namespace TLCGen.ViewModels
                     case IntersignaalGroepTypeEnum.Gelijkstart:
                         return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart && !HasLateRelease && !HasOppositeLateRelease;
                     case IntersignaalGroepTypeEnum.Voorstart:
-                        return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeVoorstart;
+                        return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeVoorstart && !HasLateRelease && !HasOppositeLateRelease;
                     case IntersignaalGroepTypeEnum.LateRelease:
-                        return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeLateRelease;
+                        return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeLateRelease && !HasVoorstart && !HasOppositeVoorstart;
                     case IntersignaalGroepTypeEnum.Naloop:
                     case IntersignaalGroepTypeEnum.Meeaanvraag:
                         return !HasConflict && !HasGarantieConflict;
