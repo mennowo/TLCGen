@@ -860,6 +860,12 @@
             <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking HD</Description>
           </Setting>
           <Setting>
+            <Default>vi</Default>
+            <Setting>vi</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar versnelde inmelding</Description>
+          </Setting>
+          <Setting>
             <Default>checkopdsin</Default>
             <Setting>checkopdsin</Setting>
             <Type>Schakelaar</Type>

@@ -628,6 +628,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             string _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
             string _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            string _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -739,14 +740,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             sb.AppendLine();
-            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.VersneldeInmeldingKoplus))
+            foreach (var ov in c.OVData.OVIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit))
             {
                 var fc = c.Fasen.FirstOrDefault(x => x.Naam == ov.FaseCyclus);
                 if (fc != null && fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop))
                 {
                     var d = fc.Detectoren.First(x => x.Type == DetectorTypeEnum.Kop);
-                    sb.AppendLine(
-                        $"{ts}if (DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
+                    if (ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd)
+                    {
+                        sb.AppendLine(
+                            $"{ts}if (DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
+                    }
+                    else
+                    {
+                        sb.AppendLine(
+                            $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
+                    }
                 }
             }
             sb.AppendLine("}");

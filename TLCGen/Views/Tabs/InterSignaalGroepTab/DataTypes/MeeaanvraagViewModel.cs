@@ -35,9 +35,12 @@ namespace TLCGen.ViewModels
                 {
                     _Meeaanvraag.Type = value;
                     RaisePropertyChanged<object>("Type", broadcast: true);
+                    RaisePropertyChanged("TypeStartGroen");
                 }
             }
         }
+
+        public bool TypeStartGroen => Type == MeeaanvraagTypeEnum.Startgroen;
 
         public bool TypeInstelbaarOpStraat
         {
@@ -66,6 +69,26 @@ namespace TLCGen.ViewModels
             {
                 _Meeaanvraag.DetectieAfhankelijk = value;
                 RaisePropertyChanged<object>("DetectieAfhankelijk", broadcast: true);
+            }
+        }
+
+        public bool Uitgesteld
+        {
+            get { return _Meeaanvraag.Uitgesteld; }
+            set
+            {
+                _Meeaanvraag.Uitgesteld = value;
+                RaisePropertyChanged<object>("Uitgesteld", broadcast: true);
+            }
+        }
+
+        public int UitgesteldTijdsduur
+        {
+            get { return _Meeaanvraag.UitgesteldTijdsduur; }
+            set
+            {
+                _Meeaanvraag.UitgesteldTijdsduur = value;
+                RaisePropertyChanged<object>("UitgesteldTijdsduur", broadcast: true);
             }
         }
 

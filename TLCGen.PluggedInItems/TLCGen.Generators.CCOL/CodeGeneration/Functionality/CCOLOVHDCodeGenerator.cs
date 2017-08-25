@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -60,6 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmtestkarlyn;
         private string _schupinagb;
         private string _schupinagbhd;
+        private string _schvi;
         private string _prmpmgt;
         private string _prmognt;
         private string _prmnofm;
@@ -111,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 _MyElements.Add(new CCOLElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
 
-                if (c.OVData.OVIngrepen.Where(x => x.KAR).Any())
+                if (c.OVData.OVIngrepen.Any(x => x.KAR))
                 {
                     var prmtest1 = new CCOLElement($"{_prmtestkarvert}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter);
                     var prmtest2 = new CCOLElement($"{_prmtestkarlyn}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter);
@@ -176,6 +178,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_tblk}{ov.FaseCyclus}",          0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_schupinagb}{ov.FaseCyclus}",    0,                             CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 _MyElements.Add(new CCOLElement($"{_prmovstp}{ov.FaseCyclus}",      0,                             CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
+                if (ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
+                    ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit)
+                {
+                    _MyElements.Add(new CCOLElement($"{_schvi}{ov.FaseCyclus}",    ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                }
                 int opties = 0;
                 if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
                 if (ov.AfkappenConflictenOV) opties += 300;
@@ -316,8 +323,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
                     sb.AppendLine();
-                    if ((c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any()) ||
-                        (c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any()))
+                    if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
+                        c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
                     {
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");

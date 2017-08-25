@@ -33,6 +33,12 @@
             <CheckBox Content="Detectie afhankelijk" 
                           IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
                           IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />
+            <CheckBox Content="Uitgestelde meeaanvraag op SG" 
+                      IsEnabled="{Binding Path=TypeStartGroen}"
+                      IsChecked="{Binding Path=Uitgesteld}" Margin="5" />
+            <Label Content="Tijdsduur uitstel" />
+            <TextBox IsEnabled="{Binding Path=Uitgesteld}" Margin="2"
+                     Text="{Binding Path=UitgesteldTijdsduur}"/>
             <StackPanel Orientation="Vertical" IsEnabled="{Binding Path=DetectieAfhankelijk}">
                 <Label Content="Detectoren" />
                 <DataGrid

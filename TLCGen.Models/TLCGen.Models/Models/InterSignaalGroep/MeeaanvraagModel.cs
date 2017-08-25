@@ -23,6 +23,8 @@ namespace TLCGen.Models
         public MeeaanvraagTypeEnum Type { get; set; }
         public bool TypeInstelbaarOpStraat { get; set; }
         public bool DetectieAfhankelijk { get; set; }
+        public bool Uitgesteld { get; set; }
+        public int UitgesteldTijdsduur { get; set; }
 
         [XmlArrayItem(ElementName = "MeeaanvraagDetector")]
         public List<MeeaanvraagDetectorModel> Detectoren { get; set; }

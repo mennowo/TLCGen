@@ -19,7 +19,7 @@ namespace TLCGen.Models
         public bool Vecom { get; set; }
         //public bool MassaDetectie { get; set; }
         public OVIngreepVoertuigTypeEnum Type { get; set; }
-        public bool VersneldeInmeldingKoplus { get; set; }
+        public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
 
         public int RijTijdOngehinderd { get; set; }
         public int RijTijdBeperktgehinderd { get; set; }

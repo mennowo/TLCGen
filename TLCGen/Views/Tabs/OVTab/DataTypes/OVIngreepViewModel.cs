@@ -109,7 +109,7 @@ namespace TLCGen.ViewModels
 
         [Description("Versnelde inmelding koplus")]
         [EnabledCondition("HasKoplus")]
-        public bool VersneldeInmeldingKoplus
+        public NooitAltijdAanUitEnum VersneldeInmeldingKoplus
         {
             get => _OVIngreep.VersneldeInmeldingKoplus;
             set
