@@ -263,6 +263,18 @@ namespace TLCGen.Settings
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Radar;
                     }
+                    else if (value == DetectorTypeEnum.VecomIngang.GetDescription())
+                    {
+                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.VecomIngang;
+                    }
+                    else if (value == DetectorTypeEnum.OpticomIngang.GetDescription())
+                    {
+                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.OpticomIngang;
+                    }
+                    else if (value == DetectorTypeEnum.Overig.GetDescription())
+                    {
+                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Overig;
+                    }
                     else
                     {
                         throw new NotImplementedException("Unknown detector type in FaseCyclusTemplateViewModel.cs line 268");

@@ -849,13 +849,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             break;
                         case Models.Enumerations.DetectorTypeEnum.File:
                         case Models.Enumerations.DetectorTypeEnum.Verweg:
-                            sb.AppendLine("DVER_type;");
+                            sb.AppendLine("DL_type | DVER_type;");
                             break;
                         case Models.Enumerations.DetectorTypeEnum.Kop:
-                            sb.AppendLine("DKOP_type;");
+                            sb.AppendLine("DL_type | DKOP_type;");
                             break;
                         case Models.Enumerations.DetectorTypeEnum.Lang:
-                            sb.AppendLine("DLNG_type;");
+                            sb.AppendLine("DL_type | DLNG_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.VecomIngang:
+                        case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
+                            sb.AppendLine("DS_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.Overig:
+                            sb.AppendLine("DL_type;");
+                            break;
+                        case Models.Enumerations.DetectorTypeEnum.Radar:
+                            // TODO: what type to use here?
                             break;
                         default:
                             throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
@@ -874,13 +885,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         break;
                     case Models.Enumerations.DetectorTypeEnum.File:
                     case Models.Enumerations.DetectorTypeEnum.Verweg:
-                        sb.AppendLine("DVER_type;");
+                        sb.AppendLine("DL_type | DVER_type;");
                         break;
                     case Models.Enumerations.DetectorTypeEnum.Kop:
-                        sb.AppendLine("DKOP_type;");
+                        sb.AppendLine("DL_type | DKOP_type;");
                         break;
                     case Models.Enumerations.DetectorTypeEnum.Lang:
-                        sb.AppendLine("DLNG_type;");
+                        sb.AppendLine("DL_type | DLNG_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.VecomIngang:
+                    case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                        // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
+                        sb.AppendLine("DS_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.Overig:
+                        sb.AppendLine("DL_type;");
+                        break;
+                    case Models.Enumerations.DetectorTypeEnum.Radar:
+                        // TODO: what type to use here?
                         break;
                     default:
                         throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());

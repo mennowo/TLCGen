@@ -26,6 +26,12 @@ namespace TLCGen.Models.Enumerations
         [Description("Drukknop buiten")]
         KnopBuiten,
         [Description("Radar")]
-        Radar
+        Radar,
+        [Description("Vecom ingang")]
+        VecomIngang,
+        [Description("Opticom ingang")]
+        OpticomIngang,
+        [Description("Overig")]
+        Overig
     }
 }

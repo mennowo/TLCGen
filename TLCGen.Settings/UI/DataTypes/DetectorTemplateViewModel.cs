@@ -130,6 +130,18 @@ namespace TLCGen.Settings
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Radar;
                     }
+                    else if (value == DetectorTypeEnum.VecomIngang.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.VecomIngang;
+                    }
+                    else if (value == DetectorTypeEnum.OpticomIngang.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.OpticomIngang;
+                    }
+                    else if (value == DetectorTypeEnum.Overig.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.Overig;
+                    }
                     else
                     {
                         throw new NotImplementedException("Unknown detector type in DetectorTemplateViewModel.cs line 135");
