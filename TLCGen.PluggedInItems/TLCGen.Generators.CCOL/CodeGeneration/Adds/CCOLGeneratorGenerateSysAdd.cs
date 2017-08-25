@@ -9,17 +9,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateSysAdd(ControllerModel controller)
+        private string GenerateSysAddHeader(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
+            sb.AppendLine(_beginGeneratedHeader);
             sb.AppendLine("/* DEFINITIE BESTAND, GEBRUIKERS TOEVOEGINGEN          */");
-            sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
             sb.AppendLine("/* --------------------------------------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "sys.add"));
+            sb.Append(GenerateFileHeader(c.Data, "sys.add"));
             sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
+            sb.Append(GenerateVersionHeader(c.Data));
+            sb.AppendLine(_endGeneratedHeader);
+
+            return sb.ToString();
+        }
+
+        private string GenerateSysAdd(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GenerateSysAddHeader(c));
             sb.AppendLine();
             sb.AppendLine("#define FCMAX  (FCMAX1+0)  /* Totaal aantal gebruikte fasecycli     */");
             sb.AppendLine("#define USMAX  (USMAX1+0)  /* Totaal aantal gebruikte uitgangen     */");

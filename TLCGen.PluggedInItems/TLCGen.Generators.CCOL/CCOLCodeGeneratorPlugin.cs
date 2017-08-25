@@ -112,6 +112,15 @@ namespace TLCGen.Generators.CCOL
             }
             _alwaysOverwriteSourcesMenuItem.IsChecked =
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+            if (_alterAddHeadersWhileGeneratingMenuItem == null)
+            {
+                _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
+                {
+                    Header = "Bijwerken add headers tijdens genereren"
+                };
+            }
+            _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
+                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
         }
 
         public void SaveSettings()
@@ -129,6 +138,7 @@ namespace TLCGen.Generators.CCOL
         #region ITLCGenMenuItem
 
         private MenuItem _alwaysOverwriteSourcesMenuItem;
+        private MenuItem _alterAddHeadersWhileGeneratingMenuItem;
         private MenuItem _pluginMenuItem;
 
         public MenuItem Menu
@@ -153,6 +163,13 @@ namespace TLCGen.Generators.CCOL
                             Header = "Altijd overschrijven bronbestanden"
                         };
                     }
+                    if (_alterAddHeadersWhileGeneratingMenuItem == null)
+                    {
+                        _alterAddHeadersWhileGeneratingMenuItem = new MenuItem
+                        {
+                            Header = "Bijwerken add headers tijdens genereren"
+                        };
+                    }
                     _alwaysOverwriteSourcesMenuItem.Click += (o, e) =>
                     {
                         CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources =
@@ -160,8 +177,16 @@ namespace TLCGen.Generators.CCOL
                         _alwaysOverwriteSourcesMenuItem.IsChecked =
                             CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
                     };
+                    _alterAddHeadersWhileGeneratingMenuItem.Click += (o, e) =>
+                    {
+                        CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating =
+                            !CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+                        _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
+                            CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+                    };
                     _pluginMenuItem.Items.Add(sitem1);
                     _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
+                    _pluginMenuItem.Items.Add(_alterAddHeadersWhileGeneratingMenuItem);
                 }
                 return _pluginMenuItem;
             }

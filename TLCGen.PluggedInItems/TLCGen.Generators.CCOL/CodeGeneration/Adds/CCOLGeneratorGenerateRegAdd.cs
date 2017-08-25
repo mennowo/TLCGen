@@ -9,17 +9,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateRegAdd(ControllerModel controller)
+        private string GenerateRegAddHeader(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
+            sb.AppendLine(_beginGeneratedHeader);
             sb.AppendLine("/* REGEL BESTAND, GEBRUIKERS TOEVOEGINGEN              */");
-            sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
             sb.AppendLine("/* --------------------------------------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "reg.add"));
+            sb.Append(GenerateFileHeader(c.Data, "reg.add"));
             sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
+            sb.Append(GenerateVersionHeader(c.Data));
+            sb.AppendLine(_endGeneratedHeader);
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegAdd(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GenerateRegAddHeader(c));
             sb.AppendLine();
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
             sb.AppendLine("void SpecialSignals_Add()");
@@ -78,7 +88,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            if (controller.ModuleMolen.LangstWachtendeAlternatief)
+            if (c.ModuleMolen.LangstWachtendeAlternatief)
             {
                 sb.AppendLine("void Alternatief_Add()");
                 sb.AppendLine("{");

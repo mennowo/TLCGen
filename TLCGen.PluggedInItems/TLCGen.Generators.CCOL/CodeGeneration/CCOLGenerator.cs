@@ -42,6 +42,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string ts => CCOLGeneratorSettingsProvider.Default.Settings.TabSpace ?? "";
 
+        private string _beginGeneratedHeader = "/* BEGIN GEGENEREERDE HEADER */";
+        private string _endGeneratedHeader = "/* EINDE GEGENEREERDE HEADER */";
+
         #endregion // Fields
 
         #region Properties
@@ -93,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
 
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
-                    throw new NotImplementedException("Error collection CCOL elements from controller.");
+                    throw new NotImplementedException("Error collecting CCOL elements from controller.");
 
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                 {
@@ -155,19 +158,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c));
                 }
 
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), GenerateRegAdd(c));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), GenerateTabAdd(c));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), GenerateDplAdd(c));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), GenerateSimAdd(c));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add")))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), GenerateSysAdd(c));
-                if (!File.Exists(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add")) &&
-                    (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0))
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), GenerateOvAdd(c));
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader);
+                if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
+                {
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader);
+                }
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
@@ -297,6 +296,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     File.Delete(Path.Combine(sourcefilepath, filename));
                 }
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+            }
+        }
+
+        private void WriteAndReviseAdd(string filename, ControllerModel c, Func<ControllerModel, string> generateFunc,
+            Func<ControllerModel, string> generateHeaderFunc)
+        {
+            if (!File.Exists(filename))
+            {
+                File.WriteAllText(filename, generateFunc(c));
+            }
+            else if(CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating)
+            {
+                try
+                {
+                    var addlines = File.ReadAllLines(filename);
+                    var sb = new StringBuilder();
+                    
+                    var header = false;
+                    foreach (var l in addlines)
+                    {
+                        if (l == _endGeneratedHeader)
+                        {
+                            header = false;
+                        }
+                        else if (l == _beginGeneratedHeader)
+                        {
+                            header = true;
+                            sb.Append(generateHeaderFunc(c));
+                        }
+                        else if(!header)
+                        {
+                            sb.AppendLine(l);
+                        }
+                    }
+                    File.Delete(filename);
+                    File.WriteAllText(filename, sb.ToString());
+                }
+                catch
+                {
+                    // ignored
+                }
             }
         }
 

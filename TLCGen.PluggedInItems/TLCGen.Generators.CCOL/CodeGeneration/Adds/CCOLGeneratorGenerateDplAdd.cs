@@ -9,19 +9,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateDplAdd(ControllerModel controller)
+        private string GenerateDplAddHeader(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
+            sb.AppendLine(_beginGeneratedHeader);
             sb.AppendLine("/* DISPLAY BESTAND, GEBRUIKERS TOEVOEGINGEN            */");
-            sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
             sb.AppendLine("/* --------------------------------------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "dpl.add"));
+            sb.Append(GenerateFileHeader(c.Data, "dpl.add"));
             sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
-            sb.AppendLine();
+            sb.Append(GenerateVersionHeader(c.Data));
+            sb.AppendLine(_endGeneratedHeader);
 
+            return sb.ToString();
+        }
+
+        private string GenerateDplAdd(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.Append(GenerateDplAddHeader(c));
+            sb.AppendLine();
             sb.AppendLine("/* extra fasecycli */");
             sb.AppendLine("/* --------------- */");
             sb.AppendLine();

@@ -9,19 +9,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateOvAdd(ControllerModel controller)
+        private string GenerateOvAddHeader(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(_beginGeneratedHeader);
+            sb.AppendLine("/* OV BESTAND, GEBRUIKERS TOEVOEGINGEN                 */");
+            sb.AppendLine("/* --------------------------------------------------- */");
+            sb.AppendLine();
+            sb.Append(GenerateFileHeader(c.Data, "ov.add"));
+            sb.AppendLine();
+            sb.Append(GenerateVersionHeader(c.Data));
+            sb.AppendLine(_endGeneratedHeader);
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvAdd(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine("/* OV BESTAND, GEBRUIKERS TOEVOEGINGEN                 */");
-            sb.AppendLine("/* (gegenereerde headers niet wijzigen of verwijderen) */");
-            sb.AppendLine("/* --------------------------------------------------- */");
+            sb.Append(GenerateDplAddHeader(c));
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "reg.add"));
-            sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
-            sb.AppendLine();
-
             sb.AppendLine("void RijTijdScenario_Add(void) {");
             sb.AppendLine("  /* -----------------------------------------------");
             sb.AppendLine("     Pas hier zonodig het RijTijdScenario aan, bijv:");
