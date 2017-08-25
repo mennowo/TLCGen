@@ -18,7 +18,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _usfile;
         private string _hafv;
         private string _tafv;
-        private string _schafv;
         private string _trij;
         private string _tbz;
         private string _prmfperc;
@@ -63,14 +62,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         fm.AfvalVertraging,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Timer));
-                _myElements.Add(
-                    new CCOLElement(
-                        $"{_schafv}{fm.Naam}",
-#warning Make this configurable via GUI (?)
-                        1,
-                        CCOLElementTimeTypeEnum.SCH_type,
-                        CCOLElementTypeEnum.Schakelaar));
-
+                
                 var detectorDict = new Dictionary<int, List<string>>();
                 foreach (var fmd in fm.FileDetectoren)
                 {
@@ -309,7 +301,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine(";");
 
-                        sb.AppendLine($"{ts}if (!(T[{_tpf}{_tafv}{fm.Naam}] || RT[{_tpf}{_tafv}{fm.Naam}]) && SCH[{_schpf}{_schafv}{fm.Naam}])");
+                        sb.AppendLine($"{ts}if (!(T[{_tpf}{_tafv}{fm.Naam}] || RT[{_tpf}{_tafv}{fm.Naam}]))");
                         sb.AppendLine($"{ts}{{");
                         foreach (var fd in fm.FileDetectoren)
                         {
