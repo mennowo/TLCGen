@@ -475,7 +475,7 @@ namespace TLCGen.ViewModels
                     case IntersignaalGroepTypeEnum.GarantieConflict:
                         return HasNoCoupling && !HasOppositeVoorstart && !HasOppositeNaloop && !HasOppositeMeeaanvraag;
                     case IntersignaalGroepTypeEnum.Gelijkstart:
-                        return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart && !HasOppositeLateRelease;
+                        return !HasConflict && !HasGarantieConflict && !HasVoorstart && !HasOppositeVoorstart && !HasLateRelease && !HasOppositeLateRelease;
                     case IntersignaalGroepTypeEnum.Voorstart:
                         return !HasConflict && !HasGarantieConflict && !HasGelijkstart && !HasOppositeVoorstart;
                     case IntersignaalGroepTypeEnum.LateRelease:
