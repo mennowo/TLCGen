@@ -192,6 +192,14 @@ namespace TLCGen.SpecialsRotterdam
             _FasenWithDummies = new List<string>();
             _MyElements = new List<CCOLElement>();
 
+            #region Versie xx yy zz
+
+            _MyElements.Add(new CCOLElement("xx", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("yy", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement("zz", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+
+            #endregion // Versie xx yy zz
+
             #region OVM
 
             if (_MyModel.ToevoegenOVM)

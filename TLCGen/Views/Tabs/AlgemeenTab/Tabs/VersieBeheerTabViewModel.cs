@@ -114,24 +114,24 @@ namespace TLCGen.ViewModels
 
         void AddVersieCommand_Executed()
         {
-            VersieModel vm = new VersieModel();
-            vm.Datum = DateTime.Now;
+            var vm = new VersieModel
+            {
+                Datum = DateTime.Now
+            };
             string nextver = null;
             int nextmajor = 1, nextminor = 0;
             if (Versies != null && Versies.Count > 0)
             {
-                Match m = Regex.Match(Versies[Versies.Count - 1].Versie, @"([0-9]+)\.([0-9]+)\.([0-9]+)");
+                var m = Regex.Match(Versies[Versies.Count - 1].Versie, @"([0-9]+)\.([0-9]+)\.([0-9]+)");
                 if (m.Groups.Count == 4)
                 {
-                    string majver = m.Groups[1].Value;
-                    string midver = m.Groups[2].Value;
-                    int nextmajver;
-                    int nextmidver;
-                    if (Int32.TryParse(majver, out nextmajver))
+                    var majver = m.Groups[1].Value;
+                    var midver = m.Groups[2].Value;
+                    if (int.TryParse(majver, out int nextmajver))
                     {
                         nextmajor = nextmajver;
                     }
-                    if (Int32.TryParse(midver, out nextmidver))
+                    if (int.TryParse(midver, out int nextmidver))
                     {
                         nextminor = nextmidver + 1;
                         nextver = m.Groups[1].Value + "." + (nextmidver + 1).ToString() + ".0";
@@ -143,8 +143,8 @@ namespace TLCGen.ViewModels
             HuidigeVersieRevision = 0;
             vm.Versie = nextver ?? "1.0.0";
             vm.Ontwerper = Environment.UserName;
-            VersieViewModel vvm = new VersieViewModel(vm);
-            Versies.Add(vvm);
+            var vvm = new VersieViewModel(vm);
+            Versies?.Add(vvm);
         }
 
         bool AddVersieCommand_CanExecute()
