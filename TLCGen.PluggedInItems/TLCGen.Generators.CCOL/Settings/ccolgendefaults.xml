@@ -266,6 +266,12 @@
             <Description>Timer richtinggevoelige aanvraag rijtijd</Description>
           </Setting>
           <Setting>
+            <Default>rgav</Default>
+            <Setting>rgav</Setting>
+            <Type>Timer</Type>
+            <Description>Timer reset richtinggevoelige aanvraag</Description>
+          </Setting>
+          <Setting>
             <Default>rgad</Default>
             <Setting>rgad</Setting>
             <Type>Schakelaar</Type>

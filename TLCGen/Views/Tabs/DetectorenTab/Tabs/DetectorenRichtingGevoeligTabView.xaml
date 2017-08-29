@@ -33,7 +33,7 @@
                 <Label Content="naar detector" />
                 <ComboBox ItemsSource="{Binding Path=DetectorenAanvraag2}" SelectedValue="{Binding Path=SelectedDetectorAanvraag2,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             </StackPanel>
-            <DataGrid 
+            <controls:SpecialDataGrid 
                 ItemsSource="{Binding Path=RichtingGevoeligeAanvragen}" 
                 CanUserAddRows="False" CanUserDeleteRows="False"
                 SelectedItem="{Binding Path=SelectedRichtingGevoeligeAanvraag}" 
@@ -52,9 +52,23 @@
                     <DataGridTextColumn Header="Fase" Binding="{Binding Path=FaseCyclus}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Van" Binding="{Binding Path=VanDetector}" IsReadOnly="True" />
                     <DataGridTextColumn Header="Naar" Binding="{Binding Path=NaarDetector}" IsReadOnly="True" />
-                    <DataGridTextColumn Header="Maximaal tijd verschil" Binding="{Binding Path=MaxTijdsVerschil}" Width="*" />
+                    <DataGridTextColumn Header="Maximaal tijd verschil" Binding="{Binding Path=MaxTijdsVerschil,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridCheckBoxColumn Header="Reset aanvr." Binding="{Binding Path=ResetAanvraag,UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Binding="{Binding Path=ResetAanvraagTijdsduur}" Header="Reset tijd"  >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=ResetAanvraag,UpdateSourceTrigger=PropertyChanged}" Value="false">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
-            </DataGrid>
+            </controls:SpecialDataGrid>
         </DockPanel>
         <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="1" />
         <DockPanel Grid.Row="2">

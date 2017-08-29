@@ -78,6 +78,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool ResetAanvraag
+        {
+            get { return _RichtingGevoeligeAanvraag.ResetAanvraag; }
+            set
+            {
+                _RichtingGevoeligeAanvraag.ResetAanvraag = value;
+                RaisePropertyChanged<object>("ResetAanvraag", broadcast: true);
+            }
+        }
+
+        public int ResetAanvraagTijdsduur
+        {
+            get { return _RichtingGevoeligeAanvraag.ResetAanvraagTijdsduur; }
+            set
+            {
+                _RichtingGevoeligeAanvraag.ResetAanvraagTijdsduur = value;
+                RaisePropertyChanged<object>("ResetAanvraagTijdsduur", broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region IComparable

@@ -18,5 +18,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string NaarDetector { get; set; }
         public int MaxTijdsVerschil { get; set; }
+        public bool ResetAanvraag { get; set; }
+        public int ResetAanvraagTijdsduur { get; set; }
     }
 }

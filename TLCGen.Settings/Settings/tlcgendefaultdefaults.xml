@@ -445,6 +445,7 @@
         <VanDetector />
         <NaarDetector />
         <MaxTijdsVerschil>10</MaxTijdsVerschil>
+        <ResetAanvraag>false</ResetAanvraag>
       </Data>
     </Default>
     <Default>

@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 #pragma warning disable 0649
         private string _trgr;
         private string _trga;
+        private string _trgav;
         private string _trgv;
         private string _hrgv;
         private string _prmmkrg;
@@ -41,6 +42,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         1, 
                         CCOLElementTimeTypeEnum.SCH_type, 
                         CCOLElementTypeEnum.Schakelaar));
+                if (rga.ResetAanvraag)
+                {
+                    _MyElements.Add(
+                        new CCOLElement(
+                            $"{_trgav}{_dpf}{rga.VanDetector}",
+                            rga.ResetAanvraagTijdsduur,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            CCOLElementTypeEnum.Timer));
+                }
             }
 
             foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
@@ -104,7 +114,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* --------------------------= */");
                     foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
                     {
-                        sb.AppendLine($"{ts}aanvraag_richtinggevoelig({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
+                        if (!rga.ResetAanvraag)
+                        {
+                            sb.AppendLine($"{ts}aanvraag_richtinggevoelig({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}aanvraag_richtinggevoelig_reset({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, {_tpf}{_trgav}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
+                        }
                     }
                     sb.AppendLine();
                     return sb.ToString();
