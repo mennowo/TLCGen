@@ -226,18 +226,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* --------------------------------------------- */");
                         foreach (var nl in c.InterSignaalGroep.Nalopen)
                         {
-                            sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, (bool) ((RA[{_fcpf}{nl.FaseNaar}] || SG[{_fcpf}{nl.FaseNaar}]) && (PR[{_fcpf}{nl.FaseNaar}] || AR[{_fcpf}{nl.FaseNaar}]) && R[{_fcpf}{nl.FaseVan}] && !TRG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseVan}] && !kcv({_fcpf}{nl.FaseVan})));");
-                            bool sym = false;
-                            foreach (var _nl in c.InterSignaalGroep.Nalopen)
+                            var sgv = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                            var sgn = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0 && 
+                                sgv != null && sgv.Type == FaseTypeEnum.Voetganger &&
+                                sgn != null && sgn.Type == FaseTypeEnum.Voetganger)
                             {
-                                if(_nl.FaseVan == nl.FaseNaar && _nl.FaseNaar == nl.FaseVan)
+                                sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, (bool) (SG[{_fcpf}{nl.FaseNaar}] && (");
+                                int i = 0;
+                                foreach (var d in nl.Detectoren)
                                 {
-                                    sym = true;
+                                    if (i < 0) sb.Append(" || ");
+                                    ++i;
+                                    sb.Append($"IH[{_hpf}{_hnla}]");
                                 }
+                                sb.AppendLine(")));");
                             }
-                            if(!sym)
+                            else
                             {
-                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) ((RA[{_fcpf}{nl.FaseVan}] || SG[{_fcpf}{nl.FaseVan}]) && (PR[{_fcpf}{nl.FaseVan}] || AR[{_fcpf}{nl.FaseVan}]) && R[{_fcpf}{nl.FaseNaar}] && !TRG[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
+                                sb.AppendLine(
+                                    $"{ts}set_MRLW({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, (bool) ((RA[{_fcpf}{nl.FaseNaar}] || SG[{_fcpf}{nl.FaseNaar}]) && (PR[{_fcpf}{nl.FaseNaar}] || AR[{_fcpf}{nl.FaseNaar}]) && R[{_fcpf}{nl.FaseVan}] && !TRG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseVan}] && !kcv({_fcpf}{nl.FaseVan})));");
+                                bool sym = false;
+                                foreach (var _nl in c.InterSignaalGroep.Nalopen)
+                                {
+                                    if (_nl.FaseVan == nl.FaseNaar && _nl.FaseNaar == nl.FaseVan)
+                                    {
+                                        sym = true;
+                                    }
+                                }
+                                if (!sym)
+                                {
+                                    sb.AppendLine(
+                                        $"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) ((RA[{_fcpf}{nl.FaseVan}] || SG[{_fcpf}{nl.FaseVan}]) && (PR[{_fcpf}{nl.FaseVan}] || AR[{_fcpf}{nl.FaseVan}]) && R[{_fcpf}{nl.FaseNaar}] && !TRG[{_fcpf}{nl.FaseNaar}] && A[{_fcpf}{nl.FaseNaar}] && !kcv({_fcpf}{nl.FaseNaar})));");
+                                }
                             }
                         }
                         sb.AppendLine();
