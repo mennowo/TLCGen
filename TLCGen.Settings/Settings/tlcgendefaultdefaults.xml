@@ -406,6 +406,102 @@
       </Data>
     </Default>
     <Default>
+      <DefaultName>Radar</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Radar</Selector1>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
+        <TOG>1440</TOG>
+        <TBG>10</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Radar</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>MK2</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>VecomIngang</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>VecomIngang</Selector1>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
+        <TOG xsi:nil="true"/>
+        <TBG xsi:nil="true"/>
+        <TFL xsi:nil="true"/>
+        <CFL xsi:nil="true"/>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>VecomIngang</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>OpticomIngang</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>OpticomIngang</Selector1>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
+        <TOG xsi:nil="true"/>
+        <TBG xsi:nil="true"/>
+        <TFL xsi:nil="true"/>
+        <CFL xsi:nil="true"/>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>VecomIngang</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Overig</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Overig</Selector1>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB xsi:nil="true"/>
+        <TDH xsi:nil="true"/>
+        <TOG xsi:nil="true"/>
+        <TBG xsi:nil="true"/>
+        <TFL xsi:nil="true"/>
+        <CFL xsi:nil="true"/>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Overig</Type>
+        <Aanvraag>Geen</Aanvraag>
+        <Verlengen>Geen</Verlengen>
+      </Data>
+    </Default>
+    <Default>
       <DefaultName>RoBuGrover file detector</DefaultName>
       <Category>Detector</Category>
       <DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Models</DataType>

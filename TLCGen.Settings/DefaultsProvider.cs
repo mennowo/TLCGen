@@ -167,7 +167,7 @@ namespace TLCGen.Settings
                     foreach (var def in defs)
                     {
                         if ((selector1 == null || selector1 == def.Selector1) &&
-                            (selector2 == null || selector2 == def.Selector2))
+                            (selector2 == null || def.Selector2 == null || selector2 == def.Selector2))
                         {
                             CopyAllProperties(def.Data, model, onlyvalues);
                             found = true;
