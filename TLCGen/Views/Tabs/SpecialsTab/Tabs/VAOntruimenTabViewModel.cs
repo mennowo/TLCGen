@@ -48,9 +48,9 @@ namespace TLCGen.ViewModels
                 {
                     SelectedVAOntruimenFase = null;
                 }
-                RaisePropertyChanged<object>("SelectedVAOntruimenFase", null, null, true);
-                RaisePropertyChanged<object>("SelectedFaseHasVAOntruimen", null, null, true);
-                RaisePropertyChanged<object>("SelectedFaseNaam", null, null, true);
+                RaisePropertyChanged("SelectedVAOntruimenFase");
+                RaisePropertyChanged("SelectedFaseHasVAOntruimen");
+                RaisePropertyChanged("SelectedFaseNaam");
             }
         }
 
@@ -88,7 +88,7 @@ namespace TLCGen.ViewModels
                         MessageBox.Show("Error in VA ontruimen: " + e.ToString());
                     }
                 }
-                RaisePropertyChanged<object>("SelectedVAOntruimenFase", null, null, true);
+                RaisePropertyChanged("SelectedVAOntruimenFase");
             }
         }
 

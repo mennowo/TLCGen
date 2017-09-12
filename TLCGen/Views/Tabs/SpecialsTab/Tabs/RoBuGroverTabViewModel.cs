@@ -60,7 +60,7 @@ namespace TLCGen.ViewModels
             {
                 var oldval = _SelectedConflictGroep;
                 _SelectedConflictGroep = value;
-                RaisePropertyChanged<object>("SelectedConflictGroep", null, null, true);
+                RaisePropertyChanged("SelectedConflictGroep");
                 Messenger.Default.Send(new SelectedConflictGroepChangedMessage(_SelectedConflictGroep?.ConflictGroep, oldval?.ConflictGroep, AutomaticallySetSelectableSignalGroups));
             }
         }
