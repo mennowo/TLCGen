@@ -46,7 +46,7 @@ namespace TLCGen.SpecialsDenHaag.Models
         public int CompareTo(object obj)
         {
             var other = obj as FaseCyclusAlternatiefPerBlokViewModel;
-            return other != null ? string.Compare(other.FaseCyclus, FaseCyclus, StringComparison.Ordinal) : 0;
+            return other != null ? string.Compare(FaseCyclus, other.FaseCyclus, StringComparison.Ordinal) : 0;
         }
         
         #endregion // IComparable

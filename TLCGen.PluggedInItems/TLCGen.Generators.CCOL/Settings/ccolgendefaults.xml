@@ -484,12 +484,6 @@
           <Setting>
             <Default>afv</Default>
             <Setting>afv</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement afval vertraging file detector</Description>
-          </Setting>
-          <Setting>
-            <Default>afv</Default>
-            <Setting>afv</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar toepassing afval vertraging gehele file ingreep</Description>
           </Setting>

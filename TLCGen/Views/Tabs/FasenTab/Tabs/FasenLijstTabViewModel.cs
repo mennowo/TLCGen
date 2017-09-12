@@ -145,7 +145,6 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
             var fcvm1 = new FaseCyclusViewModel(fcm);
             Fasen.Add(fcvm1);
-            Messenger.Default.Send(new FasenChangedMessage(new List<FaseCyclusModel>{fcm},  null));
         }
 
         bool AddNewFaseCommand_CanExecute(object prm)

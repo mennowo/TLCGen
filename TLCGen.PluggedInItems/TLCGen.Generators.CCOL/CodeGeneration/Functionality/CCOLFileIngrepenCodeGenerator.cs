@@ -16,7 +16,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private string _hfile;
         private string _usfile;
-        private string _hafv;
         private string _tafv;
         private string _trij;
         private string _tbz;
@@ -98,10 +97,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 foreach (var fd in fm.FileDetectoren)
                 {
-                    _myElements.Add(
-                        new CCOLElement(
-                            $"{_hafv}{fd.Detector}",
-                            CCOLElementTypeEnum.HulpElement));
                     _myElements.Add(
                         new CCOLElement(
                             $"{_tafv}{fd.Detector}",
@@ -285,7 +280,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         foreach (var fd in fm.FileDetectoren)
                         {
-                            sb.AppendLine($"{ts}FileMelding({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_hafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector}, {_hpf}{_hafv}{fd.Detector});");
+                            sb.AppendLine($"{ts}FileMeldingV2({_dpf}{fd.Detector}, {_tpf}{_tbz}{fd.Detector}, {_tpf}{_trij}{fd.Detector}, {_tpf}{_tafv}{fd.Detector}, {_hpf}{_hfile}{fd.Detector});");
                         }
 
                         sb.Append($"{ts}RT[{_tpf}{_tafv}{fm.Naam}] = ");

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
+using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
@@ -49,15 +50,31 @@ namespace TLCGen.SpecialsRotterdam
                     _MyModel = new SpecialsDenHaagModel();
                     _SpecialsDenHaagTabVM.Specials = _MyModel;
                 }
-                if (_Controller != null && _MyModel != null && _Controller.Fasen.Any() &&
-                    !_MyModel.AlternatievenPerBlok.Any())
+                if (_Controller != null && _MyModel != null)
                 {
-                    foreach (var fc in _Controller.Fasen)
+                    foreach (var fc in Controller.Fasen)
                     {
-                        _SpecialsDenHaagTabVM.AlternatievenPerBlok.Add(
-                            new FaseCyclusAlternatiefPerBlokViewModel(
-                                new FaseCyclusAlternatiefPerBlokModel {FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 15 }));
+                        if (_SpecialsDenHaagTabVM.AlternatievenPerBlok.All(x => x.FaseCyclus != fc.Naam))
+                        {
+                            _SpecialsDenHaagTabVM.AlternatievenPerBlok.Add(
+                                new FaseCyclusAlternatiefPerBlokViewModel(
+                                    new FaseCyclusAlternatiefPerBlokModel { FaseCyclus = fc.Naam, BitWiseBlokAlternatief = 1023 }));
+                        }
                     }
+                    var rems = new List<FaseCyclusAlternatiefPerBlokViewModel>();
+                    foreach (var fc in _SpecialsDenHaagTabVM.AlternatievenPerBlok)
+                    {
+                        if (Controller.Fasen.All(x => x.Naam != fc.FaseCyclus))
+                        {
+                            rems.Add(fc);
+                        }
+                    }
+                    foreach (var sg in rems)
+                    {
+                        _SpecialsDenHaagTabVM.AlternatievenPerBlok.Remove(sg);
+                    }
+                    _SpecialsDenHaagTabVM.AlternatievenPerBlok.BubbleSort();
+                    _SpecialsDenHaagTabVM.RaisePropertyChanged("");
                 }
             }
         }
@@ -181,6 +198,7 @@ namespace TLCGen.SpecialsRotterdam
                 _MyModel = new SpecialsDenHaagModel();
             }
             _SpecialsDenHaagTabVM.Specials = _MyModel;
+            _SpecialsDenHaagTabVM.AlternatievenPerBlok.BubbleSort();
             _SpecialsDenHaagTabVM.RaisePropertyChanged("");
         }
 

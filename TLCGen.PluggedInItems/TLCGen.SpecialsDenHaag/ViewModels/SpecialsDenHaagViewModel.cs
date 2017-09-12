@@ -98,6 +98,7 @@ namespace TLCGen.SpecialsDenHaag
                     }
                 }
             }
+            AlternatievenPerBlok.Rebuild();
         }
 
         private void OnNameChanged(NameChangedMessage message)

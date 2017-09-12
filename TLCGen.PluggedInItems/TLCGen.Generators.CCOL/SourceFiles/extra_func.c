@@ -452,3 +452,37 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition)
         break;
     }
 }
+
+/*****************************************************************************
+ *  Functie  : Filemelding
+ *
+ *  Functionele omschrijving :
+ *    CCOL implementatie eenvoudig filemeetpunt (1 detector)
+ *
+ *  In regeling zet men een hulpelement op afhankelijk van een of meer keren
+ *  deze functie aan te roepen. VB:
+ *
+ *    Filemelding detector df021 en df022
+ *
+ *    FileMelding(df021, tbz021, trij021, tafv021, hfile021, hafval021);
+ *    FileMelding(df022, tbz022, trij022, tafv022, hfile022, hafval022);
+ *
+ *    RT[tAfvalbewaking] = (D[df021] || D[df022]);
+ *    if (!(T[tAfvalbewaking] || RT[tAfvalBewaking]) && SCH[schAfvalbewaking])
+ *      IH[hfile021] = IH[hfile022] = FALSE;
+ *    IH[hfile] = H[hfile021] || H[hfile022];
+ ****************************************************************************/
+void FileMeldingV2(count det,     /* filelus                                */
+                   count tbez,    /* bezettijd  als D langer bezet -> file  */
+                   count trij,    /* rijtijd    als D korter bezet -> !file */
+                   count tafval,  /* afvalvertraging filemelding            */
+                   count hfile)   /* hulpelement filemelding                */
+{
+    RT[tbez]   = RT[trij] = !D[det];
+    RT[tafval] = D[det] && !T[tbez] ||
+		         H[hfile] && D[det] && !T[trij];
+
+	IH[hfile] = RT[tafval] || T[tafval] || H[hfile] && D[det];
+
+    if (CIF_IS[det] >= CIF_DET_STORING)   IH[hfile] = FALSE;
+}
