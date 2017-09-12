@@ -24,22 +24,28 @@ namespace TLCGen.SpecialsDenHaag
 
         public SpecialsDenHaagModel Specials
         {
-            get { return _Specials; }
+            get => _Specials;
             set
             {
                 _Specials = value;
-                AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Specials.AlternatievenPerBlok);
+                if (_Specials != null)
+                {
+                    AlternatievenPerBlok = new ObservableCollectionAroundList<FaseCyclusAlternatiefPerBlokViewModel, FaseCyclusAlternatiefPerBlokModel>(_Specials.AlternatievenPerBlok);
+                }
                 RaisePropertyChanged("");
             }
         }
 
         public bool ToepassenAlternatievenPerBlok
         {
-            get { return _Specials.ToepassenAlternatievenPerBlok; }
+            get => _Specials != null && _Specials.ToepassenAlternatievenPerBlok;
             set
             {
-                _Specials.ToepassenAlternatievenPerBlok = value; 
-                RaisePropertyChanged<object>("ToepassenAlternatievenPerBlok", true);
+                if (_Specials != null)
+                {
+                    _Specials.ToepassenAlternatievenPerBlok = value;
+                    RaisePropertyChanged<object>("ToepassenAlternatievenPerBlok", true);
+                }
             }
         }
 

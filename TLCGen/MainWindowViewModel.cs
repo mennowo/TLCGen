@@ -366,6 +366,10 @@ namespace TLCGen.ViewModels
             if (TLCGenControllerDataProvider.Default.NewController())
             {
                 string lastfilename = TLCGenControllerDataProvider.Default.ControllerFileName;
+
+                // This allows plugins to reset their content
+                ControllerVM.Controller = null;
+
                 TLCGenControllerDataProvider.Default.NewController();
                 SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
                 ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;

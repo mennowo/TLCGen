@@ -73,13 +73,13 @@ void aanvraag_detectie_reset_prm_va_arg(count fc, ...)
     }
   } while ((dpnr>=0) && (tav>=0) && (prm>END));
   if (TA[fc]) {                        /* set tijdelijke aanvraag */
-    A[fc] |= BIT7;
+    A[fc] |= BIT8;
   }
-  if (!TA[fc] && (A[fc] & BIT7)) {     /* reset tijdelijke aanvraag */
-    A[fc] &= ~BIT7;
+  if (!TA[fc] && (A[fc] & BIT8)) {     /* reset tijdelijke aanvraag */
+    A[fc] &= ~BIT8;
     if (!A[fc]) {
       TFB_timer[fc] = 0;
-      RR[fc]|= RA[fc] ? BIT7 : 0;
+      RR[fc]|= RA[fc] ? BIT8 : 0;
     }
   }
   va_end(argpt);           /* maak var. arg-lijst leeg */
@@ -123,13 +123,13 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
     if (ET[tav] && !AT[tav] && (TA[fc]>0))    TA[fc]--; /* aftellen tijdelijke aanvragen bij einde timer */
     if (EG[fc])                               TA[fc]=0; /* altijd reset bij eindgroen (net als A)        */
     if (TA[fc]) {                        /* set tijdelijke aanvraag */
-      A[fc] |= BIT7;
+      A[fc] |= BIT8;
     }
-    if (!TA[fc] && (A[fc] & BIT7)) {     /* reset tijdelijke aanvraag */
-      A[fc] &= ~BIT7;
+    if (!TA[fc] && (A[fc] & BIT8)) {     /* reset tijdelijke aanvraag */
+      A[fc] &= ~BIT8;
       if (!A[fc]) {
         TFB_timer[fc] = 0;
-        RR[fc]|= RA[fc] ? BIT7 : 0;
+        RR[fc]|= RA[fc] ? BIT8 : 0;
       }
     }
   }
