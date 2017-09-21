@@ -61,9 +61,6 @@ namespace TLCGen.Settings
                 if (!Directory.Exists(setpath))
                     Directory.CreateDirectory(setpath);
                 var setfile = Path.Combine(setpath, @"templates.xml");
-#if DEBUG
-            Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
-#else
                 if (File.Exists(setfile))
                 {
                     Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(setfile);
@@ -79,7 +76,6 @@ namespace TLCGen.Settings
                     Templates = new TLCGenTemplatesModel();
                     return;
                 }
-#endif
             }
             catch (Exception e)
             {
