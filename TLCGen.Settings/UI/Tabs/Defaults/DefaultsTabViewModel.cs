@@ -1,11 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Settings
 {
@@ -92,7 +86,6 @@ namespace TLCGen.Settings
 
         #endregion // Properties
 
-
         #region Private Methods
 
         #endregion // Private Methods
@@ -101,11 +94,11 @@ namespace TLCGen.Settings
 
         public DefaultsTabViewModel()
         {
-            foreach (var fc in DefaultsProvider.Default.Defaults.Defaults)
+            foreach (var def in DefaultsProvider.Default.Defaults.Defaults)
             {
-                if (fc.Category == "FaseCyclus") FaseCyclusDefaults.Add(fc);
-                if (fc.Category == "Detector") DetectorDefaults.Add(fc);
-                if (fc.Category == "Other") OtherDefaults.Add(fc);
+                if (def.Category == "FaseCyclus") FaseCyclusDefaults.Add(def);
+                if (def.Category == "Detector") DetectorDefaults.Add(def);
+                if (def.Category == "Other") OtherDefaults.Add(def);
             }
             if (FaseCyclusDefaults.Count > 0) SelectedFaseCyclusDefault = FaseCyclusDefaults[0];
             if (DetectorDefaults.Count > 0) SelectedDetectorDefault = DetectorDefaults[0];

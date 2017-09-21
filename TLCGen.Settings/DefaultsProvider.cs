@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -190,67 +191,139 @@ namespace TLCGen.Settings
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"settings.xml");
-#if DEBUG
-            setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
-#else
+	        string defsetfile = null;
             if (!File.Exists(setfile))
             {
                 setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             }
+			else
+			{
+				defsetfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+			}
             if (!File.Exists(setfile))
             {
                 MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading defaults");
-                setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
                 Defaults = new TLCGenDefaultsModel();
                 return;
             }
-#endif
-            Defaults = new TLCGenDefaultsModel();
-            try
-            {
-                var doc = new XmlDocument();
-                XmlReader reader =
-                    XmlReader.Create(
-                        setfile,
-                        new XmlReaderSettings() { IgnoreComments = true });
-                doc.Load(reader);
-                var defs = doc.DocumentElement.SelectSingleNode("Defaults");
-                foreach (XmlNode def in defs.ChildNodes)
-                {
-                    XmlNode x = def.SelectSingleNode("DataType");
-                    string t = x.InnerText;
-                    var type = Type.GetType(t);
-                    XmlRootAttribute xRoot = new XmlRootAttribute();
-                    xRoot.ElementName = "Data";
-                    xRoot.IsNullable = true;
-                    System.Xml.Serialization.XmlSerializer ser = new System.Xml.Serialization.XmlSerializer(type, xRoot);
-                    // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
-                    object o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
-                    var item = new TLCGenDefaultModel();
-                    item.DefaultName = def.SelectSingleNode("DefaultName").InnerText;
-                    item.DataType = def.SelectSingleNode("DataType").InnerText;
-                    item.Category = def.SelectSingleNode("Category").InnerText;
-                    XmlNode n1 = def.SelectSingleNode("Selector1");
-                    if (n1 != null)
-                    {
-                        item.Selector1 = n1.InnerText;
-                    }
-                    XmlNode n2 = def.SelectSingleNode("Selector2");
-                    if (n2 != null)
-                    {
-                        item.Selector2 = n2.InnerText;
-                    }
-                    item.Data = o;
-                    Defaults.Defaults.Add(item);
-                }
-            }
+	        try
+	        {
+		        Defaults = DeserializeDefaultsFile(setfile);
+				if (defsetfile != null && File.Exists(defsetfile))
+				{
+					var message = "";
+					var message2 = "";
+					var defaultDefaults = DeserializeDefaultsFile(defsetfile);
+			        foreach (var d in defaultDefaults.Defaults)
+			        {
+				        bool found = false;
+				        foreach (var d2 in Defaults.Defaults)
+				        {
+					        if (d.DataType == d2.DataType &&
+					            d.Category == d2.Category &&
+					            d.Selector1 == d2.Selector1 &&
+					            d.Selector2 == d2.Selector2)
+					        {
+						        found = true;
+					        }
+				        }
+				        if (!found)
+				        {
+					        message += d.DefaultName + "; ";
+					        Defaults.Defaults.Add(d);
+				        }
+			        }
+					var remDs = new List<TLCGenDefaultModel>();
+					foreach (var d in Defaults.Defaults)
+					{
+						bool found = false;
+						foreach (var d2 in defaultDefaults.Defaults)
+						{
+							if (d.DataType == d2.DataType &&
+							    d.Category == d2.Category &&
+							    d.Selector1 == d2.Selector1 &&
+							    d.Selector2 == d2.Selector2)
+							{
+								found = true;
+							}
+						}
+						if (!found)
+						{
+							message2 += d.DefaultName + "; ";
+							remDs.Add(d);
+						}
+					}
+					foreach (var d in remDs)
+					{
+						Defaults.Defaults.Remove(d);
+					}
+					if (message.Length > 0 || message2.Length > 0)
+					{
+						var s = "";
+						if (message.Length > 0) s += "Defaults added: " + message;
+						if (message2.Length > 0)
+						{
+							if (message.Length > 0) s += Environment.NewLine;
+							s += "Defaults removed: " + message2;
+						}
+						MessageBox.Show(s, "Defaults updated");
+					}
+		        }
+	        }
             catch (Exception e)
             {
                 MessageBox.Show("An error occured while loading the defaults:\n " + e.ToString() + "\nPlease report this.", "Error while loading defaults");
             }
         }
 
-        private object ConvertNode(XmlNode node, Type t)
+	    private TLCGenDefaultsModel DeserializeDefaultsFile(string filename)
+	    {
+		    var defaults = new TLCGenDefaultsModel();
+		    var doc = new XmlDocument();
+		    var reader =
+			    XmlReader.Create(
+				    filename,
+				    new XmlReaderSettings() {IgnoreComments = true});
+		    doc.Load(reader);
+		    var defs = doc.DocumentElement?.SelectSingleNode("Defaults");
+		    if (defs == null) return null;
+		    foreach (XmlNode def in defs.ChildNodes)
+		    {
+			    var x = def.SelectSingleNode("DataType");
+			    var t = x.InnerText;
+			    var type = Type.GetType(t);
+			    var xRoot = new XmlRootAttribute
+			    {
+				    ElementName = "Data",
+				    IsNullable = true
+			    };
+			    if (type == null) continue;
+			    var ser = new XmlSerializer(type, xRoot);
+			    // http://stackoverflow.com/questions/1563473/xmlnode-to-objects
+			    var o = ser.Deserialize(new XmlNodeReader(def.SelectSingleNode("Data")));
+			    var item = new TLCGenDefaultModel
+			    {
+				    DefaultName = def.SelectSingleNode("DefaultName")?.InnerText,
+				    DataType = def.SelectSingleNode("DataType")?.InnerText,
+				    Category = def.SelectSingleNode("Category")?.InnerText
+			    };
+			    var n1 = def.SelectSingleNode("Selector1");
+			    if (n1 != null)
+			    {
+				    item.Selector1 = n1.InnerText;
+			    }
+			    var n2 = def.SelectSingleNode("Selector2");
+			    if (n2 != null)
+			    {
+				    item.Selector2 = n2.InnerText;
+			    }
+			    item.Data = o;
+			    defaults.Defaults.Add(item);
+		    }
+		    return defaults;
+	    }
+
+	    private object ConvertNode(XmlNode node, Type t)
         {
             MemoryStream stm = new MemoryStream();
             StreamWriter stw = new StreamWriter(stm);
@@ -286,6 +359,6 @@ namespace TLCGen.Settings
             }
         }
 
-        #endregion // IDefaultsProvider
+#endregion // IDefaultsProvider
     }
 }
