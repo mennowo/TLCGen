@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -87,20 +88,104 @@ namespace TLCGen.Generators.CCOL
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
-#if DEBUG
-            var s = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(
-                Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
-            CCOLGeneratorSettingsProvider.Default.Settings = s;
-#else
-            if (File.Exists(setfile))
+	        if (File.Exists(setfile))
             {
                 CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(setfile);
-            }
+	            var defsetfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml");
+				if (File.Exists(defsetfile))
+				{
+					var corrected = false;
+					var updated = false;
+					var defaultSettings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(defsetfile);
+					foreach (var def in defaultSettings.CodePieceGeneratorSettings)
+					{
+						var found = false;
+						foreach (var def2 in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
+						{
+							if (def.Item1 == def2.Item1)
+							{
+								found = true;
+								if (def.Item2.ClassName != def2.Item2.ClassName)
+								{
+									def2.Item2.ClassName = def.Item2.ClassName;
+									corrected = true;
+								}
+								foreach (var s in def.Item2.Settings)
+								{
+									bool foundSet = false;
+									foreach (var s2 in def2.Item2.Settings)
+									{
+										if (s.Type == s2.Type &&
+										    s.Default == s2.Default)
+										{
+											foundSet = true;
+										}
+									}
+									if (!foundSet)
+									{
+										def2.Item2.Settings.Add(s);
+										updated = true;
+									}
+								}
+								var remSs = new List<CCOLGeneratorCodeStringSettingModel>();
+								foreach (var s in def2.Item2.Settings)
+								{
+									bool foundSet = false;
+									foreach (var s2 in def.Item2.Settings)
+									{
+										if (s.Type == s2.Type &&
+										    s.Default == s2.Default)
+										{
+											foundSet = true;
+										}
+									}
+									if (!foundSet)
+									{
+										updated = true;
+										remSs.Add(s);
+									}
+								}
+								foreach (var s in remSs)
+								{
+									def2.Item2.Settings.Remove(s);
+								}
+							}
+						}
+						if (!found)
+						{
+							CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Add(def);
+							updated = false;
+						}
+					}
+					var remDs = new List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>>();
+					foreach (var d in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
+					{
+						bool found = false;
+						foreach (var d2 in defaultSettings.CodePieceGeneratorSettings)
+						{
+							if (d.Item1 == d2.Item1)
+							{
+								found = true;
+							}
+						}
+						if (!found)
+						{
+							updated = true;
+							remDs.Add(d);
+						}
+					}
+					foreach (var d in remDs)
+					{
+						CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Remove(d);
+					}
+					if (updated) MessageBox.Show("CCOL defaults updated", "CCOL defaults updated");
+					if (corrected) MessageBox.Show("CCOL defaults corrected", "CCOL defaults corrected");
+				}
+			}
             else
             {
                 CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
             }
-#endif
             _Generator.LoadSettings();
 
             if (_alwaysOverwriteSourcesMenuItem == null)

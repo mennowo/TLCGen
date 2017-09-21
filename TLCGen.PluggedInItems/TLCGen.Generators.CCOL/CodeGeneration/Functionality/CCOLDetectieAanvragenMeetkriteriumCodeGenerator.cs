@@ -18,7 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
 #pragma warning disable 0169
         private string _prmda;
-        private string _prmmk;
+		private string _prmmk;
         private string _tkm;
 #pragma warning restore 0169
 #pragma warning restore 0649
