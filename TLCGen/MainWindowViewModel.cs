@@ -23,6 +23,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
+using WordPressPCL;
 
 namespace TLCGen.ViewModels
 {
@@ -671,46 +672,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public void CheckForNewVersion()
-        {
-            try
-            {
-                var webRequest = WebRequest.Create(@"http://www.codingconnected.eu:8080/latest.txt");
-                webRequest.UseDefaultCredentials = true;
-                using (var response = webRequest.GetResponse())
-                using (var content = response.GetResponseStream())
-                using (var reader = new StreamReader(content))
-                {
-                    var strContent = reader.ReadToEnd();
-                    var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
-                    var newvers = strContent.Split('.');
-                    var over = 0;
-                    var nver = 0;
-                    if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-                    {
-                        for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
-                        {
-                            over += Int32.Parse(oldvers[i]) * j;
-                            nver += Int32.Parse(newvers[i]) * j;
-                            j *= 10;
-                        }
-                    }
-                    if (nver > over)
-                    {
-                        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                        {
-                            var w = new NewVersionAvailableWindow(strContent);
-                            w.ShowDialog();
-                        });
-                    }
-                }
-            }
-            catch
-            {
-                // silently fail
-            }
-        }
-
         #endregion // Private methods
 
         #region Public methods
@@ -948,7 +909,40 @@ namespace TLCGen.ViewModels
 
             Directory.SetCurrentDirectory(tmpCurDir);
 
-            Task.Run(() => { CheckForNewVersion(); });
+			// Find out if there is a newer version available via Wordpress REST API
+            Task.Run(async() =>
+            {
+	            var client = new WordPressClient("https://codingconnected.eu/wp-json/");
+	            var p = await client.Pages.GetByID(1105);
+	            var c = p.Content;
+	            var r = c.Rendered.Replace("\r\n", "\r");
+	            var all = r.Split('\r');
+	            var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+	            if (tlcgenVer != null)
+	            {
+					var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+		            var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+		            var over = 0;
+		            var nver = 0;
+		            if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+		            {
+			            for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+			            {
+				            over += Int32.Parse(oldvers[i]) * j;
+				            nver += Int32.Parse(newvers[i]) * j;
+				            j *= 10;
+			            }
+		            }
+		            if (nver > over)
+		            {
+			            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+			            {
+				            var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
+				            w.ShowDialog();
+			            });
+		            }
+				}
+            });
         }
 
         #endregion // Constructor
