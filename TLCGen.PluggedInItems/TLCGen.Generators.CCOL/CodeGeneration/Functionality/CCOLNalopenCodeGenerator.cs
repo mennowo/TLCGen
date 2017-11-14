@@ -238,7 +238,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (i < 0) sb.Append(" || ");
                                     ++i;
-                                    sb.Append($"IH[{_hpf}{_hnla}]");
+                                    sb.Append($"IH[{_hpf}{_hnla}{d.Detector}]");
                                 }
                                 sb.AppendLine(")));");
                             }
