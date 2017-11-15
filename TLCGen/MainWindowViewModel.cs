@@ -924,8 +924,11 @@ namespace TLCGen.ViewModels
 
 		            dynamic obj = serializer.Deserialize(strContent, typeof(object));
 
+		            if (obj == null) return;
 		            var r1 = obj.content;
-		            string r = r1 as string;
+		            if (r1 == null) return;
+		            var r = r1 as string;
+		            if (r == null) return;
 		            var all = r.Split('\r');
 		            var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
 		            if (tlcgenVer != null)
