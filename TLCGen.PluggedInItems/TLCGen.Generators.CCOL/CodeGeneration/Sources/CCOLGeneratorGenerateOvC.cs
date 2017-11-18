@@ -653,18 +653,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             var ll = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Lang).ToList();
                             if (ll.Count <= kl.Count)
                             {
-                                int i = 0;
-                                foreach (var d in kl)
+                                if (kl.Count==0)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
-                                    if (i < ll.Count)
+                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, NG, NG, NG ");
+                                }
+                                else
+                                {
+                                    int i = 0;
+                                    foreach (var d in kl)
                                     {
-                                        sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
-                                        ++i;
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine("NG, NG);");
+                                        sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
+                                        if (i < ll.Count)
+                                        {
+                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                            ++i;
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine("NG, NG);");
+                                        }
+                                        break;
                                     }
                                 }
                             }
@@ -683,6 +691,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     {
                                         sb.AppendLine($"NG, {_dpf}{d.Naam}, NG);");
                                     }
+                                    break;
                                 }
                             }
                         }
@@ -700,20 +709,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             var kl = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Kop).ToList();
                             var ll = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Lang).ToList();
+
                             if (ll.Count <= kl.Count)
                             {
-                                int i = 0;
-                                foreach (var d in kl)
+                                if (kl.Count == 0)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
-                                    if (i < ll.Count)
+                                    sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, NG, NG, NG ");
+                                }
+                                else
+                                { 
+                                    int i = 0;
+                                    foreach (var d in kl)
                                     {
-                                        sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
-                                        ++i;
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine("NG, NG);");
+                                        sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
+                                        if (i < ll.Count)
+                                        {
+                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                            ++i;
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine("NG, NG);");
+                                        }
+                                        break;
                                     }
                                 }
                             }
@@ -732,6 +750,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     {
                                         sb.AppendLine($"NG, {_dpf}{d.Naam}, NG);");
                                     }
+                                    break;
                                 }
                             }
                         }
