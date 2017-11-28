@@ -912,51 +912,52 @@ namespace TLCGen.ViewModels
 			// Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {
-	            var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
-	            webRequest.UseDefaultCredentials = true;
-	            using (var response = webRequest.GetResponse())
-	            using (var content = response.GetResponseStream())
-	            using (var reader = new StreamReader(content))
-	            {
-		            var strContent = reader.ReadToEnd();
-		            var serializer = new JavaScriptSerializer();
-		            serializer.RegisterConverters(new[] { new DynamicJsonConverter() });
-
-		            dynamic obj = serializer.Deserialize(strContent, typeof(object));
-
-		            if (obj == null) return;
-		            var r1 = obj.content;
-		            if (r1 == null) return;
-		            var r = r1 as string;
-		            if (r == null) return;
-		            var all = r.Split('\r');
-		            var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-		            if (tlcgenVer != null)
-		            {
-		            	var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
-		                var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-		                var over = 0;
-		                var nver = 0;
-		                if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-		                {
-		                    for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
-		                    {
-		                        over += Int32.Parse(oldvers[i]) * j;
-		                        nver += Int32.Parse(newvers[i]) * j;
-		                        j *= 10;
-		                    }
-		                }
-		                if (nver > over)
-		                {
-		                    DispatcherHelper.CheckBeginInvokeOnUI(() =>
-		                    {
-		                        var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
-		                        w.ShowDialog();
-		                    });
-		                }
-		            }
-				}
-
+				// TODO ... 
+	            //var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
+	            //webRequest.UseDefaultCredentials = true;
+	            //using (var response = webRequest.GetResponse())
+	            //using (var content = response.GetResponseStream())
+	            //using (var reader = new StreamReader(content))
+	            //{
+		        //    var strContent = reader.ReadToEnd();
+		        //    var serializer = new JavaScriptSerializer();
+		        //    serializer.RegisterConverters(new[] { new DynamicJsonConverter() });
+				//
+		        //    dynamic obj = serializer.Deserialize(strContent, typeof(object));
+				//
+		        //    if (obj == null) return;
+		        //    var r1 = obj["content"];
+		        //    if (r1 == null) return;
+		        //    var r = r1 as string;
+		        //    if (r == null) return;
+		        //    var all = r.Split('\r');
+		        //    var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+		        //    if (tlcgenVer != null)
+		        //    {
+		        //    	var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+		        //        var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+		        //        var over = 0;
+		        //        var nver = 0;
+		        //        if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+		        //        {
+		        //            for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+		        //            {
+		        //                over += Int32.Parse(oldvers[i]) * j;
+		        //                nver += Int32.Parse(newvers[i]) * j;
+		        //                j *= 10;
+		        //            }
+		        //        }
+		        //        if (nver > over)
+		        //        {
+		        //            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+		        //            {
+		        //                var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
+		        //                w.ShowDialog();
+		        //            });
+		        //        }
+		        //    }
+				//}
+				//
 				//var client = new WordPressClient("https://codingconnected.eu/wp-json/");
 				//var p = await client.Pages.GetByID(1105);
 				//var c = p.Content;

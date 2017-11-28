@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -13,7 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateOvC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* OV FUNCTIES APPLICATIE */");
             sb.AppendLine("/* ---------------------- */");
@@ -38,10 +37,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCIncludes(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            sb.AppendLine($"/*include files */");
-            sb.AppendLine($"/*------------- */");
+            sb.AppendLine("/*include files */");
+            sb.AppendLine("/*------------- */");
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
@@ -73,7 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCTop(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("#define MAX_AANTAL_INMELDINGEN           10");
             sb.AppendLine("#define DEFAULT_MAX_WACHTTIJD           120");
@@ -102,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
                 c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
             {
-                bool any = false;
+                var any = false;
                 var done = new List<string>();
                 sb.AppendLine("/* Structs tbv bijhouden laatste DSI berichten per richting in/uit");
                 sb.AppendLine("   tbv voorkomen dubbele in/uit meldingen */");
@@ -193,43 +192,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCInstellingen(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
-            string _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
-            string _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto");
-            string _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg");
-            string _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg");
-            string _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtohd");
-            string _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbghd");
-            string _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtghd");
-            string _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
-            string _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
-            string _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            string _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            string _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
-            string _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            string _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio");
-            string _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
-            string _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
-            string _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            string _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagb");
-            string _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagbhd");
-            string _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwta");
-            string _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtfts");
-            string _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtvtg");
-            string _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgt");
-            string _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmognt");
-            string _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmnofm");
-            string _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmgcov");
-            string _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgcov");
-            string _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
-            string _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
-            string _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
-            string _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
+            var _prmrto = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrto");
+            var _prmrtbg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbg");
+            var _prmrtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtg");
+            var _prmrtohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtohd");
+            var _prmrtbghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtbghd");
+            var _prmrtghd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmrtghd");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
+            var _prmprio = CCOLGeneratorSettingsProvider.Default.GetElementName("prmprio");
+            var _prmpriohd = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpriohd");
+            var _prmomx = CCOLGeneratorSettingsProvider.Default.GetElementName("prmomx");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
+            var _schupinagb = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagb");
+            var _schupinagbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("schupinagbhd");
+            var _prmmwta = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwta");
+            var _prmmwtfts = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtfts");
+            var _prmmwtvtg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmwtvtg");
+            var _prmpmgt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgt");
+            var _prmognt = CCOLGeneratorSettingsProvider.Default.GetElementName("prmognt");
+            var _prmnofm = CCOLGeneratorSettingsProvider.Default.GetElementName("prmnofm");
+            var _prmmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmmgcov");
+            var _prmpmgcov = CCOLGeneratorSettingsProvider.Default.GetElementName("prmpmgcov");
+            var _prmaltp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltp");
+            var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
+            var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
+            var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
 
-            sb.AppendLine($"void OVInstellingen(void) ");
-            sb.AppendLine($"{{");
+            sb.AppendLine("void OVInstellingen(void) ");
+            sb.AppendLine("{{");
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine($"{ts}/* Instellingen OV-richtingen    */");
             sb.AppendLine($"{ts}/* ============================= */");
@@ -360,7 +359,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Na aanspreken groenbewaking wordt de selectieve ");
-            sb.AppendLine($"	   detectie niet langer betrouwbaar gevonden */");
+            sb.AppendLine("	   detectie niet langer betrouwbaar gevonden */");
             foreach (var ov in c.OVData.OVIngrepen)
             {
                 sb.AppendLine($"{ts}iSelDetFoutNaGB[ovFC{ov.FaseCyclus}] = SCH[{_schpf}{_schupinagb}{ov.FaseCyclus}];");
@@ -374,20 +373,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* =============================== */");
             sb.AppendLine($"{ts}/* Instellingen overige richtingen */");
             sb.AppendLine($"{ts}/* =============================== */");
-            sb.AppendLine($"   ");
+            sb.AppendLine("   ");
             sb.AppendLine($"{ts}/* Maximale wachttijd */");
             foreach (var fc in c.Fasen)
             {
                 switch (fc.Type)
                 {
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
                         sb.AppendLine($"{ts}iMaximumWachtTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmmwta}];");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}iMaximumWachtTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmmwtfts}];");
                         break;
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iMaximumWachtTijd[{_fcpf}{fc.Naam}] = PRM[{_prmpf}{_prmmwtvtg}];");
                         break;
                 }
@@ -404,13 +403,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
                 }
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{ovfc.FaseCyclus}];");
                         break;
                 }
@@ -426,13 +425,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
                 }
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{ovfc.FaseCyclus}];");
                         break;
                 }
@@ -447,16 +446,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
                 }
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         continue;
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{ovfc.FaseCyclus}];");
                         break;
+	                default:
+		                throw new ArgumentOutOfRangeException();
                 }
             }
             sb.AppendLine();
@@ -470,15 +471,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
                 }
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 0;");
                         continue;
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{ovfc.FaseCyclus}];");
                         break;
                 }
@@ -496,15 +497,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     continue;
                 }
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = 100; /* Voetgangers mogen niet worden afgekapt. */");
                         continue;
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{ovfc.FaseCyclus}];");
                         break;
                 }
@@ -519,16 +520,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     continue;
                 }
+                var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
 
-                var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
                 switch (fct)
                 {
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = 0;");
                         continue;
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.OV:
+                    case FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Fiets:
                         sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{ovfc.FaseCyclus}];");
                         break;
                 }
@@ -558,7 +559,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.AppendLine($"];");
+                        sb.AppendLine("];");
                     }
                     else
                     {
@@ -587,7 +588,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.AppendLine($"];");
+                        sb.AppendLine("];");
                     }
                     else
                     {
@@ -624,11 +625,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCRijTijdScenario(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
-            string _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            string _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
+            var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -649,11 +650,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (fc.Detectoren.Count > 0)
                         {
-                            var kl = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Kop).ToList();
-                            var ll = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Lang).ToList();
+                            var kl = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop).ToList();
+                            var ll = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Lang).ToList();
                             if (ll.Count <= kl.Count)
                             {
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in kl)
                                 {
                                     sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
@@ -670,7 +671,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                             else
                             {
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in ll)
                                 {
                                     sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, ");
@@ -698,11 +699,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (fc.Detectoren.Count > 0)
                         {
-                            var kl = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Kop).ToList();
-                            var ll = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.Lang).ToList();
+                            var kl = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop).ToList();
+                            var ll = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Lang).ToList();
                             if (ll.Count <= kl.Count)
                             {
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in kl)
                                 {
                                     sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, {_dpf}{d.Naam}, ");
@@ -719,7 +720,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                             else
                             {
-                                int i = 0;
+                                var i = 0;
                                 foreach (var d in ll)
                                 {
                                     sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, ");
@@ -745,17 +746,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var fc = c.Fasen.FirstOrDefault(x => x.Naam == ov.FaseCyclus);
                 if (fc != null && fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop))
                 {
-                    var d = fc.Detectoren.First(x => x.Type == DetectorTypeEnum.Kop);
-                    if (ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd)
-                    {
-                        sb.AppendLine(
-                            $"{ts}if (DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
-                    }
-                    else
-                    {
-                        sb.AppendLine(
-                            $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
-                    }
+	                var d = fc.Detectoren.First(x => x.Type == DetectorTypeEnum.Kop);
+	                sb.AppendLine(
+		                ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
+			                ? $"{ts}if (DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;"
+			                : $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
                 }
             }
             sb.AppendLine("}");
@@ -766,20 +761,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCInUitMelden(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            string _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
-            string _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
-            string _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            string _prmovstp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstp");
-            string _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
-            string _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
-            string _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
-            string _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkarin");
-            string _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkaruit");
-            string _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
-            string _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
+            var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
+            var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
+            var _prmovstp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstp");
+            var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
+            var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
+            var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
+            var _tdhkarin = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkarin");
+            var _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkaruit");
+            var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
+            var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
@@ -792,7 +787,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   De hulpelementen voor in- en uitmeldingen worden opgezet als");
             sb.AppendLine("   de bijbehorende in- resp. uitmeldlussen opstaan.");
             sb.AppendLine("   ---------------------------------------------------------------- */");
-            sb.AppendLine($"void InUitMelden(void)");
+            sb.AppendLine("void InUitMelden(void)");
             sb.AppendLine("{");
             if (c.OVData.OVIngrepen.Count > 0)
             {
@@ -837,21 +832,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             #region OV ingrepen KAR
 
             var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
-            foreach (var ov in karovfcs)
+	        var ovIngreepModels = karovfcs as OVIngreepModel[] ?? karovfcs.ToArray();
+	        foreach (var ov in ovIngreepModels)
             {
-                int ifc;
-                if (Int32.TryParse(ov.FaseCyclus, out ifc))
+	            if (int.TryParse(ov.FaseCyclus, out var ifc))
                 {
-                    string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                     sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSIN, SCH[{_schpf}{_schcprio}], PRM[{_prmpf}{_prmlaatcrit}], {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}in, {_tpf}{_tdhkarin}{ov.FaseCyclus});");
                 }
             }
-            foreach (var ov in karovfcs)
+            foreach (var ov in ovIngreepModels)
             {
-                int ifc;
-                if (Int32.TryParse(ov.FaseCyclus, out ifc))
+	            if (int.TryParse(ov.FaseCyclus, out var ifc))
                 {
-                    string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                     sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSUIT, (bool)FALSE, 0, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}uit, {_tpf}{_tdhkaruit}{ov.FaseCyclus});");
                 }
             }
@@ -863,12 +857,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var vecomovfcs = c.OVData.OVIngrepen.Where(x => x.Vecom);
             foreach (var ov in vecomovfcs)
             {
-                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+                var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
                 sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_in, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
             }
             foreach (var ov in vecomovfcs)
             {
-                string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+                var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
                 sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_uit, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
             }
 
@@ -877,12 +871,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             #region HD ingrepen KAR
 
             var karhdfcs = c.OVData.HDIngrepen.Where(x => x.KAR);
-            foreach (var hd in karhdfcs)
+	        var hdIngreepModels = karhdfcs as HDIngreepModel[] ?? karhdfcs.ToArray();
+	        foreach (var hd in hdIngreepModels)
             {
-                int ifc;
-                if (Int32.TryParse(hd.FaseCyclus, out ifc))
+	            if (int.TryParse(hd.FaseCyclus, out var ifc))
                 {
-                    string start = $"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] |= ";
+                    var start = $"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] |= ";
                     sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
                     sb.Append("".PadRight(start.Length));
                     sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
@@ -890,12 +884,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
                 }
             }
-            foreach (var hd in karhdfcs)
+            foreach (var hd in hdIngreepModels)
             {
-                int ifc;
-                if (Int32.TryParse(hd.FaseCyclus, out ifc))
+	            if (int.TryParse(hd.FaseCyclus, out var ifc))
                 {
-                    string start = $"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] |= ";
+                    var start = $"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] |= ";
                     sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkaruit}{hd.FaseCyclus}) ||");
                     sb.Append("".PadRight(start.Length));
                     sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkaruit}{hd.FaseCyclus}) ||");
@@ -908,7 +901,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #region HD ingrepen mee inmelden
 
-            if (c.OVData.HDIngrepen.Where(x => x.MeerealiserendeFaseCycli.Count > 0).Any())
+            if (c.OVData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Count > 0))
             {
                 sb.AppendLine($"{ts}/* Doorzetten HD inmeldingen */");
                 foreach (var hd in c.OVData.HDIngrepen)
@@ -925,8 +918,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #endregion // HD ingrepen mee inmelden
 
-            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any() ||
-                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any())
+            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
+                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
@@ -944,7 +937,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         
         private string GenerateOvCPARCorrecties(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* -------------------------------------");
             sb.AppendLine("   OVPARCorrecties corrigeert de PAR van");
             sb.AppendLine("   gesynchroniseerde richtingen.");
@@ -959,24 +952,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCPARCcol(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
-            string _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
-            string _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("trt");
-            string _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("trthd");
-            string _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
-            string _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            string _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
-            string _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
-            string _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
-            string _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
+            var _tgb = CCOLGeneratorSettingsProvider.Default.GetElementName("tgb");
+            var _tgbhd = CCOLGeneratorSettingsProvider.Default.GetElementName("tgbhd");
+            var _trt = CCOLGeneratorSettingsProvider.Default.GetElementName("trt");
+            var _trthd = CCOLGeneratorSettingsProvider.Default.GetElementName("trthd");
+            var _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
+            var _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+            var _tblk = CCOLGeneratorSettingsProvider.Default.GetElementName("tblk");
+            var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
+            var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
 
-            sb.AppendLine($"/*-----------------------------------------------------");
-            sb.AppendLine($"   OVCcol zorgt voor het bijwerken van de CCOL-elementen");
-            sb.AppendLine($"   voor het OV.");
-            sb.AppendLine($"   ----------------------------------------------------- */");
-            sb.AppendLine($"void OVCcol(void) {{");
+            sb.AppendLine("/*-----------------------------------------------------");
+            sb.AppendLine("   OVCcol zorgt voor het bijwerken van de CCOL-elementen");
+            sb.AppendLine("   voor het OV.");
+            sb.AppendLine("   ----------------------------------------------------- */");
+            sb.AppendLine("void OVCcol(void) {{");
             foreach(var ov in c.OVData.OVIngrepen)
             {
                 sb.AppendLine($"  OVCcolElementen(ovFC{ov.FaseCyclus}, {_tpf}{_tgb}{ov.FaseCyclus}, {_tpf}{_trt}{ov.FaseCyclus}, {_hpf}{_hov}{ov.FaseCyclus}, {_cpf}{_cvc}{ov.FaseCyclus}, {_tpf}{_tblk}{ov.FaseCyclus});");
@@ -993,16 +986,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCSpecialSignals(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            string _prmtestkarvert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarvert");
-            string _prmtestkarlyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarlyn");
-            string _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
-            string _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
-            string _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
-            string _ddummykarhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhduit");
-            string _ddummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomin");
-            string _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
+            var _prmtestkarvert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarvert");
+            var _prmtestkarlyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestkarlyn");
+            var _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
+            var _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
+            var _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
+            var _ddummykarhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhduit");
+            var _ddummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomin");
+            var _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   OVSpecialSignals wordt aangeroepen vanuit de functie ");
@@ -1010,7 +1003,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   het opzetten van bijzondere ingangen.");
             sb.AppendLine("   ---------------------------------------------------------------- */");
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
-            sb.AppendLine($"void OVSpecialSignals(void)");
+            sb.AppendLine("void OVSpecialSignals(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}/* reset oude set_DSI_message */");
             sb.AppendLine($"{ts}#ifndef VISSIM");
@@ -1022,10 +1015,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* OV ingrepen */");
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.KAR))
                 {
-                    int ifc;
-                    if (Int32.TryParse(ov.FaseCyclus, out ifc))
+	                if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
-                        string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                         sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                     }
@@ -1034,7 +1026,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
                     {
-                        string type = ov.Type == Models.Enumerations.OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                         sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                     }
@@ -1047,9 +1039,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}/* HD ingrepen */");
                 foreach (var hd in c.OVData.HDIngrepen.Where(x => x.KAR))
                 {
-                    int ifc;
-                    string type = "CIF_POL";
-                    if (Int32.TryParse(hd.FaseCyclus, out ifc))
+	                const string type = "CIF_POL";
+	                if (int.TryParse(hd.FaseCyclus, out var ifc))
                     {
                         sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
                         sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
@@ -1065,9 +1056,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateOvCBottom(ControllerModel c)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            sb.AppendLine($"#include \"ov.c\"");
+            sb.AppendLine("#include \"ov.c\"");
             sb.AppendLine($"#include \"{c.Data.Naam}ov.add\"");
             sb.AppendLine();
 

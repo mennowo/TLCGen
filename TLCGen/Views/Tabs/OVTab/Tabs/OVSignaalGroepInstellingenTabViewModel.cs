@@ -61,9 +61,26 @@ namespace TLCGen.ViewModels
                 {
                     OVIngreepSGParameters =
                         new ObservableCollectionAroundList<OVIngreepSignaalGroepParametersViewModel, OVIngreepSignaalGroepParametersModel>(Controller.OVData.OVIngreepSignaalGroepParameters);
+
+	                if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
+	                {
+		                foreach (var sg in Controller.Fasen)
+		                {
+			                if (Controller.OVData.OVIngreepSignaalGroepParameters.All(x => x.FaseCyclus != sg.Naam))
+			                {
+				                OVIngreepSGParameters.Add(
+									new OVIngreepSignaalGroepParametersViewModel(
+										new OVIngreepSignaalGroepParametersModel
+										{
+											FaseCyclus = sg.Naam
+										}));
+
+							}
+		                }
+	                }
                 }
                 else
-                {
+				{
                     OVIngreepSGParameters = null;
                 }
                 RaisePropertyChanged("OVIngreepSGParameters");
@@ -94,7 +111,27 @@ namespace TLCGen.ViewModels
         {
             if (_Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
             {
-                OVIngreepSGParameters.Rebuild();
+	            if (message.AddedFasen != null)
+	            {
+					foreach (var sg in message.AddedFasen)
+					{
+						OVIngreepSGParameters.Add(
+							new OVIngreepSignaalGroepParametersViewModel(
+								new OVIngreepSignaalGroepParametersModel
+								{
+									FaseCyclus = sg.Naam
+								}));
+					}
+	            }
+	            if (message.RemovedFasen != null)
+	            {
+		            foreach (var sg in message.RemovedFasen)
+		            {
+						var ovsgprm = OVIngreepSGParameters.FirstOrDefault(x => x.FaseCyclus == sg.Naam);
+						if(ovsgprm != null) OVIngreepSGParameters.Remove(ovsgprm);
+		            }
+	            }
+				OVIngreepSGParameters.Rebuild();
             }
         }
 
@@ -104,10 +141,10 @@ namespace TLCGen.ViewModels
             switch (message.Type)
             {
                 case Models.Enumerations.OVIngreepTypeEnum.Geen:
-                    OVIngreepSGParameters.Clear();
+                    OVIngreepSGParameters.RemoveAll();
                     break;
                 case Models.Enumerations.OVIngreepTypeEnum.Uitgebreid:
-                    foreach(FaseCyclusModel fcm in _Controller.Fasen)
+                    foreach(var fcm in _Controller.Fasen)
                     {
                         var prms = new OVIngreepSignaalGroepParametersModel();
                         DefaultsProvider.Default.SetDefaultsOnModel(prms);
@@ -165,7 +202,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<ControllerHasOVChangedMessage>(OnControllerHasOVChanged));
             Messenger.Default.Register(this, new Action<OVIngreepSignaalGroepParametersChangedMessage>(OnOVIngreepSignaalGroepParametersChanged));
-        }
+		}
 
         #endregion // Constructor
     }
