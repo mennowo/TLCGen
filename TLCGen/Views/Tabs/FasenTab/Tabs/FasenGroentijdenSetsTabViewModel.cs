@@ -1,14 +1,10 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -114,7 +110,7 @@ namespace TLCGen.ViewModels
         void AddNewGroentijdenSetCommand_Executed(object prm)
         {
             // Build model
-            GroentijdenSetModel mgsm = new GroentijdenSetModel();
+            var mgsm = new GroentijdenSetModel();
             switch(_Controller.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.VerlengGroentijden:
@@ -125,16 +121,16 @@ namespace TLCGen.ViewModels
                     break;
 
             }
-            foreach(FaseCyclusModel fcvm in _Controller.Fasen)
+            foreach(var fcvm in _Controller.Fasen)
             {
-                GroentijdModel mgm = new GroentijdModel();
+                var mgm = new GroentijdModel();
                 mgm.FaseCyclus = fcvm.Naam;
                 mgm.Waarde = Settings.Utilities.FaseCyclusUtilities.GetFaseDefaultGroenTijd(fcvm.Type);
                 mgsm.Groentijden.Add(mgm);
             }
 
             // Create ViewModel around the model, add to list
-            GroentijdenSetViewModel mgsvm = new GroentijdenSetViewModel(mgsm);
+            var mgsvm = new GroentijdenSetViewModel(mgsm);
             GroentijdenSets.Add(mgsvm);
 
             // Rebuild matrix
@@ -148,8 +144,8 @@ namespace TLCGen.ViewModels
 
         void RemoveGroentijdenSetCommand_Executed(object prm)
         {
-            bool changed = false;
-            foreach(PeriodeModel p in _Controller.PeriodenData.Perioden)
+            var changed = false;
+            foreach(var p in _Controller.PeriodenData.Perioden)
             {
                 if(p.Type == PeriodeTypeEnum.Groentijden && !GroentijdenSets.Where(x => p.GroentijdenSet == x.Naam).Any())
                 {
@@ -175,9 +171,9 @@ namespace TLCGen.ViewModels
             }
 
             GroentijdenSets.Remove(SelectedSet);
-            int i = 1;
+            var i = 1;
 
-            foreach(GroentijdenSetViewModel mgsvm in GroentijdenSets)
+            foreach(var mgsvm in GroentijdenSets)
             {
                 switch (_Controller.Data.TypeGroentijden)
                 {
@@ -215,12 +211,12 @@ namespace TLCGen.ViewModels
                 SetNames.Clear();
                 FasenNames.Clear();
                 GroentijdenMatrix = new GroentijdViewModel[0,0];
-                RaisePropertyChanged("SetNames");
-                RaisePropertyChanged("FasenNames");
-                RaisePropertyChanged("GroentijdenMatrix");
-            }
+				RaisePropertyChanged(nameof(SetNames));
+	            RaisePropertyChanged(nameof(FasenNames));
+	            RaisePropertyChanged(nameof(GroentijdenMatrix));
+			}
 
-            foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
+            foreach (var mgsvm in GroentijdenSets)
             {
 #warning CHECK > why is this needed? It's double, only the first one should be necessary.
                 mgsvm.Groentijden.BubbleSort();
@@ -233,18 +229,18 @@ namespace TLCGen.ViewModels
             SetNames.Clear();
             FasenNames.Clear();
 
-            int fccount = _Controller.Fasen.Count;
+            var fccount = _Controller.Fasen.Count;
 
             if (fccount == 0 || GroentijdenSets == null || GroentijdenSets.Count == 0)
                 return;
 
             GroentijdenMatrix = new GroentijdViewModel[GroentijdenSets.Count, fccount];
             int i = 0, j = 0;
-            foreach (GroentijdenSetViewModel mgsvm in GroentijdenSets)
+            foreach (var mgsvm in GroentijdenSets)
             {
                 SetNames.Add(mgsvm.GroentijdenSet.Naam);
                 j = 0;
-                foreach (GroentijdViewModel mgvm in mgsvm.Groentijden)
+                foreach (var mgvm in mgsvm.Groentijden)
                 {
                     // Build fasen list for row headers from first set
                     if (i == 0)
@@ -256,14 +252,14 @@ namespace TLCGen.ViewModels
                     if (j < fccount)
                         GroentijdenMatrix[i, j] = mgvm;
                     else
-                        throw new NotImplementedException();
+                        throw new IndexOutOfRangeException();
                     j++;
                 }
                 i++;
             }
-            RaisePropertyChanged("SetNames");
-            RaisePropertyChanged("FasenNames");
-            RaisePropertyChanged("GroentijdenMatrix");
+            RaisePropertyChanged(nameof(SetNames));
+            RaisePropertyChanged(nameof(FasenNames));
+            RaisePropertyChanged(nameof(GroentijdenMatrix));
         }
 
         #endregion // Private methods
@@ -303,7 +299,7 @@ namespace TLCGen.ViewModels
                 {
                     GroentijdenSets.CollectionChanged -= GroentijdenSets_CollectionChanged;
                     GroentijdenSets.Clear();
-                    foreach (GroentijdenSetModel gsm in base.Controller.GroentijdenSets)
+                    foreach (var gsm in base.Controller.GroentijdenSets)
                     {
                         GroentijdenSets.Add(new GroentijdenSetViewModel(gsm));
                     }
@@ -372,9 +368,9 @@ namespace TLCGen.ViewModels
 
         public void OnNameChanged(NameChangedMessage message)
         {
-            foreach(GroentijdenSetViewModel mgsvm in GroentijdenSets)
+            foreach(var mgsvm in GroentijdenSets)
             {
-                foreach(GroentijdViewModel mgvm in mgsvm.Groentijden)
+                foreach(var mgvm in mgsvm.Groentijden)
                 {
                     if(mgvm.FaseCyclus == message.OldName)
                     {
@@ -387,8 +383,8 @@ namespace TLCGen.ViewModels
 
         public void OnGroentijdenTypeChanged(GroentijdenTypeChangedMessage message)
         {
-            RaisePropertyChanged("DisplayName");
-            foreach (GroentijdenSetViewModel setvm in GroentijdenSets)
+            RaisePropertyChanged(nameof(DisplayName));
+            foreach (var setvm in GroentijdenSets)
             {
                 setvm.Type = message.Type;
             }
@@ -425,7 +421,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public FasenGroentijdenSetsTabViewModel() : base()
+        public FasenGroentijdenSetsTabViewModel()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));

@@ -165,7 +165,7 @@ namespace TLCGen.ViewModels
                 {
                     elem.Value.FaseVan = value;
                 }
-                RaisePropertyChanged("FaseVan");
+                RaisePropertyChanged();
             }
         }
         
@@ -182,7 +182,7 @@ namespace TLCGen.ViewModels
                 {
                     elem.Value.FaseNaar = value;
                 }
-                RaisePropertyChanged("FaseNaar");
+                RaisePropertyChanged();
             }
         }
 
@@ -192,7 +192,7 @@ namespace TLCGen.ViewModels
             {
                 if(IsCoupled || ReferencesSelf)
                 {
-                    throw new NotImplementedException();
+                    throw new InvalidOperationException("Coupled or self-referenced synch cell cannot have a conflict value");
                 }
                 switch (DisplayType)
                 {
@@ -205,9 +205,9 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<object>("ConflictValue", broadcast: true);
-                RaisePropertyChanged("HasConflict");
-                RaisePropertyChanged("IsEnabled");
+                RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
+                RaisePropertyChanged(nameof(HasConflict));
+                RaisePropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -229,8 +229,8 @@ namespace TLCGen.ViewModels
             {
                 if(IsCoupled || ReferencesSelf || !IsEnabled)
                 {
-                    throw new NotImplementedException();
-                }
+					throw new InvalidOperationException("Coupled or self-referenced synch cell cannot have a conflict value");
+				}
                 switch (DisplayType)
                 {
                     case IntersignaalGroepTypeEnum.Conflict:
@@ -242,9 +242,9 @@ namespace TLCGen.ViewModels
                     default:
                         return;
                 }
-                RaisePropertyChanged<object>("ConflictValue", broadcast: true);
-                RaisePropertyChanged("HasConflict");
-                RaisePropertyChanged("IsEnabled");
+                RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
+                RaisePropertyChanged(nameof(HasConflict));
+                RaisePropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -254,8 +254,8 @@ namespace TLCGen.ViewModels
             {
                 if (HasConflict)
                 {
-                    throw new NotImplementedException();
-                }
+					throw new InvalidOperationException("Cell with conflict cannot have a synch value");
+				}
                 switch (DisplayType)
                 {
                     case IntersignaalGroepTypeEnum.Gelijkstart:
@@ -274,10 +274,10 @@ namespace TLCGen.ViewModels
                         HasLateRelease = value;
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new ArgumentOutOfRangeException();
                 }
-                RaisePropertyChanged<object>("IsCoupled", broadcast: true);
-                RaisePropertyChanged("HasNoCoupling");
+                RaisePropertyChanged<object>(nameof(IsCoupled), broadcast: true);
+                RaisePropertyChanged(nameof(HasNoCoupling));
             }
         }
 
@@ -305,8 +305,8 @@ namespace TLCGen.ViewModels
             {
                 if(HasConflict || ReferencesSelf || !IsEnabled)
                 {
-                    throw new NotImplementedException();
-                }
+					throw new InvalidOperationException("Cell with conflict or self-reference cannot have a synch value");
+				}
                 switch (DisplayType)
                 {
                     case IntersignaalGroepTypeEnum.Gelijkstart:
@@ -330,7 +330,7 @@ namespace TLCGen.ViewModels
                         Messenger.Default.Send(new InterSignaalGroepChangedMessage(this.FaseVan, this.FaseNaar, this.LateRelease, value));
                         break;
                     default:
-                        throw new NotImplementedException();
+                        throw new ArgumentOutOfRangeException();
                 }
                 RaisePropertyChanged<object>("IsCoupled", broadcast: true);
                 RaisePropertyChanged("HasNoCoupling");
@@ -691,8 +691,8 @@ namespace TLCGen.ViewModels
                     propertyInfo.SetValue(_LateRelease, val);
                     break;
                 default:
-                    throw new NotImplementedException();
-            }
+                    throw new ArgumentOutOfRangeException();
+			}
         }
 
         private T GetSynchValue<T>(string property)
@@ -723,8 +723,8 @@ namespace TLCGen.ViewModels
                     returnval = (T)propertyInfo.GetValue(_LateRelease);
                     break;
                 default:
-                    throw new NotImplementedException();
-            }
+                    throw new ArgumentOutOfRangeException();
+			}
             return returnval;
         }
 

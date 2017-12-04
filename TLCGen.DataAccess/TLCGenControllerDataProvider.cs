@@ -270,7 +270,7 @@ namespace TLCGen.DataAccess
                 }
                 else
                 {
-                    throw new NotImplementedException("DataProvider filename not set. Cannot save.");
+                    throw new ArgumentNullException("DataProvider filename not set. Cannot save.");
                 }
 
                 ControllerHasChanged = false;

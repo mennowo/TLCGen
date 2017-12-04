@@ -56,7 +56,7 @@ namespace TLCGen.Models
             {
                 string[] parts = value.Split(':');
                 if (parts.Length != 2)
-                    throw new NotImplementedException();
+                    throw new IndexOutOfRangeException("SerializedStartTijd must have two parts seperated by a colon");
                 int hours = Int32.Parse(parts[0]);
                 int days = 0;
                 if (hours == 24)
@@ -84,8 +84,8 @@ namespace TLCGen.Models
             {
                 string[] parts = value.Split(':');
                 if (parts.Length != 2)
-                    throw new NotImplementedException();
-                int hours = Int32.Parse(parts[0]);
+					throw new IndexOutOfRangeException("SerializedEindTijd must have two parts seperated by a colon");
+				int hours = Int32.Parse(parts[0]);
                 int days = 0;
                 if (hours == 24)
                 {

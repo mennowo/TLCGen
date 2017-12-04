@@ -58,15 +58,11 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            var ov2 = obj as OVIngreepModel;
-            if (ov2 == null)
+	        if (!(obj is OVIngreepModel ov2))
             {
-                throw new NotImplementedException();
+                throw new InvalidCastException();
             }
-            else
-            {
-                return this.FaseCyclus.CompareTo(ov2.FaseCyclus);
-            }
+	        return String.Compare(this.FaseCyclus, ov2.FaseCyclus, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

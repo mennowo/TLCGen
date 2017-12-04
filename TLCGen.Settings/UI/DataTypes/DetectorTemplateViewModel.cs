@@ -98,17 +98,14 @@ namespace TLCGen.Settings
                     if (value == DetectorTypeEnum.Kop.GetDescription())
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Kop;
-
                     }
                     else if (value == DetectorTypeEnum.Lang.GetDescription())
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Lang;
-
                     }
                     else if (value == DetectorTypeEnum.Verweg.GetDescription())
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Verweg;
-
                     }
                     else if (value == DetectorTypeEnum.File.GetDescription())
                     {
@@ -144,7 +141,7 @@ namespace TLCGen.Settings
                     }
                     else
                     {
-                        throw new NotImplementedException("Unknown detector type in DetectorTemplateViewModel.cs line 135");
+                        throw new ArgumentOutOfRangeException("Unknown detector type: " + value);
                     }
                 }
                 RaisePropertyChanged("SelectedDetectorTypeString");

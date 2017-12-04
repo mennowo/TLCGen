@@ -215,10 +215,10 @@ namespace TLCGen.Settings
                     }
                     else
                     {
-                        throw new NotImplementedException("Unknown fase type in FaseCyclusTemplateViewModel.cs line 218");
+                        throw new ArgumentOutOfRangeException("Unknown fase type: " + value);
                     }
                 }
-                RaisePropertyChanged("SelectedFaseCyclusTypeString");
+                RaisePropertyChanged();
             }
         }
 
@@ -277,10 +277,10 @@ namespace TLCGen.Settings
                     }
                     else
                     {
-                        throw new NotImplementedException("Unknown detector type in FaseCyclusTemplateViewModel.cs line 268");
+                        throw new ArgumentOutOfRangeException("Unknown detector type: " + value);
                     }
                 }
-                RaisePropertyChanged("SelectedDetectorTypeString");
+                RaisePropertyChanged();
             }
         }
 

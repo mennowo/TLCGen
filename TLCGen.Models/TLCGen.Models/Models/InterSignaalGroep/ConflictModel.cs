@@ -60,10 +60,9 @@ namespace TLCGen.Models
                         Waarde = -2;
                         break;
                     default:
-                        int waarde;
-                        if (!Int32.TryParse(value, out waarde))
+	                    if (!int.TryParse(value, out var waarde))
                         {
-                            throw new NotImplementedException($"Fout bij laden conflicten:\n\nconflicten van {FaseVan} naar {FaseNaar} heeft foutieve waarde {SerializedWaarde}");
+                            throw new ArgumentOutOfRangeException($"Fout bij laden conflicten:\n\nconflicten van {FaseVan} naar {FaseNaar} heeft foutieve waarde {SerializedWaarde}");
                         }
                         else
                         {

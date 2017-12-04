@@ -60,16 +60,19 @@ namespace TLCGen.Generators.CCOL
 
         #region Commands
 
-        RelayCommand _SaveSettingsCommand;
+		/* 
+		 * For potential future use
+		 * 
+        RelayCommand _saveSettingsCommand;
         public ICommand SaveSettingsCommand
         {
             get
             {
-                if (_SaveSettingsCommand == null)
+                if (_saveSettingsCommand == null)
                 {
-                    _SaveSettingsCommand = new RelayCommand(SaveSettingsCommand_Executed, SaveSettingsCommand_CanExecute);
+                    _saveSettingsCommand = new RelayCommand(SaveSettingsCommand_Executed, SaveSettingsCommand_CanExecute);
                 }
-                return _SaveSettingsCommand;
+                return _saveSettingsCommand;
             }
         }
 
@@ -82,6 +85,8 @@ namespace TLCGen.Generators.CCOL
         {
             throw new NotImplementedException();
         }
+
+		*/
 
         #endregion // Commands
 

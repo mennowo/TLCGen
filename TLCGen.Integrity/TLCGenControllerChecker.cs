@@ -15,7 +15,7 @@ namespace TLCGen.Integrity
         public static bool IsFasenConflicting(ControllerModel controller, string fase1, string fase2)
         {
             if (controller == null)
-                throw new NotImplementedException();
+                throw new NullReferenceException();
 
             foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
             {

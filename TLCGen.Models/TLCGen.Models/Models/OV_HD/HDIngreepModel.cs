@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
@@ -48,14 +45,13 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            var hd2 = obj as HDIngreepModel;
-            if(hd2 == null)
+	        if(!(obj is HDIngreepModel hd2))
             {
-                throw new NotImplementedException();
+                throw new InvalidCastException();
             }
             else
             {
-                return this.FaseCyclus.CompareTo(hd2.FaseCyclus);
+                return string.Compare(FaseCyclus, hd2.FaseCyclus, StringComparison.Ordinal);
             }
         }
 

@@ -23,12 +23,13 @@ namespace TLCGen.Views
     /// </summary>
     public partial class ConflictMatrixDataGrid : UserControl
     {
-        private DataGridRow _PreviousRow = null;
-        private DataGridColumn _PreviousCol = null;
-        private Style styleSelectedC;
-        private Style styleSelectedR;
-        
-        public static readonly DependencyProperty ConflictMatrixProperty =
+        private DataGridRow _previousRow = null;
+        private DataGridColumn _previousCol = null;
+        private readonly Style _styleSelectedC;
+        private readonly Style _styleSelectedR;
+	    bool _editing = false;
+
+		public static readonly DependencyProperty ConflictMatrixProperty =
             DependencyProperty.Register("ConflictMatrix", typeof(Array), typeof(ConflictMatrixDataGrid), new PropertyMetadata(default(Array)));
 
         public Array ConflictMatrix
@@ -52,21 +53,21 @@ namespace TLCGen.Views
 
             if (!DesignMode.IsInDesignMode)
             {
-                styleSelectedC = new Style();
-                styleSelectedC.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(3, 3, 3, 3)));
-                styleSelectedC.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
-                styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
-                styleSelectedC.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
-                styleSelectedC.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(5, 3, 5, 3)));
-                styleSelectedC.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
+                _styleSelectedC = new Style();
+                _styleSelectedC.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(3, 3, 3, 3)));
+                _styleSelectedC.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
+                _styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
+                _styleSelectedC.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
+                _styleSelectedC.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(5, 3, 5, 3)));
+                _styleSelectedC.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
 
-                styleSelectedR = new Style();
-                styleSelectedR.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(2, 3, 2, 3)));
-                styleSelectedR.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
-                styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
-                styleSelectedR.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
-                styleSelectedR.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(3, 3, 3, 3)));
-                styleSelectedR.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
+                _styleSelectedR = new Style();
+                _styleSelectedR.Setters.Add(new Setter(Border.PaddingProperty, new Thickness(2, 3, 2, 3)));
+                _styleSelectedR.Setters.Add(new Setter(Grid.BackgroundProperty, new SolidColorBrush(Colors.Beige)));
+                _styleSelectedC.Setters.Add(new Setter(Grid.HorizontalAlignmentProperty, HorizontalAlignment.Stretch));
+                _styleSelectedR.Setters.Add(new Setter(TextBox.ForegroundProperty, new SolidColorBrush(Colors.Blue)));
+                _styleSelectedR.Setters.Add(new Setter(TextBox.PaddingProperty, new Thickness(3, 3, 3, 3)));
+                _styleSelectedR.Setters.Add(new Setter(TextBox.HorizontalAlignmentProperty, HorizontalAlignment.Center));
             }
         }
 
@@ -75,33 +76,30 @@ namespace TLCGen.Views
             DataGrid dg = sender as DataGrid;
             if (dg != null)
             {
-                if (_PreviousRow != null) _PreviousRow.HeaderStyle = null;
-                if (_PreviousCol != null) _PreviousCol.HeaderStyle = null;
+                if (_previousRow != null) _previousRow.HeaderStyle = null;
+                if (_previousCol != null) _previousCol.HeaderStyle = null;
 
                 if (e.AddedCells != null && e.AddedCells.Count > 0)
                 {
                     var row = (DataGridRow)dg.ItemContainerGenerator.ContainerFromItem(e.AddedCells[0].Item);
-                    _PreviousRow = row;
+                    _previousRow = row;
                     var col = e.AddedCells[0].Column as DataGridColumn;
-                    _PreviousCol = col;
-                    col.HeaderStyle = styleSelectedC;
-                    row.HeaderStyle = styleSelectedR;
+                    _previousCol = col;
+                    col.HeaderStyle = _styleSelectedC;
+                    row.HeaderStyle = _styleSelectedR;
                 }
-            editing = false;
+            _editing = false;
             }
         }
 
-        bool editing = false;
         private void DataGrid2D_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            editing = false;
+            _editing = false;
         }
 
         private void DataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var dg = sender as DataGrid;
-            
-            if (dg != null && !dg.IsReadOnly && !editing && 
+	        if (sender is DataGrid dg && !dg.IsReadOnly && !_editing && 
                 !(e.Key == Key.Up ||
                 e.Key == Key.Down ||
                 e.Key == Key.Left ||
@@ -114,9 +112,9 @@ namespace TLCGen.Views
                 if (dg.SelectedCells?.Count > 0)
                 {
                     var row = (DataGridRow)dg.ItemContainerGenerator.ContainerFromItem(dg.SelectedCells[0].Item);
-                    _PreviousRow = row;
+                    _previousRow = row;
                     var col = dg.SelectedCells[0].Column as DataGridColumn;
-                    _PreviousCol = col;
+                    _previousCol = col;
                     DataGridCell cell = dg.GetCell(row.GetIndex(), col.DisplayIndex);
                     dg.BeginEdit();
                 }
@@ -125,7 +123,7 @@ namespace TLCGen.Views
 
         private void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
-            editing = true;
+            _editing = true;
         }
     }
 
@@ -134,28 +132,28 @@ namespace TLCGen.Views
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values == null || values.Count() != 2)
-                throw new NotImplementedException();
+                throw new IndexOutOfRangeException();
 
             if (values[0] == DependencyProperty.UnsetValue ||
                 values[1] == DependencyProperty.UnsetValue)
                 return null;
 
-            var DisplayType = (IntersignaalGroepTypeEnum)values[0];
-            var IsEnabled = (bool)values[1];
+            var displayType = (IntersignaalGroepTypeEnum)values[0];
+            var isEnabled = (bool)values[1];
 
-            switch(DisplayType)
+            switch(displayType)
             {
                 case IntersignaalGroepTypeEnum.Conflict:
                 case IntersignaalGroepTypeEnum.GarantieConflict:
                     return Visibility.Hidden;
                 default:
-                    return IsEnabled ? Visibility.Visible : Visibility.Hidden;
+                    return isEnabled ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 
@@ -163,30 +161,34 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IntersignaalGroepTypeEnum e = (IntersignaalGroepTypeEnum)parameter;
-            switch(e)
-            {
-                case IntersignaalGroepTypeEnum.Conflict:
-                case IntersignaalGroepTypeEnum.GarantieConflict:
-                    if (value is string)
-                        return value as string;
-                    else
-                        return "";
-                case IntersignaalGroepTypeEnum.Gelijkstart:
-                case IntersignaalGroepTypeEnum.Voorstart:
-                case IntersignaalGroepTypeEnum.Naloop:
-                    if (value is bool)
-                        return (bool)value;
-                    else
-                        return false;
-                default:
-                    throw new NotImplementedException();
-            }
+	        if (parameter != null)
+	        {
+		        IntersignaalGroepTypeEnum e = (IntersignaalGroepTypeEnum)parameter;
+		        switch(e)
+		        {
+			        case IntersignaalGroepTypeEnum.Conflict:
+			        case IntersignaalGroepTypeEnum.GarantieConflict:
+				        if (value is string s)
+					        return s;
+				        else
+					        return "";
+			        case IntersignaalGroepTypeEnum.Gelijkstart:
+			        case IntersignaalGroepTypeEnum.Voorstart:
+			        case IntersignaalGroepTypeEnum.Naloop:
+				        if (value is bool b)
+					        return b;
+				        else
+					        return false;
+			        default:
+				        throw new ArgumentOutOfRangeException();
+		        }
+	        }
+			throw new NullReferenceException();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TLCGen.Models
 {
@@ -25,15 +21,11 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            var mlfc = obj as FaseCyclusModuleDataModel;
-            if (obj == null)
+	        if (!(obj is FaseCyclusModuleDataModel mlfc))
             {
-                throw new NotImplementedException();
+                throw new InvalidCastException();
             }
-            else
-            {
-                return this.FaseCyclus.CompareTo(mlfc.FaseCyclus);
-            }
+	        return string.Compare(FaseCyclus, mlfc.FaseCyclus, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

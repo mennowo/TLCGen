@@ -14,14 +14,14 @@ namespace TLCGen
 		public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
 		{
 			if (dictionary == null)
-				throw new ArgumentNullException("dictionary");
+				throw new ArgumentNullException(nameof(dictionary));
 
 			return type == typeof(object) ? new DynamicJsonObject(dictionary) : null;
 		}
 
 		public override IDictionary<string, object> Serialize(object obj, JavaScriptSerializer serializer)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public override IEnumerable<Type> SupportedTypes
@@ -37,9 +37,7 @@ namespace TLCGen
 
 			public DynamicJsonObject(IDictionary<string, object> dictionary)
 			{
-				if (dictionary == null)
-					throw new ArgumentNullException("dictionary");
-				_dictionary = dictionary;
+				_dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
 			}
 
 			public override string ToString()

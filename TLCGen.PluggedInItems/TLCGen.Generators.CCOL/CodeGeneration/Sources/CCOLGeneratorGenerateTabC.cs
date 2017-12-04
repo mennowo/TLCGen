@@ -869,7 +869,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             // TODO: what type to use here?
                             break;
                         default:
-                            throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
+                            throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type);
                     }
                 }
             }
@@ -905,7 +905,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         // TODO: what type to use here?
                         break;
                     default:
-                        throw new NotImplementedException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
+                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
                 }
             }
 
@@ -931,7 +931,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine("VTG_type;");
                         break;
                     default:
-                        throw new NotImplementedException("Unknown vehicle type while generating tab.c: " + fc.Type.ToString());
+                        throw new ArgumentOutOfRangeException("Unknown vehicle type while generating tab.c: " + fc.Type.ToString());
                 }
             }
 

@@ -55,7 +55,7 @@ namespace TLCGen.Integrity
         public static string IsConflictMatrixOK(ControllerModel c)
         {
             if (c == null)
-                throw new NotImplementedException("Error with IsConflictMatrixOK: ControllerModel cannot be null");
+                throw new NullReferenceException("Error with IsConflictMatrixOK: ControllerModel cannot be null");
             
             // Loop all conflicts
             foreach (ConflictModel cm1 in c.InterSignaalGroep.Conflicten)
@@ -222,12 +222,12 @@ namespace TLCGen.Integrity
         /// <summary>
         /// Determines if this phase conflicts with the one parsed
         /// </summary>
-        public static bool IsFasenConflicting(ControllerModel _Controller, FaseCyclusModel fcm1, FaseCyclusModel fcm2)
+        public static bool IsFasenConflicting(ControllerModel controller, FaseCyclusModel fcm1, FaseCyclusModel fcm2)
         {
-            if (_Controller == null)
-                throw new NotImplementedException();
+            if (controller == null)
+                throw new NullReferenceException();
 
-            foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
+            foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
             {
                 if (cm.FaseVan == fcm1.Naam && cm.FaseNaar == fcm2.Naam)
                     return true;
@@ -238,12 +238,12 @@ namespace TLCGen.Integrity
         /// <summary>
         /// Determines if this phase conflicts with the one parsed
         /// </summary>
-        public static bool IsFasenConflicting(ControllerModel _Controller, string define1, string define2)
+        public static bool IsFasenConflicting(ControllerModel controller, string define1, string define2)
         {
-            if (_Controller == null)
-                throw new NotImplementedException();
+            if (controller == null)
+                throw new NullReferenceException();
 
-            foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
+            foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
             {
                 if (cm.FaseVan == define1 && cm.FaseNaar == define2)
                     return true;

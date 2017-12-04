@@ -61,17 +61,13 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            var fcvm = obj as ModuleFaseCyclusAlternatiefViewModel;
-            if (fcvm == null)
-                throw new NotImplementedException();
-            else
-            {
-                var myName = FaseCyclus;
-                var hisName = fcvm.FaseCyclus;
-                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
-                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
-                return string.Compare(myName, hisName, StringComparison.Ordinal);
-            }
+	        if (!(obj is ModuleFaseCyclusAlternatiefViewModel fcvm))
+                throw new InvalidCastException();
+	        var myName = FaseCyclus;
+	        var hisName = fcvm.FaseCyclus;
+	        if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+	        else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+	        return string.Compare(myName, hisName, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

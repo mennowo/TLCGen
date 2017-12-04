@@ -12,12 +12,11 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            var they = obj as HDIngreepMeerealiserendeFaseCyclusModel;
-            if(they != null)
-            {
-                return this.FaseCyclus.CompareTo(they.FaseCyclus);
-            }
-            throw new NotImplementedException();
+	        if (!(obj is HDIngreepMeerealiserendeFaseCyclusModel they))
+	        {
+		        throw new InvalidCastException();
+	        }
+	        return string.Compare(FaseCyclus, they.FaseCyclus, StringComparison.Ordinal);
         }
     }
 }

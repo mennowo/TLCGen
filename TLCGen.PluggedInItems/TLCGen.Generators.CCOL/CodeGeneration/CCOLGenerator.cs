@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
 
                 if (CCOLElementLists == null || CCOLElementLists.Length != 8)
-                    throw new NotImplementedException("Error collecting CCOL elements from controller.");
+                    throw new IndexOutOfRangeException("Error collecting CCOL elements from controller.");
 
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationPlugins)
                 {
@@ -566,7 +566,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public CCOLGenerator()
         {
             if (PieceGenerators != null)
-                throw new NotImplementedException();
+                throw new NullReferenceException();
 
             PieceGenerators = new List<ICCOLCodePieceGenerator>();
             OrderedPieceGenerators = new Dictionary<CCOLRegCCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>>();

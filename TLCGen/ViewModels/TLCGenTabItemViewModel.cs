@@ -44,15 +44,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public virtual ImageSource Icon
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+		public virtual ImageSource Icon => null;
 
-        public virtual bool OnSelectedPreview()
+	    public virtual bool OnSelectedPreview()
         {
             return true;
         }

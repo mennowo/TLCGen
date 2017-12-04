@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TLCGen.Models
 {
@@ -23,11 +19,10 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            GroentijdModel m = obj as GroentijdModel;
-            if (m == null)
-                throw new NotImplementedException();
+	        if (!(obj is GroentijdModel m))
+                throw new InvalidCastException();
 
-            return this.FaseCyclus.CompareTo(m.FaseCyclus);
+            return string.Compare(FaseCyclus, m.FaseCyclus, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

@@ -164,7 +164,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var thisfcm = c.Fasen.FirstOrDefault(fcm => fcm.Naam == mgm.FaseCyclus);
 
                     if (thisfcm == null)
-                        throw new NotImplementedException($"Maxgroentijd voor niet bestaande fase {mgm.FaseCyclus} opgegeven.");
+                        throw new NullReferenceException($"Maxgroentijd voor niet bestaande fase {mgm.FaseCyclus} opgegeven.");
 
                     _myElements.Add(new CCOLElement(
                         $"{mgset.Naam.ToLower()}_{thisfcm.Naam}",

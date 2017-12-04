@@ -44,17 +44,13 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            ModuleFaseCyclusViewModel fcvm = obj as ModuleFaseCyclusViewModel;
-            if (fcvm == null)
-                throw new NotImplementedException();
-            else
-            {
-                string myName = FaseCyclusNaam;
-                string hisName = fcvm.FaseCyclusNaam;
-                if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
-                else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
-                return myName.CompareTo(hisName);
-            }
+	        if (!(obj is ModuleFaseCyclusViewModel fcvm))
+                throw new InvalidCastException();
+	        var myName = FaseCyclusNaam;
+	        var hisName = fcvm.FaseCyclusNaam;
+	        if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+	        else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+	        return string.Compare(myName, hisName, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

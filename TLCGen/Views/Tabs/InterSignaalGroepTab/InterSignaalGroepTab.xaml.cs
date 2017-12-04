@@ -43,7 +43,7 @@ namespace TLCGen.Views
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 
@@ -61,8 +61,8 @@ namespace TLCGen.Views
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
-        }
+			throw new InvalidOperationException();
+		}
     }
 
     public class ReferencesSelfToBackgroundConverter : IValueConverter
@@ -78,7 +78,7 @@ namespace TLCGen.Views
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
-        }
+			throw new InvalidOperationException();
+		}
     }
 }

@@ -53,18 +53,18 @@ namespace TLCGen.ViewModels
 
         public string Commentaar
         {
-            get { return _Periode.Commentaar; }
-            set
+            get => _Periode.Commentaar;
+	        set
             {
                 _Periode.Commentaar = value;
-                RaisePropertyChanged<object>("Commentaar", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Commentaar), broadcast: true);
             }
         }
         
         public string TypeAsString
         {
-            get { return Type.GetDescription(); }
-            set
+            get => Type.GetDescription();
+	        set
             {
                 if(value == PeriodeTypeEnum.BellenActief.GetDescription())
                 {
@@ -96,7 +96,7 @@ namespace TLCGen.ViewModels
                 }
                 else
                 {
-                    throw new NotImplementedException("Unknown period type in PeriodeViewModel.cs line 100");
+                    throw new ArgumentOutOfRangeException("Unknown period type: " + value);
                 }
                 RaisePropertyChanged(string.Empty);
                 RaisePropertyChanged<object>(nameof(TypeAsString), broadcast: true);

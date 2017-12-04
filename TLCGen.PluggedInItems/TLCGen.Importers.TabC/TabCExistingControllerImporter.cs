@@ -19,7 +19,7 @@ namespace TLCGen.Importers.TabC
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             set
@@ -28,10 +28,11 @@ namespace TLCGen.Importers.TabC
             }
         }
 
-        public bool ImportsIntoExisting { get { return true; } }
-        public string Name { get { return "Importeer tab.c (in bestaande regeling)"; } }
+        public bool ImportsIntoExisting => true;
 
-        public string GetPluginName()
+	    public string Name => "Importeer tab.c (in bestaande regeling)";
+
+	    public string GetPluginName()
         {
             return Name;
         }
@@ -40,7 +41,7 @@ namespace TLCGen.Importers.TabC
         {
             if(c == null)
             {
-                throw new NotImplementedException("TabC importer: Controller to import into cannot be null.");
+                throw new NullReferenceException("TabC importer: Controller to import into cannot be null.");
             }
 
             OpenFileDialog openFileDialog = new OpenFileDialog();

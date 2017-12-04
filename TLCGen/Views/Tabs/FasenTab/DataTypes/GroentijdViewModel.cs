@@ -59,9 +59,8 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            GroentijdViewModel mgvm = obj as GroentijdViewModel;
-            if (mgvm == null)
-                throw new NotImplementedException();
+	        if (!(obj is GroentijdViewModel mgvm))
+                throw new InvalidCastException();
             else
             {
                 string myFase = FaseCyclus;

@@ -50,7 +50,7 @@ namespace TLCGen.Importers.TabC
 
                     if (!Int32.TryParse(_conf, out conf))
                     {
-                        throw new NotImplementedException($"Conflict van {fc1} naar {fc2} heeft een foutieve waarde: {_conf}");
+                        throw new InvalidOperationException($"Conflict van {fc1} naar {fc2} heeft een foutieve waarde: {_conf}");
                     }
 
                     FaseCyclusModel _fcm1 = null;

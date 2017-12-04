@@ -29,15 +29,11 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            var fcovprm = obj as OVIngreepSignaalGroepParametersModel;
-            if (obj == null)
+            if (!(obj is OVIngreepSignaalGroepParametersModel fcovprm))
             {
-                throw new NotImplementedException();
+                throw new InvalidCastException();
             }
-            else
-            {
-                return this.FaseCyclus.CompareTo(fcovprm.FaseCyclus);
-            }
+            return string.Compare(FaseCyclus, fcovprm.FaseCyclus, StringComparison.Ordinal);
         }
 
         #endregion // IComparable

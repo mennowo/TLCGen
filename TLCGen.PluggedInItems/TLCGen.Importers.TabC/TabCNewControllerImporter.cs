@@ -19,7 +19,7 @@ namespace TLCGen.Importers.TabC
         {
             get
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             set
@@ -40,7 +40,7 @@ namespace TLCGen.Importers.TabC
         {
             if (c != null)
             {
-                throw new NotImplementedException("TabC importer: Controller parsed is not null, which it should be for importing into new.");
+                throw new NullReferenceException("TabC importer: Controller parsed is not null, which it should be for importing into new.");
             }
 
 
@@ -60,7 +60,7 @@ namespace TLCGen.Importers.TabC
 
                     string[] lines = File.ReadAllLines(openFileDialog.FileName);
                     if (lines.Count() <= 1)
-                        throw new NotImplementedException("Het bestand heeft minder dan 2 regels.");
+                        throw new IndexOutOfRangeException("Het bestand heeft minder dan 2 regels.");
 
                     // Build a list of the Phases with conflicts from the tab.c file
                     TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);

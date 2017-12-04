@@ -911,16 +911,14 @@ namespace TLCGen.ViewModels
                                         cvm2.ConflictValueNoMessaging = "";
                                     else
                                     {
-                                        int ci;
-                                        if (Int32.TryParse(cvm2.ConflictValue, out ci))
-                                        {
-                                            ConflictMatrix[fcm_from, fcm_to].ConflictValueNoMessaging = "*";
-                                        }
-                                    }
+										if (int.TryParse(cvm2.ConflictValue, out _))
+										{
+											ConflictMatrix[fcm_from, fcm_to].ConflictValueNoMessaging = "*";
+										}
+									}
                                     break;
                                 default:
-                                    int i;
-                                    if (Int32.TryParse(cvm2.ConflictValue, out i))
+	                                if (int.TryParse(cvm2.ConflictValue, out _))
                                     {
                                         break;
                                     }
@@ -935,7 +933,7 @@ namespace TLCGen.ViewModels
                     }
                 }
                 // conflict not found: faulty state!
-                throw new NotImplementedException();
+	            throw new InvalidOperationException();
             }
 
             // Naloop

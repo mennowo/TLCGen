@@ -465,10 +465,9 @@ namespace TLCGen.ViewModels
         private void ImportControllerCommand_Executed(object obj)
         {
             if (obj == null)
-                throw new NotImplementedException();
-            var imp = obj as ITLCGenImporter;
-            if (imp == null)
-                throw new NotImplementedException();
+                throw new NullReferenceException();
+	        if (!(obj is ITLCGenImporter imp))
+                throw new InvalidCastException();
 
             // Import into existing controller
             if (TLCGenControllerDataProvider.Default.CheckChanged()) return;
@@ -566,9 +565,8 @@ namespace TLCGen.ViewModels
             if (obj == null)
                 return false;
 
-            ITLCGenImporter imp = obj as ITLCGenImporter;
-            if (imp == null)
-                throw new NotImplementedException();
+	        if (!(obj is ITLCGenImporter imp))
+                throw new InvalidCastException();
 
             if (imp.ImportsIntoExisting)
                 return TLCGenControllerDataProvider.Default.Controller != null;
@@ -912,7 +910,7 @@ namespace TLCGen.ViewModels
 			// Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {
-				// TODO ... 
+				// TODO fix version checking algorithm
 	            //var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
 	            //webRequest.UseDefaultCredentials = true;
 	            //using (var response = webRequest.GetResponse())

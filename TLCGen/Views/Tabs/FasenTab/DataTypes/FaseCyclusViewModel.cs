@@ -483,9 +483,8 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            FaseCyclusViewModel fcvm = obj as FaseCyclusViewModel;
-            if (fcvm == null)
-                throw new NotImplementedException();
+	        if (!(obj is FaseCyclusViewModel fcvm))
+                throw new InvalidCastException();
             else
             {
                 string myName = Naam;

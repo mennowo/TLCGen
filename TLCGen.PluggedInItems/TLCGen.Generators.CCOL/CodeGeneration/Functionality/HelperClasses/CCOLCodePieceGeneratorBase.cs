@@ -39,7 +39,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public virtual bool HasDetectors()
@@ -49,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<DetectorModel> GetDetectors()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public virtual bool HasCCOLBitmapOutputs()
@@ -59,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public virtual bool HasCCOLBitmapInputs()
@@ -69,7 +69,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public virtual int HasCode(CCOLRegCCodeTypeEnum type)
@@ -79,7 +79,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public virtual bool HasSettings()

@@ -119,7 +119,7 @@ namespace TLCGen.Plugins
                                                 propinfo.SetValue(addin, dataprop.Setting);
                                                 break;
                                             default:
-                                                throw new NotImplementedException("False IGenerator property type: " + type);
+                                                throw new InvalidCastException("False IGenerator property type: " + type);
                                         }
                                     }
                                     catch
