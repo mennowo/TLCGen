@@ -120,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (ma.TypeInstelbaarOpStraat)
                         {
-                            if (!ma.DetectieAfhankelijk)
+                            if (!ma.DetectieAfhankelijk || !ma.Detectoren.Any())
                             {
                                 sb.AppendLine($"{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, TRUE);");
                             }
@@ -140,7 +140,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine("));");
                             }
                         }
-                        else if(!ma.DetectieAfhankelijk)
+                        else if(!ma.DetectieAfhankelijk || !ma.Detectoren.Any())
                         {
                             switch(ma.Type)
                             {

@@ -228,7 +228,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
 
             sb.AppendLine("void OVInstellingen(void) ");
-            sb.AppendLine("{{");
+            sb.AppendLine("{");
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine($"{ts}/* Instellingen OV-richtingen    */");
             sb.AppendLine($"{ts}/* ============================= */");
@@ -969,7 +969,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   OVCcol zorgt voor het bijwerken van de CCOL-elementen");
             sb.AppendLine("   voor het OV.");
             sb.AppendLine("   ----------------------------------------------------- */");
-            sb.AppendLine("void OVCcol(void) {{");
+            sb.AppendLine("void OVCcol(void) {");
             foreach(var ov in c.OVData.OVIngrepen)
             {
                 sb.AppendLine($"  OVCcolElementen(ovFC{ov.FaseCyclus}, {_tpf}{_tgb}{ov.FaseCyclus}, {_tpf}{_trt}{ov.FaseCyclus}, {_hpf}{_hov}{ov.FaseCyclus}, {_cpf}{_cvc}{ov.FaseCyclus}, {_tpf}{_tblk}{ov.FaseCyclus});");
