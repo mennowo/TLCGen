@@ -82,26 +82,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Synchronisaties:
+                case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 10;
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Synchronisaties:
+                case CCOLCodeTypeEnum.RegCSynchronisaties:
                     // return if no synch
                     if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
                         return null;
@@ -186,7 +186,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     sb.AppendLine($"{ts}/* set {_mpf}eerealisatie voor gelijk- of voorstartende richtingen */");
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)

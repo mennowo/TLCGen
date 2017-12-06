@@ -50,7 +50,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         #region Properties
 
         public static List<ICCOLCodePieceGenerator> PieceGenerators { get; private set; }
-        public static Dictionary<CCOLRegCCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>> OrderedPieceGenerators { get; private set; }
+        public static Dictionary<CCOLCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>> OrderedPieceGenerators { get; private set; }
 
         #endregion // Properties
 
@@ -384,13 +384,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 PieceGenerators.Add(genPlugin);
                 if(genPlugin.HasSettings()) genPlugin.SetSettings(null);
 
-                var codetypes = Enum.GetValues(typeof(CCOLRegCCodeTypeEnum));
+                var codetypes = Enum.GetValues(typeof(CCOLCodeTypeEnum));
                 foreach (var codetype in codetypes)
                 {
-                    var index = genPlugin.HasCode((CCOLRegCCodeTypeEnum)codetype);
+                    var index = genPlugin.HasCode((CCOLCodeTypeEnum)codetype);
                     if (index > 0)
                     {
-                        OrderedPieceGenerators[(CCOLRegCCodeTypeEnum)codetype].Add(index, genPlugin);
+                        OrderedPieceGenerators[(CCOLCodeTypeEnum)codetype].Add(index, genPlugin);
                     }
                 }
             }
@@ -571,11 +571,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 throw new NullReferenceException();
 
             PieceGenerators = new List<ICCOLCodePieceGenerator>();
-            OrderedPieceGenerators = new Dictionary<CCOLRegCCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>>();
-            var codetypes = Enum.GetValues(typeof(CCOLRegCCodeTypeEnum));
+            OrderedPieceGenerators = new Dictionary<CCOLCodeTypeEnum, SortedDictionary<int, ICCOLCodePieceGenerator>>();
+            var codetypes = Enum.GetValues(typeof(CCOLCodeTypeEnum));
             foreach (var type in codetypes)
             {
-                OrderedPieceGenerators.Add((CCOLRegCCodeTypeEnum)type, new SortedDictionary<int, ICCOLCodePieceGenerator>());
+                OrderedPieceGenerators.Add((CCOLCodeTypeEnum)type, new SortedDictionary<int, ICCOLCodePieceGenerator>());
             }
 
             Assembly ccolgen = typeof(CCOLGenerator).Assembly;
@@ -589,12 +589,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     PieceGenerators.Add(v);
                     foreach (var codetype in codetypes)
                     {
-                        var index = v.HasCode((CCOLRegCCodeTypeEnum) codetype);
+                        var index = v.HasCode((CCOLCodeTypeEnum) codetype);
                         if (index > 0)
                         {
                             try
                             {
-                                OrderedPieceGenerators[(CCOLRegCCodeTypeEnum) codetype].Add(index, v);
+                                OrderedPieceGenerators[(CCOLCodeTypeEnum) codetype].Add(index, v);
                             }
                             catch
                             {

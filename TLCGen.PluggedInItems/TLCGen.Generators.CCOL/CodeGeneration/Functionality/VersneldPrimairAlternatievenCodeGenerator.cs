@@ -162,24 +162,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             var sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
                     sb.AppendLine($"{ts}/* versnelde primaire realisaties */");
                     sb.AppendLine($"{ts}/* ------------------------------ */");
                     sb.AppendLine($"{ts}/* periode versnelde primaire realisatie - aantal modulen vooruit */");
@@ -377,9 +377,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
-                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLRegCCodeTypeEnum.Alternatieven])
+                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
                         {
-                            sb.Append(gen.Value.GetCode(c, CCOLRegCCodeTypeEnum.Alternatieven, ts));
+                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
                             sb.AppendLine();
                         }
 

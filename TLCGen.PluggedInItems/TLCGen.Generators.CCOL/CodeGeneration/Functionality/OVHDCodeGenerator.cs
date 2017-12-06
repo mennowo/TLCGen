@@ -291,24 +291,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyBitmapInputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 40;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine($"{ts}/* OV/HD verklikking */");
                     sb.AppendLine($"{ts}/* ----------------- */");
                     foreach(var ov in c.OVData.OVIngrepen)

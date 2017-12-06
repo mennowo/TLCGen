@@ -55,24 +55,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandeling:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandeling:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     sb.AppendLine($"{ts}/* VA ontruimen */");
                     sb.AppendLine($"{ts}/* ============ */");
                     sb.AppendLine();

@@ -63,24 +63,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Meeverlengen:
+                case CCOLCodeTypeEnum.RegCMeeverlengen:
                     return 20;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             var sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Meeverlengen:
+                case CCOLCodeTypeEnum.RegCMeeverlengen:
                     if (c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}/* Veiligheidsgroen */");

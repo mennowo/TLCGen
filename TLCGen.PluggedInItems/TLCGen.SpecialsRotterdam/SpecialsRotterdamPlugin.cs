@@ -309,34 +309,34 @@ namespace TLCGen.SpecialsRotterdam
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     return 100;
-                case CCOLRegCCodeTypeEnum.InitApplication:
+                case CCOLCodeTypeEnum.RegCInitApplication:
                     return 100;
-                case CCOLRegCCodeTypeEnum.PreApplication:
+                case CCOLCodeTypeEnum.RegCPreApplication:
                     return 100;
-                case CCOLRegCCodeTypeEnum.Alternatieven:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 100;
-                case CCOLRegCCodeTypeEnum.PostApplication:
+                case CCOLCodeTypeEnum.RegCPostApplication:
                     return 100;
-                case CCOLRegCCodeTypeEnum.PostSystemApplication:
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 100;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine("/* Ten behoeve van AFM */");
@@ -353,7 +353,7 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.InitApplication:
+                case CCOLCodeTypeEnum.RegCInitApplication:
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
@@ -366,7 +366,7 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.PreApplication:
+                case CCOLCodeTypeEnum.RegCPreApplication:
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
@@ -393,7 +393,7 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Alternatieven:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     if (!_MyModel.ToepassenAFM)
                         return "";
                     sb.AppendLine($"{ts}/* AFM */");
@@ -407,7 +407,7 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.PostApplication:
+                case CCOLCodeTypeEnum.RegCPostApplication:
                     if (!_MyModel.ToepassenAFM && !_MyModel.ToevoegenOVM)
                         return "";
                     if (_MyModel.ToevoegenOVM)
@@ -469,7 +469,7 @@ namespace TLCGen.SpecialsRotterdam
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.PostSystemApplication:
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (!_MyModel.PrmLoggingTfbMax)
                         return "";
                     sb.AppendLine($"{ts}/* Onthouden hoogste tfb waarde + tijdstip */");

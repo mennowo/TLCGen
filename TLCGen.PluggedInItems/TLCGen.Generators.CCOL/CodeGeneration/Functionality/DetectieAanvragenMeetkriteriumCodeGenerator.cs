@@ -103,26 +103,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     return 20;
-                case CCOLRegCCodeTypeEnum.Meetkriterium:
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}/* Detectie aanvragen */");
                     sb.AppendLine($"{ts}/* ------------------ */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
@@ -141,7 +141,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Meetkriterium:
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         bool HasKopmax = false;

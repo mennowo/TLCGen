@@ -181,35 +181,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyBitmapOutputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     return 20;
-                case CCOLRegCCodeTypeEnum.PreSystemApplication:
+                case CCOLCodeTypeEnum.RegCPreSystemApplication:
                     return 10;
-                case CCOLRegCCodeTypeEnum.PostSystemApplication:
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
                     sb.AppendLine();
                     }
                     return sb.ToString();
-                case CCOLRegCCodeTypeEnum.PreSystemApplication:
+                case CCOLCodeTypeEnum.RegCPreSystemApplication:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
@@ -217,7 +217,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
                     return sb.ToString();
-                case CCOLRegCCodeTypeEnum.PostSystemApplication:
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");

@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TLCGen.Generators.CCOL.CodeGeneration
+﻿namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public enum CCOLRegCCodeTypeEnum
+    public enum CCOLCodeTypeEnum
     {
-        Includes,
-        Top,
-        KwcApplication,
-        PreApplication,
-        KlokPerioden,
-        Aanvragen,
-        Verlenggroen,
-        Maxgroen,
-        Wachtgroen,
-        Meetkriterium,
-        FileVerwerking,
-        DetectieStoring,
-        Meeverlengen,
-        RealisatieAfhandelingModules,
-        RealisatieAfhandelingNaModules,
-        RealisatieAfhandeling,
-        Alternatieven,
-        Synchronisaties,
-        InitApplication,
-        Application,
-        PostApplication,
-        PreSystemApplication,
-        SystemApplication,
-        PostSystemApplication,
-        DumpApplication
+        RegCIncludes,
+        RegCTop,
+        RegCKwcApplication,
+        RegCPreApplication,
+        RegCKlokPerioden,
+        RegCAanvragen,
+        RegCVerlenggroen,
+        RegCMaxgroen,
+        RegCWachtgroen,
+        RegCMeetkriterium,
+        RegCFileVerwerking,
+        RegCDetectieStoring,
+        RegCMeeverlengen,
+        RegCRealisatieAfhandelingModules,
+        RegCRealisatieAfhandelingNaModules,
+        RegCRealisatieAfhandeling,
+        RegCAlternatieven,
+        RegCSynchronisaties,
+        RegCInitApplication,
+        RegCApplication,
+        RegCPostApplication,
+        RegCPreSystemApplication,
+        RegCSystemApplication,
+        RegCPostSystemApplication,
+        RegCDumpApplication
     };
 }

@@ -37,26 +37,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     return 20;
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 30;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     if (!c.Data.VLOGInTestOmgeving)
                     {
                         sb.AppendLine("#ifndef AUTOMAAT");
@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");

@@ -56,24 +56,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyBitmapOutputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 80;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine("/* wachtlicht uitsturing */");
                     sb.AppendLine("/* --------------------- */");
                     foreach (var fc in c.Fasen)

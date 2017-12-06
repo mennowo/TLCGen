@@ -13,24 +13,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class DetectieAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     int i = 0;
                     foreach(var fc in c.Fasen)
                     {

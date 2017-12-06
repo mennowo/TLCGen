@@ -91,22 +91,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _MyBitmapOutputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     return 30;
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 30;
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
                     return 30;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
         {
             if(c.RoBuGrover.ConflictGroepen?.Count == 0)
             {
@@ -116,14 +116,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             StringBuilder sb = new StringBuilder();
             switch(type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     sb.AppendLine($"{tabspace}/* Robuuste Groenverdeler */");
                     sb.AppendLine($"{tabspace}#include \"{c.Data.Naam}rgv.c\"");
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
                     sb.AppendLine($"{tabspace}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
                     sb.AppendLine($"{tabspace}if (SCH[{_schpf}{_schrgv}] != 0)");
                     sb.AppendLine($"{tabspace}{{");

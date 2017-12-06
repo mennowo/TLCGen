@@ -106,30 +106,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Synchronisaties:
+                case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 20;
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
                     return 10;
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 10;
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     return 20;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             var sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Synchronisaties:
+                case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         if (c.InterSignaalGroep.Nalopen.Any(x => x.MaximaleVoorstart.HasValue))
@@ -153,8 +153,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Maxgroen:
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
 
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
@@ -219,7 +219,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
                     return sb.ToString();
-                case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     if(c.InterSignaalGroep.Nalopen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");

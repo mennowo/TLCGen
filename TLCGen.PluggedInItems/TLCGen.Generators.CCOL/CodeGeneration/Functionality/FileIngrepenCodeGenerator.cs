@@ -164,30 +164,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _myBitmapOutputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     return 10;
-                case CCOLRegCCodeTypeEnum.InitApplication:
+                case CCOLCodeTypeEnum.RegCInitApplication:
                     return 10;
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 10;
-                case CCOLRegCCodeTypeEnum.FileVerwerking:
+                case CCOLCodeTypeEnum.RegCFileVerwerking:
                     return 10;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Top:
+                case CCOLCodeTypeEnum.RegCTop:
                     if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
                         sb.AppendLine("/* Variabelen eerlijke filedosering */");
@@ -210,7 +210,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.InitApplication:
+                case CCOLCodeTypeEnum.RegCInitApplication:
                     if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
                         sb.AppendLine($"{ts}/* Initialiseren variabelen voor eerlijke filedosering */");
@@ -266,7 +266,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.FileVerwerking:
+                case CCOLCodeTypeEnum.RegCFileVerwerking:
                     sb.AppendLine($"{ts}int i;");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* File afhandeling */");
@@ -533,7 +533,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine($"{ts}/* file verklikking */");
                     sb.AppendLine($"{ts}/* ---------------- */");
                     foreach (var f in c.FileIngrepen)

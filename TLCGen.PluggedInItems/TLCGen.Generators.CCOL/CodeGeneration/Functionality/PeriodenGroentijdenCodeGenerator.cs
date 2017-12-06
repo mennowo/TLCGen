@@ -195,24 +195,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _myBitmapOutputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.KlokPerioden:
+                case CCOLCodeTypeEnum.RegCKlokPerioden:
                     return 10;
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
                     return 20;
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 20;
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 50;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             var sb = new StringBuilder();
             int iper;
@@ -220,7 +220,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.KlokPerioden:
+                case CCOLCodeTypeEnum.RegCKlokPerioden:
                     sb.AppendLine($"{ts}/* default klokperiode voor max.groen */");
                     sb.AppendLine($"{ts}/* ---------------------------------- */");
                     sb.AppendLine($"{ts}MM[{_mpf}{_mperiod}] = 0;");
@@ -386,8 +386,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Verlenggroen:
-                case CCOLRegCCodeTypeEnum.Maxgroen:
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
 
                     // ReSharper disable once TooWideLocalVariableScope
                     string grfunc;
@@ -451,7 +451,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine("/* periode verklikking */");
                     sb.AppendLine("/* ------------------- */");
                     iper = 0;

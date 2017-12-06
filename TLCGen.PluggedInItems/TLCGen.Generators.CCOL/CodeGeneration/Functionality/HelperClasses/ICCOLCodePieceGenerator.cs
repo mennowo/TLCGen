@@ -17,8 +17,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs();
         bool HasCCOLBitmapInputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapInputs();
-        int HasCode(CCOLRegCCodeTypeEnum type);
-        string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace);
+        int HasCode(CCOLCodeTypeEnum type);
+        string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace);
         bool HasSettings();
         bool SetSettings(CCOLGeneratorClassWithSettingsModel settings);
         List<string> GetSourcesToCopy();

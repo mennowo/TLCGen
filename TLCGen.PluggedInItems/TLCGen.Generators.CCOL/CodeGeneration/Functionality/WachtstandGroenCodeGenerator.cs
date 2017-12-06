@@ -46,26 +46,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Wachtgroen:
+                case CCOLCodeTypeEnum.RegCWachtgroen:
                     return 10;
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     return 60;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Aanvragen:
+                case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{tabspace}/* Wachtstand groen aanvragen */");
                     sb.AppendLine($"{tabspace}/* -------------------------- */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
@@ -79,7 +79,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.Wachtgroen:
+                case CCOLCodeTypeEnum.RegCWachtgroen:
                     if(c.Data.ExtraMeeverlengenInWG)
                     {
                         sb.AppendLine($"{tabspace}/* Zet voor alle fasen het WS[] bitje. */");

@@ -72,12 +72,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             throw new NotSupportedException();
         }
 
-        public virtual int HasCode(CCOLRegCCodeTypeEnum type)
+        public virtual int HasCode(CCOLCodeTypeEnum type)
         {
             return 0;
         }
 
-        public virtual string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string tabspace)
+        public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
         {
             throw new NotSupportedException();
         }

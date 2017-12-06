@@ -11,28 +11,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class KWCCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     return 10;
-                case CCOLRegCCodeTypeEnum.KwcApplication:
+                case CCOLCodeTypeEnum.RegCKwcApplication:
                     return 10;
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 20;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Includes:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     if(c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
                         sb.AppendLine($"#ifndef AUTOMAAT");
@@ -52,7 +52,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLRegCCodeTypeEnum.SystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
                         sb.AppendLine($"#if (!defined AUTOMAAT) && (!defined VISSIM)");

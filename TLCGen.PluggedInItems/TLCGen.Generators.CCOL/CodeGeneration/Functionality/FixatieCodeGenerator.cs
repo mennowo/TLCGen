@@ -59,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _MyBitmapInputs;
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             return 0;
         }
