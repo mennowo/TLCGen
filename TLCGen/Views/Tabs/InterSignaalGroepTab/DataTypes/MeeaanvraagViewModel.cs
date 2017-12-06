@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using TLCGen.DataAccess;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
@@ -28,14 +29,14 @@ namespace TLCGen.ViewModels
 
         public MeeaanvraagTypeEnum Type
         {
-            get { return _Meeaanvraag.Type; }
-            set
+            get => _Meeaanvraag.Type;
+	        set
             {
                 if (value != _Meeaanvraag.Type)
                 {
                     _Meeaanvraag.Type = value;
-                    RaisePropertyChanged<object>("Type", broadcast: true);
-                    RaisePropertyChanged("TypeStartGroen");
+                    RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                    RaisePropertyChanged(nameof(TypeStartGroen));
                 }
             }
         }
@@ -44,51 +45,76 @@ namespace TLCGen.ViewModels
 
         public bool TypeInstelbaarOpStraat
         {
-            get { return _Meeaanvraag.TypeInstelbaarOpStraat; }
-            set
+            get => _Meeaanvraag.TypeInstelbaarOpStraat;
+	        set
             {
                 _Meeaanvraag.TypeInstelbaarOpStraat = value;
-                RaisePropertyChanged<object>("TypeInstelbaarOpStraat", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TypeInstelbaarOpStraat), broadcast: true);
             }
         }
 
         public bool DetectieAfhankelijkPossible
         {
-            get { return _DetectieAfhankelijkPossible; }
-            set
+            get => _DetectieAfhankelijkPossible;
+	        set
             {
                 _DetectieAfhankelijkPossible = value;
-                RaisePropertyChanged("DetectieAfhankelijkPossible");
+                RaisePropertyChanged();
             }
         }
 
         public bool DetectieAfhankelijk
         {
-            get { return _Meeaanvraag.DetectieAfhankelijk; }
-            set
+            get => _Meeaanvraag.DetectieAfhankelijk;
+	        set
             {
                 _Meeaanvraag.DetectieAfhankelijk = value;
-                RaisePropertyChanged<object>("DetectieAfhankelijk", broadcast: true);
+	            if (value)
+	            {
+		            var fc = TLCGenControllerDataProvider.Default.Controller.Fasen.First(x => x.Naam == _Meeaanvraag.FaseVan);
+		            switch (fc.Type)
+		            {
+			            case FaseTypeEnum.Auto:
+			            case FaseTypeEnum.Fiets:
+			            case FaseTypeEnum.OV:
+				            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop))
+				            {
+					            DetectorManager.SelectedDetectorToAdd = d.Naam;
+								DetectorManager.AddDetectorCommand.Execute(null);
+							}
+				            break;
+			            case FaseTypeEnum.Voetganger:
+				            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.KnopBuiten))
+				            {
+								DetectorManager.SelectedDetectorToAdd = d.Naam;
+					            DetectorManager.AddDetectorCommand.Execute(null);
+							}
+							break;
+			            default:
+				            throw new ArgumentOutOfRangeException();
+		            }
+	            }
+                RaisePropertyChanged<object>(nameof(DetectieAfhankelijk), broadcast: true);
             }
         }
 
         public bool Uitgesteld
         {
-            get { return _Meeaanvraag.Uitgesteld; }
-            set
+            get => _Meeaanvraag.Uitgesteld;
+	        set
             {
                 _Meeaanvraag.Uitgesteld = value;
-                RaisePropertyChanged<object>("Uitgesteld", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Uitgesteld), broadcast: true);
             }
         }
 
         public int UitgesteldTijdsduur
         {
-            get { return _Meeaanvraag.UitgesteldTijdsduur; }
-            set
+            get => _Meeaanvraag.UitgesteldTijdsduur;
+	        set
             {
                 _Meeaanvraag.UitgesteldTijdsduur = value;
-                RaisePropertyChanged<object>("UitgesteldTijdsduur", broadcast: true);
+                RaisePropertyChanged<object>(nameof(UitgesteldTijdsduur), broadcast: true);
             }
         }
 
@@ -104,13 +130,13 @@ namespace TLCGen.ViewModels
         
         public MeeaanvraagDetectorModel SelectedDetector
         {
-            get { return DetectorManager?.SelectedDetector; }
-            set
+            get => DetectorManager?.SelectedDetector;
+	        set
             {
                 if (DetectorManager != null)
                 {
                     DetectorManager.SelectedDetector = value;
-                    RaisePropertyChanged("SelectedDetector");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -123,20 +149,19 @@ namespace TLCGen.ViewModels
                 if (_DetectorManager == null && _Meeaanvraag != null && _Meeaanvraag.FaseVan != null)
                 {
                     List<string> dets = 
-                        DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            Where(x => x.Naam == _Meeaanvraag.FaseVan).
-                            First().
+                        TLCGenControllerDataProvider.Default.Controller.Fasen.
+                            First(x => x.Naam == _Meeaanvraag.FaseVan).
                             Detectoren.
                             Select(x => x.Naam).
                             ToList();
                     _DetectorManager = new DetectorManagerViewModel<MeeaanvraagDetectorModel, string>(
                         Detectoren,
                         dets,
-                        (x) => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },
-                        (x) => { return !Detectoren.Where(y => y.MeeaanvraagDetector == x).Any(); },
+                        x => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },
+                        x => { return Detectoren.All(y => y.MeeaanvraagDetector != x); },
                         null,
-                        () => { RaisePropertyChanged("SelectedDetector"); },
-                        () => { RaisePropertyChanged("SelectedDetector"); }
+                        () => { RaisePropertyChanged(nameof(SelectedDetector)); },
+                        () => { RaisePropertyChanged(nameof(SelectedDetector)); }
                         );
                 }
                 return _DetectorManager;

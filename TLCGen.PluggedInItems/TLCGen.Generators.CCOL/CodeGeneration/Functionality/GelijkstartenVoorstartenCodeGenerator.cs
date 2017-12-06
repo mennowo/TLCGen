@@ -205,9 +205,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 				case CCOLCodeTypeEnum.OvCIncludes:
 					sb.AppendLine("#include \"syncvar.h\"");
-					break;
+					return sb.ToString();
 
-                default:
+				default:
                     return null;
             }
         }

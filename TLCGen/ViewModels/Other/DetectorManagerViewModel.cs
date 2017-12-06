@@ -25,39 +25,39 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ObservableCollection<T1> DetectorenInCollection { get; private set; }
-        public List<T2> AllDetectoren { get; private set; }
-        public ObservableCollection<T2> SelectableDetectoren { get; private set; }
-        public ObservableCollection<T2> RemovableDetectoren { get; private set; }
+        public ObservableCollection<T1> DetectorenInCollection { get; }
+        public List<T2> AllDetectoren { get; }
+        public ObservableCollection<T2> SelectableDetectoren { get; }
+        public ObservableCollection<T2> RemovableDetectoren { get; }
 
         private T2 _SelectedDetectorToAdd;
         public T2 SelectedDetectorToAdd
         {
-            get { return _SelectedDetectorToAdd; }
-            set
+            get => _SelectedDetectorToAdd;
+	        set
             {
                 _SelectedDetectorToAdd = value;
-                RaisePropertyChanged("SelectedDetectorToAdd");
+                RaisePropertyChanged();
             }
         }
         private T2 _SelectedDetectorToRemove;
         public T2 SelectedDetectorToRemove
         {
-            get { return _SelectedDetectorToRemove; }
-            set
+            get => _SelectedDetectorToRemove;
+	        set
             {
                 _SelectedDetectorToRemove = value;
-                RaisePropertyChanged("SelectedDetectorToRemove");
+                RaisePropertyChanged();
             }
         }
 
         public T1 SelectedDetector
         {
-            get { return _SelectedDetector; }
-            set
+            get => _SelectedDetector;
+	        set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged("SelectedDetector");
+                RaisePropertyChanged();
             }
         }
 

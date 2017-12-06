@@ -70,9 +70,9 @@
     </Prefix>
   </Prefixes>
   <CodePieceGeneratorSettings>
-    <CodePieceGenerator CodePiece="CCOLDetectieAanvragenMeetkriteriumCodeGenerator">
+    <CodePieceGenerator CodePiece="DetectieAanvragenMeetkriteriumCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLDetectieAanvragenMeetkriteriumCodeGenerator</ClassName>
+        <ClassName>DetectieAanvragenMeetkriteriumCodeGenerator</ClassName>
         <Description>Detectie aanvragen</Description>
         <Settings>
           <Setting>
@@ -96,9 +96,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLMeeAanvragenCodeGenerator">
+    <CodePieceGenerator CodePiece="MeeAanvragenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLMeeAanvragenCodeGenerator</ClassName>
+        <ClassName>MeeAanvragenCodeGenerator</ClassName>
         <Description>Meeaanvragen</Description>
         <Settings>
           <Setting>
@@ -116,9 +116,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLPeriodenGroentijdenCodeGenerator">
+    <CodePieceGenerator CodePiece="PeriodenGroentijdenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLPeriodenGroentijdenCodeGenerator</ClassName>
+        <ClassName>PeriodenGroentijdenCodeGenerator</ClassName>
         <Description>Perioden en maxgroen</Description>
         <Settings>
           <Setting>
@@ -208,9 +208,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLMeeverlengenCodeGenerator">
+    <CodePieceGenerator CodePiece="MeeverlengenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLMeeverlengenCodeGenerator</ClassName>
+        <ClassName>MeeverlengenCodeGenerator</ClassName>
         <Description>Meeverlengen</Description>
         <Settings>
           <Setting>
@@ -222,9 +222,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVersneldPrimairAlternatievenCodeGenerator">
+    <CodePieceGenerator CodePiece="VersneldPrimairAlternatievenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVersneldPrimairAlternatievenCodeGenerator</ClassName>
+        <ClassName>VersneldPrimairAlternatievenCodeGenerator</ClassName>
         <Description>Modules en alternatieven</Description>
         <Settings>
           <Setting>
@@ -254,9 +254,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLRichtingGevoeligCodeGenerator">
+    <CodePieceGenerator CodePiece="RichtingGevoeligCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLRichtingGevoeligCodeGenerator</ClassName>
+        <ClassName>RichtingGevoeligCodeGenerator</ClassName>
         <Description>Richting gevoeligheid</Description>
         <Settings>
           <Setting>
@@ -304,9 +304,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLPtpCodeGenerator">
+    <CodePieceGenerator CodePiece="PtpCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLPtpCodeGenerator</ClassName>
+        <ClassName>PtpCodeGenerator</ClassName>
         <Description>PTP koppeling</Description>
         <Settings>
           <Setting>
@@ -426,9 +426,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVAOntruimenCodeGenerator">
+    <CodePieceGenerator CodePiece="VAOntruimenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVAOntruimenCodeGenerator</ClassName>
+        <ClassName>VAOntruimenCodeGenerator</ClassName>
         <Description>VA ontruimen</Description>
         <Settings>
           <Setting>
@@ -446,9 +446,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLFileIngrepenCodeGenerator">
+    <CodePieceGenerator CodePiece="FileIngrepenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLFileIngrepenCodeGenerator</ClassName>
+        <ClassName>FileIngrepenCodeGenerator</ClassName>
         <Description>File ingrepen</Description>
         <Settings>
           <Setting>
@@ -514,9 +514,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator> 
-    <CodePieceGenerator CodePiece="CCOLNalopenCodeGenerator">
+    <CodePieceGenerator CodePiece="NalopenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLNalopenCodeGenerator</ClassName>
+        <ClassName>NalopenCodeGenerator</ClassName>
         <Description>Nalopen</Description>
         <Settings>
           <Setting>
@@ -582,9 +582,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLGelijkstartenVoorstartenCodeGenerator">
+    <CodePieceGenerator CodePiece="GelijkstartenVoorstartenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLGelijkstartenVoorstartenCodeGenerator</ClassName>
+        <ClassName>GelijkstartenVoorstartenCodeGenerator</ClassName>
         <Description>Voor- en gelijkstarten</Description>
         <Settings>
           <Setting>
@@ -608,9 +608,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLRateltikkersCodeGenerator">
+    <CodePieceGenerator CodePiece="RateltikkersCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLRateltikkersCodeGenerator</ClassName>
+        <ClassName>RateltikkersCodeGenerator</ClassName>
         <Description>Rateltikkers</Description>
         <Settings>
           <Setting>
@@ -634,9 +634,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLWaarschuwingsLichtenCodeGenerator">
+    <CodePieceGenerator CodePiece="WaarschuwingsLichtenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLWaarschuwingsLichtenCodeGenerator</ClassName>
+        <ClassName>WaarschuwingsLichtenCodeGenerator</ClassName>
         <Description>Waarschuwings groepen</Description>
         <Settings>
           <Setting>
@@ -666,9 +666,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVLOGCodeGenerator">
+    <CodePieceGenerator CodePiece="VLOGCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVLOGCodeGenerator</ClassName>
+        <ClassName>VLOGCodeGenerator</ClassName>
         <Description>VLOG</Description>
         <Settings>
           <Setting>
@@ -686,9 +686,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLOVHDCodeGenerator">
+    <CodePieceGenerator CodePiece="OVHDCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLOVHDCodeGenerator</ClassName>
+        <ClassName>OVHDCodeGenerator</ClassName>
         <Description>OV en HD ingrepen</Description>
         <Settings>
           <Setting>
@@ -1000,9 +1000,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLRoBuGroverCodeGenerator">
+    <CodePieceGenerator CodePiece="RoBuGroverCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLRoBuGroverCodeGenerator</ClassName>
+        <ClassName>RoBuGroverCodeGenerator</ClassName>
         <Description>RoBuGrover</Description>
         <Settings>
           <Setting>
@@ -1098,9 +1098,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVasteAanvraagCodeGenerator">
+    <CodePieceGenerator CodePiece="VasteAanvraagCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVasteAanvraagCodeGenerator</ClassName>
+        <ClassName>VasteAanvraagCodeGenerator</ClassName>
         <Description>Vaste aanvragen</Description>
         <Settings>
           <Setting>
@@ -1112,9 +1112,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLWachtstandGroenCodeGenerator">
+    <CodePieceGenerator CodePiece="WachtstandGroenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLWachtstandGroenCodeGenerator</ClassName>
+        <ClassName>WachtstandGroenCodeGenerator</ClassName>
         <Description>Wachtstand groen</Description>
         <Settings>
           <Setting>
@@ -1126,9 +1126,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLWaitsignalenCodeGenerator">
+    <CodePieceGenerator CodePiece="WaitsignalenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLWaitsignalenCodeGenerator</ClassName>
+        <ClassName>WaitsignalenCodeGenerator</ClassName>
         <Description>Waitsignalen</Description>
         <Settings>
           <Setting>
@@ -1140,9 +1140,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLFixatieCodeGenerator">
+    <CodePieceGenerator CodePiece="FixatieCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLFixatieCodeGenerator</ClassName>
+        <ClassName>FixatieCodeGenerator</ClassName>
         <Description>Fixatie</Description>
         <Settings>
           <Setting>
@@ -1160,9 +1160,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLDetectieStoringGenerator">
+    <CodePieceGenerator CodePiece="DetectieStoringGenerator">
       <CodePieceData>
-        <ClassName>CCOLDetectieStoringGenerator</ClassName>
+        <ClassName>DetectieStoringGenerator</ClassName>
         <Description>Detectie storing</Description>
         <Settings>
           <Setting>
@@ -1186,9 +1186,9 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="CCOLVeiligheidsGroenCodeGenerator">
+    <CodePieceGenerator CodePiece="VeiligheidsGroenCodeGenerator">
       <CodePieceData>
-        <ClassName>CCOLVeiligheidsGroenCodeGenerator</ClassName>
+        <ClassName>VeiligheidsGroenCodeGenerator</ClassName>
         <Description>Veiligheidsgroen</Description>
         <Settings>
           <Setting>

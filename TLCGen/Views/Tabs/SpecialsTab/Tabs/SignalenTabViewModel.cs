@@ -216,14 +216,14 @@ namespace TLCGen.ViewModels
                         if(d.Type == Models.Enumerations.DetectorTypeEnum.Knop ||
                            d.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen ||
                            d.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)
-                        rtm.Detectoren.Add(new RatelTikkerDetectorModel() { Detector = d.Naam });
+                        rtm.Detectoren.Add(new RatelTikkerDetectorModel { Detector = d.Naam });
                     }
                 }
             }
             var rtvm = new RatelTikkerViewModel(rtm);
             RatelTikkers.Add(rtvm);
             SelectedRatelTikker = rtvm;
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
             if (SelectableRatelTikkerFasen.Count > 0)
             {
