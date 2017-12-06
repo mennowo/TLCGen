@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {
@@ -37,21 +38,21 @@ namespace TLCGen.ViewModels
 
         public WaarschuwingsGroepViewModel SelectedWaarschuwingsGroep
         {
-            get { return _SelectedWaarschuwingsGroep; }
-            set
+            get => _SelectedWaarschuwingsGroep;
+	        set
             {
                 _SelectedWaarschuwingsGroep = value;
-                RaisePropertyChanged("SelectedWaarschuwingsGroep");
+                RaisePropertyChanged();
             }
         }
 
         public RatelTikkerViewModel SelectedRatelTikker
         {
-            get { return _SelectedRatelTikker; }
-            set
+            get => _SelectedRatelTikker;
+	        set
             {
                 _SelectedRatelTikker = value;
-                RaisePropertyChanged("SelectedRatelTikker");
+                RaisePropertyChanged();
                 UpdateSelectables();
             }
         }
@@ -68,37 +69,17 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        public ObservableCollection<string> ControllerFasen
-        {
-            get
-            {
-                if (_ControllerFasen == null)
-                {
-                    _ControllerFasen = new ObservableCollection<string>();
-                }
-                return _ControllerFasen;
-            }
-        }
+        public ObservableCollection<string> ControllerFasen => _ControllerFasen ?? (_ControllerFasen = new ObservableCollection<string>());
 
-        public ObservableCollection<string> SelectableRatelTikkerFasen
-        {
-            get
-            {
-                if (_SelectableRatelTikkerFasen == null)
-                {
-                    _SelectableRatelTikkerFasen = new ObservableCollection<string>();
-                }
-                return _SelectableRatelTikkerFasen;
-            }
-        }
+	    public ObservableCollection<string> SelectableRatelTikkerFasen => _SelectableRatelTikkerFasen ?? (_SelectableRatelTikkerFasen = new ObservableCollection<string>());
 
-        public string SelectedRatelTikkerFaseToAdd
+	    public string SelectedRatelTikkerFaseToAdd
         {
-            get { return _SelectedRatelTikkerFaseToAdd; }
-            set
+            get => _SelectedRatelTikkerFaseToAdd;
+	        set
             {
                 _SelectedRatelTikkerFaseToAdd = value;
-                RaisePropertyChanged("SelectedRatelTikkerFaseToAdd");
+                RaisePropertyChanged();
             }
         }
 
@@ -106,55 +87,19 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        public ICommand AddWaarschuwingsGroepCommand
-        {
-            get
-            {
-                if (_AddWaarschuwingsGroepCommand == null)
-                {
-                    _AddWaarschuwingsGroepCommand = new RelayCommand(AddWaarschuwingsGroepCommand_Executed, AddWaarschuwingsGroepCommand_CanExecute);
-                }
-                return _AddWaarschuwingsGroepCommand;
-            }
-        }
+        public ICommand AddWaarschuwingsGroepCommand => _AddWaarschuwingsGroepCommand ?? (_AddWaarschuwingsGroepCommand =
+	                                                        new RelayCommand(AddWaarschuwingsGroepCommand_Executed, AddWaarschuwingsGroepCommand_CanExecute));
 
-        public ICommand RemoveWaarschuwingsGroepCommand
-        {
-            get
-            {
-                if (_RemoveWaarschuwingsGroepCommand == null)
-                {
-                    _RemoveWaarschuwingsGroepCommand = new RelayCommand(RemoveWaarschuwingsGroepCommand_Executed, RemoveWaarschuwingsGroepCommand_CanExecute);
-                }
-                return _RemoveWaarschuwingsGroepCommand;
-            }
-        }
+	    public ICommand RemoveWaarschuwingsGroepCommand => _RemoveWaarschuwingsGroepCommand ?? (_RemoveWaarschuwingsGroepCommand =
+		                                                       new RelayCommand(RemoveWaarschuwingsGroepCommand_Executed, RemoveWaarschuwingsGroepCommand_CanExecute));
 
-        public ICommand AddRatelTikkerCommand
-        {
-            get
-            {
-                if (_AddRatelTikkerCommand == null)
-                {
-                    _AddRatelTikkerCommand = new RelayCommand(AddRatelTikkerCommand_Executed, AddRatelTikkerCommand_CanExecute);
-                }
-                return _AddRatelTikkerCommand;
-            }
-        }
+	    public ICommand AddRatelTikkerCommand => _AddRatelTikkerCommand ?? (_AddRatelTikkerCommand =
+		                                             new RelayCommand(AddRatelTikkerCommand_Executed, AddRatelTikkerCommand_CanExecute));
 
-        public ICommand RemoveRatelTikkerCommand
-        {
-            get
-            {
-                if (_RemoveRatelTikkerCommand == null)
-                {
-                    _RemoveRatelTikkerCommand = new RelayCommand(RemoveRatelTikkerCommand_Executed, RemoveRatelTikkerCommand_CanExecute);
-                }
-                return _RemoveRatelTikkerCommand;
-            }
-        }
+	    public ICommand RemoveRatelTikkerCommand => _RemoveRatelTikkerCommand ?? (_RemoveRatelTikkerCommand =
+		                                                new RelayCommand(RemoveRatelTikkerCommand_Executed, RemoveRatelTikkerCommand_CanExecute));
 
-        #endregion // Commands
+	    #endregion // Commands
 
         #region Command functionality
 
@@ -162,16 +107,16 @@ namespace TLCGen.ViewModels
         {
             var grm = new WaarschuwingsGroepModel();
             int i = WaarschuwingsGroepen.Count + 1;
-            grm.Naam = "groep" + i.ToString();
+            grm.Naam = "groep" + i;
             while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, grm.Naam))
             {
                 ++i;
-                grm.Naam = "groep" + i.ToString();
+                grm.Naam = "groep" + i;
             }
             var grvm = new WaarschuwingsGroepViewModel(grm);
             WaarschuwingsGroepen.Add(grvm);
             SelectedWaarschuwingsGroep = grvm;
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
         }
 
@@ -191,7 +136,7 @@ namespace TLCGen.ViewModels
                 id = id >= WaarschuwingsGroepen.Count ? WaarschuwingsGroepen.Count - 1 : id;
                 SelectedWaarschuwingsGroep = WaarschuwingsGroepen[id];
             }
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
         }
 
@@ -231,7 +176,20 @@ namespace TLCGen.ViewModels
                 id = id >= SelectableRatelTikkerFasen.Count ? SelectableRatelTikkerFasen.Count - 1 : id;
                 SelectedRatelTikkerFaseToAdd = SelectableRatelTikkerFasen[id];
             }
-        }
+
+	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAanvraag))
+	        {
+		       AddPeriodToModel(PeriodeTypeEnum.RateltikkersAanvraag);
+			}
+	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAltijd))
+	        {
+		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersAltijd);
+	        }
+	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersDimmen))
+	        {
+		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen);
+	        }
+		}
 
         bool AddRatelTikkerCommand_CanExecute(object prm)
         {
@@ -245,7 +203,7 @@ namespace TLCGen.ViewModels
             RatelTikkers.Remove(SelectedRatelTikker);
             UpdateSelectables();
             SelectedRatelTikker = null;
-            Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
+            Messenger.Default.Send(new ControllerDataChangedMessage());
             if (RatelTikkers.Count > 0)
             {
                 id = id < 0 ? 0 : id;
@@ -268,6 +226,26 @@ namespace TLCGen.ViewModels
         #endregion // Command functionality
 
         #region Private methods
+
+	    private void AddPeriodToModel(PeriodeTypeEnum type)
+	    {
+			var p = new PeriodeModel { Type = type };
+		    DefaultsProvider.Default.SetDefaultsOnModel(p, p.Type.ToString(), null, false);
+		    var name = p.Naam;
+		    var newname = p.Naam;
+		    p.Naam = "";
+		    var message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
+		    Messenger.Default.Send(message);
+		    var i = 0;
+		    while (!(message.Handled && message.IsUnique))
+		    {
+			    newname = name + (i++);
+			    message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
+			    Messenger.Default.Send(message);
+		    }
+		    p.Naam = newname;
+		    _Controller.PeriodenData.Perioden.Add(p);
+		}
 
         private void UpdateSelectables()
         {
@@ -296,7 +274,7 @@ namespace TLCGen.ViewModels
             {
                 foreach (var fc in ControllerFasen)
                 {
-                    if (!RatelTikkers.Where(x => x.FaseCyclus == fc).Any())
+                    if (RatelTikkers.All(x => x.FaseCyclus != fc))
                     {
                         SelectableRatelTikkerFasen.Add(fc);
                     }
@@ -311,9 +289,7 @@ namespace TLCGen.ViewModels
             }
             if (_SelectableRatelTikkerFasen.Count > 0)
             {
-                SelectedRatelTikkerFaseToAdd = tempfc == null ?
-                    SelectableRatelTikkerFasen[0] :
-                    tempfc;
+                SelectedRatelTikkerFaseToAdd = tempfc ?? SelectableRatelTikkerFasen[0];
             }
             else
             {
@@ -329,24 +305,18 @@ namespace TLCGen.ViewModels
 
         #region TLCGen TabItem overrides
 
-        public override string DisplayName
-        {
-            get { return "Signalen"; }
-        }
+        public override string DisplayName => "Signalen";
 
-        public override void OnSelected()
+	    public override void OnSelected()
         {
             UpdateSelectables();
         }
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
-            set
+	        set
             {
                 base.Controller = value;
                 if (base.Controller != null)
@@ -359,8 +329,8 @@ namespace TLCGen.ViewModels
                     WaarschuwingsGroepen = null;
                     RatelTikkers = null;
                 }
-                RaisePropertyChanged("WaarschuwingsGroepen");
-                RaisePropertyChanged("RatelTikkers");
+                RaisePropertyChanged(nameof(WaarschuwingsGroepen));
+                RaisePropertyChanged(nameof(RatelTikkers));
             }
         }
 
@@ -386,7 +356,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public SignalenTabViewModel() : base()
+        public SignalenTabViewModel()
         {
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));

@@ -222,6 +222,10 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+	        if (_Controller.PeriodenData.Perioden.Count != Periodes.Count)
+	        {
+		        Periodes.Rebuild();
+	        }
         }
 
         public override ControllerModel Controller

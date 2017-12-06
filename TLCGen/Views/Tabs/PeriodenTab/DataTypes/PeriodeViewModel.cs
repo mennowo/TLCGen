@@ -112,7 +112,7 @@ namespace TLCGen.ViewModels
                 if(value != PeriodeTypeEnum.Groentijden)
                 {
                     GroentijdenSet = null;
-                    DefaultsProvider.Default.SetDefaultsOnModel(_Periode, Type.ToString(), null, false);
+                    DefaultsProvider.Default.SetDefaultsOnModel(_Periode, _Periode.Type.ToString(), null, false);
                     string name = _Periode.Naam;
                     string newname = _Periode.Naam;
                     _Periode.Naam = "";
@@ -121,7 +121,7 @@ namespace TLCGen.ViewModels
                     int i = 0;
                     while (!(message.Handled && message.IsUnique))
                     {
-                        newname = name + (i++).ToString();
+                        newname = name + (i++);
                         message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
                         Messenger.Default.Send(message);
                     }
