@@ -212,7 +212,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CopySourceIfNeeded("rgv_overslag.c", sourcefilepath);
                     CopySourceIfNeeded("rgvfunc.c", sourcefilepath);
                     CopySourceIfNeeded("rgvvar.c", sourcefilepath);
-                }
+                    CopySourceIfNeeded("winmg.c", sourcefilepath);
+                    CopySourceIfNeeded("winmg.h", sourcefilepath);
+				}
 
                 foreach (var pl in PieceGenerators)
                 {
