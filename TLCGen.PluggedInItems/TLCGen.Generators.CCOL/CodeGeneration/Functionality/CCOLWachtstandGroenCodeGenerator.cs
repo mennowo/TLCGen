@@ -51,9 +51,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Wachtgroen:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    return 6;
+                    return 60;
                 default:
                     return 0;
             }

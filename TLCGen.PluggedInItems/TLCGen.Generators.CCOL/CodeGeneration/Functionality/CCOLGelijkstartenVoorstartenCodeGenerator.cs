@@ -87,9 +87,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

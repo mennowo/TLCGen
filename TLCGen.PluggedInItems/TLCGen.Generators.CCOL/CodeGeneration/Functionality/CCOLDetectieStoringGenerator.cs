@@ -75,7 +75,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.DetectieStoring:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

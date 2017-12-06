@@ -108,9 +108,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.Meetkriterium:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

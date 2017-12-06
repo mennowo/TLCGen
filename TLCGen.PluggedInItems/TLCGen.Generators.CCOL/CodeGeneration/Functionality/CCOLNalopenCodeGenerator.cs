@@ -111,13 +111,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Synchronisaties:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.Maxgroen:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandelingNaModules:
-                    return 2;
+                    return 20;
                 default:
                     return 0;
             }

@@ -314,17 +314,17 @@ namespace TLCGen.SpecialsRotterdam
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
-                    return 5;
+                    return 100;
                 case CCOLRegCCodeTypeEnum.InitApplication:
-                    return 2;
+                    return 100;
                 case CCOLRegCCodeTypeEnum.PreApplication:
-                    return 1;
+                    return 100;
                 case CCOLRegCCodeTypeEnum.Alternatieven:
-                    return 1;
+                    return 100;
                 case CCOLRegCCodeTypeEnum.PostApplication:
-                    return 1;
+                    return 100;
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
-                    return 2;
+                    return 100;
                 default:
                     return 0;
             }

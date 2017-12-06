@@ -186,11 +186,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Includes:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.PreSystemApplication:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.PostSystemApplication:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

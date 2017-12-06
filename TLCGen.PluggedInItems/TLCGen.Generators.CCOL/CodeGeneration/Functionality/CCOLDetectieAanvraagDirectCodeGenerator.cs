@@ -18,7 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

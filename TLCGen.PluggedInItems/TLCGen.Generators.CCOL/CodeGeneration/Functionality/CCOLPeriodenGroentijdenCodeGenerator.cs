@@ -200,13 +200,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.KlokPerioden:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.Maxgroen:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return 5;
+                    return 50;
                 default:
                     return 0;
             }

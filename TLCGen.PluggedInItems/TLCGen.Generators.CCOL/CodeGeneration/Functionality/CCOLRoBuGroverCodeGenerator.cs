@@ -96,11 +96,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
-                    return 3;
+                    return 30;
                 case CCOLRegCCodeTypeEnum.Verlenggroen:
-                    return 3;
+                    return 30;
                 case CCOLRegCCodeTypeEnum.Maxgroen:
-                    return 3;
+                    return 30;
                 default:
                     return 0;
             }

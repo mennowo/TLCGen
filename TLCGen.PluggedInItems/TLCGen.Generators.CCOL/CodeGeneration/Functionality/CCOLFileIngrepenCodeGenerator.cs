@@ -169,13 +169,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.InitApplication:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return 1;
+                    return 10;
                 case CCOLRegCCodeTypeEnum.FileVerwerking:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

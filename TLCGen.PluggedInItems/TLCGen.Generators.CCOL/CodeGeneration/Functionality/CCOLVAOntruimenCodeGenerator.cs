@@ -60,7 +60,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.RealisatieAfhandeling:
-                    return 1;
+                    return 10;
                 default:
                     return 0;
             }

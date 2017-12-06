@@ -68,7 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Meeverlengen:
-                    return 2;
+                    return 20;
                 default:
                     return 0;
             }

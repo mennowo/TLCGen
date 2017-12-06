@@ -95,13 +95,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_prmmwtfts}", c.OVData.MaxWachttijdFiets,      CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
                 _MyElements.Add(new CCOLElement($"{_prmmwtvtg}", c.OVData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
 
-                if ((c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Where(x => x.KAR).Any()) ||
-                    (c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Where(x => x.KAR).Any()))
+                if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
+                    c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
                 {
                     _MyElements.Add(new CCOLElement($"{_uskarmelding}", CCOLElementTypeEnum.Uitgang));
                     _MyElements.Add(new CCOLElement($"{_uskarog}",      CCOLElementTypeEnum.Uitgang));
-                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KARMeldingBitmapData as IOElementModel, $"{_uspf}{_uskarmelding}"));
-                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KAROnderGedragBitmapData as IOElementModel, $"{_uspf}{_uskarog}"));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KARMeldingBitmapData, $"{_uspf}{_uskarmelding}"));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KAROnderGedragBitmapData, $"{_uspf}{_uskarog}"));
 
                     _MyElements.Add(new CCOLElement($"{_tkarmelding}", 15,   CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                     _MyElements.Add(new CCOLElement($"{_tkarog}",      1440, CCOLElementTimeTypeEnum.TM_type, CCOLElementTypeEnum.Timer));
@@ -123,7 +123,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(prmtest2);
                 }
 
-#warning This is not nice. Need to improve! should only be generated when needed
+				// TODO: This is not nice. Need to improve! should only be generated when needed
                 //if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
                 //{
                 _MyElements.Add(new CCOLElement($"{_schcheckopdsin}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
@@ -137,11 +137,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         continue;
                     }
 
-                    var fct = c.Fasen.Where(x => x.Naam == ovfc.FaseCyclus).First().Type;
+                    var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                     
                     _MyElements.Add(new CCOLElement($"{_prmpmgt}{ovfc.FaseCyclus}", ovfc.PercMaxGroentijdVoorTerugkomen, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
                     _MyElements.Add(new CCOLElement($"{_prmognt}{ovfc.FaseCyclus}", ovfc.OndergrensNaTerugkomen,         CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                    if(fct != Models.Enumerations.FaseTypeEnum.Voetganger)
+                    if(fct != FaseTypeEnum.Voetganger)
                     {
                         _MyElements.Add(new CCOLElement($"{_prmnofm}{ovfc.FaseCyclus}",   ovfc.AantalKerenNietAfkappen,              CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
                         _MyElements.Add(new CCOLElement($"{_prmmgcov}{ovfc.FaseCyclus}",  ovfc.MinimumGroentijdConflictOVRealisatie, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
@@ -154,7 +154,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             /* Variables for OV */
             foreach (var ov in c.OVData.OVIngrepen)
             {
-                _MyBitmapOutputs.Add(new CCOLIOElement(ov.OVInmeldingBitmapData as IOElementModel, $"{_uspf}{_usovinm}{ov.FaseCyclus}"));
+                _MyBitmapOutputs.Add(new CCOLIOElement(ov.OVInmeldingBitmapData, $"{_uspf}{_usovinm}{ov.FaseCyclus}"));
 
                 _MyElements.Add(new CCOLElement($"{_usovinm}{ov.FaseCyclus}", CCOLElementTypeEnum.Uitgang));
                 _MyElements.Add(new CCOLElement($"{_hov}{ov.FaseCyclus}",     CCOLElementTypeEnum.HulpElement));
@@ -192,16 +192,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
                 _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
-                int n = 1;
+                var n = 1;
                 foreach (var l in ov.LijnNummers)
                 {
-                    int num;
-                    if (Int32.TryParse(l.Nummer, out num))
-                    {
-                        _MyElements.Add(
-                            new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n.ToString("00")}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                        ++n;
-                    }
+	                if (!int.TryParse(l.Nummer, out var num)) continue;
+	                _MyElements.Add(
+		                new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+	                ++n;
                 }
 
                 if(ov.KAR)
@@ -219,7 +216,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             /* Variables for HD */
             foreach (var hd in c.OVData.HDIngrepen)
             {
-                _MyBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData as IOElementModel, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
+                _MyBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
 
                 _MyElements.Add(new CCOLElement($"{_ushdinm}{hd.FaseCyclus}", CCOLElementTypeEnum.Uitgang));
                 _MyElements.Add(new CCOLElement($"{_hhd}{hd.FaseCyclus}",     CCOLElementTypeEnum.HulpElement));
@@ -236,7 +233,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_schupinagbhd}{hd.FaseCyclus}", 0,                          CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
 
                 // For signal groups that have HD but not OV
-                if(!c.OVData.OVIngrepen.Where(x => x.FaseCyclus == hd.FaseCyclus).Any())
+                if(!c.OVData.OVIngrepen.Any(x => x.FaseCyclus == hd.FaseCyclus))
                 {
                     if (hd.KAR)
                     {
@@ -299,7 +296,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return 4;
+                    return 40;
                 default:
                     return 0;
             }

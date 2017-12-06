@@ -86,7 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return 6;
+                    return 60;
                 default:
                     return 0;
             }

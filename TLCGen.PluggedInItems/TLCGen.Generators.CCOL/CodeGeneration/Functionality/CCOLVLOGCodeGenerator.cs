@@ -42,9 +42,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Top:
-                    return 2;
+                    return 20;
                 case CCOLRegCCodeTypeEnum.SystemApplication:
-                    return 3;
+                    return 30;
                 default:
                     return 0;
             }
@@ -94,7 +94,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            if (settings == null || settings.Settings == null)
+            if (settings?.Settings == null)
             {
                 return false;
             }
@@ -103,8 +103,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 switch (s.Default)
                 {
-                    case "maxtvg": _prmmaxtvgvlog = s.Setting == null ? s.Default : s.Setting; break;
-                    case "maxtfb": _prmmaxtfb = s.Setting == null ? s.Default : s.Setting; break;
+                    case "maxtvg": _prmmaxtvgvlog = s.Setting ?? s.Default; break;
+                    case "maxtfb": _prmmaxtfb = s.Setting ?? s.Default; break;
                 }
             }
 

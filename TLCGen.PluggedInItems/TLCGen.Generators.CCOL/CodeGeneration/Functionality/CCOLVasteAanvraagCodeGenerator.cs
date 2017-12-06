@@ -51,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLRegCCodeTypeEnum.Aanvragen:
-                    return 5;
+                    return 50;
                 default:
                     return 0;
             }
