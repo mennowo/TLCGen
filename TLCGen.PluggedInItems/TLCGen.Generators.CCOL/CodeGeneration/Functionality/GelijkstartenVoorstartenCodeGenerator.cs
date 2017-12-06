@@ -90,7 +90,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
                     return 10;
-                default:
+	            case CCOLCodeTypeEnum.OvCIncludes:
+		            return 10;
+				default:
                     return 0;
             }
         }
@@ -200,6 +202,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine();
                     return sb.ToString();
+
+				case CCOLCodeTypeEnum.OvCIncludes:
+					sb.AppendLine("#include \"syncvar.h\"");
+					break;
 
                 default:
                     return null;

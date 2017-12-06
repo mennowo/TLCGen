@@ -65,9 +65,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
             sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
-            sb.AppendLine();
 
-            return sb.ToString();
+			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true);
+
+			return sb.ToString();
         }
 
         private string GenerateOvCTop(ControllerModel c)
@@ -93,10 +94,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("} TOVRichtingIndex;");
             sb.AppendLine();
             sb.AppendLine("#include \"ov.h\"");
-            if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
-            {
-                sb.AppendLine("#include \"syncvar.h\"");
-            }
             sb.AppendLine();
             if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
                 c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
@@ -132,8 +129,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("/* Variabele tbv start KAR ondergedrag timer bij starten regeling */");
                 sb.AppendLine("static char startkarog = FALSE;");
             }
-            sb.AppendLine();
-            sb.AppendLine("/*-------------------------------------------------------------------------------------------");
+
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
+
+			sb.AppendLine("/*-------------------------------------------------------------------------------------------");
             sb.AppendLine("   OVInstellingen voorziet alle OV-instellingen van een juiste waarde.");
             sb.AppendLine("   Het gaat om de volgende instellingen:");
             sb.AppendLine("   - iFC_OVix[ov]                        : (de index van) de fasecyclus van de OV-richting ov.");
@@ -617,10 +616,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
 
-            sb.AppendLine("}");
+			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInstellingen, true, true);
+
+			sb.AppendLine("}");
             sb.AppendLine();
 
-            return sb.ToString();
+			return sb.ToString();
         }
 
         private string GenerateOvCRijTijdScenario(ControllerModel c)
@@ -753,10 +754,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			                : $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{d.Naam}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
                 }
             }
-            sb.AppendLine("}");
-            sb.AppendLine();
 
-            return sb.ToString();
+			if (OrderedPieceGenerators[CCOLCodeTypeEnum.OvCRijTijdScenario].Any())
+	        {
+		        sb.AppendLine();
+		        foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.OvCRijTijdScenario])
+		        {
+			        sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.OvCRijTijdScenario, ts));
+		        }
+	        }
+	        sb.AppendLine();
+			sb.AppendLine("}");
+	        sb.AppendLine();
+
+			return sb.ToString();
         }
 
         private string GenerateOvCInUitMelden(ControllerModel c)
@@ -928,11 +939,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}if (!startkarog) startkarog = TRUE;");
             }
 
-            sb.AppendLine();
-            sb.AppendLine("}");
-            sb.AppendLine();
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, true, true);
 
-            return sb.ToString();
+			sb.AppendLine("}");
+	        sb.AppendLine();
+
+			return sb.ToString();
         }
         
         private string GenerateOvCPARCorrecties(ControllerModel c)
@@ -944,8 +956,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   ------------------------------------- */");
             sb.AppendLine("void OVPARCorrecties(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
-            sb.AppendLine("}");
+
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCorrecties, true, true);
+
+			sb.AppendLine("}");
             sb.AppendLine();
             return sb.ToString();
         }
@@ -978,7 +992,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"  OVCcolElementen(hdFC{hd.FaseCyclus}, {_tpf}{_tgbhd}{hd.FaseCyclus}, {_tpf}{_trthd}{hd.FaseCyclus}, {_hpf}{_hhd}{hd.FaseCyclus}, {_cpf}{_cvchd}{hd.FaseCyclus}, -1);");
             }
-            sb.AppendLine("}");
+
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCcol, true, true);
+
+			sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
@@ -1047,7 +1064,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-            sb.AppendLine("}");
+
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, true, true);
+			
+			sb.AppendLine("}");
             sb.AppendLine("#endif");
             sb.AppendLine();
 
@@ -1060,9 +1080,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("#include \"ov.c\"");
             sb.AppendLine($"#include \"{c.Data.Naam}ov.add\"");
-            sb.AppendLine();
 
-            return sb.ToString();
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, true, true);
+			
+			return sb.ToString();
         }
     }
 }

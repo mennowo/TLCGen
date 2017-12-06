@@ -396,6 +396,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
+	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool addnewlinebefore = false, bool addnewlineatend = false)
+	    {
+			if (OrderedPieceGenerators[type].Any())
+			{
+				if (addnewlinebefore) sb.AppendLine();
+				foreach (var gen in OrderedPieceGenerators[type])
+				{
+					sb.Append(gen.Value.GetCode(c, type, ts));
+				}
+			}
+			if(addnewlineatend) sb.AppendLine();
+		}
+
         #endregion // Public Methods
 
         #region Private Methods

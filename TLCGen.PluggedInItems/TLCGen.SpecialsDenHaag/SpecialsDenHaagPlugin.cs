@@ -250,24 +250,24 @@ namespace TLCGen.SpecialsRotterdam
             return _MyElements.Where(x => x.Type == type);
         }
 
-        public override int HasCode(CCOLRegCCodeTypeEnum type)
+        public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Alternatieven:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 101;
                 default:
                     return 0;
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLRegCCodeTypeEnum type, string ts)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
-                case CCOLRegCCodeTypeEnum.Alternatieven:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     if (!_MyModel.ToepassenAlternatievenPerBlok)
                     {
                         return "";

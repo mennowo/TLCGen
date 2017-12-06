@@ -26,6 +26,15 @@
         RegCPreSystemApplication,
         RegCSystemApplication,
         RegCPostSystemApplication,
-        RegCDumpApplication
-    };
+        RegCDumpApplication,
+	    OvCIncludes,
+		OvCTop,
+		OvCInstellingen,
+		OvCRijTijdScenario,
+		OvCInUitMelden,
+	    OvCPARCorrecties,
+	    OvCPARCcol,
+	    OvCSpecialSignals,
+		OvCBottom
+	};
 }
