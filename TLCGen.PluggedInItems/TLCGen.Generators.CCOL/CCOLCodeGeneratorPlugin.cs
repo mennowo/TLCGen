@@ -224,6 +224,7 @@ namespace TLCGen.Generators.CCOL
 
         private MenuItem _alwaysOverwriteSourcesMenuItem;
         private MenuItem _alterAddHeadersWhileGeneratingMenuItem;
+        private MenuItem _resetSettingsMenuItem;
         private MenuItem _pluginMenuItem;
 
         public MenuItem Menu
@@ -255,7 +256,14 @@ namespace TLCGen.Generators.CCOL
                             Header = "Bijwerken add headers tijdens genereren"
                         };
                     }
-                    _alwaysOverwriteSourcesMenuItem.Click += (o, e) =>
+	                if (_resetSettingsMenuItem == null)
+	                {
+		                _resetSettingsMenuItem = new MenuItem
+		                {
+			                Header = "Reset CCOL generator instellingen"
+		                };
+	                }
+					_alwaysOverwriteSourcesMenuItem.Click += (o, e) =>
                     {
                         CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources =
                             !CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
@@ -269,7 +277,11 @@ namespace TLCGen.Generators.CCOL
                         _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
                             CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
                     };
-                    _pluginMenuItem.Items.Add(sitem1);
+	                _resetSettingsMenuItem.Click += (o, e) =>
+	                {
+						CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
+					};
+					_pluginMenuItem.Items.Add(sitem1);
                     _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
                     _pluginMenuItem.Items.Add(_alterAddHeadersWhileGeneratingMenuItem);
                 }

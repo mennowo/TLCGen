@@ -8,7 +8,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     [CCOLCodePieceGenerator]
-    public class CCOLRoBuGroverCodeGenerator : CCOLCodePieceGeneratorBase
+    public class RoBuGroverCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
@@ -52,7 +52,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
-                if (fc.FileDetectoren?.Count == 0 || fc.HiaatDetectoren?.Count == 0)
+                if (fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                     continue;
 
                 _MyElements.Add(new CCOLElement($"{_prmmintvg}_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));

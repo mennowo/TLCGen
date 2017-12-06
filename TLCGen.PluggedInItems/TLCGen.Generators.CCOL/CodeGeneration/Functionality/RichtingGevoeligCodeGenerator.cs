@@ -9,7 +9,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration 
 {
     [CCOLCodePieceGenerator]
-    public class CCOLRichtingGevoeligCodeGenerator : CCOLCodePieceGeneratorBase
+    public class RichtingGevoeligCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
 
