@@ -183,11 +183,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(new CCOLElement($"{_schvi}{ov.FaseCyclus}",    ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 }
-                int opties = 0;
+                var opties = 0;
                 if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
                 if (ov.AfkappenConflictenOV) opties += 300;
-                if (ov.TussendoorRealiseren) opties += 20;
-                if (ov.VasthoudenGroen) opties += 3;
+                if (ov.TussendoorRealiseren) opties += 30;
+                if (ov.VasthoudenGroen) opties += 2;
                 _MyElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", opties, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
@@ -233,7 +233,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_schupinagbhd}{hd.FaseCyclus}", 0,                          CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
 
                 // For signal groups that have HD but not OV
-                if(!c.OVData.OVIngrepen.Any(x => x.FaseCyclus == hd.FaseCyclus))
+                if(c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
                 {
                     if (hd.KAR)
                     {
