@@ -197,8 +197,8 @@
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
       <ItemGroup>
-        <Reference Include="Microsoft.Practices.ServiceLocation">
-          <HintPath>..\packages\CommonServiceLocator\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+        <Reference Include="CommonServiceLocator">
+          <HintPath>..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

@@ -71,6 +71,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -863,8 +864,8 @@ move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"</PostBuildEv
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
       <ItemGroup>
-        <Reference Include="Microsoft.Practices.ServiceLocation">
-          <HintPath>..\packages\CommonServiceLocator\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+        <Reference Include="CommonServiceLocator">
+          <HintPath>..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
@@ -927,17 +928,6 @@ move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"</PostBuildEv
         </Reference>
         <Reference Include="System.Windows.Interactivity">
           <HintPath>..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
-      <ItemGroup>
-        <Reference Include="Newtonsoft.Json">
-          <HintPath>..\packages\Newtonsoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

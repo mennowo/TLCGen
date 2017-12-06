@@ -6,7 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Routing;
 using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
@@ -625,7 +627,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-#warning Make this generic, just like how settings are loaded
+		// TODO: Make this generic, just like how settings are loaded
         private void SaveGeneratorControllerSettingsToModel()
         {
             //SettingsVM.Settings.CustomData.AddinSettings.Clear();
@@ -910,83 +912,50 @@ namespace TLCGen.ViewModels
 			// Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {
-				// TODO fix version checking algorithm
-	            //var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
-	            //webRequest.UseDefaultCredentials = true;
-	            //using (var response = webRequest.GetResponse())
-	            //using (var content = response.GetResponseStream())
-	            //using (var reader = new StreamReader(content))
-	            //{
-		        //    var strContent = reader.ReadToEnd();
-		        //    var serializer = new JavaScriptSerializer();
-		        //    serializer.RegisterConverters(new[] { new DynamicJsonConverter() });
-				//
-		        //    dynamic obj = serializer.Deserialize(strContent, typeof(object));
-				//
-		        //    if (obj == null) return;
-		        //    var r1 = obj["content"];
-		        //    if (r1 == null) return;
-		        //    var r = r1 as string;
-		        //    if (r == null) return;
-		        //    var all = r.Split('\r');
-		        //    var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-		        //    if (tlcgenVer != null)
-		        //    {
-		        //    	var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
-		        //        var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-		        //        var over = 0;
-		        //        var nver = 0;
-		        //        if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-		        //        {
-		        //            for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
-		        //            {
-		        //                over += Int32.Parse(oldvers[i]) * j;
-		        //                nver += Int32.Parse(newvers[i]) * j;
-		        //                j *= 10;
-		        //            }
-		        //        }
-		        //        if (nver > over)
-		        //        {
-		        //            DispatcherHelper.CheckBeginInvokeOnUI(() =>
-		        //            {
-		        //                var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
-		        //                w.ShowDialog();
-		        //            });
-		        //        }
-		        //    }
-				//}
-				//
-				//var client = new WordPressClient("https://codingconnected.eu/wp-json/");
-				//var p = await client.Pages.GetByID(1105);
-				//var c = p.Content;
-				//var r = c.Rendered.Replace("\r\n", "\r");
-				//var all = r.Split('\r');
-				//var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-				//if (tlcgenVer != null)
-				//{
-				//	var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
-				//    var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-				//    var over = 0;
-				//    var nver = 0;
-				//    if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-				//    {
-				//        for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
-				//        {
-				//            over += Int32.Parse(oldvers[i]) * j;
-				//            nver += Int32.Parse(newvers[i]) * j;
-				//            j *= 10;
-				//        }
-				//    }
-				//    if (nver > over)
-				//    {
-				//        DispatcherHelper.CheckBeginInvokeOnUI(() =>
-				//        {
-				//            var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
-				//            w.ShowDialog();
-				//        });
-				//    }
-				//}
-			});
+	            var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
+	            webRequest.UseDefaultCredentials = true;
+	            using (var response = webRequest.GetResponse())
+				using (var content = response.GetResponseStream())
+				if(content != null) {
+					using (var reader = new StreamReader(content))
+					{
+						var strContent = reader.ReadToEnd().Replace("\n", "");
+						var jsonDeserializer = new JavaScriptSerializer();
+						var deserializedJson = jsonDeserializer.Deserialize<dynamic>(strContent);
+						if (deserializedJson == null) return;
+						var contentData = deserializedJson["content"];
+						if (contentData == null) return;
+						var renderedData = contentData["rendered"];
+						if (renderedData == null) return;
+						var data = renderedData as string;
+						if (data == null) return;
+						var all = data.Split('\r');
+						var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+						if (tlcgenVer == null) return;
+						var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+						var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+						var over = 0;
+						var nver = 0;
+						if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+						{
+							for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+							{
+								over += int.Parse(oldvers[i]) * j;
+								nver += int.Parse(newvers[i]) * j;
+								j *= 10;
+							}
+						}
+						if (nver > over)
+						{
+							DispatcherHelper.CheckBeginInvokeOnUI(() =>
+							{
+								var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
+								w.ShowDialog();
+							});
+						}
+					}
+				}
+            });
         }
 
         #endregion // Constructor
@@ -995,8 +964,7 @@ namespace TLCGen.ViewModels
         
         public void DragOver(IDropInfo dropInfo)
         {
-            var d = dropInfo.Data as DataObject;
-            if (d == null || !d.ContainsFileDropList()) return;
+	        if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList()) return;
             var files = d.GetFileDropList();
             if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
             {
@@ -1007,8 +975,7 @@ namespace TLCGen.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            var d = dropInfo.Data as DataObject;
-            if (d == null || !d.ContainsFileDropList()) return;
+	        if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList()) return;
             {
                 var files = d.GetFileDropList();
                 if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
