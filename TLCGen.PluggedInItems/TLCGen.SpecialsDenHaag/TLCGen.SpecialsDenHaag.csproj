@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\FaseCyclusAlternatiefPerBlokModel.cs" />
+    <Compile Include="DVMModule\DVMModuleDenHaag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpecialsDenHaagPlugin.cs" />
     <Compile Include="ViewModels\FaseCyclusAlternatiefPerBlokViewModel.cs" />
@@ -67,6 +68,10 @@
     <ProjectReference Include="..\..\TLCGen.Helpers\TLCGen.Helpers.csproj">
       <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
       <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468F6A-D191-4049-BA0F-4E4CD023BBD0}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{B3A654CF-76A7-4AB9-B99E-870781E5D83B}</Project>

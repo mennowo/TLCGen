@@ -15,6 +15,7 @@ using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.SpecialsDenHaag;
 using TLCGen.SpecialsDenHaag.Models;
+using TLCGen.SpecialsDenHaag.OVMModule;
 
 namespace TLCGen.SpecialsRotterdam
 {
@@ -29,6 +30,7 @@ namespace TLCGen.SpecialsRotterdam
 
         private SpecialsDenHaagViewModel _SpecialsDenHaagTabVM;
         private SpecialsDenHaagModel _MyModel;
+	    private OVMModuleDenHaag _ovmModule;
 
         #endregion // Fields
 
@@ -48,7 +50,8 @@ namespace TLCGen.SpecialsRotterdam
                 if (_Controller == null)
                 {
                     _MyModel = new SpecialsDenHaagModel();
-                    _SpecialsDenHaagTabVM.Specials = _MyModel;
+	                _ovmModule = new OVMModuleDenHaag();
+					_SpecialsDenHaagTabVM.Specials = _MyModel;
                 }
                 if (_Controller != null && _MyModel != null)
                 {
@@ -200,7 +203,8 @@ namespace TLCGen.SpecialsRotterdam
             _SpecialsDenHaagTabVM.Specials = _MyModel;
             _SpecialsDenHaagTabVM.AlternatievenPerBlok.BubbleSort();
             _SpecialsDenHaagTabVM.RaisePropertyChanged("");
-        }
+	        _ovmModule = new OVMModuleDenHaag();
+		}
 
         public void SetXmlInDocument(XmlDocument document)
         {
@@ -230,6 +234,10 @@ namespace TLCGen.SpecialsRotterdam
                     }
                 }
             }
+	        foreach (var e in _ovmModule.GetCCOLElements(c))
+	        {
+		        _MyElements.Add(e);
+	        }
         }
 
         public override bool HasCCOLElements()
