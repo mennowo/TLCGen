@@ -11,7 +11,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLDetectieAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
+    public class DetectieAanvraagDirectCodeGenerator : CCOLCodePieceGeneratorBase
     {
         public override int HasCode(CCOLRegCCodeTypeEnum type)
         {

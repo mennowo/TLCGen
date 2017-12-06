@@ -11,7 +11,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLNalopenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class NalopenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         #region Fields
 

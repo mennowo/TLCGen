@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLFileIngrepenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class FileIngrepenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _myElements;
         private List<CCOLIOElement> _myBitmapOutputs;

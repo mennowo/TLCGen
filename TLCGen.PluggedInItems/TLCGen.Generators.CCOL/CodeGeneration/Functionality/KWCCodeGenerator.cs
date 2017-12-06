@@ -9,7 +9,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLKWCCodeGenerator : CCOLCodePieceGeneratorBase
+    public class KWCCodeGenerator : CCOLCodePieceGeneratorBase
     {
         public override int HasCode(CCOLRegCCodeTypeEnum type)
         {

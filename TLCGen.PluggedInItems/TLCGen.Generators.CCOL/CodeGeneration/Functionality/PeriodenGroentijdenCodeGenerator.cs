@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     [CCOLCodePieceGenerator]
-    public class CCOLPeriodenGroentijdenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class PeriodenGroentijdenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _myElements;
         private List<CCOLIOElement> _myBitmapOutputs;

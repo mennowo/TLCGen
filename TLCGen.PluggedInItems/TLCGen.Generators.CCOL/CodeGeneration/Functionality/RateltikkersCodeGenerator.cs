@@ -12,7 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
 
     [CCOLCodePieceGenerator]
-    public class CCOLRateltikkersCodeGenerator : CCOLCodePieceGeneratorBase
+    public class RateltikkersCodeGenerator : CCOLCodePieceGeneratorBase
     {
 
         #region Fields

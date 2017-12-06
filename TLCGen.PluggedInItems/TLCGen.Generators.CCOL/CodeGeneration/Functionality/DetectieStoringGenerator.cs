@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLDetectieStoringGenerator : CCOLCodePieceGeneratorBase
+    public class DetectieStoringGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         

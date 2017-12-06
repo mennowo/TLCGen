@@ -12,7 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
 
     [CCOLCodePieceGenerator]
-    public class CCOLWaarschuwingsLichtenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class WaarschuwingsLichtenCodeGenerator : CCOLCodePieceGeneratorBase
     {
 
         #region Fields

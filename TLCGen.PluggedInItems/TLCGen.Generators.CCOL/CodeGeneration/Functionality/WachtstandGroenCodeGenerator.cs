@@ -10,7 +10,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLWachtstandGroenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class WachtstandGroenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
 

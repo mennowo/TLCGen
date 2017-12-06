@@ -8,7 +8,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLFixatieCodeGenerator : CCOLCodePieceGeneratorBase
+    public class FixatieCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapInputs;

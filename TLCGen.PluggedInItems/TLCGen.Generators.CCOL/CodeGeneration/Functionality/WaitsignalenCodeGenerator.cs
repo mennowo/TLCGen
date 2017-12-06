@@ -10,7 +10,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     [CCOLCodePieceGenerator]
-    public class CCOLWaitsignalenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class WaitsignalenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;

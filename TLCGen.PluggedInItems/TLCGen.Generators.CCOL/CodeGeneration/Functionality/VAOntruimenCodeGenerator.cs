@@ -9,7 +9,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLVAOntruimenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class VAOntruimenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         private List<CCOLElement> _MyElements;
 

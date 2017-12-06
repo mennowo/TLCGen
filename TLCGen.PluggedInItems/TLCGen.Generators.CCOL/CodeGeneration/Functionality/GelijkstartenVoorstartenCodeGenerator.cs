@@ -6,7 +6,7 @@ using TLCGen.Models;
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
-    public class CCOLGelijkstartenVoorstartenCodeGenerator : CCOLCodePieceGeneratorBase
+    public class GelijkstartenVoorstartenCodeGenerator : CCOLCodePieceGeneratorBase
     {
         #region Fields
 
