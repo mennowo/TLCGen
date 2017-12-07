@@ -53,7 +53,7 @@ namespace TLCGen.Helpers
             }
             catch (InvalidOperationException)
             {
-                MessageBox.Show("Bestandsformaat onjuist. Is dit een TLCGen bestand?", "Fout bij laden bestand.");
+                MessageBox.Show($"Bestandsformaat onjuist (betand: {fileName}).\nIs dit een bestand horend bij type {typeof(T).Name}?", "Fout bij laden bestand.");
             }
             catch (Exception e)
             {

@@ -9,6 +9,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Documents;
 using GalaSoft.MvvmLight;
+using Microsoft.Win32;
 
 namespace TLCGen.Updater
 {
@@ -82,7 +83,6 @@ namespace TLCGen.Updater
 			if (TLCGenDownloaded)
 			{
 				var p = Process.Start(_tempfile);
-				p?.WaitForExit();
 			}
 		}
 
@@ -93,8 +93,14 @@ namespace TLCGen.Updater
 
 		public void CleanUp()
 		{
+			var key = Registry.CurrentUser.OpenSubKey("Software", true);
+			var sk1 = key?.OpenSubKey("CodingConnected e.U.", true) ?? key.CreateSubKey("CodingConnected e.U.");
+			if (sk1 != null)
+			{
+				var sk2 = sk1.OpenSubKey("TLCGen", true) ?? key.CreateSubKey("TLCGen");
+				sk2?.SetValue("TempInstallFile", _tempfile, RegistryValueKind.String);
+			}
 			_client?.Dispose();
-			if (File.Exists(_tempfile)) File.Delete(_tempfile);
 		}
 
 		private void ClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs asyncCompletedEventArgs)

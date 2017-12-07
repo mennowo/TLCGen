@@ -15,6 +15,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Threading;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Win32;
 using TLCGen.DataAccess;
 using TLCGen.Dialogs;
 using TLCGen.GuiActions;
@@ -835,22 +836,6 @@ namespace TLCGen.ViewModels
                 // Construct the ViewModel
                 ControllerVM = new ControllerViewModel();
 
-                // If we are in debug mode, the code below tries loading default file
-#if OPENDEBUG
-            TLCGenControllerDataProvider.Default.OpenDebug();
-            if (TLCGenControllerDataProvider.Default.Controller != null)
-            {
-                ControllerVM.Controller = TLCGenControllerDataProvider.Default.Controller;
-                SetControllerForStatics(TLCGenControllerDataProvider.Default.Controller);
-            
-                MessengerInstance.Send(new ControllerFileNameChangedMessage(TLCGenControllerDataProvider.Default.ControllerFileName, null));
-                MessengerInstance.Send(new UpdateTabsEnabledMessage());
-                TLCGenControllerDataProvider.Default.ControllerHasChanged = false;
-                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
-                RaisePropertyChanged("ProgramTitle");
-            }
-#endif
-
                 if (!DesignMode.IsInDesignMode)
                 {
                     if (Application.Current != null && Application.Current.MainWindow != null)
@@ -912,6 +897,20 @@ namespace TLCGen.ViewModels
 			// Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {
+				// clean potential old data
+	            var key = Registry.CurrentUser.OpenSubKey("Software", true);
+	            var sk1 = key?.OpenSubKey("CodingConnected e.U.", true);
+	            var sk2 = sk1?.OpenSubKey("TLCGen", true);
+	            var tempFile = (string) sk2?.GetValue("TempInstallFile", null);
+	            if (tempFile != null)
+	            {
+		            if (File.Exists(tempFile))
+		            {
+			            File.Delete(tempFile);
+		            }
+					sk2?.DeleteValue("TempInstallFile");
+	            }
+
 	            var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
 	            webRequest.UseDefaultCredentials = true;
 	            using (var response = webRequest.GetResponse())

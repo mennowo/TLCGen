@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="1.0.0" 
+    Version="1.1.0" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
     
@@ -34,7 +34,7 @@
       <ComponentRef Id="ProgramMenuDir" />
 		</Feature>
     
-    <Icon Id="TLCGen.exe" SourceFile="../TLCGen/bin/Release/TLCGen.exe" />
+    <Icon Id="TLCGen.exe" SourceFile="$(var.ReleaseDir)/TLCGen.exe" />
 
     <UIRef Id="WixUI_InstallDir" />
 	  <UIRef Id="WixUI_ErrorProgressText" />
@@ -74,7 +74,7 @@
         <File Id='TLCGenEXEConfig' Name='TLCGen.exe.config' Source='$(var.ReleaseDir)/TLCGen.exe.config' KeyPath='no' />
         <File Id='TLCGenSettings' Name='TLCGenSettings.xml' Source='$(var.ReleaseDir)/TLCGenSettings.xml' KeyPath='no' />
         <ProgId Id='TLCGen.tlc' Description='TLCGen file' Icon='TLCGenEXE'>
-          <Extension Id='mtd' ContentType='application/mtd'>
+          <Extension Id='tlc' ContentType='application/tlc'>
             <Verb Id='open' Command='Open' TargetFile='TLCGenEXE' Argument='"%1"' />
           </Extension>
         </ProgId>
@@ -84,6 +84,7 @@
       <Component Id='UpdaterExecutable' Guid='888E5F09-ECCF-4E75-B15E-05B743F1B9DB'>
         <File Id='TLCGenUpdaterEXE' Name='TLCGen.Updater.exe' Source='$(var.ReleaseDir)/Updater/TLCGen.Updater.exe' KeyPath='no' />
         <File Id='TLCGenUpdaterEXEConfig' Name='TLCGen.Updater.exe.config' Source='$(var.ReleaseDir)/Updater/TLCGen.Updater.exe.config' KeyPath='no' />
+        <File Id='GalaSoft.MvvmLight.Updater' Name='GalaSoft.MvvmLight.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenDependencies" Directory="DEPSFOLDER">
@@ -92,6 +93,7 @@
         <File Id='FloodFill' Name='FloodFill.dll' Source='$(var.ReleaseDir)/FloodFill.dll' KeyPath='no' />
         <File Id='GalaSoft.MvvmLight' Name='GalaSoft.MvvmLight.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.dll' KeyPath='no' />
         <File Id='GalaSoft.MvvmLight.Platform' Name='GalaSoft.MvvmLight.Platform.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.Platform.dll' KeyPath='no' />
+        <File Id='GongSolutions.WPF.DragDrop' Name='GongSolutions.WPF.DragDrop.dll' Source='$(var.ReleaseDir)/GongSolutions.WPF.DragDrop.dll' KeyPath='no' />
         <File Id='Gu.Wpf.DataGrid2D' Name='Gu.Wpf.DataGrid2D.dll' Source='$(var.ReleaseDir)/Gu.Wpf.DataGrid2D.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack' Name='Microsoft.WindowsAPICodePack.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack.Shell' Name='Microsoft.WindowsAPICodePack.Shell.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.Shell.dll' KeyPath='no' />
