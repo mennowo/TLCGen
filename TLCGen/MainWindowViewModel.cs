@@ -956,7 +956,7 @@ namespace TLCGen.ViewModels
 					}
 				}
             });
-        }
+		}
 
         #endregion // Constructor
 

@@ -24,9 +24,9 @@ namespace TLCGen
     {
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();	
 
-            DispatcherHelper.Initialize();
+			DispatcherHelper.Initialize();
 
             MainToolBarTray.DataContextChanged += (s, e) =>
             {

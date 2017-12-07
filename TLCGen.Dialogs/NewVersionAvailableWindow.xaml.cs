@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,14 +30,17 @@ namespace TLCGen.Dialogs
             NewVersionTB.Text = newver;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void UpdateNowButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+	        var p = Process.GetCurrentProcess();
+	        var path = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updater", "TLCGen.Updater.exe");
+            Process.Start(path, p.Id.ToString());
+			Application.Current.Shutdown();
         }
 
-        private void DownloadHyperlink_Click(object sender, RoutedEventArgs e)
+        private void UpdateLaterButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.codingconnected.eu/software/tlcgen/");
+            this.Close();
         }
     }
 }

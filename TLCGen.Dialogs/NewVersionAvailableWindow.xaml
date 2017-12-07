@@ -27,14 +27,15 @@
                 <LineBreak />
                 Beschikbare versie: <TextBlock Name="NewVersionTB" />
                 <LineBreak />
-                <LineBreak />
-                Ga naar 
-                <Hyperlink Click="DownloadHyperlink_Click">https://www.codingconnected.eu/software/tlcgen/</Hyperlink>
-                om te downloaden.
-                </TextBlock>
-            </StackPanel>
-        <Button Grid.Row="1" HorizontalAlignment="Center" Margin="5" Click="Button_Click" IsDefault="True">
-            <Image Source="{StaticResource AppIconDrawingImage}" Width="32" Height="32" />
-        </Button>
+            </TextBlock>
+        </StackPanel>
+        <UniformGrid Grid.Row="1" Columns="2">
+            <Button 
+                Content="Update nu uitvoeren"
+                HorizontalAlignment="Stretch" Margin="5" Click="UpdateNowButton_Click" IsDefault="True" />
+            <Button 
+                Content="Later uitvoeren"
+                HorizontalAlignment="Stretch" Margin="5" Click="UpdateLaterButton_Click" IsCancel="True" />
+        </UniformGrid>
     </Grid>
 </Window>
