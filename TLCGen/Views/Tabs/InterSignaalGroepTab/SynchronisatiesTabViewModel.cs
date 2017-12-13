@@ -153,8 +153,7 @@ namespace TLCGen.ViewModels
                     RaisePropertyChanged("GelijkstartOntruimingstijdFaseVan");
                     RaisePropertyChanged("GelijkstartOntruimingstijdFaseNaar");
                 }
-                RaisePropertyChanged("Comment1");
-                RaisePropertyChanged("Comment2");
+                RaisePropertyChanged("");
             }
         }
 
@@ -273,8 +272,8 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Voorstart.VoorstartTijd = value;
-                RaisePropertyChanged("VoorstartTijd");
-            }
+				RaisePropertyChanged<object>(nameof(VoorstartTijd), broadcast: true);
+			}
         }
 
         public int VoorstartOntruimingstijd
@@ -289,8 +288,8 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Voorstart.VoorstartOntruimingstijd = value;
-                RaisePropertyChanged("VoorstartOntruimingstijd");
-            }
+				RaisePropertyChanged<object>(nameof(VoorstartOntruimingstijd), broadcast: true);
+			}
         }
 
         public string Comment1

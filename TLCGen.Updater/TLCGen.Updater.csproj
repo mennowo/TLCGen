@@ -68,7 +68,7 @@
       <DependentUpon>UpdaterHome.xaml</DependentUpon>
     </Compile>
     <Compile Include="UpdaterViewModel.cs" />
-    <Compile Include="PageSwitcher.cs" />
+    <Compile Include="Switcher.cs" />
     <Page Include="UpdaterDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

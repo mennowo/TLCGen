@@ -47,7 +47,8 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Controller = value;
-                if (_Controller == null)
+#warning Is this ok in case of a new controller? Ie will old data not remain?
+				if (_Controller == null)
                 {
                     _MyModel = new SpecialsDenHaagModel();
 	                _ovmModule = new DVMModuleDenHaag();

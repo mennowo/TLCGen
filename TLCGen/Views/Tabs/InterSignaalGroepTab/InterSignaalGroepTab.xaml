@@ -118,9 +118,9 @@
                 <StackPanel 
                     HorizontalAlignment="Stretch" IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}" Grid.Row="1">
                     <Label Content="{Binding Path=Comment1}" />
-                    <TextBox Text="{Binding Path=VoorstartTijd}" Margin="2" />
+                    <TextBox Text="{Binding Path=VoorstartTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                     <Label Content="{Binding Path=Comment2}" />
-                    <TextBox Text="{Binding Path=VoorstartOntruimingstijd}" Margin="2" />
+                    <TextBox Text="{Binding Path=VoorstartOntruimingstijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                 </StackPanel>
             </Grid>
 
