@@ -121,7 +121,8 @@ namespace TLCGen.DataAccess
                     Controller = new ControllerModel();
                     Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.Data);
                     Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.OVData);
-                }
+                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.PeriodenData);
+				}
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {
                     // Force adding the segments; this is because this is fixed list, 

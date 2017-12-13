@@ -133,6 +133,11 @@ namespace TLCGen.ViewModels
             var mgsvm = new GroentijdenSetViewModel(mgsm);
             GroentijdenSets.Add(mgsvm);
 
+	        if (string.IsNullOrWhiteSpace(_Controller.PeriodenData.DefaultPeriodeGroentijdenSet))
+	        {
+		        _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = mgsm.Naam;
+	        }
+
             // Rebuild matrix
             BuildGroentijdenMatrix();
         }
@@ -188,6 +193,12 @@ namespace TLCGen.ViewModels
                 i++;
             }
             SelectedSet = null;
+
+	        if (!GroentijdenSets.Any())
+	        {
+				_Controller.PeriodenData.DefaultPeriodeGroentijdenSet = "";
+			}
+
             BuildGroentijdenMatrix();
         }
 

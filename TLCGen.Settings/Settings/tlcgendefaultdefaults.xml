@@ -815,5 +815,14 @@
         <OVIngreepSignaalGroepParameters />
       </Data>
     </Default>
+    <Default>
+      <DefaultName>Perioden instellingen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Models</DataType>
+      <Data>
+        <DefaultPeriodeGroentijdenSet></DefaultPeriodeGroentijdenSet>
+        <DefaultPeriodeNaam></DefaultPeriodeNaam>
+      </Data>
+    </Default>
   </Defaults>
 </TLCGenDefaultsModel>
