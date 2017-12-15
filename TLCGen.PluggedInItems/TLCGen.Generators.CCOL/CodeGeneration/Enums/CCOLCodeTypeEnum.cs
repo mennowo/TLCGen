@@ -2,6 +2,7 @@
 {
     public enum CCOLCodeTypeEnum
     {
+		// REG
         RegCIncludes,
         RegCTop,
         RegCKwcApplication,
@@ -27,6 +28,8 @@
         RegCSystemApplication,
         RegCPostSystemApplication,
         RegCDumpApplication,
+
+		// OV
 	    OvCIncludes,
 		OvCTop,
 		OvCInstellingen,
@@ -35,6 +38,9 @@
 	    OvCPARCorrecties,
 	    OvCPARCcol,
 	    OvCSpecialSignals,
-		OvCBottom
+		OvCBottom,
+
+		// TAB
+	    TabCControlParameters
 	};
 }

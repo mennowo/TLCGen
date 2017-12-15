@@ -330,7 +330,9 @@ namespace TLCGen.ViewModels
 
         public override void OnDeselected()
         {
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+	        if (_Controller == null) return;
+
+            foreach (var fcm in _Controller.Fasen)
             {
                 fcm.Detectoren.BubbleSort();
             }

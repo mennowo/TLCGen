@@ -155,7 +155,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
 
-            sb.AppendLine();
+	        AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, false, true);
+			
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
 
             sb.AppendLine("}");
