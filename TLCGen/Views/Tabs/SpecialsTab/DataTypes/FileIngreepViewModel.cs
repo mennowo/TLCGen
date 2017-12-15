@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -96,8 +98,20 @@ namespace TLCGen.ViewModels
             get { return _FileIngreep.Naam; }
             set
             {
-                _FileIngreep.Naam = value;
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+	            {
+		            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
+		            Messenger.Default.Send(message);
+		            if (message.Handled && message.IsUnique)
+		            {
+                        string oldname = _FileIngreep.Naam;
+			            _FileIngreep.Naam = value;
+
+						// Notify the messenger
+						Messenger.Default.Send(new NameChangedMessage(oldname, value));
+						RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
+		            }
+				}
             }
         }
 

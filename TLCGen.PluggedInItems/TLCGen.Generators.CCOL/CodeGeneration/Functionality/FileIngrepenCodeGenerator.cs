@@ -135,7 +135,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         _myElements.Add(
                             new CCOLElement(
-                                $"{_prmfperc}{ff.FaseCyclus}",
+                                $"{_prmfperc}{fm.Naam}{ff.FaseCyclus}",
                                 ff.DoseerPercentage,
                                 CCOLElementTimeTypeEnum.None,
                                 CCOLElementTypeEnum.Parameter));
@@ -485,7 +485,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine(fm.EerlijkDoseren
                                 ? $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
-                                : $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{ff.FaseCyclus},");
+                                : $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             var rest = "";
                             var irest = 1;

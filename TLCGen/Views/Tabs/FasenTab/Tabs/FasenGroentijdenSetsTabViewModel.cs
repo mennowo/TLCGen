@@ -183,10 +183,10 @@ namespace TLCGen.ViewModels
                 switch (_Controller.Data.TypeGroentijden)
                 {
                     case GroentijdenTypeEnum.VerlengGroentijden:
-                        mgsvm.Naam = "VG" + i.ToString();
+                        mgsvm.Naam = "VG" + i;
                         break;
                     default:
-                        mgsvm.Naam = "MG" + i.ToString();
+                        mgsvm.Naam = "MG" + i;
                         break;
 
                 }

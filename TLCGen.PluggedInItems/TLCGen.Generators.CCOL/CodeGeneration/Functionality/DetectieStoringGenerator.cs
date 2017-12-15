@@ -131,7 +131,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
                         sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
 
-                        if (fc.AantalRijstroken.HasValue)
+                        if (fc.AantalRijstroken.HasValue && fc.Type != FaseTypeEnum.Voetganger)
                         {
                             for (int str = 1; str <= fc.AantalRijstroken; ++str)
                             {
@@ -278,17 +278,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
                             if (defmgfc?.Waarde != null)
                             {
-                                sb.Append($"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}, ");
+                                sb.Append($"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}");
                             }
 
-                            var i = 0;
                             foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                             {
                                 foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
                                 {
                                     foreach (var unused in mgsm.Groentijden.Where(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
                                     {
-                                        if (i > 0) sb.Append(", "); ++i;
+                                        sb.Append(", ");
                                         sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}_{fc.Naam}");
                                     }
                                 }

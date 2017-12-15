@@ -82,7 +82,22 @@ namespace TLCGen.ViewModels
             {
                 base.Controller = value;
                 Fasen = base.Controller != null ? new ObservableCollectionAroundList<FaseCyclusModuleDataViewModel, FaseCyclusModuleDataModel>(base.Controller.ModuleMolen.FasenModuleData) : null;
-                RaisePropertyChanged("Fasen");
+
+	            if (Fasen != null)
+	            {
+		            foreach (var fc in Controller.Fasen)
+		            {
+			            if (Fasen.All(x => x.FaseCyclus != fc.Naam))
+			            {
+				            var data = new FaseCyclusModuleDataModel();
+							DefaultsProvider.Default.SetDefaultsOnModel(data);
+				            data.FaseCyclus = fc.Naam;
+							Fasen.Add(new FaseCyclusModuleDataViewModel(data));
+			            }
+		            }
+	            }
+
+	            RaisePropertyChanged("Fasen");
             }
         }
 
