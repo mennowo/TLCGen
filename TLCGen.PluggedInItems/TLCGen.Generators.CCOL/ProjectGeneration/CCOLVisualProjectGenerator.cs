@@ -89,35 +89,17 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
             return writeline;
         }
 
-        public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, VisualProjectTypeEnum type)
+        public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, string templateName)
         {
             StringBuilder sb = new StringBuilder();
 
             string templatefilename = "";
             string filtersfilename = "";
             string outputfilename = "";
-            switch (type)
-            {
-                case VisualProjectTypeEnum.Visual2010:
-                    templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010.xml");
-                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010filters.xml");
-                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_msvc2010.vcxproj");
-                    break;
-                case VisualProjectTypeEnum.Visual2013:
-                    templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013.xml");
-                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013filters.xml");
-                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_msvc2013.vcxproj"); break;
-                case VisualProjectTypeEnum.Visual2010Vissim:
-                    templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010vissim.xml");
-                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2010vissimfilters.xml");
-                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_vissim_msvc2010.vcxproj");
-                    break;
-                case VisualProjectTypeEnum.Visual2013Vissim:
-                    templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013vissim.xml");
-                    filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Resources\\visualprojecttemplate2013vissimfilters.xml");
-                    outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName), $"{plugin.Controller.Data.Naam}_vissim_msvc2013.vcxproj");
-                    break;
-            }
+
+			templatefilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}.xml");
+	        filtersfilename = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Settings\\VisualTemplates\\{templateName}_filters.xml");
+            outputfilename = Path.Combine(Path.GetDirectoryName(plugin.ControllerFileName) ?? throw new InvalidOperationException(), $"{plugin.Controller.Data.Naam}_{templateName}.vcxproj");
             if (File.Exists(templatefilename))
             {
                 string[] projtemplate = File.ReadAllLines(templatefilename);

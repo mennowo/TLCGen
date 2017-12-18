@@ -23,8 +23,8 @@
         <ComboBox 
             Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"
             IsEnabled="{Binding Path=VisualCBEnabled}"
-            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type proj:VisualProjectTypeEnum}}}"
-            SelectedItem="{Binding Path=VisualProjectType}" Margin="2" />
+            ItemsSource="{Binding Path=VisualProjects}"
+            SelectedItem="{Binding Path=SelectedVisualProject}" Margin="2" />
         <Button Command="{Binding Path=GenerateVisualProjectCommand}" ToolTip="Genereer MS Visual project file" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
             <Image Source="{StaticResource GenerateVisualIconDrawingImage}" Width="16" Height="16"  />
         </Button>

@@ -49,7 +49,9 @@
           <Directory Id="LIBSFOLDER" Name="Libs" />
           <Directory Id="DEPSFOLDER" Name="Deps" />
           <Directory Id="PLUGINSFOLDER" Name="Plugins" />
-          <Directory Id="SETTINGSFOLDER" Name="Settings" />
+          <Directory Id="SETTINGSFOLDER" Name="Settings">
+            <Directory Id="VISUALTEMPLATESFOLDER" Name="VisualTemplates" />
+          </Directory>
           <Directory Id="CCOLSOURCEFILESFOLDER" Name="SourceFiles" />
         </Directory>
 			</Directory>

@@ -115,7 +115,6 @@
     <Compile Include="CodeGeneration\CCOLGeneratorGeneral.cs" />
     <Compile Include="Extensions\TLCGenModelExtensions.cs" />
     <Compile Include="ProjectGeneration\CCOLVisualProjectGenerator.cs" />
-    <Compile Include="ProjectGeneration\VisualProjectTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\CCOLGeneratorClassWithSettingsModel.cs" />
     <Compile Include="Settings\CCOLGeneratorCodeStringSettingModel.cs" />
@@ -187,6 +186,33 @@
     <Content Include="Settings\ccolgendefaults.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Readme.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2010.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2010_vissim.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2010_vissim_filters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2010_filters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2013.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2013_filters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2017.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Settings\VisualTemplates\Visual_2017_filters.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="SourceFilesToCopy\Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -375,6 +375,18 @@ namespace TLCGen.Generators.CCOL
             _Generator = new CCOLGenerator();
             _MyVM = new CCOLGeneratorViewModel(this, _Generator);
             _GeneratorView.DataContext = _MyVM;
+
+	        var filesDef = Directory.GetFiles(
+				Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\VisualTemplates"),
+				"*.xml", SearchOption.TopDirectoryOnly);
+
+	        foreach (var t in filesDef)
+	        {
+		        if (!t.ToLower().EndsWith("_filters.xml"))
+		        {
+					_MyVM.VisualProjects.Add(Path.GetFileNameWithoutExtension(t).Replace("_", " "));
+				}
+	        }
         }
 
         #endregion // Constructor

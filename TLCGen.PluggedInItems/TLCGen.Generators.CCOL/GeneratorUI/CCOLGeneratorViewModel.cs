@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,7 @@ namespace TLCGen.Generators.CCOL
         private CCOLCodeGeneratorPlugin _Plugin;
         private CCOLGenerator _CodeGenerator;
         private CCOLVisualProjectGenerator _ProjectGenerator;
-        private VisualProjectTypeEnum _VisualProjectType;
+        private string _SelectedVisualProject;
         private bool _VisualCBEnabled;
 
         #endregion // Fields
@@ -37,13 +38,15 @@ namespace TLCGen.Generators.CCOL
             get { return _CodeGenerator; }
         }
 
-        public VisualProjectTypeEnum VisualProjectType
+		public ObservableCollection<string> VisualProjects { get; }
+
+        public string SelectedVisualProject
         {
-            get { return _VisualProjectType; }
+            get { return _SelectedVisualProject; }
             set
             {
-                _VisualProjectType = value;
-                RaisePropertyChanged("VisualProjectType");
+                _SelectedVisualProject = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -53,7 +56,7 @@ namespace TLCGen.Generators.CCOL
             set
             {
                 _VisualCBEnabled = value;
-                RaisePropertyChanged("VisualCBEnabled");
+                RaisePropertyChanged();
             }
         }
 
@@ -117,19 +120,19 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateVisualProjectCommand_Executed(object prm)
         {
-            _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin, VisualProjectType);
+            _ProjectGenerator.GenerateVisualStudioProjectFiles(_Plugin, SelectedVisualProject.Replace(" ", "_"));
             Messenger.Default.Send(new ControllerProjectGeneratedMessage());
         }
 
         private bool GenerateVisualProjectCommand_CanExecute(object prm)
         {
-            bool b = _Plugin.Controller != null &&
+            bool b = _Plugin.Controller != null && 
                      !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath) &&
                      !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden) &&
                      !string.IsNullOrWhiteSpace(CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath) &&
                      !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
             VisualCBEnabled = b;
-            return b;
+            return b && !string.IsNullOrWhiteSpace(SelectedVisualProject);
         }
 
         #endregion // Command Functionality
@@ -149,7 +152,10 @@ namespace TLCGen.Generators.CCOL
             _Plugin = plugin;
             _CodeGenerator = generator;
             _ProjectGenerator = new CCOLVisualProjectGenerator();
-        }
+
+	        VisualProjects = new ObservableCollection<string>();
+
+		}
 
         #endregion // Constructor
     }
