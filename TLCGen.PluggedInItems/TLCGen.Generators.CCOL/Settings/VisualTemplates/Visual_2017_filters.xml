@@ -25,10 +25,10 @@ __IFPTP__</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{__GUIDSOURCEFILES__}</UniqueIdentifier>
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{__GUIDRESOURCEFILES__}</UniqueIdentifier>
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

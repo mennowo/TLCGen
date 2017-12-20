@@ -189,7 +189,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
-                    sb.AppendLine($"{ts}/* set {_mpf}eerealisatie voor gelijk- of voorstartende richtingen */");
+	                // return if no synch
+	                if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+		                return null;
+
+					sb.AppendLine($"{ts}/* set meerealisatie voor gelijk- of voorstartende richtingen */");
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)
                     {
@@ -204,6 +208,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
 				case CCOLCodeTypeEnum.OvCIncludes:
+					// return if no synch
+					if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+						return null;
+
 					sb.AppendLine("#include \"syncvar.h\"");
 					return sb.ToString();
 

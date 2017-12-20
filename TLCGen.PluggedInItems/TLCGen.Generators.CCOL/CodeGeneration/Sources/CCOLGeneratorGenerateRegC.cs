@@ -437,7 +437,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void init_application(void)");
             sb.AppendLine("{");
-            sb.AppendLine("#ifndef AUTOMAAT");
+            sb.AppendLine("#if !defined AUTOMAAT && !defined VISSIM");
             sb.AppendLine($"{ts}if (!SAPPLPROG)");
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");

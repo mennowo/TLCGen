@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using TLCGen.Messaging.Messages;
@@ -83,7 +84,22 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
             }
         }
-        [Category("Opties regeling")]
+
+
+	    public string VissimNaam
+	    {
+		    get => _Controller?.Data?.VissimNaam;
+		    set
+		    {
+			    if (Regex.IsMatch(value, @"^[0-9]*$"))
+			    {
+					_Controller.Data.VissimNaam = value;
+					RaisePropertyChanged<object>(nameof(VissimNaam), broadcast: true);
+			    }
+		    }
+	    }
+
+		[Category("Opties regeling")]
         [Description("Fasebewaking")]
         public int Fasebewaking
         {
