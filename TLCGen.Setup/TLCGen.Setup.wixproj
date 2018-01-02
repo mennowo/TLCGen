@@ -37,7 +37,7 @@
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" />
   <PropertyGroup>
-    <PostBuildEvent>signtool sign /f "C:\Programming\CodeSigning\MySPC.pfx" /d "TLCGen setup" /t http://timestamp.verisign.com/scripts/timstamp.dll /v $(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

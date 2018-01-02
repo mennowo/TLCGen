@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="1.1.0" 
+    Version="0.1.117" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
     
@@ -31,6 +31,7 @@
       <ComponentGroupRef Id="TLCGenPlugins" />
       <ComponentGroupRef Id="TLCGenSettings" />
       <ComponentGroupRef Id="TLCGenCCOLSources" />
+      <ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
       <ComponentRef Id="ProgramMenuDir" />
 		</Feature>
     
@@ -136,6 +137,21 @@
         <File Id='ccolgendefaults' Name='ccolgendefaults.xml' Source='$(var.ReleaseDir)/Settings/ccolgendefaults.xml' KeyPath='no' />
         <File Id='tlcgendefaultdefaults' Name='tlcgendefaultdefaults.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaultdefaults.xml' KeyPath='no' />
         <File Id='tlcgendefaulttemplates' Name='tlcgendefaulttemplates.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaulttemplates.xml' KeyPath='no' />
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="TLCGenCCOLVisualTemplates" Directory="VISUALTEMPLATESFOLDER">
+      <Component Id='AllCCOLVisualTemplates' Guid='3ED972D5-FB4B-43FE-8486-EDE282B3B534'>
+        <File Id="VisualTemplatesReadme" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Readme.txt" />
+        <File Id="VisualTemplate2010" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2010.xml" />
+        <File Id="VisualTemplate2010filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2010_filters.xml" />
+        <File Id="VisualTemplate2010vissim" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2010_vissim.xml" />
+        <File Id="VisualTemplate2010vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2010_vissim_filters.xml" />
+        <File Id="VisualTemplate2013" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2013.xml" />
+        <File Id="VisualTemplate2013filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2013_filters.xml" />
+        <File Id="VisualTemplate2017" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017.xml" />
+        <File Id="VisualTemplate2017filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_filters.xml" />
+        <File Id="VisualTemplate2017vissim" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim.xml" />
+        <File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
