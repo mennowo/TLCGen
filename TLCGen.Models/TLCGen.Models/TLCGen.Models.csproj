@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Attributes\IOElementAttribute.cs" />
     <Compile Include="Attributes\ModelNameAttribute.cs" />
+    <Compile Include="Attributes\RefersToAttribute.cs" />
     <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
@@ -51,6 +52,7 @@
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarDataModel.cs" />
+    <Compile Include="Models\Halfstar\HalfstarPeriodeDataModel.cs" />
     <Compile Include="Models\Halfstar\SignaalPlanFaseModel.cs" />
     <Compile Include="Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\InterSignaalGroep\LateReleaseModel.cs" />

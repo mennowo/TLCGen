@@ -38,6 +38,7 @@ namespace TLCGen.ViewModels
             get { return _Periode.Naam; }
             set
             {
+	            var oldName = _Periode.Naam;
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
@@ -45,9 +46,10 @@ namespace TLCGen.ViewModels
                     if (message.Handled && message.IsUnique)
                     {
                         _Periode.Naam = value;
+						MessengerInstance.Send(new NameChangedMessage(oldName, value));
                     }
                 }
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 

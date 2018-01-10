@@ -41,6 +41,9 @@
 		OvCBottom,
 
 		// TAB
-	    TabCControlParameters
+	    TabCControlParameters,
+
+		// HST
+
 	};
 }

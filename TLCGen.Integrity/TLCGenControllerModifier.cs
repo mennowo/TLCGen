@@ -14,8 +14,10 @@ namespace TLCGen.Integrity
     {
         ControllerModel Controller { get; set; }
 
+		// TODO: remove upper two below and make into one generic!
         void RemoveSignalGroupFromController(string remsg);
         void RemoveDetectorFromController(string remd);
+        void RemoveModelItemFromController(string remitem);
         void CorrectModel_AlteredConflicts();
         void CorrectModel_AlteredHDIngrepen();
     }
@@ -73,7 +75,12 @@ namespace TLCGen.Integrity
             RemoveDetectorFromController(_Controller, remd);
         }
 
-        public void CorrectModel_AlteredConflicts()
+	    public void RemoveModelItemFromController(string uniqueModelName)
+	    {
+		    RemoveDetectorFromController(_Controller, uniqueModelName);
+	    }
+
+		public void CorrectModel_AlteredConflicts()
         {
             CorrectModelWithAlteredConflicts(_Controller);
         }
@@ -224,7 +231,71 @@ namespace TLCGen.Integrity
             }
         }
 
-        private void CorrectModelWithAlteredConflicts(object obj)
+		private void RemoveFromController<T1, T2>(object obj, string remd)
+		{
+			if (obj == null) return;
+			Type objType = obj.GetType();
+			PropertyInfo[] properties = objType.GetProperties();
+			foreach (PropertyInfo property in properties)
+			{
+				Type propType = property.PropertyType;
+				if (!(propType == typeof(string)) && !propType.IsValueType)
+				{
+					object propValue = property.GetValue(obj);
+					var elems = propValue as IList;
+					if (elems != null)
+					{
+						var t = elems.GetType();
+						if (t.IsGenericType)
+						{
+							var _t = t.GetGenericArguments()[0];
+							if (_t != typeof(List<>))
+							{
+								var _attr = _t.GetCustomAttribute<RefersToAttribute>();
+								if (_attr != null)
+								{
+									var listType = typeof(List<>).MakeGenericType(_t);
+									var remitems = Activator.CreateInstance(listType);
+									foreach (var item in elems)
+									{
+										if (_attr.ReferProperty1 != null)
+										{
+											string val1 = (string)_t.GetProperty(_attr.ReferProperty1).GetValue(item);
+											if (val1 == remd)
+											{
+												t.GetMethod("Add").Invoke(remitems, new[] { item });
+											}
+											else if (_attr.ReferProperty2 != null)
+											{
+												string val2 = (string)_t.GetProperty(_attr.ReferProperty2).GetValue(item);
+												if (val2 == remd)
+												{
+													t.GetMethod("Add").Invoke(remitems, new[] { item });
+												}
+											}
+										}
+									}
+									foreach (var item in (IList)remitems)
+									{
+										elems.Remove(item);
+									}
+								}
+							}
+						}
+						foreach (var item in elems)
+						{
+							RemoveDetectorFromController(item, remd);
+						}
+					}
+					else
+					{
+						RemoveDetectorFromController(propValue, remd);
+					}
+				}
+			}
+		}
+
+		private void CorrectModelWithAlteredConflicts(object obj)
         {
             var c = obj as ControllerModel;
             if (c != null)

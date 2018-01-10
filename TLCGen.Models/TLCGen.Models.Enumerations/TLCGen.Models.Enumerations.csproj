@@ -50,6 +50,7 @@
     <Compile Include="DetectorTypeEnum.cs" />
     <Compile Include="DetectorVerlengenTypeEnum.cs" />
     <Compile Include="FaseTypeEnum.cs" />
+    <Compile Include="HalfstarTypeEnum.cs" />
     <Compile Include="KWCTypeEnum.cs" />
     <Compile Include="MeeaanvraagTypeEnum.cs" />
     <Compile Include="MeeVerlengenTypeEnum.cs" />

@@ -1212,6 +1212,218 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="HalfstarCodeGenerator">
+      <CodePieceData>
+        <ClassName>HalfstarCodeGenerator</ClassName>
+        <Description>Halfstar</Description>
+        <Settings>
+          <Setting>
+            <Default>mlact</Default>
+            <Setting>mlact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken actief zijn ML-bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>plact</Default>
+            <Setting>plact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken actief zijn PL-bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>kpact</Default>
+            <Setting>kpact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken koppeling actief</Description>
+          </Setting>
+          <Setting>
+            <Default>mlpl</Default>
+            <Setting>mlpl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken ML tijdens VA of PL tijdens halfstar bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>txtimer</Default>
+            <Setting>txtimer</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken TX_timer tijdens halfstar bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>master</Default>
+            <Setting>master</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken master bepaald aansturing</Description>
+          </Setting>
+          <Setting>
+            <Default>slave</Default>
+            <Setting>slave</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken slave bepaald aansturing</Description>
+          </Setting>
+          <Setting>
+            <Default>klok</Default>
+            <Setting>klok</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken klok programma door klok bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>hand</Default>
+            <Setting>hand</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken aansturing/programma met de hand bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>inleven</Default>
+            <Setting>inleven</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken inkomend levenssignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>insyncok</Default>
+            <Setting>insyncok</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken draait synchroon met</Description>
+          </Setting>
+          <Setting>
+            <Default>intxsok</Default>
+            <Setting>intxsok</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken txs ok naar</Description>
+          </Setting>
+          <Setting>
+            <Default>uitkpuls</Default>
+            <Setting>uitkpuls</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken uitsturing koppelpuls</Description>
+          </Setting>
+          <Setting>
+            <Default>uitpervar</Default>
+            <Setting>uitpervar</Setting>
+            <Type>Uitgang</Type>
+            <Dpescription>Verklikken periode VA regelen</Dpescription>
+          </Setting>
+          <Setting>
+            <Default>uitperarh</Default>
+            <Setting>uitperarh</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken periode alternatieven voor hoofdrichtingen</Description>
+          </Setting>
+          <Setting>
+            <Default>uitpl</Default>
+            <Setting>uitpl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken uitsturing actief plan naar</Description>
+          </Setting>
+          <Setting>
+            <Default>klok</Default>
+            <Setting>klok</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Geheugenelement halfstar/va obv klokprioden</Description>
+          </Setting>
+          <Setting>
+            <Default>hand</Default>
+            <Setting>hand</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Geheugenelement halstar/va handmatig bepaal</Description>
+          </Setting>
+          <Setting>
+            <Default>kpact</Default>
+            <Setting>kpact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement koppeling actief</Description>
+          </Setting>
+          <Setting>
+            <Default>plact</Default>
+            <Setting>plact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement halfstar actief</Description>
+          </Setting>
+          <Setting>
+            <Default>mlact</Default>
+            <Setting>mlact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement va regelen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>var</Default>
+            <Setting>var</Setting>
+            <Type>Schakelaar</Type>
+            <Description>VA regelen aan/uit</Description>
+          </Setting>
+          <Setting>
+            <Default>varper</Default>
+            <Setting>varper</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar va regelen per periode</Description>
+          </Setting>
+          <Setting>
+            <Default>varper</Default>
+            <Setting>varper</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement va regelen obv schakelaar per periode</Description>
+          </Setting>
+          <Setting>
+            <Default>arhper</Default>
+            <Setting>arhper</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar alternatieven voor hoofdrichtignen per periode</Description>
+          </Setting>
+          <Setting>
+            <Default>arhper</Default>
+            <Setting>arhper</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement alternatieven voor hoofdrichtignen obv schakelaar per periode</Description>
+          </Setting>
+          <Setting>
+            <Default>varstreng</Default>
+            <Setting>varstreng</Setting>
+            <Type>Schakelaar</Type>
+            <Description>VA regelen aan/uit voor gehele streng</Description>
+          </Setting>
+          <Setting>
+            <Default>vaml</Default>
+            <Setting>vaml</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Indien VA regelen, ML-bedrijf of versneld PL-bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>plhulpdienst</Default>
+            <Setting>plhulpdienst</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement hulpdienstingreep tbv (tijdelijk) lokaal VA regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>ovpriople</Default>
+            <Setting>ovpriople</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Wel/niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>plxper</Default>
+            <Setting>plxper</Setting>
+            <Type>Parameter</Type>
+            <Description>Instellen plan per periode</Description>
+          </Setting>
+          <Setting>
+            <Default>in</Default>
+            <Setting>in</Setting>
+            <Type>Timer</Type>
+            <Description>Timer inrijden harde koppelingen</Description>
+          </Setting>
+          <Setting>
+            <Default>xpl</Default>
+            <Setting>xpl</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement tegenhouden richtingen tbv gelijkstart</Description>
+          </Setting>
+          <Setting>
+            <Default>inst</Default>
+            <Setting>inst</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar eenmalig instellen signaalplannen na wijziging</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

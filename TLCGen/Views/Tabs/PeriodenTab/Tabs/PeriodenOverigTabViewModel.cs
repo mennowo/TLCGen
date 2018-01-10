@@ -10,7 +10,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -169,14 +171,24 @@ namespace TLCGen.ViewModels
         void AddNewPeriodeCommand_Executed(object prm)
         {
             PeriodeModel mm = new PeriodeModel();
-            mm.Type = Models.Enumerations.PeriodeTypeEnum.Overig;
-            mm.DagCode = Models.Enumerations.PeriodeDagCodeEnum.AlleDagen;
-            mm.Naam = "Periode" + (Periodes.Count + 1).ToString();
-            PeriodeViewModel mvm = new PeriodeViewModel(mm);
+            mm.Type = PeriodeTypeEnum.Overig;
+            mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
+			var inewname = Periodes.Count;
+	        IsElementIdentifierUniqueRequest message;
+	        do
+	        {
+		        inewname++;
+		        mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
+		        message = new IsElementIdentifierUniqueRequest(mm.Naam, ElementIdentifierType.Naam);
+		        Messenger.Default.Send(message);
+	        }
+	        while (!message.IsUnique);
 
-            if(Periodes.Where(x => x.Type != Models.Enumerations.PeriodeTypeEnum.Groentijden).Any())
+			PeriodeViewModel mvm = new PeriodeViewModel(mm);
+
+            if(Periodes.Any(x => x.Type != PeriodeTypeEnum.Groentijden))
             {
-                int index = Periodes.Where(x => x.Type != Models.Enumerations.PeriodeTypeEnum.Groentijden).Count();
+                int index = Periodes.Count(x => x.Type != PeriodeTypeEnum.Groentijden);
                 Periodes.Insert(index, mvm);
             }
             else
@@ -185,17 +197,21 @@ namespace TLCGen.ViewModels
             }
 
             Periodes.RebuildList();
-        }
+	        Messenger.Default.Send(new PeriodenChangedMessage());
+		}
 
-        bool AddNewPeriodeCommand_CanExecute(object prm)
+		bool AddNewPeriodeCommand_CanExecute(object prm)
         {
             return Periodes != null;
         }
 
         void RemovePeriodeCommand_Executed(object prm)
         {
-            Periodes.Remove(SelectedPeriode);
-        }
+			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam);
+	        Periodes.Remove(SelectedPeriode);
+	        SelectedPeriode = null;
+	        Messenger.Default.Send(new PeriodenChangedMessage());
+		}
 
         bool ChangePeriodeCommand_CanExecute(object prm)
         {

@@ -64,7 +64,7 @@ namespace TLCGen.Helpers
         {
             this.CollectionChanged -= Items_CollectionChanged;
             Clear();
-            foreach (T2 im in _ModelItems)
+            foreach (var im in _ModelItems)
             {
                 object[] args = { im };
                 this.Add((T1)Activator.CreateInstance(typeof(T1), args));

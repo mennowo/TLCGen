@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -9,6 +10,8 @@ namespace TLCGen.Models
 		#region Properties
 
 		public bool IsHalfstar { get; set; }
+		public HalfstarTypeEnum Type { get; set; }
+		public List<HalfstarPeriodeDataModel> HalfstarPeriodenData { get; set; }
 		public List<SignaalPlanModel> SignaalPlannen { get; set; }
 		
 		#endregion // Properties
@@ -18,6 +21,7 @@ namespace TLCGen.Models
 		public HalfstarDataModel()
 		{
 			SignaalPlannen = new List<SignaalPlanModel>();
+			HalfstarPeriodenData = new List<HalfstarPeriodeDataModel>();
 		}
 
 		#endregion // Constructor

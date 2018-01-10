@@ -10,6 +10,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
+	[RefersTo("Naam")]
     public class PeriodeModel
     {
         #region Properties

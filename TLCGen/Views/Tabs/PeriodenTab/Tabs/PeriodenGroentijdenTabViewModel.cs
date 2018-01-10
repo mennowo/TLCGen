@@ -13,7 +13,9 @@ using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 
@@ -154,8 +156,8 @@ namespace TLCGen.ViewModels
 
         private void MovePeriodeUpCommand_Executed(object obj)
         {
-            int index = -1;
-            foreach (PeriodeViewModel mvm in Periodes)
+            var index = -1;
+            foreach (var mvm in Periodes)
             {
                 ++index;
                 if (mvm == SelectedPeriode)
@@ -165,7 +167,7 @@ namespace TLCGen.ViewModels
             }
             if (index >= 1 && Periodes[index - 1].Type == Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
-                PeriodeViewModel mvm = SelectedPeriode;
+                var mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index - 1, mvm);
@@ -175,12 +177,11 @@ namespace TLCGen.ViewModels
             }
         }
 
-
         private void MovePeriodeDownCommand_Executed(object obj)
         {
-            int index = -1;
+            var index = -1;
             
-            foreach (PeriodeViewModel mvm in Periodes)
+            foreach (var mvm in Periodes)
             {
                 ++index;
                 if (mvm == SelectedPeriode)
@@ -190,7 +191,7 @@ namespace TLCGen.ViewModels
             }
             if (index >= 0 && (index <= (Periodes.Count - 2)) && Periodes[index + 1].Type == Models.Enumerations.PeriodeTypeEnum.Groentijden)
             {
-                PeriodeViewModel mvm = SelectedPeriode;
+                var mvm = SelectedPeriode;
                 SelectedPeriode = null;
                 Periodes.Remove(mvm);
                 Periodes.Insert(index + 1, mvm);
@@ -203,34 +204,47 @@ namespace TLCGen.ViewModels
 
         void AddNewPeriodeCommand_Executed(object prm)
         {
-            PeriodeModel mm = new PeriodeModel();
-            mm.Type = Models.Enumerations.PeriodeTypeEnum.Groentijden;
-            mm.DagCode = Models.Enumerations.PeriodeDagCodeEnum.AlleDagen;
-            mm.Naam = "MGPeriode" + (Periodes.Count + 1).ToString();
-            PeriodeViewModel mvm = new PeriodeViewModel(mm);
+            var mm = new PeriodeModel();
+            mm.Type = PeriodeTypeEnum.Groentijden;
+            mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
+	        var inewname = Periodes.Count;
+	        IsElementIdentifierUniqueRequest message;
+	        do
+	        {
+		        inewname++;
+				mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
+		        message = new IsElementIdentifierUniqueRequest(mm.Naam, ElementIdentifierType.Naam);
+		        Messenger.Default.Send(message);
+	        }
+	        while (!message.IsUnique);
+			var mvm = new PeriodeViewModel(mm);
 
-            if (Periodes.Where(x => x.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden).Any())
+            if (Periodes.Any(x => x.Type == PeriodeTypeEnum.Groentijden))
             {
-                int index = Periodes.Where(x => x.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden).Count();
+                var index = Periodes.Count(x => x.Type == PeriodeTypeEnum.Groentijden);
                 Periodes.Insert(index, mvm);
             }
             else
             {
                 Periodes.Insert(0, mvm);
             }
-        }
+	        Messenger.Default.Send(new PeriodenChangedMessage());
+		}
 
-        bool AddNewPeriodeCommand_CanExecute(object prm)
+		bool AddNewPeriodeCommand_CanExecute(object prm)
         {
             return Periodes != null && GroentijdenSets?.Count > 0;
         }
 
         void RemovePeriodeCommand_Executed(object prm)
         {
-            Periodes.Remove(SelectedPeriode);
-        }
+			TLCGenControllerModifier.Default.RemoveModelItemFromController(SelectedPeriode.Naam);
+	        Periodes.Remove(SelectedPeriode);
+	        SelectedPeriode = null;
+	        Messenger.Default.Send(new PeriodenChangedMessage());
+		}
 
-        bool ChangePeriodeCommand_CanExecute(object prm)
+		bool ChangePeriodeCommand_CanExecute(object prm)
         {
             return SelectedPeriode != null;
         }
@@ -257,7 +271,7 @@ namespace TLCGen.ViewModels
         {
             var v = _Controller.PeriodenData.DefaultPeriodeGroentijdenSet;
             GroentijdenSets.Clear();
-            foreach (GroentijdenSetModel gsm in _Controller.GroentijdenSets)
+            foreach (var gsm in _Controller.GroentijdenSets)
             {
                 GroentijdenSets.Add(gsm.Naam);
             }
@@ -283,7 +297,7 @@ namespace TLCGen.ViewModels
                 {
                     Periodes = new ObservableCollectionAroundList<PeriodeViewModel, PeriodeModel>(base.Controller.PeriodenData.Perioden);
                     Periodes.CollectionChanged += Periodes_CollectionChanged;
-                    ICollectionView view = CollectionViewSource.GetDefaultView(Periodes);
+                    var view = CollectionViewSource.GetDefaultView(Periodes);
                     view.Filter = FilterPerioden;
                 }
                 else

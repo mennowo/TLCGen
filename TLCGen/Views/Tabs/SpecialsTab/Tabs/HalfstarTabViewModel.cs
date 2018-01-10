@@ -12,6 +12,7 @@ using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 using TLCGen.ViewModels;
+using TLCGen.Views.Tabs.SpecialsTab.DataTypes;
 
 namespace TLCGen.ViewModels
 {
@@ -27,6 +28,7 @@ namespace TLCGen.ViewModels
 		public HalfstarDataModel HalfstarData;
 
 		public ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel> SignaalPlannen { get; private set; }
+		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
 
 		public SignaalPlanViewModel SelectedSignaalPlan
 		{
@@ -59,6 +61,7 @@ namespace TLCGen.ViewModels
 								}));
 							}
 						}
+
 						var rems = new List<SignaalPlanFaseViewModel>();
 						foreach (var spfc in sp.Fasen)
 						{
@@ -73,7 +76,20 @@ namespace TLCGen.ViewModels
 							sp.Fasen.Remove(fc);
 						}
 					}
+
+					UpdatePeriodenData();
 				}
+
+				RaisePropertyChanged();
+			}
+		}
+
+		public HalfstarTypeEnum Type
+		{
+			get => HalfstarData.Type;
+			set
+			{
+				HalfstarData.Type = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -121,7 +137,7 @@ namespace TLCGen.ViewModels
 
 		private void AddSignaalPlanCommand_Executed(object obj)
 		{
-			var spl = new SignaalPlanModel()
+			var spl = new SignaalPlanModel
 			{
 				Naam = "PL" + (SignaalPlannen.Count + 1)
 			};
@@ -169,6 +185,34 @@ namespace TLCGen.ViewModels
 
 		#region Private methods
 
+		private void UpdatePeriodenData()
+		{
+			foreach (var per in Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+			{
+				if (HalfstarPeriodenData.All(x => x.Periode != per.Naam))
+				{
+					HalfstarPeriodenData.Add(new HalfstarPeriodeDataViewModel(new HalfstarPeriodeDataModel
+					{
+						Periode = per.Naam
+					}));
+				}
+			}
+
+			var rems2 = new List<HalfstarPeriodeDataViewModel>();
+			foreach (var hstper in HalfstarPeriodenData)
+			{
+				if (Controller.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden).All(x => x.Naam != hstper.Periode))
+				{
+					rems2.Add(hstper);
+				}
+			}
+
+			foreach (var fc in rems2)
+			{
+				HalfstarPeriodenData.Remove(fc);
+			}
+		}
+
 		#endregion // Private methods
 
 		#region Public methods
@@ -194,6 +238,7 @@ namespace TLCGen.ViewModels
 				{
 					HalfstarData = Controller.HalfstarData;
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
+					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
 				}
 				else
 				{
@@ -258,6 +303,11 @@ namespace TLCGen.ViewModels
 			}
 		}
 
+		private void OnPeriodenChanged(PeriodenChangedMessage obj)
+		{
+			UpdatePeriodenData();
+		}
+
 		#endregion // TLCGen Events
 
 		#region Constructor
@@ -267,6 +317,7 @@ namespace TLCGen.ViewModels
 			Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
 			Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
 			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
+			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
 		}
 
 		#endregion // Constructor

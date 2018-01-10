@@ -139,6 +139,7 @@ namespace TLCGen.ViewModels
                         while (!message.IsUnique);
                     }
                 }
+	            break;
             }
             fcm.Naam = newname;
             fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
