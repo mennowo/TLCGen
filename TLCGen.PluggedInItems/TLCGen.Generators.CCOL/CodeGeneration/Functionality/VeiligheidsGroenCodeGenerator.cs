@@ -97,7 +97,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     else
                                     {
-                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}, {_tpf}{_tvga}{fcm.Naam}, {_tpf}{_tvgb}{fcm.Naam}, (bool)(SCH[{_schpf}{_schvg}{dm.Naam}] && TDH[{_dpf}{dm.Naam}]));");
+                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{fcm.Naam}, {_tpf}{_tvgb}{fcm.Naam}, (bool)(SCH[{_schpf}{_schvg}{dm.Naam}] && TDH[{_dpf}{dm.Naam}]));");
                                     }
                                 }
                             }
