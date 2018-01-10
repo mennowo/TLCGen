@@ -103,6 +103,9 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\SignaalPlanView.xaml.cs">
+      <DependentUpon>SignaalPlanView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\DetectorenTab\DetectorenTab.xaml.cs">
       <DependentUpon>DetectorenTab.xaml</DependentUpon>
     </Compile>
@@ -191,6 +194,10 @@
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverHiaatDetectorViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverInstellingenViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingenViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\SignaalPlanViewModel.cs">
+      <DependentUpon>SignaalPlanView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\SignaaPlanFaseViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenDetectorViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\VAOntruimenFaseViewModel.cs">
       <DependentUpon>VAOntruimenFaseView.xaml</DependentUpon>
@@ -203,6 +210,12 @@
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\FileTabViewModel.cs">
       <DependentUpon>FileTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\HalfstarTabView.xaml.cs">
+      <DependentUpon>HalfstarTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\Tabs\HalfstarTabViewModel.cs">
+      <DependentUpon>HalfstarTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\Tabs\PTPKoppelingenTabViewModel.cs">
       <DependentUpon>PTPKoppelingenTabView.xaml</DependentUpon>
@@ -472,6 +485,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\SpecialsTab\DataTypes\SignaalPlanView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\ModulesTab\Tabs\ModulesAlternatievenCVInstellingenTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -525,6 +542,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\SpecialsTab\DataTypes\RoBuGroverSignaalGroepInstellingDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\SpecialsTab\Tabs\HalfstarTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

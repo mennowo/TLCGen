@@ -50,6 +50,9 @@
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
+    <Compile Include="Models\Halfstar\HalfstarDataModel.cs" />
+    <Compile Include="Models\Halfstar\SignaalPlanFaseModel.cs" />
+    <Compile Include="Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\InterSignaalGroep\LateReleaseModel.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerDetectorModel.cs" />

@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="TLCGen.Views.HalfstarViewTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Algemeen">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox Content="Halfstarre regeling" Margin="5" IsChecked="{Binding Path=IsHalfstar,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Signaalplannen" IsEnabled="{Binding Path=IsHalfstar}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding Path=SignaalPlannen}" 
+                             SelectedItem="{Binding Path=SelectedSignaalPlan}" 
+                             DisplayMemberPath="Naam"
+                             Margin="2"/>
+                    <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" Grid.RowSpan="2" />
+                    <StackPanel Orientation="Vertical" Grid.Row="1">
+                        <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddSignaalPlanCommand}" />
+                        <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveSignaalPlanCommand}" />
+                    </StackPanel>
+                    <local:SignaalPlanView DataContext="{Binding Path=SelectedSignaalPlan}" Grid.Column="2" Grid.RowSpan="2" />
+                </Grid>
+            </TabItem>
+        </TabControl>   
+    </Grid>
+</UserControl>

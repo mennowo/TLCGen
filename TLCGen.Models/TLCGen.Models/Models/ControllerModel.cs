@@ -52,9 +52,11 @@ namespace TLCGen.Models
 
         public RoBuGroverModel RoBuGrover { get; set; }
 
-        public SignalenDataModel Signalen { get; set; } 
+        public SignalenDataModel Signalen { get; set; }
+		
+		public HalfstarDataModel HalfstarData { get; set; }
 
-        public CustomDataModel CustomData { get; set; }
+		public CustomDataModel CustomData { get; set; }
 
         #endregion // Properties
 
@@ -78,6 +80,7 @@ namespace TLCGen.Models
             PTPData = new PTPDataModel();
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();
+			HalfstarData = new HalfstarDataModel();
         }
 
         #endregion // Constructor
