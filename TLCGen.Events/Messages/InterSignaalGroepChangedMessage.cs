@@ -1,29 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class InterSignaalGroepChangedMessage
+    public class InterSignaalGroepChangedMessage : MessageBase
     {
-        public string FaseVan { get; private set; }
-        public string FaseNaar { get; private set; }
+        public string FaseVan { get; }
+        public string FaseNaar { get; }
 
-        public bool IsCoupled { get; private set; }
+        public bool IsCoupled { get; }
 
-        public ConflictModel Conflict { get; private set; }
-        public NaloopModel Naloop { get; private set; }
-        public GelijkstartModel Gelijkstart { get; private set; }
-        public VoorstartModel Voorstart { get; private set; }
-        public MeeaanvraagModel Meeaanvraag { get; private set; }
-        public LateReleaseModel LateRelease { get; private set; }
+        public ConflictModel Conflict { get; }
+        public NaloopModel Naloop { get; }
+        public GelijkstartModel Gelijkstart { get; }
+        public VoorstartModel Voorstart { get; }
+        public MeeaanvraagModel Meeaanvraag { get; }
+        public LateReleaseModel LateRelease { get; }
 
         public InterSignaalGroepChangedMessage(string fasevan, string fasenaar, object synchronisatieobject, bool iscoupled = false)
         {
-            Type t = synchronisatieobject.GetType();
+            var t = synchronisatieobject.GetType();
             if (t == typeof(ConflictModel)) Conflict = (ConflictModel)synchronisatieobject;
             if (t == typeof(NaloopModel)) Naloop = (NaloopModel)synchronisatieobject;
             if (t == typeof(GelijkstartModel)) Gelijkstart = (GelijkstartModel)synchronisatieobject;

@@ -359,7 +359,7 @@ namespace TLCGen.ViewModels
             foreach (var fc in items)
             {
                 if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fc.Naam) &&
-                     (fc.Detectoren.Count == 0 || !fc.Detectoren.Where(x => TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, x.Naam) == false).Any())))
+                     (fc.Detectoren.Count == 0 || fc.Detectoren.All(x => TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, x.Naam) != false))))
                 {
                     MessageBox.Show("Error bij toevoegen van fase met naam " + fc.Naam + ".\nFase en/of bijbehorende detectie is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class SelectedConflictGroepChangedMessage
+    public class SelectedConflictGroepChangedMessage : MessageBase
     {
-        public RoBuGroverConflictGroepModel OldGroep { get; private set; }
-        public RoBuGroverConflictGroepModel NewGroep { get; private set; }
-        public bool NewGroupCheckConflicts { get; private set; }
+        public RoBuGroverConflictGroepModel OldGroep { get; }
+        public RoBuGroverConflictGroepModel NewGroep { get; }
+        public bool NewGroupCheckConflicts { get; }
 
         public SelectedConflictGroepChangedMessage(RoBuGroverConflictGroepModel newgroep, RoBuGroverConflictGroepModel oldgroep, bool newgroupcheckconflicts)
         {

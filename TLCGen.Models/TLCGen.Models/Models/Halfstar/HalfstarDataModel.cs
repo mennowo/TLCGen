@@ -11,8 +11,11 @@ namespace TLCGen.Models
 
 		public bool IsHalfstar { get; set; }
 		public HalfstarTypeEnum Type { get; set; }
+		public string DefaultSignaalplan { get; set; }
+		public bool DefaultVARegelen { get; set; }
 		public List<HalfstarPeriodeDataModel> HalfstarPeriodenData { get; set; }
 		public List<SignaalPlanModel> SignaalPlannen { get; set; }
+		public List<HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; set; }
 		
 		#endregion // Properties
 
@@ -22,6 +25,7 @@ namespace TLCGen.Models
 		{
 			SignaalPlannen = new List<SignaalPlanModel>();
 			HalfstarPeriodenData = new List<HalfstarPeriodeDataModel>();
+			GekoppeldeKruisingen = new List<HalfstarGekoppeldeKruisingModel>();
 		}
 
 		#endregion // Constructor

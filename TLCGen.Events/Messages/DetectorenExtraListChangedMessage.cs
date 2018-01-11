@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class DetectorenExtraListChangedMessage
+	public class DetectorenExtraListChangedMessage : MessageBase
     {
         public List<DetectorModel> DetectorenList { get; private set; }
 

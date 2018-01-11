@@ -9,6 +9,8 @@ namespace TLCGen.Models
 		#region Properties
 
 		public string Periode { get; set; }
+		public string Signaalplan { get; set; }
+		public bool VARegelen { get; set; }
 
 		#endregion // Properties
 	}

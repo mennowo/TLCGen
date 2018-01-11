@@ -4,32 +4,120 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" Name="root"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:HalfstarTabViewModel}">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="Algemeen">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <CheckBox Content="Halfstarre regeling" 
                               Grid.ColumnSpan="2"
                               Margin="5" IsChecked="{Binding Path=IsHalfstar,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
-                    <Label Content="Type regeling" Grid.Row="1" />
-                    <ComboBox 
-                        Grid.Column="1" Grid.Row="1"
-                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarTypeEnum}}}" Margin="2"
-                        SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}"/>
-                    <DataGrid ItemsSource="{Binding Path=HalfstarPeriodenData}" Grid.Row="2" Grid.ColumnSpan="2"
+                    <Grid Grid.Row="1" IsEnabled="{Binding Path=IsHalfstar}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Type regeling" Grid.Row="0" />
+                        <ComboBox 
+                            Grid.Column="1" Grid.Row="0"
+                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarTypeEnum}}}" Margin="2"
+                            SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Gekoppelde regelaars" Grid.Row="1" Grid.ColumnSpan="2" />
+                        <ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="2"
+                                 HorizontalContentAlignment="Stretch"
+                                 ItemsSource="{Binding GekoppeldeKruisingen}" SelectedItem="{Binding SelectedHalfstarGekoppeldeKruising}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="Naam kruising" />
+                                        <Label Grid.Row="1" Grid.Column="0" Content="Type" />
+                                        <Label Grid.Row="2" Grid.Column="0" Content="Koppelwijze" />
+                                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding KruisingNaam}" Margin="2" />
+                                        <ComboBox 
+                                            Grid.Column="1" Grid.Row="1" 
+                                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarGekoppeldTypeEnum}}}" Margin="2"
+                                            SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <ComboBox 
+                                            Grid.Column="1" Grid.Row="2" 
+                                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarGekoppeldWijzeEnum}}}" Margin="2"
+                                            SelectedItem="{Binding Path=KoppelWijze,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                                  Header="PTP opties" Visibility="{Binding ShowPTPOptions, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel>
+                                                <Label Content="Te gebruiken PTP koppeling" />
+                                                <ComboBox 
+                                                    ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,ElementName=root}"
+                                                    SelectedItem="{Binding Path=PTPKruising}"
+                                                    />
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                                                  Header="Koppelsignalen opties" Visibility="{Binding ShowKoppelsignalenOpties, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <StackPanel>
+                                                <Label Content="Dit wordt nog niet ondersteund" FontWeight="Bold" />
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <Separator Grid.Row="4" Grid.ColumnSpan="2" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Kruising toevoegen" Command="{Binding AddGekoppeldeKruisingCommand}" Margin="2" />
+                            <Button Content="Kruising verwijderen" Command="{Binding RemoveGekoppeldeKruisingCommand}" Margin="2" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Perioden" IsEnabled="{Binding Path=IsHalfstar}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label Content="{Binding DefaultSignaalplanText}" />
+                    <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding DefaultVARegelenText}"
+                              IsChecked="{Binding DefaultVARegelen}" Margin="5" />
+                    <ComboBox
+                        Grid.Row="0" Grid.Column="1" Margin="2" ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
+                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                        SelectedItem="{Binding Path=DefaultSignaalplan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+
+                    <DataGrid ItemsSource="{Binding Path=HalfstarPeriodenData}" 
+                              Grid.Row="2" Grid.ColumnSpan="2" AutoGenerateColumns="False"
                               Margin="2" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.RowHeaderTemplate>
                             <DataTemplate>
@@ -38,6 +126,24 @@
                                       Path=Item.Periode}"/>
                             </DataTemplate>
                         </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Signaalplan" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Signaalplan}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedItem="{Binding Path=Signaalplan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridCheckBoxColumn Header="VA regelen" Binding="{Binding VARegelen}" />
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
             </TabItem>

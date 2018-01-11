@@ -66,7 +66,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
-                RaisePropertyChanged<object>("DefaultPeriodeGroentijdenSet", null, null, true);
+                RaisePropertyChanged<object>(nameof(DefaultPeriodeGroentijdenSet), null, null, true);
             }
         }
 
@@ -75,8 +75,15 @@ namespace TLCGen.ViewModels
             get { return _Controller.PeriodenData.DefaultPeriodeNaam; }
             set
             {
-                _Controller.PeriodenData.DefaultPeriodeNaam = value;
-                RaisePropertyChanged<object>("DefaultPeriodeNaam", null, null, true);
+	            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
+		        Messenger.Default.Send(message);
+	            if (message.IsUnique)
+	            {
+		            var oldName = _Controller.PeriodenData.DefaultPeriodeNaam;
+					_Controller.PeriodenData.DefaultPeriodeNaam = value;
+		            MessengerInstance.Send(new NameChangedMessage(oldName, value));
+	            }
+                RaisePropertyChanged<object>(nameof(DefaultPeriodeNaam), null, null, true);
             }
         }
 
@@ -343,7 +350,7 @@ namespace TLCGen.ViewModels
                     MessageBox.Show("Error bij toevoegen van periode met naam " + per.Naam + ".\nNaam van de periode is niet uniek in de regeling.", "Error bij toepassen template");
                     return;
                 }
-                if(!_Controller.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet).Any())
+                if(_Controller.GroentijdenSets.All(x => x.Naam != per.GroentijdenSet))
                 {
                     MessageBox.Show("Error bij toevoegen van periode verwijzend naar groentijdenset " + per.GroentijdenSet + ".\nDeze groentijdenset ontbreekt in de regeling.", "Error bij toepassen template");
                     return;
@@ -353,6 +360,7 @@ namespace TLCGen.ViewModels
             {
                 Periodes.Add(new PeriodeViewModel(per));
             }
+	        Messenger.Default.Send(new PeriodenChangedMessage());
         }
 
         #endregion // IAllowTemplates

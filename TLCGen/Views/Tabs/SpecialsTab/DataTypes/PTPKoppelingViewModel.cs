@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -28,8 +31,15 @@ namespace TLCGen.ViewModels
             get { return _PTPKoppeling.TeKoppelenKruispunt; }
             set
             {
-                _PTPKoppeling.TeKoppelenKruispunt = value;
-                RaisePropertyChanged<object>("TeKoppelenKruispunt", broadcast: true);
+	            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
+	            Messenger.Default.Send(message);
+	            if (message.Handled && message.IsUnique)
+	            {
+                    var oldname = _PTPKoppeling.TeKoppelenKruispunt;
+		            _PTPKoppeling.TeKoppelenKruispunt = value;
+		            RaisePropertyChanged<object>(nameof(TeKoppelenKruispunt), broadcast: true);
+		            Messenger.Default.Send(new NameChangedMessage(oldname, value));
+	            }
             }
         }
         public int AantalsignalenIn
@@ -38,7 +48,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenIn = value;
-                RaisePropertyChanged<object>("AantalsignalenIn", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AantalsignalenIn), broadcast: true);
             }
         }
 
@@ -48,7 +58,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.AantalsignalenUit = value;
-                RaisePropertyChanged<object>("AantalsignalenUit", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AantalsignalenUit), broadcast: true);
             }
         }
 
@@ -58,7 +68,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _PTPKoppeling.PortnummerSimuatieOmgeving = value;
-                RaisePropertyChanged<object>("PortnummerSimuatieOmgeving", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PortnummerSimuatieOmgeving), broadcast: true);
             }
         }
 

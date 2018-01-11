@@ -21,14 +21,20 @@ namespace TLCGen.ViewModels
 	{
 		#region Fields
 		
+		private SignaalPlanViewModel _selectedSignaalPlan;
+		private HalfstarGekoppeldeKruisingViewModel _selectedHalfstarGekoppeldeKruising;
+
 		#endregion // Fields
 
 		#region Properties
 
 		public HalfstarDataModel HalfstarData;
 
+		public ObservableCollection<string> PTPKruisingenNames { get; } = new ObservableCollection<string>();
+		public ObservableCollection<string> SignaalPlannenNames { get; } = new ObservableCollection<string>();
 		public ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel> SignaalPlannen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
+		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
 
 		public SignaalPlanViewModel SelectedSignaalPlan
 		{
@@ -36,6 +42,15 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_selectedSignaalPlan = value; 
+				RaisePropertyChanged();
+			}
+		}
+
+		public HalfstarGekoppeldeKruisingViewModel SelectedHalfstarGekoppeldeKruising
+		{
+			get => _selectedHalfstarGekoppeldeKruising; set
+			{
+				_selectedHalfstarGekoppeldeKruising = value; 
 				RaisePropertyChanged();
 			}
 		}
@@ -90,6 +105,46 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.Type = value;
+				switch (value)
+				{
+					case HalfstarTypeEnum.Master:
+						foreach (var k in GekoppeldeKruisingen)
+						{
+							k.Type = HalfstarGekoppeldTypeEnum.Slave;
+						}
+						break;
+					case HalfstarTypeEnum.FallbackMaster:
+						break;
+					case HalfstarTypeEnum.Slave:
+						foreach (var k in GekoppeldeKruisingen)
+						{
+							k.Type = HalfstarGekoppeldTypeEnum.Master;
+						}
+						break;
+				}
+				RaisePropertyChanged();
+			}
+		}
+
+		public string DefaultSignaalplanText => "Default (" + Controller.PeriodenData.DefaultPeriodeNaam + ") plan";
+		public string DefaultVARegelenText => "Default (" + Controller.PeriodenData.DefaultPeriodeNaam + ") VA regelen";
+
+		public string DefaultSignaalplan
+		{
+			get => HalfstarData.DefaultSignaalplan; 
+			set
+			{
+				HalfstarData.DefaultSignaalplan = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public bool DefaultVARegelen
+		{
+			get => HalfstarData.DefaultVARegelen; 
+			set
+			{
+				HalfstarData.DefaultVARegelen = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -112,7 +167,6 @@ namespace TLCGen.ViewModels
 		}
 
 		private RelayCommand _removeSignaalPlanCommand;
-		private SignaalPlanViewModel _selectedSignaalPlan;
 
 		public ICommand RemoveSignaalPlanCommand
 		{
@@ -123,6 +177,33 @@ namespace TLCGen.ViewModels
 					_removeSignaalPlanCommand = new RelayCommand(RemoveSignaalPlanCommand_Executed, RemoveSignaalPlanCommand_CanExecute);
 				}
 				return _removeSignaalPlanCommand;
+			}
+		}
+
+		private RelayCommand _addGekoppeldeKruisingCommand;
+		public ICommand AddGekoppeldeKruisingCommand
+		{
+			get
+			{
+				if (_addGekoppeldeKruisingCommand == null)
+				{
+					_addGekoppeldeKruisingCommand = new RelayCommand(AddGekoppeldeKruisingCommand_Executed, AddGekoppeldeKruisingCommand_CanExecute);
+				}
+				return _addGekoppeldeKruisingCommand;
+			}
+		}
+
+		private RelayCommand _removeGekoppeldeKruisingCommand;
+
+		public ICommand RemoveGekoppeldeKruisingCommand
+		{
+			get
+			{
+				if (_removeGekoppeldeKruisingCommand == null)
+				{
+					_removeGekoppeldeKruisingCommand = new RelayCommand(RemoveGekoppeldeKruisingCommand_Executed, RemoveGekoppeldeKruisingCommand_CanExecute);
+				}
+				return _removeGekoppeldeKruisingCommand;
 			}
 		}
 
@@ -139,7 +220,8 @@ namespace TLCGen.ViewModels
 		{
 			var spl = new SignaalPlanModel
 			{
-				Naam = "PL" + (SignaalPlannen.Count + 1)
+				Naam = "PL" + (SignaalPlannen.Count + 1),
+				StartMoment = 1, SwitchMoment = 1
 			};
 			foreach (var fc in Controller.Fasen)
 			{
@@ -178,6 +260,77 @@ namespace TLCGen.ViewModels
 			{
 				pl.Naam = "PL" + j;
 				++j;
+			}
+
+			foreach (var per in HalfstarPeriodenData)
+			{
+				if (SignaalPlannen.Count == 0)
+				{
+					per.Signaalplan = null;
+				}
+
+				else
+				{
+					if (SignaalPlannen.All(x => x.Naam != per.Signaalplan))
+					{
+						per.Signaalplan = SignaalPlannen[0].Naam;
+					}
+				}
+			}
+		}
+		private bool AddGekoppeldeKruisingCommand_CanExecute(object obj)
+		{
+			return Type == HalfstarTypeEnum.Master ||
+				   Type == HalfstarTypeEnum.FallbackMaster ||
+				   Type == HalfstarTypeEnum.Slave && GekoppeldeKruisingen.Count == 0;
+		}
+
+		private void AddGekoppeldeKruisingCommand_Executed(object obj)
+		{
+			var gkk = new HalfstarGekoppeldeKruisingModel();
+			switch (Type)
+			{
+				case HalfstarTypeEnum.Master:
+					gkk.Type = HalfstarGekoppeldTypeEnum.Slave;
+					break;
+				case HalfstarTypeEnum.FallbackMaster:
+					gkk.Type = GekoppeldeKruisingen.Count == 0 ? HalfstarGekoppeldTypeEnum.Master : HalfstarGekoppeldTypeEnum.Slave;
+					break;
+				case HalfstarTypeEnum.Slave:
+					gkk.Type = HalfstarGekoppeldTypeEnum.Master;
+					break;
+			}
+			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
+		}
+
+		private bool RemoveGekoppeldeKruisingCommand_CanExecute(object obj)
+		{
+			return SelectedHalfstarGekoppeldeKruising != null;
+		}
+
+		private void RemoveGekoppeldeKruisingCommand_Executed(object obj)
+		{
+			var i = GekoppeldeKruisingen.IndexOf(SelectedHalfstarGekoppeldeKruising);
+			GekoppeldeKruisingen.Remove(SelectedHalfstarGekoppeldeKruising);
+			SelectedHalfstarGekoppeldeKruising = null;
+			if (i - 1 <= GekoppeldeKruisingen.Count - 1)
+			{
+				if (i - 1 >= 0)
+				{
+					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[i - 1];
+				}
+				else
+				{
+					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[0];
+				}
+			}
+
+			if (Type == HalfstarTypeEnum.FallbackMaster && GekoppeldeKruisingen.Any())
+			{
+				if (GekoppeldeKruisingen.All(x => x.Type != HalfstarGekoppeldTypeEnum.Master))
+				{
+					GekoppeldeKruisingen[0].Type = HalfstarGekoppeldTypeEnum.Master;
+				}
 			}
 		}
 
@@ -239,6 +392,41 @@ namespace TLCGen.ViewModels
 					HalfstarData = Controller.HalfstarData;
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
+					GekoppeldeKruisingen = new ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel>(HalfstarData.GekoppeldeKruisingen);
+					SignaalPlannen.CollectionChanged += (o, e) =>
+					{
+						if (e.OldItems != null && e.OldItems.Count > 0)
+						{
+							foreach (SignaalPlanViewModel spvm in e.OldItems)
+							{
+								SignaalPlannenNames.Remove(spvm.Naam);
+								foreach (var per in HalfstarPeriodenData)
+								{
+									if (per.Signaalplan == spvm.Naam)
+									{
+										per.Signaalplan = SignaalPlannenNames.Any() ? SignaalPlannenNames[0] : null;
+									}
+								}
+							}
+						}
+						if (e.NewItems != null && e.NewItems.Count > 0)
+						{
+							foreach (SignaalPlanViewModel spvm in e.NewItems)
+							{
+								SignaalPlannenNames.Add(spvm.Naam);
+							}
+						}
+					};
+					SignaalPlannenNames.Clear();
+					foreach (var spvm in SignaalPlannen)
+					{
+						SignaalPlannenNames.Add(spvm.Naam);
+					}
+					PTPKruisingenNames.Clear();
+					foreach (var kr in Controller.PTPData.PTPKoppelingen)
+					{
+						PTPKruisingenNames.Add(kr.TeKoppelenKruispunt);
+					}
 				}
 				else
 				{
@@ -293,6 +481,15 @@ namespace TLCGen.ViewModels
 			{
 				pl.Fasen.BubbleSort();
 			}
+			RaisePropertyChanged(nameof(DefaultSignaalplanText));
+			RaisePropertyChanged(nameof(DefaultVARegelenText));
+			foreach (var k in GekoppeldeKruisingen)
+			{
+				if (k.PTPKruising == msg.OldName)
+				{
+					k.PTPKruising = msg.NewName;
+				}
+			}
 		}
 
 		private void OnFasenSorted(FasenSortedMessage msg)
@@ -303,9 +500,41 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		private void OnPeriodenChanged(PeriodenChangedMessage obj)
+		private void OnPeriodenChanged(PeriodenChangedMessage msg)
 		{
 			UpdatePeriodenData();
+		}
+
+		private void OnPTPKoppelingenChanged(PTPKoppelingenChangedMessage msg)
+		{
+			var rems = new List<string>();
+			foreach (var ptpk in PTPKruisingenNames)
+			{
+				if (Controller.PTPData.PTPKoppelingen.All(x => x.TeKoppelenKruispunt != ptpk))
+				{
+					rems.Add(ptpk);
+				}
+			}
+
+			foreach (var r in rems)
+			{
+				PTPKruisingenNames.Remove(r);
+				foreach (var k in GekoppeldeKruisingen)
+				{
+					if (k.PTPKruising == r)
+					{
+						k.PTPKruising = null;
+					}
+				}
+			}
+
+			foreach (var ptpkp in Controller.PTPData.PTPKoppelingen)
+			{
+				if (PTPKruisingenNames.All(x => x != ptpkp.TeKoppelenKruispunt))
+				{
+					PTPKruisingenNames.Add(ptpkp.TeKoppelenKruispunt);
+				}
+			}
 		}
 
 		#endregion // TLCGen Events
@@ -318,6 +547,7 @@ namespace TLCGen.ViewModels
 			Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
 			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
 			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
+			Messenger.Default.Register(this, new Action<PTPKoppelingenChangedMessage>(OnPTPKoppelingenChanged));
 		}
 
 		#endregion // Constructor

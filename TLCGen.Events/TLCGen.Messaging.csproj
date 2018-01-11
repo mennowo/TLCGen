@@ -34,6 +34,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -65,6 +69,7 @@
     <Compile Include="Messages\OVIngrepenChangedMessage.cs" />
     <Compile Include="Messages\OVIngreepSignaalGroepParametersChangedMessage.cs" />
     <Compile Include="Messages\PeriodenChangedMessage.cs" />
+    <Compile Include="Messages\PTPKoppelingenChangedMessage.cs" />
     <Compile Include="Messages\SelectedConflictGroepChangedMessage.cs" />
     <Compile Include="Messages\TemplatesChangedMessage.cs" />
     <Compile Include="Messages\UpdateTabsEnabledMessage.cs" />

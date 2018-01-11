@@ -2,7 +2,8 @@
 
 namespace TLCGen.Messaging.Messages
 {
-	public class DetectorenChangedMessage : MessageBase
-    {
-    }
+	public class PTPKoppelingenChangedMessage : MessageBase
+	{
+		
+	}
 }

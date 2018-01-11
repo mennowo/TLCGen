@@ -51,6 +51,7 @@
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
+    <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarDataModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarPeriodeDataModel.cs" />
     <Compile Include="Models\Halfstar\SignaalPlanFaseModel.cs" />

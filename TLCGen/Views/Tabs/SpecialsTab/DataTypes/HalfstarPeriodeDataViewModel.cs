@@ -16,6 +16,26 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			get => PeriodeData.Periode;
 		}
 
+		public string Signaalplan
+		{
+			get => PeriodeData.Signaalplan;
+			set
+			{
+				PeriodeData.Signaalplan = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public bool VARegelen
+		{
+			get => PeriodeData.VARegelen;
+			set
+			{
+				PeriodeData.VARegelen = value;
+				RaisePropertyChanged();
+			}
+		}
+
 		#endregion // Properties
 
 		#region IViewModelWithItem

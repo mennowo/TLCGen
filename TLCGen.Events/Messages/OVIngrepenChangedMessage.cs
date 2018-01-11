@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.Messaging;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class OVIngrepenChangedMessage
+    public class OVIngrepenChangedMessage : MessageBase
     {
 #warning TODO: present a list of added/removed elements
     }

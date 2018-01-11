@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class FileIngreepTeDoserenSignaalGroepPercentageChangedMessage
+    public class FileIngreepTeDoserenSignaalGroepPercentageChangedMessage : MessageBase
     {
-        public FileIngreepTeDoserenSignaalGroepModel TeDoserenSignaalGroep { get; private set; }
+        public FileIngreepTeDoserenSignaalGroepModel TeDoserenSignaalGroep { get; }
 
         public FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(FileIngreepTeDoserenSignaalGroepModel fileingreep)
         {
