@@ -51,9 +51,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
             sb.AppendLine($"{ts}#define MLMAX1 {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
-            sb.AppendLine();
-            sb.AppendLine("/* Aantal perioden voor max groen */");
+	        sb.AppendLine();
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine("/* signaalplannen*/");
+		        sb.AppendLine("/* -------------- */");
+		        sb.AppendLine($"{ts}#define PLMAX1 {controller.HalfstarData.SignaalPlannen.Count} /* aantal signaalplannen */");
+		        sb.AppendLine();
+	        }
+	        sb.AppendLine("/* Aantal perioden voor max groen */");
             sb.AppendLine("/* ------- */");
+			#warning Why is this +1 ? 
             sb.AppendLine($"{ts}#define MPERIODMAX {controller.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");

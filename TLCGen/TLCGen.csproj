@@ -104,6 +104,7 @@
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarGekoppeldeKruisingViewModel.cs" />
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarHoofdrichtingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarPeriodeDataViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\SignaalPlanView.xaml.cs">
       <DependentUpon>SignaalPlanView.xaml</DependentUpon>

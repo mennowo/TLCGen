@@ -152,11 +152,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c));
                 }
-                if (c.OVData.OVIngrepen.Count > 0 ||
-                    c.OVData.HDIngrepen.Count > 0)
+                if (c.OVData.OVIngrepen.Any() ||
+                    c.OVData.HDIngrepen.Any())
                 {
                     File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c));
                 }
+	            if (c.HalfstarData.IsHalfstar)
+	            {
+		            File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c));
+	            }
 
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader);
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader);
@@ -215,6 +219,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     CopySourceIfNeeded("winmg.c", sourcefilepath);
                     CopySourceIfNeeded("winmg.h", sourcefilepath);
 				}
+
+	            if (c.HalfstarData.IsHalfstar)
+	            {
+                    CopySourceIfNeeded("halfstar.c", sourcefilepath);
+                    CopySourceIfNeeded("halfstar.h", sourcefilepath);
+		            CopySourceIfNeeded("halfstar_ov.c", sourcefilepath);
+					CopySourceIfNeeded("halfstar_ov.h", sourcefilepath);
+		            CopySourceIfNeeded("halfstar_help.c", sourcefilepath);
+					CopySourceIfNeeded("halfstar_help.h", sourcefilepath);
+	            }
 
                 foreach (var pl in PieceGenerators)
                 {

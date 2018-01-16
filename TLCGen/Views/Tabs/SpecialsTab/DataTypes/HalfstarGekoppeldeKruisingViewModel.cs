@@ -56,8 +56,11 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			get => _gekoppeldeKruising.PTPKruising;
 			set
 			{
-				_gekoppeldeKruising.PTPKruising = value;
-				RaisePropertyChanged();
+				if (value != null)
+				{
+					_gekoppeldeKruising.PTPKruising = value;
+					RaisePropertyChanged();
+				}
 			}
 		}
 

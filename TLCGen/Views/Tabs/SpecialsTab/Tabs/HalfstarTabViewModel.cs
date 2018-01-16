@@ -23,18 +23,22 @@ namespace TLCGen.ViewModels
 		
 		private SignaalPlanViewModel _selectedSignaalPlan;
 		private HalfstarGekoppeldeKruisingViewModel _selectedHalfstarGekoppeldeKruising;
+		private string _selectedHoofdRichtingToAdd;
+		private HalfstarHoofdrichtingViewModel _selectedHoofdRichtingToRemove;
 
 		#endregion // Fields
 
 		#region Properties
 
-		public HalfstarDataModel HalfstarData;
+		private HalfstarDataModel HalfstarData;
 
 		public ObservableCollection<string> PTPKruisingenNames { get; } = new ObservableCollection<string>();
 		public ObservableCollection<string> SignaalPlannenNames { get; } = new ObservableCollection<string>();
+		public ObservableCollection<string> SelectableHoofdRichtingen { get; } = new ObservableCollection<string>();
 		public ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel> SignaalPlannen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
 		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
+		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
 
 		public SignaalPlanViewModel SelectedSignaalPlan
 		{
@@ -42,6 +46,26 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_selectedSignaalPlan = value; 
+				RaisePropertyChanged();
+			}
+		}
+
+		public string SelectedHoofdRichtingToAdd
+		{
+			get => _selectedHoofdRichtingToAdd;
+			set
+			{
+				_selectedHoofdRichtingToAdd = value; 
+				RaisePropertyChanged();
+			}
+		}
+
+		public HalfstarHoofdrichtingViewModel SelectedHoofdRichtingToRemove
+		{
+			get => _selectedHoofdRichtingToRemove;
+			set
+			{
+				_selectedHoofdRichtingToRemove = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -126,25 +150,66 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public string DefaultSignaalplanText => "Default (" + Controller.PeriodenData.DefaultPeriodeNaam + ") plan";
-		public string DefaultVARegelenText => "Default (" + Controller.PeriodenData.DefaultPeriodeNaam + ") VA regelen";
+		public string DefaultSignaalplanText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") plan";
+		public string DefaultVARegelenText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") VA regelen";
+		public string DefaultAlternatievenVoorHoofdrichtingenText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") hoofdr.alt.";
 
-		public string DefaultSignaalplan
+		public bool VARegelen
 		{
-			get => HalfstarData.DefaultSignaalplan; 
+			get => HalfstarData.VARegelen;
 			set
 			{
-				HalfstarData.DefaultSignaalplan = value;
+				HalfstarData.VARegelen = value;
 				RaisePropertyChanged();
 			}
 		}
 
-		public bool DefaultVARegelen
+		public bool OVPrioriteitPL
 		{
-			get => HalfstarData.DefaultVARegelen; 
+			get => HalfstarData.OVPrioriteitPL;
 			set
 			{
-				HalfstarData.DefaultVARegelen = value;
+				HalfstarData.OVPrioriteitPL = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public bool AlternatievenVoorHoofdrichtingen
+		{
+			get => HalfstarData.AlternatievenVoorHoofdrichtingen;
+			set
+			{
+				HalfstarData.AlternatievenVoorHoofdrichtingen = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public string DefaultSignaalplan
+		{
+			get => HalfstarData.DefaultPeriodeSignaalplan; 
+			set
+			{
+				HalfstarData.DefaultPeriodeSignaalplan = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public bool DefaultPeriodeVARegelen
+		{
+			get => HalfstarData.DefaultPeriodeVARegelen; 
+			set
+			{
+				HalfstarData.DefaultPeriodeVARegelen = value;
+				RaisePropertyChanged();
+			}
+		}
+
+		public bool DefaultPeriodeAlternatievenVoorHoofdrichtingen
+		{
+			get => HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen; 
+			set
+			{
+				HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen = value;
 				RaisePropertyChanged();
 			}
 		}
@@ -167,7 +232,6 @@ namespace TLCGen.ViewModels
 		}
 
 		private RelayCommand _removeSignaalPlanCommand;
-
 		public ICommand RemoveSignaalPlanCommand
 		{
 			get
@@ -177,6 +241,32 @@ namespace TLCGen.ViewModels
 					_removeSignaalPlanCommand = new RelayCommand(RemoveSignaalPlanCommand_Executed, RemoveSignaalPlanCommand_CanExecute);
 				}
 				return _removeSignaalPlanCommand;
+			}
+		}
+
+		private RelayCommand _addHoofdRichtingCommand;
+		public ICommand AddHoofdRichtingCommand
+		{
+			get
+			{
+				if (_addHoofdRichtingCommand == null)
+				{
+					_addHoofdRichtingCommand = new RelayCommand(AddHoofdRichtingCommand_Executed, AddHoofdRichtingCommand_CanExecute);
+				}
+				return _addHoofdRichtingCommand;
+			}
+		}
+
+		private RelayCommand _removeHoofdRichtingCommand;
+		public ICommand RemoveHoofdRichtingCommand
+		{
+			get
+			{
+				if (_removeHoofdRichtingCommand == null)
+				{
+					_removeHoofdRichtingCommand = new RelayCommand(RemoveHoofdRichtingCommand_Executed, RemoveHoofdRichtingCommand_CanExecute);
+				}
+				return _removeHoofdRichtingCommand;
 			}
 		}
 
@@ -278,6 +368,34 @@ namespace TLCGen.ViewModels
 				}
 			}
 		}
+
+		private bool AddHoofdRichtingCommand_CanExecute(object obj)
+		{
+			return SelectedHoofdRichtingToAdd != null;
+		}
+
+		private void AddHoofdRichtingCommand_Executed(object obj)
+		{
+			HoofdRichtingen.Add(new HalfstarHoofdrichtingViewModel(new HalfstarHoofdrichtingModel
+			{
+				FaseCyclus = SelectedHoofdRichtingToAdd
+			}));
+			HoofdRichtingen.BubbleSort();
+			UpdateSelectables();
+		}
+
+		private bool RemoveHoofdRichtingCommand_CanExecute(object obj)
+		{
+			return SelectedHoofdRichtingToRemove != null;
+		}
+
+		private void RemoveHoofdRichtingCommand_Executed(object obj)
+		{
+			HoofdRichtingen.Remove(SelectedHoofdRichtingToRemove);
+			HoofdRichtingen.BubbleSort();
+			UpdateSelectables();
+		}
+
 		private bool AddGekoppeldeKruisingCommand_CanExecute(object obj)
 		{
 			return Type == HalfstarTypeEnum.Master ||
@@ -299,6 +417,11 @@ namespace TLCGen.ViewModels
 				case HalfstarTypeEnum.Slave:
 					gkk.Type = HalfstarGekoppeldTypeEnum.Master;
 					break;
+			}
+
+			if (PTPKruisingenNames.Any())
+			{
+				gkk.PTPKruising = PTPKruisingenNames[0];
 			}
 			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
 		}
@@ -337,6 +460,28 @@ namespace TLCGen.ViewModels
 		#endregion // Command functionality
 
 		#region Private methods
+
+		private void UpdateSelectables()
+		{
+			var s = SelectedHoofdRichtingToAdd;
+			SelectableHoofdRichtingen.Clear();
+			foreach (var fc in Controller.Fasen)
+			{
+				if (HoofdRichtingen.All(x => x.FaseCyclus != fc.Naam))
+				{
+					SelectableHoofdRichtingen.Add(fc.Naam);
+				}
+			}
+
+			if (s != null && SelectableHoofdRichtingen.Contains(s))
+			{
+				SelectedHoofdRichtingToAdd = s;
+			}
+			else if (SelectableHoofdRichtingen.Any())
+			{
+				SelectedHoofdRichtingToAdd = SelectableHoofdRichtingen[0];
+			}
+		}
 
 		private void UpdatePeriodenData()
 		{
@@ -393,6 +538,7 @@ namespace TLCGen.ViewModels
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
 					GekoppeldeKruisingen = new ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel>(HalfstarData.GekoppeldeKruisingen);
+					HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
 					SignaalPlannen.CollectionChanged += (o, e) =>
 					{
 						if (e.OldItems != null && e.OldItems.Count > 0)
@@ -427,6 +573,7 @@ namespace TLCGen.ViewModels
 					{
 						PTPKruisingenNames.Add(kr.TeKoppelenKruispunt);
 					}
+					UpdateSelectables();
 				}
 				else
 				{
@@ -471,8 +618,13 @@ namespace TLCGen.ViewModels
 
 						pl.Fasen.BubbleSort();
 					}
+
+					var rfc = HoofdRichtingen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+					if (rfc != null) HoofdRichtingen.Remove(rfc);
 				}
 			}
+
+			UpdateSelectables();
 		}
 
 		private void OnNameChanged(NameChangedMessage msg)
@@ -483,13 +635,22 @@ namespace TLCGen.ViewModels
 			}
 			RaisePropertyChanged(nameof(DefaultSignaalplanText));
 			RaisePropertyChanged(nameof(DefaultVARegelenText));
-			foreach (var k in GekoppeldeKruisingen)
+			
+			if (PTPKruisingenNames.Contains(msg.OldName))
 			{
-				if (k.PTPKruising == msg.OldName)
+				PTPKruisingenNames.Add(msg.NewName);
+				foreach (var k in GekoppeldeKruisingen)
 				{
-					k.PTPKruising = msg.NewName;
+					if (k.PTPKruising == msg.OldName)
+					{
+						k.PTPKruising = msg.NewName;
+					}
 				}
+				PTPKruisingenNames.Remove(msg.OldName);
 			}
+
+			HoofdRichtingen.BubbleSort();
+			UpdateSelectables();
 		}
 
 		private void OnFasenSorted(FasenSortedMessage msg)
@@ -498,6 +659,7 @@ namespace TLCGen.ViewModels
 			{
 				pl.Fasen.BubbleSort();
 			}
+			HoofdRichtingen.BubbleSort();
 		}
 
 		private void OnPeriodenChanged(PeriodenChangedMessage msg)
@@ -523,7 +685,7 @@ namespace TLCGen.ViewModels
 				{
 					if (k.PTPKruising == r)
 					{
-						k.PTPKruising = null;
+						k.PTPKruising = "onbekend";
 					}
 				}
 			}

@@ -13,7 +13,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateRegC(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine("/* REGELPROGRAMMA */");
             sb.AppendLine("/* -------------- */");
             sb.AppendLine();
@@ -57,7 +57,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCIncludes(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
@@ -81,6 +81,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"tmvar.c\"    /* tijd elementen                    */");
             sb.AppendLine($"{ts}#include \"ctvar.c\"    /* teller elementen                  */");
             sb.AppendLine($"{ts}#include \"schvar.c\"   /* software schakelaars              */");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+				sb.AppendLine($"{ts}#include \"tigvar.c\"   /* uitgebreide signaalplan structuur */");
+				sb.AppendLine($"{ts}#include \"plevar.c\"   /* uitgebreide signaalplan structuur */");
+	        }
             sb.AppendLine($"{ts}#include \"prmvar.c\"   /* parameters                        */");
             sb.AppendLine($"{ts}#include \"lwmlvar.c\"  /* langstwachtende modulen structuur */");
             sb.AppendLine($"{ts}#ifndef NO_VLOG");
@@ -115,6 +120,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
             }
+
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}#include \"{controller.Data.Naam}hst.c\"");
+		        //if (controller.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
+		        //{
+				//	sb.AppendLine($"{ts}#include {controller.Data.Naam}hst_ov.c");
+		        //}
+	        }
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCIncludes])
             {
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCIncludes, ts));
@@ -127,7 +141,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCTop(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine($"static int fc;");
             sb.AppendLine();
@@ -143,7 +157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCKwcApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void KwcApplication(void)");
             sb.AppendLine("{");
@@ -162,7 +176,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCPreApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
@@ -173,14 +187,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}PreApplication_Add();");
-            sb.AppendLine("}");
+
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}pre_application_halfstar();");
+	        }
+	        sb.AppendLine();
+
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}/* Genereren knippersignalen */");
+		        sb.AppendLine($"{ts}UpdateKnipperSignalen();");
+	        }
+
+	        sb.AppendLine("}");
+	        sb.AppendLine();
 
             return sb.ToString();
         }
 
         private string GenerateRegCKlokPerioden(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void KlokPerioden(void)");
             sb.AppendLine("{");
@@ -191,14 +219,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}KlokPerioden_Add();");
-            sb.AppendLine("}");
+            
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}KlokPerioden_halfstar();");
+	        }
+
+	        sb.AppendLine("}");
+	        sb.AppendLine();
 
             return sb.ToString();
         }
 
         private string GenerateRegCAanvragen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void Aanvragen(void)");
             sb.AppendLine("{");
@@ -210,6 +245,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}Aanvragen_Add();");
+			
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Aanvragen_halfstar();");
+	        }
+
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -218,7 +259,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCMaxOfVerlenggroen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             switch(controller.Data.TypeGroentijden)
             {
@@ -233,6 +274,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
+	                if (controller.HalfstarData.IsHalfstar)
+	                {
+		                sb.AppendLine($"{ts}Maxgroen_halfstar();");
+	                }
                     sb.AppendLine("}");
 
                     sb.AppendLine();
@@ -249,6 +294,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
+	                if (controller.HalfstarData.IsHalfstar)
+	                {
+		                sb.AppendLine($"{ts}Verlenggroen_halfstar();");
+	                }
                     sb.AppendLine("}");
 
                     sb.AppendLine();
@@ -261,7 +310,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCWachtgroen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void Wachtgroen(void)");
             sb.AppendLine("{");
@@ -272,6 +321,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCWachtgroen, ts));
             }
             sb.AppendLine($"{ts}Wachtgroen_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Wachtgroen_halfstar();");
+	        }
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -279,7 +332,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCMeetkriterium(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
@@ -289,6 +342,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMeetkriterium, ts));
             }
             sb.AppendLine($"{ts}Meetkriterium_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Meetkriterium_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -297,7 +354,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCMeeverlengen(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void Meeverlengen(void)");
             sb.AppendLine("{");
@@ -310,6 +367,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}Meeverlengen_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Meeverlengen_halfstar();");
+	        }
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -317,7 +378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCSynchronisaties(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void Synchronisaties(void)");
             sb.AppendLine("{");
@@ -328,6 +389,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}Synchronisaties_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Synchronisaties_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -336,7 +401,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCRealisatieAfhandeling(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void RealisatieAfhandeling(void)");
             sb.AppendLine("{");
@@ -363,7 +428,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
               sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PRML, ML, ML_MAX);");
             }
             sb.AppendLine();
-            foreach(ModuleModel mm in controller.ModuleMolen.Modules)
+            foreach(var mm in controller.ModuleMolen.Modules)
             {
                 if(mm.Naam == controller.ModuleMolen.WachtModule)
                     sb.AppendLine($"{ts}YML[{mm.Naam}] |= yml_wml(PRML, ML_MAX);");
@@ -372,6 +437,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}Modules_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}Modules_halfstar();");
+	        }
             sb.AppendLine();
             sb.AppendLine($"{ts}SML = modules(ML_MAX, PRML, YML, &ML);");
             sb.AppendLine();
@@ -387,6 +456,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, ts));
             }
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}RealisatieAfhandeling_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -395,7 +468,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCFileVerwerking(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
@@ -406,6 +479,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCFileVerwerking, ts));
             }
             sb.AppendLine($"{ts}FileVerwerking_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}FileVerwerking_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -414,7 +491,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCDetectieStoring(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
@@ -425,6 +502,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCDetectieStoring, ts));
             }
             sb.AppendLine($"{ts}DetectieStoring_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}DetectieStoring_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -433,7 +514,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCInitApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void init_application(void)");
             sb.AppendLine("{");
@@ -454,6 +535,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCInitApplication, ts));
             }
             sb.AppendLine($"{ts}post_init_application();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}post_init_application_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -462,7 +547,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
@@ -510,7 +595,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCPostApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void PostApplication(void)");
             sb.AppendLine("{");
@@ -522,6 +607,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}PostApplication_Add();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}PostApplication_halfstar();");
+	        }
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -529,7 +618,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCSystemApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("void system_application(void)");
             sb.AppendLine("{");
@@ -541,7 +630,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}pre_system_application();");
-
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}pre_system_application_halfstar();");
+	        }
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSystemApplication])
             {
@@ -570,6 +662,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}post_system_application();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}post_system_application_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -578,7 +674,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCDumpApplication(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("#define ENDDUMP   21");
             sb.AppendLine("");
@@ -616,6 +712,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             //sb.AppendLine($"{tabspace}" + "}");
             sb.AppendLine("");
             sb.AppendLine($"{ts}post_dump_application();");
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}post_dump_application_halfstar();");
+	        }
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -624,7 +724,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private string GenerateRegCSpecialSignals(ControllerModel controller)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
             sb.AppendLine("void OVSpecialSignals();");

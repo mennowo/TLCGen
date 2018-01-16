@@ -9,37 +9,27 @@ namespace TLCGen.Generators.CCOL.Settings
 {
     public class CCOLGeneratorSettingsProvider
     {
-        private static CCOLGeneratorSettingsProvider _Default;
-        public static CCOLGeneratorSettingsProvider Default
-        {
-            get
-            {
-                if(_Default == null)
-                {
-                    _Default = new CCOLGeneratorSettingsProvider();
-                }
-                return _Default;
-            }
-        }
+        private static CCOLGeneratorSettingsProvider _default;
+        public static CCOLGeneratorSettingsProvider Default => _default ?? (_default = new CCOLGeneratorSettingsProvider());
 
-        public CCOLGeneratorSettingsProvider()
+	    public CCOLGeneratorSettingsProvider()
         {
             CCOLElementNames = new Dictionary<string, string>();
         }
 
         public Dictionary<string, string> CCOLElementNames { get; set; }
 
-        private CCOLGeneratorSettingsModel _Settings;
+        private CCOLGeneratorSettingsModel _settings;
         public CCOLGeneratorSettingsModel Settings
         {
-            get { return _Settings; }
-            set
+            get => _settings;
+	        set
             {
-                _Settings = value;
+                _settings = value;
                 
                 // Build dictionary with all available settings
                 CCOLElementNames.Clear();
-                foreach (var s in _Settings.CodePieceGeneratorSettings)
+                foreach (var s in _settings.CodePieceGeneratorSettings)
                 {
                     foreach(var ss in s.Item2.Settings)
                     {
@@ -51,15 +41,7 @@ namespace TLCGen.Generators.CCOL.Settings
 
         public string GetElementName(string defaultwithprefix)
         {
-            string n = null;
-            if(CCOLElementNames.TryGetValue(defaultwithprefix, out n))
-            {
-                return (n);
-            }
-            else
-            {
-                return null;
-            }
+	        return CCOLElementNames.TryGetValue(defaultwithprefix, out var n) ? n : null;
         }
 
         public string GetPrefix(CCOLGeneratorSettingTypeEnum type)
@@ -118,9 +100,9 @@ namespace TLCGen.Generators.CCOL.Settings
         
         public string GetPrefix(string pfdefault)
         {
-            if (Settings.Prefixes.Where(x => x.Default == pfdefault).Any())
+            if (Settings.Prefixes.Any(x => x.Default == pfdefault))
             {
-                return Settings.Prefixes.Where(x => x.Default == pfdefault).First().Setting;
+                return Settings.Prefixes.First(x => x.Default == pfdefault).Setting;
             }
             return null;
         }

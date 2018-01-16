@@ -486,3 +486,8 @@ void FileMeldingV2(count det,     /* filelus                                */
 
     if (CIF_IS[det] >= CIF_DET_STORING)   IH[hfile] = FALSE;
 }
+
+void UpdateKnipperSignalen()
+{
+    Knipper_1Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 10) > 4); /* 1 Hz */
+}

@@ -10,7 +10,14 @@
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:HalfstarTabViewModel}">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TLCGen;component/Resources/ApplicationIcons.xaml" />
+                <ResourceDictionary>
+                    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <TabControl>
@@ -31,6 +38,10 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -39,8 +50,51 @@
                             Grid.Column="1" Grid.Row="0"
                             ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarTypeEnum}}}" Margin="2"
                             SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}"/>
-                        <Label Content="Gekoppelde regelaars" Grid.Row="1" Grid.ColumnSpan="2" />
-                        <ListBox Grid.Row="2" Grid.ColumnSpan="2" Margin="2"
+                        <Label Content="Type VA regelen" Grid.Row="1" />
+                        <ComboBox 
+                            Grid.Column="1" Grid.Row="1"
+                            ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:HalfstarVARegelenTypeEnum}}}" Margin="2"
+                            SelectedItem="{Binding Path=TypeVARegelen,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="VA regelen inschakelen" Grid.Row="2" />
+                        <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VARegelen}" />
+                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AlternatievenVoorHoofdrichtingen}" />
+                        <Label Content="Hoofdr.alt. inschakelen" Grid.Row="3" />
+                        <Label Grid.Row="4" Grid.Column="0" Content="Hoofdrichtingen" />
+                        <Grid Grid.Row="4" Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <ListView Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
+                                      ItemsSource="{Binding Path=HoofdRichtingen}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate DataType="ListViewItem">
+                                        <Border Background="AntiqueWhite" BorderThickness="0.7" BorderBrush="Black">
+                                            <TextBlock Text="{Binding FaseCyclus}" Margin="2" />
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <ComboBox 
+                                    MinWidth="50"
+                                    ItemsSource="{Binding Path=SelectableHoofdRichtingen}" Margin="2"
+                                    SelectedItem="{Binding Path=SelectedHoofdRichtingToAdd,UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Margin="2" Command="{Binding AddHoofdRichtingCommand}" CommandParameter="Add" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                                    <Image Source="{StaticResource AddIconDrawingImage}" Width="17" Margin="0" />
+                                </Button>
+                                <Button Margin="2" Command="{Binding RemoveHoofdRichtingCommand}" CommandParameter="Remove" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">
+                                    <Image Source="{StaticResource RemoveIconDrawingImage}" Width="17" Margin="0" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                        <Label Content="Gekoppelde regelaars" Grid.Row="5" Grid.ColumnSpan="2" />
+                        <ListBox Grid.Row="6" Grid.ColumnSpan="2" Margin="2"
                                  HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding GekoppeldeKruisingen}" SelectedItem="{Binding SelectedHalfstarGekoppeldeKruising}">
                             <ListBox.ItemTemplate>
@@ -90,7 +144,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal">
                             <Button Content="Kruising toevoegen" Command="{Binding AddGekoppeldeKruisingCommand}" Margin="2" />
                             <Button Content="Kruising verwijderen" Command="{Binding RemoveGekoppeldeKruisingCommand}" Margin="2" />
                         </StackPanel>
@@ -102,6 +156,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -111,13 +166,15 @@
                     <Label Content="{Binding DefaultSignaalplanText}" />
                     <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding DefaultVARegelenText}"
                               IsChecked="{Binding DefaultVARegelen}" Margin="5" />
+                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding DefaultAlternatievenVoorHoofdrichtingenText}"
+                              IsChecked="{Binding DefaultAlternatievenVoorHoofdrichtingen}" Margin="5" />
                     <ComboBox
                         Grid.Row="0" Grid.Column="1" Margin="2" ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                         SelectedItem="{Binding Path=DefaultSignaalplan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
 
                     <DataGrid ItemsSource="{Binding Path=HalfstarPeriodenData}" 
-                              Grid.Row="2" Grid.ColumnSpan="2" AutoGenerateColumns="False"
+                              Grid.Row="3" Grid.ColumnSpan="2" AutoGenerateColumns="False"
                               Margin="2" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.RowHeaderTemplate>
                             <DataTemplate>
@@ -143,6 +200,7 @@
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                             <DataGridCheckBoxColumn Header="VA regelen" Binding="{Binding VARegelen}" />
+                            <DataGridCheckBoxColumn Header="Hoofdr.alt." Binding="{Binding AlternatievenVoorHoofdrichtingen}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

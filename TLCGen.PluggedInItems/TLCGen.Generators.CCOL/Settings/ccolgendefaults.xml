@@ -1350,6 +1350,12 @@
             <Description>VA regelen aan/uit</Description>
           </Setting>
           <Setting>
+            <Default>arh</Default>
+            <Setting>arh</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelaar toestaan alternatieven voor hoofdrichtingen</Description>
+          </Setting>
+          <Setting>
             <Default>varper</Default>
             <Setting>varper</Setting>
             <Type>Schakelaar</Type>
@@ -1420,6 +1426,12 @@
             <Setting>inst</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar eenmalig instellen signaalplannen na wijziging</Description>
+          </Setting>
+          <Setting>
+            <Default>omschakelok</Default>
+            <Setting>omschakelok</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpelement tbv bijhouden of omschakelen is toegestaan</Description>
           </Setting>
         </Settings>
       </CodePieceData>

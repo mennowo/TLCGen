@@ -44,6 +44,23 @@
 	    TabCControlParameters,
 
 		// HST
+		HstCPostInitApplication,
+		HstCPreApplication,
+		HstCKlokPerioden,
+		HstCAanvragen,
+		HstCVerlenggroen,
+		HstCMaxgroen,
+		HstCWachtgroen,
+		HstCMeetkriterium,
+		HstCDetectieStoring,
+		HstCMeeverlengen,
+		HstCSynchronisaties,
+		HstCAlternatief,
+		HstCRealisatieAfhandeling,
+		HstCPostApplication,
+		HstCPreSystemApplication,
+		HstCPostSystemApplication,
+		HstCPostDumpApplication
 
 	};
 }

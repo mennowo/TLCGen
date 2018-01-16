@@ -17,6 +17,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* REGEL INSTELLINGEN */");
             sb.AppendLine("/* ------------------ */");
             sb.AppendLine();
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+				sb.AppendLine("/* Definieer functie tbv tijden halfstar */");
+		        sb.AppendLine("void signaalplan_instellingen(void);");
+				sb.AppendLine();
+	        }
             sb.Append(GenerateFileHeader(controller.Data, "tab.c"));
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
@@ -156,7 +162,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
 	        AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, false, true);
-			
+
+	        if (controller.HalfstarData.IsHalfstar)
+	        {
+		        sb.AppendLine($"{ts}signaalplan_instellingen();");
+                sb.AppendLine();
+	        }
+
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
 
             sb.AppendLine("}");

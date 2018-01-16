@@ -33,6 +33,9 @@ void FileMeldingV2(count det,     /* filelus                                */
     count tafval,  /* afvalvertraging filemelding            */
     count hfile);   /* hulpelement filemelding                */
 void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
+void UpdateKnipperSignalen();
+
 extern mulv FC_type[];
+int Knipper_1Hz = 0;
 
 #endif

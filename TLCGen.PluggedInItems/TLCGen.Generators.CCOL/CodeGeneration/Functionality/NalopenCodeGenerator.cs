@@ -28,6 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _prmxnl;
 #pragma warning restore 0649
+	    private string _homschakelok;
 
         #endregion // Fields
 
@@ -110,6 +111,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCPreApplication:
+					return 30;
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 20;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
@@ -129,6 +132,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+				case CCOLCodeTypeEnum.RegCPreApplication:
+					sb.AppendLine($"{ts}IH[{_hpf}{_homschakelok}] |=");
+					var k = 0;
+					foreach (var t in _MyElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
+					{
+						if (k != 0)
+						{
+							sb.AppendLine(" &&");
+						}
+						sb.Append($"{ts}{ts}!T[{_tpf}{t.Naam}]");
+						++k;
+					}
+					sb.AppendLine(";");
+					return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
@@ -255,5 +272,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return null;
             }
         }
+		
+	    public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+	    {
+		    _homschakelok = CCOLGeneratorSettingsProvider.Default.GetElementName("homschakelok");
+		    
+		    return base.SetSettings(settings);
+	    }
     }
 }

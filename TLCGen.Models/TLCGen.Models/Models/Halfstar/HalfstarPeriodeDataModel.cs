@@ -11,6 +11,7 @@ namespace TLCGen.Models
 		public string Periode { get; set; }
 		public string Signaalplan { get; set; }
 		public bool VARegelen { get; set; }
+		public bool AlternatievenVoorHoofdrichtingen { get; set; }
 
 		#endregion // Properties
 	}
