@@ -30,7 +30,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfgd;
         private string _tnlcvd;
         private string _tnlegd;
-        private string _hfile;
+	    private string _hfile;
+	    private string _hmlact;
+	    private string _hplact;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -252,6 +254,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 $"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
                         }
                         sb.AppendLine();
+
+	                    var parts = ts;
+	                    if (c.HalfstarData.IsHalfstar)
+	                    {
+		                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}])");
+		                    sb.AppendLine($"{ts}{{");
+		                    parts = ts + ts;
+	                    }
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             Tuple<string, List<string>> hasgs = null;
@@ -266,7 +276,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (hasgs != null)
                             {
                                 sb.Append(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                    $"{parts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
                                 foreach (var ofc in hasgs.Item2)
                                 {
                                     sb.Append(ofc);
@@ -281,7 +291,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             else
                             {
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                    $"{parts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                             }
                         }
                         sb.AppendLine();
@@ -326,7 +336,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     tnl = _tnlcv;
                                 }
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && ((max_tar_to({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
+                                    $"{parts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && ((max_tar_to({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                             }
                             sb.AppendLine();
                         }
@@ -337,7 +347,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (gs.Item2.Count > 1)
                             {
                                 yes = true;
-                                sb.Append($"{ts}PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
+                                sb.Append($"{parts}PAR[{_fcpf}{gs.Item1}] = PAR[{_fcpf}{gs.Item1}]");
                                 foreach (var ofc in gs.Item2)
                                 {
                                     if (ofc == gs.Item1)
@@ -368,10 +378,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             yes = true;
                                             sb.AppendLine();
-                                            sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
+                                            sb.AppendLine($"{parts}/* Niet alternatief komen tijdens file */");
                                         }
                                         sb.AppendLine(
-                                            $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                            $"{parts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
                                     }
                                 }
                             }
@@ -380,6 +390,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine();
                         }
+
+	                    if (c.HalfstarData.IsHalfstar)
+	                    {
+		                    sb.AppendLine($"{ts}}}");
+		                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+		                    sb.AppendLine($"{ts}{{");
+		                    foreach (var fc in c.ModuleMolen.FasenModuleData)
+		                    {
+			                    Tuple<string, List<string>> hasgs = null;
+			                    foreach (var gs in gelijkstarttuples)
+			                    {
+				                    if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+				                    {
+					                    hasgs = gs;
+					                    break;
+				                    }
+			                    }
+			                    if (hasgs != null)
+			                    {
+				                    sb.Append(
+					                    $"{parts}rhdhv_alternatief_pl({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}");
+				                    foreach (var ofc in hasgs.Item2)
+				                    {
+					                    sb.Append(ofc);
+				                    }
+				                    sb.Append($"] && SCH[{_schpf}{_schaltg}");
+				                    foreach (var ofc in hasgs.Item2)
+				                    {
+					                    sb.Append(ofc);
+				                    }
+				                    sb.AppendLine("]);");
+			                    }
+			                    else
+			                    {
+				                    sb.AppendLine(
+					                    $"{parts}rhdhv_alternatief_pl({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}], SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]);");
+			                    }
+		                    }
+							#warning TODO add fixes for synchronisations
+		                    sb.AppendLine($"{ts}}}");
+	                    }
+
+	                    if (c.HalfstarData.IsHalfstar)
+	                    {
+		                    parts = ts + ts;
+	                    }
 
                         foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
                         {
@@ -534,6 +590,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
             _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+            _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }

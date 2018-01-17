@@ -37,7 +37,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.Append(GenerateHstCFileVerwerking(c));
 	        sb.Append(GenerateHstCDetectieStoring(c));
 	        sb.Append(GenerateHstCPostApplication(c));
-	        sb.Append(GenerateHstCSynchronisatieHalfstar(c));
 	        sb.Append(GenerateHstCPreSystemApplication(c));
 	        sb.Append(GenerateHstCPostSystemApplication(c));
 	        sb.Append(GenerateHstCPostDumpApplication(c));
@@ -61,11 +60,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("#include \"halfstar_help.c\"");
 			sb.AppendLine("#include \"halfstar.c\"");
+			sb.AppendLine("#include \"tx_synch.h\"");
 			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 			{
 				sb.AppendLine("#include \"halfstar_ov.h\"");
 			}
 			sb.AppendLine();
+			sb.AppendLine("static int fc;");
+			sb.AppendLine();
+
 
 			return sb.ToString();
 		}
@@ -127,6 +130,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("void Aanvragen_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCAanvragen])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCAanvragen, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -140,12 +149,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			{
 				sb.AppendLine("void Maxgroen_halfstar(void)");
 				sb.AppendLine("{");
+
+				foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCMaxgroen])
+				{
+					sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMaxgroen, ts));
+				}
+
 				sb.AppendLine("}");
 			}
 			else
 			{
 				sb.AppendLine("void Verlenggroen_halfstar(void)");
 				sb.AppendLine("{");
+
+				foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCVerlenggroen])
+				{
+					sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCVerlenggroen, ts));
+				}
+
 				sb.AppendLine("}");
 			}
 
@@ -158,6 +179,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void Wachtgroen_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCWachtgroen])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCWachtgroen, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -169,6 +196,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void Meetkriterium_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCMeetkriterium])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMeetkriterium, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -180,6 +213,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void Meeverlengen_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCMeeverlengen])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMeeverlengen, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -191,6 +230,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void Synchronisaties_halfstar(void)");
 			sb.AppendLine("{");
+			
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCSynchronisaties])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCSynchronisaties, ts));
+			}
+			
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -202,6 +247,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 		    sb.AppendLine("void VersneldPrimair_halfstar(void)");
 		    sb.AppendLine("{");
+
 		    sb.AppendLine("}");
 
 		    return sb.ToString();
@@ -213,6 +259,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void Alternatief_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCAlternatief])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCAlternatief, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -224,6 +276,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 		    sb.AppendLine("void Modules_halfstar(void)");
 		    sb.AppendLine("{");
+
 		    sb.AppendLine("}");
 
 		    return sb.ToString();
@@ -235,6 +288,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("void RealisatieAfhandeling_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCRealisatieAfhandeling])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCRealisatieAfhandeling, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -246,6 +305,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 		    sb.AppendLine("void FileVerwerking_halfstar(void)");
 		    sb.AppendLine("{");
+			
 		    sb.AppendLine("}");
 
 		    return sb.ToString();
@@ -257,6 +317,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void DetectieStoring_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCDetectieStoring])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCDetectieStoring, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -268,17 +334,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void PostApplication_halfstar(void)");
 			sb.AppendLine("{");
-			sb.AppendLine("}");
 
-			return sb.ToString();
-		}
-
-	    private string GenerateHstCSynchronisatieHalfstar(ControllerModel c)
-		{
-			var sb = new StringBuilder();
-						
-			sb.AppendLine("void SynchronisatieHalfstar_halfstar(void)");
-			sb.AppendLine("{");
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCPostApplication])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostApplication, ts));
+			}
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -290,6 +350,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void pre_system_application_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCPreSystemApplication])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPreSystemApplication, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -301,6 +367,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void post_system_application_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCPostSystemApplication])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostSystemApplication, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -312,6 +384,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("void post_dump_application_halfstar(void)");
 			sb.AppendLine("{");
+
+			foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCPostDumpApplication])
+			{
+				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostDumpApplication, ts));
+			}
+
 			sb.AppendLine("}");
 
 			return sb.ToString();

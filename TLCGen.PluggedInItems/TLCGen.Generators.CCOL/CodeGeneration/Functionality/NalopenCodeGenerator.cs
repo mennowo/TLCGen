@@ -28,7 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlegd;
         private string _prmxnl;
 #pragma warning restore 0649
-	    private string _homschakelok;
+	    private string _homschtegenh;
 
         #endregion // Fields
 
@@ -133,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
 				case CCOLCodeTypeEnum.RegCPreApplication:
-					sb.AppendLine($"{ts}IH[{_hpf}{_homschakelok}] |=");
+					sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
 					var k = 0;
 					foreach (var t in _MyElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
@@ -275,7 +275,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		
 	    public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
 	    {
-		    _homschakelok = CCOLGeneratorSettingsProvider.Default.GetElementName("homschakelok");
+		    _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
 		    
 		    return base.SetSettings(settings);
 	    }

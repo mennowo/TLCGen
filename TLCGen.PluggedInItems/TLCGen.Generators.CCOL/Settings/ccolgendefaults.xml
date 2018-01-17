@@ -1428,10 +1428,16 @@
             <Description>Schakelaar eenmalig instellen signaalplannen na wijziging</Description>
           </Setting>
           <Setting>
-            <Default>omschakelok</Default>
-            <Setting>omschakelok</Setting>
+            <Default>omschtegenh</Default>
+            <Setting>omschtegenh</Setting>
             <Type>HulpElement</Type>
             <Description>Hulpelement tbv bijhouden of omschakelen is toegestaan</Description>
+          </Setting>
+          <Setting>
+            <Default>rstotxa</Default>
+            <Setting>rstotxa</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter tijd tot xa dat RS opgezet wordt (anti-flitsgroen)</Description>
           </Setting>
         </Settings>
       </CodePieceData>
