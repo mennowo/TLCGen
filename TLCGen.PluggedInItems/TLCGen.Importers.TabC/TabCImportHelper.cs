@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
+using System.Windows;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 
 namespace TLCGen.Importers.TabC
 {
     public class TabCImportHelperOutcome
     {
+        public List<DetectorModel> Detectoren { get; set; }
         public List<FaseCyclusModel> Fasen { get; set; }
         public List<ConflictModel> Conflicten { get; set; }
 
@@ -18,6 +22,7 @@ namespace TLCGen.Importers.TabC
         {
             Fasen = new List<FaseCyclusModel>();
             Conflicten = new List<ConflictModel>();
+	        Detectoren = new List<DetectorModel>();
         }
     }
 
@@ -25,6 +30,8 @@ namespace TLCGen.Importers.TabC
     {
         public static TabCImportHelperOutcome GetNewData(string[] lines)
         {
+	        var dz = MessageBoxResult.None;
+
             TabCImportHelperOutcome outcome = new TabCImportHelperOutcome();
 
             if (lines.Count() <= 1)
@@ -54,7 +61,7 @@ namespace TLCGen.Importers.TabC
                     }
 
                     FaseCyclusModel _fcm1 = null;
-                    foreach (FaseCyclusModel fcm in outcome.Fasen)
+                    foreach (var fcm in outcome.Fasen)
                     {
                         if (fcm.Naam == fc1.Replace("fc", ""))
                         {
@@ -86,6 +93,99 @@ namespace TLCGen.Importers.TabC
                     }
                     outcome.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Naam, FaseNaar = _fcm2.Naam, Waarde = conf });
                 }
+
+	            if (dz != MessageBoxResult.No &&
+	                Regex.IsMatch(line, @"^\s+D_code\[") || Regex.IsMatch(line, @"^\s+TBG_max\["))
+	            {
+		            if (dz != MessageBoxResult.Yes)
+		            {
+			            dz = MessageBox.Show("Detectoren zoeken in tab.c?", "Detectoren zoeken?", MessageBoxButton.YesNo);
+			            if (dz == MessageBoxResult.No)
+			            {
+							continue;
+			            }
+		            }
+		            string d = Regex.Replace(line, @"^\s*D_code\s*\[\s*(d[0-9a-zA-Z_]+).*", "$1");
+		            string dd = Regex.Replace(d, @"^d", "");
+		            if (dd.StartsWith("r"))
+		            {
+			            dd = "k" + dd.Substring(1);
+		            }
+		            var tdb = -1;
+		            var tdh = -1;
+		            var tog = -1;
+		            var tbg = -1;
+		            if (Regex.IsMatch(line, @"TDB_max"))
+		            {
+			            var mtdb = Regex.Match(line, @"TDB_max\[.*?\]\s*=\s*([0-9]+);");
+			            if (mtdb.Groups.Count > 1)
+				            int.TryParse(mtdb.Groups[1].Value, out tdb);
+		            }
+		            if (Regex.IsMatch(line, @"TDH_max"))
+		            {
+			            var mtdb = Regex.Match(line, @"TDH_max\[.*?\]\s*=\s*([0-9]+);");
+			            if (mtdb.Groups.Count > 1)
+				            int.TryParse(mtdb.Groups[1].Value, out tdh);
+		            }
+		            if (Regex.IsMatch(line, @"TBG_max"))
+		            {
+			            var mtdb = Regex.Match(line, @"TBG_max\[.*?\]\s*=\s*([0-9]+);");
+			            if (mtdb.Groups.Count > 1)
+				            int.TryParse(mtdb.Groups[1].Value, out tbg);
+		            }
+		            if (Regex.IsMatch(line, @"TOG_max"))
+		            {
+			            var mtdb = Regex.Match(line, @"TOG_max\[.*?\]\s*=\s*([0-9]+);");
+			            if (mtdb.Groups.Count > 1)
+				            int.TryParse(mtdb.Groups[1].Value, out tog);
+		            }
+					var nd = new DetectorModel
+					{
+						Naam = dd, Rijstrook = 1
+					};
+		            if (tdb != -1) nd.TDB = tdb;
+		            if (tdh != -1) nd.TDH = tdh;
+		            if (tbg != -1) nd.TBG = tbg;
+		            if (tog != -1) nd.TOG = tog;
+		            if (nd.Naam.StartsWith("k"))
+		            {
+			            nd.Type = DetectorTypeEnum.Knop;
+			            nd.Aanvraag = DetectorAanvraagTypeEnum.RoodGeel;
+			            nd.Verlengen = DetectorVerlengenTypeEnum.Geen;
+		            }
+		            else if (Regex.IsMatch(nd.Naam, "1[a-z]?$"))
+		            {
+			            nd.Type = DetectorTypeEnum.Kop;
+			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+			            nd.AanvraagDirect = true;
+			            nd.Verlengen = DetectorVerlengenTypeEnum.Kopmax;
+		            }
+		            else if (Regex.IsMatch(nd.Naam, "2[a-z]?$"))
+		            {
+			            nd.Type = DetectorTypeEnum.Lang;
+			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+			            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
+		            }
+		            else if (Regex.IsMatch(nd.Naam, "3[a-z]?$"))
+		            {
+			            nd.Type = DetectorTypeEnum.Verweg;
+			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+			            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
+		            }
+		            else 
+		            {
+			            nd.Type = DetectorTypeEnum.Overig;
+			            nd.Aanvraag = DetectorAanvraagTypeEnum.Uit;
+		            }
+		            foreach (var fc in outcome.Fasen)
+		            {
+			            if (fc.Naam.Length < nd.Naam.Length &&
+			                Regex.IsMatch(nd.Naam, $@"^k?{fc.Naam}"))
+			            {
+							fc.Detectoren.Add(nd);
+			            }
+		            }
+	            }
             }
             return outcome;
         }

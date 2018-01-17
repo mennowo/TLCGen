@@ -85,7 +85,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-
+	    [Description("Vissim naam")]
 	    public string VissimNaam
 	    {
 		    get => _Controller?.Data?.VissimNaam;

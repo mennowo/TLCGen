@@ -79,31 +79,31 @@ namespace TLCGen.ViewModels
 
         public string SelectedFaseNaam
         {
-            get { return _SelectedFaseNaam; }
-            set
+            get => _SelectedFaseNaam;
+	        set
             {
                 _SelectedFaseNaam = value;
-                if(_Controller != null && _Controller.Fasen.Where(x => x.Naam == value).Any())
+                if(_Controller != null && _Controller.Fasen.Any(x => x.Naam == value))
                 {
-                    _SelectedFase = _Controller.Fasen.Where(x => x.Naam == value).First();
+                    _SelectedFase = _Controller.Fasen.First(x => x.Naam == value);
                 }
 
                 Detectoren.Clear();
                 if (_SelectedFase != null)
                 {
-                    foreach (DetectorModel dm in _SelectedFase.Detectoren)
+                    foreach (var dm in _SelectedFase.Detectoren)
                     {
-                        var dvm = new DetectorViewModel(dm);
-                        dvm.FaseCyclus = value;
-                        dvm.PropertyChanged += Detector_PropertyChanged;
+	                    var dvm = new DetectorViewModel(dm) {FaseCyclus = value};
+	                    dvm.PropertyChanged += Detector_PropertyChanged;
                         Detectoren.Add(dvm);
                     }
+					Detectoren.BubbleSort();
                 }
                 if(Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];
 
-                RaisePropertyChanged("SelectedFaseNaam");
-                RaisePropertyChanged("Detectoren");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Detectoren));
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetector = value;
-                RaisePropertyChanged("SelectedDetector");
+                RaisePropertyChanged();
             }
         }
 
@@ -123,7 +123,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedDetectoren = value;
-                RaisePropertyChanged("SelectedDetectoren");
+                RaisePropertyChanged();
             }
         }
 
@@ -177,15 +177,15 @@ namespace TLCGen.ViewModels
 
         void AddDetectorCommand_Executed(object prm)
         {
-            DetectorModel _dm = new DetectorModel();
-            string newname = "1";
-            int inewname = 1;
-            foreach (DetectorModel dm in _SelectedFase.Detectoren)
+            var _dm = new DetectorModel();
+            var newname = "1";
+            var inewname = 1;
+            foreach (var dm in _SelectedFase.Detectoren)
             {
                 if (Regex.IsMatch(dm.Naam, @"[0-9]$"))
                 {
-                    Match m = Regex.Match(dm.Naam, @"[0-9]$");
-                    string next = m.Value;
+                    var m = Regex.Match(dm.Naam, @"[0-9]$");
+                    var next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
                         var message = new IsElementIdentifierUniqueRequest("", ElementIdentifierType.Naam);
@@ -216,22 +216,25 @@ namespace TLCGen.ViewModels
                 if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
             }
             DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
-            DetectorViewModel dvm1 = new DetectorViewModel(_dm);
-            dvm1.FaseCyclus = _SelectedFase.Naam;
-            dvm1.Rijstrook = 1;
-            _SelectedFase.Detectoren.Add(_dm);
+	        var dvm1 = new DetectorViewModel(_dm)
+	        {
+		        FaseCyclus = _SelectedFase.Naam,
+		        Rijstrook = 1
+	        };
+	        _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
-            Messenger.Default.Send(new DetectorenChangedMessage());
+	        Detectoren.BubbleSort();
+			Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         bool AddDetectorCommand_CanExecute(object prm)
         {
-            return _SelectedFase != null && _SelectedFase.Detectoren != null;
+            return _SelectedFase?.Detectoren != null;
         }
 
         void RemoveDetectorCommand_Executed(object prm)
         {
-            bool changed = false;
+            var changed = false;
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
                 changed = true;
@@ -255,25 +258,17 @@ namespace TLCGen.ViewModels
 
         bool RemoveDetectorCommand_CanExecute(object prm)
         {
-            return _SelectedFase != null &&
-                   _SelectedFase.Detectoren != null &&
-                   (SelectedDetector != null ||
-                    SelectedDetectoren != null && SelectedDetectoren.Count > 0);
+            return _SelectedFase?.Detectoren != null && (SelectedDetector != null ||
+                                                         SelectedDetectoren != null && SelectedDetectoren.Count > 0);
         }
 
         #endregion // Command functionality
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Fasen";
-            }
-        }
+        public override string DisplayName => "Fasen";
 
-        public override bool IsEnabled
+	    public override bool IsEnabled
         {
             get { return true; }
             set { }
@@ -281,12 +276,9 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
+            get => base.Controller;
 
-            set
+	        set
             {
                 base.Controller = value;
                 Detectoren.Clear();
@@ -298,7 +290,7 @@ namespace TLCGen.ViewModels
         {
             var tfc = SelectedFaseNaam;
             Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(fcm.Naam);
             }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -74,16 +75,17 @@ namespace TLCGen.ViewModels
         private void UpdateDetectoren()
         {
             Detectoren.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                foreach (var dm in fcm.Detectoren)
                 {
                     var dvm = new DetectorViewModel(dm) { FaseCyclus = fcm.Naam };
                     dvm.PropertyChanged += Detector_PropertyChanged;
                     Detectoren.Add(dvm);
                 }
             }
-            foreach (DetectorModel dm in _Controller.Detectoren)
+			Detectoren.BubbleSort();
+            foreach (var dm in _Controller.Detectoren)
             {
                 var dvm = new DetectorViewModel(dm);
                 dvm.PropertyChanged += Detector_PropertyChanged;
@@ -95,15 +97,9 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Alles";
-            }
-        }
+        public override string DisplayName => "Alles";
 
-        public override bool IsEnabled
+	    public override bool IsEnabled
         {
             get { return true; }
             set { }

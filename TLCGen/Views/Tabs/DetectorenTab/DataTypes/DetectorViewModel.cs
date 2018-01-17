@@ -324,11 +324,14 @@ namespace TLCGen.ViewModels
         public int CompareTo(object obj)
         {
 	        if (!(obj is DetectorViewModel fcvm)) throw new InvalidCastException();
-	        var myName = Naam;
-	        var hisName = fcvm.Naam;
+	        var myName = FaseCyclus == null ? Naam : Naam.Replace(FaseCyclus, "");
+	        var hisName = fcvm.FaseCyclus == null ? fcvm.Naam : fcvm.Naam.Replace(fcvm.FaseCyclus, "");
 	        if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
 	        else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
-	        return string.Compare(myName, hisName, StringComparison.Ordinal);
+	        return string.Compare(
+		        FaseCyclus == null ? myName : FaseCyclus + myName, 
+		        fcvm.FaseCyclus == null ? hisName : fcvm.FaseCyclus + hisName, 
+		        StringComparison.Ordinal);
         }
 
         #endregion // IComparable

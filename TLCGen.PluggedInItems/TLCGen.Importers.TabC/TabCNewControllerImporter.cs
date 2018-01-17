@@ -59,7 +59,7 @@ namespace TLCGen.Importers.TabC
                     newc.Data.GarantieOntruimingsTijden = false;
 
                     string[] lines = File.ReadAllLines(openFileDialog.FileName);
-                    if (lines.Count() <= 1)
+                    if (lines.Length <= 1)
                         throw new IndexOutOfRangeException("Het bestand heeft minder dan 2 regels.");
 
                     // Build a list of the Phases with conflicts from the tab.c file

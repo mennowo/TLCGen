@@ -278,7 +278,7 @@ void rhdhv_mgcor_pl_deelc(count fc1, count fc2)
 
 
 /**********************************************************************************/
-void rhdhv_hardekoppeling_pl(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
+void hardekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
 {
   /* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
   if (GL[fc2])
@@ -321,18 +321,21 @@ void rhdhv_hardekoppeling_pl(bool period, count fc1, count fc2, count tvs, count
   /* meerealisatie nalooprichting */
   rhdhv_MR(fc2, fc1, (bool)(period && ((A[fc1] &&  R[fc1]) || CV[fc1])));
   
-  /* aanvoerende richting niet te snel realiseren */
-  if (period && x_aanvoer(fc2, T_max[tvs]) && (TX_timer != TXB[PL][fc1]))
-    X[fc1] |= RHDHV_X_VOOR;
-  
-  /* ten behoeve van verklikken */
-  RT[tvs] = SG[fc1];
-
-  /* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
-  if (period && (GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
+  if(tvs != NG)
   {
-    if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > T_max[tvs])
+    /* aanvoerende richting niet te snel realiseren */
+    if (period && x_aanvoer(fc2, T_max[tvs]) && (TX_timer != TXB[PL][fc1]))
       X[fc1] |= RHDHV_X_VOOR;
+    
+    /* ten behoeve van verklikken */
+    RT[tvs] = SG[fc1];
+
+    /* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
+    if (period && (GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
+    {
+      if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > T_max[tvs])
+        X[fc1] |= RHDHV_X_VOOR;
+    }
   }
   
   /* als nalooprichting worden tegengehouden, dan ook aanvoerende richting tegenhouden */

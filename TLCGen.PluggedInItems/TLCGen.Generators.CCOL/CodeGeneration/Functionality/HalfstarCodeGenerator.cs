@@ -19,6 +19,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _mperiod;
 		private string _cvc;
 		private string _schmv;
+		private string _tnlsg;
+		private string _tnlsgd;
+		private string _tnlcv;
+		private string _tnlcvd;
+		private string _tnleg;
+		private string _tnlegd;
 #pragma warning restore 0649
 
 #pragma warning disable 0649
@@ -455,9 +461,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCSynchronisaties:
+					//sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					//sb.AppendLine($"{ts}{ts}YV[fc] &= ~RHDHV_YV_KOP;");
+					//sb.AppendLine();
+					//sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+					//sb.AppendLine($"{ts}{{");
+					//sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					//sb.AppendLine($"{ts}{ts}{{");
+					//sb.AppendLine($"{ts}{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
+					//sb.AppendLine($"{ts}{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
+					//sb.AppendLine($"{ts}{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
+					//sb.AppendLine($"{ts}{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
+					//sb.AppendLine($"{ts}{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
+					//sb.AppendLine($"{ts}{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
+					//sb.AppendLine($"{ts}{ts}}}");
+					//sb.AppendLine();
+					//
+					//foreach (var nl in c.InterSignaalGroep.Nalopen)
+					//{
+					//	if (nl.Type == NaloopTypeEnum.EindeGroen ||
+					//	    nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
+					//	{
+					//		if (nl.VasteNaloop)
+					//		{
+					//			var t = nl.Type == NaloopTypeEnum.EindeGroen ? _tnleg : _tnlcv;
+					//			sb.AppendLine($"hardekoppeling_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, NG, NG, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
+					//		}
+					//		else if (nl.DetectieAfhankelijk)
+					//		{
+					//			var t = nl.Type == NaloopTypeEnum.EindeGroen ? _tnlegd : _tnlcvd;
+					//			sb.AppendLine($"hardekoppeling_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, NG, NG, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
+					//		}
+					//	}
+					//}
+					//
+					//sb.AppendLine();
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
+					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
+					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RHDHV_RR_ALTCOR;");
+					sb.AppendLine();
+					sb.AppendLine($"{ts}if (IH[{_hpf}{_hmlact}])");
+					sb.AppendLine($"{ts}{{");
+					foreach (var fc in c.Fasen)
+					{
+
+					}
+					//sb.AppendLine($"{ts}{ts}PAR[{_fcpf}101] = ({_mpf}ax_tar_to2({_fcpf}101) >= PRM[{_prmpf}{_prmaltp}101]) && SCH[{_schpf}{_schaltg}101];");
+
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
@@ -485,7 +537,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			_mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
 			_cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 			_schmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schmv");
-			
+			_tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
+			_tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+			_tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+			_tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+			_tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+			_tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+
 			return base.SetSettings(settings);
 		}
 	}

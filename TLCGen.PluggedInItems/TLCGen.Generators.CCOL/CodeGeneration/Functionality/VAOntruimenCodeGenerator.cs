@@ -73,6 +73,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
+	                if (!c.VAOntruimenFasen.Any()) return "";
+
                     sb.AppendLine($"{ts}/* VA ontruimen */");
                     sb.AppendLine($"{ts}/* ============ */");
                     sb.AppendLine();
