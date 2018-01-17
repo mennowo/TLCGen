@@ -154,6 +154,16 @@ namespace TLCGen.ViewModels
 		public string DefaultVARegelenText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") VA regelen";
 		public string DefaultAlternatievenVoorHoofdrichtingenText => "Default (" + Controller?.PeriodenData.DefaultPeriodeNaam + ") hoofdr.alt.";
 
+		public HalfstarVARegelenTypeEnum TypeVARegelen
+		{
+			get => HalfstarData.TypeVARegelen;
+			set
+			{
+				HalfstarData.TypeVARegelen = value;
+				RaisePropertyChanged();
+			}
+		}
+
 		public bool VARegelen
 		{
 			get => HalfstarData.VARegelen;
@@ -321,6 +331,16 @@ namespace TLCGen.ViewModels
 				});
 			}
 			SignaalPlannen.Add(new SignaalPlanViewModel(spl));
+			foreach (var gk in GekoppeldeKruisingen)
+			{
+				gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+				{
+					Kruising = gk.KruisingNaam,
+					Plan = spl.Naam,
+					Type = gk.Type
+				});
+				gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+			}
 		}
 
 		private bool RemoveSignaalPlanCommand_CanExecute(object obj)
@@ -339,7 +359,7 @@ namespace TLCGen.ViewModels
 				{
 					SelectedSignaalPlan = SignaalPlannen[i - 1];
 				}
-				else
+				else if (SignaalPlannen.Any())
 				{
 					SelectedSignaalPlan = SignaalPlannen[0];
 				}
@@ -365,6 +385,16 @@ namespace TLCGen.ViewModels
 					{
 						per.Signaalplan = SignaalPlannen[0].Naam;
 					}
+				}
+			}
+
+			foreach (var gk in GekoppeldeKruisingen)
+			{
+				var plu = gk.GekoppeldeKruising.PlanUitgangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
+				if (plu != null)
+				{
+					gk.GekoppeldeKruising.PlanUitgangen.Remove(plu);
+					gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
 				}
 			}
 		}
@@ -423,6 +453,16 @@ namespace TLCGen.ViewModels
 			{
 				gkk.PTPKruising = PTPKruisingenNames[0];
 			}
+
+			foreach (var pl in SignaalPlannen)
+			{
+				gkk.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+				{
+					Kruising = gkk.KruisingNaam,
+					Plan = pl.Naam,
+					Type = gkk.Type
+				});
+			}
 			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
 		}
 
@@ -442,7 +482,7 @@ namespace TLCGen.ViewModels
 				{
 					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[i - 1];
 				}
-				else
+				else if (GekoppeldeKruisingen.Any())
 				{
 					SelectedHalfstarGekoppeldeKruising = GekoppeldeKruisingen[0];
 				}

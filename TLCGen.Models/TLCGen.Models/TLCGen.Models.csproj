@@ -53,6 +53,7 @@
     <Compile Include="Models\Controller\FixatieModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarDataModel.cs" />
+    <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarPeriodeDataModel.cs" />
     <Compile Include="Models\Halfstar\SignaalPlanFaseModel.cs" />

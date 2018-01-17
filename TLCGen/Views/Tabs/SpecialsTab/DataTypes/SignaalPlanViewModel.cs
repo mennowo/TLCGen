@@ -59,6 +59,7 @@ namespace TLCGen.ViewModels
 				RaisePropertyChanged();
 			}
 		}
+		
 		public ObservableCollectionAroundList<SignaalPlanFaseViewModel, SignaalPlanFaseModel> Fasen { get; private set; }
 
 		#endregion // Properties

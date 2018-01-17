@@ -1272,10 +1272,10 @@
             <Description>Verklikken aansturing/programma met de hand bepaald</Description>
           </Setting>
           <Setting>
-            <Default>inleven</Default>
-            <Setting>inleven</Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken inkomend levenssignaal</Description>
+            <Description>Verklikken levenssignaal</Description>
           </Setting>
           <Setting>
             <Default>insyncok</Default>
@@ -1356,26 +1356,26 @@
             <Description>Schakelaar toestaan alternatieven voor hoofdrichtingen</Description>
           </Setting>
           <Setting>
-            <Default>varper</Default>
-            <Setting>varper</Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar va regelen per periode</Description>
           </Setting>
           <Setting>
-            <Default>varper</Default>
-            <Setting>varper</Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
             <Type>HulpElement</Type>
             <Description>Hulpelement va regelen obv schakelaar per periode</Description>
           </Setting>
           <Setting>
-            <Default>arhper</Default>
-            <Setting>arhper</Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar alternatieven voor hoofdrichtignen per periode</Description>
           </Setting>
           <Setting>
-            <Default>arhper</Default>
-            <Setting>arhper</Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
             <Type>HulpElement</Type>
             <Description>Hulpelement alternatieven voor hoofdrichtignen obv schakelaar per periode</Description>
           </Setting>
@@ -1438,6 +1438,18 @@
             <Setting>rstotxa</Setting>
             <Type>Parameter</Type>
             <Description>Parameter tijd tot xa dat RS opgezet wordt (anti-flitsgroen)</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>Timer</Type>
+            <Description>Frequentie verstuurd levenssignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden actief zijn levensignaal</Description>
           </Setting>
         </Settings>
       </CodePieceData>

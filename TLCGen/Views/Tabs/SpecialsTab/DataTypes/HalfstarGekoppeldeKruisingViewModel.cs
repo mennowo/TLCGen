@@ -11,37 +11,45 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 	{
 		#region Fields
 
-		private HalfstarGekoppeldeKruisingModel _gekoppeldeKruising;
-		private bool _showPTPOptions;
-		private bool _showKoppelsignalenOpties;
-
+		private readonly HalfstarGekoppeldeKruisingModel _gekoppeldeKruising;
+		
 		#endregion // Fields
 		
 		#region Properties
 
+		public HalfstarGekoppeldeKruisingModel GekoppeldeKruising => _gekoppeldeKruising;
+
 		public string KruisingNaam
 		{
-			get { return _gekoppeldeKruising.KruisingNaam; }
+			get => _gekoppeldeKruising.KruisingNaam;
 			set
 			{
 				_gekoppeldeKruising.KruisingNaam = value;
+				foreach (var u in _gekoppeldeKruising.PlanUitgangen)
+				{
+					u.Kruising = value;
+				}
 				RaisePropertyChanged();
 			}
 		}
 		
 		public HalfstarGekoppeldTypeEnum Type
 		{
-			get { return _gekoppeldeKruising.Type; }
+			get => _gekoppeldeKruising.Type;
 			set
 			{
 				_gekoppeldeKruising.Type = value;
+				foreach (var u in _gekoppeldeKruising.PlanUitgangen)
+				{
+					u.Type = value;
+				}
 				RaisePropertyChanged();
 			}
 		}
 
 		public HalfstarGekoppeldWijzeEnum KoppelWijze
 		{
-			get { return _gekoppeldeKruising.KoppelWijze; }
+			get => _gekoppeldeKruising.KoppelWijze;
 			set
 			{
 				_gekoppeldeKruising.KoppelWijze = value;

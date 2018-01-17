@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
 	[Serializable]
-	public class SignaalPlanModel
+	[IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
+	public class SignaalPlanModel : IOElementModel
 	{
 		#region Fields
 		#endregion // Fields
@@ -14,7 +16,7 @@ namespace TLCGen.Models
 
 		[ModelName]
 		[Browsable(false)]
-		public string Naam { get; set; }
+		public override string Naam { get; set; }
 		public string Commentaar { get; set; }
 		public int Cyclustijd { get; set; }
 		public int StartMoment { get; set; }

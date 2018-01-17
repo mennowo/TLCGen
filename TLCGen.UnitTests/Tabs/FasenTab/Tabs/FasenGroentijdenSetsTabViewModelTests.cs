@@ -362,7 +362,7 @@ namespace TLCGen.UnitTests
         public void FaseAddedToModel_TwoGroentijdenSetsInModel_FaseAddedToBothSets()
         {
             var model = new ControllerModel();
-            Messenger.OverrideDefault(FakesCreator.CreateMessenger());
+            Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
@@ -383,15 +383,15 @@ namespace TLCGen.UnitTests
             Assert.AreEqual("04", model.GroentijdenSets[0].Groentijden[1].FaseCyclus);
             Assert.AreEqual("05", model.GroentijdenSets[0].Groentijden[2].FaseCyclus);
             Assert.AreEqual("06", model.GroentijdenSets[0].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("09", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("07", model.GroentijdenSets[0].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[0].Groentijden[5].FaseCyclus);
             Assert.AreEqual(6, model.GroentijdenSets[1].Groentijden.Count);
             Assert.AreEqual("03", model.GroentijdenSets[1].Groentijden[0].FaseCyclus);
             Assert.AreEqual("04", model.GroentijdenSets[1].Groentijden[1].FaseCyclus);
             Assert.AreEqual("05", model.GroentijdenSets[1].Groentijden[2].FaseCyclus);
             Assert.AreEqual("06", model.GroentijdenSets[1].Groentijden[3].FaseCyclus);
-            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
-            Assert.AreEqual("09", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
+            Assert.AreEqual("07", model.GroentijdenSets[1].Groentijden[4].FaseCyclus);
+            Assert.AreEqual("08", model.GroentijdenSets[1].Groentijden[5].FaseCyclus);
         }
 
         [Test]
