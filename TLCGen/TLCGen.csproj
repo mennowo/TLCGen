@@ -103,6 +103,13 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVHDFaseDataOverviewViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml.cs">
+      <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabViewModel.cs">
+      <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarGekoppeldeKruisingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarHoofdrichtingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarPeriodeDataViewModel.cs" />
@@ -485,6 +492,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\TabItemTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

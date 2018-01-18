@@ -14,7 +14,7 @@ namespace TLCGen.UnitTests
 {
     public static class FakesCreator
     {
-        public static ISettingsProvider CreateSettingsProvider()
+		public static ISettingsProvider CreateSettingsProvider()
         {
             var _settingsprovider = Substitute.For<ISettingsProvider>();
             return _settingsprovider;
@@ -30,9 +30,20 @@ namespace TLCGen.UnitTests
                 Do(c =>
                 {
                     c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
-                    c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = controller == null ?
-                        true :
-                        controller.Fasen.All(x => c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam && x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier);
+	                if (controller == null)
+	                {
+		                c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = true;
+	                }
+	                else
+	                {
+		                c.Arg<IsElementIdentifierUniqueRequest>().IsUnique =
+			                controller.Fasen.All(x =>
+				                c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam &&
+				                x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier) &&
+			                controller.Fasen.SelectMany(x => x.Detectoren).All(x =>
+				                c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam &&
+				                x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier);
+	                }
                 });
 
             return _messenger;

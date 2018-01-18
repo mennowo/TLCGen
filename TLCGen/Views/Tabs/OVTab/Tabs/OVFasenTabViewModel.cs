@@ -11,7 +11,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 1, type: TabItemTypeEnum.OVTab)]
+    [TLCGenTabItem(index: 0, type: TabItemTypeEnum.OVTab)]
     public class OVFasenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
@@ -90,7 +90,7 @@ namespace TLCGen.ViewModels
                     SelectedFaseCyclus.OVIngreep = value;
                     if (value)
                     {
-                        OVIngreepModel ov = new OVIngreepModel();
+                        var ov = new OVIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
                         _Controller.OVData.OVIngrepen.Add(ov);
@@ -116,7 +116,7 @@ namespace TLCGen.ViewModels
                     }
                     MessengerInstance.Send(new OVIngrepenChangedMessage());
                 }
-                RaisePropertyChanged<object>("SelectedFaseCyclusOVIngreep", null, null, true);
+                RaisePropertyChanged<object>(nameof(SelectedFaseCyclusOVIngreep), null, null, true);
             }
         }
 
@@ -126,7 +126,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedOVIngreep = value;
-                RaisePropertyChanged("SelectedOVIngreep");
+                RaisePropertyChanged();
             }
         }
 
@@ -209,32 +209,17 @@ namespace TLCGen.ViewModels
             var temp = SelectedFaseCyclus;
             Fasen.Clear();
             SelectedFaseCyclus = null;
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 var fcvm = new FaseCyclusViewModel(fcm);
                 Fasen.Add(fcvm);
-                if(temp != null && fcvm.Naam == temp.Naam)
-                {
-                    SelectedFaseCyclus = fcvm;
-                    temp = null;
-                }
+	            if (temp == null || fcvm.Naam != temp.Naam) continue;
+	            SelectedFaseCyclus = fcvm;
+	            temp = null;
             }
             if(SelectedFaseCyclus == null && Fasen.Count > 0)
             {
                 SelectedFaseCyclus = Fasen[0];
-            }
-        }
-
-        public override ControllerModel Controller
-        {
-            get
-            {
-                return base.Controller;
-            }
-
-            set
-            {
-                base.Controller = value;
             }
         }
 

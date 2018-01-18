@@ -152,7 +152,7 @@ namespace TLCGen.ViewModels
             var changed = false;
             foreach(var p in _Controller.PeriodenData.Perioden)
             {
-                if(p.Type == PeriodeTypeEnum.Groentijden && !GroentijdenSets.Where(x => p.GroentijdenSet == x.Naam).Any())
+                if(p.Type == PeriodeTypeEnum.Groentijden && GroentijdenSets.All(x => p.GroentijdenSet != x.Naam))
                 {
                     p.GroentijdenSet = null;
                     changed = true;

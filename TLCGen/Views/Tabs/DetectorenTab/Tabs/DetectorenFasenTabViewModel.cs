@@ -179,16 +179,15 @@ namespace TLCGen.ViewModels
         {
             var _dm = new DetectorModel();
             var newname = "1";
-            var inewname = 1;
-            foreach (var dm in _SelectedFase.Detectoren)
+	        foreach (var dm in _SelectedFase.Detectoren)
             {
                 if (Regex.IsMatch(dm.Naam, @"[0-9]$"))
                 {
                     var m = Regex.Match(dm.Naam, @"[0-9]$");
                     var next = m.Value;
-                    if (Int32.TryParse(next, out inewname))
+	                if (int.TryParse(next, out var inewname))
                     {
-                        var message = new IsElementIdentifierUniqueRequest("", ElementIdentifierType.Naam);
+                        IsElementIdentifierUniqueRequest message;
                         do
                         {
                             newname = inewname.ToString();

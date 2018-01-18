@@ -52,7 +52,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
+    <Compile Include="Tabs\DetectorenTab\Tabs\DetectorenFasenTabTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\FaseCyclusViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\GroentijdenSetViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\GroentijdViewModelTests.cs" />
@@ -130,9 +132,7 @@
       <Name>TLCGen</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tabs\DetectorenTab\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
