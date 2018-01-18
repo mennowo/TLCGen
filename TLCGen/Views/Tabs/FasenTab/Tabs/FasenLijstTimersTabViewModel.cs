@@ -1,11 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -40,22 +36,22 @@ namespace TLCGen.ViewModels
 
         public FaseCyclusViewModel SelectedFaseCyclus
         {
-            get { return _SelectedFaseCyclus; }
-            set
+            get => _SelectedFaseCyclus;
+	        set
             {
                 _SelectedFaseCyclus = value;
-                RaisePropertyChanged("SelectedFaseCyclus");
+                RaisePropertyChanged();
             }
         }
 
         public IList SelectedFaseCycli
         {
-            get { return _SelectedFaseCycli; }
-            set
+            get => _SelectedFaseCycli;
+	        set
             {
                 _SelectedFaseCycli = value;
                 _SettingMultiple = false;
-                RaisePropertyChanged("SelectedFaseCycli");
+                RaisePropertyChanged();
             }
         }
 
@@ -65,11 +61,8 @@ namespace TLCGen.ViewModels
 
         public override ControllerModel Controller
         {
-            get
-            {
-                return base.Controller;
-            }
-            set
+            get => base.Controller;
+	        set
             {
                 base.Controller = value;
                 if (value != null)
@@ -79,15 +72,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public override string DisplayName
-        {
-            get
-            {
-                return "Tijden";
-            }
-        }
+        public override string DisplayName => "Tijden";
 
-        public override bool IsEnabled
+	    public override bool IsEnabled
         {
             get { return true; }
             set { }

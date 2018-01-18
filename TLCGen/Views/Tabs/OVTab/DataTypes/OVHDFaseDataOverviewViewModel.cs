@@ -18,6 +18,7 @@ namespace TLCGen.ViewModels
 		private OVIngreepViewModel _OVIngreep;
 		private HDIngreepViewModel _HDIngreep;
 		private ControllerModel _controller;
+		private OVOverzichtTabViewModel _overVM;
 
 		#endregion // Fields
 
@@ -39,6 +40,7 @@ namespace TLCGen.ViewModels
 					_controller.OVData.OVIngrepen.Add(ov);
 					_controller.OVData.OVIngrepen.BubbleSort();
 					OVIngreep = new OVIngreepViewModel(ov);
+					OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
 					/* Trick to add dummy detectors */
 					if (ov.KAR)
 					{
@@ -76,6 +78,7 @@ namespace TLCGen.ViewModels
 					_controller.OVData.HDIngrepen.Add(hd);
 					_controller.OVData.HDIngrepen.BubbleSort();
 					HDIngreep = new HDIngreepViewModel(_controller, hd);
+					HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
 					/* Trick to add dummy detectors */
 					if (hd.KAR)
 					{
@@ -120,16 +123,19 @@ namespace TLCGen.ViewModels
 
 		#region Constructor
 
-		public OVHDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, ControllerModel controller)
+		public OVHDFaseDataOverviewViewModel(FaseCyclusModel faseCyclus, OVOverzichtTabViewModel overvm, ControllerModel controller)
 		{
 			_faseCyclus = faseCyclus;
 			_controller = controller;
+			_overVM = overvm;
 			if (_faseCyclus.OVIngreep)
 			{
 				var ovi = controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
 				if (ovi != null)
 				{
 					OVIngreep = new OVIngreepViewModel(ovi);
+					OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
+		        
 				}
 			}
 			if (_faseCyclus.HDIngreep)
@@ -138,6 +144,7 @@ namespace TLCGen.ViewModels
 				if (hdi != null)
 				{
 					HDIngreep = new HDIngreepViewModel(controller, hdi);
+					HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
 				}
 			}
 		}

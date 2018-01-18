@@ -843,10 +843,6 @@
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Updater\TLCGen.Updater.csproj">
-      <Project>{208f78be-cec8-45d9-ba1a-fd9443b983e6}</Project>
-      <Name>TLCGen.Updater</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />
@@ -867,7 +863,7 @@ move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)..\..\..\TLCGen.Updater\bin\$(Configuration)\*.*" "$(TargetDir)Updater"</PostBuildEvent>
+copy "$(TargetDir)..\..\..\TLCGen.Updater\bin\$(Configuration)\*.*" "$(TargetDir)Updater"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

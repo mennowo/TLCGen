@@ -8,6 +8,7 @@
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
              xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:extensions="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Extensions"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance viewModels:OVOverzichtTabViewModel}">
     <UserControl.Resources>
@@ -28,36 +29,75 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <re:SpecialDataGrid ItemsSource="{Binding Fasen}"
-                  CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                      AncestorType={x:Type DataGridRow}}, 
-                                      Path=Item.FaseCyclusNaam}" />
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="OV" Binding="{Binding HasOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridCheckBoxColumn Header="KAR" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.KAR,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridCheckBoxColumn Header="Vecom" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.Vecom,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridComboBoxColumn Header="Vtg.type" CellStyle="{StaticResource HasOvIngreepCellStyle}"
-                                        SelectedItemBinding="{Binding Path=OVIngreep.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:OVIngreepVoertuigTypeEnum}}}" />
-                <DataGridComboBoxColumn Header="Versn.inm." CellStyle="{StaticResource HasOvIngreepCellStyle}"
-                                        SelectedItemBinding="{Binding Path=OVIngreep.VersneldeInmeldingKoplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
-                <DataGridTextColumn Header="Rt.ongeh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdOngehinderd}" />
-                <DataGridTextColumn Header="Rt.bep.geh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdBeperktgehinderd}" />
-                <DataGridTextColumn Header="Rt.geh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdGehinderd}" />
-                <DataGridTextColumn Header="Ondermax." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.OnderMaximum}" />
-                <DataGridTextColumn Header="Groenbew." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.GroenBewaking}" />
-                <DataGridCheckBoxColumn Header="Afk.conf." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AfkappenConflicten}" />
-                <DataGridCheckBoxColumn Header="Afk.conf.OV" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AfkappenConflictenOV}" />
-                <DataGridCheckBoxColumn Header="Gr.vasth." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.VasthoudenGroen}" />
-                <DataGridCheckBoxColumn Header="Tussend." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.TussendoorRealiseren}" />
-                <DataGridCheckBoxColumn Header="Alle lijnen" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AlleLijnen}" />
-            </DataGrid.Columns>
-        </re:SpecialDataGrid>
+        <TabControl>
+            <TabItem Header="OV ingrepen">
+                <re:SpecialDataGrid ItemsSource="{Binding Fasen}"
+                                    extensions:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                              AncestorType={x:Type DataGridRow}}, 
+                                              Path=Item.FaseCyclusNaam}" />
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Header="OV" Binding="{Binding HasOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="KAR" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.KAR,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Vecom" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.Vecom,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridComboBoxColumn Header="Vtg.type" CellStyle="{StaticResource HasOvIngreepCellStyle}"
+                                                SelectedItemBinding="{Binding Path=OVIngreep.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:OVIngreepVoertuigTypeEnum}}}" />
+                        <DataGridComboBoxColumn Header="Versn.inm." CellStyle="{StaticResource HasOvIngreepCellStyle}"
+                                                SelectedItemBinding="{Binding Path=OVIngreep.VersneldeInmeldingKoplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                        <DataGridTextColumn Header="Rt.ongeh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdOngehinderd}" />
+                        <DataGridTextColumn Header="Rt.bep.geh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdBeperktgehinderd}" />
+                        <DataGridTextColumn Header="Rt.geh." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.RijTijdGehinderd}" />
+                        <DataGridTextColumn Header="Ondermax." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.OnderMaximum}" />
+                        <DataGridTextColumn Header="Groenbew." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.GroenBewaking}" />
+                        <DataGridCheckBoxColumn Header="Afk.conf." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AfkappenConflicten}" />
+                        <DataGridCheckBoxColumn Header="Afk.conf.OV" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AfkappenConflictenOV}" />
+                        <DataGridCheckBoxColumn Header="Gr.vasth." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.VasthoudenGroen}" />
+                        <DataGridCheckBoxColumn Header="Tussend." CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.TussendoorRealiseren}" />
+                        <DataGridCheckBoxColumn Header="Alle lijnen" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.AlleLijnen}" />
+                    </DataGrid.Columns>
+                </re:SpecialDataGrid>
+            </TabItem>
+            <TabItem Header="HD ingrepen">
+                <re:SpecialDataGrid ItemsSource="{Binding Fasen}"
+                                    extensions:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedFaseCycli, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                              AncestorType={x:Type DataGridRow}}, 
+                                              Path=Item.FaseCyclusNaam}" />
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type DataGridCell}" x:Key="HasHdIngreepCellStyle">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasHDIngreep}" Value="false">
+                                    <Setter Property="IsEnabled" Value="False" />
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Header="HD" Binding="{Binding HasHDIngreep,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="KAR" CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.KAR,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Opticom" CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.Opticom,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Sirene" CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.Sirene,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Rt.ongeh." CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.RijTijdOngehinderd}" />
+                        <DataGridTextColumn Header="Rt.bep.geh." CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.RijTijdBeperktgehinderd}" />
+                        <DataGridTextColumn Header="Rt.geh." CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.RijTijdGehinderd}" />
+                        <DataGridTextColumn Header="Groenbew." CellStyle="{StaticResource HasHdIngreepCellStyle}" Binding="{Binding HDIngreep.GroenBewaking}" />
+                    </DataGrid.Columns>
+                </re:SpecialDataGrid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
