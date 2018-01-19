@@ -843,6 +843,10 @@
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Updater\TLCGen.Updater.csproj">
+      <Project>{208f78be-cec8-45d9-ba1a-fd9443b983e6}</Project>
+      <Name>TLCGen.Updater</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />
