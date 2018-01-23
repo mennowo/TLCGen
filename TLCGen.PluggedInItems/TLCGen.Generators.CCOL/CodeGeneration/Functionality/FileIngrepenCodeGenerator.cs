@@ -267,8 +267,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
-                    sb.AppendLine($"{ts}int i;");
-                    sb.AppendLine();
                     sb.AppendLine($"{ts}/* File afhandeling */");
                     sb.AppendLine($"{ts}/* ---------------- */");
                     sb.AppendLine();

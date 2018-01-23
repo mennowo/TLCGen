@@ -11,7 +11,8 @@
         IOElementProvider = 0x20,
         XMLNodeWriter = 0x40,
         HasSettings = 0x80,
-        PlugMessaging = 0x100
+        PlugMessaging = 0x100,
+		Switcher = 0x200
     }
 
     [System.AttributeUsage(System.AttributeTargets.Class)]

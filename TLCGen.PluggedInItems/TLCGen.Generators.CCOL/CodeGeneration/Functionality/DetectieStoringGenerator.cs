@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
@@ -135,6 +136,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             for (int str = 1; str <= fc.AantalRijstroken; ++str)
                             {
+	                            if (fc.Detectoren.All(x => x.Rijstrook != str)) continue;
+
                                 int det = 0;
                                 if (str > 1)
                                 {
@@ -237,6 +240,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"{ts}if (");
                             for (var str = 1; str <= fc.AantalRijstroken; ++str)
                             {
+	                            if (fc.Detectoren.All(x => x.Rijstrook != str)) continue;
+
                                 var det = 0;
                                 if (str > 1)
                                 {

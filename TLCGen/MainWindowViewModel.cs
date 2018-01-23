@@ -756,6 +756,11 @@ namespace TLCGen.ViewModels
                 " - Project voor regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " gegenereerd");
         }
 
+	    private void OnControllerFileNameChanged(ControllerFileNameChangedMessage message)
+	    {
+			RaisePropertyChanged(nameof(ProgramTitle));
+	    }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -775,6 +780,7 @@ namespace TLCGen.ViewModels
                 MessengerInstance.Register(this, new Action<Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
                 MessengerInstance.Register(this, new Action<ControllerCodeGeneratedMessage>(OnControllerCodeGenerated));
                 MessengerInstance.Register(this, new Action<ControllerProjectGeneratedMessage>(OnControllerProjectGenerated));
+                MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
 
                 // Load application settings and defaults
                 SettingsProvider.Default.LoadApplicationSettings();
@@ -825,6 +831,13 @@ namespace TLCGen.ViewModels
                                 case TLCGenPluginElems.PlugMessaging:
                                     (instpl as ITLCGenPlugMessaging).UpdateTLCGenMessaging();
                                     break;
+								case TLCGenPluginElems.Switcher:
+									(instpl as ITLCGenSwitcher).ControllerSet += (sender, model) => { SetController(model); };
+									(instpl as ITLCGenSwitcher).FileNameSet += (sender, model) =>
+										{
+											TLCGenControllerDataProvider.Default.ControllerFileName = model;
+										};
+									break;
                             }
                         }
                         TLCGenPluginManager.LoadAddinSettings(instpl, part.Item2.GetType(), SettingsProvider.Default.Settings.CustomData);

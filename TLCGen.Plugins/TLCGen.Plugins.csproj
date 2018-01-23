@@ -49,6 +49,7 @@
     <Compile Include="ITLCGenPlugMessaging.cs" />
     <Compile Include="ITLCGenPlugin.cs" />
     <Compile Include="ITLCGenPluginManager.cs" />
+    <Compile Include="ITLCGenSwitcher.cs" />
     <Compile Include="ITLCGenToolBar.cs" />
     <Compile Include="ITLCGenXMLNodeWriter.cs" />
     <Compile Include="TLCGenPluginAttribute.cs" />
