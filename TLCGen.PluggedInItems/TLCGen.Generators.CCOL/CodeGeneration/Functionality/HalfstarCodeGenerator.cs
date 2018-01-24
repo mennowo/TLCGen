@@ -51,12 +51,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 		private string _mklok;
 		private string _mhand;
+		private string _mmaster;
+		private string _mslave;
+		private string _mleven;
 		private string _hkpact;
 		private string _hplact;
 		private string _hmlact;
 		private string _schvar;
 		private string _scharh;
 		private string _schpervar;
+		private string _schslavebep;
 		private string _hpervar;
 		private string _schperarh;
 		private string _hperarh;
@@ -72,6 +76,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _prmrstotxa;
 		private string _tleven;
 		private string _hleven;
+		private string _prmvolgmasterpl;
+		private string _toffset;
+		private string _txmarge;
 #pragma warning restore 0649
 
 		public override void CollectCCOLElements(ControllerModel c)
@@ -98,6 +105,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				
 				_myElements.Add(new CCOLElement($"{_mklok}", CCOLElementTypeEnum.GeheugenElement));
 				_myElements.Add(new CCOLElement($"{_mhand}", CCOLElementTypeEnum.GeheugenElement));
+				if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+				{
+					_myElements.Add(new CCOLElement($"{_mmaster}", CCOLElementTypeEnum.GeheugenElement));
+					_myElements.Add(new CCOLElement($"{_mslave}", CCOLElementTypeEnum.GeheugenElement));
+				}
 				
 				_myElements.Add(new CCOLElement($"{_schvaml}", hsd.TypeVARegelen == HalfstarVARegelenTypeEnum.ML ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
 				_myElements.Add(new CCOLElement($"{_schvar}", hsd.VARegelen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
@@ -253,7 +265,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 		public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
 		{
-			StringBuilder sb = new StringBuilder();
+			if (!c.HalfstarData.IsHalfstar || !c.HalfstarData.SignaalPlannen.Any())
+			{
+				return "";
+			}
+
+			var sb = new StringBuilder();
+			var master = c.HalfstarData.GekoppeldeKruisingen.FirstOrDefault(x => x.IsMaster);
 
 			switch (type)
 			{
@@ -301,86 +319,208 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine();
 					sb.AppendLine($"{ts}/* BepaalKoppeling */");
 					sb.AppendLine($"{ts}/* --------------- */");
-					sb.AppendLine($"{ts}MM[{_mpf}{_mklok}] = MM[{_mpf}{_mhand}] = FALSE;");
+
+					#region Reset data
+
+					sb.AppendLine($"{ts}MM[{_mpf}{_mklok}] = FALSE;");
+					sb.AppendLine($"{ts}= MM[{_mpf}{_mhand}] = FALSE;");
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}MM[{_mpf}{_mmaster}] = FALSE;");
+					}
 					sb.AppendLine($"{ts}IH[{_hpf}{_hkpact}] = TRUE;");
 					sb.AppendLine($"{ts}IH[{_hpf}{_hplact}] = TRUE;");
 					sb.AppendLine($"{ts}IH[{_hpf}{_hmlact}] = FALSE;");
 					sb.AppendLine($"{ts}APL = NG;");
 					sb.AppendLine();
-					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+
+					#endregion // Reset data
+
+					#region Bepalen PL/var/arh door master
+
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						if (master != null)
+						{
+							sb.AppendLine($"/* Master bepaalt wat er gaat gebeuren */");
+							sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{master.KruisingNaam}] && !SCH[{_schpf}{_schslavebep}])");
+							sb.AppendLine($"{ts}{{");
+							sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mmaster}] = TRUE;");
+							sb.AppendLine();
+							sb.Append($"{ts}{ts}if      ");
+							int i = 0, ipl = 5;
+							foreach (var pl in c.HalfstarData.SignaalPlannen)
+							{
+								if (i > 0)
+								{
+									sb.AppendLine();
+									sb.Append($"{ts}{ts}else if ");
+								}
+								sb.Append($"(IH[{_hpf}{master.PTPKruising}{_hiks}{ipl++:00}]) APL = {pl.Naam};");
+								++i;
+							}
+							sb.AppendLine();
+							sb.AppendLine($"{ts}{ts}else APL = PL1;");
+							sb.AppendLine();
+							sb.AppendLine($"{ts}{ts}char volgMaster = TRUE;");
+							sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmvolgmasterpl}] > 0)");
+							sb.AppendLine($"{ts}{ts}{{");
+							i = 1;
+							sb.Append($"{ts}{ts}{ts}if (");
+							foreach (var pl in c.HalfstarData.SignaalPlannen)
+							{
+								if (i > 1)
+								{
+									sb.AppendLine(" ||");
+								}
+								sb.Append($"(APL == {pl.Naam}) && !(PRM[{_prmpf}{_prmvolgmasterpl}] & BIT{i})");
+								++i;
+							}
+							sb.AppendLine($")");
+							sb.AppendLine($"{ts}{ts}{ts}{{");
+							sb.AppendLine($"{ts}{ts}{ts}{ts}volgMaster = FALSE;");
+							sb.AppendLine($"{ts}{ts}{ts}}}");
+							sb.AppendLine($"{ts}{ts}}}");
+							sb.AppendLine($"{ts}{ts}if (volgMaster == FALSE)");
+							sb.AppendLine($"{ts}{ts}{{");
+							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hkpact}] = FALSE;");
+							sb.AppendLine($"{ts}{ts}}}");
+							sb.AppendLine($"{ts}{ts}else");
+							sb.AppendLine($"{ts}{ts}{{");
+							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hpervar}] =  IH[{_hpf}{master.PTPKruising}{_hiks}03];");
+							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hperarh}] =  IH[{_hpf}{master.PTPKruising}{_hiks}04];");
+							sb.AppendLine($"{ts}{ts}}}");
+							sb.AppendLine($"{ts}}}");
+							sb.AppendLine(
+								$"/* Bij afwezigheid Master bepaalt Slave zelf wat er gaat gebeuren. In dit geval neemt de slave de functie van Master over */");
+							sb.AppendLine($"else");
+							sb.AppendLine($"");
+						}
+					}
+
+					#endregion // Bepalen PL/var/arh door master
+
+					#region Zelf bepalen PL/var/arh
+					
+					var mts = c.HalfstarData.Type == HalfstarTypeEnum.Master ? ts : ts + ts;
+
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}else");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{mts}MM[{_mpf}{_mslave}] = TRUE;");
+					}
+
+					sb.AppendLine($"{mts}switch (MM[{_mpf}{_mperiod}])");
+					sb.AppendLine($"{mts}{{");
+					sb.AppendLine($"{mts}{ts}case 0: /* default */");
+					sb.AppendLine($"{mts}{ts}{{");
+					sb.AppendLine($"{mts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}def] - 1;");
+					sb.AppendLine($"{mts}{ts}{ts}break;");
+					sb.AppendLine($"{mts}{ts}}}");
+					var iper = 1;
+					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
+					{
+						sb.AppendLine($"{mts}{ts}case {iper}: /* default */");
+						sb.AppendLine($"{mts}{ts}{{");
+						sb.AppendLine($"{mts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}{iper}] - 1;");
+						sb.AppendLine($"{mts}{ts}{ts}break;");
+						sb.AppendLine($"{mts}{ts}}}");
+						++iper;
+					}
+					sb.AppendLine($"{mts}{ts}default:");
+					sb.AppendLine($"{mts}{ts}{{");
+					sb.AppendLine($"{mts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}def] - 1;");
+					sb.AppendLine($"{mts}{ts}{ts}break;");
+					sb.AppendLine($"{mts}{ts}}}");
+					sb.AppendLine($"{mts}}}");
+
+					#region Klok bepaling VA bedrijf
+
+					sb.AppendLine($"{mts}/* Klokbepaling voor VA-bedrijf */");
+					sb.AppendLine($"{mts}if (IH[{_hpf}{_homschtegenh}])");
+					sb.AppendLine($"{mts}{{");
+					sb.Append($"{mts}{ts}if ((SCH[{_schpf}{_schpervar}def] && (MM[{_mpf}{_mperiod}] == 0)");
+					iper = 1;
+					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
+					{
+						sb.AppendLine(") ||");
+						sb.Append($"{mts}{ts}    (SCH[{_schpf}{_schpervar}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
+						++iper;
+					}
+					sb.AppendLine("))");
+					sb.AppendLine($"{mts}{ts}{{");
+					sb.AppendLine($"{mts}{ts}{ts}IH[{_hpf}{_hpervar}] = TRUE;");
+					sb.AppendLine($"{mts}{ts}}}");
+					sb.AppendLine($"{mts}{ts}else");
+					sb.AppendLine($"{mts}{ts}{{");
+					sb.AppendLine($"{mts}{ts}{ts}IH[{_hpf}{_hpervar}] = FALSE;");
+					sb.AppendLine($"{mts}{ts}}}");
+					sb.AppendLine($"{mts}}}");
+					sb.AppendLine();
+
+					#endregion // Klok bepaling VA bedrijf
+
+					#region Klok bepaling alternatieven hoofdrichtingen
+
+					sb.AppendLine($"{mts}/* Klokbepaling voor alternatieve realisaties voor de hoofdrichtingen */");
+					sb.Append($"{mts}if ((SCH[{_schpf}{_schperarh}def] && (MM[{_mpf}{_mperiod}] == 0)");
+					iper = 1;
+					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
+					{
+						sb.AppendLine(") ||");
+						sb.Append($"{mts}    (SCH[{_schpf}{_schperarh}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
+						++iper;
+					}
+					sb.AppendLine("))");
+					sb.AppendLine($"{mts}{{");
+					sb.AppendLine($"{mts}{ts}IH[{_hpf}{_hperarh}] = TRUE;");
+					sb.AppendLine($"{mts}}}");
+					sb.AppendLine($"{mts}else");
+					sb.AppendLine($"{mts}{{");
+					sb.AppendLine($"{mts}{ts}IH[{_hpf}{_hperarh}] = FALSE;");
+					sb.AppendLine($"{mts}}}");
+					
+					#endregion // Bepalen alternatieven hoofdrichtingen
+
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}}}");
+					}
+					sb.AppendLine();
+
+					#endregion // Zelf bepalen PL/var/arh
+
+					#region Bepalen VA bedrijf schakelaar
+
+					sb.AppendLine($"{ts}/* Klokbepaling voor VA-bedrijf */");
+					if (c.HalfstarData.Type == HalfstarTypeEnum.Slave)
+					{
+						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schvar}])");
+					}
+					else
+					{
+						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+					}
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* halfstar/va afhankelijk van schakelaar */");
+					sb.AppendLine($"{ts}{ts}/* Halfstar/va afhankelijk van schakelaar */");
 					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hkpact}] = FALSE;");
 					sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mhand}]  = TRUE;");
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mmaster}]  = FALSE;");
+						sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mslave}]  = FALSE;");
+					}
 					sb.AppendLine($"{ts}}} ");
 					sb.AppendLine($"{ts}else");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mklok}] = TRUE;");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
-					sb.AppendLine($"{ts}switch (MM[{_mpf}{_mperiod}])");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}case 0: /* default */");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}def] - 1;");
-					sb.AppendLine($"{ts}{ts}{ts}break;");
-					sb.AppendLine($"{ts}{ts}}}");
-					var iper = 1;
-					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
-					{
-						sb.AppendLine($"{ts}{ts}case {iper}: /* default */");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}{iper}] - 1;");
-						sb.AppendLine($"{ts}{ts}{ts}break;");
-						sb.AppendLine($"{ts}{ts}}}");
-						++iper;
-					}
-					sb.AppendLine($"{ts}{ts}default:");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}APL = PRM[{_prmpf}{_prmplxper}def] - 1;");
-					sb.AppendLine($"{ts}{ts}{ts}break;");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}}}");
-					sb.AppendLine();
-					sb.AppendLine($"{ts}/* Klokbepaling voor VA-bedrijf */");
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}])");
-					sb.AppendLine($"{ts}{{");
-					sb.Append($"{ts}{ts}if ((SCH[{_schpf}{_schpervar}def] && (MM[{_mpf}{_mperiod}] == 0)");
-					iper = 1;
-					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
-					{
-						sb.AppendLine(") ||");
-						sb.Append($"{ts}{ts}    (SCH[{_schpf}{_schpervar}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
-						++iper;
-					}
-					sb.AppendLine("))");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hpervar}] = TRUE;");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}{ts}else");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hpervar}] = FALSE;");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}}}");
-					sb.AppendLine();
 
-					sb.AppendLine($"{ts}/* Klokbepaling voor alternatieve realisaties voor de hoofdrichtingen */");
-					sb.Append($"{ts}if ((SCH[{_schpf}{_schperarh}def] && (MM[{_mpf}{_mperiod}] == 0)");
-					iper = 1;
-					foreach (var per in c.HalfstarData.HalfstarPeriodenData)
-					{
-						sb.AppendLine(") ||");
-						sb.Append($"{ts}    (SCH[{_schpf}{_schperarh}{iper}] && (MM[{_mpf}{_mperiod}] == {iper})");
-						++iper;
-					}
-					sb.AppendLine("))");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperarh}] = TRUE;");
-					sb.AppendLine($"{ts}}}");
-					sb.AppendLine($"{ts}else");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperarh}] = FALSE;");
-					sb.AppendLine($"{ts}}}");
+					#endregion // Bepalen VA bedrijf schakelaar
+
+					#region Bepalen alternatieven hoofdrichtingen schakelaar
 
 					sb.AppendLine($"{ts}/* Toestaan alternatief hoofdrichtingen ook mogelijk met schakelaar */");
 					sb.AppendLine($"{ts}if (SCH[{_schpf}{_scharh}])");
@@ -389,14 +529,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mhand}]   = TRUE;");
 					sb.AppendLine($"{ts}}}");
 
+					#endregion // Bepalen alternatieven hoofdrichtingen schakelaar
+
 					sb.AppendLine($"{ts}/* Koppelen actief */");
-					sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+					switch (c.HalfstarData.Type)
+					{
+						case HalfstarTypeEnum.Master:
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
+							break;
+						case HalfstarTypeEnum.FallbackMaster:
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}] || MM[{_mpf}{_mslave}])");
+							break;
+						case HalfstarTypeEnum.Slave:
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || MM[{_mpf}{_mslave}])");
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
 					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hkpact}] = FALSE;");
 					sb.AppendLine($"{ts}else");
 					sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hkpact}] = TRUE;");
 
 					sb.AppendLine($"{ts}/* Indien VA-bedrijf, dan met schakelaar te bepalen of dit in ML-bedrijf of in versneld PL-bedrijf gebeurt */");
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hkpact}] == FALSE)");
+					sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}])");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schvaml}] || (APL == NG))");
 					sb.AppendLine($"{ts}{ts}{{");
@@ -690,6 +845,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}");
 					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}]) /* Code alleen bij PL-bedrijf */");
 					sb.AppendLine($"{ts}{{");
+					if (master != null && c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						#warning TODO need code for running single appl.
+						sb.AppendLine($"{ts}{ts}RT[{_tpf}{_toffset}] = SH[{_hpf}in{master.PTPKruising}02]; /* offset starten op start koppelpuls */");
+						sb.AppendLine($"{ts}{ts}SYN_TXS = ET[{_tpf}offset]; /* synchronisatie einde offset timer */");
+						sb.AppendLine($"{ts}{ts}synchronization_timer(SAPPLPROG, T_max[{_tpf}xmarge]);");
+					}
 					sb.AppendLine($"{ts}{ts}FTX = HTX = FALSE;  /* reset instructievariabelen van TX */");
 					sb.AppendLine($"{ts}{ts}");
 					sb.AppendLine($"{ts}{ts}if (!IH[{_hpf}{_hkpact}] && !IH[{_hpf}{_hmlact}])");
@@ -702,7 +864,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}{ts}FTX = !H[{_hpf}{_homschtegenh}] &&");
 					sb.AppendLine($"{ts}{ts}{ts}      versnel_tx(TRUE); /* voertuigafhankelijk */");
 					sb.AppendLine($"{ts}{ts}}}");
+					if (master != null && c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}{ts}else");
+						sb.AppendLine($"{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}/* gekoppelde signaalplansturing */");
+						sb.AppendLine($"{ts}{ts}{ts}/* ----------------------------- */");
+						sb.AppendLine($"{ts}{ts}{ts}/* als TXS_SYNC, en daarmee ook TXS_OKE, de regeling zacht of hard synchroniseren afhankelijk van ");
+						sb.AppendLine($"{ts}{ts}{ts}{ts} positie ten opzichte van de master */");
+						sb.AppendLine($"{ts}{ts}{ts}if (MM[{_mpf}{_mleven}{master.KruisingNaam}] && TXS_OKE && TXS_SYNC && (TXS_delta > 0) && (PL==APL))");
+						sb.AppendLine($"{ts}{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}/* regeling loopt iets vooruit (2 x marge) */");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}if (TXS_delta > 0 && (TXS_delta <= (2 * T_max[{_tpf}{_txmarge}])))");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}HTX = TRUE;");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}else");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}/* regeling loop iets achter (2 x marge) */");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}if (TXS_delta > 0 && (TXS_delta >= (TX_max[PL] - (2 * T_max[{_tpf}{_txmarge}]))))");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}FTX = versnel_tx(FALSE);");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}/* in alle andere gevallen is de afwijking te groot en moet, om lange synchronisatietijden te voorkomen,");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{ts} de regeling hard worden gesynschroniseerd */");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}else");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}if (!H[{_hpf}{_homschtegenh}]) /* koppelingen en pelotons mogen niet worden afgekapt     */");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}{ts}TX_timer = TXS_timer; /* TX_timer gelijk maken aan de cyclustijd van de master */");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}}}");
+						sb.AppendLine($"{ts}{ts}{ts}}}");
+						sb.AppendLine($"{ts}{ts}{ts}else");
+						sb.AppendLine($"{ts}{ts}{ts}{{");
+						sb.AppendLine($"{ts}{ts}{ts}{ts}/* do nothing */");
+						sb.AppendLine($"{ts}{ts}{ts}}}");
+						sb.AppendLine($"{ts}{ts}}}");
+					}
 					sb.AppendLine($"{ts}}} /* Einde code PL-bedrijf */");
+					
+					if (master != null && c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}/* tijdens VA bedrijf hard synchroniseren */");
+						sb.AppendLine($"{ts}else");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{ts}RTX = SH[{_hpf}in{master.PTPKruising}02];");
+						sb.AppendLine($"{ts}}}");
+					}
 
 					sb.AppendLine();
 

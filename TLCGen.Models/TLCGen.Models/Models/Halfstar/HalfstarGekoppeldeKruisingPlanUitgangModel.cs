@@ -3,6 +3,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+	[Serializable]
     [IOElement("uit", BitmappedItemTypeEnum.Uitgang, "IOName", "IsSlave")]
 	public class HalfstarGekoppeldeKruisingPlanUitgangModel : IOElementModel, IComparable
 	{

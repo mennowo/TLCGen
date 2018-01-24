@@ -51,6 +51,9 @@
     <Compile Include="AutoSelectTextBox.cs" />
     <Compile Include="BrowsableConditionAttribute.cs" />
     <Compile Include="EnabledConditionAttribute.cs" />
+    <Compile Include="FileTextBox.xaml.cs">
+      <DependentUpon>FileTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FolderTextBox.xaml.cs">
       <DependentUpon>FolderTextBox.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,10 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="FileTextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="FolderTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

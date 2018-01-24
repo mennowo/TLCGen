@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Dialogs;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -254,6 +256,19 @@ namespace TLCGen.ViewModels
 			}
 		}
 
+		private RelayCommand _importSignaalPlanCommand;
+		public ICommand ImportSignaalPlanCommand
+		{
+			get
+			{
+				if (_importSignaalPlanCommand == null)
+				{
+					_importSignaalPlanCommand = new RelayCommand(ImportSignaalPlanCommand_Executed, ImportSignaalPlanCommand_CanExecute);
+				}
+				return _importSignaalPlanCommand;
+			}
+		}
+
 		private RelayCommand _addHoofdRichtingCommand;
 		public ICommand AddHoofdRichtingCommand
 		{
@@ -396,6 +411,24 @@ namespace TLCGen.ViewModels
 					gk.GekoppeldeKruising.PlanUitgangen.Remove(plu);
 					gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
 				}
+			}
+		}
+
+		
+		private bool ImportSignaalPlanCommand_CanExecute(object obj)
+		{
+			return SelectedSignaalPlan != null;
+		}
+
+		private void ImportSignaalPlanCommand_Executed(object obj)
+		{
+			var importWindow = new ImportSignalPlanWindow(SelectedSignaalPlan.SignaalPlan);
+			importWindow.ShowDialog();
+			importWindow.Owner = Application.Current.MainWindow;
+			SelectedSignaalPlan.RaisePropertyChanged("");
+			foreach (var fc in SelectedSignaalPlan.Fasen)
+			{
+				fc.RaisePropertyChanged("");
 			}
 		}
 

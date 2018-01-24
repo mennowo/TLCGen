@@ -1,5 +1,8 @@
-﻿namespace TLCGen.Models
+﻿using System;
+
+namespace TLCGen.Models
 {
+	[Serializable]
 	[RefersToSignalGroup("FaseCyclus")]
 	public class SignaalPlanFaseModel
 	{

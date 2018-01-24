@@ -19,6 +19,9 @@ namespace TLCGen.Models
 		public bool IsSlave => Type == HalfstarGekoppeldTypeEnum.Slave;
 
 		[Browsable(false)]
+		public bool IsMaster => Type == HalfstarGekoppeldTypeEnum.Master;
+
+		[Browsable(false)]
 		[IOElement("leven", BitmappedItemTypeEnum.Uitgang, "KruisingNaam")]
 		public BitmapCoordinatenDataModel UitLeven { get; set; }
 

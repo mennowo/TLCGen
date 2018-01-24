@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="TLCGen.Controls.FolderTextBox"
+﻿<UserControl x:Class="TLCGen.Controls.FileTextBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding ElementName=Root,Path=Folder,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
-        <Button Grid.Column="1" Content=" ... " Click="SelectStdFolderButton_Click" Margin="2" />
+        <TextBox Text="{Binding ElementName=Root,Path=File,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />
+        <Button Grid.Column="1" Content=" ... " Click="SelectFileButton_Click" Margin="2" />
     </Grid>
 </UserControl>

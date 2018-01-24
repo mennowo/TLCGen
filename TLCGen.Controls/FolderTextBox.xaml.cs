@@ -58,7 +58,7 @@ namespace TLCGen.Controls
             ofd.Title = ChooseDialogTitle;
             ofd.EnsurePathExists = true;
             ofd.Multiselect = false;
-            if (ofd.ShowDialog() == CommonFileDialogResult.Ok)
+            if (ofd.ShowDialog(Window.GetWindow(this)) == CommonFileDialogResult.Ok)
             {
                 Folder = ofd.FileName;
             }

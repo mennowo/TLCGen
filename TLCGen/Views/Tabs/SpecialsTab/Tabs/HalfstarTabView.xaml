@@ -224,6 +224,7 @@
                     <StackPanel Orientation="Vertical" Grid.Row="1">
                         <Button Content="Toevoegen" Margin="2" Command="{Binding Path=AddSignaalPlanCommand}" />
                         <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveSignaalPlanCommand}" />
+                        <Button Content="Importeren" Margin="2" Command="{Binding Path=ImportSignaalPlanCommand}" />
                     </StackPanel>
                     <local:SignaalPlanView DataContext="{Binding Path=SelectedSignaalPlan}" Grid.Column="2" Grid.RowSpan="2" />
                 </Grid>

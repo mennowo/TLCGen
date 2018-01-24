@@ -50,6 +50,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportSignalPlanWindow.xaml.cs">
+      <DependentUpon>ImportSignalPlanWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewVersionAvailableWindow.xaml.cs">
       <DependentUpon>NewVersionAvailableWindow.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ImportSignalPlanWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="NewVersionAvailableWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,9 +104,21 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2C677528-AD13-4081-A55F-CE70F9A10B84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
       <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
       <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
+      <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
+      <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{B3A654CF-76A7-4AB9-B99E-870781E5D83B}</Project>
+      <Name>TLCGen.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

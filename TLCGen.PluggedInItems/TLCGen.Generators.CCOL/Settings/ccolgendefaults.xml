@@ -1305,31 +1305,43 @@
             <Default>uitperarh</Default>
             <Setting>uitperarh</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken periode alternatieven voor hoofdrichtingen</Description>
+            <Description>Periode alternatieven voor hoofdrichtingen</Description>
           </Setting>
           <Setting>
             <Default>uitpl</Default>
             <Setting>uitpl</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken uitsturing actief plan naar</Description>
+            <Description>Uitsturing actief plan naar _ELEM_</Description>
           </Setting>
           <Setting>
             <Default>klok</Default>
             <Setting>klok</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Geheugenelement halfstar/va obv klokprioden</Description>
+            <Description>Halfstar/va obv klokprioden</Description>
           </Setting>
           <Setting>
             <Default>hand</Default>
             <Setting>hand</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Geheugenelement halstar/va handmatig bepaal</Description>
+            <Description>Halstar/va handmatig bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>master</Default>
+            <Setting>master</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halstar/va bepaald door master</Description>
+          </Setting>
+          <Setting>
+            <Default>slave</Default>
+            <Setting>slave</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halstar/va bepaald door slave</Description>
           </Setting>
           <Setting>
             <Default>kpact</Default>
             <Setting>kpact</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement koppeling actief</Description>
+            <Description>Halfstarre koppeling actief</Description>
           </Setting>
           <Setting>
             <Default>plact</Default>
@@ -1422,6 +1434,12 @@
             <Description>Hulpelement tegenhouden richtingen tbv gelijkstart</Description>
           </Setting>
           <Setting>
+            <Default>slavebep</Default>
+            <Setting>slavebep</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Slave bepaald PL aansturing</Description>
+          </Setting>
+          <Setting>
             <Default>inst</Default>
             <Setting>inst</Setting>
             <Type>Schakelaar</Type>
@@ -1450,6 +1468,30 @@
             <Setting>leven</Setting>
             <Type>HulpElement</Type>
             <Description>Bijhouden actief zijn levensignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden actief zijn levensignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>volgmasterpl</Default>
+            <Setting>volgmasterpl</Setting>
+            <Type>Parameter</Type>
+            <Description>Per plan (bitwise) instellen wel/niet volgen master</Description>
+          </Setting>
+          <Setting>
+            <Default>offset</Default>
+            <Setting>offset</Setting>
+            <Type>Timer</Type>
+            <Description>Offset in slave</Description>
+          </Setting>
+          <Setting>
+            <Default>xmarge</Default>
+            <Setting>xmarge</Setting>
+            <Type>Timer</Type>
+            <Description>Toegestane marge by sync halfstar</Description>
           </Setting>
         </Settings>
       </CodePieceData>
