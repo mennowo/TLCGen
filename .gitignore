@@ -212,3 +212,6 @@ _Pvt_Extensions/
 ModelManifest.xml
 
 .paket/paket.exe
+
+# dlls
+*.dll

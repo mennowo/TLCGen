@@ -1,0 +1,71 @@
+﻿<Window x:Class="TLCGen.Settings.Views.TLCGenSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TLCGen.Settings.Views"
+        xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="TLCGenSettingsWindow" Height="400" Width="600" >
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl Margin="2">
+            <TabItem Header="Templates">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TabControl Grid.Row="1">
+                        <TabItem Header="Fasen">
+                            <local:FasenTemplatesEditorTabView DataContext="{Binding Path=FasenTemplatesEditorTabVM}" />
+                        </TabItem>
+                        <TabItem Header="Detectoren">
+                            <local:DetectorenTemplatesEditorTabView DataContext="{Binding Path=DetectorenTemplatesEditorTabVM}" />
+                        </TabItem>
+                        <TabItem Header="Perioden">
+                            <local:PeriodenTemplatesEditorTabView DataContext="{Binding Path=PeriodenTemplatesEditorTabVM}" />
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Controller default settings">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <Label Content="Default settings voor verkeersregeling" />
+                    </WrapPanel>
+                    <local:DefaultsTabView DataContext="{Binding Path=DefaultsTabVM}" Grid.Row="1" />
+                </Grid>
+            </TabItem>
+            <!--<TabItem Header="Generatoren settings">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel>
+                        <Label Content="Generator: " />
+                        <ComboBox Margin="2" ItemsSource="{Binding Generators}" SelectedItem="{Binding SelectedGenerator}" DisplayMemberPath="Naam" Name="GeneratorCB" />
+                    </WrapPanel>
+                    <xc:PropertyGrid Margin="2" 
+                                     ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="True"
+                                     Grid.Row="1" SelectedObject="{Binding ElementName=GeneratorCB,Path=SelectedItem.Generator}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                </Grid>
+            </TabItem>-->
+        </TabControl>
+        <WrapPanel Grid.Row="1">
+            <Button IsDefault="True" Content="OK" Click="Button_Click" Margin="2" />
+        </WrapPanel>
+    </Grid>
+</Window>

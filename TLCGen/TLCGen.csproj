@@ -62,6 +62,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FloodFill">
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\FloodFill.dll</HintPath>
+    </Reference>
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>Libs\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
@@ -83,6 +86,61 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="TLCGen.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.CustomPropertyEditors, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.CustomPropertyEditors.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Dialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Dialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.GuiActions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.GuiActions.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Helpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Integrity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Integrity.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.ModelManager">
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.ModelManager.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Models.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Settings.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -759,65 +817,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FloodFill\FloodFill.csproj">
-      <Project>{9A33318A-1352-43C3-8275-FF20DC9B9202}</Project>
-      <Name>FloodFill</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
-      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
-      <Name>TLCGen.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
-      <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
-      <Name>TLCGen.CustomPropertyEditors</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
-      <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
-      <Name>TLCGen.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
-      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
-      <Name>TLCGen.Dialogs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Events\TLCGen.Messaging.csproj">
-      <Project>{2dbc9d19-d683-4f87-b534-dd026b46e763}</Project>
-      <Name>TLCGen.Messaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
-      <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
-      <Name>TLCGen.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.GuiActions\TLCGen.GuiActions.csproj">
-      <Project>{7922013a-9b43-4813-a354-f1977b5788de}</Project>
-      <Name>TLCGen.GuiActions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
-      <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
-      <Name>TLCGen.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
-      <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
-      <Name>TLCGen.Integrity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
-      <Name>TLCGen.Models.Enumerations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.ModelManager\TLCGen.ModelManager.csproj">
-      <Project>{ae032ace-62d7-4093-986e-6a436d8d8161}</Project>
-      <Name>TLCGen.ModelManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
-      <Name>TLCGen.Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj">
       <Project>{deae73bc-0c8e-47bf-b7ae-850617a34949}</Project>
       <Name>TLCGen.GebruikersOpties</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
-      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
-      <Name>TLCGen.Generators.CCOL</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.TLCCC.csproj">
       <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
@@ -834,18 +836,6 @@
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj">
       <Project>{14c1bbc3-eda1-4d16-897d-43138abe02da}</Project>
       <Name>TLCGen.SpecialsRotterdam</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Plugins\TLCGen.Plugins.csproj">
-      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
-      <Name>TLCGen.Plugins</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Settings\TLCGen.Settings.csproj">
-      <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
-      <Name>TLCGen.Settings</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Updater\TLCGen.Updater.csproj">
-      <Project>{208f78be-cec8-45d9-ba1a-fd9443b983e6}</Project>
-      <Name>TLCGen.Updater</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

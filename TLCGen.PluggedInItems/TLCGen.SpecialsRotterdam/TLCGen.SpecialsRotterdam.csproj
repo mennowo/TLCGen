@@ -42,6 +42,21 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TLCGen.Helpers">
+      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Messaging">
+      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Models">
+      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Models.Enumerations">
+      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
+    </Reference>
+    <Reference Include="TLCGen.Plugins">
+      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -54,26 +69,6 @@
     <Compile Include="SpecialsRotterdamViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TLCGen.Events\TLCGen.Messaging.csproj">
-      <Project>{2dbc9d19-d683-4f87-b534-dd026b46e763}</Project>
-      <Name>TLCGen.Messaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TLCGen.Helpers\TLCGen.Helpers.csproj">
-      <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
-      <Name>TLCGen.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
-      <Name>TLCGen.Models.Enumerations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
-      <Name>TLCGen.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TLCGen.Plugins\TLCGen.Plugins.csproj">
-      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
-      <Name>TLCGen.Plugins</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
       <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
       <Name>TLCGen.Generators.CCOL</Name>

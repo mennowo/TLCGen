@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TLCGen.Settings</RootNamespace>
+    <AssemblyName>TLCGen.Settings</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DefaultsProvider.cs" />
+    <Compile Include="Interfaces\ITemplatesProvider.cs" />
+    <Compile Include="Interfaces\IDefaultsProvider.cs" />
+    <Compile Include="Interfaces\ISettingsProvider.cs" />
+    <Compile Include="Models\Defaults\TLCGenDefaultModel.cs" />
+    <Compile Include="Models\Defaults\TLCGenDefaultsModel.cs" />
+    <Compile Include="Models\Templates\TLCGenTemplateModel.cs" />
+    <Compile Include="Models\Templates\TLCGenTemplatesModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SettingsProvider.cs" />
+    <Compile Include="UI\DataTypes\DetectorTemplateViewModel.cs">
+      <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\FaseCyclusTemplateViewModel.cs">
+      <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\PeriodeTemplateView.xaml.cs">
+      <DependentUpon>PeriodeTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\DetectorTemplateView.xaml.cs">
+      <DependentUpon>DetectorTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\FaseCyclusTemplateView.xaml.cs">
+      <DependentUpon>FaseCyclusTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DataTypes\PeriodeTemplateViewModel.cs">
+      <DependentUpon>PeriodeTemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Defaults\DefaultsListView.xaml.cs">
+      <DependentUpon>DefaultsListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Defaults\DefaultsTabView.xaml.cs">
+      <DependentUpon>DefaultsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Defaults\DefaultsTabViewModel.cs" />
+    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>DetectorenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabView.xaml.cs">
+      <DependentUpon>PeriodenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabView.xaml.cs">
+      <DependentUpon>DetectorenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml.cs">
+      <DependentUpon>FasenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabViewModel.cs">
+      <DependentUpon>PeriodenTemplatesEditorTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TLCGenSettingsWindow.xaml.cs">
+      <DependentUpon>TLCGenSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\TLCGenSettingsViewModel.cs" />
+    <Compile Include="TemplatesProvider.cs" />
+    <Compile Include="Utilities\FaseCyclusUtilities.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Settings\tlcgendefaultdefaults.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Settings\tlcgendefaulttemplates.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\DataTypes\PeriodeTemplateView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\DataTypes\DetectorTemplateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DataTypes\FaseCyclusTemplateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tabs\Defaults\DefaultsListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tabs\Defaults\DefaultsTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tabs\Templates\PeriodenTemplatesEditorTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tabs\Templates\DetectorenTemplatesEditorTabView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tabs\Templates\FasenTemplatesEditorTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\TLCGenSettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Events\TLCGen.Messaging.csproj">
+      <Project>{2DBC9D19-D683-4F87-B534-DD026B46E763}</Project>
+      <Name>TLCGen.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
+      <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
+      <Name>TLCGen.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
+      <Project>{04039111-5CBD-459E-AF6E-65F016EEB333}</Project>
+      <Name>TLCGen.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
+      <Project>{69468F6A-D191-4049-BA0F-4E4CD023BBD0}</Project>
+      <Name>TLCGen.Models.Enumerations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
+      <Project>{B3A654CF-76A7-4AB9-B99E-870781E5D83B}</Project>
+      <Name>TLCGen.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="CommonServiceLocator">
+          <HintPath>..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Xceed.Wpf.AvalonDock">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.DataGrid">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.Toolkit">
+          <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="GalaSoft.MvvmLight">
+          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="GalaSoft.MvvmLight.Extras">
+          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="GalaSoft.MvvmLight.Platform">
+          <HintPath>..\packages\MvvmLightLibs\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="System.Windows.Interactivity">
+          <HintPath>..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+</Project>

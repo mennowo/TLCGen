@@ -8,7 +8,6 @@ using System.Web;
 using System.Windows;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using TLCGen.Settings;
 
 namespace TLCGen.Importers.TabC
 {

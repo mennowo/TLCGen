@@ -1,0 +1,10 @@
+framework: net45
+source https://api.nuget.org/v3/index.json
+
+nuget CommonServiceLocator
+nuget Extended.Wpf.Toolkit framework: >= net45
+nuget Microsoft.WindowsAPICodePack.Core framework: >= net45
+nuget Microsoft.WindowsAPICodePack.Shell framework: >= net45
+nuget MvvmLightLibs
+nuget NSubstitute framework: >= net45
+nuget NUnit framework: >= net45
