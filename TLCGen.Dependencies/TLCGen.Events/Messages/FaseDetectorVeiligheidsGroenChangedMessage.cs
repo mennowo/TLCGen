@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class FaseDetectorVeiligheidsGroenChangedMessage : MessageBase
+    public class FaseDetectorVeiligheidsGroenChangedMessage
     {
         public NooitAltijdAanUitEnum VeiligheidsGroen { get; }
         public string DetectorDefine { get; }

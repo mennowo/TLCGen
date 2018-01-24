@@ -18,8 +18,9 @@ namespace TLCGen.ModelManagement
         private static ITLCGenModelManager _Default;
 
         private IMessenger _MessengerInstance;
+	    private Action<object> _setDefaultsAction;
 
-        #endregion // Fields
+	    #endregion // Fields
 
         #region Properties
 
@@ -61,6 +62,11 @@ namespace TLCGen.ModelManagement
             _Default = provider;
         }
 
+	    public void InjectDefaultAction(Action<object> setDefaultsAction)
+	    {
+		    _setDefaultsAction = setDefaultsAction;
+	    }
+
         #endregion // Public Methods
 
         #region TLCGen Messaging
@@ -75,14 +81,14 @@ namespace TLCGen.ModelManagement
                     if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
                     {
                         var prms = new OVIngreepSignaalGroepParametersModel();
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(prms);
+                        _setDefaultsAction?.Invoke(prms);
                         prms.FaseCyclus = fcm.Naam;
                         Controller.OVData.OVIngreepSignaalGroepParameters.Add(prms);
                     }
 
                     // Module settings
                     var fcmlm = new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam };
-                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(fcmlm);
+	                _setDefaultsAction?.Invoke(fcmlm);
                     Controller.ModuleMolen.FasenModuleData.Add(fcmlm);
                 }
             }

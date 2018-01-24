@@ -787,8 +787,15 @@ namespace TLCGen.ViewModels
                 DefaultsProvider.Default.LoadSettings();
                 TemplatesProvider.Default.LoadSettings();
 
+	            TLCGenModelManager.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+	            TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+
                 // Load available applicationparts and plugins
-                TLCGenPluginManager.Default.LoadApplicationParts("TLCGen.ViewModels");
+	            var assms = Assembly.GetExecutingAssembly();
+	            var types = from t in assms.GetTypes()
+		            where t.IsClass && t.Namespace == "TLCGen.ViewModels"
+		            select t;
+                TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
                 TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
                 // Instantiate all parts

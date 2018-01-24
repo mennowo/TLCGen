@@ -1,8 +1,6 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-
-namespace TLCGen.Messaging.Messages
+﻿namespace TLCGen.Messaging.Messages
 {
-	public class ConflictsChangedMessage : MessageBase
+	public class ConflictsChangedMessage
     {
     }
 }

@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class SelectedConflictGroepChangedMessage : MessageBase
+    public class SelectedConflictGroepChangedMessage
     {
         public RoBuGroverConflictGroepModel OldGroep { get; }
         public RoBuGroverConflictGroepModel NewGroep { get; }

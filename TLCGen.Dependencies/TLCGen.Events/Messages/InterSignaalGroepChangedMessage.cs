@@ -1,10 +1,10 @@
 ﻿using System;
-using GalaSoft.MvvmLight.Messaging;
+
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class InterSignaalGroepChangedMessage : MessageBase
+    public class InterSignaalGroepChangedMessage
     {
         public string FaseVan { get; }
         public string FaseNaar { get; }

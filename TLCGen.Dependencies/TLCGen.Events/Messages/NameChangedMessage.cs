@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 
 namespace TLCGen.Messaging.Messages
 {
-	public class NameChangedMessage : MessageBase
+	public class NameChangedMessage
     {
         public string OldName { get; }
         public string NewName { get; }

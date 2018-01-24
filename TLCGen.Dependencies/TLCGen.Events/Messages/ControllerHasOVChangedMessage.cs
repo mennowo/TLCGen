@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {
-	public class ControllerHasOVChangedMessage : MessageBase
+	public class ControllerHasOVChangedMessage
     {
         public OVIngreepTypeEnum Type { get; private set; }
 

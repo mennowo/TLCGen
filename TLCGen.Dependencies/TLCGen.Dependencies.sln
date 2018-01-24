@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Controls", "TLCGen.Controls\TLCGen.Controls.csproj", "{2C677528-AD13-4081-A55F-CE70F9A10B84}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Models", "TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj", "{B3A654CF-76A7-4AB9-B99E-870781E5D83B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Models.Enumerations", "TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj", "{69468F6A-D191-4049-BA0F-4E4CD023BBD0}"
@@ -15,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Helpers", "TLCGen.He
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Extensions", "TLCGen.Extensions\TLCGen.Extensions.csproj", "{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Settings", "TLCGen.Settings\TLCGen.Settings.csproj", "{3C79B172-B6A4-41FB-9A83-8075A1B4A318}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Messaging", "TLCGen.Events\TLCGen.Messaging.csproj", "{2DBC9D19-D683-4F87-B534-DD026B46E763}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E92958EC-7BE1-463C-8F10-E27FEE1149A5}"
@@ -26,19 +22,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Plugins", "TLCGen.Plugins\TLCGen.Plugins.csproj", "{355E3027-7851-4EB9-9C91-3B281D01DC02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.CustomPropertyEditors", "TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj", "{9890605D-8F9C-4AC0-8493-1598DFF0007F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloodFill", "FloodFill\FloodFill.csproj", "{9A33318A-1352-43C3-8275-FF20DC9B9202}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.DataAccess", "TLCGen.DataAccess\TLCGen.DataAccess.csproj", "{94CA4D36-A404-4E0E-9C39-14613D1C4C39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Integrity", "TLCGen.Integrity\TLCGen.Integrity.csproj", "{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Dialogs", "TLCGen.Dialogs\TLCGen.Dialogs.csproj", "{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.GuiActions", "TLCGen.GuiActions\TLCGen.GuiActions.csproj", "{7922013A-9B43-4813-A354-F1977B5788DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Updater", "TLCGen.Updater\TLCGen.Updater.csproj", "{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Dependencies", "TLCGen.Dependencies\TLCGen.Dependencies.csproj", "{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +40,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2C677528-AD13-4081-A55F-CE70F9A10B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C677528-AD13-4081-A55F-CE70F9A10B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C677528-AD13-4081-A55F-CE70F9A10B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C677528-AD13-4081-A55F-CE70F9A10B84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3A654CF-76A7-4AB9-B99E-870781E5D83B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3A654CF-76A7-4AB9-B99E-870781E5D83B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3A654CF-76A7-4AB9-B99E-870781E5D83B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,10 +60,6 @@ Global
 		{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3C79B172-B6A4-41FB-9A83-8075A1B4A318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C79B172-B6A4-41FB-9A83-8075A1B4A318}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C79B172-B6A4-41FB-9A83-8075A1B4A318}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C79B172-B6A4-41FB-9A83-8075A1B4A318}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2DBC9D19-D683-4F87-B534-DD026B46E763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2DBC9D19-D683-4F87-B534-DD026B46E763}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DBC9D19-D683-4F87-B534-DD026B46E763}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -82,10 +68,6 @@ Global
 		{355E3027-7851-4EB9-9C91-3B281D01DC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{355E3027-7851-4EB9-9C91-3B281D01DC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{355E3027-7851-4EB9-9C91-3B281D01DC02}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9890605D-8F9C-4AC0-8493-1598DFF0007F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9890605D-8F9C-4AC0-8493-1598DFF0007F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9890605D-8F9C-4AC0-8493-1598DFF0007F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9890605D-8F9C-4AC0-8493-1598DFF0007F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A33318A-1352-43C3-8275-FF20DC9B9202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A33318A-1352-43C3-8275-FF20DC9B9202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A33318A-1352-43C3-8275-FF20DC9B9202}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -98,10 +80,6 @@ Global
 		{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC7BF1EE-CF32-48FE-8FFD-52BF8F443DC4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7922013A-9B43-4813-A354-F1977B5788DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7922013A-9B43-4813-A354-F1977B5788DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7922013A-9B43-4813-A354-F1977B5788DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -110,6 +88,10 @@ Global
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

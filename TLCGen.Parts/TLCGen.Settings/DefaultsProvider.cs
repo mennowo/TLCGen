@@ -190,11 +190,11 @@ namespace TLCGen.Settings
 	        string defsetfile = null;
             if (!File.Exists(setfile))
             {
-                setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+                setfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
             }
 			else
 			{
-				defsetfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+				defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
 			}
             if (!File.Exists(setfile))
             {
@@ -287,6 +287,11 @@ namespace TLCGen.Settings
 		    {
 			    var x = def.SelectSingleNode("DataType");
 			    var t = x.InnerText;
+				#warning this corrects old files; should be removed at a point in the future (@24-1-2018)
+			    if (t.EndsWith(",TLCGen.Model"))
+			    {
+				    t = t.Replace(",TLCGen.Model", ",TLCGen.Dependencies");
+			    }
 			    var type = Type.GetType(t);
 			    var xRoot = new XmlRootAttribute
 			    {

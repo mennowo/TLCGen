@@ -6,7 +6,7 @@
       <DefaultName>Fasecyclus auto</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
@@ -33,7 +33,7 @@
       <DefaultName>Fasecyclus fiets</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
@@ -60,7 +60,7 @@
       <DefaultName>Fasecyclus voetganger</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Voetganger</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
@@ -87,7 +87,7 @@
       <DefaultName>Fasecyclus ov</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>OV</Selector1>
-      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FaseCyclusModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="FaseCyclusModel">
         <Naam />
         <BitmapCoordinaten />
@@ -114,7 +114,7 @@
       <DefaultName>Groentijd auto</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="GroentijdModel">
         <FaseCyclus />
         <Waarde>300</Waarde>
@@ -124,7 +124,7 @@
       <DefaultName>Groentijd fiets</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="GroentijdModel">
         <FaseCyclus />
         <Waarde>150</Waarde>
@@ -134,7 +134,7 @@
       <DefaultName>Groentijd voetganger</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Voetganger</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="GroentijdModel">
         <FaseCyclus />
         <Waarde xsi:nil="true" />
@@ -144,7 +144,7 @@
       <DefaultName>Groentijd OV</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>OV</Selector1>
-      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.GroentijdModel,TLCGen.Dependencies</DataType>
       <Data xsi:type="GroentijdModel">
         <FaseCyclus />
         <Waarde xsi:nil="true" />
@@ -154,7 +154,7 @@
       <DefaultName>RoBuGrover auto en OV</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Auto</Selector1>
-      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <MinGroenTijd>100</MinGroenTijd>
@@ -167,7 +167,7 @@
       <DefaultName>RoBuGrover overig</DefaultName>
       <Category>FaseCyclus</Category>
       <Selector1>Fiets</Selector1>
-      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RoBuGroverFaseCyclusInstellingenModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <MinGroenTijd>0</MinGroenTijd>
@@ -179,7 +179,7 @@
     <Default>
       <DefaultName>Conflict OV</DefaultName>
       <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.OVIngreepSignaalGroepParametersModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <AantalKerenNietAfkappen>0</AantalKerenNietAfkappen>
@@ -194,7 +194,7 @@
     <Default>
       <DefaultName>Alternatief</DefaultName>
       <Category>FaseCyclus</Category>
-      <DataType>TLCGen.Models.FaseCyclusModuleDataModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FaseCyclusModuleDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <ModulenVooruit>1</ModulenVooruit>
@@ -210,7 +210,7 @@
       <Category>Detector</Category>
       <Selector1>Kop</Selector1>
       <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -235,7 +235,7 @@
       <Category>Detector</Category>
       <Selector1>Lang</Selector1>
       <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -260,7 +260,7 @@
       <Category>Detector</Category>
       <Selector1>Verweg</Selector1>
       <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -285,7 +285,7 @@
       <Category>Detector</Category>
       <Selector1>File</Selector1>
       <Selector2>Auto</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -310,7 +310,7 @@
       <Category>Detector</Category>
       <Selector1>Kop</Selector1>
       <Selector2>Fiets</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -335,7 +335,7 @@
       <Category>Detector</Category>
       <Selector1>Knop</Selector1>
       <Selector2>Fiets</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -360,7 +360,7 @@
       <Category>Detector</Category>
       <Selector1>KnopBinnen</Selector1>
       <Selector2>Voetganger</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -385,7 +385,7 @@
       <Category>Detector</Category>
       <Selector1>KnopBuiten</Selector1>
       <Selector2>Voetganger</Selector2>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -409,7 +409,7 @@
       <DefaultName>Radar</DefaultName>
       <Category>Detector</Category>
       <Selector1>Radar</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -433,7 +433,7 @@
       <DefaultName>VecomIngang</DefaultName>
       <Category>Detector</Category>
       <Selector1>VecomIngang</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -457,7 +457,7 @@
       <DefaultName>OpticomIngang</DefaultName>
       <Category>Detector</Category>
       <Selector1>OpticomIngang</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -481,7 +481,7 @@
       <DefaultName>Overig</DefaultName>
       <Category>Detector</Category>
       <Selector1>Overig</Selector1>
-      <DataType>TLCGen.Models.DetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <BitmapCoordinaten />
@@ -504,7 +504,7 @@
     <Default>
       <DefaultName>RoBuGrover file detector</DefaultName>
       <Category>Detector</Category>
-      <DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RoBuGroverFileDetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Detector />
         <FileTijd>60</FileTijd>
@@ -513,7 +513,7 @@
     <Default>
       <DefaultName>RoBuGrover hiaat lus</DefaultName>
       <Category>Detector</Category>
-      <DataType>TLCGen.Models.RoBuGroverHiaatDetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RoBuGroverHiaatDetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Detector />
         <HiaatTijd>10</HiaatTijd>
@@ -522,7 +522,7 @@
     <Default>
       <DefaultName>File ingreep detector</DefaultName>
       <Category>Detector</Category>
-      <DataType>TLCGen.Models.FileIngreepDetectorModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FileIngreepDetectorModel,TLCGen.Dependencies</DataType>
       <Data>
         <Detector />
         <BezetTijd>35</BezetTijd>
@@ -535,7 +535,7 @@
     <Default>
       <DefaultName>Richtinggevoelige aanvraag</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.RichtingGevoeligeAanvraagModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RichtingGevoeligeAanvraagModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <VanDetector />
@@ -547,7 +547,7 @@
     <Default>
       <DefaultName>Richtinggevoelig verlengen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.RichtingGevoeligVerlengModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RichtingGevoeligVerlengModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <VanDetector />
@@ -560,7 +560,7 @@
     <Default>
       <DefaultName>Regeling instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.ControllerDataModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.ControllerDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <Stad />
@@ -591,7 +591,7 @@
     <Default>
       <DefaultName>OV ingreep</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.OVIngreepModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.OVIngreepModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <KAR>true</KAR>
@@ -649,7 +649,7 @@
     <Default>
       <DefaultName>HD ingreep</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.HDIngreepModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.HDIngreepModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
         <KAR>true</KAR>
@@ -672,7 +672,7 @@
       <DefaultName>Periode rateltikkers altijd</DefaultName>
       <Selector1>RateltikkersAltijd</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>rtaltijd</Naam>
         <Type>RateltikkersAltijd</Type>
@@ -688,7 +688,7 @@
       <DefaultName>Periode rateltikkers aanvraag</DefaultName>
       <Selector1>RateltikkersAanvraag</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>rtaanvraag</Naam>
         <Type>RateltikkersAanvraag</Type>
@@ -704,7 +704,7 @@
       <DefaultName>Periode rateltikkers dimmen</DefaultName>
       <Selector1>RateltikkersDimmen</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>rtdim</Naam>
         <Type>RateltikkersDimmen</Type>
@@ -720,7 +720,7 @@
       <DefaultName>Periode bellen actief</DefaultName>
       <Selector1>BellenActief</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>belact</Naam>
         <Type>BellenActief</Type>
@@ -736,7 +736,7 @@
       <DefaultName>Periode bellen dimmen</DefaultName>
       <Selector1>BellenDimmen</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>beldim</Naam>
         <Type>BellenDimmen</Type>
@@ -752,7 +752,7 @@
       <DefaultName>Periode overig</DefaultName>
       <Selector1>Overig</Selector1>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodeModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam>beldim</Naam>
         <Type>Overig</Type>
@@ -767,7 +767,7 @@
     <Default>
       <DefaultName>RoBuGrover instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.RoBuGroverModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.RoBuGroverModel,TLCGen.Dependencies</DataType>
       <Data>
         <RoBuGrover>true</RoBuGrover>
         <MinimaleCyclustijd>900</MinimaleCyclustijd>
@@ -786,7 +786,7 @@
     <Default>
       <DefaultName>File ingreep</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.FileIngreepModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.FileIngreepModel,TLCGen.Dependencies</DataType>
       <Data>
         <Naam />
         <MinimaalAantalMeldingen>0</MinimaalAantalMeldingen>
@@ -800,7 +800,7 @@
     <Default>
       <DefaultName>OV instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.OVDataModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.OVDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <OVIngreepType>Uitgebreid</OVIngreepType>
         <DSI>true</DSI>
@@ -818,7 +818,7 @@
     <Default>
       <DefaultName>Perioden instellingen</DefaultName>
       <Category>Other</Category>
-      <DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Models</DataType>
+      <DataType>TLCGen.Models.PeriodenDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <DefaultPeriodeGroentijdenSet></DefaultPeriodeGroentijdenSet>
         <DefaultPeriodeNaam></DefaultPeriodeNaam>

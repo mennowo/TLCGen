@@ -1,4 +1,5 @@
-﻿using TLCGen.Models;
+﻿using System;
+using TLCGen.Models;
 
 namespace TLCGen.DataAccess
 {
@@ -15,6 +16,8 @@ namespace TLCGen.DataAccess
         bool CloseController();
         bool SetController(ControllerModel controller);
         bool CheckChanged();
+
+	    void InjectDefaultAction(Action<object> setDefaultsAction);
 
 #if DEBUG
         bool OpenDebug();

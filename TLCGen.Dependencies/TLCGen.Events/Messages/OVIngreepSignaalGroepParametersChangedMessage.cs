@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class OVIngreepSignaalGroepParametersChangedMessage : MessageBase
+    public class OVIngreepSignaalGroepParametersChangedMessage
     {
         public OVIngreepSignaalGroepParametersModel SignaalGroepParameters { get; }
 

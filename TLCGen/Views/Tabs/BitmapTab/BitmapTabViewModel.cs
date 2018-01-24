@@ -1,22 +1,17 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using FloodFill;
 using TLCGen.Helpers;
 using System.Windows.Controls;
 using TLCGen.Models;
-using TLCGen.DataAccess;
 using TLCGen.Messaging.Messages;
 using System.Windows.Media.Imaging;
-using TLCGen.Messaging;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Plugins;
 using TLCGen.Models.Enumerations;

@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {
-	public class FaseDetectorTypeChangedMessage : MessageBase
+	public class FaseDetectorTypeChangedMessage
     {
         public DetectorTypeEnum Type { get; }
         public string DetectorDefine { get; }

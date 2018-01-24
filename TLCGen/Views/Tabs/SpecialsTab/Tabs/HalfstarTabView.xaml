@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Models.Enumerations"
-             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Helpers"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:HalfstarTabViewModel}">
     <UserControl.Resources>

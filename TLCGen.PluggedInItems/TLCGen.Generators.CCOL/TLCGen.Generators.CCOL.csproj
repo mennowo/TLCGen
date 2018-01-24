@@ -48,26 +48,9 @@
     <Reference Include="TLCGen.CustomPropertyEditors">
       <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.CustomPropertyEditors.dll</HintPath>
     </Reference>
-    <Reference Include="TLCGen.Extensions">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Helpers">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Integrity">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Integrity.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Messaging">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models.Enumerations">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Plugins">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -355,6 +338,28 @@
         </Reference>
         <Reference Include="Xceed.Wpf.Toolkit">
           <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.WindowsAPICodePack">
+          <HintPath>..\..\packages\Microsoft.WindowsAPICodePack.Core\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+          <HintPath>..\..\packages\Microsoft.WindowsAPICodePack.Shell\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

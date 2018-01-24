@@ -1,10 +1,10 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.Xml;
+using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
 using TLCGen.Messaging.Messages;
@@ -26,6 +26,8 @@ namespace TLCGen.DataAccess
         private bool _ControllerHasChanged;
 
         private XmlDocument _ControllerXml;
+
+	    private Action<object> _setDefaultsAction;
 
         #endregion // Fields
 
@@ -55,8 +57,8 @@ namespace TLCGen.DataAccess
         /// </summary>
         public ControllerModel Controller
         {
-            get { return _Controller; }
-            private set
+            get => _Controller;
+	        private set
             {
                 _Controller = value;
                 foreach (var pl in TLCGenPluginManager.Default.ApplicationParts)
@@ -70,18 +72,15 @@ namespace TLCGen.DataAccess
             }
         }
 
-        public XmlDocument ControllerXml
-        {
-            get { return _ControllerXml; }
-        }
+        public XmlDocument ControllerXml => _ControllerXml;
 
-        /// <summary>
+	    /// <summary>
         /// String representation of the currently loaded file.
         /// </summary>
         public string ControllerFileName
         {
-            get { return _ControllerFileName; }
-            set
+            get => _ControllerFileName;
+		    set
             {
                 _ControllerFileName = value;
             }
@@ -89,8 +88,8 @@ namespace TLCGen.DataAccess
 
         public bool ControllerHasChanged
         {
-            get { return _ControllerHasChanged; }
-            set
+            get => _ControllerHasChanged;
+	        set
             {
                 _ControllerHasChanged = value;
             }
@@ -114,9 +113,9 @@ namespace TLCGen.DataAccess
                 else
                 {
                     Controller = new ControllerModel();
-                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.Data);
-                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.OVData);
-                    Settings.DefaultsProvider.Default.SetDefaultsOnModel(Controller.PeriodenData);
+	                _setDefaultsAction?.Invoke(Controller.Data);
+                    _setDefaultsAction?.Invoke(Controller.OVData);
+                    _setDefaultsAction?.Invoke(Controller.PeriodenData);
 				}
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {
@@ -362,6 +361,11 @@ namespace TLCGen.DataAccess
             }
             return false;
         }
+
+	    public void InjectDefaultAction(Action<object> setDefaultsAction)
+	    {
+		    _setDefaultsAction = setDefaultsAction;
+	    }
 
 #if DEBUG
         public bool OpenDebug()

@@ -38,60 +38,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="TLCGen.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.CustomPropertyEditors">
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.CustomPropertyEditors.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Dialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.GuiActions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.GuiActions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Helpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Integrity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Integrity.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.ModelManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.ModelManager.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Settings.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies">
+      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
@@ -126,12 +74,19 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
+      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
+      <Name>TLCGen.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
+      <Name>TLCGen.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen\TLCGen.csproj">
       <Project>{bfc33a68-228a-46b6-9e7d-25f41ac5c02c}</Project>
       <Name>TLCGen</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

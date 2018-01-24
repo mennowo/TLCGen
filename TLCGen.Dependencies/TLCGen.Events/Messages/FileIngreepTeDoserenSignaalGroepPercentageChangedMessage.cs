@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models;
 
 namespace TLCGen.Messaging.Messages
 {
-    public class FileIngreepTeDoserenSignaalGroepPercentageChangedMessage : MessageBase
+    public class FileIngreepTeDoserenSignaalGroepPercentageChangedMessage
     {
         public FileIngreepTeDoserenSignaalGroepModel TeDoserenSignaalGroep { get; }
 

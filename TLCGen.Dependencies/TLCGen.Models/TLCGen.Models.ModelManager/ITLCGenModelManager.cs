@@ -10,5 +10,7 @@ namespace TLCGen.ModelManagement
     public interface ITLCGenModelManager
     {
         ControllerModel Controller { get; set; }
+
+	    void InjectDefaultAction(Action<object> setDefaultsAction);
     }
 }

@@ -134,12 +134,9 @@ namespace TLCGen.Plugins
             }
         }
 
-        public void LoadApplicationParts(string nspace)
+        public void LoadApplicationParts(List<Type> types)
         {
-            var q = from t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                    where t.IsClass && t.Namespace == nspace
-                    select t;
-            foreach (var type in q)
+            foreach (var type in types)
             {
                 // Load parts
                 var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));

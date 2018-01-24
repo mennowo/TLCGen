@@ -11,6 +11,6 @@ namespace TLCGen.Plugins
         List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationPlugins { get; }
         List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> ApplicationParts { get; }
         void LoadPlugins(string pluginpath);
-        void LoadApplicationParts(string nspace);
+        void LoadApplicationParts(List<Type> types);
     }
 }

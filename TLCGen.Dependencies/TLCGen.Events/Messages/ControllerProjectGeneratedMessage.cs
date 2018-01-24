@@ -1,8 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 
 namespace TLCGen.Messaging.Messages
 {
-    public class ControllerProjectGeneratedMessage : MessageBase
+    public class ControllerProjectGeneratedMessage
     {
         
     }

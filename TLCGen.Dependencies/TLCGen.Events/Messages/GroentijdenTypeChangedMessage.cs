@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+﻿
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {
-	public class GroentijdenTypeChangedMessage : MessageBase
+	public class GroentijdenTypeChangedMessage
     {
         public GroentijdenTypeEnum Type { get; }
 

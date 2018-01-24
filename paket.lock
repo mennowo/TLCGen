@@ -2,7 +2,7 @@ RESTRICTION: == net45
 NUGET
   remote: https://api.nuget.org/v3/index.json
     Castle.Core (4.2.1)
-    CommonServiceLocator (2.0.1)
+    CommonServiceLocator (2.0.2)
     Extended.Wpf.Toolkit (3.2)
     Microsoft.WindowsAPICodePack.Core (1.1)
     Microsoft.WindowsAPICodePack.Shell (1.1)

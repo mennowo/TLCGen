@@ -62,9 +62,6 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FloodFill">
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\FloodFill.dll</HintPath>
-    </Reference>
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>Libs\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
@@ -87,60 +84,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TLCGen.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.CustomPropertyEditors, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.CustomPropertyEditors.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Dialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Dialogs.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.GuiActions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.GuiActions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Helpers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Integrity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Integrity.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.ModelManager">
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.ModelManager.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models.Enumerations, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\TLCGen.Dependencies\bin\Debug\TLCGen.Settings.dll</HintPath>
+      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -817,9 +763,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
+      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
+      <Name>TLCGen.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
+      <Name>TLCGen.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.GebruikersOpties\TLCGen.GebruikersOpties.csproj">
       <Project>{deae73bc-0c8e-47bf-b7ae-850617a34949}</Project>
       <Name>TLCGen.GebruikersOpties</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.TLCCC.csproj">
       <Project>{1687e431-d444-4d29-ab19-3688e47fb411}</Project>
@@ -856,8 +818,7 @@ move "$(TargetDir)TLCGen.Generators.*.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Importers.*.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
-copy "$(TargetDir)..\..\..\TLCGen.Updater\bin\$(Configuration)\*.*" "$(TargetDir)Updater"</PostBuildEvent>
+move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
@@ -911,6 +872,28 @@ copy "$(TargetDir)..\..\..\TLCGen.Updater\bin\$(Configuration)\*.*" "$(TargetDir
         </Reference>
         <Reference Include="Xceed.Wpf.Toolkit">
           <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.WindowsAPICodePack">
+          <HintPath>..\packages\Microsoft.WindowsAPICodePack.Core\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+          <HintPath>..\packages\Microsoft.WindowsAPICodePack.Shell\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

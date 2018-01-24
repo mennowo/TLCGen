@@ -46,29 +46,9 @@
     <Reference Include="TLCGen.Controls">
       <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="TLCGen.DataAccess">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Extensions">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Helpers">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Integrity">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Integrity.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Messaging">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Models.Enumerations">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Models.Enumerations.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.Plugins">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Plugins.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -122,6 +102,42 @@
       <ItemGroup>
         <Reference Include="CommonServiceLocator">
           <HintPath>..\..\packages\CommonServiceLocator\lib\net45\CommonServiceLocator.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Xceed.Wpf.AvalonDock">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.DataGrid">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+        <Reference Include="Xceed.Wpf.Toolkit">
+          <HintPath>..\..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
