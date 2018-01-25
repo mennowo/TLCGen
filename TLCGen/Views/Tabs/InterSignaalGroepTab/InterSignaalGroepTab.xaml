@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
@@ -11,7 +12,7 @@
              xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              x:Name="root"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:SynchronisatiesTabViewModel}">
     <UserControl.Resources>
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
@@ -90,38 +91,15 @@
             </Grid>
             
             <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Gelijkstart}}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Gelijkstart opties" FontWeight="Bold" Grid.Row="0" />
-                <StackPanel 
-                    HorizontalAlignment="Stretch" IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}" Grid.Row="1">
-                    <CheckBox Content="Deelconflict" IsChecked="{Binding Path=GelijkstartDeelConflict}" Margin="5" />
-                    <StackPanel IsEnabled="{Binding Path=GelijkstartDeelConflict}" HorizontalAlignment="Stretch">
-                        <Label Content="{Binding Path=Comment1}" />
-                        <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseVan}" Margin="2" />
-                        <Label Content="{Binding Path=Comment2}" />
-                        <TextBox Text="{Binding Path=GelijkstartOntruimingstijdFaseNaar}" Margin="2" />
-                    </StackPanel>
-                </StackPanel>
+                IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}"
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Gelijkstart}}" >
+                <local:GelijkstartView DataContext="{Binding Path=SelectedSynchronisatie.GelijkstartVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Voorstart}}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
-                <StackPanel 
-                    HorizontalAlignment="Stretch" IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}" Grid.Row="1">
-                    <Label Content="{Binding Path=Comment1}" />
-                    <TextBox Text="{Binding Path=VoorstartTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                    <Label Content="{Binding Path=Comment2}" />
-                    <TextBox Text="{Binding Path=VoorstartOntruimingstijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                </StackPanel>
+                IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}"
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Voorstart}}" >
+                <local:VoorstartView DataContext="{Binding Path=SelectedSynchronisatie.VoorstartVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
 
             <Grid 

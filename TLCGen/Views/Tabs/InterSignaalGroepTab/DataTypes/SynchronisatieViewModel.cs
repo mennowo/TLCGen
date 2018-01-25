@@ -41,6 +41,8 @@ namespace TLCGen.ViewModels
 
         private NaloopViewModel _NaloopVM;
         private MeeaanvraagViewModel _MeeaanvraagVM;
+        private VoorstartViewModel _VoorstartVM;
+	    private GelijkstartViewModel _GelijkstartVM;
 
         private Dictionary<IntersignaalGroepTypeEnum, IInterSignaalGroepElement> _InterSignaalGroepElements;
 
@@ -48,30 +50,18 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public NaloopViewModel NaloopVM
-        {
-            get
-            {
-                if(_NaloopVM == null)
-                    _NaloopVM = new NaloopViewModel(_Naloop);
-                return _NaloopVM;
-            }
-        }
+        public NaloopViewModel NaloopVM => _NaloopVM ?? (_NaloopVM = new NaloopViewModel(_Naloop));
 
-        public MeeaanvraagViewModel MeeaanvraagVM
-        {
-            get
-            {
-                if (_MeeaanvraagVM == null)
-                    _MeeaanvraagVM = new MeeaanvraagViewModel(_Meeaanvraag);
-                return _MeeaanvraagVM;
-            }
-        }
+	    public MeeaanvraagViewModel MeeaanvraagVM => _MeeaanvraagVM ?? (_MeeaanvraagVM = new MeeaanvraagViewModel(_Meeaanvraag));
+        
+	    public VoorstartViewModel VoorstartVM => _VoorstartVM ?? (_VoorstartVM = new VoorstartViewModel(_Voorstart));
+	    
+	    public GelijkstartViewModel GelijkstartVM => _GelijkstartVM ?? (_GelijkstartVM = new GelijkstartViewModel(_Gelijkstart));
 
-        public ConflictModel Conflict
+	    public ConflictModel Conflict
         {
-            get { return _Conflict; }
-            set
+            get => _Conflict;
+		    set
             {
                 _Conflict = value;
                 HasConflict = _Conflict != null;
@@ -80,8 +70,8 @@ namespace TLCGen.ViewModels
 
         public NaloopModel Naloop
         {
-            get { return _Naloop; }
-            set
+            get => _Naloop;
+	        set
             {
                 _Naloop = value;
                 HasNaloop = _Naloop != null;
@@ -90,8 +80,8 @@ namespace TLCGen.ViewModels
 
         public GelijkstartModel Gelijkstart
         {
-            get { return _Gelijkstart; }
-            set
+            get => _Gelijkstart;
+	        set
             {
                 _Gelijkstart = value;
                 HasGelijkstart = _Gelijkstart != null;
@@ -100,8 +90,8 @@ namespace TLCGen.ViewModels
 
         public VoorstartModel Voorstart
         {
-            get { return _Voorstart; }
-            set
+            get => _Voorstart;
+	        set
             {
                 _Voorstart = value;
                 HasVoorstart = _Voorstart != null;
@@ -110,8 +100,8 @@ namespace TLCGen.ViewModels
 
         public MeeaanvraagModel Meeaanvraag
         {
-            get { return _Meeaanvraag; }
-            set
+            get => _Meeaanvraag;
+	        set
             {
                 _Meeaanvraag = value;
                 _HasMeeaanvraag = _Meeaanvraag != null;
@@ -120,8 +110,8 @@ namespace TLCGen.ViewModels
 
         public LateReleaseModel LateRelease
         {
-            get { return _LateRelease; }
-            set
+            get => _LateRelease;
+	        set
             {
                 _LateRelease = value;
                 _HasLateRelease = _LateRelease != null;
@@ -130,11 +120,11 @@ namespace TLCGen.ViewModels
 
         public IntersignaalGroepTypeEnum DisplayType
         {
-            get { return _DisplayType; }
-            set
+            get => _DisplayType;
+	        set
             {
                 _DisplayType = value;
-                RaisePropertyChanged("DisplayType");
+                RaisePropertyChanged();
                 RaisePropertyChanged("ConflictValue");
                 RaisePropertyChanged("IsCoupled");
                 RaisePropertyChanged("HasNoCoupling");
@@ -144,11 +134,11 @@ namespace TLCGen.ViewModels
 
         public int SynchronisationValue
         {
-            get { return _SynchronisationValue; }
-            set
+            get => _SynchronisationValue;
+	        set
             {
                 _SynchronisationValue = value;
-                RaisePropertyChanged("SynchronisationValue");
+                RaisePropertyChanged();
             }
         }
 
@@ -450,7 +440,7 @@ namespace TLCGen.ViewModels
         }
 
         private bool _HasOppositeLateRelease;
-        public bool HasOppositeLateRelease
+	    public bool HasOppositeLateRelease
         {
             get { return _HasOppositeLateRelease; }
             set

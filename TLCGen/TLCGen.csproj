@@ -113,6 +113,10 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GelijkstartView.xaml.cs">
+      <DependentUpon>GelijkstartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\GelijkstartViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVHDFaseDataOverviewViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml.cs">
       <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
@@ -477,6 +481,12 @@
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\VersieBeheerTabView.xaml.cs">
       <DependentUpon>VersieBeheerTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\VoorstartView.xaml.cs">
+      <DependentUpon>VoorstartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\VoorstartViewModel.cs">
+      <DependentUpon>VoorstartView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -506,6 +516,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GelijkstartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -741,6 +755,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\VoorstartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -776,6 +794,10 @@
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
+      <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
+      <Name>TLCGen.CustomPropertyEditors</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
       <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
