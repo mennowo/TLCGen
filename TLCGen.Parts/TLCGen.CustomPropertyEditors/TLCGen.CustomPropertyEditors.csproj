@@ -54,6 +54,12 @@
   <ItemGroup>
     <None Include="paket.references" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

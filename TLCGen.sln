@@ -25,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.SpecialsRotterdam", "TLCGen.PluggedInItems\TLCGen.SpecialsRotterdam\TLCGen.SpecialsRotterdam.csproj", "{14C1BBC3-EDA1-4D16-897D-43138ABE02DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.CCOL", "TLCGen.PluggedInItems\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj", "{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2C677528-AD13-4081-A55F-CE70F9A10B84} = {2C677528-AD13-4081-A55F-CE70F9A10B84}
+		{9890605D-8F9C-4AC0-8493-1598DFF0007F} = {9890605D-8F9C-4AC0-8493-1598DFF0007F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Generators.TLCCC", "TLCGen.PluggedInItems\TLCGen.Generators.YATLCCLC\TLCGen.Generators.TLCCC.csproj", "{1687E431-D444-4D29-AB19-3688E47FB411}"
 EndProject

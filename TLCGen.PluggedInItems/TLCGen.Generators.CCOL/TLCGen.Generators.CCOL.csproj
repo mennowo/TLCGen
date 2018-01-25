@@ -42,12 +42,6 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Xml" />
-    <Reference Include="TLCGen.Controls">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="TLCGen.CustomPropertyEditors">
-      <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.CustomPropertyEditors.dll</HintPath>
-    </Reference>
     <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
@@ -280,6 +274,16 @@
     <Content Include="SourceFiles\winmg.h">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.CustomPropertyEditors\TLCGen.CustomPropertyEditors.csproj">
+      <Project>{9890605d-8f9c-4ac0-8493-1598dff0007f}</Project>
+      <Name>TLCGen.CustomPropertyEditors</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
