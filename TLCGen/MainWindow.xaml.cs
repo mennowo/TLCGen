@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GalaSoft.MvvmLight.Threading;
 using TLCGen.Plugins;
+using TLCGen.ViewModels;
 
 namespace TLCGen
 {
@@ -24,20 +25,22 @@ namespace TLCGen
     {
         public MainWindow()
         {
-            InitializeComponent();	
+            InitializeComponent();
+
+	        TLCGenSplashScreenHelper.SplashScreen = new TLCGenSplashScreenView();
+	        TLCGenSplashScreenHelper.Show();
+	        TLCGenSplashScreenHelper.ShowText("TLCGen wordt gestart...");
 
 			DispatcherHelper.Initialize();
 
             MainToolBarTray.DataContextChanged += (s, e) =>
             {
-                var vm = e.NewValue as ViewModels.MainWindowViewModel;
-                if (vm == null) return;
+	            if (!(e.NewValue is MainWindowViewModel vm)) return;
                 foreach (var pl in vm.ApplicationParts)
                 {
                     if ((pl.Item1 & TLCGenPluginElems.ToolBarControl) != TLCGenPluginElems.ToolBarControl) continue;
                     var tb = new ToolBar();
-                    var tlcGenToolBar = pl.Item2 as ITLCGenToolBar;
-                    if (tlcGenToolBar != null) tb.Items.Add(tlcGenToolBar.ToolBarView);
+	                if (pl.Item2 is ITLCGenToolBar tlcGenToolBar) tb.Items.Add(tlcGenToolBar.ToolBarView);
                     MainToolBarTray.ToolBars.Add(tb);
                 }
             };
@@ -57,6 +60,15 @@ namespace TLCGen
             mvm.FileOpenFailed += (sender, s) => RecentFileList.RemoveFile(s);
 
             mvm.CheckCommandLineArgs();
+
+	        TLCGenSplashScreenHelper.Hide();
         }
+
+	    protected override void OnClosed(EventArgs e)
+	    {
+		    base.OnClosed(e);
+
+		    Application.Current.Shutdown();
+	    }
     }
 }

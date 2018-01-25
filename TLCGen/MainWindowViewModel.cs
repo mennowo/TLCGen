@@ -6,9 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Routing;
 using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
@@ -783,6 +781,7 @@ namespace TLCGen.ViewModels
                 MessengerInstance.Register(this, new Action<ControllerFileNameChangedMessage>(OnControllerFileNameChanged));
 
                 // Load application settings and defaults
+	            TLCGenSplashScreenHelper.ShowText("Laden instellingen en defaults...");
                 SettingsProvider.Default.LoadApplicationSettings();
                 DefaultsProvider.Default.LoadSettings();
                 TemplatesProvider.Default.LoadSettings();
@@ -795,7 +794,9 @@ namespace TLCGen.ViewModels
 	            var types = from t in assms.GetTypes()
 		            where t.IsClass && t.Namespace == "TLCGen.ViewModels"
 		            select t;
+	            TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
                 TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
+	            TLCGenSplashScreenHelper.ShowText("Laden plugins...");
                 TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
                 // Instantiate all parts
@@ -804,6 +805,7 @@ namespace TLCGen.ViewModels
                 foreach (var part in parts)
                 {
                     ITLCGenPlugin instpl = part.Item2;
+					TLCGenSplashScreenHelper.ShowText($"Laden plugin {instpl.GetPluginName()}...");
                     var flags = Enum.GetValues(typeof(TLCGenPluginElems));
                     foreach (TLCGenPluginElems elem in flags)
                     {
@@ -903,6 +905,8 @@ namespace TLCGen.ViewModels
             }
             catch (Exception e)
             {
+	            TLCGenSplashScreenHelper.Hide();
+
                 string message = "Er is een onverwachte fout opgetreden.\n\n";
                 message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
                 var win = new TLCGen.Dialogs.UnhandledExceptionWindow();
@@ -915,66 +919,66 @@ namespace TLCGen.ViewModels
             Directory.SetCurrentDirectory(tmpCurDir);
 
 			// Find out if there is a newer version available via Wordpress REST API
-            Task.Run(() =>
-            {
-				// clean potential old data
-	            var key = Registry.CurrentUser.OpenSubKey("Software", true);
-	            var sk1 = key?.OpenSubKey("CodingConnected e.U.", true);
-	            var sk2 = sk1?.OpenSubKey("TLCGen", true);
-	            var tempFile = (string) sk2?.GetValue("TempInstallFile", null);
-	            if (tempFile != null)
-	            {
-		            if (File.Exists(tempFile))
-		            {
-			            File.Delete(tempFile);
-		            }
-					sk2?.DeleteValue("TempInstallFile");
-	            }
-
-	            var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
-	            webRequest.UseDefaultCredentials = true;
-	            using (var response = webRequest.GetResponse())
-				using (var content = response.GetResponseStream())
-				if(content != null) {
-					using (var reader = new StreamReader(content))
-					{
-						var strContent = reader.ReadToEnd().Replace("\n", "");
-						var jsonDeserializer = new JavaScriptSerializer();
-						var deserializedJson = jsonDeserializer.Deserialize<dynamic>(strContent);
-						if (deserializedJson == null) return;
-						var contentData = deserializedJson["content"];
-						if (contentData == null) return;
-						var renderedData = contentData["rendered"];
-						if (renderedData == null) return;
-						var data = renderedData as string;
-						if (data == null) return;
-						var all = data.Split('\r');
-						var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
-						if (tlcgenVer == null) return;
-						var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
-						var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-						var over = 0;
-						var nver = 0;
-						if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
-						{
-							for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
-							{
-								over += int.Parse(oldvers[i]) * j;
-								nver += int.Parse(newvers[i]) * j;
-								j *= 10;
-							}
-						}
-						if (nver > over)
-						{
-							DispatcherHelper.CheckBeginInvokeOnUI(() =>
-							{
-								var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
-								w.ShowDialog();
-							});
-						}
-					}
-				}
-            });
+            //Task.Run(() =>
+            //{
+			//	// clean potential old data
+	        //    var key = Registry.CurrentUser.OpenSubKey("Software", true);
+	        //    var sk1 = key?.OpenSubKey("CodingConnected e.U.", true);
+	        //    var sk2 = sk1?.OpenSubKey("TLCGen", true);
+	        //    var tempFile = (string) sk2?.GetValue("TempInstallFile", null);
+	        //    if (tempFile != null)
+	        //    {
+		    //        if (File.Exists(tempFile))
+		    //        {
+			//            File.Delete(tempFile);
+		    //        }
+			//		sk2?.DeleteValue("TempInstallFile");
+	        //    }
+			//
+	        //    var webRequest = WebRequest.Create(@"https://codingconnected.eu/wp-json/wp/v2/pages/1105");
+	        //    webRequest.UseDefaultCredentials = true;
+	        //    using (var response = webRequest.GetResponse())
+			//	using (var content = response.GetResponseStream())
+			//	if(content != null) {
+			//		using (var reader = new StreamReader(content))
+			//		{
+			//			var strContent = reader.ReadToEnd().Replace("\n", "");
+			//			var jsonDeserializer = new JavaScriptSerializer();
+			//			var deserializedJson = jsonDeserializer.Deserialize<dynamic>(strContent);
+			//			if (deserializedJson == null) return;
+			//			var contentData = deserializedJson["content"];
+			//			if (contentData == null) return;
+			//			var renderedData = contentData["rendered"];
+			//			if (renderedData == null) return;
+			//			var data = renderedData as string;
+			//			if (data == null) return;
+			//			var all = data.Split('\r');
+			//			var tlcgenVer = all.FirstOrDefault(v => v.StartsWith("TLCGen="));
+			//			if (tlcgenVer == null) return;
+			//			var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
+			//			var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
+			//			var over = 0;
+			//			var nver = 0;
+			//			if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
+			//			{
+			//				for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+			//				{
+			//					over += int.Parse(oldvers[i]) * j;
+			//					nver += int.Parse(newvers[i]) * j;
+			//					j *= 10;
+			//				}
+			//			}
+			//			if (nver > over)
+			//			{
+			//				DispatcherHelper.CheckBeginInvokeOnUI(() =>
+			//				{
+			//					var w = new NewVersionAvailableWindow(tlcgenVer.Replace("TLCGen=", ""));
+			//					w.ShowDialog();
+			//				});
+			//			}
+			//		}
+			//	}
+            //});
 		}
 
         #endregion // Constructor

@@ -101,6 +101,12 @@
     <Compile Include="MainWindowViewModel.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TLCGenSplashScreenHelper.cs">
+      <DependentUpon>TLCGenSplashScreenView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TLCGenSplashScreenView.xaml.cs">
+      <DependentUpon>TLCGenSplashScreenView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\IntersignaalGroepTypeEnum.cs" />
     <Compile Include="ViewModels\TLCGenMainTabItemViewModel.cs" />
     <Compile Include="ViewModels\TLCGenTabItemViewModel.cs" />
@@ -499,6 +505,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="TLCGenSplashScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -809,9 +819,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <SplashScreen Include="Resources\AppSplash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

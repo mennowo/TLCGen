@@ -281,6 +281,7 @@ namespace TLCGen.Settings
 				    filename,
 				    new XmlReaderSettings() {IgnoreComments = true});
 		    doc.Load(reader);
+			reader.Dispose();
 		    var defs = doc.DocumentElement?.SelectSingleNode("Defaults");
 		    if (defs == null) return null;
 		    foreach (XmlNode def in defs.ChildNodes)
