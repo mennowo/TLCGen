@@ -18,7 +18,7 @@ namespace TLCGen.ViewModels
     /// Used to disclose relevant information about a PhaseCyclus to the of the application
     /// that deals with modules.
     /// </summary>
-    public class FaseCyclusModuleViewModel : ViewModelBase
+    public class FaseCyclusModuleViewModel : ViewModelBase, IComparable
     {
         #region Fields
 
@@ -141,6 +141,11 @@ namespace TLCGen.ViewModels
         public override string ToString()
         {
             return Naam;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return string.Compare(Naam, ((FaseCyclusModuleViewModel) obj).Naam, StringComparison.Ordinal);
         }
 
         #endregion // Overrides

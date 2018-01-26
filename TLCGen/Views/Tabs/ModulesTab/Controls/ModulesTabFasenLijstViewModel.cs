@@ -218,7 +218,7 @@ namespace TLCGen.ViewModels
         {
             var sfc = SelectedFaseCyclus;
             Fasen.Clear();
-            foreach (FaseCyclusModel fcm in _Controller.Fasen)
+            foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(new FaseCyclusModuleViewModel(fcm, null));
             }
@@ -236,6 +236,17 @@ namespace TLCGen.ViewModels
             {
                 SelectedFaseCyclus = Fasen[0];
             }
+            Fasen.BubbleSort();
+        }
+
+        private void OnNameChanged(NameChangedMessage obj)
+        {
+            Fasen.BubbleSort();
+        }
+
+        private void OnFasenSortedChanged(FasenSortedMessage obj)
+        {
+            Fasen.BubbleSort();
         }
 
         #endregion // Message handling
@@ -245,6 +256,8 @@ namespace TLCGen.ViewModels
         public ModulesTabFasenLijstViewModel()
         {   
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSortedChanged));
         }
 
         #endregion // Constructor

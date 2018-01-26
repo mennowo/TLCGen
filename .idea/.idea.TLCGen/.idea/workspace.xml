@@ -2,25 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/contentModel.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/indexLayout.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/modules.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/vcs.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/riderModule.iml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/.idea/.idea.TLCGen.Dependencies/.idea/vcs.xml" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" />
-      <change beforePath="$PROJECT_DIR$/TLCGen/Views/UserControls/ConflictMatrixDataGrid.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/UserControls/ConflictMatrixDataGrid.xaml" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -30,92 +14,115 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="HalfstarCodeGenerator.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
+      <file leaf-file-name="ModulesTabFasenLijstViewModel.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="156" column="84" lean-forward="false" selection-start-line="156" selection-start-column="84" selection-end-line="156" selection-end-column="84" />
+            <state relative-caret-position="356">
+              <caret line="248" column="0" lean-forward="false" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="0" />
               <folding>
-                <marker date="1516961691316" expanded="false" signature="6:260" ph="..." />
-                <marker date="1516961691316" expanded="true" signature="323:48717" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="419:48715" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="2261:11156" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="2391:11148" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="3897:4587" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5120:5260" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5346:5497" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5444:5491" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5690:6057" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5764:5909" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="5851:5902" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="6106:10069" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="6403:8207" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="7312:7430" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="7471:7578" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="8259:10063" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="9174:9293" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="9335:9443" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="10295:10471" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="10720:10919" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="10978:11143" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11198:11222" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11308:11366" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11413:11437" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11506:11542" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11596:12716" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="11617:12712" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="12803:47678" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="12882:12907" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="13100:13125" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="13143:47674" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="13777:13852" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="14232:14941" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="15196:15717" ph="Reset data" />
-                <marker date="1516961691316" expanded="true" signature="15384:15457" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="15724:17918" ph="Bepalen PL/var/arh door master" />
-                <marker date="1516961691316" expanded="true" signature="15820:17867" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="15853:17860" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="16280:16507" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="16308:16395" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="16885:17091" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="16913:16964" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="17925:21368" ph="Zelf bepalen PL/var/arh" />
-                <marker date="1516961691316" expanded="true" signature="18098:18394" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="18815:19104" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="19378:20338" ph="Klok bepaling VA bedrijf" />
-                <marker date="1516961691316" expanded="true" signature="19738:19898" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="20345:21198" ph="Klok bepaling alternatieven hoofdrichtingen" />
-                <marker date="1516961691316" expanded="true" signature="20666:20822" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="21256:21302" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="21375:22401" ph="Bepalen VA bedrijf schakelaar" />
-                <marker date="1516961691316" expanded="true" signature="21532:21603" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="21613:21716" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="22002:22143" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="22408:22873" ph="Bepalen alternatieven hoofdrichtingen schakelaar" />
-                <marker date="1516961691316" expanded="true" signature="22958:23545" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="24740:25072" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="26653:26819" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="27790:28186" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="28016:28143" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="28609:28730" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="28816:30539" ph="/* sb.AppendLine($&quot;{ts}for (fc = 0; fc &lt; FCMAX; ++fc)&quot;); ... */" />
-                <marker date="1516961691316" expanded="true" signature="31245:31334" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="34394:34464" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="34474:34864" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="35093:35161" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="35171:35557" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="36742:37037" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="38632:39028" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="39893:42168" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="42308:42574" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="42659:47440" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="42704:47433" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="44276:45692" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="45347:45575" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="46532:46712" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="46780:46835" ph="{...}" />
-                <marker date="1516961691316" expanded="true" signature="47763:48712" ph="{...}" />
+                <marker date="1516962316097" expanded="false" signature="6:368" ph="..." />
+                <marker date="1516962316097" expanded="true" signature="397:8793" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="404:606" ph="/// ViewModel meant for displaying a list of phases in the Modules tab. ... " />
+                <marker date="1516962316097" expanded="true" signature="669:8791" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="684:1029" ph="Fields" />
+                <marker date="1516962316097" expanded="true" signature="1039:4009" ph="Properties" />
+                <marker date="1516962316097" expanded="true" signature="1100:1540" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1166:1530" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1289:1516" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1377:1498" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1610:1861" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1636:1851" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1686:1806" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1922:2139" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="1996:2129" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="2194:3061" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="2264:3051" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="2430:2981" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="2707:2799" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="2824:2917" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="3122:3975" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="3196:3965" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="3340:3891" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="3617:3709" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="3734:3827" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4019:4480" ph="Commands" />
+                <marker date="1516962316097" expanded="true" signature="4125:4448" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4151:4438" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4216:4378" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4490:7242" ph="Command functionality" />
+                <marker date="1516962316097" expanded="true" signature="4575:7046" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4745:5514" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="4812:5175" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="5212:5500" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="5251:5368" ph="/* Use custom method instead of Remove method: ... */" />
+                <marker date="1516962316097" expanded="true" signature="5563:6482" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="5630:5989" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="6026:6468" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="6065:6182" ph="/* Use custom method instead of Remove method: ... */" />
+                <marker date="1516962316097" expanded="true" signature="6546:6964" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="6722:6803" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="6824:6907" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7104:7197" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7252:7312" ph="Public Methods" />
+                <marker date="1516962316097" expanded="true" signature="7330:8362" ph="Message handling" />
+                <marker date="1516962316097" expanded="true" signature="7420:8091" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7550:7647" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7694:7937" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7749:7923" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7811:7905" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="7974:8049" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="8151:8203" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="8270:8322" ph="{...}" />
+                <marker date="1516962316097" expanded="true" signature="8372:8785" ph="Constructor" />
+                <marker date="1516962316097" expanded="true" signature="8439:8750" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FaseCyclusModuleViewModel.cs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="638">
+              <caret line="147" column="19" lean-forward="false" selection-start-line="147" selection-start-column="19" selection-end-line="147" selection-end-column="19" />
+              <folding>
+                <marker date="1516962111441" expanded="false" signature="6:343" ph="..." />
+                <marker date="1516962111441" expanded="true" signature="372:5338" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="379:536" ph="/// Used to disclose relevant information about a PhaseCyclus to the of the application ... " />
+                <marker date="1516962111441" expanded="true" signature="608:5336" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="623:813" ph="Fields" />
+                <marker date="1516962111441" expanded="true" signature="823:4287" ph="Properties" />
+                <marker date="1516962111441" expanded="true" signature="851:1143" ph="/// A reference to the currently selected module. When this value is set, the method ... " />
+                <marker date="1516962111441" expanded="true" signature="1183:1406" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="1247:1396" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="1461:1696" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="1529:1686" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="1706:1782" ph="/// The name of the PhaseCyclus ... " />
+                <marker date="1516962111441" expanded="true" signature="1809:1874" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="1884:2025" ph="/// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM ... " />
+                <marker date="1516962111441" expanded="true" signature="2056:3082" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="2082:3072" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="2135:2589" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="2234:2571" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="2632:3029" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3092:3223" ph="/// Indicates if this phase is or is not in the Module referenced by property ModuleVM ... " />
+                <marker date="1516962111441" expanded="true" signature="3248:4008" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3274:3998" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3327:3626" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3426:3574" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3669:3954" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="3758:3902" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="4071:4169" ph="/// Indicates that the property ModuleVM has no value ... " />
+                <marker date="1516962111441" expanded="true" signature="4297:4365" ph="Collection Changed" />
+                <marker date="1516962111441" expanded="true" signature="4375:4682" ph="Overrides" />
+                <marker date="1516962111441" expanded="true" signature="4435:4480" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="4522:4649" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="4692:5102" ph="Public methods" />
+                <marker date="1516962111441" expanded="true" signature="4724:4813" ph="/// Instructs the view that info has changed ... " />
+                <marker date="1516962111441" expanded="true" signature="4852:5064" ph="{...}" />
+                <marker date="1516962111441" expanded="true" signature="5112:5330" ph="Constructor" />
+                <marker date="1516962111441" expanded="true" signature="5215:5295" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -127,12 +134,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
+        <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs" />
+        <option value="$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs" />
       </list>
     </option>
   </component>
@@ -167,32 +178,6 @@
             <path>
               <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
               <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="CodeGeneration" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="CodeGeneration" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="Functionality" type="977d5f41:SolutionExplorerNodeRider" />
-            </path>
-            <path>
-              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
-              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
               <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
             </path>
             <path>
@@ -214,7 +199,35 @@
               <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
               <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
               <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
-              <item name="SpecialsTab" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="ModulesTab" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="ModulesTab" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Controls" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="ModulesTab" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Controls" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="ModulesTabFasenLijstView.xaml" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="ModulesTab" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
             </path>
           </expand>
           <select />
@@ -272,11 +285,12 @@
       <option name="presentableId" value="Default" />
       <updated>1516960246879</updated>
       <workItem from="1516960248676" duration="1539000" />
+      <workItem from="1516961973824" duration="544000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1539000" />
+    <option name="totallyTimeSpent" value="2083000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -289,28 +303,27 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1170" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23072916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -322,6 +335,94 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1516961691316" expanded="false" signature="6:260" ph="..." />
+            <marker date="1516961691316" expanded="true" signature="323:48717" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="419:48715" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="2261:11156" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="2391:11148" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="3897:4587" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5120:5260" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5346:5497" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5444:5491" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5690:6057" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5764:5909" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5851:5902" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="6106:10069" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="6403:8207" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="7312:7430" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="7471:7578" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="8259:10063" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="9174:9293" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="9335:9443" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10295:10471" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10720:10919" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10978:11143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11198:11222" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11308:11366" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11413:11437" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11506:11542" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11596:12716" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11617:12712" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="12803:47678" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="12882:12907" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13100:13125" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13143:47674" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13777:13852" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="14232:14941" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15196:15717" ph="Reset data" />
+            <marker date="1516961691316" expanded="true" signature="15384:15457" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15724:17918" ph="Bepalen PL/var/arh door master" />
+            <marker date="1516961691316" expanded="true" signature="15820:17867" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15853:17860" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16280:16507" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16308:16395" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16885:17091" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16913:16964" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="17925:21368" ph="Zelf bepalen PL/var/arh" />
+            <marker date="1516961691316" expanded="true" signature="18098:18394" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="18815:19104" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="19378:20338" ph="Klok bepaling VA bedrijf" />
+            <marker date="1516961691316" expanded="true" signature="19738:19898" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="20345:21198" ph="Klok bepaling alternatieven hoofdrichtingen" />
+            <marker date="1516961691316" expanded="true" signature="20666:20822" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21256:21302" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21375:22401" ph="Bepalen VA bedrijf schakelaar" />
+            <marker date="1516961691316" expanded="true" signature="21532:21603" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21613:21716" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="22002:22143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="22408:22873" ph="Bepalen alternatieven hoofdrichtingen schakelaar" />
+            <marker date="1516961691316" expanded="true" signature="22958:23545" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="24740:25072" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="26653:26819" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="27790:28186" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28016:28143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28609:28730" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28816:30539" ph="/* sb.AppendLine($&quot;{ts}for (fc = 0; fc &lt; FCMAX; ++fc)&quot;); ... */" />
+            <marker date="1516961691316" expanded="true" signature="31245:31334" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="34394:34464" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="34474:34864" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="35093:35161" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="35171:35557" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="36742:37037" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="38632:39028" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="39893:42168" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42308:42574" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42659:47440" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42704:47433" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="44276:45692" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="45347:45575" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="46532:46712" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="46780:46835" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="47763:48712" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -406,6 +507,115 @@
             <marker date="1516961691316" expanded="true" signature="46532:46712" ph="{...}" />
             <marker date="1516961691316" expanded="true" signature="46780:46835" ph="{...}" />
             <marker date="1516961691316" expanded="true" signature="47763:48712" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/DataTypes/FaseCyclusModuleViewModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="147" column="19" lean-forward="false" selection-start-line="147" selection-start-column="19" selection-end-line="147" selection-end-column="19" />
+          <folding>
+            <marker date="1516962111441" expanded="false" signature="6:343" ph="..." />
+            <marker date="1516962111441" expanded="true" signature="372:5338" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="379:536" ph="/// Used to disclose relevant information about a PhaseCyclus to the of the application ... " />
+            <marker date="1516962111441" expanded="true" signature="608:5336" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="623:813" ph="Fields" />
+            <marker date="1516962111441" expanded="true" signature="823:4287" ph="Properties" />
+            <marker date="1516962111441" expanded="true" signature="851:1143" ph="/// A reference to the currently selected module. When this value is set, the method ... " />
+            <marker date="1516962111441" expanded="true" signature="1183:1406" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="1247:1396" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="1461:1696" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="1529:1686" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="1706:1782" ph="/// The name of the PhaseCyclus ... " />
+            <marker date="1516962111441" expanded="true" signature="1809:1874" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="1884:2025" ph="/// Indicates if this phase can or cannot be added to the Module referenced by property ModuleVM ... " />
+            <marker date="1516962111441" expanded="true" signature="2056:3082" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="2082:3072" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="2135:2589" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="2234:2571" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="2632:3029" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3092:3223" ph="/// Indicates if this phase is or is not in the Module referenced by property ModuleVM ... " />
+            <marker date="1516962111441" expanded="true" signature="3248:4008" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3274:3998" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3327:3626" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3426:3574" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3669:3954" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="3758:3902" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="4071:4169" ph="/// Indicates that the property ModuleVM has no value ... " />
+            <marker date="1516962111441" expanded="true" signature="4297:4365" ph="Collection Changed" />
+            <marker date="1516962111441" expanded="true" signature="4375:4682" ph="Overrides" />
+            <marker date="1516962111441" expanded="true" signature="4435:4480" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="4522:4649" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="4692:5102" ph="Public methods" />
+            <marker date="1516962111441" expanded="true" signature="4724:4813" ph="/// Instructs the view that info has changed ... " />
+            <marker date="1516962111441" expanded="true" signature="4852:5064" ph="{...}" />
+            <marker date="1516962111441" expanded="true" signature="5112:5330" ph="Constructor" />
+            <marker date="1516962111441" expanded="true" signature="5215:5295" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen/Views/Tabs/ModulesTab/Controls/ModulesTabFasenLijstViewModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="248" column="0" lean-forward="false" selection-start-line="248" selection-start-column="0" selection-end-line="248" selection-end-column="0" />
+          <folding>
+            <marker date="1516962316097" expanded="false" signature="6:368" ph="..." />
+            <marker date="1516962316097" expanded="true" signature="397:8793" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="404:606" ph="/// ViewModel meant for displaying a list of phases in the Modules tab. ... " />
+            <marker date="1516962316097" expanded="true" signature="669:8791" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="684:1029" ph="Fields" />
+            <marker date="1516962316097" expanded="true" signature="1039:4009" ph="Properties" />
+            <marker date="1516962316097" expanded="true" signature="1100:1540" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1166:1530" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1289:1516" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1377:1498" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1610:1861" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1636:1851" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1686:1806" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1922:2139" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="1996:2129" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="2194:3061" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="2264:3051" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="2430:2981" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="2707:2799" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="2824:2917" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="3122:3975" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="3196:3965" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="3340:3891" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="3617:3709" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="3734:3827" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4019:4480" ph="Commands" />
+            <marker date="1516962316097" expanded="true" signature="4125:4448" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4151:4438" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4216:4378" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4490:7242" ph="Command functionality" />
+            <marker date="1516962316097" expanded="true" signature="4575:7046" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4745:5514" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="4812:5175" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="5212:5500" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="5251:5368" ph="/* Use custom method instead of Remove method: ... */" />
+            <marker date="1516962316097" expanded="true" signature="5563:6482" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="5630:5989" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="6026:6468" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="6065:6182" ph="/* Use custom method instead of Remove method: ... */" />
+            <marker date="1516962316097" expanded="true" signature="6546:6964" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="6722:6803" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="6824:6907" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7104:7197" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7252:7312" ph="Public Methods" />
+            <marker date="1516962316097" expanded="true" signature="7330:8362" ph="Message handling" />
+            <marker date="1516962316097" expanded="true" signature="7420:8091" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7550:7647" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7694:7937" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7749:7923" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7811:7905" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="7974:8049" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="8151:8203" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="8270:8322" ph="{...}" />
+            <marker date="1516962316097" expanded="true" signature="8372:8785" ph="Constructor" />
+            <marker date="1516962316097" expanded="true" signature="8439:8750" ph="{...}" />
           </folding>
         </state>
       </provider>
