@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\NL33478\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_TLCGen.Dependencies.77340617.00" t="ExcludeRecursive" />
+    <e p="C:\Users\NL33478\Source\Repos\TLCGen\TLCGen.Dependencies" t="IncludeFlat">
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="FloodFill" t="IncludeRecursive">
+        <e p="AbstractFloodFiller.cs" t="Include" />
+        <e p="EditableBitmap.cs" t="Include" />
+        <e p="FloodFill.csproj" t="IncludeRecursive" />
+        <e p="FloodFillRangeQueue.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="QueueLinearFloodFiller.cs" t="Include" />
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="paket.dependencies" t="Include" />
+      <e p="Solution Items" t="Include" />
+      <e p="TLCGen.DataAccess" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="ITLCGenControllerDataProvider.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.DataAccess.csproj" t="IncludeRecursive" />
+        <e p="TLCGenControllerDataProvider.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Dependencies" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ILMergeConfig.json" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Dependencies.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TLCGen.Dependencies.sln" t="IncludeFlat" />
+      <e p="TLCGen.Events" t="IncludeRecursive">
+        <e p="Messages" t="Include">
+          <e p="ConflictsChangedMessage.cs" t="Include" />
+          <e p="ControllerCodeGeneratedMessage.cs" t="Include" />
+          <e p="ControllerDataChangedMessage.cs" t="Include" />
+          <e p="ControllerFileNameChangedMessage.cs" t="Include" />
+          <e p="ControllerHasOVChangedMessage.cs" t="Include" />
+          <e p="ControllerProjectGeneratedMessage.cs" t="Include" />
+          <e p="DetectorenChangedMessage.cs" t="Include" />
+          <e p="DetectorenExtraListChangedMessage.cs" t="Include" />
+          <e p="FaseDetectorTypeChangedMessage.cs" t="Include" />
+          <e p="FaseDetectorVeiligheidsGroenChangedMessage.cs" t="Include" />
+          <e p="FasenChangedMessage.cs" t="Include" />
+          <e p="FasenChangingMessage.cs" t="Include" />
+          <e p="FasenSortedMessage.cs" t="Include" />
+          <e p="FileIngreepTeDoserenSignaalGroepPercentageChangedMessage.cs" t="Include" />
+          <e p="GroentijdenTypeChangedMessage.cs" t="Include" />
+          <e p="HDIngrepenChangedMessage.cs" t="Include" />
+          <e p="InterSignaalGroepChangedMessage.cs" t="Include" />
+          <e p="NameChangedMessage.cs" t="Include" />
+          <e p="OVIngreepSignaalGroepParametersChangedMessage.cs" t="Include" />
+          <e p="OVIngrepenChangedMessage.cs" t="Include" />
+          <e p="PeriodenChangedMessage.cs" t="Include" />
+          <e p="PTPKoppelingenChangedMessage.cs" t="Include" />
+          <e p="SelectedConflictGroepChangedMessage.cs" t="Include" />
+          <e p="TemplatesChangedMessage.cs" t="Include" />
+          <e p="UpdateTabsEnabledMessage.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Requests" t="Include">
+          <e p="GetDetectorListReqeust.cs" t="Include" />
+          <e p="IsElementIdentifierUniqueRequest.cs" t="Include" />
+          <e p="IsFasenConflictingRequest.cs" t="Include" />
+          <e p="PrepareForGenerationRequest.cs" t="Include" />
+          <e p="ProcessSynchronisationsRequest.cs" t="Include" />
+          <e p="RefreshBitmapRequest.cs" t="Include" />
+        </e>
+        <e p="Responses" t="Include">
+          <e p="GetDetectorListResponse.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Messaging.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TLCGen.Extensions" t="IncludeRecursive">
+        <e p="AssemblyExtensions.cs" t="Include" />
+        <e p="CollectionExtensions.cs" t="Include" />
+        <e p="DataGridExtensions.cs" t="Include" />
+        <e p="EnumerationExtensions.cs" t="Include" />
+        <e p="ListExtensions.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Extensions.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TLCGen.GuiActions" t="IncludeRecursive">
+        <e p="GuiActionsManager.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.GuiActions.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TLCGen.Helpers" t="IncludeRecursive">
+        <e p="DeepCloner.cs" t="Include" />
+        <e p="DesignMode.cs" t="Include" />
+        <e p="EnumHelper.cs" t="Include" />
+        <e p="IViewModelWithItem.cs" t="Include" />
+        <e p="ModelStringSetter.cs" t="Include" />
+        <e p="MultiPropertySetter.cs" t="Include" />
+        <e p="NameSyntaxChecker.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="ObservableCollectionAroundList.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="RecentFileList.cs" t="Include" />
+        <e p="RelayCommand.cs" t="Include" />
+        <e p="TLCGen.Helpers.csproj" t="IncludeRecursive" />
+        <e p="TLCGenSerialization.cs" t="Include" />
+        <e p="TypeSwitch.cs" t="Include" />
+        <e p="XmlNodeConverter.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Integrity" t="IncludeRecursive">
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Integrity.csproj" t="IncludeRecursive" />
+        <e p="TLCGenControllerChecker.cs" t="Include" />
+        <e p="TLCGenControllerModifier.cs" t="Include" />
+        <e p="TLCGenIntegrityChecker.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Models\TLCGen.Models" t="IncludeRecursive">
+        <e p="Attributes" t="Include">
+          <e p="HasDefaultAttribute.cs" t="Include" />
+          <e p="IOElementAttribute.cs" t="Include" />
+          <e p="ModelNameAttribute.cs" t="Include" />
+          <e p="RefersToAttribute.cs" t="Include" />
+          <e p="RefersToDetectorAttribute.cs" t="Include" />
+          <e p="RefersToSignalGroupAttribute.cs" t="Include" />
+        </e>
+        <e p="Interfaces" t="Include">
+          <e p="IInterSignaalGroepElement.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="Base" t="Include">
+            <e p="DetectorModel.cs" t="Include" />
+            <e p="FaseCyclusModel.cs" t="Include" />
+            <e p="GroentijdenSetModel.cs" t="Include" />
+            <e p="GroentijdModel.cs" t="Include" />
+            <e p="IOElementModel.cs" t="Include" />
+            <e p="SegmentDisplayElementModel.cs" t="Include" />
+          </e>
+          <e p="Controller" t="Include">
+            <e p="ControllerDataModel.cs" t="Include" />
+            <e p="FixatieModel.cs" t="Include" />
+            <e p="VersieModel.cs" t="Include" />
+          </e>
+          <e p="ControllerModel.cs" t="Include" />
+          <e p="FileIngreep" t="Include">
+            <e p="FileIngreepDetectorModel.cs" t="Include" />
+            <e p="FileIngreepModel.cs" t="Include" />
+            <e p="FileIngreepTeDoserenSignaalGroepModel.cs" t="Include" />
+          </e>
+          <e p="Halfstar" t="Include">
+            <e p="HalfstarDataModel.cs" t="Include" />
+            <e p="HalfstarGekoppeldeKruisingModel.cs" t="Include" />
+            <e p="HalfstarGekoppeldeKruisingPlanIngangModel.cs" t="Include" />
+            <e p="HalfstarGekoppeldeKruisingPlanUitgangModel.cs" t="Include" />
+            <e p="HalfstarHoofdrichtingModel.cs" t="Include" />
+            <e p="HalfstarPeriodeDataModel.cs" t="Include" />
+            <e p="SignaalPlanFaseModel.cs" t="Include" />
+            <e p="SignaalPlanModel.cs" t="Include" />
+          </e>
+          <e p="InterSignaalGroep" t="Include">
+            <e p="ConflictModel.cs" t="Include" />
+            <e p="GelijkstartModel.cs" t="Include" />
+            <e p="InterSignaalGroepModel.cs" t="Include" />
+            <e p="LateReleaseModel.cs" t="Include" />
+            <e p="MeeaanvraagDetectorModel.cs" t="Include" />
+            <e p="MeeaanvraagModel.cs" t="Include" />
+            <e p="NaloopDetectorModel.cs" t="Include" />
+            <e p="NaloopModel.cs" t="Include" />
+            <e p="NaloopTijdModel.cs" t="Include" />
+            <e p="VoorstartModel.cs" t="Include" />
+          </e>
+          <e p="Modules" t="Include">
+            <e p="FaseCyclusModuleDataModel.cs" t="Include" />
+            <e p="ModuleFaseCyclusAlternatiefModel.cs" t="Include" />
+            <e p="ModuleFaseCyclusModel.cs" t="Include" />
+            <e p="ModuleModel.cs" t="Include" />
+            <e p="ModuleMolenModel.cs" t="Include" />
+          </e>
+          <e p="NonController" t="Include">
+            <e p="AddinSettingsModel.cs" t="Include" />
+            <e p="AddinSettingsPropertyModel.cs" t="Include" />
+            <e p="CustomDataModel.cs" t="Include" />
+          </e>
+          <e p="OV_HD" t="Include">
+            <e p="HDIngreepMeerealiserendeFaseModel.cs" t="Include" />
+            <e p="HDIngreepModel.cs" t="Include" />
+            <e p="OVDataModel.cs" t="Include" />
+            <e p="OVIngreepLijnNummerModel.cs" t="Include" />
+            <e p="OVIngreepModel.cs" t="Include" />
+            <e p="OVIngreepSignaalGroepParametersModel.cs" t="Include" />
+          </e>
+          <e p="Perioden" t="Include">
+            <e p="PeriodeModel.cs" t="Include" />
+            <e p="PeriodenDataModel.cs" t="Include" />
+          </e>
+          <e p="RoBuGrover" t="Include">
+            <e p="RoBuGroverConflictGroepFaseModel.cs" t="Include" />
+            <e p="RoBuGroverConflictGroepModel.cs" t="Include" />
+            <e p="RoBuGroverFileDetectorModel.cs" t="Include" />
+            <e p="RoBuGroverHiaatDetectorModel.cs" t="Include" />
+            <e p="RoBuGroverModel.cs" t="Include" />
+            <e p="RoBuGroverSignaalGroepInstellingenModel.cs" t="Include" />
+          </e>
+          <e p="Signalen" t="Include">
+            <e p="RatelTikkerDetectorModel.cs" t="Include" />
+            <e p="RatelTikkerModel.cs" t="Include" />
+            <e p="SignalenDataModel.cs" t="Include" />
+            <e p="WaarschuwingsGroepModel.cs" t="Include" />
+          </e>
+          <e p="Varia" t="Include">
+            <e p="BitmapCoordinaatModel.cs" t="Include" />
+            <e p="BitmapCoordinatenDataModel.cs" t="Include" />
+            <e p="DetectorSimulatieModel.cs" t="Include" />
+            <e p="DetectorVeiligheidsGroenModel.cs" t="Include" />
+            <e p="PTPDataModel.cs" t="Include" />
+            <e p="PTPKoppelingModel.cs" t="Include" />
+            <e p="RichtingGevoeligeAanvraagModel.cs" t="Include" />
+            <e p="RichtingGevoeligVerlengModel.cs" t="Include" />
+            <e p="VAOntruimenDetectorModel.cs" t="Include" />
+            <e p="VAOntruimenFaseModel.cs" t="Include" />
+            <e p="VAOntruimenNaarFaseModel.cs" t="Include" />
+          </e>
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Settings" t="Include">
+          <e p="TLCGenSettingsModel.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Models.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="TLCGen.Models\TLCGen.Models.Enumerations" t="IncludeRecursive">
+        <e p="AansturingWaitsignalenEnum.cs" t="Include" />
+        <e p="BitmappedItemTypeEnum.cs" t="Include" />
+        <e p="CCOLVersieEnum.cs" t="Include" />
+        <e p="DetectorAanvraagTypeEnum.cs" t="Include" />
+        <e p="DetectorTypeEnum.cs" t="Include" />
+        <e p="DetectorVerlengenTypeEnum.cs" t="Include" />
+        <e p="FaseTypeEnum.cs" t="Include" />
+        <e p="GroentijdenTypeEnum.cs" t="Include" />
+        <e p="HalfstarGekoppeldTypeEnum.cs" t="Include" />
+        <e p="HalfstarGekoppeldWijzeEnum.cs" t="Include" />
+        <e p="HalfstarTypeEnum.cs" t="Include" />
+        <e p="HalfstarVARegelenTypeEnum.cs" t="Include" />
+        <e p="KWCTypeEnum.cs" t="Include" />
+        <e p="MeeaanvraagTypeEnum.cs" t="Include" />
+        <e p="MeeVerlengenTypeEnum.cs" t="Include" />
+        <e p="NaloopDetectorTypeEnum.cs" t="Include" />
+        <e p="NaloopTijdTypeEnum.cs" t="Include" />
+        <e p="NaloopTypeEnum.cs" t="Include" />
+        <e p="NooitAltijdAanUitEnum.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="OVIngreepPrioriteitEnum.cs" t="Include" />
+        <e p="OVIngreepTypeEnum.cs" t="Include" />
+        <e p="OVIngreepVoertuigTypeEnum.cs" t="Include" />
+        <e p="PeriodeDagCodeEnum.cs" t="Include" />
+        <e p="PeriodeTypeEnum.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="RateltikkerTypeEnum.cs" t="Include" />
+        <e p="RichtingGevoeligVerlengenTypeEnum.cs" t="Include" />
+        <e p="RoBuGroverMethodeEnum.cs" t="Include" />
+        <e p="SegmentDisplayTypeEnum.cs" t="Include" />
+        <e p="SynchronisatieTypeEnum.cs" t="Include" />
+        <e p="TLCGen.Models.Enumerations.csproj" t="IncludeRecursive" />
+        <e p="VLOGTypeEnum.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Models\TLCGen.Models.ModelManager" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="ITLCGenModelManager.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.ModelManager.csproj" t="IncludeRecursive" />
+        <e p="TLCGenModelManager.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Plugins" t="IncludeRecursive">
+        <e p="ITLCGenGenerator.cs" t="Include" />
+        <e p="ITLCGenHasSettings.cs" t="Include" />
+        <e p="ITLCGenImporter.cs" t="Include" />
+        <e p="ITLCGenIOElementProvider.cs" t="Include" />
+        <e p="ITLCGenMenuItem.cs" t="Include" />
+        <e p="ITLCGenPlugin.cs" t="Include" />
+        <e p="ITLCGenPluginManager.cs" t="Include" />
+        <e p="ITLCGenPlugMessaging.cs" t="Include" />
+        <e p="ITLCGenSwitcher.cs" t="Include" />
+        <e p="ITLCGenTabItem.cs" t="Include" />
+        <e p="ITLCGenToolBar.cs" t="Include" />
+        <e p="ITLCGenXMLNodeWriter.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Plugins.csproj" t="IncludeRecursive" />
+        <e p="TLCGenCustomSettingAttribute.cs" t="Include" />
+        <e p="TLCGenPluginAttribute.cs" t="Include" />
+        <e p="TLCGenPluginManager.cs" t="Include" />
+        <e p="TLCGenTabItemAttribute.cs" t="Include" />
+      </e>
+      <e p="TLCGen.Updater" t="IncludeRecursive">
+        <e p="app.config" t="Include" />
+        <e p="App.xaml" t="Include" />
+        <e p="App.xaml.cs" t="Include" />
+        <e p="AppIcon.ico" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="ISwitchable.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Switcher.cs" t="Include" />
+        <e p="TLCGen.Updater.csproj" t="IncludeRecursive" />
+        <e p="UpdaterDownload.xaml" t="Include" />
+        <e p="UpdaterDownload.xaml.cs" t="Include" />
+        <e p="UpdaterHome.xaml" t="Include" />
+        <e p="UpdaterHome.xaml.cs" t="Include" />
+        <e p="UpdaterViewModel.cs" t="Include" />
+        <e p="UpdaterWindow.xaml" t="Include" />
+        <e p="UpdaterWindow.xaml.cs" t="Include" />
+      </e>
+    </e>
+  </component>
+</project>

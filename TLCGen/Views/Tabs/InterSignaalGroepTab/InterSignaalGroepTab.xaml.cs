@@ -46,39 +46,4 @@ namespace TLCGen.Views
             throw new InvalidOperationException();
         }
     }
-
-    public class SelectedDisplayTypeToBoolConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            IntersignaalGroepTypeEnum e1 = (IntersignaalGroepTypeEnum)value;
-            IntersignaalGroepTypeEnum e2 = (IntersignaalGroepTypeEnum)parameter;
-            if (e2.HasFlag(e1))
-                return true;
-            else
-                return false;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-			throw new InvalidOperationException();
-		}
-    }
-
-    public class ReferencesSelfToBackgroundConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            bool b = (bool)value;
-            if (b)
-                return null;
-            else
-                return Brushes.DarkGray;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-			throw new InvalidOperationException();
-		}
-    }
 }

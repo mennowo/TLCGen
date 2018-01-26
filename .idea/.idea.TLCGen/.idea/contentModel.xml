@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\NL33478\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_TLCGen.-951580014.00" t="ExcludeRecursive" />
+    <e p="C:\Users\NL33478\Source\Repos\TLCGen" t="IncludeFlat">
+      <e p=".paket" t="Include" />
+      <e p="bin" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="paket.dependencies" t="Include" />
+      <e p="TLCGen" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="App.xaml" t="Include" />
+        <e p="App.xaml.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="MainWindow.xaml" t="Include" />
+        <e p="MainWindow.xaml.cs" t="Include" />
+        <e p="MainWindowViewModel.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Resources" t="Include">
+          <e p="AppIcon.ico" t="Include" />
+          <e p="ApplicationIcons.xaml" t="Include" />
+          <e p="MenuIcons.xaml" t="Include" />
+          <e p="TabIcons.xaml" t="Include" />
+          <e p="TabItemTemplates.xaml" t="Include" />
+        </e>
+        <e p="TLCGen.csproj" t="IncludeRecursive" />
+        <e p="TLCGenSplashScreenHelper.cs" t="Include" />
+        <e p="TLCGenSplashScreenView.xaml" t="Include" />
+        <e p="TLCGenSplashScreenView.xaml.cs" t="Include" />
+        <e p="ViewModels" t="Include">
+          <e p="HelperTypes" t="Include">
+            <e p="GarantieTijdConvertHelper.cs" t="Include" />
+          </e>
+          <e p="IntersignaalGroepTypeEnum.cs" t="Include" />
+          <e p="Other" t="Include">
+            <e p="DetectorManagerViewModel.cs" t="Include" />
+            <e p="IAllowTemplates.cs" t="Include" />
+            <e p="IGeneratorViewModel.cs" t="Include" />
+            <e p="TemplateProviderViewModel.cs" t="Include" />
+            <e p="TLCGenStatusBarViewModel.cs" t="Include" />
+          </e>
+          <e p="TLCGenMainTabItemViewModel.cs" t="Include" />
+          <e p="TLCGenTabItemViewModel.cs" t="Include" />
+        </e>
+        <e p="Views" t="Include">
+          <e p="ControllerView.xaml" t="Include" />
+          <e p="ControllerView.xaml.cs" t="Include" />
+          <e p="ControllerViewModel.cs" t="Include" />
+          <e p="DataTypes" t="Include">
+            <e p="IGeneratorView.xaml" t="Include" />
+            <e p="IGeneratorView.xaml.cs" t="Include" />
+          </e>
+          <e p="GelijkstartView.xaml" t="Include" />
+          <e p="GelijkstartView.xaml.cs" t="Include" />
+          <e p="Resources" t="Include">
+            <e p="ConflictBackgroundConverter.cs" t="Include" />
+            <e p="EnumBooleanConverter.cs" t="Include" />
+            <e p="SpecialDataGrid.cs" t="Include" />
+            <e p="ViewModelDataTemplateSelector.cs" t="Include" />
+          </e>
+          <e p="Tabs" t="Include">
+            <e p="AlgemeenTab" t="Include">
+              <e p="AlgemeenTab.xaml" t="Include" />
+              <e p="AlgemeenTab.xaml.cs" t="Include" />
+              <e p="AlgemeenTabViewModel.cs" t="Include" />
+              <e p="DataTypes" t="Include">
+                <e p="ControllerDataViewModel.cs" t="Include" />
+                <e p="OVDataViewModel.cs" t="Include" />
+                <e p="VersieViewModel.cs" t="Include" />
+              </e>
+              <e p="Tabs" t="Include">
+                <e p="ControllerDataTabView.xaml" t="Include" />
+                <e p="ControllerDataTabView.xaml.cs" t="Include" />
+                <e p="ControllerDataTabViewModel.cs" t="Include" />
+                <e p="OVDataTabView.xaml" t="Include" />
+                <e p="OVDataTabView.xaml.cs" t="Include" />
+                <e p="OVDataTabViewModel.cs" t="Include" />
+                <e p="VersieBeheerTabView.xaml" t="Include" />
+                <e p="VersieBeheerTabView.xaml.cs" t="Include" />
+                <e p="VersieBeheerTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="BitmapTab" t="Include">
+              <e p="BitmapTab.xaml" t="Include" />
+              <e p="BitmapTab.xaml.cs" t="Include" />
+              <e p="BitmapTabViewModel.cs" t="Include" />
+              <e p="DataTypes" t="Include">
+                <e p="BitmappedItemViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="DetectorenTab" t="Include">
+              <e p="Controls" t="Include">
+                <e p="DetectorenLijstView.xaml" t="Include" />
+                <e p="DetectorenLijstView.xaml.cs" t="Include" />
+                <e p="DetectorenToevVerw.xaml" t="Include" />
+                <e p="DetectorenToevVerw.xaml.cs" t="Include" />
+              </e>
+              <e p="DataTypes" t="Include">
+                <e p="DetectorViewModel.cs" t="Include" />
+                <e p="RichtingGevoeligeAanvraagViewModel.cs" t="Include" />
+                <e p="RichtingGevoeligVerlengViewModel.cs" t="Include" />
+              </e>
+              <e p="DetectorenTab.xaml" t="Include" />
+              <e p="DetectorenTab.xaml.cs" t="Include" />
+              <e p="DetectorenTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="DetectorenAllesTabView.xaml" t="Include" />
+                <e p="DetectorenAllesTabView.xaml.cs" t="Include" />
+                <e p="DetectorenAllesTabViewModel.cs" t="Include" />
+                <e p="DetectorenExtraTabView.xaml" t="Include" />
+                <e p="DetectorenExtraTabView.xaml.cs" t="Include" />
+                <e p="DetectorenExtraTabViewModel.cs" t="Include" />
+                <e p="DetectorenFasenTabView.xaml" t="Include" />
+                <e p="DetectorenFasenTabView.xaml.cs" t="Include" />
+                <e p="DetectorenFasenTabViewModel.cs" t="Include" />
+                <e p="DetectorenRichtingGevoeligTabView.xaml" t="Include" />
+                <e p="DetectorenRichtingGevoeligTabView.xaml.cs" t="Include" />
+                <e p="DetectorenRichtingGevoeligTabViewModel.cs" t="Include" />
+                <e p="DetectorenSimulatieTabView.xaml" t="Include" />
+                <e p="DetectorenSimulatieTabView.xaml.cs" t="Include" />
+                <e p="DetectorenSimulatieTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="FasenTab" t="Include">
+              <e p="Controls" t="Include">
+                <e p="FasenToevVerw.xaml" t="Include" />
+                <e p="FasenToevVerw.xaml.cs" t="Include" />
+              </e>
+              <e p="DataTypes" t="Include">
+                <e p="FaseCyclusView.xaml" t="Include" />
+                <e p="FaseCyclusView.xaml.cs" t="Include" />
+                <e p="FaseCyclusViewModel.cs" t="Include" />
+                <e p="GroentijdenSetViewModel.cs" t="Include" />
+                <e p="GroentijdViewModel.cs" t="Include" />
+              </e>
+              <e p="FasenTab.xaml" t="Include" />
+              <e p="FasenTab.xaml.cs" t="Include" />
+              <e p="FasenTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="FasenDetailsTabView.xaml" t="Include" />
+                <e p="FasenDetailsTabView.xaml.cs" t="Include" />
+                <e p="FasenDetailsTabViewModel.cs" t="Include" />
+                <e p="FasenGroentijdenSetsTabView.xaml" t="Include" />
+                <e p="FasenGroentijdenSetsTabView.xaml.cs" t="Include" />
+                <e p="FasenGroentijdenSetsTabViewModel.cs" t="Include" />
+                <e p="FasenLijstTabView.xaml" t="Include" />
+                <e p="FasenLijstTabView.xaml.cs" t="Include" />
+                <e p="FasenLijstTabViewModel.cs" t="Include" />
+                <e p="FasenLijstTimersTabView.xaml" t="Include" />
+                <e p="FasenLijstTimersTabView.xaml.cs" t="Include" />
+                <e p="FasenLijstTimersTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="GelijkstartViewModel.cs" t="Include" />
+            <e p="InterSignaalGroepTab" t="Include">
+              <e p="DataTypes" t="Include">
+                <e p="MeeAanvraagView.xaml" t="Include" />
+                <e p="MeeAanvraagView.xaml.cs" t="Include" />
+                <e p="MeeaanvraagViewModel.cs" t="Include" />
+                <e p="NaloopView.xaml" t="Include" />
+                <e p="NaloopView.xaml.cs" t="Include" />
+                <e p="NaloopViewModel.cs" t="Include" />
+                <e p="SynchronisatieViewModel.cs" t="Include" />
+                <e p="VoorstartView.xaml" t="Include" />
+                <e p="VoorstartView.xaml.cs" t="Include" />
+                <e p="VoorstartViewModel.cs" t="Include" />
+              </e>
+              <e p="InterSignaalGroepTab.xaml" t="Include" />
+              <e p="InterSignaalGroepTab.xaml.cs" t="Include" />
+              <e p="SynchronisatiesTabViewModel.cs" t="Include" />
+            </e>
+            <e p="ModulesTab" t="Include">
+              <e p="Controls" t="Include">
+                <e p="ModulesTabFasenLijstView.xaml" t="Include" />
+                <e p="ModulesTabFasenLijstView.xaml.cs" t="Include" />
+                <e p="ModulesTabFasenLijstViewModel.cs" t="Include" />
+              </e>
+              <e p="DataTypes" t="Include">
+                <e p="FaseCyclusModuleDataViewModel.cs" t="Include" />
+                <e p="FaseCyclusModuleViewModel.cs" t="Include" />
+                <e p="ModuleFaseCyclusAlternatiefViewModel.cs" t="Include" />
+                <e p="ModuleFaseCyclusViewModel.cs" t="Include" />
+                <e p="ModuleMolenView.xaml" t="Include" />
+                <e p="ModuleMolenView.xaml.cs" t="Include" />
+                <e p="ModuleMolenViewModel.cs" t="Include" />
+                <e p="ModuleViewModel.cs" t="Include" />
+              </e>
+              <e p="ModulesTab.xaml" t="Include" />
+              <e p="ModulesTab.xaml.cs" t="Include" />
+              <e p="ModulesTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="ModulesAlternatievenCVInstellingenTabView.xaml" t="Include" />
+                <e p="ModulesAlternatievenCVInstellingenTabView.xaml.cs" t="Include" />
+                <e p="ModulesAlternatievenCVInstellingenTabViewModel.cs" t="Include" />
+                <e p="ModulesDetailsTabView.xaml" t="Include" />
+                <e p="ModulesDetailsTabView.xaml.cs" t="Include" />
+                <e p="ModulesDetailsTabViewModel.cs" t="Include" />
+                <e p="ModulesLangstwachtendeInstellingenTabView.xaml" t="Include" />
+                <e p="ModulesLangstwachtendeInstellingenTabView.xaml.cs" t="Include" />
+                <e p="ModulesLangstwachtendeInstellingenTabViewModel.cs" t="Include" />
+                <e p="ModulesVooruitRealisatiesTabView.xaml" t="Include" />
+                <e p="ModulesVooruitRealisatiesTabView.xaml.cs" t="Include" />
+                <e p="ModulesVooruitRealisatiesTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="OVTab" t="Include">
+              <e p="DataTypes" t="Include">
+                <e p=".xaml.cs" t="Include" />
+                <e p="HDIngreepMeerealiserendeFaseCyclusViewModel.cs" t="Include" />
+                <e p="HDIngreepView.xaml" t="Include" />
+                <e p="HDIngreepView.xaml.cs" t="Include" />
+                <e p="HDIngreepViewModel.cs" t="Include" />
+                <e p="OVHDFaseDataOverviewViewModel.cs" t="Include" />
+                <e p="OVIngreepLijnNummerViewModel.cs" t="Include" />
+                <e p="OVIngreepSignaalGroepParametersViewModel.cs" t="Include" />
+                <e p="OVIngreepView.xaml" t="Include" />
+                <e p="OVIngreepViewModel.cs" t="Include" />
+              </e>
+              <e p="OVTab.xaml" t="Include" />
+              <e p="OVTab.xaml.cs" t="Include" />
+              <e p="OVTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="OVFasenTabView.xaml" t="Include" />
+                <e p="OVFasenTabView.xaml.cs" t="Include" />
+                <e p="OVFasenTabViewModel.cs" t="Include" />
+                <e p="OVOverzichtTabView.xaml" t="Include" />
+                <e p="OVOverzichtTabView.xaml.cs" t="Include" />
+                <e p="OVOverzichtTabViewModel.cs" t="Include" />
+                <e p="OVSignaalGroepInstellingenTabView.xaml" t="Include" />
+                <e p="OVSignaalGroepInstellingenTabView.xaml.cs" t="Include" />
+                <e p="OVSignaalGroepInstellingenTabViewModel.cs" t="Include" />
+                <e p="OVSimulatieTabView.xaml" t="Include" />
+                <e p="OVSimulatieTabView.xaml.cs" t="Include" />
+                <e p="OVSimulatieTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="PeriodenTab" t="Include">
+              <e p="DataTypes" t="Include">
+                <e p="PeriodeViewModel.cs" t="Include" />
+              </e>
+              <e p="PeriodenTab.xaml" t="Include" />
+              <e p="PeriodenTab.xaml.cs" t="Include" />
+              <e p="PeriodenTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="PeriodenGroentijdenTabView.xaml" t="Include" />
+                <e p="PeriodenGroentijdenTabView.xaml.cs" t="Include" />
+                <e p="PeriodenGroentijdenTabViewModel.cs" t="Include" />
+                <e p="PeriodenOverigTabView.xaml" t="Include" />
+                <e p="PeriodenOverigTabView.xaml.cs" t="Include" />
+                <e p="PeriodenOverigTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="SpecialsTab" t="Include">
+              <e p="DataTypes" t="Include">
+                <e p="FileIngreepDetectorViewModel.cs" t="Include" />
+                <e p="FileIngreepTeDoserenSignaalGroepViewModel.cs" t="Include" />
+                <e p="FileIngreepView.xaml" t="Include" />
+                <e p="FileIngreepView.xaml.cs" t="Include" />
+                <e p="FileIngreepViewModel.cs" t="Include" />
+                <e p="HalfstarGekoppeldeKruisingViewModel.cs" t="Include" />
+                <e p="HalfstarHoofdrichtingViewModel.cs" t="Include" />
+                <e p="HalfstarPeriodeDataViewModel.cs" t="Include" />
+                <e p="PTPKoppelingViewModel.cs" t="Include" />
+                <e p="RatelTikkerDetectorViewModel.cs" t="Include" />
+                <e p="RatelTikkerViewModel.cs" t="Include" />
+                <e p="RoBuGroverConflictGroepFaseViewModel.cs" t="Include" />
+                <e p="RoBuGroverConflictGroepViewModel.cs" t="Include" />
+                <e p="RoBuGroverFileDetectorViewModel.cs" t="Include" />
+                <e p="RoBuGroverHiaatDetectorViewModel.cs" t="Include" />
+                <e p="RoBuGroverInstellingenViewModel.cs" t="Include" />
+                <e p="RoBuGroverSignaalGroepInstellingDetailsView.xaml" t="Include" />
+                <e p="RoBuGroverSignaalGroepInstellingDetailsView.xaml.cs" t="Include" />
+                <e p="RoBuGroverSignaalGroepInstellingenViewModel.cs" t="Include" />
+                <e p="SignaalPlanView.xaml" t="Include" />
+                <e p="SignaalPlanView.xaml.cs" t="Include" />
+                <e p="SignaalPlanViewModel.cs" t="Include" />
+                <e p="SignaaPlanFaseViewModel.cs" t="Include" />
+                <e p="VAOntruimenDetectorViewModel.cs" t="Include" />
+                <e p="VAOntruimenFaseView.xaml" t="Include" />
+                <e p="VAOntruimenFaseView.xaml.cs" t="Include" />
+                <e p="VAOntruimenFaseViewModel.cs" t="Include" />
+                <e p="VAOntruimenNaarFaseViewModel.cs" t="Include" />
+                <e p="WaarschuwingsGroepViewModel.cs" t="Include" />
+              </e>
+              <e p="Other" t="Include">
+                <e p="RoBuGroverTabFaseViewModel.cs" t="Include" />
+              </e>
+              <e p="SpecialsTab.xaml" t="Include" />
+              <e p="SpecialsTab.xaml.cs" t="Include" />
+              <e p="SpecialsTabViewModel.cs" t="Include" />
+              <e p="Tabs" t="Include">
+                <e p="FileTabView.xaml" t="Include" />
+                <e p="FileTabView.xaml.cs" t="Include" />
+                <e p="FileTabViewModel.cs" t="Include" />
+                <e p="HalfstarTabView.xaml" t="Include" />
+                <e p="HalfstarTabView.xaml.cs" t="Include" />
+                <e p="HalfstarTabViewModel.cs" t="Include" />
+                <e p="PTPKoppelingenTabView.xaml" t="Include" />
+                <e p="PTPKoppelingenTabView.xaml.cs" t="Include" />
+                <e p="PTPKoppelingenTabViewModel.cs" t="Include" />
+                <e p="RoBuGroverTabView.xaml" t="Include" />
+                <e p="RoBuGroverTabView.xaml.cs" t="Include" />
+                <e p="RoBuGroverTabViewModel.cs" t="Include" />
+                <e p="SignalenTabView.xaml" t="Include" />
+                <e p="SignalenTabView.xaml.cs" t="Include" />
+                <e p="SignalenTabViewModel.cs" t="Include" />
+                <e p="VAOntruimenTabView.xaml" t="Include" />
+                <e p="VAOntruimenTabView.xaml.cs" t="Include" />
+                <e p="VAOntruimenTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+          </e>
+          <e p="UserControls" t="Include">
+            <e p="ConflictMatrixDataGrid.xaml" t="Include" />
+            <e p="ConflictMatrixDataGrid.xaml.cs" t="Include" />
+            <e p="DetectorManagerView.xaml" t="Include" />
+            <e p="DetectorManagerView.xaml.cs" t="Include" />
+            <e p="SettingsDataGrid.xaml" t="Include" />
+            <e p="SettingsDataGrid.xaml.cs" t="Include" />
+            <e p="TemplateManagerView.xaml" t="Include" />
+            <e p="TemplateManagerView.xaml.cs" t="Include" />
+            <e p="TLCGenStatusBar.xaml" t="Include" />
+            <e p="TLCGenStatusBar.xaml.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="TLCGen.Parts" t="Include">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="TLCGen.Controls" t="IncludeRecursive">
+          <e p="AutoSelectTextBox.cs" t="Include" />
+          <e p="bin" t="ExcludeRecursive" />
+          <e p="BrowsableConditionAttribute.cs" t="Include" />
+          <e p="EnabledConditionAttribute.cs" t="Include" />
+          <e p="FileTextBox.xaml" t="Include" />
+          <e p="FileTextBox.xaml.cs" t="Include" />
+          <e p="FolderTextBox.xaml" t="Include" />
+          <e p="FolderTextBox.xaml.cs" t="Include" />
+          <e p="InfoElement.xaml" t="Include" />
+          <e p="InfoElement.xaml.cs" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="SimplePropertyEditor.xaml" t="Include" />
+          <e p="SimplePropertyEditor.xaml.cs" t="Include" />
+          <e p="SingleClickDataGridTemplateColumn.cs" t="Include" />
+          <e p="SpecialDataGrid.cs" t="Include" />
+          <e p="TimeSpanUpDown24Hours.cs" t="Include" />
+          <e p="TLCGen.Controls.csproj" t="IncludeRecursive" />
+          <e p="ZoomBorder.cs" t="Include" />
+        </e>
+        <e p="TLCGen.CustomPropertyEditors" t="IncludeRecursive">
+          <e p="FileEditor.cs" t="Include" />
+          <e p="FolderEditor.cs" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="TLCGen.CustomPropertyEditors.csproj" t="IncludeRecursive" />
+        </e>
+        <e p="TLCGen.Dialogs" t="IncludeRecursive">
+          <e p="AboutWindow.xaml" t="Include" />
+          <e p="AboutWindow.xaml.cs" t="Include" />
+          <e p="ApplyTemplateWindow.xaml" t="Include" />
+          <e p="ApplyTemplateWindow.xaml.cs" t="Include" />
+          <e p="ImportSignalPlanWindow.xaml" t="Include" />
+          <e p="ImportSignalPlanWindow.xaml.cs" t="Include" />
+          <e p="NewTemplateWindow.xaml" t="Include" />
+          <e p="NewTemplateWindow.xaml.cs" t="Include" />
+          <e p="NewVersionAvailableWindow.xaml" t="Include" />
+          <e p="NewVersionAvailableWindow.xaml.cs" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="TLCGen.Dialogs.csproj" t="IncludeRecursive" />
+          <e p="TLCGenSettingsWindow.xaml" t="Include" />
+          <e p="TLCGenSettingsWindow.xaml.cs" t="Include" />
+          <e p="UnhandledExceptionWindow.xaml" t="Include" />
+          <e p="UnhandledExceptionWindow.xaml.cs" t="Include" />
+        </e>
+        <e p="TLCGen.Settings" t="IncludeRecursive">
+          <e p="App.config" t="Include" />
+          <e p="bin" t="ExcludeRecursive" />
+          <e p="DefaultsProvider.cs" t="Include" />
+          <e p="Interfaces" t="Include">
+            <e p="IDefaultsProvider.cs" t="Include" />
+            <e p="ISettingsProvider.cs" t="Include" />
+            <e p="ITemplatesProvider.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="Defaults" t="Include">
+              <e p="TLCGenDefaultModel.cs" t="Include" />
+              <e p="TLCGenDefaultsModel.cs" t="Include" />
+            </e>
+            <e p="Templates" t="Include">
+              <e p="TLCGenTemplateModel.cs" t="Include" />
+              <e p="TLCGenTemplatesModel.cs" t="Include" />
+            </e>
+          </e>
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="Settings" t="Include">
+            <e p="tlcgendefaultdefaults.xml" t="Include" />
+            <e p="tlcgendefaulttemplates.xml" t="Include" />
+          </e>
+          <e p="SettingsProvider.cs" t="Include" />
+          <e p="TemplatesProvider.cs" t="Include" />
+          <e p="TLCGen.Settings.csproj" t="IncludeRecursive" />
+          <e p="UI" t="Include">
+            <e p="Controls" t="Include" />
+            <e p="DataTypes" t="Include">
+              <e p="DetectorTemplateView.xaml" t="Include" />
+              <e p="DetectorTemplateView.xaml.cs" t="Include" />
+              <e p="DetectorTemplateViewModel.cs" t="Include" />
+              <e p="FaseCyclusTemplateView.xaml" t="Include" />
+              <e p="FaseCyclusTemplateView.xaml.cs" t="Include" />
+              <e p="FaseCyclusTemplateViewModel.cs" t="Include" />
+              <e p="PeriodeTemplateView.xaml" t="Include" />
+              <e p="PeriodeTemplateView.xaml.cs" t="Include" />
+              <e p="PeriodeTemplateViewModel.cs" t="Include" />
+            </e>
+            <e p="Tabs" t="Include">
+              <e p="Defaults" t="Include">
+                <e p="DefaultsListView.xaml" t="Include" />
+                <e p="DefaultsListView.xaml.cs" t="Include" />
+                <e p="DefaultsTabView.xaml" t="Include" />
+                <e p="DefaultsTabView.xaml.cs" t="Include" />
+                <e p="DefaultsTabViewModel.cs" t="Include" />
+              </e>
+              <e p="Templates" t="Include">
+                <e p="DetectorenTemplatesEditorTabView.xaml" t="Include" />
+                <e p="DetectorenTemplatesEditorTabView.xaml.cs" t="Include" />
+                <e p="DetectorenTemplatesEditorTabViewModel.cs" t="Include" />
+                <e p="FasenTemplatesEditorTabView.xaml" t="Include" />
+                <e p="FasenTemplatesEditorTabView.xaml.cs" t="Include" />
+                <e p="FasenTemplatesEditorTabViewModel.cs" t="Include" />
+                <e p="PeriodenTemplatesEditorTabView.xaml" t="Include" />
+                <e p="PeriodenTemplatesEditorTabView.xaml.cs" t="Include" />
+                <e p="PeriodenTemplatesEditorTabViewModel.cs" t="Include" />
+              </e>
+            </e>
+            <e p="TLCGenSettingsViewModel.cs" t="Include" />
+            <e p="TLCGenSettingsWindow.xaml" t="Include" />
+            <e p="TLCGenSettingsWindow.xaml.cs" t="Include" />
+          </e>
+          <e p="Utilities" t="Include">
+            <e p="FaseCyclusUtilities.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="TLCGen.PluggedInItems" t="Include">
+        <e p="TLCGen.GebruikersOpties" t="IncludeRecursive">
+          <e p="GebruikersOptiesIcon.xaml" t="Include" />
+          <e p="GebruikersOptiesLijst.xaml" t="Include" />
+          <e p="GebruikersOptiesLijst.xaml.cs" t="Include" />
+          <e p="GebruikersOptiesModel.cs" t="Include" />
+          <e p="GebruikersOptiesTabView.xaml" t="Include" />
+          <e p="GebruikersOptiesTabView.xaml.cs" t="Include" />
+          <e p="GebruikersOptiesTabViewModel.cs" t="Include" />
+          <e p="GebruikersOptieViewModel.cs" t="Include" />
+          <e p="GebruikersOptieWithIOViewModel.cs" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="TLCGen.GebruikersOpties.csproj" t="IncludeRecursive" />
+        </e>
+        <e p="TLCGen.Generators.CCOL" t="IncludeRecursive">
+          <e p="App.config" t="Include" />
+          <e p="CCOLCodeGeneratorPlugin.cs" t="Include" />
+          <e p="CodeGeneration" t="Include">
+            <e p="Adds" t="Include">
+              <e p="CCOLGeneratorGenerateDplAdd.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateOvAdd.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateRegAdd.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateSimAdd.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateSysAdd.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateTabAdd.cs" t="Include" />
+            </e>
+            <e p="CCOLGenerator.cs" t="Include" />
+            <e p="CCOLGeneratorGeneral.cs" t="Include" />
+            <e p="Enums" t="Include">
+              <e p="CCOLCodeTypeEnum.cs" t="Include" />
+              <e p="CCOLElementTimeTypeEnum.cs" t="Include" />
+              <e p="CCOLElementTypeEnum.cs" t="Include" />
+            </e>
+            <e p="Functionality" t="Include">
+              <e p="DetectieAanvraagDirectCodeGenerator.cs" t="Include" />
+              <e p="DetectieAanvragenMeetkriteriumCodeGenerator.cs" t="Include" />
+              <e p="DetectieStoringGenerator.cs" t="Include" />
+              <e p="FileIngrepenCodeGenerator.cs" t="Include" />
+              <e p="FixatieCodeGenerator.cs" t="Include" />
+              <e p="GelijkstartenVoorstartenCodeGenerator.cs" t="Include" />
+              <e p="HalfstarCodeGenerator.cs" t="Include" />
+              <e p="HelperClasses" t="Include">
+                <e p="CCOLCodePieceGeneratorAttribute.cs" t="Include" />
+                <e p="CCOLCodePieceGeneratorBase.cs" t="Include" />
+                <e p="ICCOLCodePieceGenerator.cs" t="Include" />
+              </e>
+              <e p="KWCCodeGenerator.cs" t="Include" />
+              <e p="MeeAanvragenCodeGenerator.cs" t="Include" />
+              <e p="MeeverlengenCodeGenerator.cs" t="Include" />
+              <e p="NalopenCodeGenerator.cs" t="Include" />
+              <e p="OVHDCodeGenerator.cs" t="Include" />
+              <e p="PeriodenGroentijdenCodeGenerator.cs" t="Include" />
+              <e p="PtpCodeGenerator.cs" t="Include" />
+              <e p="RateltikkersCodeGenerator.cs" t="Include" />
+              <e p="RichtingGevoeligCodeGenerator.cs" t="Include" />
+              <e p="RoBuGroverCodeGenerator.cs" t="Include" />
+              <e p="VAOntruimenCodeGenerator.cs" t="Include" />
+              <e p="VasteAanvraagCodeGenerator.cs" t="Include" />
+              <e p="VeiligheidsGroenCodeGenerator.cs" t="Include" />
+              <e p="VersneldPrimairAlternatievenCodeGenerator.cs" t="Include" />
+              <e p="VISSIMCodeGenerator.cs" t="Include" />
+              <e p="VLOGCodeGenerator.cs" t="Include" />
+              <e p="WaarschuwingsLichtenCodeGenerator.cs" t="Include" />
+              <e p="WachtstandGroenCodeGenerator.cs" t="Include" />
+              <e p="WaitsignalenCodeGenerator.cs" t="Include" />
+            </e>
+            <e p="HelperClasses" t="Include">
+              <e p="CCOLCodeHelper.cs" t="Include" />
+              <e p="CCOLElement.cs" t="Include" />
+              <e p="CCOLElementCollector.cs" t="Include" />
+              <e p="CCOLElemListData.cs" t="Include" />
+              <e p="CCOLIOElement.cs" t="Include" />
+            </e>
+            <e p="Sources" t="Include">
+              <e p="CCOLGeneratorGenerateDplC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateHstC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateOvC.cs" t="Include" />
+              <e p="CCOLGeneratorGeneratePtpC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateRegC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateRgvC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateSimC.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateSysH.cs" t="Include" />
+              <e p="CCOLGeneratorGenerateTabC.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Extensions" t="Include">
+            <e p="TLCGenModelExtensions.cs" t="Include" />
+          </e>
+          <e p="GeneratorUI" t="Include">
+            <e p="CCOLGeneratorView.xaml" t="Include" />
+            <e p="CCOLGeneratorView.xaml.cs" t="Include" />
+            <e p="CCOLGeneratorViewModel.cs" t="Include" />
+          </e>
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="ProjectGeneration" t="Include">
+            <e p="CCOLVisualProjectGenerator.cs" t="Include" />
+          </e>
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="Resources" t="Include">
+            <e p="Icons.xaml" t="Include" />
+          </e>
+          <e p="Settings" t="Include">
+            <e p="ccolgendefaults.xml" t="Include" />
+            <e p="CCOLGeneratorClassWithSettingsModel.cs" t="Include" />
+            <e p="CCOLGeneratorCodeStringSettingModel.cs" t="Include" />
+            <e p="CCOLGeneratorFolderSettingModel.cs" t="Include" />
+            <e p="CCOLGeneratorSettingsModel.cs" t="Include" />
+            <e p="CCOLGeneratorSettingsProvider.cs" t="Include" />
+            <e p="CCOLGeneratorSettingTypeEnum.cs" t="Include" />
+            <e p="CCOLGeneratorStringSettingModel.cs" t="Include" />
+            <e p="CCOLGeneratorVisualSettingsModel.cs" t="Include" />
+            <e p="CodePieceSettingsTuple.cs" t="Include" />
+            <e p="SettingsUI" t="Include">
+              <e p="CCOLGeneratorSettingsView.xaml" t="Include" />
+              <e p="CCOLGeneratorSettingsView.xaml.cs" t="Include" />
+              <e p="CCOLGeneratorSettingsViewModel.cs" t="Include" />
+            </e>
+            <e p="VisualTemplates" t="Include">
+              <e p="Readme.txt" t="Include" />
+              <e p="Visual_2010.xml" t="Include" />
+              <e p="Visual_2010_filters.xml" t="Include" />
+              <e p="Visual_2010_vissim.xml" t="Include" />
+              <e p="Visual_2010_vissim_filters.xml" t="Include" />
+              <e p="Visual_2013.xml" t="Include" />
+              <e p="Visual_2013_filters.xml" t="Include" />
+              <e p="Visual_2017.xml" t="Include" />
+              <e p="Visual_2017_filters.xml" t="Include" />
+              <e p="Visual_2017_vissim.xml" t="Include" />
+              <e p="Visual_2017_vissim_filters.xml" t="Include" />
+            </e>
+          </e>
+          <e p="SourceFiles" t="Include">
+            <e p="ccolfunc.c" t="Include" />
+            <e p="ccolfunc.h" t="Include" />
+            <e p="detectie.c" t="Include" />
+            <e p="extra_func.c" t="Include" />
+            <e p="extra_func.h" t="Include" />
+            <e p="extra_func_ov.c" t="Include" />
+            <e p="extra_func_ov.h" t="Include" />
+            <e p="fixatie.c" t="Include" />
+            <e p="fixatie.h" t="Include" />
+            <e p="halfstar.c" t="Include" />
+            <e p="halfstar.h" t="Include" />
+            <e p="halfstar_help.c" t="Include" />
+            <e p="halfstar_help.h" t="Include" />
+            <e p="halfstar_ov.c" t="Include" />
+            <e p="halfstar_ov.h" t="Include" />
+            <e p="nalopen.c" t="Include" />
+            <e p="nalopen.h" t="Include" />
+            <e p="ov.c" t="Include" />
+            <e p="ov.h" t="Include" />
+            <e p="rgv_overslag.c" t="Include" />
+            <e p="rgvfunc.c" t="Include" />
+            <e p="rgvvar.c" t="Include" />
+            <e p="syncfunc.c" t="Include" />
+            <e p="syncvar.c" t="Include" />
+            <e p="syncvar.h" t="Include" />
+            <e p="uitstuur.c" t="Include" />
+            <e p="uitstuur.h" t="Include" />
+            <e p="winmg.c" t="Include" />
+            <e p="winmg.h" t="Include" />
+          </e>
+          <e p="SourceFilesToCopy" t="Include">
+            <e p="Readme.txt" t="Include" />
+          </e>
+          <e p="TLCGen.Generators.CCOL.csproj" t="IncludeRecursive" />
+        </e>
+        <e p="TLCGen.Generators.YATLCCLC" t="IncludeRecursive">
+          <e p="CodeGeneration" t="Include">
+            <e p="HelperClasses" t="Include">
+              <e p="TLCCCElement.cs" t="Include" />
+              <e p="TLCCCElementCollector.cs" t="Include" />
+              <e p="TLCCCElementTimeTypeEnum.cs" t="Include" />
+              <e p="TLCCCElementTypeEnum.cs" t="Include" />
+              <e p="TLCCCElemListData.cs" t="Include" />
+            </e>
+            <e p="TLCCCGenerator.cs" t="Include" />
+            <e p="TLCCCGeneratorGeneral.cs" t="Include" />
+            <e p="TLCCCGeneratorGenerateDplC.cs" t="Include" />
+            <e p="TLCCCGeneratorGenerateRegC.cs" t="Include" />
+            <e p="TLCCCGeneratorGenerateSysH.cs" t="Include" />
+            <e p="TLCCCGeneratorGenerateTabC.cs" t="Include" />
+          </e>
+          <e p="GeneratorUI" t="Include">
+            <e p="TLCCCGeneratorView.xaml" t="Include" />
+            <e p="TLCCCGeneratorView.xaml.cs" t="Include" />
+            <e p="TLCCCGeneratorViewModel.cs" t="Include" />
+          </e>
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="Resources" t="Include">
+            <e p="Icons.xaml" t="Include" />
+          </e>
+          <e p="Settings" t="Include">
+            <e p="TLCCCGeneratorCodeStringSettingModel.cs" t="Include" />
+            <e p="TLCCCGeneratorSettingsModel.cs" t="Include" />
+            <e p="TLCCCGeneratorSettingsProvider.cs" t="Include" />
+          </e>
+          <e p="SourceFiles" t="Include" />
+          <e p="TLCCCCodeGeneratorPlugin.cs" t="Include" />
+          <e p="TLCGen.Generators.TLCCC.csproj" t="IncludeRecursive" />
+        </e>
+        <e p="TLCGen.Importers.TabC" t="IncludeRecursive">
+          <e p="App.config" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="TabCExistingControllerImporter.cs" t="Include" />
+          <e p="TabCImportHelper.cs" t="Include" />
+          <e p="TabCNewControllerImporter.cs" t="Include" />
+          <e p="TLCGen.Importers.TabC.csproj" t="IncludeRecursive" />
+        </e>
+        <e p="TLCGen.SpecialsDenHaag" t="IncludeRecursive">
+          <e p="DVMModule" t="Include">
+            <e p="DVMModuleDenHaag.cs" t="Include" />
+          </e>
+          <e p="Models" t="Include">
+            <e p="FaseCyclusAlternatiefPerBlokModel.cs" t="Include" />
+            <e p="SpecialsDenHaagModel.cs" t="Include" />
+          </e>
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="SpecialsDenHaagPlugin.cs" t="Include" />
+          <e p="SpecialsDenHaagView.xaml" t="Include" />
+          <e p="SpecialsDenHaagView.xaml.cs" t="Include" />
+          <e p="TLCGen.SpecialsDenHaag.csproj" t="IncludeRecursive" />
+          <e p="ViewModels" t="Include">
+            <e p="FaseCyclusAlternatiefPerBlokViewModel.cs" t="Include" />
+            <e p="SpecialsDenHaagViewModel.cs" t="Include" />
+          </e>
+        </e>
+        <e p="TLCGen.SpecialsRotterdam" t="IncludeRecursive">
+          <e p="App.config" t="Include" />
+          <e p="obj" t="ExcludeRecursive" />
+          <e p="paket.references" t="Include" />
+          <e p="Properties" t="Include">
+            <e p="AssemblyInfo.cs" t="Include" />
+          </e>
+          <e p="SourceFiles" t="Include">
+            <e p="afmroutines.c" t="Include" />
+            <e p="afmroutines.h" t="Include" />
+          </e>
+          <e p="SpecialsRotterdamModel.cs" t="Include" />
+          <e p="SpecialsRotterdamPlugin.cs" t="Include" />
+          <e p="SpecialsRotterdamView.xaml" t="Include" />
+          <e p="SpecialsRotterdamView.xaml.cs" t="Include" />
+          <e p="SpecialsRotterdamViewModel.cs" t="Include" />
+          <e p="TLCGen.SpecialsRotterdam.csproj" t="IncludeRecursive" />
+        </e>
+      </e>
+      <e p="TLCGen.Setup" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Config.wxi" t="Include" />
+        <e p="license.rtf" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="Product.wxs" t="Include" />
+        <e p="TLCGen.Setup.wixproj" t="IncludeRecursive" />
+        <e p="WixUIExtension" t="Include" />
+      </e>
+      <e p="TLCGen.sln" t="IncludeFlat" />
+      <e p="TLCGen.UnitTests" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Helpers" t="Include">
+          <e p="ControllerCreator.cs" t="Include" />
+          <e p="FakesCreator.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="paket.references" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Tabs" t="Include">
+          <e p="DetectorenTab" t="Include">
+            <e p="Tabs" t="Include">
+              <e p="DetectorenFasenTabTests.cs" t="Include" />
+            </e>
+          </e>
+          <e p="FasenTab" t="Include">
+            <e p="DataTypes" t="Include">
+              <e p="FaseCyclusViewModelTests.cs" t="Include" />
+              <e p="GroentijdenSetViewModelTests.cs" t="Include" />
+              <e p="GroentijdViewModelTests.cs" t="Include" />
+            </e>
+            <e p="Tabs" t="Include">
+              <e p="FasenDetailsTabViewModelTests.cs" t="Include" />
+              <e p="FasenGroentijdenSetsTabViewModelTests.cs" t="Include" />
+              <e p="FasenLijstTabViewModelTests.cs" t="Include" />
+              <e p="FasenLijstTimersTabViewModelTests.cs" t="Include" />
+              <e p="FasenOVTabViewModelTests.cs" t="Include" />
+            </e>
+          </e>
+          <e p="OVIngreepSGInstellingenLijstViewModelTests.cs" t="Include" />
+        </e>
+        <e p="TLCGen.UnitTests.csproj" t="IncludeRecursive" />
+      </e>
+    </e>
+  </component>
+</project>

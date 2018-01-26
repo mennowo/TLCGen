@@ -133,18 +133,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
 				case CCOLCodeTypeEnum.RegCPreApplication:
-					sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
-					var k = 0;
-					foreach (var t in _MyElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
+					if (c.HalfstarData.IsHalfstar && _MyElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
-						if (k != 0)
+						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
+						var k = 0;
+						foreach (var t in _MyElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
 						{
-							sb.AppendLine(" &&");
+							if (k != 0)
+							{
+								sb.AppendLine(" &&");
+							}
+							sb.Append($"{ts}{ts}!T[{_tpf}{t.Naam}]");
+							++k;
 						}
-						sb.Append($"{ts}{ts}!T[{_tpf}{t.Naam}]");
-						++k;
+						sb.AppendLine(";");
 					}
-					sb.AppendLine(";");
 					return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)

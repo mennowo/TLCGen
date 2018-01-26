@@ -1278,32 +1278,32 @@
             <Description>Verklikken levenssignaal</Description>
           </Setting>
           <Setting>
-            <Default>insyncok</Default>
-            <Setting>insyncok</Setting>
+            <Default>syncok</Default>
+            <Setting>syncok</Setting>
             <Type>Uitgang</Type>
             <Description>Verklikken draait synchroon met</Description>
           </Setting>
           <Setting>
-            <Default>intxsok</Default>
-            <Setting>intxsok</Setting>
+            <Default>txsok</Default>
+            <Setting>txsok</Setting>
             <Type>Uitgang</Type>
             <Description>Verklikken txs ok naar</Description>
           </Setting>
           <Setting>
-            <Default>uitkpuls</Default>
-            <Setting>uitkpuls</Setting>
+            <Default>kpuls</Default>
+            <Setting>kpuls</Setting>
             <Type>Uitgang</Type>
             <Description>Verklikken uitsturing koppelpuls</Description>
           </Setting>
           <Setting>
-            <Default>uitpervar</Default>
-            <Setting>uitpervar</Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
             <Type>Uitgang</Type>
             <Dpescription>Verklikken periode VA regelen</Dpescription>
           </Setting>
           <Setting>
-            <Default>uitperarh</Default>
-            <Setting>uitperarh</Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
             <Type>Uitgang</Type>
             <Description>Periode alternatieven voor hoofdrichtingen</Description>
           </Setting>

@@ -6,18 +6,12 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
-             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
-             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
-             x:Name="root"
+             x:Name="Root"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:SynchronisatiesTabViewModel}">
     <UserControl.Resources>
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
-        <local:SelectedDisplayTypeToBoolConverter x:Key="DisplayTypeToBoolConverter" />
-        <BooleanToVisibilityConverter x:Key="BoolToVisConv" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -62,8 +56,7 @@
         <GridSplitter HorizontalAlignment="Stretch" Width="5" Grid.Column="2" />
 
         <Grid Grid.Column="3">
-            <Grid 
-            Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict}}" Grid.Row="1" >
+            <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict}}" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />

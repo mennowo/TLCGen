@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/contentModel.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/indexLayout.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/modules.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/vcs.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/.idea/workspace.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen/riderModule.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/.idea/.idea.TLCGen.Dependencies/.idea/vcs.xml" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" afterPath="$PROJECT_DIR$/TLCGen.Dependencies/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/NalopenCodeGenerator.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" afterPath="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/Settings/ccolgendefaults.xml" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/InterSignaalGroepTab/InterSignaalGroepTab.xaml.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" afterPath="$PROJECT_DIR$/TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen/Views/UserControls/ConflictMatrixDataGrid.xaml" afterPath="$PROJECT_DIR$/TLCGen/Views/UserControls/ConflictMatrixDataGrid.xaml" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="HalfstarCodeGenerator.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="156" column="84" lean-forward="false" selection-start-line="156" selection-start-column="84" selection-end-line="156" selection-end-column="84" />
+              <folding>
+                <marker date="1516961691316" expanded="false" signature="6:260" ph="..." />
+                <marker date="1516961691316" expanded="true" signature="323:48717" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="419:48715" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="2261:11156" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="2391:11148" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="3897:4587" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5120:5260" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5346:5497" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5444:5491" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5690:6057" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5764:5909" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="5851:5902" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="6106:10069" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="6403:8207" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="7312:7430" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="7471:7578" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="8259:10063" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="9174:9293" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="9335:9443" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="10295:10471" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="10720:10919" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="10978:11143" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11198:11222" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11308:11366" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11413:11437" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11506:11542" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11596:12716" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="11617:12712" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="12803:47678" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="12882:12907" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="13100:13125" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="13143:47674" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="13777:13852" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="14232:14941" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="15196:15717" ph="Reset data" />
+                <marker date="1516961691316" expanded="true" signature="15384:15457" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="15724:17918" ph="Bepalen PL/var/arh door master" />
+                <marker date="1516961691316" expanded="true" signature="15820:17867" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="15853:17860" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="16280:16507" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="16308:16395" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="16885:17091" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="16913:16964" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="17925:21368" ph="Zelf bepalen PL/var/arh" />
+                <marker date="1516961691316" expanded="true" signature="18098:18394" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="18815:19104" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="19378:20338" ph="Klok bepaling VA bedrijf" />
+                <marker date="1516961691316" expanded="true" signature="19738:19898" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="20345:21198" ph="Klok bepaling alternatieven hoofdrichtingen" />
+                <marker date="1516961691316" expanded="true" signature="20666:20822" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="21256:21302" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="21375:22401" ph="Bepalen VA bedrijf schakelaar" />
+                <marker date="1516961691316" expanded="true" signature="21532:21603" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="21613:21716" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="22002:22143" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="22408:22873" ph="Bepalen alternatieven hoofdrichtingen schakelaar" />
+                <marker date="1516961691316" expanded="true" signature="22958:23545" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="24740:25072" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="26653:26819" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="27790:28186" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="28016:28143" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="28609:28730" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="28816:30539" ph="/* sb.AppendLine($&quot;{ts}for (fc = 0; fc &lt; FCMAX; ++fc)&quot;); ... */" />
+                <marker date="1516961691316" expanded="true" signature="31245:31334" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="34394:34464" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="34474:34864" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="35093:35161" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="35171:35557" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="36742:37037" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="38632:39028" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="39893:42168" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="42308:42574" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="42659:47440" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="42704:47433" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="44276:45692" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="45347:45575" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="46532:46712" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="46780:46835" ph="{...}" />
+                <marker date="1516961691316" expanded="true" signature="47763:48712" ph="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1170" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="SolutionExplorer" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="SolutionExplorer">
+        <subPane>
+          <expand>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="CodeGeneration" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.PluggedInItems" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Generators.CCOL" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="CodeGeneration" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Functionality" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Views" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Tabs" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="SpecialsTab" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+        <option name="show-file-system" value="false" />
+        <option name="show-all-items" value="false" />
+      </pane>
+      <pane id="Scratches" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="HbShouldOpenHtmlAsHb" value="" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="Default" type="DotNetProject" factoryName=".NET Project">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/TLCGen/bin/Debug/TLCGen.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/TLCGen/bin/Debug" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <envs />
+      <option name="USE_MONO" value="0" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="PROJECT_PATH" value="$PROJECT_DIR$/TLCGen/TLCGen.csproj" />
+      <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
+      <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
+      <option name="PROJECT_WORKING_DIRECTORY_TRACKING" value="1" />
+      <option name="PROJECT_KIND" value="Console" />
+      <option name="PROJECT_TFM" value=".NETFramework,Version=v4.5" />
+    </configuration>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e9b362e9-2a70-4a87-992f-7cf58cf8b70e" name="Default" comment="" />
+      <created>1516960246879</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1516960246879</updated>
+      <workItem from="1516960248676" duration="1539000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="1539000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-9" y="-9" width="1938" height="1170" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Errors In Solution" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Unit Tests" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23072916" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="156" column="84" lean-forward="false" selection-start-line="156" selection-start-column="84" selection-end-line="156" selection-end-column="84" />
+          <folding>
+            <marker date="1516961691316" expanded="false" signature="6:260" ph="..." />
+            <marker date="1516961691316" expanded="true" signature="323:48717" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="419:48715" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="2261:11156" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="2391:11148" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="3897:4587" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5120:5260" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5346:5497" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5444:5491" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5690:6057" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5764:5909" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="5851:5902" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="6106:10069" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="6403:8207" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="7312:7430" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="7471:7578" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="8259:10063" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="9174:9293" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="9335:9443" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10295:10471" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10720:10919" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="10978:11143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11198:11222" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11308:11366" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11413:11437" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11506:11542" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11596:12716" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="11617:12712" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="12803:47678" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="12882:12907" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13100:13125" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13143:47674" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="13777:13852" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="14232:14941" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15196:15717" ph="Reset data" />
+            <marker date="1516961691316" expanded="true" signature="15384:15457" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15724:17918" ph="Bepalen PL/var/arh door master" />
+            <marker date="1516961691316" expanded="true" signature="15820:17867" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="15853:17860" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16280:16507" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16308:16395" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16885:17091" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="16913:16964" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="17925:21368" ph="Zelf bepalen PL/var/arh" />
+            <marker date="1516961691316" expanded="true" signature="18098:18394" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="18815:19104" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="19378:20338" ph="Klok bepaling VA bedrijf" />
+            <marker date="1516961691316" expanded="true" signature="19738:19898" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="20345:21198" ph="Klok bepaling alternatieven hoofdrichtingen" />
+            <marker date="1516961691316" expanded="true" signature="20666:20822" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21256:21302" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21375:22401" ph="Bepalen VA bedrijf schakelaar" />
+            <marker date="1516961691316" expanded="true" signature="21532:21603" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="21613:21716" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="22002:22143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="22408:22873" ph="Bepalen alternatieven hoofdrichtingen schakelaar" />
+            <marker date="1516961691316" expanded="true" signature="22958:23545" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="24740:25072" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="26653:26819" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="27790:28186" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28016:28143" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28609:28730" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="28816:30539" ph="/* sb.AppendLine($&quot;{ts}for (fc = 0; fc &lt; FCMAX; ++fc)&quot;); ... */" />
+            <marker date="1516961691316" expanded="true" signature="31245:31334" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="34394:34464" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="34474:34864" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="35093:35161" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="35171:35557" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="36742:37037" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="38632:39028" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="39893:42168" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42308:42574" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42659:47440" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="42704:47433" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="44276:45692" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="45347:45575" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="46532:46712" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="46780:46835" ph="{...}" />
+            <marker date="1516961691316" expanded="true" signature="47763:48712" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

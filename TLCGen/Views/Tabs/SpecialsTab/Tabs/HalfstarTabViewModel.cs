@@ -12,8 +12,6 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
-using TLCGen.Settings;
-using TLCGen.ViewModels;
 using TLCGen.Views.Tabs.SpecialsTab.DataTypes;
 
 namespace TLCGen.ViewModels
@@ -255,6 +253,19 @@ namespace TLCGen.ViewModels
 				return _removeSignaalPlanCommand;
 			}
 		}
+		
+		private RelayCommand _duplicateSignaalPlanCommand;
+		public ICommand DuplicateSignaalPlanCommand
+		{
+			get
+			{
+				if (_duplicateSignaalPlanCommand == null)
+				{
+					_duplicateSignaalPlanCommand = new RelayCommand(DuplicateSignaalPlanCommand_Executed, DuplicateSignaalPlanCommand_CanExecute);
+				}
+				return _duplicateSignaalPlanCommand;
+			}
+		}
 
 		private RelayCommand _importSignaalPlanCommand;
 		public ICommand ImportSignaalPlanCommand
@@ -355,6 +366,13 @@ namespace TLCGen.ViewModels
 					Type = gk.Type
 				});
 				gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+				gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
+				{
+					Kruising = gk.KruisingNaam,
+					Plan = spl.Naam,
+					Type = gk.Type
+				});
+				gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
 			}
 		}
 
@@ -411,9 +429,43 @@ namespace TLCGen.ViewModels
 					gk.GekoppeldeKruising.PlanUitgangen.Remove(plu);
 					gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
 				}
+				var pli = gk.GekoppeldeKruising.PlanIngangen.FirstOrDefault(x => SignaalPlannen.All(x2 => x2.Naam != x.Plan));
+				if (pli != null)
+				{
+					gk.GekoppeldeKruising.PlanIngangen.Remove(pli);
+					gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
+				}
 			}
 		}
+		
+		private bool DuplicateSignaalPlanCommand_CanExecute(object obj)
+		{
+			return SelectedSignaalPlan != null;
+		}
 
+		private void DuplicateSignaalPlanCommand_Executed(object obj)
+		{
+			var newpl = DeepCloner.DeepClone(SelectedSignaalPlan.SignaalPlan);
+			newpl.Naam = "PL" + (SignaalPlannen.Count + 1);
+			SignaalPlannen.Add(new SignaalPlanViewModel(newpl));
+			foreach (var gk in GekoppeldeKruisingen)
+			{
+				gk.GekoppeldeKruising.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+				{
+					Kruising = gk.KruisingNaam,
+					Plan = newpl.Naam,
+					Type = gk.Type
+				});
+				gk.GekoppeldeKruising.PlanUitgangen.BubbleSort();
+				gk.GekoppeldeKruising.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
+				{
+					Kruising = gk.KruisingNaam,
+					Plan = newpl.Naam,
+					Type = gk.Type
+				});
+				gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
+			}
+		}
 		
 		private bool ImportSignaalPlanCommand_CanExecute(object obj)
 		{
@@ -490,6 +542,12 @@ namespace TLCGen.ViewModels
 			foreach (var pl in SignaalPlannen)
 			{
 				gkk.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+				{
+					Kruising = gkk.KruisingNaam,
+					Plan = pl.Naam,
+					Type = gkk.Type
+				});
+				gkk.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
 				{
 					Kruising = gkk.KruisingNaam,
 					Plan = pl.Naam,

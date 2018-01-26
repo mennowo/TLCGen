@@ -4,8 +4,8 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
 	[Serializable]
-    [IOElement("uit", BitmappedItemTypeEnum.Uitgang, "IOName", "IsSlave")]
-	public class HalfstarGekoppeldeKruisingPlanUitgangModel : IOElementModel, IComparable
+    [IOElement("in", BitmappedItemTypeEnum.Uitgang, "IOName", "IsMaster")]
+	public class HalfstarGekoppeldeKruisingPlanIngangModel : IOElementModel, IComparable
 	{
 		public override string Naam { get; set; }
 		
@@ -13,13 +13,13 @@ namespace TLCGen.Models
 		public string Kruising { get; set; }
 		public HalfstarGekoppeldTypeEnum Type { get; set; }
 		
-		public bool IsSlave => Type == HalfstarGekoppeldTypeEnum.Slave;
+		public bool IsMaster => Type == HalfstarGekoppeldTypeEnum.Master;
 
 		public string IOName => Kruising + Plan;
 
 		public int CompareTo(object obj)
 		{
-			return string.Compare(Plan, ((HalfstarGekoppeldeKruisingPlanUitgangModel) obj).Plan, StringComparison.Ordinal);
+			return string.Compare(Plan, ((HalfstarGekoppeldeKruisingPlanIngangModel) obj).Plan, StringComparison.Ordinal);
 		}
 	}
 }

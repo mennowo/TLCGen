@@ -7,22 +7,18 @@
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
-             xmlns:dg2d="http://gu.se/DataGrid2D"
-             xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
-             x:Name="root"
+             xmlns:dg2D="http://gu.se/DataGrid2D"
+             x:Name="Root"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <local:ConflictBackgroundConverter x:Key="backgroundConverter" />
+        <local:ConflictBackgroundConverter x:Key="BackgroundConverter" />
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
-        <local:SelectedDisplayTypeToBoolConverter x:Key="DisplayTypeToBoolConverter" />
-        <local:ReferencesSelfToBackgroundConverter x:Key="RefSelfConv" />
         <local:SynchCheckBoxVisibilityConverter x:Key="CheckBoxVisConverter" />
-        <BooleanToVisibilityConverter x:Key="Bool2VisConverter" />
-        <DataTemplate x:Key="MatrixCellTemplate">
+        <DataTemplate x:Key="MatrixCellTemplate" DataType="vm:SynchronisatieViewModel">
             <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
                 <TextBlock
                     Margin="0" Padding="0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -41,7 +37,7 @@
                     </CheckBox.Visibility>
                 </CheckBox>
                 <Grid.Background>
-                    <MultiBinding Converter="{StaticResource backgroundConverter}">
+                    <MultiBinding Converter="{StaticResource BackgroundConverter}">
                         <Binding Path="ReferencesSelf" Mode="OneWay" />
                         <Binding Path="IsEnabled" Mode="OneWay" />
                         <Binding Path="DisplayType" Mode="OneWay" />
@@ -50,7 +46,7 @@
                 </Grid.Background>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="MatrixCellEditingTemplate">
+        <DataTemplate x:Key="MatrixCellEditingTemplate" DataType="vm:SynchronisatieViewModel">
             <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
                 <controls:AutoSelectTextBox
                         Margin="0"
@@ -75,14 +71,14 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid
-            dg2d:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=root}" 
-            dg2d:ItemsSource.RowHeadersSource="{Binding FasenNames}"
-            dg2d:Cell.Template="{StaticResource MatrixCellTemplate}"
-            dg2d:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
-            dg2d:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
-            dg2d:Selected.CellItem="{Binding Path=GridSelectedItem,ElementName=root}"
+            dg2D:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=Root}" 
+            dg2D:ItemsSource.RowHeadersSource="{Binding FasenNames}"
+            dg2D:Cell.Template="{StaticResource MatrixCellTemplate}"
+            dg2D:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
+            dg2D:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
+            dg2D:Selected.CellItem="{Binding Path=GridSelectedItem,ElementName=Root}"
             AutoGenerateColumns="True"
-            MinRowHeight="24" Name="conflictgrid"
+            MinRowHeight="24"
             MinColumnWidth="24"
             EnableRowVirtualization="True" EnableColumnVirtualization="True"
             HorizontalGridLinesBrush="LightGray"
