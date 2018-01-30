@@ -401,6 +401,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("bool application1_tig(void)");
 			sb.AppendLine("{");
+			sb.AppendLine($"{ts}return 0;");
 			sb.AppendLine("}");
 
 			return sb.ToString();
@@ -412,6 +413,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("bool application2_tig(void)");
 			sb.AppendLine("{");
+			sb.AppendLine($"{ts}return 0;");
 			sb.AppendLine("}");
 
 			return sb.ToString();

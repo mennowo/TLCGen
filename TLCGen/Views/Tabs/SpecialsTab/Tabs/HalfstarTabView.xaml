@@ -171,10 +171,11 @@
                     <ComboBox
                         Grid.Row="0" Grid.Column="1" Margin="2" ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                        SelectedItem="{Binding Path=DefaultSignaalplan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        SelectedValue="{Binding Path=DefaultSignaalplan,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
 
                     <DataGrid ItemsSource="{Binding Path=HalfstarPeriodenData}" 
-                              Grid.Row="3" Grid.ColumnSpan="2" AutoGenerateColumns="False"
+                              Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" 
+                              AutoGenerateColumns="False"
                               Margin="2" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.RowHeaderTemplate>
                             <DataTemplate>
@@ -195,7 +196,7 @@
                                         <ComboBox 
                                             ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
                                             FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                            SelectedItem="{Binding Path=Signaalplan,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                            SelectedValue="{Binding Path=Signaalplan,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>

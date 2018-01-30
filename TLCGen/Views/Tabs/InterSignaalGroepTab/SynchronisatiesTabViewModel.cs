@@ -205,7 +205,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
-                foreach(SynchronisatieViewModel svm in ConflictMatrix)
+                foreach(var svm in ConflictMatrix)
                 {
                     if(svm.FaseVan == SelectedSynchronisatie.FaseNaar && svm.FaseNaar == SelectedSynchronisatie.FaseVan)
                     {
@@ -227,7 +227,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == SelectedSynchronisatie.FaseNaar && svm.FaseNaar == SelectedSynchronisatie.FaseVan)
                     {
@@ -249,7 +249,7 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectedSynchronisatie.Gelijkstart.DeelConflict = value;
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == SelectedSynchronisatie.FaseNaar && svm.FaseNaar == SelectedSynchronisatie.FaseVan)
                     {
@@ -343,8 +343,8 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                ResourceDictionary dict = new ResourceDictionary();
-                Uri u = new Uri("pack://application:,,,/" +
+                var dict = new ResourceDictionary();
+                var u = new Uri("pack://application:,,,/" +
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
                     ";component/" + "Resources/TabIcons.xaml");
                 dict.Source = u;
@@ -383,14 +383,14 @@ namespace TLCGen.ViewModels
             _AllDetectoren = new List<string>();
             if (Controller != null)
             {
-                foreach (FaseCyclusModel fcm in Controller.Fasen)
+                foreach (var fcm in Controller.Fasen)
                 {
-                    foreach (DetectorModel dm in fcm.Detectoren)
+                    foreach (var dm in fcm.Detectoren)
                     {
                         _AllDetectoren.Add(dm.Naam);
                     }
                 }
-                foreach (DetectorModel dm in Controller.Detectoren)
+                foreach (var dm in Controller.Detectoren)
                 {
                     _AllDetectoren.Add(dm.Naam);
                 }
@@ -490,11 +490,11 @@ namespace TLCGen.ViewModels
 
         private void SetGarantieValuesCommand_Executed(object obj)
         {
-            int fccount = Fasen.Count;
+            var fccount = Fasen.Count;
 
-            for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
+            for (var fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
             {
-                for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
+                for (var fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
                     int i;
                     if (!string.IsNullOrWhiteSpace(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue()) && Int32.TryParse(ConflictMatrix[fcvm_from, fcvm_to].GetConflictValue(), out i))
@@ -521,7 +521,7 @@ namespace TLCGen.ViewModels
 
         private void AddGarantieConvertValue_Executed(object obj)
         {
-            GarantieTijdConvertHelper h = new GarantieTijdConvertHelper(this);
+            var h = new GarantieTijdConvertHelper(this);
 
             _SettingGarConvs = true;
 
@@ -563,7 +563,7 @@ namespace TLCGen.ViewModels
         {
             SaveConflictMatrix();
 
-            string s = Integrity.TLCGenIntegrityChecker.IsConflictMatrixOK(_Controller);
+            var s = Integrity.TLCGenIntegrityChecker.IsConflictMatrixOK(_Controller);
             if (s == null)
             {
                 if (_MatrixChanged == true)
@@ -594,7 +594,7 @@ namespace TLCGen.ViewModels
 
             _SettingGarConvs = true;
 
-            for (int i = 1; i < GarantieTijdenConvertValues.Count; ++i)
+            for (var i = 1; i < GarantieTijdenConvertValues.Count; ++i)
             {
                 GarantieTijdenConvertValues[i].MinVan = GarantieTijdenConvertValues[i - 1].Tot;
                 GarantieTijdenConvertValues[i].Van = GarantieTijdenConvertValues[i].MinVan;
@@ -610,7 +610,7 @@ namespace TLCGen.ViewModels
 
             _SettingGarConvs = true;
 
-            for (int i = 0; i < (GarantieTijdenConvertValues.Count - 1); ++i)
+            for (var i = 0; i < (GarantieTijdenConvertValues.Count - 1); ++i)
             {
                 GarantieTijdenConvertValues[i].Tot = GarantieTijdenConvertValues[i + 1].Van;
             }
@@ -634,19 +634,19 @@ namespace TLCGen.ViewModels
                 return;
             }
 
-            int fccount = Fasen.Count;
+            var fccount = Fasen.Count;
 
             _FasenNames = new ObservableCollection<string>();
-            foreach (FaseCyclusModel fcvm in Fasen)
+            foreach (var fcvm in Fasen)
             {
                 FasenNames.Add(fcvm.Naam);
             }
             RaisePropertyChanged("FasenNames");
 
             ConflictMatrix = new SynchronisatieViewModel[fccount, fccount];
-            for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+            for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
             {
-                for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                 {
                     if (ConflictMatrix[fcm_from, fcm_to] == null)
                     {
@@ -666,9 +666,9 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
+            foreach (var cm in _Controller.InterSignaalGroep.Conflicten)
             {
-                foreach(SynchronisatieViewModel svm in ConflictMatrix)
+                foreach(var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == cm.FaseVan && svm.FaseNaar == cm.FaseNaar)
                     {
@@ -678,14 +678,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (NaloopModel nm in _Controller.InterSignaalGroep.Nalopen)
+            foreach (var nm in _Controller.InterSignaalGroep.Nalopen)
             {
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == nm.FaseVan && svm.FaseNaar == nm.FaseNaar)
                     {
                         svm.Naloop = nm;
-                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        foreach (var svm_opp in ConflictMatrix)
                         {
                             if (svm_opp.FaseVan == nm.FaseNaar && svm_opp.FaseNaar == nm.FaseVan)
                             {
@@ -698,14 +698,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (GelijkstartModel gm in _Controller.InterSignaalGroep.Gelijkstarten)
+            foreach (var gm in _Controller.InterSignaalGroep.Gelijkstarten)
             {
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == gm.FaseVan && svm.FaseNaar == gm.FaseNaar)
                     {
                         svm.Gelijkstart = gm;
-                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        foreach (var svm_opp in ConflictMatrix)
                         {
                             if (svm_opp.FaseVan == gm.FaseNaar && svm_opp.FaseNaar == gm.FaseVan)
                             {
@@ -721,14 +721,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (VoorstartModel vm in _Controller.InterSignaalGroep.Voorstarten)
+            foreach (var vm in _Controller.InterSignaalGroep.Voorstarten)
             {
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == vm.FaseVan && svm.FaseNaar == vm.FaseNaar)
                     {
                         svm.Voorstart = vm;
-                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        foreach (var svm_opp in ConflictMatrix)
                         {
                             if (svm_opp.FaseVan == vm.FaseNaar && svm_opp.FaseNaar == vm.FaseVan)
                             {
@@ -740,14 +740,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (LateReleaseModel lrm in _Controller.InterSignaalGroep.LateReleases)
+            foreach (var lrm in _Controller.InterSignaalGroep.LateReleases)
             {
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == lrm.FaseVan && svm.FaseNaar == lrm.FaseNaar)
                     {
                         svm.LateRelease = lrm;
-                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        foreach (var svm_opp in ConflictMatrix)
                         {
                             if (svm_opp.FaseVan == lrm.FaseNaar && svm_opp.FaseNaar == lrm.FaseVan)
                             {
@@ -759,14 +759,14 @@ namespace TLCGen.ViewModels
                 }
             }
 
-            foreach (MeeaanvraagModel mm in _Controller.InterSignaalGroep.Meeaanvragen)
+            foreach (var mm in _Controller.InterSignaalGroep.Meeaanvragen)
             {
-                foreach (SynchronisatieViewModel svm in ConflictMatrix)
+                foreach (var svm in ConflictMatrix)
                 {
                     if (svm.FaseVan == mm.FaseVan && svm.FaseNaar == mm.FaseNaar)
                     {
                         svm.Meeaanvraag = mm;
-                        foreach (SynchronisatieViewModel svm_opp in ConflictMatrix)
+                        foreach (var svm_opp in ConflictMatrix)
                         {
                             if (svm_opp.FaseVan == mm.FaseNaar && svm_opp.FaseNaar == mm.FaseVan)
                             {
@@ -798,7 +798,7 @@ namespace TLCGen.ViewModels
                 return;
             }
 
-            int fccount = Fasen.Count;
+            var fccount = Fasen.Count;
 
             // Call extension method RemoveAll instead of built-in Clear(), see:
             // http://stackoverflow.com/questions/224155/when-clearing-an-observablecollection-there-are-no-items-in-e-olditems
@@ -808,10 +808,10 @@ namespace TLCGen.ViewModels
             _Controller.InterSignaalGroep.Nalopen.RemoveAll();
             _Controller.InterSignaalGroep.Meeaanvragen.RemoveAll();
             _Controller.InterSignaalGroep.LateReleases.RemoveAll();
-            bool[,] gelijkstartsaved = new bool[fccount, fccount];
-            for (int fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
+            var gelijkstartsaved = new bool[fccount, fccount];
+            for (var fcvm_from = 0; fcvm_from < fccount; ++fcvm_from)
             {
-                for (int fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
+                for (var fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
                     if (ConflictMatrix[fcvm_from, fcvm_to].HasConflict || ConflictMatrix[fcvm_from, fcvm_to].HasGarantieConflict)
                     {
@@ -882,10 +882,10 @@ namespace TLCGen.ViewModels
             // Conflict
             if (message.Conflict != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.Conflict.FaseVan &&
                            Fasen[fcm_to].Naam == message.Conflict.FaseNaar)
@@ -938,10 +938,10 @@ namespace TLCGen.ViewModels
             // Naloop
             if(message.Naloop != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.Naloop.FaseVan &&
                             Fasen[fcm_to].Naam == message.Naloop.FaseNaar)
@@ -956,10 +956,10 @@ namespace TLCGen.ViewModels
             // Voorstart
             if (message.Voorstart != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.Voorstart.FaseVan &&
                             Fasen[fcm_to].Naam == message.Voorstart.FaseNaar)
@@ -974,10 +974,10 @@ namespace TLCGen.ViewModels
             // LateRelease
             if (message.LateRelease != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.LateRelease.FaseVan &&
                             Fasen[fcm_to].Naam == message.LateRelease.FaseNaar)
@@ -992,10 +992,10 @@ namespace TLCGen.ViewModels
             // Gelijkstart
             if (message.Gelijkstart != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.Gelijkstart.FaseVan &&
                             Fasen[fcm_to].Naam == message.Gelijkstart.FaseNaar)
@@ -1010,10 +1010,10 @@ namespace TLCGen.ViewModels
             // Meeaanvraag
             if (message.Meeaanvraag != null)
             {
-                int fccount = Fasen.Count;
-                for (int fcm_from = 0; fcm_from < fccount; ++fcm_from)
+                var fccount = Fasen.Count;
+                for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
                 {
-                    for (int fcm_to = 0; fcm_to < fccount; ++fcm_to)
+                    for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
                     {
                         if (Fasen[fcm_from].Naam == message.Meeaanvraag.FaseVan &&
                             Fasen[fcm_to].Naam == message.Meeaanvraag.FaseNaar)

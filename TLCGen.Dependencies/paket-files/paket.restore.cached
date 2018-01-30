@@ -1,0 +1,9 @@
+RESTRICTION: == net45
+NUGET
+  remote: https://api.nuget.org/v3/index.json
+    CommonServiceLocator (2.0.2)
+    Extended.Wpf.Toolkit (3.2)
+    ilmerge (2.14.1208)
+    ILMerge.MSBuild.Task (1.0.2)
+    MvvmLightLibs (5.3)
+      CommonServiceLocator (>= 1.3)

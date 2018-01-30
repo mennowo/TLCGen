@@ -73,7 +73,7 @@ namespace TLCGen.ViewModels
                         //}
 
                         _SelectedVAOntruimenFase.ConflicterendeFasen.Clear();
-                        foreach (ConflictModel cm in _Controller.InterSignaalGroep.Conflicten)
+                        foreach (var cm in _Controller.InterSignaalGroep.Conflicten)
                         {
                             if (cm.FaseVan == SelectedFaseNaam && cm.Waarde >= 0)
                             {

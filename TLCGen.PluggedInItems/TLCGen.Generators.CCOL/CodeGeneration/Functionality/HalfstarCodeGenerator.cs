@@ -131,7 +131,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					var pl = hsd.SignaalPlannen[index];
 					if (hsd.DefaultPeriodeSignaalplan == pl.Naam)
 					{
-						iplx = index;
+						iplx = index + 1;
 						break;
 					}
 				}
@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						var pl = hsd.SignaalPlannen[index];
 						if (per.Signaalplan == pl.Naam)
 						{
-							iplx = index;
+							iplx = index + 1;
 							break;
 						}
 					}
@@ -985,19 +985,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 									mts2 = ts + ts;
 									sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{master.KruisingNaam}])");
 									sb.AppendLine($"{ts}{{");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* koppelpuls master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode var master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode arh master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usleven}] = GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uskpuls}] = GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* koppelpuls master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uspervar}] = GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode var master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usperarh}] = GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode arh master doorsturen */");
 									foreach (var pl in c.HalfstarData.SignaalPlannen)
 									{
-										sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm:00}];");
+										sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{pl.Naam}] = GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm:00}];");
 										ipl++;
 										iplm++;
 									}
 									sb.AppendLine($"{ts}}}");
 									sb.AppendLine($"{ts}else");
 									sb.AppendLine($"{ts}{{");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usleven}] = FALSE;");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uskpuls}] = FALSE;");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uspervar}] = FALSE;");
+									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usperarh}] = FALSE;");
+									foreach (var pl in c.HalfstarData.SignaalPlannen)
+									{
+										sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{pl.Naam}] = FALSE;");
+										ipl++;
+										iplm++;
+									}
 								}
 								ipl = 1;
 								iplm = 1;

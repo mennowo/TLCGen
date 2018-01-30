@@ -44,10 +44,12 @@ namespace TLCGen.Importers.TabC
                 throw new NullReferenceException("TabC importer: Controller to import into cannot be null.");
             }
 
-            var openFileDialog = new OpenFileDialog();
-            openFileDialog.CheckFileExists = true;
-            openFileDialog.Title = "Selecteer tab.c file voor importeren";
-            openFileDialog.Filter = "tab.c files|*tab.c|Alle files|*.*";
+            var openFileDialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                Title = "Selecteer tab.c file voor importeren",
+                Filter = "tab.c files|*tab.c|Alle files|*.*"
+            };
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -135,11 +137,18 @@ namespace TLCGen.Importers.TabC
 
                         foreach(var cm in newData.Conflicten)
                         {
+                            var _cm = new ConflictModel
+                            {
+                                FaseVan = cm.FaseVan,
+                                FaseNaar = cm.FaseNaar,
+                                Waarde = cm.Waarde
+                            };
+                            var old = c.InterSignaalGroep.Conflicten.FirstOrDefault(x => x.FaseVan == cm.FaseVan && x.FaseNaar == cm.FaseNaar);
+                            if (old != null)
+                            {
+                                c.InterSignaalGroep.Conflicten.Remove(old);
+                            }
 
-                            var _cm = new ConflictModel();
-                            _cm.FaseVan = cm.FaseVan;
-                            _cm.FaseNaar = cm.FaseNaar;
-                            _cm.Waarde = cm.Waarde;
                             c.InterSignaalGroep.Conflicten.Add(_cm);
                             
                             // Check for new conflicts
@@ -157,7 +166,7 @@ namespace TLCGen.Importers.TabC
                 }
                 catch (Exception e)
                 {
-                    System.Windows.MessageBox.Show("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c");
+                    MessageBox.Show("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c");
                     return null;
                 }
             }

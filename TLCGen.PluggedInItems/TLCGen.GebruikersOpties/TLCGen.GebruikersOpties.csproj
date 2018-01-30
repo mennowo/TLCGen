@@ -81,6 +81,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2C677528-AD13-4081-A55F-CE70F9A10B84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
       <Project>{3d0fcfc8-2c31-492c-baa2-3af8214ed6df}</Project>
       <Name>TLCGen.Generators.CCOL</Name>

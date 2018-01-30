@@ -2,11 +2,10 @@
 using TLCGen.Helpers;
 using TLCGen.Models;
 
-namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
+namespace TLCGen.ViewModels
 {
 	public class HalfstarPeriodeDataViewModel : ViewModelBase, IViewModelWithItem
 	{
-
 		#region Properties
 
 		public HalfstarPeriodeDataModel PeriodeData { get; }
