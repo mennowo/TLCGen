@@ -131,6 +131,7 @@
             <WrapPanel Orientation="Horizontal" Grid.Row="2">
                 <Button Content="Refresh (F5)" Command="{Binding Path=RefreshBitmapCommand}" Margin="2" />
                 <Button Content="Reset zoom" Command="{Binding Path=ResetBitmapCommand}" CommandParameter="{Binding ElementName=zb}" Margin="2" />
+                <Button Content="Import dpl.c" Command="{Binding Path=ImportDplCCommand}" Margin="2" />
             </WrapPanel>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />

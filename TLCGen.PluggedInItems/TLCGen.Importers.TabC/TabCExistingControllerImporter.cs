@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.Settings;
 
 namespace TLCGen.Importers.TabC
 {
@@ -119,6 +120,8 @@ namespace TLCGen.Importers.TabC
 	                        var fc = c.Fasen.FirstOrDefault(x => x.Naam == newfcm.Naam);
                             if (fc == null)
                             {
+                                newfcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(newfcm.Naam);
+                                DefaultsProvider.Default.SetDefaultsOnModel(newfcm, newfcm.Type.ToString());
                                 c.Fasen.Add(newfcm);
                                 c.ModuleMolen.FasenModuleData.Add(new FaseCyclusModuleDataModel { FaseCyclus = newfcm.Naam });
                                 NewPhasesMessage = NewPhasesMessage + newfcm.Naam + "\n";

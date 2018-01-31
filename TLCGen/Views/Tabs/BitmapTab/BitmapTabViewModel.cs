@@ -18,6 +18,10 @@ using TLCGen.Models.Enumerations;
 using TLCGen.Messaging.Requests;
 using System.Reflection;
 using System.Collections;
+using System.Runtime.InteropServices;
+using System.Windows;
+using TLCGen.Dialogs;
+using Point = System.Drawing.Point;
 
 namespace TLCGen.ViewModels
 {
@@ -186,31 +190,18 @@ namespace TLCGen.ViewModels
         }
 
         RelayCommand _RefreshBitmapCommand;
-        public ICommand RefreshBitmapCommand
-        {
-            get
-            {
-                if (_RefreshBitmapCommand == null)
-                {
-                    _RefreshBitmapCommand = new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute);
-                }
-                return _RefreshBitmapCommand;
-            }
-        }
+        public ICommand RefreshBitmapCommand => _RefreshBitmapCommand ?? (_RefreshBitmapCommand =
+                                                    new RelayCommand(RefreshBitmapCommand_Executed, RefreshBitmapCommand_CanExecute));
 
         RelayCommand _ResetBitmapCommand;
-        public ICommand ResetBitmapCommand
-        {
-            get
-            {
-                if (_ResetBitmapCommand == null)
-                {
-                    _ResetBitmapCommand = new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute);
-                }
-                return _ResetBitmapCommand;
-            }
-        }
+        public ICommand ResetBitmapCommand => _ResetBitmapCommand ?? (_ResetBitmapCommand =
+                                                  new RelayCommand(ResetBitmapCommand_Executed, ResetBitmapCommand_CanExecute));
 
+        RelayCommand _ImportDplCCommand;
+        public ICommand ImportDplCCommand => _ImportDplCCommand ?? (_ImportDplCCommand =
+                                                  new RelayCommand(ImportDplCCommand_Executed, ImportDplCCommand_CanExecute));
+
+        
         #endregion // Commands
 
         #region TabItem Overrides
@@ -316,6 +307,20 @@ namespace TLCGen.ViewModels
             return true;
         }
 
+        void ImportDplCCommand_Executed(object prm)
+        {
+            var dlg = new ImportDplCWindow(_Controller);
+            dlg.Owner = Application.Current.MainWindow;
+            dlg.ShowDialog();
+            LoadBitmap();
+        }
+
+        bool ImportDplCCommand_CanExecute(object prm)
+        {
+            return BitmapFileName != null;
+        }
+
+        
         #endregion // Command functionality
 
         #region Public Methods

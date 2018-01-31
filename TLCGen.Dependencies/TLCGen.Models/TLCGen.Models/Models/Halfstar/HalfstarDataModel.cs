@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -23,6 +24,41 @@ namespace TLCGen.Models
 		public List<HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; set; }
 		public List<HalfstarHoofdrichtingModel> Hoofdrichtingen { get; set; }
 		
+		[Browsable(false)]
+		[IOElement("mlact", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel MlActUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("plact", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel PlActUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("kpact", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel KpActUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("mlpl", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel MlPlUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("txtimer", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel TxTimerUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("klok", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel KlokUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("hand", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
+		public BitmapCoordinatenDataModel HandUitgang { get; set; }
+		
+		[Browsable(false)]
+		[IOElement("master", BitmappedItemTypeEnum.Uitgang, conditionprop: "IsNotMaster")]
+		public BitmapCoordinatenDataModel MasterUitgang { get; set; }
+
+		[Browsable(false)]
+		public bool IsNotMaster => IsHalfstar && Type != HalfstarTypeEnum.Master;
+		
 		#endregion // Properties
 
 		#region Constructor
@@ -33,6 +69,15 @@ namespace TLCGen.Models
 			HalfstarPeriodenData = new List<HalfstarPeriodeDataModel>();
 			GekoppeldeKruisingen = new List<HalfstarGekoppeldeKruisingModel>();
 			Hoofdrichtingen = new List<HalfstarHoofdrichtingModel>();
+			
+			MlActUitgang = new BitmapCoordinatenDataModel();
+			PlActUitgang = new BitmapCoordinatenDataModel();
+			KpActUitgang = new BitmapCoordinatenDataModel();
+			MlPlUitgang = new BitmapCoordinatenDataModel();
+			TxTimerUitgang = new BitmapCoordinatenDataModel();
+			KlokUitgang = new BitmapCoordinatenDataModel();
+			HandUitgang = new BitmapCoordinatenDataModel();
+			MasterUitgang = new BitmapCoordinatenDataModel();
 		}
 
 		#endregion // Constructor

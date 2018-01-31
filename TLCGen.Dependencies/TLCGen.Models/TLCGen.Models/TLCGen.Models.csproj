@@ -47,6 +47,7 @@
     <Compile Include="Attributes\RefersToAttribute.cs" />
     <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
     <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
+    <Compile Include="Attributes\VissimNameAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />

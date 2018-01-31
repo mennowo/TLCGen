@@ -2,15 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a5796f3-d1f1-4963-8f68-1bc383556cb3" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Attributes/VissimNameAttribute.cs" />
       <change beforePath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/contentModel.xml" afterPath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/contentModel.xml" />
       <change beforePath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/../.paket/paket.exe" afterPath="$PROJECT_DIR$/../.paket/paket.exe" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/.paket/paket.exe" afterPath="$PROJECT_DIR$/.paket/paket.exe" />
-      <change beforePath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.GebruikersOpties/GebruikersOptiesLijst.xaml" afterPath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.GebruikersOpties/GebruikersOptiesLijst.xaml" />
-      <change beforePath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.GebruikersOpties/TLCGen.GebruikersOpties.csproj" afterPath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.GebruikersOpties/TLCGen.GebruikersOpties.csproj" />
-      <change beforePath="$PROJECT_DIR$/../TLCGen/TLCGen.csproj" afterPath="$PROJECT_DIR$/../TLCGen/TLCGen.csproj" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Integrity/TLCGenIntegrityChecker.cs" afterPath="$PROJECT_DIR$/TLCGen.Integrity/TLCGenIntegrityChecker.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/DetectorModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/DetectorModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs" afterPath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs" />
+      <change beforePath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" afterPath="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/TLCGen.Models.csproj" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml" afterPath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml.cs" afterPath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/ImportSignalPlanWindow.xaml.cs" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/TLCGen.Dialogs.csproj" afterPath="$PROJECT_DIR$/../TLCGen.Parts/TLCGen.Dialogs/TLCGen.Dialogs.csproj" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" afterPath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.Generators.CCOL/CodeGeneration/Functionality/HalfstarCodeGenerator.cs" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCExistingControllerImporter.cs" afterPath="$PROJECT_DIR$/../TLCGen.PluggedInItems/TLCGen.Importers.TabC/TabCExistingControllerImporter.cs" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen/Views/Tabs/BitmapTab/BitmapTab.xaml" afterPath="$PROJECT_DIR$/../TLCGen/Views/Tabs/BitmapTab/BitmapTab.xaml" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen/Views/Tabs/BitmapTab/BitmapTabViewModel.cs" afterPath="$PROJECT_DIR$/../TLCGen/Views/Tabs/BitmapTab/BitmapTabViewModel.cs" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" afterPath="$PROJECT_DIR$/../TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabView.xaml" />
+      <change beforePath="$PROJECT_DIR$/../TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" afterPath="$PROJECT_DIR$/../TLCGen/Views/Tabs/SpecialsTab/Tabs/HalfstarTabViewModel.cs" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -19,28 +28,26 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FavoritesManager">
+    <favorites_list name="TLCGen.Dependencies" />
+    <favorites_list name="Halfstar">
+      <favorite_root url="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs" type="psiFile" klass="com.intellij.ide.projectView.impl.nodes.PsiFileNode" />
+    </favorites_list>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="HalfstarGekoppeldeKruisingPlanIngangModel.cs" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanIngangModel.cs">
+      <file leaf-file-name="HalfstarDataModel.cs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="504">
-              <caret line="21" column="40" lean-forward="false" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HalfstarGekoppeldeKruisingPlanUitgangModel.cs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+            <state relative-caret-position="773">
+              <caret line="59" column="48" lean-forward="false" selection-start-line="59" selection-start-column="48" selection-end-line="59" selection-end-column="48" />
               <folding>
-                <marker date="1517316887289" expanded="false" signature="6:47" ph="..." />
-                <marker date="1517316887289" expanded="true" signature="72:707" ph="{...}" />
-                <marker date="1517316887289" expanded="true" signature="252:705" ph="{...}" />
-                <marker date="1517316887289" expanded="true" signature="579:702" ph="{...}" />
+                <marker date="1517397718906" expanded="false" signature="6:110" ph="..." />
+                <marker date="1517397718906" expanded="true" signature="135:3215" ph="{...}" />
+                <marker date="1517397718906" expanded="true" signature="185:3213" ph="{...}" />
+                <marker date="1517397718906" expanded="true" signature="191:2454" ph="Properties" />
+                <marker date="1517397718906" expanded="true" signature="2458:3210" ph="Constructor" />
+                <marker date="1517397718906" expanded="true" signature="2507:3181" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -53,11 +60,19 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Varia/BitmapCoordinatenDataModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/OV_HD/OVIngreepModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Integrity/TLCGenIntegrityChecker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/FaseCyclusModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Attributes/VissimNameAttribute.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models.ModelManager/TLCGenModelManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/DetectorModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanIngangModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/TLCGen.Helpers/ModelStringSetter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/SignaalPlanModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/SignaalPlanFaseModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanIngangModel.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -66,6 +81,10 @@
         <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs" />
         <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanIngangModel.cs" />
         <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
+        <option value="$PROJECT_DIR$/TLCGen.Integrity/TLCGenIntegrityChecker.cs" />
+        <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Attributes/VissimNameAttribute.cs" />
+        <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/DetectorModel.cs" />
+        <option value="$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs" />
       </list>
     </option>
   </component>
@@ -76,10 +95,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
+    <option name="x" value="1911" />
     <option name="y" value="-9" />
-    <option name="width" value="1938" />
-    <option name="height" value="1170" />
+    <option name="width" value="1698" />
+    <option name="height" value="1020" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -104,6 +123,59 @@
             <path>
               <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
               <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Helpers" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Integrity" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.ModelManager" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Attributes" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Models" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Base" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Halfstar" type="977d5f41:SolutionExplorerNodeRider" />
+            </path>
+            <path>
+              <item name="" type="13324e5d:SolutionExplorerViewPane$ProjectViewPaneTreeStructure$createRoot$1" />
+              <item name="TLCGen.Dependencies (13 projects)" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="TLCGen.Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="Models" type="977d5f41:SolutionExplorerNodeRider" />
+              <item name="OV_HD" type="977d5f41:SolutionExplorerNodeRider" />
             </path>
           </expand>
           <select />
@@ -161,11 +233,12 @@
       <updated>1516957124104</updated>
       <workItem from="1516957125781" duration="4394000" />
       <workItem from="1517317089611" duration="655000" />
+      <workItem from="1517387261802" duration="4131000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5049000" />
+    <option name="totallyTimeSpent" value="9180000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -177,7 +250,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1170" extended-state="6" />
+    <frame x="1911" y="-9" width="1698" height="1020" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -188,13 +261,13 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="NuGet" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1796875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20535715" sideWeight="0.8059361" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Build" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32944608" sideWeight="0.49791667" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20535715" sideWeight="0.19406393" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -225,11 +298,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="552">
+          <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+          <folding>
+            <marker date="1517316887289" expanded="false" signature="6:47" ph="..." />
+            <marker date="1517316887289" expanded="true" signature="252:705" ph="{...}" />
+            <marker date="1517316887289" expanded="true" signature="579:702" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanIngangModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="21" column="40" lean-forward="false" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
           <caret line="24" column="1" lean-forward="true" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
           <folding>
             <marker date="1517316887289" expanded="false" signature="6:47" ph="..." />
-            <marker date="1517316887289" expanded="true" signature="72:707" ph="{...}" />
             <marker date="1517316887289" expanded="true" signature="252:705" ph="{...}" />
             <marker date="1517316887289" expanded="true" signature="579:702" ph="{...}" />
           </folding>
@@ -271,10 +363,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs">
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="893">
-          <caret line="98" column="38" lean-forward="false" selection-start-line="98" selection-start-column="38" selection-end-line="98" selection-end-column="38" />
+        <state relative-caret-position="552">
+          <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+          <folding>
+            <marker date="1517316887289" expanded="false" signature="6:47" ph="..." />
+            <marker date="1517316887289" expanded="true" signature="252:705" ph="{...}" />
+            <marker date="1517316887289" expanded="true" signature="579:702" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -286,15 +383,238 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingPlanUitgangModel.cs">
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarGekoppeldeKruisingModel.cs">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+        <state relative-caret-position="120">
+          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
           <folding>
-            <marker date="1517316887289" expanded="false" signature="6:47" ph="..." />
-            <marker date="1517316887289" expanded="true" signature="72:707" ph="{...}" />
-            <marker date="1517316887289" expanded="true" signature="252:705" ph="{...}" />
-            <marker date="1517316887289" expanded="true" signature="579:702" ph="{...}" />
+            <marker date="1517316887286" expanded="false" signature="6:110" ph="..." />
+            <marker date="1517316887286" expanded="true" signature="135:4089" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="199:4087" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="205:289" ph="Fields" />
+            <marker date="1517316887286" expanded="true" signature="293:3198" ph="Properties" />
+            <marker date="1517316887286" expanded="true" signature="396:604" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="424:600" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="487:522" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="560:595" ph="{...}" />
+            <marker date="1517316887286" expanded="true" signature="3242:4084" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Attributes/VissimNameAttribute.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+          <folding>
+            <marker date="1517392232073" expanded="false" signature="6:115" ph="..." />
+            <marker date="1517392232073" expanded="true" signature="140:253" ph="{...}" />
+            <marker date="1517392232073" expanded="true" signature="239:251" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/DetectorModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="8" lean-forward="false" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="20" />
+          <folding>
+            <marker date="1517392240017" expanded="false" signature="6:178" ph="..." />
+            <marker date="1517392240017" expanded="true" signature="203:2732" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="376:2730" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="391:435" ph="Fields" />
+            <marker date="1517392240017" expanded="true" signature="445:1808" ph="Properties" />
+            <marker date="1517392240017" expanded="true" signature="1723:1774" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="1818:2098" ph="Public Methods" />
+            <marker date="1517392240017" expanded="true" signature="1874:2060" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="2108:2476" ph="IComparable" />
+            <marker date="1517392240017" expanded="true" signature="2169:2440" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="2217:2359" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="2376:2430" ph="{...}" />
+            <marker date="1517392240017" expanded="true" signature="2486:2724" ph="Constructor" />
+            <marker date="1517392240017" expanded="true" signature="2546:2689" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Integrity/TLCGenIntegrityChecker.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="161" column="51" lean-forward="true" selection-start-line="160" selection-start-column="20" selection-end-line="161" selection-end-column="51" />
+          <folding>
+            <marker date="1517392194693" expanded="false" signature="6:167" ph="..." />
+            <marker date="1517392194693" expanded="true" signature="195:10493" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="244:10491" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="259:525" ph="/// Checks the integrity of the data in the instance of ControllerModel that is parsed in ... " />
+            <marker date="1517392194693" expanded="true" signature="592:777" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="687:741" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="849:1392" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="946:1040" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="1096:1357" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="1220:1343" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="1402:1596" ph="/// Checks if the ConflictMatrix is symmetrical. ... " />
+            <marker date="1517392194693" expanded="true" signature="1663:6550" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="1926:6515" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="2043:6302" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="2145:6246" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="2259:4963" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="3382:4640" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="3562:4083" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="4170:4293" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="4334:4606" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="4677:4937" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="5026:6224" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="5171:5925" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="5292:5656" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="5393:5622" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="5693:5895" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="6017:6198" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="6330:6501" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="6560:6809" ph="/// Checks if an element's Name property is unique accross the ControllerModel ... " />
+            <marker date="1517392194693" expanded="true" signature="6898:6985" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7059:8475" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7319:8440" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7450:7816" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7716:7798" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7877:8426" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="7945:8179" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="8063:8157" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="8204:8408" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="8292:8386" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="8485:8752" ph="/// Checks if an element's VissimName property is unique accross the ControllerModel ... " />
+            <marker date="1517392194693" expanded="true" signature="8853:9357" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="8945:9154" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="9012:9140" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="9210:9322" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="9367:9470" ph="/// Determines if this phase conflicts with the one parsed ... " />
+            <marker date="1517392194693" expanded="true" signature="9588:9929" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="9759:9893" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="9939:10042" ph="/// Determines if this phase conflicts with the one parsed ... " />
+            <marker date="1517392194693" expanded="true" signature="10148:10485" ph="{...}" />
+            <marker date="1517392194693" expanded="true" signature="10319:10449" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models.ModelManager/TLCGenModelManager.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1363">
+          <caret line="19" column="36" lean-forward="false" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+          <folding>
+            <marker date="1517316887232" expanded="false" signature="6:230" ph="..." />
+            <marker date="1517316887232" expanded="true" signature="264:5018" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="324:5016" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="339:593" ph="Fields" />
+            <marker date="1517316887232" expanded="true" signature="603:1365" ph="Properties" />
+            <marker date="1517316887232" expanded="true" signature="672:1085" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="698:1075" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="750:1028" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="871:988" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1131:1246" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1289:1331" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1375:1694" ph="Public Methods" />
+            <marker date="1517316887232" expanded="true" signature="1471:1524" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1596:1656" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1704:4632" ph="TLCGen Messaging" />
+            <marker date="1517316887232" expanded="true" signature="1795:4592" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1849:2684" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="1919:2670" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="2080:2398" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="2730:4154" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="2814:4140" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="2975:3597" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="3168:3387" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="3255:3361" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="3430:3575" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="3774:3963" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="3850:3941" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="4001:4122" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="4314:4388" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="4642:5010" ph="Constructor" />
+            <marker date="1517316887232" expanded="true" signature="4733:4975" ph="{...}" />
+            <marker date="1517316887232" expanded="true" signature="4785:4868" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Helpers/ModelStringSetter.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="25" column="18" lean-forward="false" selection-start-line="25" selection-start-column="18" selection-end-line="25" selection-end-column="18" />
+          <folding>
+            <marker date="1517316886937" expanded="false" signature="6:166" ph="..." />
+            <marker date="1517316886937" expanded="true" signature="192:2933" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="236:2931" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="334:1547" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="588:1537" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="722:969" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="848:951" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1030:1523" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1139:1361" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1213:1339" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1386:1505" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1644:2925" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="1898:2915" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2032:2339" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2187:2321" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2400:2901" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2509:2735" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2583:2713" ph="{...}" />
+            <marker date="1517316886937" expanded="true" signature="2760:2883" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Base/FaseCyclusModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="25" column="26" lean-forward="true" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
+          <folding>
+            <marker date="1517316887269" expanded="false" signature="6:210" ph="..." />
+            <marker date="1517316887269" expanded="true" signature="235:2784" ph="{...}" />
+            <marker date="1517316887269" expanded="true" signature="409:2782" ph="{...}" />
+            <marker date="1517316887269" expanded="true" signature="424:468" ph="Fields" />
+            <marker date="1517316887269" expanded="true" signature="478:2051" ph="Properties" />
+            <marker date="1517316887269" expanded="true" signature="2061:2563" ph="IComparable" />
+            <marker date="1517316887269" expanded="true" signature="2122:2528" ph="{...}" />
+            <marker date="1517316887269" expanded="true" signature="2171:2496" ph="{...}" />
+            <marker date="1517316887269" expanded="true" signature="2573:2776" ph="Constructor" />
+            <marker date="1517316887269" expanded="true" signature="2635:2741" ph="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/OV_HD/OVIngreepModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-504">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1517316887351" expanded="false" signature="6:142" ph="..." />
+            <marker date="1517316887351" expanded="true" signature="167:3834" ph="{...}" />
+            <marker date="1517316887351" expanded="true" signature="274:2685" ph="{...}" />
+            <marker date="1517316887351" expanded="true" signature="289:2007" ph="Properties" />
+            <marker date="1517316887351" expanded="true" signature="1829:1973" ph="/* [XmlArrayItem(ElementName = &quot;MassaDetectieMelding&quot;)] ... */" />
+            <marker date="1517316887351" expanded="true" signature="2017:2345" ph="IComparable" />
+            <marker date="1517316887351" expanded="true" signature="2078:2310" ph="{...}" />
+            <marker date="1517316887351" expanded="true" signature="2131:2209" ph="{...}" />
+            <marker date="1517316887351" expanded="true" signature="2355:2679" ph="Constructor" />
+            <marker date="1517316887351" expanded="true" signature="2407:2644" ph="{...}" />
+            <marker date="1517316887351" expanded="true" signature="2691:3832" ph="/* public class OVIngreepMassaDetectieMelding ... */" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TLCGen.Models/TLCGen.Models/Models/Halfstar/HalfstarDataModel.cs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="773">
+          <caret line="59" column="48" lean-forward="false" selection-start-line="59" selection-start-column="48" selection-end-line="59" selection-end-column="48" />
+          <folding>
+            <marker date="1517397718906" expanded="false" signature="6:110" ph="..." />
+            <marker date="1517397718906" expanded="true" signature="135:3215" ph="{...}" />
+            <marker date="1517397718906" expanded="true" signature="185:3213" ph="{...}" />
+            <marker date="1517397718906" expanded="true" signature="191:2454" ph="Properties" />
+            <marker date="1517397718906" expanded="true" signature="2458:3210" ph="Constructor" />
+            <marker date="1517397718906" expanded="true" signature="2507:3181" ph="{...}" />
           </folding>
         </state>
       </provider>

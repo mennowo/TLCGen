@@ -145,6 +145,7 @@
           <e p="RefersToAttribute.cs" t="Include" />
           <e p="RefersToDetectorAttribute.cs" t="Include" />
           <e p="RefersToSignalGroupAttribute.cs" t="Include" />
+          <e p="VissimNameAttribute.cs" t="Include" />
         </e>
         <e p="Interfaces" t="Include">
           <e p="IInterSignaalGroepElement.cs" t="Include" />

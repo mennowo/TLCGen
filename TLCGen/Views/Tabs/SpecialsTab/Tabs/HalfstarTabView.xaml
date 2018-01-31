@@ -165,9 +165,9 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="{Binding DefaultSignaalplanText}" />
                     <CheckBox Grid.Row="1" Grid.ColumnSpan="2" Content="{Binding DefaultVARegelenText}"
-                              IsChecked="{Binding DefaultVARegelen}" Margin="5" />
+                              IsChecked="{Binding DefaultPeriodeVARegelen}" Margin="5" />
                     <CheckBox Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding DefaultAlternatievenVoorHoofdrichtingenText}"
-                              IsChecked="{Binding DefaultAlternatievenVoorHoofdrichtingen}" Margin="5" />
+                              IsChecked="{Binding DefaultPeriodeAlternatievenVoorHoofdrichtingen}" Margin="5" />
                     <ComboBox
                         Grid.Row="0" Grid.Column="1" Margin="2" ItemsSource="{Binding Path=DataContext.SignaalPlannenNames,ElementName=root}" 
                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"

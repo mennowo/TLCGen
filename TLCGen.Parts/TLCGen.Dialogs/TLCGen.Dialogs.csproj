@@ -50,6 +50,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImportDplCWindow.xaml.cs">
+      <DependentUpon>ImportDplCWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImportSignalPlanWindow.xaml.cs">
       <DependentUpon>ImportSignalPlanWindow.xaml</DependentUpon>
     </Compile>
@@ -74,6 +77,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="ImportDplCWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ImportSignalPlanWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

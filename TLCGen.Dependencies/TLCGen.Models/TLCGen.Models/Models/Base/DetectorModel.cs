@@ -22,6 +22,7 @@ namespace TLCGen.Models
         [ModelName]
         [Browsable(false)]
         public override string Naam { get; set; }
+        [VissimName]
         [Browsable(false)]
         public string VissimNaam { get; set; }
         public int? TDB { get; set; }

@@ -89,6 +89,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			if (c.HalfstarData.IsHalfstar)
 			{
 				var hsd = c.HalfstarData;
+				
+				_myElements.Add(new CCOLElement($"{_usplact}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_uskpact}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_usmlact}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_usmlpl}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_ustxtimer}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_usklok}", CCOLElementTypeEnum.Uitgang));
+				_myElements.Add(new CCOLElement($"{_ushand}", CCOLElementTypeEnum.Uitgang));
+				
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_uspf}{_usplact}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MlActUitgang, $"{_uspf}{_usmlact}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.KpActUitgang, $"{_uspf}{_uskpact}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MlPlUitgang, $"{_uspf}{_usmlpl}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.TxTimerUitgang, $"{_uspf}{_ustxtimer}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.KlokUitgang, $"{_uspf}{_usklok}"));
+				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.HandUitgang, $"{_uspf}{_ushand}"));
+				
 				_myElements.Add(new CCOLElement($"{_hplact}", CCOLElementTypeEnum.HulpElement));
 				_myElements.Add(new CCOLElement($"{_hkpact}", CCOLElementTypeEnum.HulpElement));
 				_myElements.Add(new CCOLElement($"{_hmlact}", CCOLElementTypeEnum.HulpElement));
@@ -108,6 +125,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(new CCOLElement($"{_mhand}", CCOLElementTypeEnum.GeheugenElement));
 				if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 				{
+					_myElements.Add(new CCOLElement($"{_usmaster}", CCOLElementTypeEnum.Uitgang));
+					_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MasterUitgang, $"{_uspf}{_usmaster}"));
+					
 					_myElements.Add(new CCOLElement($"{_mmaster}", CCOLElementTypeEnum.GeheugenElement));
 					_myElements.Add(new CCOLElement($"{_mslave}", CCOLElementTypeEnum.GeheugenElement));
 					
@@ -441,7 +461,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 					{
 						sb.AppendLine(
-							$"/* Bij afwezigheid Master bepaalt Slave zelf wat er gaat gebeuren. In dit geval neemt de slave de functie van Master over */");
+							$"{ts}/* Bij afwezigheid Master bepaalt Slave zelf wat er gaat gebeuren. In dit geval neemt de slave de functie van Master over */");
 						sb.AppendLine($"{ts}else");
 						sb.AppendLine($"{ts}{{");
 						sb.AppendLine($"{mts}MM[{_mpf}{_mslave}] = TRUE;");
@@ -650,7 +670,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}/* Retour wachtgroen bij wachtgroen richtingen, let op: inclusief aanvraag! */");
 					foreach (var fc in c.Fasen)
 					{
-						sb.AppendLine($"{ts}{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");
+						if (fc.Wachtgroen != NooitAltijdAanUitEnum.Nooit)
+						{
+							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
+							{
+								sb.AppendLine($"{ts}{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}])r);");
+							}
+							else
+							{
+								sb.AppendLine($"{ts}{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+							}
+						}
 					}
 					sb.AppendLine($"{ts}}}");
 					return sb.ToString();
@@ -748,16 +778,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					
 					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}]) /* Code alleen bij PL-bedrijf */");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* hoofdrichtingen alleen tijdens periode alternatieve realisaties en koppeling uit */");
-					sb.AppendLine($"{ts}{ts}if (!H[{_hpf}{_hperarh}] && H[{_hpf}kpact])");
-					sb.AppendLine($"{ts}{ts}{{");
-					foreach (var hfc in c.HalfstarData.Hoofdrichtingen)
+					
+					if (c.HalfstarData.Hoofdrichtingen.Any())
 					{
-						sb.AppendLine($"{ts}{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
+						sb.AppendLine($"{ts}{ts}/* hoofdrichtingen alleen tijdens periode alternatieve realisaties en koppeling uit */");
+						sb.AppendLine($"{ts}{ts}if (!H[{_hpf}{_hperarh}] && H[{_hpf}kpact])");
+						sb.AppendLine($"{ts}{ts}{{");
+						foreach (var hfc in c.HalfstarData.Hoofdrichtingen)
+						{
+							sb.AppendLine($"{ts}{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
+						}
+
+						sb.AppendLine($"{ts}{ts}}}");
+						sb.AppendLine($"{ts}}}");
+						sb.AppendLine($"{ts}");
 					}
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}}}");
-					sb.AppendLine($"{ts}");
+
 					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
@@ -960,57 +996,71 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						int ipl;
 						switch (kp.Type)
 						{
+							// If the coupled intersection is the master of this one
 							case HalfstarGekoppeldTypeEnum.Master:
 								ipl = 1;
+								// Receive: leven, koppelpuls, pervar, perarh, actief plan (op FALSE zetten indien geen leven)
+								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) van {kp.KruisingNaam} */");
+								ipl = 1;
+								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+								sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{kp.KruisingNaam}])");
+								sb.AppendLine($"{ts}{{");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+								foreach (var pl in c.HalfstarData.SignaalPlannen)
+								{
+									sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
+									ipl++;
+								}
+								sb.AppendLine($"{ts}}}");
+								sb.AppendLine($"{ts}else");
+								sb.AppendLine($"{ts}{{");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uskpuls}] = FALSE;");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uspervar}] = FALSE;");
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usperarh}] = FALSE;");
+								foreach (var pl in c.HalfstarData.SignaalPlannen)
+								{
+									sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{pl.Naam}] = FALSE;");
+								}
+								sb.AppendLine($"{ts}}}");
+								sb.AppendLine();
+								// Send: leven, synch, txs
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}];");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = REG && (MM[{_mpf}{_mleven}{kp.KruisingNaam}] && (TXS_delta == 0) && TXS_OKE);");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ustxsok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = REG && MM[{_mpf}{_mleven}{kp.KruisingNaam}] && TXS_OKE;");
 								sb.AppendLine();
-								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) van {kp.KruisingNaam} */");
-								ipl = 1;
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine();
 								break;
+							// Otherwise, the coupled intersection is a slave of this one
 							case HalfstarGekoppeldTypeEnum.Slave:
 								ipl = 1;
 								var iplm = 1;
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								var mts2 = ts;
+								// If fallback: send master if master alive, otherwise determine by own judgement
 								if (c.HalfstarData.Type == HalfstarTypeEnum.FallbackMaster)
 								{
 									mts2 = ts + ts;
 									sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{master.KruisingNaam}])");
 									sb.AppendLine($"{ts}{{");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usleven}] = GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uskpuls}] = GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* koppelpuls master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uspervar}] = GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode var master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usperarh}] = GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode arh master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* koppelpuls master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode var master doorsturen */");
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode arh master doorsturen */");
 									foreach (var pl in c.HalfstarData.SignaalPlannen)
 									{
-										sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{pl.Naam}] = GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm:00}];");
+										sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm:00}];");
 										ipl++;
 										iplm++;
 									}
 									sb.AppendLine($"{ts}}}");
 									sb.AppendLine($"{ts}else");
 									sb.AppendLine($"{ts}{{");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usleven}] = FALSE;");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uskpuls}] = FALSE;");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_uspervar}] = FALSE;");
-									sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{_usperarh}] = FALSE;");
-									foreach (var pl in c.HalfstarData.SignaalPlannen)
-									{
-										sb.AppendLine($"{mts2}GUS[{_uspf}in{master.KruisingNaam}{pl.Naam}] = FALSE;");
-										ipl++;
-										iplm++;
-									}
 								}
+
 								ipl = 1;
-								iplm = 1;
+								// For master and fallback, send data to coupled slave: leven, koppelpuls, pervar, perarh, actief plan
 								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
 								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = ((TX_timer <= 1)); /* koppelpuls master */");
 								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = (IH[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvarstreng}]); /* periode var master */");
@@ -1025,6 +1075,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 									sb.AppendLine($"{ts}}}");
 								}
 								sb.AppendLine();
+								// Receive from slave: leven, synch, txs
 								sb.AppendLine($"{ts}/* Koppelsignalen via (PTP) van {kp.KruisingNaam} */");
 								ipl = 1;
 								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
@@ -1036,7 +1087,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								throw new ArgumentOutOfRangeException();
 						}
 					}
-
+					
+					// Outpus for all halfstar intersections
+					sb.AppendLine($"{ts}GUS[{_uspf}{_usplact}] = IH[{_hpf}{_hplact}];");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlact}] = IH[{_hpf}{_hmlact}];");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_uskpact}] = IH[{_hpf}{_hkpact}];");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlpl}] = IH[{_hpf}{_hplact}] ? (s_int16)(PL+1): (s_int16)(ML+1);");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_ustxtimer}] = IH[{_hpf}{_hplact}] ? (s_int16)(TX_timer): 0;");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_usklok}] = MM[{_mpf}{_mklok}];");
+					sb.AppendLine($"{ts}GUS[{_uspf}{_ushand}] = MM[{_mpf}{_mhand}];");
+					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
+					{
+						sb.AppendLine($"{ts}GUS[{_uspf}{_usmaster}] = MM[{_mpf}{_mmaster}];");									
+					}
+					sb.AppendLine();
 
 					return sb.ToString();
 				

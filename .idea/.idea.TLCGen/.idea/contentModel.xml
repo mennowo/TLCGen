@@ -373,6 +373,8 @@
           <e p="AboutWindow.xaml.cs" t="Include" />
           <e p="ApplyTemplateWindow.xaml" t="Include" />
           <e p="ApplyTemplateWindow.xaml.cs" t="Include" />
+          <e p="ImportDplCWindow.xaml" t="Include" />
+          <e p="ImportDplCWindow.xaml.cs" t="Include" />
           <e p="ImportSignalPlanWindow.xaml" t="Include" />
           <e p="ImportSignalPlanWindow.xaml.cs" t="Include" />
           <e p="NewTemplateWindow.xaml" t="Include" />

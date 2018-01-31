@@ -119,7 +119,7 @@ namespace TLCGen.ViewModels
 					UpdatePeriodenData();
 				}
 
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace TLCGen.ViewModels
 						}
 						break;
 				}
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.TypeVARegelen = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.VARegelen = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.OVPrioriteitPL = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.AlternatievenVoorHoofdrichtingen = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -200,7 +200,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeSignaalplan = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeVARegelen = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -475,8 +475,8 @@ namespace TLCGen.ViewModels
 		private void ImportSignaalPlanCommand_Executed(object obj)
 		{
 			var importWindow = new ImportSignalPlanWindow(SelectedSignaalPlan.SignaalPlan);
-			importWindow.ShowDialog();
 			importWindow.Owner = Application.Current.MainWindow;
+			importWindow.ShowDialog();
 			SelectedSignaalPlan.RaisePropertyChanged("");
 			foreach (var fc in SelectedSignaalPlan.Fasen)
 			{

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -15,7 +17,7 @@ namespace TLCGen.Integrity
         /// <returns></returns>
         public static string IsControllerDataOK(ControllerModel c)
         {
-            string s = IsConflictMatrixOK(c);
+            var s = IsConflictMatrixOK(c);
             if (!string.IsNullOrEmpty(s))
             {
                 return s;
@@ -50,10 +52,10 @@ namespace TLCGen.Integrity
                 throw new NullReferenceException("Error with IsConflictMatrixOK: ControllerModel cannot be null");
             
             // Loop all conflicts
-            foreach (ConflictModel cm1 in c.InterSignaalGroep.Conflicten)
+            foreach (var cm1 in c.InterSignaalGroep.Conflicten)
             {
-                bool Found = false;
-                foreach (ConflictModel cm2 in c.InterSignaalGroep.Conflicten)
+                var Found = false;
+                foreach (var cm2 in c.InterSignaalGroep.Conflicten)
                 {
                     if (cm1.FaseVan == cm2.FaseNaar && cm1.FaseNaar == cm2.FaseVan)
                     {
@@ -149,14 +151,16 @@ namespace TLCGen.Integrity
             if (obj == null || string.IsNullOrWhiteSpace(naam))
                 return true;
             
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
+            var objType = obj.GetType();
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
             {
-                object propValue = property.GetValue(obj);
+                var propValue = property.GetValue(obj);
                 if (property.PropertyType == typeof(string))
                 {
-                    string propString = (string)propValue;
+                    var attr = property.GetCustomAttributes(typeof(ModelNameAttribute), true);
+                    if (attr.Length != 1) continue;
+                    var propString = (string) propValue;
                     if (propString == naam)
                     {
                         return false;
@@ -164,15 +168,11 @@ namespace TLCGen.Integrity
                 }
                 else if (!property.PropertyType.IsValueType)
                 {
-                    var elems = propValue as IList;
-                    if (elems != null)
+                    if (propValue is IList elems)
                     {
-                        foreach (var item in elems)
+                        if (elems.Cast<object>().Any(item => !IsElementNaamUnique(item, naam)))
                         {
-                            if(!IsElementNaamUnique(item, naam))
-                            {
-                                return false;
-                            }
+                            return false;
                         }
                     }
                     else
@@ -195,15 +195,15 @@ namespace TLCGen.Integrity
         public static bool IsElementVissimNaamUnique(ControllerModel _Controller, string vissimnaam)
         {
             // Check detectie
-            foreach (FaseCyclusModel fcvm in _Controller.Fasen)
+            foreach (var fcvm in _Controller.Fasen)
             {
-                foreach (DetectorModel dvm in fcvm.Detectoren)
+                foreach (var dvm in fcvm.Detectoren)
                 {
                     if (dvm.VissimNaam == vissimnaam)
                         return false;
                 }
             }
-            foreach (DetectorModel dvm in _Controller.Detectoren)
+            foreach (var dvm in _Controller.Detectoren)
             {
                 if (dvm.VissimNaam == vissimnaam)
                     return false;
@@ -219,7 +219,7 @@ namespace TLCGen.Integrity
             if (controller == null)
                 throw new NullReferenceException();
 
-            foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
+            foreach (var cm in controller.InterSignaalGroep.Conflicten)
             {
                 if (cm.FaseVan == fcm1.Naam && cm.FaseNaar == fcm2.Naam)
                     return true;
@@ -235,7 +235,7 @@ namespace TLCGen.Integrity
             if (controller == null)
                 throw new NullReferenceException();
 
-            foreach (ConflictModel cm in controller.InterSignaalGroep.Conflicten)
+            foreach (var cm in controller.InterSignaalGroep.Conflicten)
             {
                 if (cm.FaseVan == define1 && cm.FaseNaar == define2)
                     return true;

@@ -60,9 +60,8 @@ namespace TLCGen.Dialogs
 								bool found = false;
 								foreach (var fc in SignaalPlan.Fasen)
 								{
-									if (fc.FaseCyclus.Length == strPhase.Length && fc.FaseCyclus == strPhase ||
-									    fc.FaseCyclus.Length == strPhase.ToLower().Replace("fc", "").Length &&
-									    fc.FaseCyclus == strPhase.ToLower().Replace("fc", ""))
+									var nfc = fc.FaseCyclus.Replace("fc", "");
+									if (nfc.PadLeft(strPhase.Length, '0') == strPhase)
 									{
 										if (fc.B1 == 0)
 										{
