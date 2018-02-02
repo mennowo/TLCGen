@@ -29,14 +29,11 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public FaseCyclusModel FaseCyclus
-        {
-            get { return _FaseCyclus; }
-        }
+        public FaseCyclusModel FaseCyclus => _FaseCyclus;
 
         public string Naam
         {
-            get { return _FaseCyclus.Naam; }
+            get => _FaseCyclus.Naam;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
@@ -58,7 +55,9 @@ namespace TLCGen.ViewModels
                             Messenger.Default.Send(_message);
                             if (_message.Handled && _message.IsUnique)
                             {
+                                var oldD = d.Naam;
                                 d.Naam = nd;
+                                Messenger.Default.Send(new NameChangedMessage(oldD, d.Naam));
                             }
                             nd = d.VissimNaam.Replace(oldname, value);
                             _message = new IsElementIdentifierUniqueRequest(nd, ElementIdentifierType.VissimNaam);
@@ -74,13 +73,13 @@ namespace TLCGen.ViewModels
                     }
                 }
                 RaisePropertyChanged(string.Empty); // Update all properties
-                RaisePropertyChanged<object>("Naam", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
             }
         }
 
         public FaseTypeEnum Type
         {
-            get { return _FaseCyclus.Type; }
+            get => _FaseCyclus.Type;
             set
             {
                 if (_FaseCyclus.Type != value)
@@ -97,27 +96,27 @@ namespace TLCGen.ViewModels
                     SetMeeverlengenOpties();
 
                     RaisePropertyChanged(string.Empty); // Update all properties
-                    RaisePropertyChanged<object>("Type", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(Type), broadcast: true);
                 }
             }
         }
 
         public int TFG
         {
-            get { return _FaseCyclus.TFG; }
+            get => _FaseCyclus.TFG;
             set
             {
                 if (value >= 0 && value >= TGG)
                     _FaseCyclus.TFG = value;
                 else
                     _FaseCyclus.TFG = TGG;
-                RaisePropertyChanged<object>("TFG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TFG), broadcast: true);
             }
         }
 
         public int TGG
         {
-            get { return _FaseCyclus.TGG; }
+            get => _FaseCyclus.TGG;
             set
             {
                 if (value >= 0 && value >= TGG_min)
@@ -129,13 +128,13 @@ namespace TLCGen.ViewModels
                     _FaseCyclus.TGG = TGG_min;
                 }
                 if (TFG < _FaseCyclus.TGG) TFG = _FaseCyclus.TGG;
-                RaisePropertyChanged<object>("TGG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TGG), broadcast: true);
             }
         }
 
         public int TGG_min
         {
-            get { return _FaseCyclus.TGG_min; }
+            get => _FaseCyclus.TGG_min;
             set
             {
                 if (value >= 0)
@@ -144,13 +143,13 @@ namespace TLCGen.ViewModels
                     if (TGG < value)
                         TGG = value;
                 }
-                RaisePropertyChanged<object>("TGG_min", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TGG_min), broadcast: true);
             }
         }
 
         public int TRG
         {
-            get { return _FaseCyclus.TRG; }
+            get => _FaseCyclus.TRG;
             set
             {
                 if (value >= 0 && value >= TRG_min)
@@ -159,13 +158,13 @@ namespace TLCGen.ViewModels
                 }
                 else
                     _FaseCyclus.TRG = TRG_min;
-                RaisePropertyChanged<object>("TRG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TRG), broadcast: true);
             }
         }
 
         public int TRG_min
         {
-            get { return _FaseCyclus.TRG_min; }
+            get => _FaseCyclus.TRG_min;
             set
             {
                 if (value >= 0)
@@ -174,13 +173,13 @@ namespace TLCGen.ViewModels
                     if (TRG < value)
                         TRG = value;
                 }
-                RaisePropertyChanged<object>("TRG_min", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TRG_min), broadcast: true);
             }
         }
 
         public int TGL
         {
-            get { return _FaseCyclus.TGL; }
+            get => _FaseCyclus.TGL;
             set
             {
                 if (value >= 0 && value >= TGL_min)
@@ -189,13 +188,13 @@ namespace TLCGen.ViewModels
                 }
                 else
                     _FaseCyclus.TGL = TGL_min;
-                RaisePropertyChanged<object>("TGL", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TGL), broadcast: true);
             }
         }
 
         public int TGL_min
         {
-            get { return _FaseCyclus.TGL_min; }
+            get => _FaseCyclus.TGL_min;
             set
             {
                 if (value >= 0)
@@ -204,89 +203,112 @@ namespace TLCGen.ViewModels
                     if (TGL < value)
                         TGL = value;
                 }
-                RaisePropertyChanged<object>("TGL_min", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TGL_min), broadcast: true);
             }
         }
 
         public int Kopmax
         {
-            get { return _FaseCyclus.Kopmax; }
+            get => _FaseCyclus.Kopmax;
             set
             {
                 if (value >= 0)
                 {
                     _FaseCyclus.Kopmax = value;
                 }
-                RaisePropertyChanged<object>("Kopmax", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Kopmax), broadcast: true);
             }
         }
 
         public int? AantalRijstroken
         {
-            get { return _FaseCyclus.AantalRijstroken; }
+            get => _FaseCyclus.AantalRijstroken;
             set
             {
                 if (value >= 0)
                 {
                     _FaseCyclus.AantalRijstroken = value;
                 }
-                RaisePropertyChanged<object>("AantalRijstroken", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AantalRijstroken), broadcast: true);
             }
         }
 
         public NooitAltijdAanUitEnum VasteAanvraag
         {
-            get { return _FaseCyclus.VasteAanvraag; }
+            get => _FaseCyclus.VasteAanvraag;
             set
             {
                 _FaseCyclus.VasteAanvraag = value;
-                RaisePropertyChanged<object>("VasteAanvraag", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VasteAanvraag), broadcast: true);
+                RaisePropertyChanged(nameof(UitgesteldeVasteAanvraagPossible));
             }
         }
 
         public NooitAltijdAanUitEnum Wachtgroen
         {
-            get { return _FaseCyclus.Wachtgroen; }
+            get => _FaseCyclus.Wachtgroen;
             set
             {
                 _FaseCyclus.Wachtgroen = value;
-                RaisePropertyChanged<object>("Wachtgroen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Wachtgroen), broadcast: true);
             }
         }
 
         public NooitAltijdAanUitEnum Meeverlengen
         {
-            get { return _FaseCyclus.Meeverlengen; }
+            get => _FaseCyclus.Meeverlengen;
             set
             {
                 _FaseCyclus.Meeverlengen = value;
-                RaisePropertyChanged<object>("Meeverlengen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Meeverlengen), broadcast: true);
             }
         }
 
         public MeeVerlengenTypeEnum MeeverlengenType
         {
-            get { return _FaseCyclus.MeeverlengenType; }
+            get => _FaseCyclus.MeeverlengenType;
             set
             {
                 _FaseCyclus.MeeverlengenType = value;
-                RaisePropertyChanged<object>("MeeverlengenType", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MeeverlengenType), broadcast: true);
             }
         }
 
         public int? MeeverlengenVerschil
         {
-            get { return _FaseCyclus.MeeverlengenVerschil; }
+            get => _FaseCyclus.MeeverlengenVerschil;
             set
             {
                 _FaseCyclus.MeeverlengenVerschil = value;
-                RaisePropertyChanged<object>("MeeverlengenVerschil", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MeeverlengenVerschil), broadcast: true);
             }
         }
 
+        public bool UitgesteldeVasteAanvraag
+        {
+            get => _FaseCyclus.UitgesteldeVasteAanvraag;
+            set
+            {
+                _FaseCyclus.UitgesteldeVasteAanvraag = value;
+                RaisePropertyChanged<object>(nameof(UitgesteldeVasteAanvraag), broadcast: true);
+            }
+        }
+        
+        public int UitgesteldeVasteAanvraagTijdsDuur
+        {
+            get => _FaseCyclus.UitgesteldeVasteAanvraagTijdsduur;
+            set
+            {
+                _FaseCyclus.UitgesteldeVasteAanvraagTijdsduur = value;
+                RaisePropertyChanged<object>(nameof(UitgesteldeVasteAanvraagTijdsDuur), broadcast: true);
+            }
+        }
+
+        public bool UitgesteldeVasteAanvraagPossible => VasteAanvraag != NooitAltijdAanUitEnum.Nooit;
+
         public bool HiaatKoplusBijDetectieStoring
         {
-            get { return _FaseCyclus.HiaatKoplusBijDetectieStoring; }
+            get => _FaseCyclus.HiaatKoplusBijDetectieStoring;
             set
             {
                 _FaseCyclus.HiaatKoplusBijDetectieStoring = value;
@@ -294,31 +316,25 @@ namespace TLCGen.ViewModels
                 {
                     VervangendHiaatKoplus = 25;
                 }
-                RaisePropertyChanged<object>("HiaatKoplusBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HiaatKoplusBijDetectieStoring), broadcast: true);
             }
         }
 
-        public bool HasHiaatKoplusBijDetectieStoring
-        {
-            get
-            {
-                return Type != FaseTypeEnum.Voetganger && Type != FaseTypeEnum.Fiets;
-            }
-        }
+        public bool HasHiaatKoplusBijDetectieStoring => Type != FaseTypeEnum.Voetganger && Type != FaseTypeEnum.Fiets;
 
         public bool AanvraagBijDetectieStoring
         {
-            get { return _FaseCyclus.AanvraagBijDetectieStoring; }
+            get => _FaseCyclus.AanvraagBijDetectieStoring;
             set
             {
                 _FaseCyclus.AanvraagBijDetectieStoring = value;
-                RaisePropertyChanged<object>("AanvraagBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoring), broadcast: true);
             }
         }
 
         public bool PercentageGroenBijDetectieStoring
         {
-            get { return _FaseCyclus.PercentageGroenBijDetectieStoring; }
+            get => _FaseCyclus.PercentageGroenBijDetectieStoring;
             set
             {
                 _FaseCyclus.PercentageGroenBijDetectieStoring = value;
@@ -326,67 +342,55 @@ namespace TLCGen.ViewModels
                 {
                     PercentageGroenBijStoring = 65;
                 }
-                RaisePropertyChanged<object>("PercentageGroenBijDetectieStoring", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PercentageGroenBijDetectieStoring), broadcast: true);
             }
         }
 
-        public bool HasPercentageGroenBijDetectieStoring
-        {
-            get
-            {
-                return Type != FaseTypeEnum.Voetganger;
-            }
-        }
+        public bool HasPercentageGroenBijDetectieStoring => Type != FaseTypeEnum.Voetganger;
 
         public int? VervangendHiaatKoplus
         {
-            get { return _FaseCyclus.VervangendHiaatKoplus; }
+            get => _FaseCyclus.VervangendHiaatKoplus;
             set
             {
                 _FaseCyclus.VervangendHiaatKoplus = value;
-                RaisePropertyChanged<object>("VervangendHiaatKoplus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VervangendHiaatKoplus), broadcast: true);
             }
         }
 
         public int? PercentageGroenBijStoring
         {
-            get { return _FaseCyclus.PercentageGroen; }
+            get => _FaseCyclus.PercentageGroen;
             set
             {
                 _FaseCyclus.PercentageGroen = value;
-                RaisePropertyChanged<object>("PercentageGroenBijStoring", broadcast: true);
+                RaisePropertyChanged<object>(nameof(PercentageGroenBijStoring), broadcast: true);
             }
         }
 
 
         public int VeiligheidsGroenMinMG
         {
-            get { return _FaseCyclus.VeiligheidsGroenMinMG; }
+            get => _FaseCyclus.VeiligheidsGroenMinMG;
             set
             {
                 _FaseCyclus.VeiligheidsGroenMinMG = value;
-                RaisePropertyChanged<object>("VeiligheidsGroenMinMG", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VeiligheidsGroenMinMG), broadcast: true);
             }
         }
 
         public int VeiligheidsGroenTijdsduur
         {
-            get { return _FaseCyclus.VeiligheidsGroenTijdsduur; }
+            get => _FaseCyclus.VeiligheidsGroenTijdsduur;
             set
             {
                 _FaseCyclus.VeiligheidsGroenTijdsduur = value;
-                RaisePropertyChanged<object>("VeiligheidsGroenTijdsduur", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VeiligheidsGroenTijdsduur), broadcast: true);
             }
         }
 
 
-        public int DetectorCount
-        {
-            get
-            {
-                return _FaseCyclus.Detectoren.Count;
-            }
-        }
+        public int DetectorCount => _FaseCyclus.Detectoren.Count;
 
         public bool HasKopmax
         {
@@ -406,39 +410,29 @@ namespace TLCGen.ViewModels
 
         public bool OVIngreep
         {
-            get { return _FaseCyclus.OVIngreep; }
+            get => _FaseCyclus.OVIngreep;
             set
             {
                 _FaseCyclus.OVIngreep = value;
-                RaisePropertyChanged<object>("OVIngreep", broadcast: true);
+                RaisePropertyChanged<object>(nameof(OVIngreep), broadcast: true);
             }
         }
 
         public bool HDIngreep
         {
-            get { return _FaseCyclus.HDIngreep; }
+            get => _FaseCyclus.HDIngreep;
             set
             {
                 _FaseCyclus.HDIngreep = value;
-                RaisePropertyChanged<object>("HDIngreep", broadcast: true);
+                RaisePropertyChanged<object>(nameof(HDIngreep), broadcast: true);
             }
         }
 
-        public ObservableCollection<string> MeeverlengenOpties
-        {
-            get
-            {
-                if (_MeeverlengenOpties == null)
-                {
-                    _MeeverlengenOpties = new ObservableCollection<string>();
-                }
-                return _MeeverlengenOpties;
-            }
-        }
+        public ObservableCollection<string> MeeverlengenOpties => _MeeverlengenOpties ?? (_MeeverlengenOpties = new ObservableCollection<string>());
 
         public string MeeverlengenTypeString
         {
-            get { return _MeeverlengenTypeString; }
+            get => _MeeverlengenTypeString;
             set
             {
                 _MeeverlengenTypeString = value;

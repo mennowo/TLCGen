@@ -1,7 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
@@ -18,6 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private string _hmad; // help element meeaanvraag detector name
         private string _prmtypema; // help element meeaanvraag detector name
+        private string _tuitgestma; // help element meeaanvraag detector name
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -37,6 +40,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                 }
+
+                if ((ma.Type == MeeaanvraagTypeEnum.Startgroen || ma.TypeInstelbaarOpStraat) &&
+                    ma.Uitgesteld)
+                {
+                    _MyElements.Add(
+                        new CCOLElement(
+                            $"{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}",
+                            ma.UitgesteldTijdsduur,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            CCOLElementTypeEnum.Timer));
+                }
+                
                 if (ma.TypeInstelbaarOpStraat)
                 {
                     var inst = 0;
@@ -118,15 +133,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
+                        if (ma.Uitgesteld)
+                        {
+                            sb.AppendLine($"{ts}/* Uitgestelde meeaanvraag op startgroen */");
+                            
+                            sb.Append($"{ts}RT[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}] = SG[{_fcpf}{ma.FaseVan}]");
+                            if (ma.DetectieAfhankelijk && ma.Detectoren.Any())
+                            {
+                                sb.Append(" && (");
+                                var i = 0;
+                                foreach (var dm in ma.Detectoren)
+                                {
+                                    if (i == 1)
+                                    {
+                                        sb.Append(" || ");
+                                    }
+
+                                    ++i;
+                                    sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
+                                }
+                                sb.Append(")");
+                            }
+                            sb.AppendLine(";");
+                        }
                         if (ma.TypeInstelbaarOpStraat)
                         {
                             if (!ma.DetectieAfhankelijk || !ma.Detectoren.Any())
                             {
-                                sb.AppendLine($"{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, TRUE);");
+                                sb.AppendLine(!ma.Uitgesteld
+                                    ? $"{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));"
+                                    : $"{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                             }
                             else
                             {
-                                sb.Append($"{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(");
+                                if (ma.Uitgesteld)
+                                {
+                                    sb.AppendLine($"{ts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
+                                    sb.AppendLine($"{ts}{{");
+                                    sb.AppendLine($"{ts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{ts}}}");
+                                    sb.AppendLine($"{ts}else");
+                                    sb.AppendLine($"{ts}{{");
+                                }
+
+                                var uts = ma.Uitgesteld ? ts + ts : ts;
+                                sb.Append($"{uts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(");
                                 var i = 0;
                                 foreach (var dm in ma.Detectoren)
                                 {
@@ -138,6 +189,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
                                 }
                                 sb.AppendLine("));");
+                                
+                                if (ma.Uitgesteld)
+                                {
+                                    sb.AppendLine($"{ts}}}");
+                                }
                             }
                         }
                         else if(!ma.DetectieAfhankelijk || !ma.Detectoren.Any())
@@ -154,7 +210,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
-                                    sb.AppendLine($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (SG[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine(!ma.Uitgesteld
+                                        ? $"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (SG[{_fcpf}{ma.FaseVan}]));"
+                                        : $"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
@@ -162,31 +220,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else
                         {
-                            sb.Append($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) ((");
+                            sb.Append($"{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool) (");
                             var i = 0;
-                            foreach (var dm in ma.Detectoren)
+                            if (!ma.Uitgesteld)
                             {
-                                if (i == 1)
+                                sb.Append("(");
+                                foreach (var dm in ma.Detectoren)
                                 {
-                                    sb.Append(" || ");
+                                    if (i == 1)
+                                    {
+                                        sb.Append(" || ");
+                                    }
+
+                                    ++i;
+                                    sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
                                 }
-                                ++i;
-                                sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
+                                sb.Append(") ");
                             }
 
                             switch (ma.Type)
                             {
                                 case MeeaanvraagTypeEnum.Aanvraag:
-                                    sb.AppendLine($") && !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"&& !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraag:
-                                    sb.AppendLine($") && RA[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"&& RA[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.RoodVoorAanvraagGeenConflicten:
-                                    sb.AppendLine($") && RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine($"&& RA[{_fcpf}{ma.FaseVan}] && !K[{_fcpf}{ma.FaseVan}]));");
                                     break;
                                 case MeeaanvraagTypeEnum.Startgroen:
-                                    sb.AppendLine($") && SG[{_fcpf}{ma.FaseVan}]));");
+                                    sb.AppendLine(!ma.Uitgesteld
+                                        ? $"&& SG[{_fcpf}{ma.FaseVan}]));"
+                                        : $"ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();

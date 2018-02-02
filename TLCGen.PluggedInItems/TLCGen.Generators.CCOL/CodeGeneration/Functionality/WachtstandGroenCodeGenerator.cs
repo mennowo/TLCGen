@@ -59,22 +59,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
-                    sb.AppendLine($"{tabspace}/* Wachtstand groen aanvragen */");
-                    sb.AppendLine($"{tabspace}/* -------------------------- */");
+                    sb.AppendLine($"{ts}/* Wachtstand groen aanvragen */");
+                    sb.AppendLine($"{ts}/* -------------------------- */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                            sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
+                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
-                            sb.AppendLine($"{tabspace}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
+                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
                     }
                     sb.AppendLine();
                     return sb.ToString();
@@ -82,29 +82,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCWachtgroen:
                     if(c.Data.ExtraMeeverlengenInWG)
                     {
-                        sb.AppendLine($"{tabspace}/* Zet voor alle fasen het WS[] bitje. */");
-                        sb.AppendLine($"{tabspace}WachtStand(PRML, ML, MLMAX);");
+                        sb.AppendLine($"{ts}/* Zet voor alle fasen het WS[] bitje. */");
+                        sb.AppendLine($"{ts}WachtStand(PRML, ML, MLMAX);");
                         sb.AppendLine();
                     }
-                    sb.AppendLine($"{tabspace}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{tabspace}{tabspace}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine();
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                         {
-                            sb.Append($"{tabspace}RW[{fcm.GetDefine()}] |= (");
+                            sb.Append($"{ts}RW[{fcm.GetDefine()}] |= (");
                             if(c.Data.ExtraMeeverlengenInWG && fcm.Type != FaseTypeEnum.Voetganger)
                             {
                                 sb.AppendLine($"(MK[{fcm.GetDefine()}] & ~BIT5) ||");
-                                sb.Append("".PadLeft($"{tabspace}RW[{fcm.GetDefine()}] |= (".Length));
+                                sb.Append("".PadLeft($"{ts}RW[{fcm.GetDefine()}] |= (".Length));
                             }
                             sb.AppendLine($"SCH[{_schpf}{_schwg}{fcm.Naam}] && yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{tabspace}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
+                            sb.AppendLine($"{ts}RW[{fcm.GetDefine()}] |= (yws_groen({fcm.GetDefine()})) && !fka({fcm.GetDefine()}) ? BIT4 : 0;");
                         }
                     }
                     sb.AppendLine();
@@ -113,11 +113,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                         {
-                            sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()});");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()});");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{tabspace}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()});");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()});");
                         }
                     }
                     sb.AppendLine();

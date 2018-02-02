@@ -8,8 +8,9 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500">
+             d:DesignHeight="300" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModels:FaseCyclusViewModel}">
     <UserControl.Resources>
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
     </UserControl.Resources>
@@ -136,6 +137,13 @@
                     <TextBox Text="{Binding Path=PercentageGroenBijStoring,TargetNullValue={x:Static sys:String.Empty},UpdateSourceTrigger=PropertyChanged}" 
                              IsEnabled="{Binding Path=PercentageGroenBijDetectieStoring}" ToolTip="Hiaat koplus bij defect lange lus" Margin="2"/>
 
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Vaste aanvraag opties">
+                <StackPanel>
+                    <CheckBox Content="Uitgestelde aanvraag" IsChecked="{Binding Path=UitgesteldeVasteAanvraag,UpdateSourceTrigger=PropertyChanged}"
+                              Margin="5" IsEnabled="{Binding UitgesteldeVasteAanvraagPossible}"/>
+                    <TextBox Margin="2" Text="{Binding UitgesteldeVasteAanvraagTijdsDuur,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UitgesteldeVasteAanvraag}" />
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

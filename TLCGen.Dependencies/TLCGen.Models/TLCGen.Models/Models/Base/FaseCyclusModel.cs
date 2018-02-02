@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
@@ -43,6 +40,8 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum Meeverlengen { get; set; }
         public MeeVerlengenTypeEnum MeeverlengenType { get; set; }
         public int? MeeverlengenVerschil { get; set; }
+        public bool UitgesteldeVasteAanvraag { get; set; }
+        public int UitgesteldeVasteAanvraagTijdsduur { get; set; }
         public int? AantalRijstroken { get; set; }
         public bool HiaatKoplusBijDetectieStoring { get; set; }
         public int? VervangendHiaatKoplus { get; set; }

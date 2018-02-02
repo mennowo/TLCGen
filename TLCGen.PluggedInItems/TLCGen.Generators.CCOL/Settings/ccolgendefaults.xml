@@ -113,6 +113,12 @@
             <Type>Parameter</Type>
             <Description>Parameter om type meeaanvraag op straat in te kunnen stellen</Description>
           </Setting>
+          <Setting>
+            <Default>uitgestma</Default>
+            <Setting>uitgestma</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur uitgestelde meeaanvraag op startgroen</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
@@ -1108,6 +1114,12 @@
             <Setting>ca</Setting>
             <Type>Schakelaar</Type>
             <Description>Schakelaar cyclische aanvraag</Description>
+          </Setting>
+          <Setting>
+            <Default>uitgestca</Default>
+            <Setting>uitgestca</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur uitgestelde vaste aanvraag</Description>
           </Setting>
         </Settings>
       </CodePieceData>

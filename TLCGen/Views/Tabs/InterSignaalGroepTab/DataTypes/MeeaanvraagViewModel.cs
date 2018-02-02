@@ -36,12 +36,10 @@ namespace TLCGen.ViewModels
                 {
                     _Meeaanvraag.Type = value;
                     RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                    RaisePropertyChanged(nameof(TypeStartGroen));
+                    RaisePropertyChanged(nameof(UitgesteldPossible));
                 }
             }
         }
-
-        public bool TypeStartGroen => Type == MeeaanvraagTypeEnum.Startgroen;
 
         public bool TypeInstelbaarOpStraat
         {
@@ -50,6 +48,7 @@ namespace TLCGen.ViewModels
             {
                 _Meeaanvraag.TypeInstelbaarOpStraat = value;
                 RaisePropertyChanged<object>(nameof(TypeInstelbaarOpStraat), broadcast: true);
+                RaisePropertyChanged(nameof(UitgesteldPossible));
             }
         }
 
@@ -117,6 +116,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(UitgesteldTijdsduur), broadcast: true);
             }
         }
+
+        public bool UitgesteldPossible => Type == MeeaanvraagTypeEnum.Startgroen || TypeInstelbaarOpStraat;
 
         public ObservableCollection<MeeaanvraagDetectorModel> Detectoren
         {

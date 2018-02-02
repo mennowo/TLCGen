@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TLCGen.Dialogs"
         SizeToContent="WidthAndHeight"
         mc:Ignorable="d"
-        Height="Auto" Width="600" MaxWidth="600">
+        Height="Auto" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

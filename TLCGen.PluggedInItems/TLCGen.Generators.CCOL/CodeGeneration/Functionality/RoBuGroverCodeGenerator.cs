@@ -106,7 +106,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             if(c.RoBuGrover.ConflictGroepen?.Count == 0)
             {
@@ -117,21 +117,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch(type)
             {
                 case CCOLCodeTypeEnum.RegCTop:
-                    sb.AppendLine($"{tabspace}/* Robuuste Groenverdeler */");
-                    sb.AppendLine($"{tabspace}#include \"{c.Data.Naam}rgv.c\"");
+                    sb.AppendLine($"{ts}/* Robuuste Groenverdeler */");
+                    sb.AppendLine($"{ts}#include \"{c.Data.Naam}rgv.c\"");
                     sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    sb.AppendLine($"{tabspace}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
-                    sb.AppendLine($"{tabspace}if (SCH[{_schpf}{_schrgv}] != 0)");
-                    sb.AppendLine($"{tabspace}{{");
-                    sb.AppendLine($"{tabspace}{tabspace}int teller = 0;");
+                    sb.AppendLine($"{ts}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schrgv}] != 0)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}int teller = 0;");
                     sb.AppendLine();
                     foreach(var cg in c.RoBuGrover.ConflictGroepen)
                     {
-                        sb.Append($"{tabspace}{tabspace}TC[teller++] = berekencyclustijd_va_arg(");
+                        sb.Append($"{ts}{ts}TC[teller++] = berekencyclustijd_va_arg(");
                         foreach(var fc in cg.Fasen)
                         {
                             sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
@@ -139,40 +139,40 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"END);");
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}TC_max = TC[0];");
+                    sb.AppendLine($"{ts}{ts}TC_max = TC[0];");
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}for (teller = 1; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
-                    sb.AppendLine($"{tabspace}{tabspace}{{");
-                    sb.AppendLine($"{tabspace}{tabspace}{tabspace}if (TC_max < TC[teller])");
-                    sb.AppendLine($"{tabspace}{tabspace}{tabspace}{{");
-                    sb.AppendLine($"{tabspace}{tabspace}{tabspace}{tabspace}TC_max = TC[teller];");
-                    sb.AppendLine($"{tabspace}{tabspace}{tabspace}}}");
-                    sb.AppendLine($"{tabspace}{tabspace}}}");
-                    sb.AppendLine($"{tabspace}#if !defined AUTOMAAT");
-                    sb.AppendLine($"{tabspace}{tabspace}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
-                    sb.AppendLine($"{tabspace}{tabspace}{{");
-                    sb.AppendLine($"{tabspace}{tabspace}{tabspace}xyprintf(50, teller + 1, \"%4d\", TC[teller]);");
-                    sb.AppendLine($"{tabspace}{tabspace}}}");
-                    sb.AppendLine($"{tabspace}#endif");
+                    sb.AppendLine($"{ts}{ts}for (teller = 1; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}if (TC_max < TC[teller])");
+                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}TC_max = TC[teller];");
+                    sb.AppendLine($"{ts}{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#if !defined AUTOMAAT");
+                    sb.AppendLine($"{ts}{ts}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(50, teller + 1, \"%4d\", TC[teller]);");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}/* AANROEP ROBUUSTE GROENTIJD VERDELER */");
-                    sb.AppendLine($"{tabspace}{tabspace}/* ================================== */");
-                    sb.AppendLine($"{tabspace}{tabspace}rgv_add();");
+                    sb.AppendLine($"{ts}{ts}/* AANROEP ROBUUSTE GROENTIJD VERDELER */");
+                    sb.AppendLine($"{ts}{ts}/* ================================== */");
+                    sb.AppendLine($"{ts}{ts}rgv_add();");
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[{_uspf}{_usrgv}] = TRUE;");
-                    sb.AppendLine($"{tabspace}}}");
-                    sb.AppendLine($"{tabspace}else");
-                    sb.AppendLine($"{tabspace}{{");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usrgv}] = TRUE;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}else");
+                    sb.AppendLine($"{ts}{{");
                     foreach (var fc in c.Fasen)
                     {
                         if(fc.Type == Models.Enumerations.FaseTypeEnum.Auto)
                         {
-                            sb.AppendLine($"{tabspace}{tabspace}TVG_rgv[{_fcpf}{fc.Naam}] = TVG_basis[{_fcpf}{fc.Naam}];");
+                            sb.AppendLine($"{ts}{ts}TVG_rgv[{_fcpf}{fc.Naam}] = TVG_basis[{_fcpf}{fc.Naam}];");
                         }
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{tabspace}{tabspace}CIF_GUS[{_uspf}{_usrgv}] = FALSE;");
-                    sb.AppendLine($"{tabspace}}}");
+                    sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usrgv}] = FALSE;");
+                    sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
 
                     return sb.ToString();

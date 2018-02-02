@@ -293,6 +293,12 @@ namespace TLCGen.ViewModels
             _DetectorManager = null;
             RaisePropertyChanged("DetectorManager");
         }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            _DetectorManager = null;
+            RaisePropertyChanged("DetectorManager");
+        }
         
         #endregion // TLCGen Events
 
@@ -316,6 +322,7 @@ namespace TLCGen.ViewModels
             Tijden.CollectionChanged += Tijden_CollectionChanged;
 
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 
         #endregion // Constructor

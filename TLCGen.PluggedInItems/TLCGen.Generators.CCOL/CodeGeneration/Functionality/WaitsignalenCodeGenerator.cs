@@ -67,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
+        public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -87,11 +87,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 string fcdef = fc.GetDefine();
                                 if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.DrukknopGebruik)
                                 {
-                                    sb.AppendLine($"{tabspace}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");
+                                    sb.AppendLine($"{ts}CIF_GUS[{wtdef}] = (D[{ddef}] && !SD[{ddef}] || ED[{ddef}]) && A[{fcdef}] && !G[{fcdef}] && REG ? TRUE : CIF_GUS[{wtdef}] && !G[{fcdef}] && REG;");
                                 }
                                 else if (c.Data.AansturingWaitsignalen == AansturingWaitsignalenEnum.AanvraagGezet)
                                 {
-                                    sb.AppendLine($"{tabspace}CIF_GUS[{wtdef}] = !G[{fcdef}] && A[{fcdef}] && REG;");
+                                    sb.AppendLine($"{ts}CIF_GUS[{wtdef}] = !G[{fcdef}] && A[{fcdef}] && REG;");
                                 }
                             }
                         }

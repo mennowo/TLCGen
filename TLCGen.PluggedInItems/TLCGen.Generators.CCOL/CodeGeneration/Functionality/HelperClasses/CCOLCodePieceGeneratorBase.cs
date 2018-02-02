@@ -77,7 +77,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return 0;
         }
 
-        public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string tabspace)
+        public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             throw new NotSupportedException();
         }

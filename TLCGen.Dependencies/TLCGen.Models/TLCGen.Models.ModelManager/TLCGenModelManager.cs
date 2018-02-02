@@ -94,7 +94,7 @@ namespace TLCGen.ModelManagement
             }
             if (message.RemovedFasen != null)
             {
-                foreach (FaseCyclusModel fcm in message.RemovedFasen)
+                foreach (var fcm in message.RemovedFasen)
                 {
                     // PT Conflict prms
                     if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
@@ -115,11 +115,11 @@ namespace TLCGen.ModelManagement
 
                     // Module settings
                     FaseCyclusModuleDataModel fcvm = null;
-                    foreach(var _f in Controller.ModuleMolen.FasenModuleData)
+                    foreach(var f in Controller.ModuleMolen.FasenModuleData)
                     {
-                        if(fcm.Naam == _f.FaseCyclus)
+                        if(fcm.Naam == f.FaseCyclus)
                         {
-                            fcvm = _f;
+                            fcvm = f;
                         }
                     }
                     if (fcvm != null)
