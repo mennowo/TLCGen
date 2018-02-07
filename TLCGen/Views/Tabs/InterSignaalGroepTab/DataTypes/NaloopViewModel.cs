@@ -3,13 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using TLCGen.DataAccess;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
-using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -19,10 +15,10 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private NaloopModel _Naloop;
-        private ObservableCollection<NaloopTijdModel> _Tijden;
-        private ObservableCollection<NaloopDetectorModel> _Detectoren;
-        private bool _DetectieAfhankelijkPossible;
+        private readonly NaloopModel _naloop;
+        private ObservableCollection<NaloopTijdModel> _tijden;
+        private ObservableCollection<NaloopDetectorModel> _detectoren;
+        private bool _detectieAfhankelijkPossible;
         
         #endregion // Fields
 
@@ -30,133 +26,115 @@ namespace TLCGen.ViewModels
 
         public NaloopTypeEnum Type
         {
-            get { return _Naloop.Type; }
+            get => _naloop.Type;
             set
             {
-                if (value != _Naloop.Type)
+                if (value != _naloop.Type)
                 {
-                    _Naloop.Type = value;
+                    _naloop.Type = value;
                     SetNaloopTijden();
-                    RaisePropertyChanged<object>("Type", broadcast: true);
+                    RaisePropertyChanged<object>(nameof(Type), broadcast: true);
                 }
             }
         }
 
         public bool VasteNaloop
         {
-            get { return _Naloop.VasteNaloop; }
+            get => _naloop.VasteNaloop;
             set
             {
                 if (!value && !DetectieAfhankelijk)
                     return;
 
-                _Naloop.VasteNaloop = value;
+                _naloop.VasteNaloop = value;
                 SetNaloopTijden();
-                RaisePropertyChanged<object>("VasteNaloop", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VasteNaloop), broadcast: true);
             }
         }
         public bool InrijdenTijdensGroen
         {
-            get { return _Naloop.InrijdenTijdensGroen; }
+            get => _naloop.InrijdenTijdensGroen;
             set
             {
-                _Naloop.InrijdenTijdensGroen = value;
-                RaisePropertyChanged<object>("InrijdenTijdensGroen", broadcast: true);
+                _naloop.InrijdenTijdensGroen = value;
+                RaisePropertyChanged<object>(nameof(InrijdenTijdensGroen), broadcast: true);
             }
         }
 
         public bool DetectieAfhankelijkPossible
         {
-            get { return _DetectieAfhankelijkPossible; }
+            get => _detectieAfhankelijkPossible;
             set
             {
-                _DetectieAfhankelijkPossible = value;
-                RaisePropertyChanged("DetectieAfhankelijkPossible");
+                _detectieAfhankelijkPossible = value;
+                RaisePropertyChanged();
             }
         }
 
 
         public bool DetectieAfhankelijk
         {
-            get { return _Naloop.DetectieAfhankelijk; }
+            get => _naloop.DetectieAfhankelijk;
             set
             {
                 if (!value && !VasteNaloop)
                     return;
 
-                _Naloop.DetectieAfhankelijk = value;
+                _naloop.DetectieAfhankelijk = value;
                 SetNaloopTijden();
-                RaisePropertyChanged<object>("DetectieAfhankelijk", broadcast: true);
+                RaisePropertyChanged<object>(nameof(DetectieAfhankelijk), broadcast: true);
             }
         }
 
         public int? MaximaleVoorstart
         {
-            get { return _Naloop.MaximaleVoorstart; }
+            get => _naloop.MaximaleVoorstart;
             set
             {
-                _Naloop.MaximaleVoorstart = value;
-                RaisePropertyChanged<object>("MaximaleVoorstart", broadcast: true);
+                _naloop.MaximaleVoorstart = value;
+                RaisePropertyChanged<object>(nameof(MaximaleVoorstart), broadcast: true);
             }
         }
 
-        public ObservableCollection<NaloopTijdModel> Tijden
-        {
-            get
-            {
-                if (_Tijden == null)
-                    _Tijden = new ObservableCollection<NaloopTijdModel>();
-                return _Tijden;
-            }
-        }
+        public ObservableCollection<NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollection<NaloopTijdModel>());
 
-        public ObservableCollection<NaloopDetectorModel> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                    _Detectoren = new ObservableCollection<NaloopDetectorModel>();
-                return _Detectoren;
-            }
-        }
+        public ObservableCollection<NaloopDetectorModel> Detectoren => _detectoren ?? (_detectoren = new ObservableCollection<NaloopDetectorModel>());
 
         public NaloopDetectorModel SelectedDetector
         {
-            get { return DetectorManager?.SelectedDetector; }
+            get => DetectorManager?.SelectedDetector;
             set
             {
-                if (DetectorManager != null)
-                {
-                    DetectorManager.SelectedDetector = value;
-                    RaisePropertyChanged("SelectedDetector");
-                }
+                if (DetectorManager == null) return;
+                DetectorManager.SelectedDetector = value;
+                RaisePropertyChanged();
             }
         }
 
-        private DetectorManagerViewModel<NaloopDetectorModel, string> _DetectorManager;
+        private DetectorManagerViewModel<NaloopDetectorModel, string> _detectorManager;
         public DetectorManagerViewModel<NaloopDetectorModel, string> DetectorManager
         {
             get
             {
-                if (_DetectorManager == null && _Naloop?.FaseVan != null)
+                if (_detectorManager == null && _naloop?.FaseVan != null)
                 {
                     var dets =
                         TLCGenControllerDataProvider.Default.Controller.Fasen.
-                            First(x => x.Naam == _Naloop.FaseVan).
+                            First(x => x.Naam == _naloop.FaseVan).
                                 Detectoren.
                                 Select(x => x.Naam).
                                 ToList();
-                    _DetectorManager = new DetectorManagerViewModel<NaloopDetectorModel, string>(
+                    _detectorManager = new DetectorManagerViewModel<NaloopDetectorModel, string>(
                         Detectoren,
                         dets,
                         x => { var md = new NaloopDetectorModel { Detector = x }; return md; },
                         x => { return Detectoren.All(y => y.Detector != x); },
                         null,
-                        () => { RaisePropertyChanged("SelectedDetector"); },
-                        () => { RaisePropertyChanged("SelectedDetector"); }
+                        () => { RaisePropertyChanged(nameof(SelectedDetector)); },
+                        () => { RaisePropertyChanged(nameof(SelectedDetector)); }
                         );
                 }
-                return _DetectorManager;
+                return _detectorManager;
             }
         }
 
@@ -166,60 +144,60 @@ namespace TLCGen.ViewModels
 
         private void SetNaloopTijden()
         {
-            List<NaloopTijdModel> _oldtijden = _Naloop.Tijden;
-            _Naloop.Tijden = new List<NaloopTijdModel>();
-            switch (_Naloop.Type)
+            var oldtijden = _naloop.Tijden;
+            _naloop.Tijden = new List<NaloopTijdModel>();
+            switch (_naloop.Type)
             {
                 case NaloopTypeEnum.StartGroen:
-                    if(_Naloop.VasteNaloop)
+                    if(_naloop.VasteNaloop)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroen });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroen });
                     }
-                    if (_Naloop.DetectieAfhankelijk)
+                    if (_naloop.DetectieAfhankelijk)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroenDetectie });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.StartGroenDetectie });
                     }
                     break;
                 case NaloopTypeEnum.EindeGroen:
-                    if (_Naloop.VasteNaloop)
+                    if (_naloop.VasteNaloop)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
                     }
-                    if (_Naloop.DetectieAfhankelijk)
+                    if (_naloop.DetectieAfhankelijk)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
                     }
-                    if (_Naloop.VasteNaloop)
+                    if (_naloop.VasteNaloop)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroen });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroen });
                     }
-                    if (_Naloop.DetectieAfhankelijk)
+                    if (_naloop.DetectieAfhankelijk)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroenDetectie });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeGroenDetectie });
                     }
                     break;
                 case NaloopTypeEnum.CyclischVerlengGroen:
-                    if (_Naloop.VasteNaloop)
+                    if (_naloop.VasteNaloop)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroen });
                     }
-                    if (_Naloop.DetectieAfhankelijk)
+                    if (_naloop.DetectieAfhankelijk)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.VastGroenDetectie });
                     }
-                    if (_Naloop.VasteNaloop)
+                    if (_naloop.VasteNaloop)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroen });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroen });
                     }
-                    if (_Naloop.DetectieAfhankelijk)
+                    if (_naloop.DetectieAfhankelijk)
                     {
-                        _Naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroenDetectie });
+                        _naloop.Tijden.Add(new NaloopTijdModel() { Type = NaloopTijdTypeEnum.EindeVerlengGroenDetectie });
                     }
                     break;
             }
-            foreach(NaloopTijdModel tmo in _oldtijden)
+            foreach(var tmo in oldtijden)
             {
-                foreach(NaloopTijdModel tmn in _Naloop.Tijden)
+                foreach(var tmn in _naloop.Tijden)
                 {
                     if(tmo.Type == tmn.Type)
                     {
@@ -227,8 +205,8 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            _Tijden = new ObservableCollection<NaloopTijdModel>(_Naloop.Tijden);
-            RaisePropertyChanged("Tijden");
+            _tijden = new ObservableCollection<NaloopTijdModel>(_naloop.Tijden);
+            RaisePropertyChanged(nameof(Tijden));
         }
 
         #endregion // Private methods
@@ -241,14 +219,14 @@ namespace TLCGen.ViewModels
             {
                 foreach (NaloopDetectorModel d in e.NewItems)
                 {
-                    _Naloop.Detectoren.Add(d);
+                    _naloop.Detectoren.Add(d);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (NaloopDetectorModel d in e.OldItems)
                 {
-                    _Naloop.Detectoren.Remove(d);
+                    _naloop.Detectoren.Remove(d);
                 }
             }
             Messenger.Default.Send(new ControllerDataChangedMessage());
@@ -260,14 +238,14 @@ namespace TLCGen.ViewModels
             {
                 foreach (NaloopTijdModel t in e.NewItems)
                 {
-                    _Naloop.Tijden.Add(t);
+                    _naloop.Tijden.Add(t);
                 }
             }
             if (e.OldItems != null && e.OldItems.Count > 0)
             {
                 foreach (NaloopTijdModel t in e.OldItems)
                 {
-                    _Naloop.Tijden.Remove(t);
+                    _naloop.Tijden.Remove(t);
                 }
             }
             Messenger.Default.Send(new ControllerDataChangedMessage());
@@ -283,21 +261,21 @@ namespace TLCGen.ViewModels
             {
                 Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
                 Detectoren.Clear();
-                foreach (var ndm in _Naloop.Detectoren)
+                foreach (var ndm in _naloop.Detectoren)
                 {
                     Detectoren.Add(ndm);
                 }
                 Detectoren.CollectionChanged += Detectoren_CollectionChanged;
             }
 
-            _DetectorManager = null;
-            RaisePropertyChanged("DetectorManager");
+            _detectorManager = null;
+            RaisePropertyChanged(nameof(DetectorManager));
         }
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            _DetectorManager = null;
-            RaisePropertyChanged("DetectorManager");
+            _detectorManager = null;
+            RaisePropertyChanged(nameof(DetectorManager));
         }
         
         #endregion // TLCGen Events
@@ -306,7 +284,7 @@ namespace TLCGen.ViewModels
 
         public NaloopViewModel(NaloopModel nm)
         {
-            _Naloop = nm;
+            _naloop = nm;
 
             foreach (var ndm in nm.Detectoren)
             {

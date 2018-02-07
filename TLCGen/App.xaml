@@ -7,6 +7,9 @@
          
     </Application.Resources>
     <JumpList.JumpList>
-        <JumpList ShowRecentCategory="True"/>
+        <JumpList ShowRecentCategory="True"
+                   ShowFrequentCategory="True" 
+                  JumpItemsRejected="OnJumpItemsRejected" 
+                  JumpItemsRemovedByUser="OnJumpItemsRemoved"/>
     </JumpList.JumpList>
 </Application>
