@@ -910,7 +910,7 @@ namespace TLCGen.ViewModels
 
             Directory.SetCurrentDirectory(tmpCurDir);
 
-#if !DEBUG
+#if !DEBUG1
             // Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {
@@ -950,18 +950,25 @@ namespace TLCGen.ViewModels
 						if (tlcgenVer == null) return;
 						var oldvers = Assembly.GetEntryAssembly().GetName().Version.ToString().Split('.');
 						var newvers = tlcgenVer.Replace("TLCGen=", "").Split('.');
-						var over = 0;
-						var nver = 0;
+                        bool newer = false;
 						if (oldvers.Length > 0 && oldvers.Length == newvers.Length)
 						{
-							for (int i = oldvers.Length - 1, j = 1; i >= 0; --i)
+							for (int i = 0; i < newvers.Length; i++)
 							{
-								over += int.Parse(oldvers[i]) * j;
-								nver += int.Parse(newvers[i]) * j;
-								j *= 10;
+                                    var o = int.Parse(oldvers[i]);
+                                    var n = int.Parse(newvers[i]);
+                                    if(o > n)
+                                    {
+                                        break;
+                                    }
+                                    if(n > o)
+                                    {
+                                        newer = true;
+                                        break;
+                                    }
 							}
 						}
-						if (nver > over)
+						if (newer)
 						{
 							DispatcherHelper.CheckBeginInvokeOnUI(() =>
 							{

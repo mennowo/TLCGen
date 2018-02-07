@@ -38,7 +38,7 @@
       <Feature Id='RotterdamOptions' Title='Plugin Rotterdam' Description='Plugin Rotterdamse functies' Level='1' AllowAdvertise='no'>
         <ComponentGroupRef Id="TLCGenPluginsRotterdam" />
       </Feature>
-      <Feature Id='DenHaagOptions' Title='Plguin Den Haag' Description='Plugin Haagse functies' Level='1' AllowAdvertise='no'>
+      <Feature Id='DenHaagOptions' Title='Plugin Den Haag' Description='Plugin Haagse functies' Level='1' AllowAdvertise='no'>
         <ComponentGroupRef Id="TLCGenPluginsDenHaag" />
       </Feature>
     </Feature>
@@ -176,10 +176,10 @@
         <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
         <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
+        <!--<File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />
+        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />-->
       </Component>
     </ComponentGroup>
 
