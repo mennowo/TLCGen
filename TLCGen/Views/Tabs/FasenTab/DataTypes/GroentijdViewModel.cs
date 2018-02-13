@@ -1,6 +1,7 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -42,6 +43,7 @@ namespace TLCGen.ViewModels
             {
                 _Groentijd.Waarde = value;
                 RaisePropertyChanged<object>("Waarde", broadcast: true);
+                MessengerInstance.Send(new GroentijdChangedMessage());
             }
         }
 

@@ -56,6 +56,7 @@
           <e p="FasenChangingMessage.cs" t="Include" />
           <e p="FasenSortedMessage.cs" t="Include" />
           <e p="FileIngreepTeDoserenSignaalGroepPercentageChangedMessage.cs" t="Include" />
+          <e p="GroentijdChangedMessage.cs" t="Include" />
           <e p="GroentijdenTypeChangedMessage.cs" t="Include" />
           <e p="HDIngrepenChangedMessage.cs" t="Include" />
           <e p="InterSignaalGroepChangedMessage.cs" t="Include" />

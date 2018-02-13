@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -140,6 +142,7 @@ namespace TLCGen.ViewModels
 
             // Rebuild matrix
             BuildGroentijdenMatrix();
+            CheckGroentijdenSetsWithDefaultPeriode();
         }
 
         bool AddNewGroentijdenSetCommand_CanExecute(object prm)
@@ -200,6 +203,7 @@ namespace TLCGen.ViewModels
 			}
 
             BuildGroentijdenMatrix();
+            CheckGroentijdenSetsWithDefaultPeriode();
         }
 
         bool RemoveGroentijdenSetCommand_CanExecute(object prm)
@@ -271,6 +275,70 @@ namespace TLCGen.ViewModels
             RaisePropertyChanged(nameof(SetNames));
             RaisePropertyChanged(nameof(FasenNames));
             RaisePropertyChanged(nameof(GroentijdenMatrix));
+        }
+
+        private void CheckGroentijdenSetsWithDefaultPeriode()
+        {
+            if (FasenNames.Count == 0 || GroentijdenSets.Count == 0) return;
+
+            // check if any fase has no greentime for some set and does have them for others
+            var ok = true;
+            foreach (var sg in FasenNames)
+            {
+                // check if the fase has any greentime
+                if (GroentijdenSets.Any(x => x.Groentijden.Any(x2 => x2.FaseCyclus == sg && x2.Waarde.HasValue)))
+                {
+                    // now check if there is a set that does not have this fase
+                    foreach (var set in GroentijdenSets)
+                    {
+                        if (set.Groentijden.Any(x => x.FaseCyclus == sg && !x.Waarde.HasValue))
+                        {
+                            ok = false;
+                            break;
+                        }
+                    }
+                }
+                if (!ok) break;
+            }
+
+            if (!ok)
+            {
+                var okgts = new List<GroentijdenSetViewModel>();
+                foreach (var set in GroentijdenSets)
+                {
+                    var setok = true;
+                    foreach (var gt in set.Groentijden)
+                    {
+                        if (!gt.Groentijd.Waarde.HasValue)
+                        {
+                            foreach (var set2 in GroentijdenSets)
+                            {
+                                if (ReferenceEquals(set, set2)) continue;
+
+                                if (set2.Groentijden.Any(x => x.FaseCyclus == gt.FaseCyclus && x.Waarde.HasValue))
+                                {
+                                    setok = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (setok == false) break;
+                    }
+                    if (setok) okgts.Add(set);
+                }
+                if (okgts.All(x => x.Naam != Controller.PeriodenData.DefaultPeriodeGroentijdenSet))
+                {
+                    Controller.PeriodenData.DefaultPeriodeGroentijdenSet = okgts.FirstOrDefault()?.Naam;
+                    if (Controller.PeriodenData.DefaultPeriodeGroentijdenSet != null)
+                    {
+                        MessageBox.Show("Groentijdenset voor default periode aangepast: " + Controller.PeriodenData.DefaultPeriodeGroentijdenSet, "Groentijdenset default periode aangepast");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Groentijdenset voor default periode kon niet op een geldige waarde worden ingesteld.\nControleer de groentijdensets!", "Groentijdenset default periode aangepast");
+                    }
+                }
+            }
         }
 
         #endregion // Private methods
@@ -402,6 +470,11 @@ namespace TLCGen.ViewModels
             BuildGroentijdenMatrix();
         }
 
+        private void OnGroentijdChanged(GroentijdChangedMessage msg)
+        {
+            CheckGroentijdenSetsWithDefaultPeriode();
+        }
+
         #endregion // TLCGen events
 
         #region Collection Changed
@@ -438,6 +511,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
             Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             Messenger.Default.Register(this, new Action<GroentijdenTypeChangedMessage>(OnGroentijdenTypeChanged));
+            Messenger.Default.Register(this, new Action<GroentijdChangedMessage>(OnGroentijdChanged));
         }
 
 
