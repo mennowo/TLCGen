@@ -65,10 +65,6 @@
     <Reference Include="GongSolutions.WPF.DragDrop">
       <HintPath>Libs\GongSolutions.WPF.DragDrop.dll</HintPath>
     </Reference>
-    <Reference Include="Gu.Wpf.DataGrid2D, Version=0.2.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Libs\Gu.Wpf.DataGrid2D.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -905,6 +901,17 @@ move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"</PostBuildEv
         </Reference>
         <Reference Include="Xceed.Wpf.Toolkit">
           <HintPath>..\packages\Extended.Wpf.Toolkit\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5'">
+      <ItemGroup>
+        <Reference Include="Gu.Wpf.DataGrid2D">
+          <HintPath>..\packages\Gu.Wpf.DataGrid2D\lib\net45\Gu.Wpf.DataGrid2D.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

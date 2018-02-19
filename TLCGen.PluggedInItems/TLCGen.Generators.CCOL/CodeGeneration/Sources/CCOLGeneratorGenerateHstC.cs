@@ -32,7 +32,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.Append(GenerateHstCSynchronisaties(c));
 	        sb.Append(GenerateHstCVersneldPrimair(c));
 	        sb.Append(GenerateHstCAlternatief(c));
-	        sb.Append(GenerateHstCModules(c));
 	        sb.Append(GenerateHstCRealisatieAfhandeling(c));
 	        sb.Append(GenerateHstCFileVerwerking(c));
 	        sb.Append(GenerateHstCDetectieStoring(c));
@@ -50,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	    private string GenerateHstCExtraDefines(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
-
+            
             return sb.ToString();
         }
 
@@ -66,11 +65,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.AppendLine("#include \"halfstar_ov.h\"");
 			}
 			sb.AppendLine();
-			sb.AppendLine("static int fc;");
+            sb.AppendLine($"#include \"{c.Data.Naam}hst.add\"");
+			sb.AppendLine();
+            sb.AppendLine($"static int fc;");
 			sb.AppendLine();
 
-
-			return sb.ToString();
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPostInitApplication(ControllerModel c)
@@ -84,10 +84,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			{
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostInitApplication, ts));
 			}
-			
-			sb.AppendLine("}");
 
-			return sb.ToString();
+            sb.AppendLine();
+            sb.AppendLine($"{ts}post_init_application_halfstar_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPreApplication(ControllerModel c)
@@ -101,10 +105,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			{
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPreApplication, ts));
 			}
-			
-			sb.AppendLine("}");
 
-			return sb.ToString();
+            sb.AppendLine();
+            sb.AppendLine($"{ts}PreApplication_halfstar_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCKlokperioden(ControllerModel c)
@@ -119,9 +127,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCKlokPerioden, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}KlokPerioden_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCAanvragen(ControllerModel c)
@@ -136,9 +148,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCAanvragen, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Aanvragen_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCMaxOfVerlengroen(ControllerModel c)
@@ -155,7 +171,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 					sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMaxgroen, ts));
 				}
 
-				sb.AppendLine("}");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}Maxgroen_halfstar_Add();");
+
+                sb.AppendLine("}");
 			}
 			else
 			{
@@ -167,10 +186,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 					sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCVerlenggroen, ts));
 				}
 
-				sb.AppendLine("}");
-			}
+                sb.AppendLine();
+                sb.AppendLine($"{ts}Maxgroen_halfstar_Add();");
 
-			return sb.ToString();
+                sb.AppendLine("}");
+			}
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCWachtgroen(ControllerModel c)
@@ -185,9 +208,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCWachtgroen, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Wachtgroen_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCMeetkriterium(ControllerModel c)
@@ -202,9 +229,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMeetkriterium, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Meetkriterium_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCMeeverlengen(ControllerModel c)
@@ -219,9 +250,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCMeeverlengen, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Meeverlengen_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCSynchronisaties(ControllerModel c)
@@ -235,10 +270,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			{
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCSynchronisaties, ts));
 			}
-			
-			sb.AppendLine("}");
 
-			return sb.ToString();
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Synchronisaties_halfstar_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 		
 	    private string GenerateHstCVersneldPrimair(ControllerModel c)
@@ -248,9 +287,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 		    sb.AppendLine("void VersneldPrimair_halfstar(void)");
 		    sb.AppendLine("{");
 
-		    sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}VersneldPrimair_halfstar_Add();");
 
-		    return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 	    }
 
 	    private string GenerateHstCAlternatief(ControllerModel c)
@@ -265,23 +308,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCAlternatief, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 		
-	    private string GenerateHstCModules(ControllerModel c)
-	    {
-		    var sb = new StringBuilder();
-						
-		    sb.AppendLine("void Modules_halfstar(void)");
-		    sb.AppendLine("{");
-
-		    sb.AppendLine("}");
-
-		    return sb.ToString();
-	    }
-
 	    private string GenerateHstCRealisatieAfhandeling(ControllerModel c)
 		{
 			var sb = new StringBuilder();
@@ -294,9 +329,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCRealisatieAfhandeling, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}RealisatieAfhandeling_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCFileVerwerking(ControllerModel c)
@@ -305,10 +344,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 		    sb.AppendLine("void FileVerwerking_halfstar(void)");
 		    sb.AppendLine("{");
-			
-		    sb.AppendLine("}");
 
-		    return sb.ToString();
+            sb.AppendLine();
+            sb.AppendLine($"{ts}FileVerwerking_halfstar_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 	    }
 
 	    private string GenerateHstCDetectieStoring(ControllerModel c)
@@ -323,9 +366,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCDetectieStoring, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}DetectieStoring_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPostApplication(ControllerModel c)
@@ -339,9 +386,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			{
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostApplication, ts));
 			}
-			sb.AppendLine("}");
 
-			return sb.ToString();
+            sb.AppendLine();
+            sb.AppendLine($"{ts}PostApplication_halfstar_Add();");
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPreSystemApplication(ControllerModel c)
@@ -356,9 +408,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPreSystemApplication, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}pre_system_application_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPostSystemApplication(ControllerModel c)
@@ -373,9 +429,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostSystemApplication, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}post_system_application_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCPostDumpApplication(ControllerModel c)
@@ -390,9 +450,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 				sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCPostDumpApplication, ts));
 			}
 
-			sb.AppendLine("}");
+            sb.AppendLine();
+            sb.AppendLine($"{ts}post_dump_application_halfstar_Add();");
 
-			return sb.ToString();
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCApplicationTig1(ControllerModel c)
@@ -401,10 +465,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 						
 			sb.AppendLine("bool application1_tig(void)");
 			sb.AppendLine("{");
-			sb.AppendLine($"{ts}return 0;");
+			sb.AppendLine($"{ts}return application1_tig_Add();");
 			sb.AppendLine("}");
+            sb.AppendLine();
 
-			return sb.ToString();
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCApplicationTig2(ControllerModel c)
@@ -413,10 +478,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("bool application2_tig(void)");
 			sb.AppendLine("{");
-			sb.AppendLine($"{ts}return 0;");
-			sb.AppendLine("}");
+            sb.AppendLine($"{ts}return application2_tig_Add();");
+            sb.AppendLine("}");
+            sb.AppendLine();
 
-			return sb.ToString();
+            return sb.ToString();
 		}
 
 	    private string GenerateHstCSignaalPlanInstellingen(ControllerModel controller)
@@ -456,8 +522,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 		    }
 		    
 		    sb.AppendLine("}");
+            sb.AppendLine();
 
-		    return sb.ToString();
+            return sb.ToString();
 	    }
 	}
 }

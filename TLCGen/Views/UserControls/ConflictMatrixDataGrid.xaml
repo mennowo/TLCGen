@@ -71,16 +71,14 @@
     </UserControl.Resources>
     <Grid>
         <DataGrid
-            dg2D:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=Root}" 
-            dg2D:ItemsSource.RowHeadersSource="{Binding FasenNames}"
+            dg2D:ItemsSource.Array2D="{Binding Path=ConflictMatrix,ElementName=Root,Mode=TwoWay}" 
+            dg2D:ItemsSource.RowHeadersSource="{Binding FasenNames,Mode=OneWay}"
+            dg2D:ItemsSource.ColumnHeadersSource="{Binding FasenNames,Mode=OneWay}"
             dg2D:Cell.Template="{StaticResource MatrixCellTemplate}"
             dg2D:Cell.EditingTemplate="{StaticResource MatrixCellEditingTemplate}"
-            dg2D:ItemsSource.ColumnHeadersSource="{Binding FasenNames}"
-            dg2D:Selected.CellItem="{Binding Path=GridSelectedItem,ElementName=Root}"
-            AutoGenerateColumns="True"
+            dg2D:Selected.CellItem="{Binding Path=GridSelectedItem,ElementName=Root,Mode=OneWayToSource}"
             MinRowHeight="24"
             MinColumnWidth="24"
-            EnableRowVirtualization="True" EnableColumnVirtualization="True"
             HorizontalGridLinesBrush="LightGray"
             VerticalGridLinesBrush="LightGray"
             SelectionUnit="Cell"

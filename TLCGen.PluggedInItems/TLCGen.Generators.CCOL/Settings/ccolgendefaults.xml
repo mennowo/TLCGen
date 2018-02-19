@@ -1505,6 +1505,12 @@
             <Type>Timer</Type>
             <Description>Toegestane marge by sync halfstar</Description>
           </Setting>
+          <Setting>
+            <Default>pl</Default>
+            <Setting>pl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikking actief plan per plan</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

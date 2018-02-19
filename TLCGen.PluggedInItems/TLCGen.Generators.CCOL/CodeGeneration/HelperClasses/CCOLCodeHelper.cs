@@ -34,7 +34,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var gss = new List<Tuple<string, List<string>>>();
             foreach(var fc in c.Fasen)
             {
-                gss.Add(new Tuple<string, List<string>>(fc.Naam, new List<string>()));
+                if(c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseVan == fc.Naam))
+                {
+                    gss.Add(new Tuple<string, List<string>>(fc.Naam, new List<string>()));
+                }
             }
             foreach (var i in gss)
             {

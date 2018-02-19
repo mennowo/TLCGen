@@ -116,7 +116,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 20;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 10;
+                    return 20;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 10;
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
@@ -192,6 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             string vn = nl.FaseVan + nl.FaseNaar;
                             switch (nl.Type)
                             {
+#warning This only works for pedestrians
                                 case NaloopTypeEnum.StartGroen:
                                     if(nl.VasteNaloop)
                                     {

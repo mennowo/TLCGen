@@ -116,7 +116,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1);");
                     sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3);");
                     sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1|BIT2|BIT3);");
-                    sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0|BIT1|BIT2|BIT3|BIT4|BIT5|BIT6|BIT7);");
+                    if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
+                    {
+                        sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0|BIT1|BIT2|BIT3|BIT4|BIT5|BIT6|BIT7);");
+                    }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}control_realisation_timers();");

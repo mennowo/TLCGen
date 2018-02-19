@@ -202,7 +202,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case CCOLCodeTypeEnum.RegCKlokPerioden:
                     return 10;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 20;
+                    return 10;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 20;
                 case CCOLCodeTypeEnum.RegCSystemApplication:

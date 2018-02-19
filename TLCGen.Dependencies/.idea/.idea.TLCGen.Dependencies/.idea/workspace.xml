@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0a5796f3-d1f1-4963-8f68-1bc383556cb3" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/TLCGen.Events/Messages/GroentijdChangedMessage.cs" />
-      <change beforePath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../.idea/.idea.TLCGen/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/contentModel.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/.idea.TLCGen.Dependencies/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/TLCGen.Events/TLCGen.Messaging.csproj" afterPath="$PROJECT_DIR$/TLCGen.Events/TLCGen.Messaging.csproj" />
-      <change beforePath="$PROJECT_DIR$/../TLCGen/Views/Tabs/FasenTab/DataTypes/GroentijdViewModel.cs" afterPath="$PROJECT_DIR$/../TLCGen/Views/Tabs/FasenTab/DataTypes/GroentijdViewModel.cs" />
-    </list>
+    <list default="true" id="0a5796f3-d1f1-4963-8f68-1bc383556cb3" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -396,12 +389,12 @@
       <workItem from="1517387261802" duration="4730000" />
       <workItem from="1517565915651" duration="2448000" />
       <workItem from="1518007763701" duration="2997000" />
-      <workItem from="1518530625844" duration="797000" />
+      <workItem from="1518530625844" duration="1995000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16021000" />
+    <option name="totallyTimeSpent" value="17219000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -261,12 +262,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            switch(controller.Data.TypeGroentijden)
+            var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+
+            switch (controller.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.MaxGroentijden:
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
-
+                    
                     foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMaxgroen])
                     {
                         sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMaxgroen, ts));
@@ -274,10 +277,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
-	                if (controller.HalfstarData.IsHalfstar)
-	                {
-		                sb.AppendLine($"{ts}Maxgroen_halfstar();");
-	                }
                     sb.AppendLine("}");
 
                     sb.AppendLine();
@@ -294,10 +293,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
-	                if (controller.HalfstarData.IsHalfstar)
-	                {
-		                sb.AppendLine($"{ts}Verlenggroen_halfstar();");
-	                }
                     sb.AppendLine("}");
 
                     sb.AppendLine();
@@ -311,21 +306,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCWachtgroen(ControllerModel controller)
         {
             var sb = new StringBuilder();
+            var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             sb.AppendLine("void Wachtgroen(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}register count fc;");
-            sb.AppendLine();
+
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCWachtgroen])
             {
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCWachtgroen, ts));
             }
             sb.AppendLine($"{ts}Wachtgroen_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}Wachtgroen_halfstar();");
-	        }
-            sb.AppendLine("}");
+	        sb.AppendLine("}");
 
             return sb.ToString();
         }
@@ -336,16 +327,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
+            
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMeetkriterium])
             {
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMeetkriterium, ts));
             }
             sb.AppendLine($"{ts}Meetkriterium_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}Meetkriterium_halfstar();");
-	        }
+
             sb.AppendLine("}");
             sb.AppendLine();
 
@@ -355,22 +343,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCMeeverlengen(ControllerModel controller)
         {
             var sb = new StringBuilder();
+            var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             sb.AppendLine("void Meeverlengen(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}register count fc;");
 
-            sb.AppendLine();
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMeeverlengen])
             {
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMeeverlengen, ts));
             }
 
             sb.AppendLine($"{ts}Meeverlengen_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}Meeverlengen_halfstar();");
-	        }
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -389,11 +372,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine($"{ts}Synchronisaties_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}Synchronisaties_halfstar();");
-	        }
-            sb.AppendLine("}");
+	        sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
@@ -437,11 +416,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}Modules_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}Modules_halfstar();");
-	        }
-            sb.AppendLine();
+	        sb.AppendLine();
             sb.AppendLine($"{ts}SML = modules(ML_MAX, PRML, YML, &ML);");
             sb.AppendLine();
             sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
@@ -456,11 +431,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, ts));
             }
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}RealisatieAfhandeling_halfstar();");
-	        }
-            sb.AppendLine("}");
+	        sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
@@ -479,11 +450,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCFileVerwerking, ts));
             }
             sb.AppendLine($"{ts}FileVerwerking_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}FileVerwerking_halfstar();");
-	        }
-            sb.AppendLine("}");
+	        sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
@@ -502,11 +469,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCDetectieStoring, ts));
             }
             sb.AppendLine($"{ts}DetectieStoring_Add();");
-	        if (controller.HalfstarData.IsHalfstar)
-	        {
-		        sb.AppendLine($"{ts}DetectieStoring_halfstar();");
-	        }
-            sb.AppendLine("}");
+	        sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
@@ -548,6 +511,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateRegCApplication(ControllerModel controller)
         {
             var sb = new StringBuilder();
+            var _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             sb.AppendLine("void application(void)");
             sb.AppendLine("{");
@@ -556,22 +520,57 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TFB_max = PRM[prmfb];");
             sb.AppendLine($"{ts}KlokPerioden();");
             sb.AppendLine($"{ts}Aanvragen();");
+
+            var hsts = controller.HalfstarData.IsHalfstar ? ts + ts : ts;
+
+            if (controller.HalfstarData.IsHalfstar)
+            {
+                sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                sb.AppendLine($"{ts}{{");
+                switch (controller.Data.TypeGroentijden)
+                {
+                    case GroentijdenTypeEnum.MaxGroentijden:
+                        sb.AppendLine($"{hsts}Maxgroen_halfstar();");
+                        break;
+                    case GroentijdenTypeEnum.VerlengGroentijden:
+                        sb.AppendLine($"{hsts}Verlenggroen_halfstar();");
+                        break;
+                }
+                sb.AppendLine($"{hsts}Wachtgroen_halfstar();");
+                sb.AppendLine($"{hsts}Meetkriterium_halfstar();");
+                sb.AppendLine($"{hsts}Meeverlengen_halfstar();");
+                sb.AppendLine($"{hsts}Synchronisaties_halfstar();");
+                sb.AppendLine($"{hsts}RealisatieAfhandeling_halfstar();");
+                sb.AppendLine($"{hsts}Alternatief_halfstar();");
+                sb.AppendLine($"{hsts}FileVerwerking_halfstar();");
+                sb.AppendLine($"{hsts}DetectieStoring_halfstar();");
+                sb.AppendLine($"{ts}}}");
+                sb.AppendLine($"{ts}else");
+                sb.AppendLine($"{ts}{{");
+            }
+
             switch (controller.Data.TypeGroentijden)
             {
                 case GroentijdenTypeEnum.MaxGroentijden:
-                    sb.AppendLine($"{ts}Maxgroen();");
+                    sb.AppendLine($"{hsts}Maxgroen();");
                     break;
                 case GroentijdenTypeEnum.VerlengGroentijden:
-                    sb.AppendLine($"{ts}Verlenggroen();");
+                    sb.AppendLine($"{hsts}Verlenggroen();");
                     break;
             }
-            sb.AppendLine($"{ts}Wachtgroen();");
-            sb.AppendLine($"{ts}Meetkriterium();");
-            sb.AppendLine($"{ts}Meeverlengen();");
-            sb.AppendLine($"{ts}Synchronisaties();");
-            sb.AppendLine($"{ts}RealisatieAfhandeling();");
-            sb.AppendLine($"{ts}FileVerwerking();");
-            sb.AppendLine($"{ts}DetectieStoring();");
+            sb.AppendLine($"{hsts}Wachtgroen();");
+            sb.AppendLine($"{hsts}Meetkriterium();");
+            sb.AppendLine($"{hsts}Meeverlengen();");
+            sb.AppendLine($"{hsts}Synchronisaties();");
+            sb.AppendLine($"{hsts}RealisatieAfhandeling();");
+            sb.AppendLine($"{hsts}FileVerwerking();");
+            sb.AppendLine($"{hsts}DetectieStoring();");
+
+            if (controller.HalfstarData.IsHalfstar)
+            {
+                sb.AppendLine($"{ts}}}");
+            }
+
             if (controller.OVData.OVIngrepen.Count > 0 ||
                 controller.OVData.HDIngrepen.Count > 0)
             {

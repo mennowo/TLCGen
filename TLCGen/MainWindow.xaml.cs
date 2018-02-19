@@ -48,7 +48,7 @@ namespace TLCGen
             RecentFileList.MenuClick += (sender, args) =>
             {
                 if (DataContext == null) return;
-                var mymvm = DataContext as ViewModels.MainWindowViewModel;
+                var mymvm = DataContext as MainWindowViewModel;
                 mymvm?.LoadController(args.Filepath);
             };
 

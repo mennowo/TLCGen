@@ -171,6 +171,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader);
                 }
+                if (c.HalfstarData.IsHalfstar)
+                {
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader);
+                }
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
@@ -309,7 +313,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (File.Exists(Path.Combine(sourcefilepath, filename)))
                 {
-                    File.Delete(Path.Combine(sourcefilepath, filename));
+                    try
+                    {
+                        File.Delete(Path.Combine(sourcefilepath, filename));
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
             }

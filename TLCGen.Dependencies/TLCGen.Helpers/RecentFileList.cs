@@ -12,7 +12,7 @@ using Microsoft.Win32;
 
 namespace TLCGen.Helpers
 {
-    // Adapter from: https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU
+    // Adapted from: https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU
     // Copyright (C) 2008 Nicholas Butler
     public class RecentFileList : Separator
     {

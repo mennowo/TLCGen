@@ -6,13 +6,75 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:vmenums="clr-namespace:TLCGen.ViewModels.Enums"
+             xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:dg2D="http://gu.se/DataGrid2D"
              mc:Ignorable="d" 
              x:Name="Root"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:SynchronisatiesTabViewModel}">
     <UserControl.Resources>
         <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+
+
+        <local:ConflictBackgroundConverter x:Key="BackgroundConverter" />
+        <local:SynchCheckBoxVisibilityConverter x:Key="CheckBoxVisConverter" />
+        <DataTemplate x:Key="MatrixCellTemplate" DataType="vm:SynchronisatieViewModel">
+            <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
+                <TextBlock
+                    Margin="0" Padding="0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    IsEnabled="{Binding Path=IsEnabled}"
+                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
+                    Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                </TextBlock>
+                <CheckBox
+                    Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    IsChecked="{Binding Path=IsCoupled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <CheckBox.Visibility>
+                        <MultiBinding Converter="{StaticResource CheckBoxVisConverter}">
+                            <Binding Path="DisplayType" Mode="OneWay" />
+                            <Binding Path="IsEnabled" Mode="OneWay" />
+                        </MultiBinding>
+                    </CheckBox.Visibility>
+                </CheckBox>
+                <Grid.Background>
+                    <MultiBinding Converter="{StaticResource BackgroundConverter}">
+                        <Binding Path="ReferencesSelf" Mode="OneWay" />
+                        <Binding Path="IsEnabled" Mode="OneWay" />
+                        <Binding Path="DisplayType" Mode="OneWay" />
+                        <Binding Path="ConflictValue" Mode="OneWay" />
+                    </MultiBinding>
+                </Grid.Background>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="MatrixCellEditingTemplate" DataType="vm:SynchronisatieViewModel">
+            <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
+                <controls:AutoSelectTextBox
+                        Margin="0"
+                        Padding="0"
+                        TextAlignment="Center"
+                        IsEnabled="{Binding Path=IsEnabled}"
+                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
+                        Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
+                <CheckBox
+                    Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    IsChecked="{Binding Path=IsCoupled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <CheckBox.Visibility>
+                        <MultiBinding Converter="{StaticResource CheckBoxVisConverter}">
+                            <Binding Path="DisplayType" Mode="OneWay" />
+                            <Binding Path="IsEnabled" Mode="OneWay" />
+                        </MultiBinding>
+                    </CheckBox.Visibility>
+                </CheckBox>
+            </Grid>
+        </DataTemplate>
+        
+        
+        
     </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
+    </UserControl.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -44,8 +106,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <local:ConflictMatrixDataGrid 
-                    ConflictMatrix="{Binding Path=ConflictMatrix}" 
-                    GridSelectedItem="{Binding Path=SelectedSynchronisatie,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ConflictMatrix="{Binding Path=ConflictMatrix,Mode=OneWay}" 
+                    GridSelectedItem="{Binding Path=SelectedSynchronisatie,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
                     Grid.ColumnSpan="2" HorizontalAlignment="Left" />
                 <Grid Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Conflict}}" Grid.Row="1" >
                     <CheckBox Content="Gebruik garantie ontruimingstijden" IsChecked="{Binding Path=UseGarantieOntruimingsTijden,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" />

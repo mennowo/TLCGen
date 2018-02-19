@@ -278,7 +278,7 @@ void rhdhv_mgcor_pl_deelc(count fc1, count fc2)
 
 
 /**********************************************************************************/
-void hardekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
+void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count tnldet, count tnl)
 {
   /* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
   if (GL[fc2])
@@ -321,19 +321,16 @@ void hardekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count
   /* meerealisatie nalooprichting */
   rhdhv_MR(fc2, fc1, (bool)(period && ((A[fc1] &&  R[fc1]) || CV[fc1])));
   
-  if(tvs != NG)
+  if(prmxnl != NG)
   {
     /* aanvoerende richting niet te snel realiseren */
-    if (period && x_aanvoer(fc2, T_max[tvs]) && (TX_timer != TXB[PL][fc1]))
+    if (period && x_aanvoer(fc2, PRM[prmxnl]) && (TX_timer != TXB[PL][fc1]))
       X[fc1] |= RHDHV_X_VOOR;
-    
-    /* ten behoeve van verklikken */
-    RT[tvs] = SG[fc1];
 
     /* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
     if (period && (GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
     {
-      if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > T_max[tvs])
+      if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > PRM[prmxnl])
         X[fc1] |= RHDHV_X_VOOR;
     }
   }
@@ -571,22 +568,18 @@ void rhdhv_altcor_parftsvtg_pl(count fc1, count fc2, bool voorwaarde)
 
 
 /*****************************************************************************/
-void rhdhv_altcor_kopvtg_pl(count fc1, count fc2, bool a_bui_fc1, bool a_bui_fc2, count tnlsg12, count tnlsg21, bool voorwaarde)
+void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg12, bool voorwaarde)
 {
   if (voorwaarde)
   {
-    if (a_bui_fc1 || a_bui_fc2)
+    if (a_bui_fc1)
     {
       if (!(PAR[fc2] && (tar_max_ple(fc2) > (T_max[tnlsg12] + 11))))
         PAR[fc1] = FALSE;
-      if (!(PAR[fc1] && (tar_max_ple(fc1) > (T_max[tnlsg21] + 11))))
-        PAR[fc2] = FALSE;
     }
     
     if (a_bui_fc1 && !PAR[fc1])
       PAR[fc2] = FALSE;
-    if (a_bui_fc2 && !PAR[fc2])
-      PAR[fc1] = FALSE;
     
     /* als PAR bitje ingetrokken, dan als in RA ook RR instructie */
     /* kla wordt in applicatie uitgevoerd */
@@ -613,17 +606,13 @@ void rhdhv_altcor_parfts_pl(count fc1, count fc2, bool voorwaarde)
 
 
 /**********************************************************************************/
-void rhdhv_getrapte_voetganger_pl(count fc1             , /* fc1 */
-                                  count fc2             , /* fc2 */
-                                  bool  a_bui_fc1       , /* buitendrukknopaanvraag fc1 */
-                                  bool  a_bui_fc2       , /* buitendrukknopaanvraag fc2 */
-                                  count tkopfc1fc2      , /* naloop (SG) fc1 -> fc2 */
-                                  count tkopfc2fc1      , /* naloop (SG) fc2 -> fc1 */
-                                  count voorstartfc1fc2 , /* maximale voorstart fc1 -> fc2 (mag NG) */
-                                  count voorstartfc2fc1 ) /* maximale voorstart fc2 -> fc1 (mag NG) */
+void naloopSG_halfstar(count fc1             , /* fc1 */
+                       count fc2             , /* fc2 */
+                       bool  a_bui_fc1       , /* buitendrukknopaanvraag fc1 */
+                       count tkopfc1fc2)       /* naloop (SG) fc1 -> fc2 */
 {
   /* nalopen */
-  RT[tkopfc1fc2] = (bool)(RA[fc1] && a_bui_fc1);
+  RT[tkopfc1fc2] = (bool) (RA[fc1] && a_bui_fc1);
   AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
   if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) || 
        (rhdhv_yv_ar_max_pl(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])))
@@ -631,39 +620,8 @@ void rhdhv_getrapte_voetganger_pl(count fc1             , /* fc1 */
     YV[fc2] |= RHDHV_YV_KOP;
   }
   
-  RT[tkopfc2fc1] = (bool)(RA[fc2] && a_bui_fc2);
-  AT[tkopfc2fc1] = (bool)((ERA[fc2] && SRV[fc2]));
-  if ((RT[tkopfc2fc1] || T[tkopfc2fc1]) && ((YV_PL[fc1] && PR[fc1]) || 
-       (rhdhv_yv_ar_max_pl(fc1, (mulv)(T_max[tkopfc2fc1] - TFG_max[fc1])) && AR[fc1])))
-  {
-    YV[fc1] |= RHDHV_YV_KOP;
-  }
-    
   /* meerealisaties */
-  rhdhv_MR(fc1, fc2, (bool)(a_bui_fc2 && R[fc2] && (A[fc2] != RHDHV_A_WS)));
   rhdhv_MR(fc2, fc1, (bool)(a_bui_fc1 && R[fc1] && (A[fc1] != RHDHV_A_WS)));
-  
-  /* aanvoerende richting niet te snel realiseren (maximale voorstarttijd gelijk aan nalooptijd) */
-  if (voorstartfc1fc2 != NG)
-  {
-    if ((voorstartfc1fc2 > 0) && a_bui_fc1)
-    {
-      if (x_aanvoer(fc2, (mulv)(voorstartfc1fc2)))
-      {
-        X[fc1] |= RHDHV_X_VOOR;
-      }
-    }
-  }
-  if (voorstartfc2fc1 != NG)
-  {
-    if ((voorstartfc2fc1 > 0) && a_bui_fc2)
-    {
-      if (x_aanvoer(fc1, (mulv)(voorstartfc2fc1)))
-      {
-        X[fc2] |= RHDHV_X_VOOR;
-      }
-    }
-  }
 }
 
 

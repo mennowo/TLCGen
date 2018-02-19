@@ -27,12 +27,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _tnlcvd;
 		private string _tnleg;
 		private string _tnlegd;
-		private object _huks;
-		private object _hiks;
+		private string _huks;
+		private string _hiks;
+        private string _prmxnl;
+        private string _hnla;
 #pragma warning restore 0649
 
 #pragma warning disable 0649
-		private string _usmlact;
+        private string _usmlact;
 		private string _usplact;
 		private string _uskpact;
 		private string _usmlpl;
@@ -79,9 +81,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _prmvolgmasterpl;
 		private string _toffset;
 		private string _txmarge;
+		private string _uspl;
 #pragma warning restore 0649
 
-		public override void CollectCCOLElements(ControllerModel c)
+        public override void CollectCCOLElements(ControllerModel c)
 		{
 			_myElements = new List<CCOLElement>();
 			_MyBitmapOutputs = new List<CCOLIOElement>();
@@ -97,8 +100,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(new CCOLElement($"{_ustxtimer}", CCOLElementTypeEnum.Uitgang));
 				_myElements.Add(new CCOLElement($"{_usklok}", CCOLElementTypeEnum.Uitgang));
 				_myElements.Add(new CCOLElement($"{_ushand}", CCOLElementTypeEnum.Uitgang));
-				
-				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_uspf}{_usplact}"));
+
+                foreach (var pl in c.HalfstarData.SignaalPlannen)
+                {
+                    _myElements.Add(new CCOLElement($"{_uspl}{pl.Naam}", CCOLElementTypeEnum.Uitgang));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}{_uspl}{pl.Naam}"));
+                }
+
+                _MyBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_uspf}{_usplact}"));
 				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MlActUitgang, $"{_uspf}{_usmlact}"));
 				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.KpActUitgang, $"{_uspf}{_uskpact}"));
 				_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MlPlUitgang, $"{_uspf}{_usmlpl}"));
@@ -249,6 +258,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				{
 					_myElements.Add(new CCOLElement($"{_schovpriople}", hsd.OVPrioriteitPL ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
 				}
+
+                if (c.InterSignaalGroep.Gelijkstarten.Any())
+                {
+                    var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                    foreach (var gs in gelijkstarttuples)
+                    {
+                        var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
+					    _myElements.Add(new CCOLElement(hxpl, CCOLElementTypeEnum.HulpElement));
+                    }
+                }
 			}
 			
 		}
@@ -686,7 +705,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 
 				case CCOLCodeTypeEnum.HstCMeetkriterium:
-					sb.AppendLine($"if(IH[{_hpf}{_hplact}])");
+					sb.AppendLine($"{ts}if(IH[{_hpf}{_hplact}])");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}{{");
@@ -732,42 +751,92 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCSynchronisaties:
-					//sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					//sb.AppendLine($"{ts}{ts}YV[fc] &= ~RHDHV_YV_KOP;");
-					//sb.AppendLine();
-					//sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
-					//sb.AppendLine($"{ts}{{");
-					//sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					//sb.AppendLine($"{ts}{ts}{{");
-					//sb.AppendLine($"{ts}{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
-					//sb.AppendLine($"{ts}{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
-					//sb.AppendLine($"{ts}{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
-					//sb.AppendLine($"{ts}{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
-					//sb.AppendLine($"{ts}{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
-					//sb.AppendLine($"{ts}{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
-					//sb.AppendLine($"{ts}{ts}}}");
-					//sb.AppendLine();
-					//
-					//foreach (var nl in c.InterSignaalGroep.Nalopen)
-					//{
-					//	if (nl.Type == NaloopTypeEnum.EindeGroen ||
-					//	    nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
-					//	{
-					//		if (nl.VasteNaloop)
-					//		{
-					//			var t = nl.Type == NaloopTypeEnum.EindeGroen ? _tnleg : _tnlcv;
-					//			sb.AppendLine($"hardekoppeling_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, NG, NG, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
-					//		}
-					//		else if (nl.DetectieAfhankelijk)
-					//		{
-					//			var t = nl.Type == NaloopTypeEnum.EindeGroen ? _tnlegd : _tnlcvd;
-					//			sb.AppendLine($"hardekoppeling_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, NG, NG, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
-					//		}
-					//	}
-					//}
-					//
-					//sb.AppendLine();
-					return sb.ToString();
+					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					sb.AppendLine($"{ts}{ts}YV[fc] &= ~RHDHV_YV_KOP;");
+					sb.AppendLine();
+					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+					sb.AppendLine($"{ts}{{");
+					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					sb.AppendLine($"{ts}{ts}{{");
+					sb.AppendLine($"{ts}{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
+					sb.AppendLine($"{ts}{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
+					sb.AppendLine($"{ts}{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
+					sb.AppendLine($"{ts}{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
+					sb.AppendLine($"{ts}{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
+                    if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
+                    {
+					    sb.AppendLine($"{ts}{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
+                    }
+					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine();
+					
+					foreach (var nl in c.InterSignaalGroep.Nalopen)
+					{
+						if (nl.Type == NaloopTypeEnum.EindeGroen ||
+						    nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
+						{
+							var t = nl.Type == NaloopTypeEnum.EindeGroen ? _tnleg : _tnlcv;
+                            var dt = "NG";
+                            if (nl.DetectieAfhankelijk)
+                            {
+                                dt = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
+                            }
+                            var xnl = "NG";
+                            if (nl.MaximaleVoorstart.HasValue)
+                            {
+                                xnl = $"{_prmpf}{_prmxnl}";
+                            }
+							sb.AppendLine($"{ts}{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
+						}
+
+                        if(nl.Type == NaloopTypeEnum.StartGroen)
+                        {
+                            if (nl.DetectieAfhankelijk && nl.Detectoren.Any())
+                            {
+                                sb.AppendLine($"{ts}{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar});");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar});");
+                            }
+                        }
+					}
+					sb.AppendLine();
+
+                    if (c.InterSignaalGroep.Gelijkstarten.Any())
+                    {
+                        var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                        foreach (var gs in gelijkstarttuples)
+                        {
+                            var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
+                            sb.Append($"{ts}{ts}rhdhv_gelijkstart_va_arg({_hpf}{hxpl}, NG, FALSE, ");
+                            foreach(var fc in gs.Item2)
+                            {
+                                sb.Append($"{_fcpf}{fc}, ");
+                            }
+                            sb.AppendLine("END);");
+                            sb.AppendLine($"{ts}{ts}if (IH[{_hpf}{hxpl}])");
+                            sb.AppendLine($"{ts}{ts}{{");
+                            foreach(var fc in gs.Item2)
+                            {
+                                sb.Append($"{ts}{ts}{ts}if ((");
+                                var first = true;
+                                foreach (var fc2 in gs.Item2)
+                                {
+                                    if (fc == fc2) continue;
+                                    if (!first) sb.Append(" || ");
+                                    sb.Append($"A[{_fcpf}{fc2}]");
+                                    first = false;
+                                }
+                                sb.AppendLine($") && !G[{_fcpf}{fc}]) X[{_fcpf}{fc}] |= RHDHV_X_GELIJK;");
+                            }
+                            sb.AppendLine($"{ts}{ts}}}");
+                        }
+                    }
+
+                    sb.AppendLine($"{ts}}}");
+
+                    return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
 					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
@@ -776,20 +845,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}/* PAR wordt geregeld in reg.c */");
 					sb.AppendLine();
 					
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}]) /* Code alleen bij PL-bedrijf */");
-					sb.AppendLine($"{ts}{{");
-					
 					if (c.HalfstarData.Hoofdrichtingen.Any())
 					{
-						sb.AppendLine($"{ts}{ts}/* hoofdrichtingen alleen tijdens periode alternatieve realisaties en koppeling uit */");
-						sb.AppendLine($"{ts}{ts}if (!H[{_hpf}{_hperarh}] && H[{_hpf}kpact])");
-						sb.AppendLine($"{ts}{ts}{{");
+						sb.AppendLine($"{ts}/* hoofdrichtingen alleen tijdens periode alternatieve realisaties en koppeling uit */");
+						sb.AppendLine($"{ts}if (!H[{_hpf}{_hperarh}] && H[{_hpf}kpact])");
+						sb.AppendLine($"{ts}{{");
 						foreach (var hfc in c.HalfstarData.Hoofdrichtingen)
 						{
-							sb.AppendLine($"{ts}{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
+							sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
 						}
-
-						sb.AppendLine($"{ts}{ts}}}");
 						sb.AppendLine($"{ts}}}");
 						sb.AppendLine($"{ts}");
 					}
@@ -1093,6 +1157,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlact}] = IH[{_hpf}{_hmlact}];");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_uskpact}] = IH[{_hpf}{_hkpact}];");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlpl}] = IH[{_hpf}{_hplact}] ? (s_int16)(PL+1): (s_int16)(ML+1);");
+                    foreach(var pl in c.HalfstarData.SignaalPlannen)
+                    {
+					    sb.AppendLine($"{ts}GUS[{_uspf}{_uspl}{pl.Naam}] = PL == {pl.Naam};");
+                    }
 					sb.AppendLine($"{ts}GUS[{_uspf}{_ustxtimer}] = IH[{_hpf}{_hplact}] ? (s_int16)(TX_timer): 0;");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usklok}] = MM[{_mpf}{_mklok}];");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_ushand}] = MM[{_mpf}{_mhand}];");
@@ -1128,9 +1196,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			_tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
 			_tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
 			_huks = CCOLGeneratorSettingsProvider.Default.GetElementName("huks");
-			_hiks = CCOLGeneratorSettingsProvider.Default.GetElementName("hiks");
+            _hiks = CCOLGeneratorSettingsProvider.Default.GetElementName("hiks");
+            _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
+            _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
 
-			return base.SetSettings(settings);
+            return base.SetSettings(settings);
 		}
 	}
 }

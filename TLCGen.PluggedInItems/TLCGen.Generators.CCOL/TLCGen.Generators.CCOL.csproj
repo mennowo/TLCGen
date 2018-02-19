@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
+    <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
     <Compile Include="CodeGeneration\Functionality\DetectieAanvraagDirectCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\DetectieStoringGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\FileIngrepenCodeGenerator.cs" />
