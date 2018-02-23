@@ -62,7 +62,7 @@ namespace TLCGen.ViewModels
 
         public string DefaultPeriodeGroentijdenSet
         {
-            get { return _Controller.PeriodenData.DefaultPeriodeGroentijdenSet; }
+            get { return _Controller?.PeriodenData.DefaultPeriodeGroentijdenSet; }
             set
             {
                 _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
@@ -72,7 +72,7 @@ namespace TLCGen.ViewModels
 
         public string DefaultPeriodeNaam
         {
-            get { return _Controller.PeriodenData.DefaultPeriodeNaam; }
+            get { return _Controller?.PeriodenData.DefaultPeriodeNaam; }
             set
             {
 	            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);

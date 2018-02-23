@@ -223,16 +223,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case NaloopTypeEnum.CyclischVerlengGroen:
                                     if (nl.VasteNaloop)
                                     {
-                                        sb.AppendLine($"{ts}NaloopFG({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnleg}{vn});");
-                                        sb.AppendLine($"{ts}NaloopCV({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnleg}{vn});");
+										sb.AppendLine($"{ts}NaloopFG({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlcv}{vn});");
+                                        sb.AppendLine($"{ts}NaloopCV({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlcv}{vn});");
                                     }
                                     if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0)
                                     {
                                         foreach (var d in nl.Detectoren)
                                         {
-                                            sb.AppendLine($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnleg}{vn});");
-                                            sb.AppendLine($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnleg}{vn});");
-                                        }
+                                            sb.AppendLine($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlcv}{vn});");
+                                            sb.AppendLine($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlcv}{vn});");                                        
+										}
                                     }
                                     break;
                             }
