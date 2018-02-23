@@ -748,21 +748,24 @@ namespace TLCGen.GebruikersOpties
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang,
+					    elem.Commentaar));
             }
             foreach (var elem in Ingangen)
             {
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang,
+					    elem.Commentaar));
             }
             foreach (var elem in HulpElementen)
             {
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement,
+					    elem.Commentaar));
             }
             foreach (var elem in Timers)
             {
@@ -771,7 +774,8 @@ namespace TLCGen.GebruikersOpties
                         elem.Naam,
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer,
+					    elem.Commentaar));
             }
             foreach (var elem in Counters)
             {
@@ -780,7 +784,8 @@ namespace TLCGen.GebruikersOpties
                         elem.Naam,
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter,
+					    elem.Commentaar));
             }
             foreach (var elem in Schakelaars)
             {
@@ -789,14 +794,16 @@ namespace TLCGen.GebruikersOpties
                         elem.Naam,
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.SCH_type,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar,
+					    elem.Commentaar));
             }
             foreach (var elem in GeheugenElementen)
             {
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement,
+					    elem.Commentaar));
             }
             foreach (var elem in Parameters)
             {
@@ -805,7 +812,8 @@ namespace TLCGen.GebruikersOpties
                         elem.Naam,
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
-                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter));
+                        Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter,
+					    elem.Commentaar));
             }
 
             return AllElements;

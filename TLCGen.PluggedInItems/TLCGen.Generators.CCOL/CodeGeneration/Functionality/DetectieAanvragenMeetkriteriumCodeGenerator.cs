@@ -20,6 +20,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _prmda;
 		private string _prmmk;
         private string _tkm;
+		private string _prmda_D;
+		private string _prmmk_D;
+        private string _tkm_D;
 #pragma warning restore 0169
 #pragma warning restore 0649
 
@@ -53,7 +56,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         set = 3;
                         break;
                 }
-                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, 
+					CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmda_D, dm.Naam)));
             }
 
             // Detectie verlengkriterium
@@ -67,7 +71,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         $"{_prmmk}{dm.Naam}", 
                         (int)dm.Verlengen, 
                         CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Parameter));
+                        CCOLElementTypeEnum.Parameter,
+						CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmmk_D, dm.Naam)));
             }
 
             // Collect Kopmax
@@ -88,7 +93,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         $"{_tkm}{fcm.Naam}",
                         fcm.Kopmax,
                         CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                        CCOLElementTypeEnum.Timer,
+						CCOLGeneratorSettingsProvider.Default.GetElementDescription(_tkm_D, fcm.Naam)));
                 }
             }
         }

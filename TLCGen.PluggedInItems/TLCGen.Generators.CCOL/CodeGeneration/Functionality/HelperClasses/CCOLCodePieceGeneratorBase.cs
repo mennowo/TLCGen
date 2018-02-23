@@ -113,6 +113,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         field.SetValue(this, s.Setting ?? s.Default);
                     }
+					if (field.Name == "_" + type + s.Default + "_D")
+                    {
+                        field.SetValue(this, s.Description);
+                    }
                 }
             }
             foreach (var field in fields)

@@ -23,12 +23,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             Dummy = false;
         }
 
-        public CCOLElement(string naam, CCOLElementTypeEnum type)
+        public CCOLElement(string naam, CCOLElementTypeEnum type, string description = null)
         {
             Dummy = false;
             Naam = naam;
             Define = CCOLGeneratorSettingsProvider.Default.GetPrefix(type) + naam;
             Type = type;
+			Commentaar = description;
             switch(Type)
             {
                 case CCOLElementTypeEnum.Schakelaar:
@@ -40,7 +41,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type)
+        public CCOLElement(string naam, int instelling, CCOLElementTimeTypeEnum ttype, CCOLElementTypeEnum type, string description = null)
         {
             Dummy = false;
             Naam = naam;
@@ -48,6 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             Instelling = instelling;
             TType = ttype;
             Type = type;
+			Commentaar = description;
         }
     }
 }

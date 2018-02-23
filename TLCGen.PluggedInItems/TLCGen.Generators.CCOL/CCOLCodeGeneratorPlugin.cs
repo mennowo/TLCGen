@@ -218,7 +218,7 @@ namespace TLCGen.Generators.CCOL
             TLCGenSerialization.Serialize<CCOLGeneratorSettingsModel>(setfile, CCOLGeneratorSettingsProvider.Default.Settings);
         }
 
-#endregion // ITLCGenHasSettings
+		#endregion // ITLCGenHasSettings
 
         #region ITLCGenMenuItem
 

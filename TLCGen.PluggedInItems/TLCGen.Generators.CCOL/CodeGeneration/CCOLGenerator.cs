@@ -463,14 +463,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                 if (string.IsNullOrWhiteSpace(numberdefine))
                 {
-                    sb.AppendLine($"{index}".PadLeft(pad2));
+                    sb.Append($"{index}".PadLeft(pad2));
                 }
                 else
                 {
                     sb.Append($"({numberdefine} + ");
                     sb.Append($"{index}".PadLeft(pad2));
-                    sb.AppendLine(")");
+                    sb.Append(")");
                 }
+				if (!string.IsNullOrWhiteSpace(elem.Commentaar))
+				{
+					sb.Append($" /* {elem.Commentaar} */");
+				}
+				sb.AppendLine();
                 ++index;
             }
             var indexautom = index;
@@ -486,14 +491,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.Append($"{ts}#define {elem.Define} ".PadRight(pad1));
                     if (string.IsNullOrWhiteSpace(numberdefine))
                     {
-                        sb.AppendLine($"{indexautom}".PadLeft(pad2));
+                        sb.Append($"{indexautom}".PadLeft(pad2));
                     }
                     else
                     {
                         sb.Append($"({numberdefine} + ");
                         sb.Append($"{indexautom}".PadLeft(pad2));
-                        sb.AppendLine(")");
+                        sb.Append(")");
                     }
+					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
+					{
+						sb.Append($" /* {elem.Commentaar} */");
+					}
+					sb.AppendLine();
                     ++indexautom;
                 }
                 sb.Append($"{ts}#define {data.Elements.Last().Define} ".PadRight(pad1));
@@ -568,6 +578,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.Append($" {data.CCOLTType}[{elem.Define}]".PadRight(pad5));
                         sb.Append($" = {elem.TType};");
                     }
+
+					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
+					{
+						sb.Append($" /* {elem.Commentaar} */");
+					}
                     sb.AppendLine();
                 }
             }

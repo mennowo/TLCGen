@@ -18,6 +18,7 @@ namespace TLCGen.Generators.CCOL.Settings
         }
 
         public Dictionary<string, string> CCOLElementNames { get; set; }
+        public Dictionary<string, string> CCOLElementDescriptions { get; set; }
 
         private CCOLGeneratorSettingsModel _settings;
         public CCOLGeneratorSettingsModel Settings
@@ -38,6 +39,19 @@ namespace TLCGen.Generators.CCOL.Settings
                 }
             }
         }
+
+		public string GetElementDescription(string description, params string [] elementnames)
+		{
+			var descr = description;
+			int i = 1;
+			foreach(var e in elementnames)
+			{
+				descr = descr.Replace("_E" + i + "_", e);
+				++i;
+			}
+			return descr;
+			
+		}
 
         public string GetElementName(string defaultwithprefix)
         {

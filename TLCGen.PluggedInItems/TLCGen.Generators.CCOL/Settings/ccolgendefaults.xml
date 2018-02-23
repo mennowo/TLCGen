@@ -79,19 +79,19 @@
             <Default>da</Default>
             <Setting>da</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter detectie aanvraag</Description>
+            <Description>Parameter detectie aanvraag voor _E1_</Description>
           </Setting>
           <Setting>
             <Default>mk</Default>
             <Setting>mk</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter detectie meetkriterium</Description>
+            <Description>Parameter detectie meetkriterium voor _E1_</Description>
           </Setting>
           <Setting>
             <Default>km</Default>
             <Setting>km</Setting>
             <Type>Timer</Type>
-            <Description>Timer detectie kop maximum</Description>
+            <Description>Timer detectie kop maximum voor _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
