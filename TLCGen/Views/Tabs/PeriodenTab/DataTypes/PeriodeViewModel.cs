@@ -140,7 +140,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.DagCode = value;
-                RaisePropertyChanged<object>("DagCode", broadcast: true);
+                RaisePropertyChanged<object>(nameof(DagCode), broadcast: true);
             }
         }
         
@@ -150,8 +150,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.StartTijd = value;
-                RaisePropertyChanged<object>("StartTijd", broadcast: true);
-                RaisePropertyChanged<object>("StartTijdAsText", broadcast: true);
+                RaisePropertyChanged<object>(nameof(StartTijd), broadcast: true);
+                RaisePropertyChanged(nameof(StartTijdAsText));
             }
         }
 
@@ -161,8 +161,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.EindTijd = value;
-                RaisePropertyChanged<object>("EindTijd", broadcast: true);
-                RaisePropertyChanged<object>("EindTijdAsText", broadcast: true);
+                RaisePropertyChanged<object>(nameof(EindTijd), broadcast: true);
+                RaisePropertyChanged(nameof(EindTijdAsText));
             }
         }
 
@@ -198,7 +198,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Periode.GroentijdenSet = value;
-                RaisePropertyChanged<object>("GroentijdenSet", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroentijdenSet), broadcast: true);
             }
         }
 

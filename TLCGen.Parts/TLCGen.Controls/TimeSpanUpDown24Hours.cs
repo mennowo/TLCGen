@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TLCGen.Controls
 {
-    public class TimeSpanUpDown24Hours : Xceed.Wpf.Toolkit.TimeSpanUpDown
+	public class TimeSpanUpDown24Hours : Xceed.Wpf.Toolkit.TimeSpanUpDown
     {
+		protected override void OnTextChanged( string previousValue, string currentValue)
+		{
+
+		}
+
         protected override TimeSpan? ConvertTextToValue(string text)
         {
             if (string.IsNullOrEmpty(text))
