@@ -51,6 +51,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(VasteNaloop), broadcast: true);
             }
         }
+
         public bool InrijdenTijdensGroen
         {
             get => _naloop.InrijdenTijdensGroen;
@@ -58,6 +59,11 @@ namespace TLCGen.ViewModels
             {
                 _naloop.InrijdenTijdensGroen = value;
                 RaisePropertyChanged<object>(nameof(InrijdenTijdensGroen), broadcast: true);
+                if (value)
+                {
+                    MaximaleVoorstart = null;
+                }
+                RaisePropertyChanged(nameof(MaximaleVoorstartAllowed));
             }
         }
 
@@ -95,6 +101,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(MaximaleVoorstart), broadcast: true);
             }
         }
+
+        public bool MaximaleVoorstartAllowed => !InrijdenTijdensGroen;
 
         public ObservableCollection<NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollection<NaloopTijdModel>());
 

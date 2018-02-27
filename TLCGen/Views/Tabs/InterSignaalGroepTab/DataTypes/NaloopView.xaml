@@ -24,7 +24,7 @@
                     SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Maximale voorstart tijd:" />
             <xctk:WatermarkTextBox 
-                        Watermark="NG"
+                        Watermark="NG" IsEnabled="{Binding Path=MaximaleVoorstartAllowed}"
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
