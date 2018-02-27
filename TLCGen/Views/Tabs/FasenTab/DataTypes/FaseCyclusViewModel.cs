@@ -228,6 +228,13 @@ namespace TLCGen.ViewModels
                 if (value >= 0)
                 {
                     _FaseCyclus.AantalRijstroken = value;
+                    foreach (var d in _FaseCyclus.Detectoren)
+                    {
+                        if (d.Rijstrook > value)
+                        {
+                            d.Rijstrook = value;
+                        }
+                    }
                 }
                 RaisePropertyChanged<object>(nameof(AantalRijstroken), broadcast: true);
             }
