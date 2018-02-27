@@ -1,25 +1,13 @@
-﻿/* -------------------------------------------------------------------------------------- */
-/*                                                                                        */
-/* CCOL - signaalplanstructuur bibliotheek Royal HaskoningDHV voor TPA generator V3.40    */
-/*                                                                                        */
-/*                                                                                        */
-/* (C) Copyright 2015 Royal HaskoningDHV b.v. All rights reserved.                        */
-/*                                                                                        */
-/* -------------------------------------------------------------------------------------- */
-/*                                                                                        */
-/* Versie :  1.0                                                                          */
-/* Naam   :  rhdhv_ple.c                                                                  */
-/* Datum  :  07-12-2015 kla: eerste versie                                                */
-/*                                                                                        */
-/* -------------------------------------------------------------------------------------- */
-
-#include "halfstar.h"
+﻿#include "halfstar.h"
 #include "halfstar_ov.h"     /* declaratie functies                                      */
 
 #if !defined AUTOMAAT || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */
    #include <stdio.h>      /* declaration printf()       */
 #endif
+
+bool COPY_2_TIG = FALSE;  /* nieuwe TX-tijden copieren naar TIG tabel             */
+char HalfstarOmschakelenToegestaan = 0;
 
 void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te)
 {
@@ -31,8 +19,56 @@ void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv
 }
 
 /*****************************************************************************/
+void reset_fc_halfstar(void)
+{
+	register count i;
+	for (i = 0; i<FC_MAX; i++)
+	{
+		YS[i] = YW[i] = YV[i] = YM[i] /*= YL[i]*/ = FALSE;
+		BR[i] = PP[i] = RR[i] = BL[i] = X[i] = RS[i] = RW[i] = FW[i] = FM[i] = Z[i] /*= MK[i]*/ = FALSE;
+	}
+}
+
+/**********************************************************************************/
+void gelijkstart_va_arg_halfstar(count h_x,
+	count h_rr,
+	bool  overslag,
+	...)
+{
+	count fc;
+	va_list argp;
+
+	IH[h_x] = FALSE;
+	if (h_rr != NG)  IH[h_rr] = FALSE;
+
+	va_start(argp, overslag);
+	do
+	{
+		fc = va_arg(argp, va_count);
+
+		if (fc != END)
+		{
+			if ((X[fc] && (R[fc] || GL[fc])) ||
+				RR[fc] ||
+				(K[fc] && A[fc]) ||
+				TRG[fc] || GL[fc] || SGL[fc] ||
+				(PR[fc] || AR[fc]) && RV[fc] && A[fc] ||
+				SRA[fc])  IH[h_x] = TRUE;
+
+			if ((h_rr != NG) && overslag)
+			{
+				if (G[fc] ||
+					GL[fc])  IH[h_rr] |= TRUE;
+			}
+		}
+	} while (fc != END);
+	va_end(argp);
+}
+
+
+/*****************************************************************************/
 /* vasthouden groen OV bij signaalplan */
-void rhdhv_yv_ov_pl(count fc, bool bit, bool condition)
+void yv_ov_pl_halfstar(count fc, bool bit, bool condition)
 {
     RW[fc] &= ~bit;
     YV[fc] &= ~bit;
@@ -90,7 +126,7 @@ bool txb_gemist(count i, int marge)
 
 /**********************************************************************************/
 /* Set functies voor het bepalen waar de plaats tussen TX momenten */
-bool rhdhv_tussen_txa_en_txb(count fc)
+bool tussen_txa_en_txb(count fc)
 {
     if (TXA_PL[fc] > TXB_PL[fc])
     {
@@ -106,7 +142,7 @@ bool rhdhv_tussen_txa_en_txb(count fc)
     return (FALSE);
 }
 
-bool rhdhv_tussen_txb_en_txc(count fc)
+bool tussen_txb_en_txc(count fc)
 {
     if (TXB_PL[fc]> TXC[PL][fc])
     {
@@ -122,7 +158,7 @@ bool rhdhv_tussen_txb_en_txc(count fc)
     return (FALSE);
 }
 
-bool rhdhv_tussen_txb_en_txd(count fc)
+bool tussen_txb_en_txd(count fc)
 {
     if (TXB_PL[fc]> TXD[PL][fc])
     {
@@ -139,7 +175,7 @@ bool rhdhv_tussen_txb_en_txd(count fc)
 }
 
 /*****************************************************************************/
-void rhdhv_altcor_kop_pl(count fc_aan, count fc_af, count t_nl)
+void altcor_kop_halfstar(count fc_aan, count fc_af, count t_nl)
 {
   /* tijdens rood van de nalooprichting kijken of er genoeg alternatieve realisatieruimte is,
      inclusief nalooptijd */
@@ -154,12 +190,12 @@ void rhdhv_altcor_kop_pl(count fc_aan, count fc_af, count t_nl)
   {
     /* aanvoerende richting alleen alternatief tijdens groen van naloop als er 
        geen (fictief) conflicterende aanvraag is, of als naloop nog in vastgroen is */
-    if ((!rhdhv_yv_ar_max_pl(fc_af, (mulv)(TFG_max[fc_aan] + T_max[t_nl] + 9))))
+    if ((!yv_ar_max_halfstar(fc_af, (mulv)(TFG_max[fc_aan] + T_max[t_nl] + 9))))
       PAR[fc_aan] = FALSE;
   }
   /* koppeling garanderen */
-  if (RHDHV_IRT(t_nl))
-    RR[fc_af] &= ~RHDHV_RR_ALTCOR;
+  if (TIMER_ACTIVE(t_nl))
+    RR[fc_af] &= ~RR_ALTCOR_HALFSTAR;
 }
 
 
@@ -171,11 +207,11 @@ void wachtstand_halfstar(count fc, bool condition_a, bool condition_ws)
   /* preset */
   if (IH[h_plact])
   {
-    YW[fc] &= ~RHDHV_YW_WS;
+    YW[fc] &= ~YW_WS_HALFSTAR;
     WS[fc] = FALSE;
   }
   /* dezelfde functie als aanvraag_wachtstand_exp() van stdfunc.c, maar nu wordt ook gekeken
-     naar fictieve conflicten en wordt bit RHDHV_A_WS opgezet ipv BIT2 */
+     naar fictieve conflicten en wordt bit A_WS_HALFSTAR opgezet ipv BIT2 */
   if (condition_a && !A[fc] && RV[fc] && !K[fc] && !TRG[fc] && !RR[fc] && !BL[fc]) 
   {
     for (j=0; j<FKFC_MAX[fc]; j++) 
@@ -185,7 +221,7 @@ void wachtstand_halfstar(count fc, bool condition_a, bool condition_ws)
       /* resetten wachtstand aanvraag bij (fictief) conflicterende aanvraag */
       if (A[k])
       {
-        A[fc] &= ~RHDHV_A_WS;
+        A[fc] &= ~A_WS_HALFSTAR;
         if (!A[fc] && RA[fc])
         {
           RR[fc] |= TRUE;
@@ -195,41 +231,26 @@ void wachtstand_halfstar(count fc, bool condition_a, bool condition_ws)
       if (A[k] && !BL[k] || TRG[k] || SG[k] || GL[k])  
         return;
     }
-    A[fc] |= RHDHV_A_WS;
+    A[fc] |= A_WS_HALFSTAR;
   }
 
   /* wachtstand opzetten */
-  WS[fc] = (bool)(WG[fc] && rhdhv_yws_groen_fk(fc) && condition_ws);
-  RHDHV_BIT(YW[fc], (bool)(WS[fc]), RHDHV_YW_WS);
+  WS[fc] = (bool)(WG[fc] && yws_groen_fk(fc) && condition_ws);
+  BIT_ACTIVE(YW[fc], (bool)(WS[fc]), YW_WS_HALFSTAR);
   
 }
 
-
-/*****************************************************************************/
-void rhdhv_reset_PLE(void)
+/**********************************************************************************/
+bool yws_groen_fk(count i)
 {
-  register count i;
-  /* PL=0;                /. active signalplan                    */
-  /* APL=0;               /. demand of signalplan                 */
-  /* SPL=FALSE;           /. start of a new signalplan            */
-  RTX=FALSE;            /* restart TX -> TX_timer==1            */
-  HTX=FALSE;            /* halt TX                              */
-  FTX=FALSE;            /* fast TX                              */
-  for(i=0; i<FC_MAX; i++)
-  {
-    RR_PL[i]=           /* no realisation                       */
-    YS_PL[i]=           /* hold instruction advanced-greenphase */
-    YW_PL[i]=           /* hold instruction waiting greenphase  */
-    YV_PL[i]=           /* hold instruction veh. act.-greenphase*/
-    YM_PL[i]=FALSE;     /* hold instruction parallel-greenphase */
+	count n, k;
 
-    PR[i]=FALSE;        /* primary realisation                  */
-    AR[i]=FALSE;        /* alternative realisation              */
-    PG[i]=FALSE;        /* primary realized                     */
-/*  AG[i]=FALSE;        /. alternative realized                 */
-    PP[i]=FALSE;        /* privelege periode prim. realisation  */
-    WS[i]=FALSE;        /* waiting green - phasecycle           */
-  }
+	for (n = 0; n<FKFC_MAX[i]; n++)
+	{
+		k = TO_pointer[i][n];
+		if (A[k])  return (FALSE);
+	}
+	return (TRUE);
 }
 
 
@@ -237,10 +258,10 @@ void rhdhv_reset_PLE(void)
    de richting terugsturen naar verlenggroen (via WG) */
 void Verlengroen_na_Meeverlenggroen_PL(count fc, count prmvgmg)
 {
-  if (MG[fc] && !FM[fc] && !Z[fc] && PR[fc] && MK[fc] && rhdhv_tussen_txb_en_txd(fc) && 
+  if (MG[fc] && !FM[fc] && !Z[fc] && PR[fc] && MK[fc] && tussen_txb_en_txd(fc) && 
       (TOTXD_PL[fc] >= PRM[prmvgmg]) && !kcv(fc))
   {
-    RW[fc] |= RHDHV_RW_VGNAMG;
+    RW[fc] |= RW_VGNAMG_HALFSTAR;
   }
 }
 
@@ -250,30 +271,30 @@ void set_ym_pl_halfstar(count fc, bool condition)
 {
   if (ym_max_to(fc, NG)      &&   /* meeverlengen kan volgens ontruimingstijden      */
       ym_max_tig(fc, NG)     &&   /* meeverlengen kan volgens intergroentijdentabel  */
-      rhdhv_ym_max_pl(fc, 10)&&   /* meeverlengen kan volgens signaalplan            */
+	  ym_max_halfstar(fc, 10)&&   /* meeverlengen kan volgens signaalplan            */
       hf_wsg()               &&   /* minimaal 1 richting actief                      */
       condition             )
   {
-    YM[fc] |= RHDHV_YM_PL;
+    YM[fc] |= YM_HALFSTAR;
   }
 }
 
 
 /**********************************************************************************/
 /* corrigeert het meeverlengen van de aanvoerende richting van een hard gekoppelde interne richting */
-void rhdhv_mgcor_pl(count fcaan, count fcnal, count t_nal)
+void mgcor_halfstar(count fcaan, count fcnal, count t_nal)
 {
-  if (!rhdhv_ym_max_pl(fcnal, (mulv)(T_max[t_nal] + 9))) /* +9 vanwege afronding m.g.b. 10/sec ORT's */
-    YM[fcaan] &= ~RHDHV_YM_PL;
+  if (!ym_max_halfstar(fcnal, (mulv)(T_max[t_nal] + 9))) /* +9 vanwege afronding m.g.b. 10/sec ORT's */
+    YM[fcaan] &= ~YM_HALFSTAR;
 } 
 
 
 /**********************************************************************************/
 /* correcties voor parallell langzaamverkeer en autoverkeer in deelconflict tijdens PL */
-void rhdhv_mgcor_pl_deelc(count fc1, count fc2)
+void mgcor_halfstar_deelc(count fc1, count fc2)
 {
   if (RA[fc1])
-    YM[fc2] &= ~RHDHV_YM_PL;
+    YM[fc2] &= ~YM_HALFSTAR;
 }
 
 
@@ -299,13 +320,13 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
     AT[tnldet] = (bool)(ERA[fc1] && SRV[fc1]);
   }
 
-  if (period && (G[fc1] || GL[fc1] || RHDHV_IRT(tnl) || ((tnldet != NG) && RHDHV_IRT(tnldet))))
+  if (period && (G[fc1] || GL[fc1] || TIMER_ACTIVE(tnl) || ((tnldet != NG) && TIMER_ACTIVE(tnldet))))
   {
     if (CG[fc1] < CG_MG)
     {
-      if ((YV_PL[fc2] && PR[fc2]) || (rhdhv_yv_ar_max_pl(fc2, (mulv)(T_max[tnl] + 9) && AR[fc2])))
+      if ((YV_PL[fc2] && PR[fc2]) || (yv_ar_max_halfstar(fc2, (mulv)(T_max[tnl] + 9) && AR[fc2])))
       {
-        YV[fc2] |= RHDHV_YV_KOP;
+        YV[fc2] |= YV_KOP_HALFSTAR;
       }
     }
     
@@ -313,43 +334,43 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
        aanvoer in MG komt, dan naloop ook in MG anders kan de correctie van de koppeling
        op het meeverlengen niet worden uitgevoerd. Na einde MG van aanvoer wordt naloop weer
        VG zodat na de koppeling weer kan worden verlengd */
-    RW[fc2] |= SG[fc1] ? RHDHV_RW_KOP : 0;
+    RW[fc2] |= SG[fc1] ? RW_KOP_HALFSTAR : 0;
     
-    YM[fc2] |= RHDHV_YM_KOP;
+    YM[fc2] |= YM_KOP_HALFSTAR;
   }
   
   /* meerealisatie nalooprichting */
-  rhdhv_MR(fc2, fc1, (bool)(period && ((A[fc1] &&  R[fc1]) || CV[fc1])));
+  set_special_MR(fc2, fc1, (bool)(period && ((A[fc1] &&  R[fc1]) || CV[fc1])));
   
   if(prmxnl != NG)
   {
     /* aanvoerende richting niet te snel realiseren */
     if (period && x_aanvoer(fc2, PRM[prmxnl]) && (TX_timer != TXB[PL][fc1]))
-      X[fc1] |= RHDHV_X_VOOR;
+      X[fc1] |= X_VOOR_HALFSTAR;
 
     /* tegenhouden aanvoerende richting rekening houden met geel en garantieroodtijd; x_aanvoer doet dit niet! */
     if (period && (GL[fc2] || TRG[fc2] && (TX_timer != TXB[PL][fc1])))
     {
       if (((TGL_max[fc2] + TRG_max[fc2]) - (geeltimer[fc1][fc2] + groodtimer[fc1][fc2])) > PRM[prmxnl])
-        X[fc1] |= RHDHV_X_VOOR;
+        X[fc1] |= X_VOOR_HALFSTAR;
     }
   }
   
   /* als nalooprichting worden tegengehouden, dan ook aanvoerende richting tegenhouden */
   if (period && ((RR[fc2]) && !(TX_timer == TXB[PL][fc1])))
   {
-    RR[fc1] |= RHDHV_RR_KOP;
+    RR[fc1] |= RR_KOP_HALFSTAR;
   }
   
   /* koppeling garanderen */
-  if (period && (RHDHV_IRT(tnl) || ((tnldet != NG) && RHDHV_IRT(tnldet))))
-    RR[fc2] &= ~RHDHV_RR_ALTCOR;
+  if (period && (TIMER_ACTIVE(tnl) || ((tnldet != NG) && TIMER_ACTIVE(tnldet))))
+    RR[fc2] &= ~RR_ALTCOR_HALFSTAR;
   
 }
 
 
 /**********************************************************************************/
-void rhdhv_zachtekoppeling_pl(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
+void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
 {
   /* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
   if (GL[fc2])
@@ -370,14 +391,14 @@ void rhdhv_zachtekoppeling_pl(bool period, count fc1, count fc2, count tvs, coun
     AT[tnl] = (bool)(ERA[fc1] && SRV[fc1]);
   }
 
-  if (period && ((G[fc1] && !WS[fc1]) || GL[fc1] || RHDHV_IRT(tnl) || ((tnldet != NG) && RHDHV_IRT(tnldet))))
+  if (period && ((G[fc1] && !WS[fc1]) || GL[fc1] || TIMER_ACTIVE(tnl) || ((tnldet != NG) && TIMER_ACTIVE(tnldet))))
   {
     if ((CG[fc1] < CG_MG))
     {
-      if ((YV_PL[fc2] && PR[fc2]) || (rhdhv_yv_ar_max_pl(fc2, (mulv)(T_max[tnl] + 9) && AR[fc2])))
+      if ((YV_PL[fc2] && PR[fc2]) || (yv_ar_max_halfstar(fc2, (mulv)(T_max[tnl] + 9) && AR[fc2])))
       {
-        YV[fc2] |= RHDHV_YV_KOP;
-        RW[fc2] |= SG[fc1] ? RHDHV_RW_KOP : 0;
+        YV[fc2] |= YV_KOP_HALFSTAR;
+        RW[fc2] |= SG[fc1] ? RW_KOP_HALFSTAR : 0;
       }
     }
   }
@@ -391,7 +412,7 @@ void rhdhv_zachtekoppeling_pl(bool period, count fc1, count fc2, count tvs, coun
 
 /*****************************************************************************/
 /* PP bitje opzetten en cyclische aanvraag op TXB moment als PP waar is      */
-void rhdhv_set_pp(count fc, bool condition, count value)
+void set_pp_halfstar(count fc, bool condition, count value)
 {
   if (!condition)
     return; 
@@ -409,52 +430,20 @@ void rhdhv_set_pp(count fc, bool condition, count value)
 
 /*****************************************************************************/
 /* 'variabel' TXC moment voor bijvoorbeeld gekoppelde richtingen */
-void rhdhv_var_txc(count fc, bool condition)
+void var_txc(count fc, bool condition)
 {
-  YW[fc] &= ~RHDHV_YW_VAR_TXC;
-  RW[fc] &= ~RHDHV_RW_VAR_TXC;
+  YW[fc] &= ~YW_VAR_TXC;
+  RW[fc] &= ~RW_VAR_TXC;
   
-  YW[fc] |= condition && rhdhv_tussen_txb_en_txc(fc) ? RHDHV_YW_VAR_TXC : 0;
-  RW[fc] |= condition && rhdhv_tussen_txb_en_txc(fc) ? RHDHV_RW_VAR_TXC : 0;
+  YW[fc] |= condition && tussen_txb_en_txc(fc) ? YW_VAR_TXC : 0;
+  RW[fc] |= condition && tussen_txb_en_txc(fc) ? RW_VAR_TXC : 0;
   
 }
-
-
-/*****************************************************************************/
-void rhdhv_pl_fc(count fc_a, /* eerste fasecyclus                    */ 
-                 count fc_e) /* laatste fasecyclus                   */
-{
-  register count fc;            /* loopindex */
-  
-  /* beveiliging verkeerde invoer: */
-  if (fc_a < 0)                        fc_a = 0;
-  if ((fc_e < 0) || (fc_e >= FC_MAX))  fc_e = (FC_MAX - 1);
-
-  for (fc = fc_a; fc <= fc_e; fc++)
-  {
-    /* Tegenhouden realisatie indien txa gedefinieerd: */
-    RR[fc] |= (bool)(RR_PL[fc] && !PAR[fc]) ? RHDHV_RR_PL : 0;
-    
-    /* Vasthouden wachtgroen: */
-    if (TXC_PL[fc]> 0)
-      YW[fc] |= (bool)(PR[fc] && YW_PL[fc]) ? RHDHV_YW_PL: 0;
-    
-    /* Vasthouden verlenggroen: */
-    YV[fc] |= (bool)(MK[fc] && ((PR[fc] && YV_PL[fc]) ||                /* primair      */
-                                (AR[fc] && rhdhv_yv_ar_max_pl(fc, 9))) )  /* alternatief  */
-              ? RHDHV_YV_PL: 0;
-    
-    /* Afbreken V.A. verlenggroen: */
-    FM[fc] |= (bool)(!R[fc] && !YV[fc] && PR[fc]) ? RHDHV_FM_PL: 0;
-    
-  }
-}
-
 
 /**********************************************************************************/
 /* aangepaste functie van ccol bibliotheek (plfunc.c). Naast een aanvraag wordt ook gekeken naar
    PP van een conflicterende richting. De aanvraag van een hoofdrichting wordt pas op TXB moment gezet */
-bool rhdhv_ym_max_pl(count i, mulv koppeltijd)
+bool ym_max_halfstar(count i, mulv koppeltijd)
 {
   register count n, k;
   bool ym;
@@ -491,7 +480,7 @@ bool rhdhv_ym_max_pl(count i, mulv koppeltijd)
    PP van een conflicterende richting. De aanvraag van een hoofdrichting wordt pas op TXB moment gezet.
    Tevens ook berekening uitvoeren tijdens WG en MG, want een evt nalooprichting kan door TXC moment 
    worden vastgehouden of kan meeverlengen met andere richtingen */
-bool rhdhv_yv_ar_max_pl(count i, mulv koppeltijd)
+bool yv_ar_max_halfstar(count i, mulv koppeltijd)
 {
   register count n, k;
   bool yv;
@@ -527,7 +516,7 @@ bool rhdhv_yv_ar_max_pl(count i, mulv koppeltijd)
 
 
 /*****************************************************************************/
-void rhdhv_alternatief_pl(count fc, mulv altp, bool condition)
+void alternatief_halfstar(count fc, mulv altp, bool condition)
 {
   PAR[fc] = FALSE;
     
@@ -547,7 +536,7 @@ void rhdhv_alternatief_pl(count fc, mulv altp, bool condition)
 
 /*****************************************************************************/
 /* alternatieve correcties voor paralelle voetgangsers en fietsers */
-void rhdhv_altcor_parftsvtg_pl(count fc1, count fc2, bool voorwaarde)
+void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 {
   if (voorwaarde)
   {
@@ -559,11 +548,21 @@ void rhdhv_altcor_parftsvtg_pl(count fc1, count fc2, bool voorwaarde)
     /* als 1 richting in RA staat, maar de andere nog een conflict heeft,
        dan een RR */
     /*if (kcv(fc1) && A[fc1] && !RA[fc1])
-      RR[fc2] |= RHDHV_RR_ALTCOR;
+      RR[fc2] |= RR_ALTCOR_HALFSTAR;
     if (kcv(fc2) && A[fc2] && !RA[fc2])
-      RR[fc1] |= RHDHV_RR_ALTCOR;
+      RR[fc1] |= RR_ALTCOR_HALFSTAR;
     */
   }  
+}
+
+/*****************************************************************************/
+/* retour rood wanneer richting AR heeft maar geen PAR meer */
+void reset_altreal_halfstar(void)
+{
+	count i;
+
+	for (i = 0; i<FCMAX; i++)
+		RR[i] |= R[i] && AR[i] && (!PAR[i] || ERA[i]) ? RR_ALTCOR_HALFSTAR : 0;
 }
 
 
@@ -586,7 +585,7 @@ void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg1
 
 /*****************************************************************************/
 /* alternatieve correcties voor tegengestelde richtingen */
-void rhdhv_altcor_parfts_pl(count fc1, count fc2, bool voorwaarde)
+void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 {
   if (voorwaarde)
   {
@@ -608,18 +607,35 @@ void naloopSG_halfstar(count fc1             , /* fc1 */
   RT[tkopfc1fc2] = (bool) (RA[fc1] && a_bui_fc1);
   AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
   if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) || 
-       (rhdhv_yv_ar_max_pl(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])))
+       (yv_ar_max_halfstar(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])))
   {
-    YV[fc2] |= RHDHV_YV_KOP;
+    YV[fc2] |= YV_KOP_HALFSTAR;
   }
   
   /* meerealisaties */
-  rhdhv_MR(fc2, fc1, (bool)(a_bui_fc1 && R[fc1] && (A[fc1] != RHDHV_A_WS)));
+  set_special_MR(fc2, fc1, (bool)(a_bui_fc1 && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
 }
 
 
 /**********************************************************************************/
-void rhdhv_getrapte_fietser_pl(count fc1             , /* fc1 */
+/* Deze functie is afgeleid van de ccol functie "set_MRLW()".
+*/
+void set_special_MR(count i, count j, bool condition)
+{
+	if (AA[j] && condition && !AA[i] && !BL[i] && !fkaa(i) && !RR[j] && !BL[j])
+	{
+		PR[i] = AR[i] = BR[i] = MR[i] = FALSE;
+		AA[i] = MR[i] = TRUE;              /* set actuation                */
+		A[i] |= A_MR_HALFSTAR;               /* set demand                 */
+		if (PR[j])  PR[i] = PR[j];       /* set primary realization      */
+		if (AR[j])  AR[i] = AR[j];       /* set alternative realization  */
+		if (BR[j])  BR[i] = BR[j];       /* set priority realization     */
+	}
+}
+
+
+/**********************************************************************************/
+void getrapte_fietser_halfstar(count fc1             , /* fc1 */
                                count fc2             , /* fc2 */
                                bool  a_bui_fc1       , /* buitendrukknopaanvraag fc1 */
                                bool  a_bui_fc2       , /* buitendrukknopaanvraag fc2 */
@@ -632,22 +648,22 @@ void rhdhv_getrapte_fietser_pl(count fc1             , /* fc1 */
   RT[tkopfc1fc2] = (bool)((RA[fc1] || TFG[fc1]) && a_bui_fc1);
   AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
   if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) /*|| 
-       (rhdhv_yv_ar_max_pl(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])*/))
+       (yv_ar_max_halfstar(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])*/))
   {
-    YV[fc2] |= RHDHV_YV_KOP;
+    YV[fc2] |= YV_KOP_HALFSTAR;
   }
   
   RT[tkopfc2fc1] = (bool)((RA[fc2] || TFG[fc2]) && a_bui_fc2);
   AT[tkopfc2fc1] = (bool)((ERA[fc2] && SRV[fc2]));
   if ((RT[tkopfc2fc1] || T[tkopfc2fc1]) && ((YV_PL[fc1] && PR[fc1]) /*|| 
-       (rhdhv_yv_ar_max_pl(fc1, (mulv)(T_max[tkopfc2fc1] - TFG_max[fc1])) && AR[fc1])*/))
+       (yv_ar_max_halfstar(fc1, (mulv)(T_max[tkopfc2fc1] - TFG_max[fc1])) && AR[fc1])*/))
   {
-    YV[fc1] |= RHDHV_YV_KOP;
+    YV[fc1] |= YV_KOP_HALFSTAR;
   }
     
   /* meerealisaties */
-  rhdhv_MR(fc1, fc2, (bool)(PR[fc2] && a_bui_fc2 && R[fc2] && (A[fc2] != RHDHV_A_WS)));
-  rhdhv_MR(fc2, fc1, (bool)(PR[fc1] && a_bui_fc1 && R[fc1] && (A[fc1] != RHDHV_A_WS)));
+  set_special_MR(fc1, fc2, (bool)(PR[fc2] && a_bui_fc2 && R[fc2] && (A[fc2] != A_WS_HALFSTAR)));
+  set_special_MR(fc2, fc1, (bool)(PR[fc1] && a_bui_fc1 && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
   
   /* aanvoerende richting niet te snel realiseren (maximale voorstarttijd gelijk aan nalooptijd) */
   /*if (voorstartfc1fc2 != NG)
@@ -656,7 +672,7 @@ void rhdhv_getrapte_fietser_pl(count fc1             , /* fc1 */
     {
       if (x_aanvoer(fc2, (mulv)(voorstartfc1fc2)))
       {
-        X[fc1] |= RHDHV_X_VOOR;
+        X[fc1] |= X_VOOR_HALFSTAR;
       }
     }
   }
@@ -666,7 +682,7 @@ void rhdhv_getrapte_fietser_pl(count fc1             , /* fc1 */
     {
       if (x_aanvoer(fc1, (mulv)(voorstartfc2fc1)))
       {
-        X[fc2] |= RHDHV_X_VOOR;
+        X[fc2] |= X_VOOR_HALFSTAR;
       }
     }
   }*/
@@ -675,7 +691,7 @@ void rhdhv_getrapte_fietser_pl(count fc1             , /* fc1 */
 
 /**********************************************************************************/
 /* 2e REALISATIE BINNEN SIGNAALPLAN */
-void TweedeRealisatie(count fc_1,  /* fasecyclus 1e realisatie */
+void tweederealisatie_halfstar(count fc_1,  /* fasecyclus 1e realisatie */
                       count fc_2)  /* fasecyclus 2e realisatie */
 {
     register count tot_txb1,
@@ -713,7 +729,7 @@ void TweedeRealisatie(count fc_1,  /* fasecyclus 1e realisatie */
     /* omschakelen naar 2e realisatie als 2e realisatie eerstvolgende is     */
     /* en 1e realisatie voorbij het TXD-moment is (2e wordt 1e en omgekeerd) */
     /* --------------------------------------------------------------------- */
-    if ((tot_txb2 < tot_txb1) && !rhdhv_tussen_txb_en_txd(fc_1) && !G[fc_1])
+    if ((tot_txb2 < tot_txb1) && !tussen_txb_en_txd(fc_1) && !G[fc_1])
     {
         /* oude waarden 1e realisatie even onthouden */
         txa1 = TXA[PL][fc_1];
@@ -743,144 +759,6 @@ void TweedeRealisatie(count fc_1,  /* fasecyclus 1e realisatie */
     }
 }
 
-
-/**********************************************************************************/
-/* tar_max_ple() wordt gebruikt bij de specificatie van de instructie-
- * variabele PPA[] (period alternatieve) van de fasecyclus.
- * tar_max_ple() geeft de maximum tijd in tienden van seconden die beschik-
- * baar is voor de alternatieve realisatie van de fasecyclus.
- * het aanroepen van de functie tar_max_ple() dient in de applicatiefunctie
- * application() te worden gespecificeerd.
- */
-/*   ---------xxx                                              fc_k
- *                                                             ---------xxx
- *
- *            |                          TOTXB_PL[k]          |
- *                                  | TGL_max[i]+TO_max[i][k] |
- *            | to_txb_min          |
- *            | to_max |
- *                     | tar_max_i  |
- */
-
-mulv rhdhv_tar_max_ple(count i)
-{
-  register count n, k;
-  mulv totxb_min, totxb_tmp;
-  mulv to_max, to_tmp;
-  mulv t_aa_max;
-  
-  if (!GL[i] && !TRG[i])
-  {     /* let op! i.v.m. snelheid alleen in !GL[] && !TRG[] behandeld   */
-    t_aa_max= 0;
-    totxb_min= 32767;
-    totxb_tmp= 0;
-    to_max=to_tmp= 0;
-  
-#ifdef NO_TIG
-    for (n=0; n<KFC_MAX[i]; n++)
-    {
-      k= TO_pointer[i][n];
-      if (CV[k] || G[k] && (!MG[k] || RS[k] || RW[k]) || TGG[k])
-      {
-        t_aa_max= NG;
-        break;
-      }
-      if (TO[k][i])
-      {         /* zoek grootste ontruimingstijd   */
-        to_tmp= TGL_max[k]+TO_max[k][i]-TGL_timer[k]-TO_timer[k];
-        if (to_tmp>to_max)
-        to_max= to_tmp;
-      }
-      if ((TOTXB_PL[k] || (TX_PL_timer==TXB_PL[k])) && (A[k] && R[k] || PP[k]) && !PG[k])   /* @@ 25-8-1998 */
-      {
-        totxb_tmp=TOTXB_PL[k] - TO_max[i][k] - TGL_max[i];/* @@ 9-8-1998 PG[i] gewijzigd in PG[k] */
-        if (totxb_tmp<totxb_min) /* zoek kleinste starttijd confl. fc  */
-            totxb_min= totxb_tmp;
-      }
-    }
-    for (n=KFC_MAX[i]; n<FKFC_MAX[i]; n++)
-    {
-      k = TO_pointer[i][n];
-      if ((TOTXB_PL[k] || (TX_PL_timer==TXB_PL[k])) && (A[k] && R[k] || PP[k]) && !PG[k])
-      {
-        totxb_tmp=TOTXB_PL[k];
-        if (totxb_tmp<totxb_min) /*zoek kleinste starttijd confl. fc*/
-            totxb_min= totxb_tmp;
-       }
-    }
-#else
-    for (n=0; n<FKFC_MAX[i]; n++)
-    {
-      k= TO_pointer[i][n];
-      if (TIG_max[k][i]>=0)
-      {
-        if (CV[k] || G[k] && (!MG[k] || RS[k] || RW[k]) || TGG[k])
-        {
-          t_aa_max= NG;
-          break;
-        }
-        else
-          to_tmp= TIG_max[k][i]-TIG_timer[k];
-
-        if (to_tmp>to_max)      /* zoek grootste ontruimingstijd   */
-            to_max= to_tmp;
-      }
-      if (TIG_max[i][k]>=0)
-      {
-        if ((TOTXB_PL[k] || (TX_PL_timer==TXB_PL[k])) && (A[k] && R[k] || PP[k]) && !PG[k])
-        {
-          totxb_tmp=TOTXB_PL[k] - TIG_max[i][k];
-          if (totxb_tmp<totxb_min) /*zoek kleinste starttijd confl. fc*/
-              totxb_min= totxb_tmp;
-        }
-      }
-      else if (TIG_max[i][k]==FK)
-      {
-        if ((TOTXB_PL[k] || (TX_PL_timer==TXB_PL[k])) && (A[k] && R[k] || PP[k]) && !PG[k])
-        {
-          totxb_tmp=TOTXB_PL[k];
-          if (totxb_tmp<totxb_min) /*zoek kleinste starttijd confl. fc*/
-              totxb_min= totxb_tmp;
-        }
-      }
-    }
-#endif
-    if (t_aa_max>=0)
-    {
-      t_aa_max= totxb_min - to_max;
-    }
-  }
-  else
-    t_aa_max= NG;
-
-    return t_aa_max;
-}
-
-
-/**********************************************************************************/
-/* percentage MG bij defect alle kop/lange lussen */
-
-void rhdhv_detstor_ple(count fc, count dkop, count dlang1, count dlang2, count prm_perc)
-{
-  if (dlang2 == NG)
-  {
-    if ((CIF_IS[dkop] >= CIF_DET_STORING) && (CIF_IS[dlang1] >= CIF_DET_STORING))
-    {   
-      MK[fc] |= BIT5;
-      PercentageMaxGroenTijdenSP(fc, prm_perc);
-    }
-  }
-  else
-  {
-    if ((CIF_IS[dkop] >= CIF_DET_STORING) && (CIF_IS[dlang1] >= CIF_DET_STORING) && (CIF_IS[dlang2] >= CIF_DET_STORING))
-    {   
-      MK[fc] |= BIT5;
-      PercentageMaxGroenTijdenSP(fc, prm_perc);
-    }
-  }
-  
-}
-
 /**********************************************************************************/
 void sync_pg(void)
 {
@@ -901,7 +779,7 @@ void sync_pg(void)
 /**********************************************************************************/
 /* YS_PL[] zelf opzetten bij primair startgroen, dit gebeurt nl. 
    niet als een fasecyclus voor zijn TXA-moment primair groen krijgt */
-void rhdhv_set_yspl(count fc)
+void set_yspl(count fc)
 {
   if (SG[fc] && PR[fc] && (TXA_PL[fc]> 0))  
     YS_PL[fc]= TRUE;
@@ -910,20 +788,20 @@ void rhdhv_set_yspl(count fc)
 
 /**********************************************************************************/
 /* Voorstartgroen tijdens voorstart t.o.v. sg-plan */
-void rhdhv_vs_ple(count fc, count prmtotxa, bool condition)
+void vs_ple(count fc, count prmtotxa, bool condition)
 {
   /*RS[fc] |= YS_PL[fc] && PR[fc] || 
-            ((TOTXA_PL[fc]>0) && (TOTXA_PL[fc]<PRM[prmtotxa])) ? RHDHV_RS_PLE : 0;*/
-  RS[fc] |= condition /*&& YS_PL[fc]*/ && (TXA_PL[fc]> 0) && (rhdhv_tussen_txa_en_txb(fc) && PP[fc]) ? RHDHV_RS_PLE : 0;
+            ((TOTXA_PL[fc]>0) && (TOTXA_PL[fc]<PRM[prmtotxa])) ? RS_HALFSTAR : 0;*/
+  RS[fc] |= condition /*&& YS_PL[fc]*/ && (TXA_PL[fc]> 0) && (tussen_txa_en_txb(fc) && PP[fc]) ? RS_HALFSTAR : 0;
 }
 
 
 /**********************************************************************************/
 /* Retour wachtgroen bij wachtgroen richtingen */
-void rhdhv_wg_ple(count fc, bool condition)
+void wg_ple(count fc, bool condition)
 {
   RW[fc] |= YW[fc] || (TOTXB_PL[fc] <= (TRG_max[fc]+TGL_max[fc])) &&
-            (/*(TOTXB_PL[fc]>0) ||*/ condition && !ka(fc) || (TX_timer == TXB_PL[fc])) ? RHDHV_RW_WG : 0;
+            (/*(TOTXB_PL[fc]>0) ||*/ condition && !ka(fc) || (TX_timer == TXB_PL[fc])) ? RW_WG_HALFSTAR : 0;
 
 }
 
@@ -944,118 +822,6 @@ void SetPlanTijden2R(count fc, mulv plan, mulv ta  , mulv tb  , mulv tc  , mulv 
 }
 
 
-/**********************************************************************************/
-void rhdhv_tx_change(count fc        , /* signaalgroep         */
-                     count pl        , /* actieve plan         */
-                     count ptxa1     , /* eerste a realisatie    */
-                     count ptxb1     , /* eerste b realisatie    */
-                     count ptxc1     , /* eerste c realisatie    */
-                     count ptxd1     , /* eerste d realisatie    */
-                     count ptxe1     , /* eerste e realisatie    */
-                     count ptxa2     , /* tweede a realisatie    */
-                     count ptxb2     , /* tweede b realisatie    */
-                     count ptxc2     , /* tweede c realisatie    */
-                     count ptxd2     , /* tweede d realisatie    */
-                     count ptxe2     , /* tweede e realisatie    */
-                     bool  condition) /* conditie             */
-{
-  /* als geen wissel toegepast mag worden of parameters zijn 0 */
-  if ((PRM[ptxb1] == 0) && (PRM[ptxb1] == 0) && (PRM[ptxb2] == 0) && (PRM[ptxb2] == 0))
-  {
-    return;
-  }
-  
-  /* als geen tweede realisatie mag worden uitgevoerd, dan eerste realisatie instellen */
-  if (!condition || (PRM[ptxb2] == 0) || (ptxb2==NG) || (pl!=PL))
-  {
-    if (TXA[pl][fc] != PRM[ptxa1])
-    {
-      TXA[pl][fc] = PRM[ptxa1];
-      RHDHV_COPY_2_TIG = TRUE;
-    }
-    
-    if (TXB[pl][fc] != PRM[ptxb1])
-    {
-      TXB[pl][fc] = PRM[ptxb1];
-      RHDHV_COPY_2_TIG = TRUE;
-    }
-    if (TXC[pl][fc] != PRM[ptxc1])
-    {
-      TXC[pl][fc] = PRM[ptxc1];
-      RHDHV_COPY_2_TIG = TRUE;
-    }
-    if (TXD[pl][fc] != PRM[ptxd1])
-    {
-      TXD[pl][fc] = PRM[ptxd1];
-      RHDHV_COPY_2_TIG = TRUE;
-    }
-    if (TXE[pl][fc] != PRM[ptxe1])
-    {
-      TXE[pl][fc] = PRM[ptxe1];
-      RHDHV_COPY_2_TIG = TRUE;
-    }
-    return;
-  }
-  
-  if (PL==pl)
-  {
-    if (rhdhv_pl_gebied(NG, (mulv)(PRM[ptxd1] + 1), (mulv)(PRM[ptxd2])) || 
-       (rhdhv_pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
-    {
-      if (TXA_PL[fc]!= PRM[ptxa2])
-      {
-        TXA[PL][fc] = PRM[ptxa2];
-        TXA_PL[fc] = PRM[ptxa2];
-      }
-      if (TXB_PL[fc]!= PRM[ptxb2])
-      {
-        TXB[PL][fc] = PRM[ptxb2];
-        TXB_PL[fc] = PRM[ptxb2];
-      }
-      if (TXC_PL[fc]!= PRM[ptxc2])
-      {
-        TXC[PL][fc] = PRM[ptxc2];
-        TXC_PL[fc] = PRM[ptxc2];
-      }
-      if (TXD_PL[fc]!= PRM[ptxd2])
-      {
-        TXD[PL][fc] = PRM[ptxd2];
-        TXD_PL[fc] = PRM[ptxd2];
-      }
-      //RHDHV_COPY_2_TIG = TRUE;
-      check_signalplans();
-    }
-
-    if (rhdhv_pl_gebied(NG, (mulv)(PRM[ptxd2] + 1), (mulv)(PRM[ptxd1]))|| 
-       (rhdhv_pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
-    {
-      if (TXA_PL[fc]!= PRM[ptxa1])
-      {
-        TXA[PL][fc] = PRM[ptxa1];
-        TXA_PL[fc] = PRM[ptxa1];
-      }
-      if (TXB_PL[fc]!= PRM[ptxb1])
-      {
-        TXB[PL][fc] = PRM[ptxb1];
-        TXB_PL[fc] = PRM[ptxb1];
-      }
-      if (TXC_PL[fc]!= PRM[ptxc1])
-      {
-        TXC[PL][fc] = PRM[ptxc1];
-        TXC_PL[fc] = PRM[ptxc1];
-      }
-      if (TXD_PL[fc]!= PRM[ptxd1])
-      {
-        TXD[PL][fc] = PRM[ptxd1];
-        TXD_PL[fc] = PRM[ptxd1];
-      }
-      //RHDHV_COPY_2_TIG = TRUE;
-      check_signalplans();
-    }
-  }
-}
-
-
 /*****************************************************************************/
 /* Deze functie retourneert TRUE indien de actuele cyclustijd (TX_timer) zich
    tussen s (start) en e (einde) bevindt, waarbij rekening wordt gehouden met
@@ -1063,7 +829,7 @@ void rhdhv_tx_change(count fc        , /* signaalgroep         */
    Indien tx=NG dan wordt aangenomen dat de actuele TX in de cyclus moet
    worden getoetst.
 */
-bool rhdhv_pl_gebied(mulv tx,        /* moment in de cyclus afgevraagd (mag NG) */
+bool pl_gebied(mulv tx,        /* moment in de cyclus afgevraagd (mag NG) */
                      mulv s,         /* startpunt van het gebied                */
                      mulv e)         /* eindpunt van het gebied                 */
 {
@@ -1155,9 +921,9 @@ void PercentageVerlengGroenTijdenSP(count fc, count percentage)
 
 #ifndef AUTOMAAT
 /**********************************************************************************/
-/* Functie rhdhv_dump_overslag_fc() dumpt op het moment dat een (hoofd)richting 
+/* Functie dump_overslag_fc() dumpt op het moment dat een (hoofd)richting 
    geen groen heeft op zijn TXB moment een melding in de UBER_FILE */
-bool rhdhv_txboverslag(count fc       ,  /* (hoofd)richting */
+bool txboverslag(count fc       ,  /* (hoofd)richting */
                        bool  condition)  /* voorwaarde      */
 {
   if (!condition)
@@ -1197,7 +963,7 @@ bool rhdhv_txboverslag(count fc       ,  /* (hoofd)richting */
 /**********************************************************************************/
 /* printen van de TIG tabel */
 #ifdef PRINTTIG
-void rhdhv_print_tig(void)
+void print_tig(void)
 {
   int fc, fc1;
   int fc_old = 1;

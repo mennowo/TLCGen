@@ -690,11 +690,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}])r);");
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(TRUE));");
 							}
 							else
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
@@ -722,7 +722,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{tsov}/* OV meetkriterium bij PL bedrijf */");
 						foreach (var ov in c.OVData.OVIngrepen)
 						{
-							sb.AppendLine($"{tsov}rhdhv_yv_ov_pl({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
+							sb.AppendLine($"{tsov}yv_ov_pl_halfstar({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
 						}
 						sb.AppendLine($"{ts}}}");
 					}
@@ -732,7 +732,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCMeeverlengen:
 					sb.AppendLine($"{ts}/* Resetten YM bit voor PL regelen */");
 					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}YM[fc] &= ~RHDHV_YM_PL;");
+					sb.AppendLine($"{ts}{ts}YM[fc] &= ~YM_HALFSTAR;");
 					sb.AppendLine();
 					foreach (var fc in c.Fasen)
 					{
@@ -743,15 +743,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				
 				case CCOLCodeTypeEnum.HstCSynchronisaties:
 					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}YV[fc] &= ~RHDHV_YV_KOP;");
+					sb.AppendLine($"{ts}{ts}YV[fc] &= ~YV_KOP_HALFSTAR;");
 					sb.AppendLine();
 					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
-					sb.AppendLine($"{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
-					sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
-					sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
-					sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
+					sb.AppendLine($"{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RR_KOP_HALFSTAR | RR_VS_HALFSTAR);");
+					sb.AppendLine($"{ts}{ts}RW[fc]&= ~(BIT3 | RW_KOP_HALFSTAR);");
+					sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1 | YV_KOP_HALFSTAR);");
+					sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3 | YM_KOP_HALFSTAR);");
+					sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | X_GELIJK_HALFSTAR | X_VOOR_HALFSTAR | X_DEELC_HALFSTAR);");
                     if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
                     {
 					    sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
@@ -798,7 +798,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var gs in gelijkstarttuples)
                         {
                             var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
-                            sb.Append($"{ts}rhdhv_gelijkstart_va_arg({_hpf}{hxpl}, NG, FALSE, ");
+                            sb.Append($"{ts}gelijkstart_va_arg_halfstar({_hpf}{hxpl}, NG, FALSE, ");
                             foreach(var fc in gs.Item2)
                             {
                                 sb.Append($"{_fcpf}{fc}, ");
@@ -817,7 +817,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.Append($"A[{_fcpf}{fc2}]");
                                     first = false;
                                 }
-                                sb.AppendLine($") && !G[{_fcpf}{fc}]) X[{_fcpf}{fc}] |= RHDHV_X_GELIJK;");
+                                sb.AppendLine($") && !G[{_fcpf}{fc}]) X[{_fcpf}{fc}] |= X_GELIJK_HALFSTAR;");
                             }
                             sb.AppendLine($"{ts}}}");
                         }
@@ -827,7 +827,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
 					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
-					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RHDHV_RR_ALTCOR;");
+					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_ALTCOR_HALFSTAR;");
 					sb.AppendLine();
 					sb.AppendLine($"{ts}/* PAR wordt geregeld in reg.c */");
 					sb.AppendLine();
@@ -847,7 +847,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 					sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
 					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
-					sb.AppendLine($"{ts}rhdhv_reset_altreal();");
+					sb.AppendLine($"{ts}reset_altreal_halfstar();");
 					sb.AppendLine($"{ts}");
 					sb.AppendLine($"{ts}signaalplan_alternatief();");
 					
@@ -858,8 +858,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}PP[fc] &= ~BIT4;");
 					sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
-					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RHDHV_RR_VS;");
-					sb.AppendLine($"{ts}{ts}RS[fc] &= ~RHDHV_RS_PLE;");
+					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_VS_HALFSTAR;");
+					sb.AppendLine($"{ts}{ts}RS[fc] &= ~RS_HALFSTAR;");
 					sb.AppendLine($"{ts}{ts}PP[fc] |= GL[fc] ? BIT4 : 0; /* i.v.m. overslag door conflicten */");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine($"{ts}");
@@ -870,20 +870,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}{ts} dient iedere cyclus op zijn B moment groen te worden */");
 					sb.AppendLine($"{ts}{ts}if (TXC_PL[fc] > 0)");
 					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}rhdhv_set_pp(fc, IH[{_hpf}{_hkpact}], BIT4);");
+					sb.AppendLine($"{ts}{ts}{ts}set_pp_halfstar(fc, IH[{_hpf}{_hkpact}], BIT4);");
 					sb.AppendLine($"{ts}{ts}}}");
 					sb.AppendLine($"");
 					sb.AppendLine($"{ts}{ts}/* Voorstartgroen tijdens voorstart t.o.v. sg-plan, alleen als gekoppeld wordt geregeld */");
-#warning TODO: functie rhdhv_vs_ple() moet worden nagelopen en mogelijk herzien
-                    sb.AppendLine($"{ts}{ts}rhdhv_vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");
+#warning TODO: functie vs_ple() moet worden nagelopen en mogelijk herzien
+                    sb.AppendLine($"{ts}{ts}vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");
 					sb.AppendLine($"");
 					sb.AppendLine($"{ts}{ts}/* opzetten van YS en YW tijdens halfstar bedrijf */");
 					sb.AppendLine($"{ts}{ts}/* resetten */");
-					sb.AppendLine($"{ts}{ts}RW[fc] &= ~RHDHV_RW_WG;");
-					sb.AppendLine($"{ts}{ts}YW[fc] &= ~RHDHV_YW_PL;");
+					sb.AppendLine($"{ts}{ts}RW[fc] &= ~RW_WG_HALFSTAR;");
+					sb.AppendLine($"{ts}{ts}YW[fc] &= ~YW_PL_HALFSTAR;");
 					sb.AppendLine($"{ts}{ts}/* vasthouden wachtgroen functie bij PL-bedrijf */");
-					sb.AppendLine($"{ts}{ts}RW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_RW_WG : 0; /* TXC-afhandeling */");
-					sb.AppendLine($"{ts}{ts}YW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_YW_PL : 0; /* TXC-afhandeling */");
+					sb.AppendLine($"{ts}{ts}RW[fc] |= YW_PL[fc] && tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RW_WG_HALFSTAR : 0; /* TXC-afhandeling */");
+					sb.AppendLine($"{ts}{ts}YW[fc] |= YW_PL[fc] && tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? YW_PL_HALFSTAR : 0; /* TXC-afhandeling */");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine($"");
 					sb.AppendLine($"{ts}/* primaire realisaties signaalplansturing */");
@@ -950,21 +950,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 					sb.AppendLine($"{ts}/* herstart fasebewakingstimers bij wisseling tussen ML/PL en SPL */");
 					sb.AppendLine($"{ts}/* -------------------------------------------------------------- */");
-					sb.AppendLine($"{ts}RTFB &= ~RHDHV_RTFB_PLVA;");
-					sb.AppendLine($"{ts}RTFB |= (SH[{_hpf}{_hplact}] || SH[{_hpf}{_hmlact}] || (SPL && IH[{_hpf}{_hplact}])) ? RHDHV_RTFB_PLVA: 0;");
+					sb.AppendLine($"{ts}RTFB &= ~RTFB_PLVA_HALFSTAR;");
+					sb.AppendLine($"{ts}RTFB |= (SH[{_hpf}{_hplact}] || SH[{_hpf}{_hmlact}] || (SPL && IH[{_hpf}{_hplact}])) ? RTFB_PLVA_HALFSTAR : 0;");
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCPreSystemApplication:
 					sb.AppendLine($"{ts}/* copieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
-					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || RHDHV_COPY_2_TIG)");
+					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}copy_signalplan(PL);");
 					sb.AppendLine($"{ts}{ts}create_tig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
 					sb.AppendLine($"{ts}{ts}correction_tig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
 					sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
 					sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinst}] = 0;");
-					sb.AppendLine($"{ts}{ts}RHDHV_COPY_2_TIG = FALSE;");
+					sb.AppendLine($"{ts}{ts}COPY_2_TIG = FALSE;");
 					sb.AppendLine($"{ts}{ts}CIF_PARM1WIJZAP = (s_int16) (&SCH[{_schpf}{_schinst}] - CIF_PARM1);");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine($"{ts}RTX = FALSE;");

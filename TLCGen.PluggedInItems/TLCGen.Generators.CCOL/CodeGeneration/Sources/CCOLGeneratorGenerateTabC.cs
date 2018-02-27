@@ -85,6 +85,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#endif");
             }
 
+            if (controller.HalfstarData.IsHalfstar)
+            {
+                sb.AppendLine($"{ts}#include \"tx_synch.h\"");
+                sb.AppendLine($"{ts}#include \"plevar.h\"");
+                sb.AppendLine($"{ts}#include \"halfstar.h\"");
+            }
+
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
             sb.AppendLine();

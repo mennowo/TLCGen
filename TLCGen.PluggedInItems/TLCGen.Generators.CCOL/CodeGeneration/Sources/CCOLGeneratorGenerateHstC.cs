@@ -55,7 +55,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendLine("#include \"halfstar_help.c\"");
 			sb.AppendLine("#include \"halfstar.c\"");
 			sb.AppendLine("#include \"tx_synch.h\"");
 			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)

@@ -540,7 +540,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (hasgs != null)
                         {
                             sb.Append(
-                                $"{ts}rhdhv_alternatief_pl({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}");
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}");
                             foreach (var ofc in hasgs.Item2)
                             {
                                 sb.Append(ofc);
@@ -555,7 +555,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else
                         {
                             sb.AppendLine(
-                                $"{ts}rhdhv_alternatief_pl({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}], SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]);");
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}], SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]);");
                         }
                     }
                     foreach (var nl in c.InterSignaalGroep.Nalopen)
@@ -568,7 +568,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
                             }
-                            sb.AppendLine($"{ts}rhdhv_altcor_kop_pl({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {t});");
+                            sb.AppendLine($"{ts}altcor_kop_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {t});");
                         }
                         if (nl.Type == NaloopTypeEnum.StartGroen)
                         {
