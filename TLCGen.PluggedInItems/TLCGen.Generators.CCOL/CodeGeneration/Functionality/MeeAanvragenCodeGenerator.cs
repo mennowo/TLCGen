@@ -121,13 +121,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if(hasdetafh)
                     {
                         sb.AppendLine($"{ts}/* Bewaar meldingen van detectie voor het zetten van een meeaanvraag */");
+                        var mads = new List<Tuple<string, string>>();
                         foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                         {
                             if (!ma.DetectieAfhankelijk) continue;
-                            foreach(var dm in ma.Detectoren)
+                            foreach(var d in ma.Detectoren)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]= SG[{_fcpf}{ma.FaseVan}] ? FALSE : IH[{_hpf}{_hmad}{dm.MeeaanvraagDetector}] || D[{_dpf}{dm.MeeaanvraagDetector}] && !G[{_fcpf}{ma.FaseVan}] && A[{_fcpf}{ma.FaseVan}];");
+                                if(!mads.Any(x => x.Item1 == ma.FaseVan && x.Item2 == d.MeeaanvraagDetector))
+                                {
+                                    mads.Add(new Tuple<string, string>(ma.FaseVan, d.MeeaanvraagDetector));
+                                }
                             }
+                        }
+                        foreach (var mad in mads)
+                        {
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}]= SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
                         }
                         sb.AppendLine();
                     }
