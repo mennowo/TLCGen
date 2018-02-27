@@ -235,7 +235,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Waarde CCOL_SLAVE")]
+        [Description("Waarde CCOLSLAVE")]
         [EnabledCondition("CCOLMulti")]
         public int CCOLMultiSlave
         {

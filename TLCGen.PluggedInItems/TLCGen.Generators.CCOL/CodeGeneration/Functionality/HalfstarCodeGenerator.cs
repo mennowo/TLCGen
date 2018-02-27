@@ -312,8 +312,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return 10;
 				case CCOLCodeTypeEnum.HstCMeetkriterium:
 					return 10;
-				case CCOLCodeTypeEnum.HstCDetectieStoring:
-					return 10;
 				case CCOLCodeTypeEnum.HstCMeeverlengen:
 					return 10;
 				case CCOLCodeTypeEnum.HstCSynchronisaties:
@@ -370,10 +368,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}reset_fc_halfstar();");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
-					sb.AppendLine($"{ts}/* bijhouden verlenggroentijden t.b.v. calculaties diverse functies */");
-					sb.AppendLine($"{ts}tvga_timer_halfstar();");
+                    sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}])");
+					sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}/* bijhouden verlenggroentijden t.b.v. calculaties diverse functies */");
+					sb.AppendLine($"{ts}{ts}tvga_timer_halfstar();");
+					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
-					if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
+                    if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 					{
 						sb.AppendLine($"{ts}/* tbv ov_ple */");
 						sb.AppendLine($"{ts}if (SCH[sch{_schovpriople}])");
@@ -667,75 +668,65 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}}}");
 					return sb.ToString();
 
+				case CCOLCodeTypeEnum.HstCVerlenggroen:
 				case CCOLCodeTypeEnum.HstCMaxgroen:
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}]) /* Code alleen bij PL-bedrijf */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}/* afzetten functies en BITJES van ML-bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts}TVG_max[fc] = 0;");
-					sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~(BIT2 | BIT4);");
-					sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT2;");
-					sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT2;");
-					sb.AppendLine($"{ts}{ts}{ts}/* opzetten verlengfunctie (Vasthouden verlenggroen) bij PL-bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts}YV[fc] |= MK[fc] && (YV_PL[fc] && PR[fc] || AR[fc] && yv_ar_max_pl(fc, 0)) ? BIT4 : 0;");
-					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine($"{ts}{ts}/* afzetten functies en BITJES van ML-bedrijf */");
+					sb.AppendLine($"{ts}{ts}TVG_max[fc] = 0;");
+					sb.AppendLine($"{ts}{ts}YV[fc] &= ~(BIT2 | BIT4);");
+					sb.AppendLine($"{ts}{ts}FM[fc] &= ~BIT2;");
+					sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT2;");
+					sb.AppendLine($"{ts}{ts}/* opzetten verlengfunctie (Vasthouden verlenggroen) bij PL-bedrijf */");
+					sb.AppendLine($"{ts}{ts}YV[fc] |= MK[fc] && (YV_PL[fc] && PR[fc] || AR[fc] && yv_ar_max_pl(fc, 0)) ? BIT4 : 0;");
 					sb.AppendLine($"{ts}}}");
 					return sb.ToString();
 
 				case CCOLCodeTypeEnum.HstCWachtgroen:
-					sb.AppendLine($"{ts}if (IH[h{_hplact}]) /* Code alleen bij PL-bedrijf */");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* Retour wachtgroen bij wachtgroen richtingen, let op: inclusief aanvraag! */");
+					sb.AppendLine($"{ts}/* Retour wachtgroen bij wachtgroen richtingen, let op: inclusief aanvraag! */");
 					foreach (var fc in c.Fasen)
 					{
 						if (fc.Wachtgroen != NooitAltijdAanUitEnum.Nooit)
 						{
 							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
 							{
-								sb.AppendLine($"{ts}{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}])r);");
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}])r);");
 							}
 							else
 							{
-								sb.AppendLine($"{ts}{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
-					sb.AppendLine($"{ts}}}");
 					return sb.ToString();
 
 				case CCOLCodeTypeEnum.HstCMeetkriterium:
-					sb.AppendLine($"{ts}if(IH[{_hpf}{_hplact}])");
+#warning Deze code slaat op OV: verplaatsen?
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}/* afzetten BITJES van ML-bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts}{ts} Z[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}FM[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}RW[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}RR[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}YV[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}MK[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}PP[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine($"{ts}{ts}{ts}/* afzetten BITJES van ML-bedrijf */");
+					sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
+					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
-					var tsov = c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen ? $"{ts}{ts}" : $"{ts}{ts}{ts}";
+					var tsov = c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen ? $"{ts}" : $"{ts}{ts}";
 					if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 					{
-						sb.AppendLine($"{ts}{ts}if (!SCH[{_schpf}{_schovpriople}])");
-						sb.AppendLine($"{ts}{ts}{{");
+						sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
+						sb.AppendLine($"{ts}{{");
 						sb.AppendLine($"{tsov}/* OV meetkriterium bij PL bedrijf */");
 						foreach (var ov in c.OVData.OVIngrepen)
 						{
 							sb.AppendLine($"{tsov}rhdhv_yv_ov_pl({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
 						}
-						sb.AppendLine($"{ts}{ts}}}");
+						sb.AppendLine($"{ts}}}");
 					}
-					sb.AppendLine($"{ts}}}");
 
-					return sb.ToString();
-				
-				case CCOLCodeTypeEnum.HstCDetectieStoring:
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCMeeverlengen:
@@ -754,20 +745,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}YV[fc] &= ~RHDHV_YV_KOP;");
 					sb.AppendLine();
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
-					sb.AppendLine($"{ts}{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
-					sb.AppendLine($"{ts}{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
-					sb.AppendLine($"{ts}{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
-					sb.AppendLine($"{ts}{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
+					sb.AppendLine($"{ts}{ts}RR[fc]&= ~(BIT1 | BIT2 | BIT3 | RHDHV_RR_KOP | RHDHV_RR_VS);");
+					sb.AppendLine($"{ts}{ts}RW[fc]&= ~(BIT3 | RHDHV_RW_KOP);");
+					sb.AppendLine($"{ts}{ts}YV[fc]&= ~(BIT1 | RHDHV_YV_KOP);");
+					sb.AppendLine($"{ts}{ts}YM[fc]&= ~(BIT3 | RHDHV_YM_KOP);");
+					sb.AppendLine($"{ts}{ts} X[fc]&= ~(BIT1 | BIT2 |BIT3 | RHDHV_X_GELIJK | RHDHV_X_VOOR | RHDHV_X_DEELC);");
                     if(c.InterSignaalGroep.Gelijkstarten.Any() || c.InterSignaalGroep.Voorstarten.Any())
                     {
-					    sb.AppendLine($"{ts}{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
+					    sb.AppendLine($"{ts}{ts}KR[fc]&= ~(BIT0 | BIT1 |BIT2 | BIT3 |BIT4 |BIT5 |BIT6 | BIT7);");
                     }
-					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
 					
 					foreach (var nl in c.InterSignaalGroep.Nalopen)
@@ -786,18 +775,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 xnl = $"{_prmpf}{_prmxnl}";
                             }
-							sb.AppendLine($"{ts}{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
+							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
 						}
 
                         if(nl.Type == NaloopTypeEnum.StartGroen)
                         {
                             if (nl.DetectieAfhankelijk && nl.Detectoren.Any())
                             {
-                                sb.AppendLine($"{ts}{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar});");
+                                sb.AppendLine($"{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar});");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar});");
+                                sb.AppendLine($"{ts}naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar});");
                             }
                         }
 					}
@@ -809,17 +798,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var gs in gelijkstarttuples)
                         {
                             var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
-                            sb.Append($"{ts}{ts}rhdhv_gelijkstart_va_arg({_hpf}{hxpl}, NG, FALSE, ");
+                            sb.Append($"{ts}rhdhv_gelijkstart_va_arg({_hpf}{hxpl}, NG, FALSE, ");
                             foreach(var fc in gs.Item2)
                             {
                                 sb.Append($"{_fcpf}{fc}, ");
                             }
                             sb.AppendLine("END);");
-                            sb.AppendLine($"{ts}{ts}if (IH[{_hpf}{hxpl}])");
-                            sb.AppendLine($"{ts}{ts}{{");
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{hxpl}])");
+                            sb.AppendLine($"{ts}{{");
                             foreach(var fc in gs.Item2)
                             {
-                                sb.Append($"{ts}{ts}{ts}if ((");
+                                sb.Append($"{ts}{ts}if ((");
                                 var first = true;
                                 foreach (var fc2 in gs.Item2)
                                 {
@@ -830,11 +819,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine($") && !G[{_fcpf}{fc}]) X[{_fcpf}{fc}] |= RHDHV_X_GELIJK;");
                             }
-                            sb.AppendLine($"{ts}{ts}}}");
+                            sb.AppendLine($"{ts}}}");
                         }
                     }
-
-                    sb.AppendLine($"{ts}}}");
 
                     return sb.ToString();
 				
@@ -858,99 +845,95 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{ts}");
 					}
 
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
-					sb.AppendLine($"{ts}{ts}/* -------------------------------------------------------- */");
-					sb.AppendLine($"{ts}{ts}rhdhv_reset_altreal();");
-					sb.AppendLine($"{ts}{ts}");
-					sb.AppendLine($"{ts}{ts}signaalplan_alternatief();");
-					sb.AppendLine($"{ts}}}");
-
+					sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
+					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
+					sb.AppendLine($"{ts}rhdhv_reset_altreal();");
+					sb.AppendLine($"{ts}");
+					sb.AppendLine($"{ts}signaalplan_alternatief();");
+					
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
-					sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}]) /* Code alleen bij PL-bedrijf */");
+					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					sb.AppendLine($"{ts}{{");
+					sb.AppendLine($"{ts}{ts}PP[fc] &= ~BIT4;");
+					sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
+					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RHDHV_RR_VS;");
+					sb.AppendLine($"{ts}{ts}RS[fc] &= ~RHDHV_RS_PLE;");
+					sb.AppendLine($"{ts}{ts}PP[fc] |= GL[fc] ? BIT4 : 0; /* i.v.m. overslag door conflicten */");
+					sb.AppendLine($"{ts}}}");
+					sb.AppendLine($"{ts}");
+					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+					sb.AppendLine($"{ts}{{");
+					sb.AppendLine($"{ts}{ts}/* PP opzetten en cyclische aanvraag op TXB moment bij PP ");
+					sb.AppendLine($"{ts}{ts}{ts} Iedere richting met een C moment is onderdeel van een coordinatie en");
+					sb.AppendLine($"{ts}{ts}{ts} dient iedere cyclus op zijn B moment groen te worden */");
+					sb.AppendLine($"{ts}{ts}if (TXC_PL[fc] > 0)");
+					sb.AppendLine($"{ts}{ts}{{");
+					sb.AppendLine($"{ts}{ts}{ts}rhdhv_set_pp(fc, IH[{_hpf}{_hkpact}], BIT4);");
+					sb.AppendLine($"{ts}{ts}}}");
+					sb.AppendLine($"");
+					sb.AppendLine($"{ts}{ts}/* Voorstartgroen tijdens voorstart t.o.v. sg-plan, alleen als gekoppeld wordt geregeld */");
+#warning TODO: functie rhdhv_vs_ple() moet worden nagelopen en mogelijk herzien
+                    sb.AppendLine($"{ts}{ts}rhdhv_vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");
+					sb.AppendLine($"");
+					sb.AppendLine($"{ts}{ts}/* opzetten van YS en YW tijdens halfstar bedrijf */");
+					sb.AppendLine($"{ts}{ts}/* resetten */");
+					sb.AppendLine($"{ts}{ts}RW[fc] &= ~RHDHV_RW_WG;");
+					sb.AppendLine($"{ts}{ts}YW[fc] &= ~RHDHV_YW_PL;");
+					sb.AppendLine($"{ts}{ts}/* vasthouden wachtgroen functie bij PL-bedrijf */");
+					sb.AppendLine($"{ts}{ts}RW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_RW_WG : 0; /* TXC-afhandeling */");
+					sb.AppendLine($"{ts}{ts}YW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_YW_PL : 0; /* TXC-afhandeling */");
+					sb.AppendLine($"{ts}}}");
+					sb.AppendLine($"");
+					sb.AppendLine($"{ts}/* primaire realisaties signaalplansturing */");
+					sb.AppendLine($"{ts}/* --------------------------------------- */");
+					if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen)
+					{
+						sb.AppendLine($"{ts}signaalplan_primair();");
+					}
+					else
+					{
+						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{ts}{ts}signaalplan_primair_ov_ple();");
+						sb.AppendLine($"{ts}}}");
+						sb.AppendLine($"{ts}else");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{ts}{ts}signaalplan_primair();");
+						sb.AppendLine($"{ts}}}");
+					}
+					sb.AppendLine();
+					sb.AppendLine($"{ts}/* afsluiten primaire aanvraaggebieden */");
+					sb.AppendLine($"{ts}/* ----------------------------------- */");
+					if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen)
+					{
+						sb.AppendLine($"{ts}set_pg_primair_fc();");
+					}
+					else
+					{
+						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{ts}{ts}set_pg_primair_fc_ov_ple();");
+						sb.AppendLine($"{ts}}}");
+						sb.AppendLine($"{ts}else");
+						sb.AppendLine($"{ts}{{");
+						sb.AppendLine($"{ts}{ts}set_pg_primair_fc();");
+						sb.AppendLine($"{ts}}}");
+					}
+					sb.AppendLine();
+					sb.AppendLine($"{ts}/* reset PG bij planwisseling */");
+					sb.AppendLine($"{ts}/* -------------------------- */");
+					sb.AppendLine($"{ts}/* anders kan PG op blijven staan, waardoor richting eenmaal wordt overgeslagen en de regeling kan vastlopen */");
+					sb.AppendLine($"{ts}if (SH[{_hpf}{_hmlact}] || SH[{_hpf}{_hplact}] || SPL)");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT4;");
-					sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~BIT5;");
-					sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~RHDHV_RR_VS;");
-					sb.AppendLine($"{ts}{ts}{ts}RS[fc] &= ~RHDHV_RS_PLE;");
-					sb.AppendLine($"{ts}{ts}{ts}PP[fc] |= GL[fc] ? BIT4 : 0; /* i.v.m. overslag door conflicten */");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"{ts}{ts}");
-					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}/* PP opzetten en cyclische aanvraag op TXB moment bij PP ");
-					sb.AppendLine($"{ts}{ts}{ts}{ts} Iedere richting met een C moment is onderdeel van een coordinatie en");
-					sb.AppendLine($"{ts}{ts}{ts}{ts} dient iedere cyclus op zijn B moment groen te worden */");
-					sb.AppendLine($"{ts}{ts}{ts}if (TXC_PL[fc] > 0)");
-					sb.AppendLine($"{ts}{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}rhdhv_set_pp(fc, IH[{_hpf}{_hkpact}], BIT4);");
-					sb.AppendLine($"{ts}{ts}{ts}}}");
-					sb.AppendLine($"");
-					sb.AppendLine($"{ts}{ts}{ts}/* Voorstartgroen tijdens voorstart t.o.v. sg-plan, alleen als gekoppeld wordt geregeld */");
-					sb.AppendLine($"{ts}{ts}{ts}rhdhv_vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");
-					sb.AppendLine($"");
-					sb.AppendLine($"{ts}{ts}{ts}/* opzetten van YS en YW tijdens halfstar bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts}/* resetten */");
-					sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~RHDHV_RW_WG;");
-					sb.AppendLine($"{ts}{ts}{ts}YW[fc] &= ~RHDHV_YW_PL;");
-					sb.AppendLine($"{ts}{ts}{ts}/* vasthouden wachtgroen functie bij PL-bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts}RW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_RW_WG : 0; /* TXC-afhandeling */");
-					sb.AppendLine($"{ts}{ts}{ts}YW[fc] |= YW_PL[fc] && rhdhv_tussen_txb_en_txc(fc) && (TXC[PL][fc] > 0) ? RHDHV_YW_PL : 0; /* TXC-afhandeling */");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"");
-					sb.AppendLine($"{ts}{ts}/* primaire realisaties signaalplansturing */");
-					sb.AppendLine($"{ts}{ts}/* --------------------------------------- */");
-					if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen)
-					{
-						sb.AppendLine($"{ts}{ts}signaalplan_primair();");
-					}
-					else
-					{
-						sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schovpriople}])");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}signaalplan_primair_ov_ple();");
-						sb.AppendLine($"{ts}{ts}}}");
-						sb.AppendLine($"{ts}{ts}else");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}signaalplan_primair();");
-						sb.AppendLine($"{ts}{ts}}}");
-					}
-					sb.AppendLine();
-					sb.AppendLine($"{ts}{ts}/* afsluiten primaire aanvraaggebieden */");
-					sb.AppendLine($"{ts}{ts}/* ----------------------------------- */");
-					if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen)
-					{
-						sb.AppendLine($"{ts}{ts}set_pg_primair_fc();");
-					}
-					else
-					{
-						sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schovpriople}])");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}set_pg_primair_fc_ov_ple();");
-						sb.AppendLine($"{ts}{ts}}}");
-						sb.AppendLine($"{ts}{ts}else");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}set_pg_primair_fc();");
-						sb.AppendLine($"{ts}{ts}}}");
-					}
-					sb.AppendLine();
-					sb.AppendLine($"{ts}{ts}/* reset PG bij planwisseling */");
-					sb.AppendLine($"{ts}{ts}/* -------------------------- */");
-					sb.AppendLine($"{ts}{ts}/* anders kan PG op blijven staan, waardoor richting eenmaal wordt overgeslagen en de regeling kan vastlopen */");
-					sb.AppendLine($"{ts}{ts}if (SH[{_hpf}{_hmlact}] || SH[{_hpf}{_hplact}] || SPL)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}{ts}PG[fc] = FALSE;");
-					sb.AppendLine($"{ts}{ts}{ts}}}");
+					sb.AppendLine($"{ts}{ts}{ts}PG[fc] = FALSE;");
 					sb.AppendLine($"{ts}{ts}}}");
 					sb.AppendLine($"{ts}}}");
-					return sb.ToString();
+
+                    return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCPostApplication:
 					sb.AppendLine($"{ts}/* Knipperpuls generator */");

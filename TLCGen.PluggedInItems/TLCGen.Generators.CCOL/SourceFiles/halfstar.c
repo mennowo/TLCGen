@@ -580,13 +580,6 @@ void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg1
     
     if (a_bui_fc1 && !PAR[fc1])
       PAR[fc2] = FALSE;
-    
-    /* als PAR bitje ingetrokken, dan als in RA ook RR instructie */
-    /* kla wordt in applicatie uitgevoerd */
-    /*if (R[fc2])
-      dtv_set_rr_par(fc1);
-    if (R[fc1])
-      dtv_set_rr_par(fc2);*/
   }
 }
 
@@ -1141,6 +1134,24 @@ void PercentageMaxGroenTijdenSP(count fc, count percentage)
    }
 }
 
+
+/**********************************************************************************/
+void PercentageVerlengGroenTijdenSP(count fc, count percentage)
+{
+	mulv maxg;
+
+#ifdef TX_PL_TE
+	maxg = (TX_PL_max + TXD_PL[fc] - TXB_PL[fc]) % TX_PL_max;
+#else
+	maxg = ((TX_PL_max + TXD_PL[fc] - TXB_PL[fc]) % TX_PL_max) * 10;
+#endif
+
+	if (G[fc] && CV[fc] && !(MK[fc] & ~BIT5)) {
+		if ((TVGA_timer[fc])>(mulv)(((long)PRM[percentage] * (long)maxg) / 100)) {
+			MK[fc] &= ~BIT5;
+		}
+	}
+}
 
 #ifndef AUTOMAAT
 /**********************************************************************************/

@@ -30,7 +30,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.Append(GenerateHstCMeetkriterium(c));
 	        sb.Append(GenerateHstCMeeverlengen(c));
 	        sb.Append(GenerateHstCSynchronisaties(c));
-	        sb.Append(GenerateHstCVersneldPrimair(c));
 	        sb.Append(GenerateHstCAlternatief(c));
 	        sb.Append(GenerateHstCRealisatieAfhandeling(c));
 	        sb.Append(GenerateHstCFileVerwerking(c));
@@ -41,7 +40,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.Append(GenerateHstCPostDumpApplication(c));
 	        sb.Append(GenerateHstCApplicationTig1(c));
 	        sb.Append(GenerateHstCApplicationTig2(c));
-	        sb.Append(GenerateHstCSignaalPlanInstellingen(c));
 
             return sb.ToString();
         }
@@ -279,22 +277,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             return sb.ToString();
 		}
-		
-	    private string GenerateHstCVersneldPrimair(ControllerModel c)
-	    {
-		    var sb = new StringBuilder();
-						
-		    sb.AppendLine("void VersneldPrimair_halfstar(void)");
-		    sb.AppendLine("{");
-
-            sb.AppendLine();
-            sb.AppendLine($"{ts}VersneldPrimair_halfstar_Add();");
-
-            sb.AppendLine("}");
-            sb.AppendLine();
-
-            return sb.ToString();
-	    }
 
 	    private string GenerateHstCAlternatief(ControllerModel c)
 		{

@@ -32,6 +32,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateTabCControlDefaults(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlParameters(controller));
+            if(controller.HalfstarData.IsHalfstar && controller.HalfstarData.SignaalPlannen.Any())
+            {
+                sb.AppendLine();
+                sb.Append(GenerateHstCSignaalPlanInstellingen(controller));
+            }
 
             return sb.ToString();
         }

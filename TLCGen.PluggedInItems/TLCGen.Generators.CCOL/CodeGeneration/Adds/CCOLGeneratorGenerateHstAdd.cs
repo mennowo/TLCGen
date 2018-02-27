@@ -76,11 +76,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("void VersneldPrimair_halfstar_Add()");
-            sb.AppendLine("{");
-            sb.AppendLine("");
-            sb.AppendLine("}");
-            sb.AppendLine();
             sb.AppendLine("void Alternatief_halfstar_Add()");
             sb.AppendLine("{");
             sb.AppendLine("");
