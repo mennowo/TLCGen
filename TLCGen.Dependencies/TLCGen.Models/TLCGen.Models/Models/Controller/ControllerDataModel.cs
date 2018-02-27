@@ -45,6 +45,9 @@ namespace TLCGen.Models
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
         public SynchronisatieTypeEnum NaloopSynchronisatieType { get; set; }
 
+        public bool CCOLMulti { get; set; }
+        public int CCOLMultiSlave { get; set; }
+
         public int HuidigeVersieMajor { get; set; }
         public int HuidigeVersieMinor { get; set; }
         public int HuidigeVersieRevision { get; set; }

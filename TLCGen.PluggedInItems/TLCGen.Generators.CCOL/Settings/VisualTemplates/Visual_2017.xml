@@ -59,7 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IFNOTHS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IFHS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
     </Link>

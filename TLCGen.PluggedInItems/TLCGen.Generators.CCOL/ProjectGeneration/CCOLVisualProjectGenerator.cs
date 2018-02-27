@@ -82,6 +82,14 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                                 !plugin.Controller.InterSignaalGroep.Voorstarten.Any())
                                 return null;
                             break;
+                        case "HS":
+                            if (!plugin.Controller.HalfstarData.IsHalfstar)
+                                return null;
+                            break;
+                        case "NOTHS":
+                            if (plugin.Controller.HalfstarData.IsHalfstar)
+                                return null;
+                            break;
                     }
                 }
                 writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z]+__", "$1");

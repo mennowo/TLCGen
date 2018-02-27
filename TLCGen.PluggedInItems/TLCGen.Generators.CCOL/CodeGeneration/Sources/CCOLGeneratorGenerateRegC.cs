@@ -146,6 +146,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"static int fc;");
             sb.AppendLine();
+            if (controller.Data.CCOLMulti)
+            {
+                sb.AppendLine($"int CCOL_SLAVE = {controller.Data.CCOLMultiSlave};");
+                sb.AppendLine();
+            }
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCTop])
             {

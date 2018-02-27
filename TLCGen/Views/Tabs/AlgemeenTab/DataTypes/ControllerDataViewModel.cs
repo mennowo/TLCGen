@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Controls;
 
 namespace TLCGen.ViewModels
 {
@@ -173,7 +174,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.AansturingWaitsignalen = value;
-                RaisePropertyChanged<object>("AansturingWaitsignalen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AansturingWaitsignalen), broadcast: true);
             }
         }
 
@@ -184,7 +185,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.FixatieMogelijk = value;
-                RaisePropertyChanged<object>("FixatieMogelijk", broadcast: true);
+                RaisePropertyChanged<object>(nameof(FixatieMogelijk), broadcast: true);
             }
         }
 
@@ -195,7 +196,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.FixatieData.BijkomenTijdensFixatie = value;
-                RaisePropertyChanged<object>("BijkomenTijdensFixatie", broadcast: true);
+                RaisePropertyChanged<object>(nameof(BijkomenTijdensFixatie), broadcast: true);
             }
         }
 
@@ -206,7 +207,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.TypeGroentijden = value;
-                RaisePropertyChanged<object>("TypeGroentijden", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TypeGroentijden), broadcast: true);
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
             }
         }
@@ -218,7 +219,31 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.Data.NaloopSynchronisatieType = value;
-                RaisePropertyChanged<object>("NaloopSynchronisatieType", broadcast: true);
+                RaisePropertyChanged<object>(nameof(NaloopSynchronisatieType), broadcast: true);
+            }
+        }
+
+        [Category("CCOL specifieke opties")]
+        [Description("Gekoppelde regeling (CCOLMS)")]
+        public bool CCOLMulti
+        {
+            get => _Controller?.Data?.CCOLMulti ?? false;
+            set
+            {
+                _Controller.Data.CCOLMulti = value;
+                RaisePropertyChanged<object>(nameof(CCOLMulti), broadcast: true);
+            }
+        }
+
+        [Description("Waarde CCOL_SLAVE")]
+        [EnabledCondition("CCOLMulti")]
+        public int CCOLMultiSlave
+        {
+            get => _Controller?.Data?.CCOLMultiSlave ?? 0;
+            set
+            {
+                _Controller.Data.CCOLMultiSlave = value;
+                RaisePropertyChanged<object>(nameof(CCOLMultiSlave), broadcast: true);
             }
         }
 
