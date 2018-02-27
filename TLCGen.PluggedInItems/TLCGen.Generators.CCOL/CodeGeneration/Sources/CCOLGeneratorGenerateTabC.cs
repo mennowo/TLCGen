@@ -212,16 +212,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 string prevfasefrom = "";
                 foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                 {
-                    if(prevfasefrom == "")
+                    var ff = conflict.GetFaseFromDefine();
+                    var ft = conflict.GetFaseToDefine();
+                    if (ff == ft) continue;
+
+                    // Cause an empty line in between signalgroups
+                    if (prevfasefrom == "")
                     {
-                        prevfasefrom = conflict.GetFaseFromDefine();
+                        prevfasefrom = ff;
                     }
-                    if(prevfasefrom != conflict.GetFaseFromDefine())
+                    if(prevfasefrom != ff)
                     {
-                        prevfasefrom = conflict.GetFaseFromDefine();
+                        prevfasefrom = ff;
                         sb.AppendLine();
                     }
-                    sb.AppendLine($"{ts}TO_max[{conflict.GetFaseFromDefine()}][{conflict.GetFaseToDefine()}] = {conflict.SerializedWaarde};");
+
+                    sb.AppendLine($"{ts}TO_max[{ff}][{ft}] = {conflict.SerializedWaarde};");
                 }
             }
 

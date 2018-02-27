@@ -817,6 +817,8 @@ namespace TLCGen.ViewModels
             {
                 for (var fcvm_to = 0; fcvm_to < fccount; ++fcvm_to)
                 {
+                    if (ConflictMatrix[fcvm_from, fcvm_to].ReferencesSelf) continue;
+
                     if (ConflictMatrix[fcvm_from, fcvm_to].HasConflict || ConflictMatrix[fcvm_from, fcvm_to].HasGarantieConflict)
                     {
                         _Controller.InterSignaalGroep.Conflicten.Add(ConflictMatrix[fcvm_from, fcvm_to].Conflict);
