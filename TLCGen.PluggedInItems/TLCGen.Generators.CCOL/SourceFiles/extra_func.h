@@ -36,6 +36,6 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
 
 extern mulv FC_type[];
-int Knipper_1Hz = 0;
+extern int Knipper_1Hz;
 
 #endif
