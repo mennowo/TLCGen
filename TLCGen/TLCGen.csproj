@@ -110,7 +110,11 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GelijkstartView.xaml.cs">
+    <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\GelijkstartView.xaml.cs">
+      <DependentUpon>GelijkstartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\GelijkstartViewModel.cs">
       <DependentUpon>GelijkstartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMassaDetectieMeldingVoorwaardeView.xaml.cs">
@@ -123,7 +127,6 @@
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMassaDetectieMeldingView.xaml.cs">
       <DependentUpon>OVIngreepMassaDetectieMeldingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\GelijkstartViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVHDFaseDataOverviewViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMassaDetectieMeldingViewModel.cs">
       <DependentUpon>OVIngreepMassaDetectieMeldingView.xaml</DependentUpon>
@@ -450,7 +453,6 @@
     <Compile Include="Views\Tabs\FasenTab\DataTypes\FaseCyclusView.xaml.cs">
       <DependentUpon>FaseCyclusView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Resources\ConflictBackgroundConverter.cs" />
     <Compile Include="Views\Resources\EnumBooleanConverter.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\Controls\DetectorenLijstView.xaml.cs">
       <DependentUpon>DetectorenLijstView.xaml</DependentUpon>
@@ -541,7 +543,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GelijkstartView.xaml">
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\GelijkstartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

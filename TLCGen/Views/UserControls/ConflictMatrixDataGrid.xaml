@@ -13,37 +13,18 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.InputBindings>
         <KeyBinding Command="{Binding Path=DeleteValueCommand}" Key="Delete" />
+        <KeyBinding Command="{Binding Path=CheckItCommand}" Key="F2" />
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <local:ConflictBackgroundConverter x:Key="BackgroundConverter" />
-        <local:SelectedDisplayTypeToVisibilityConverter x:Key="DisplayTypeToVisibilityConverter" />
-        <local:SynchCheckBoxVisibilityConverter x:Key="CheckBoxVisConverter" />
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
         <DataTemplate x:Key="MatrixCellTemplate" DataType="vm:SynchronisatieViewModel">
-            <Grid IsEnabled="{Binding Path=NotReferencingSelf}">
+            <Grid IsEnabled="{Binding Path=NotReferencingSelf}" Background="{Binding Path=ConflictBackground}">
                 <TextBlock
                     Margin="0" Padding="0" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    IsEnabled="{Binding Path=IsEnabled}"
-                    Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
-                    Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                    Foreground="{Binding Path=ConflictForeground}"
+                    Text="{Binding Path=ConflictValue,Mode=OneWay}">
                 </TextBlock>
-                <CheckBox
-                    Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    IsChecked="{Binding Path=IsCoupled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    <CheckBox.Visibility>
-                        <MultiBinding Converter="{StaticResource CheckBoxVisConverter}">
-                            <Binding Path="DisplayType" Mode="OneWay" />
-                            <Binding Path="IsEnabled" Mode="OneWay" />
-                        </MultiBinding>
-                    </CheckBox.Visibility>
-                </CheckBox>
-                <Grid.Background>
-                    <MultiBinding Converter="{StaticResource BackgroundConverter}">
-                        <Binding Path="ReferencesSelf" Mode="OneWay" />
-                        <Binding Path="IsEnabled" Mode="OneWay" />
-                        <Binding Path="DisplayType" Mode="OneWay" />
-                        <Binding Path="ConflictValue" Mode="OneWay" />
-                    </MultiBinding>
-                </Grid.Background>
+                <Border Margin="2" Background="{Binding Path=SynchronisatieIndicatorBrush}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="MatrixCellEditingTemplate" DataType="vm:SynchronisatieViewModel">
@@ -53,19 +34,10 @@
                         Padding="0"
                         TextAlignment="Center"
                         IsEnabled="{Binding Path=IsEnabled}"
+                        Visibility="{Binding Path=DisplayTypeTimings,Converter={StaticResource bool2vis}}"
                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                        Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeConflict}}"
                         Text="{Binding Path=ConflictValue,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
-                <CheckBox
-                    Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    IsChecked="{Binding Path=IsCoupled,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                    <CheckBox.Visibility>
-                        <MultiBinding Converter="{StaticResource CheckBoxVisConverter}">
-                            <Binding Path="DisplayType" Mode="OneWay" />
-                            <Binding Path="IsEnabled" Mode="OneWay" />
-                        </MultiBinding>
-                    </CheckBox.Visibility>
-                </CheckBox>
+                <Border Margin="2" Background="{Binding Path=SynchronisatieIndicatorBrush}" />
             </Grid>
         </DataTemplate>
     </UserControl.Resources>

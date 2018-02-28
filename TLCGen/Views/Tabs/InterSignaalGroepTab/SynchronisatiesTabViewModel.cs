@@ -38,6 +38,7 @@ namespace TLCGen.ViewModels
         private IntersignaalGroepTypeEnum _DisplayType;
 
         RelayCommand _DeleteValueCommand;
+        RelayCommand _CheckItCommand;
         RelayCommand _AddGarantieConvertValue;
         RelayCommand _RemoveGarantieConvertValue;
         RelayCommand _SetGarantieValuesCommand;
@@ -432,6 +433,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ICommand CheckItCommand
+        {
+            get
+            {
+                if (_CheckItCommand == null)
+                {
+                    _CheckItCommand = new RelayCommand(CheckItCommand_Executed, CheckItCommand_CanExecute);
+                }
+                return _CheckItCommand;
+            }
+        }
+
         public ICommand SetGarantieValuesCommand
         {
             get
@@ -481,6 +494,19 @@ namespace TLCGen.ViewModels
         bool DeleteValueCommand_CanExecute(object prm)
         {
             return SelectedSynchronisatie != null;
+        }
+
+        void CheckItCommand_Executed(object prm)
+        {
+            var b = SelectedSynchronisatie.IsCoupled;
+            SelectedSynchronisatie.IsCoupled = !b;
+        }
+
+        bool CheckItCommand_CanExecute(object prm)
+        {
+            return SelectedSynchronisatie != null &&
+                DisplayType != IntersignaalGroepTypeEnum.Conflict &&
+                DisplayType != IntersignaalGroepTypeEnum.GarantieConflict;
         }
 
         private bool SetGarantieValuesCommand_CanExecute(object obj)

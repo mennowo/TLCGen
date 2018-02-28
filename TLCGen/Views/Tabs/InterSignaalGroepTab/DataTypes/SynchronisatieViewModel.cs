@@ -10,6 +10,7 @@ using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.ViewModels.Enums;
+using System.Windows.Media;
 
 namespace TLCGen.ViewModels
 {
@@ -129,8 +130,16 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged("IsCoupled");
                 RaisePropertyChanged("HasNoCoupling");
                 RaisePropertyChanged("IsEnabled");
+                RaisePropertyChanged(nameof(ConflictForeground));
+                RaisePropertyChanged(nameof(ConflictBackground));
+                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
+                RaisePropertyChanged(nameof(DisplayTypeTimings));
             }
         }
+
+        public bool DisplayTypeTimings => 
+            DisplayType == IntersignaalGroepTypeEnum.Conflict ||
+            DisplayType == IntersignaalGroepTypeEnum.GarantieConflict;
 
         public int SynchronisationValue
         {
@@ -198,6 +207,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
                 RaisePropertyChanged(nameof(HasConflict));
                 RaisePropertyChanged(nameof(IsEnabled));
+                RaisePropertyChanged(nameof(ConflictBackground));
             }
         }
 
@@ -217,7 +227,7 @@ namespace TLCGen.ViewModels
             }
             set
             {
-                if(IsCoupled || ReferencesSelf || !IsEnabled)
+                if(ReferencesSelf || !IsEnabled)
                 {
 					throw new InvalidOperationException("Coupled or self-referenced synch cell cannot have a conflict value");
 				}
@@ -235,6 +245,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(ConflictValue), broadcast: true);
                 RaisePropertyChanged(nameof(HasConflict));
                 RaisePropertyChanged(nameof(IsEnabled));
+                RaisePropertyChanged(nameof(ConflictBackground));
             }
         }
 
@@ -268,6 +279,7 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged<object>(nameof(IsCoupled), broadcast: true);
                 RaisePropertyChanged(nameof(HasNoCoupling));
+                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -322,8 +334,9 @@ namespace TLCGen.ViewModels
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                RaisePropertyChanged<object>("IsCoupled", broadcast: true);
-                RaisePropertyChanged("HasNoCoupling");
+                RaisePropertyChanged<object>(nameof(IsCoupled), broadcast: true);
+                RaisePropertyChanged(nameof(HasNoCoupling));
+                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -333,8 +346,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _HasConflict = value;
-                RaisePropertyChanged("HasConflict");
-                RaisePropertyChanged("IsEnabled");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsEnabled));
             }
         }
 
@@ -410,8 +423,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _HasOppositeVoorstart = value;
-                RaisePropertyChanged("HasOppositeVoorstart");
-                RaisePropertyChanged("IsEnabled");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsEnabled));
+                RaisePropertyChanged(nameof(ConflictBackground));
+                RaisePropertyChanged(nameof(SynchronisatieIndicatorBrush));
             }
         }
 
@@ -496,6 +511,78 @@ namespace TLCGen.ViewModels
         public bool AllowCoupling
         {
             get { return !ReferencesSelf && !HasConflict && !HasGarantieConflict; }
+        }
+
+        public Brush SynchronisatieIndicatorBrush
+        {
+            get
+            {
+                if (ReferencesSelf) return null;
+                if (!IsEnabled) return Brushes.LightGray;
+                if (IsCoupled) return Brushes.LightGreen;
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush ConflictForeground
+        {
+            get
+            {
+                switch (DisplayType)
+                {
+                    case IntersignaalGroepTypeEnum.Conflict:
+                    case IntersignaalGroepTypeEnum.GarantieConflict:
+                        return Brushes.Black;
+                    default:
+                        return Brushes.Gray;
+                }
+            }
+        }
+
+        public Brush ConflictBackground
+        {
+            get
+            {
+                if (ReferencesSelf) return Brushes.DarkGray;
+                if (!IsEnabled) return Brushes.LightGray;
+                switch (DisplayType)
+                {
+                    case IntersignaalGroepTypeEnum.Conflict:
+                    case IntersignaalGroepTypeEnum.GarantieConflict:
+                        if (!string.IsNullOrEmpty(ConflictValue))
+                        {
+                            if (!Int32.TryParse(ConflictValue, out int i))
+                            {
+                                switch (ConflictValue)
+                                {
+                                    case "*":
+                                        return Brushes.OrangeRed;
+                                    case "FK":
+                                        return Brushes.LightYellow;
+                                    case "GK":
+                                        return Brushes.DarkSeaGreen;
+                                    case "GKL":
+                                        return Brushes.MediumAquamarine;
+                                    default:
+                                        return Brushes.OrangeRed;
+                                }
+                            }
+                            else
+                                return Brushes.LightBlue;
+                        }
+                        return null;
+                    case IntersignaalGroepTypeEnum.Gelijkstart:
+                    case IntersignaalGroepTypeEnum.Naloop:
+                    case IntersignaalGroepTypeEnum.Voorstart:
+                    case IntersignaalGroepTypeEnum.Meeaanvraag:
+                        if (IsEnabled)
+                            return null;
+                        else
+                            return Brushes.LightGray;
+                    default:
+                        return null;
+                }
+            }
         }
 
         #endregion // Properties
