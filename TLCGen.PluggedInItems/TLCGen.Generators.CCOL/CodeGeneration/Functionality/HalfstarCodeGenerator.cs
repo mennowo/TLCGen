@@ -690,11 +690,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(TRUE));");
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(TRUE), (bool)(TRUE));");
 							}
 							else
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
