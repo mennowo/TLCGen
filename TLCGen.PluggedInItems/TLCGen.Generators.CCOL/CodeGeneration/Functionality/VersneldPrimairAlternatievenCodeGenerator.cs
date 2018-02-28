@@ -193,10 +193,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"    PFPR[{_fcpf}{fc.FaseCyclus}] = ml_fpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmlfpr}{fc.FaseCyclus}], PRML, ML, MLMAX);");
                     sb.AppendLine("");
                     sb.AppendLine($"{ts}VersneldPrimair_Add();");
-	                if (c.HalfstarData.IsHalfstar)
-	                {
-		                sb.AppendLine($"{ts}VersneldPrimair_halfstar();");
-	                }
                     sb.AppendLine("");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}set_FPRML(fc, PRML, ML, MLMAX, (bool)PFPR[fc]);");

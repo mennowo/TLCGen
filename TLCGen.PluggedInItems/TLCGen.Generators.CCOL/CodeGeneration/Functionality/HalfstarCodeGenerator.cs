@@ -71,7 +71,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _hplhulpdienst;
 		private string _schovpriople;
 		private string _prmplxper;
-		private string _tin;
+		private string _prmtx;
+		private string _prmtx_D;
+        private string _tin;
 		private string _hxpl;
 		private string _schinst;
 		private string _homschtegenh;
@@ -105,6 +107,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(new CCOLElement($"{_uspl}{pl.Naam}", CCOLElementTypeEnum.Uitgang));
                     _MyBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}{_uspl}{pl.Naam}"));
+
+                    foreach(var fcpl in pl.Fasen)
+                    {
+                        if (fcpl.B2.HasValue && fcpl.B2 != 0 && fcpl.D2.HasValue && fcpl.D2 != 0)
+                        {
+                            var times = new []{ fcpl.A1, fcpl.B1, fcpl.C1, fcpl.D1, fcpl.E1, fcpl.A2, fcpl.B2, fcpl.C2, fcpl.D2, fcpl.E2 };
+                            var moments = new [] { "A", "B", "C", "D", "E", "A", "B", "C", "D", "E" };
+                            var realisation = 1;
+                            for (int i = 0; i < 10; ++i)
+                            {
+                                if (i == 5) realisation = 2;
+                                _myElements.Add(new CCOLElement(
+                                    $"{_prmtx}{moments[i]}{realisation}{pl.Naam}_{fcpl.FaseCyclus}",
+                                    times[i] ?? 0,
+                                    CCOLElementTimeTypeEnum.None,
+                                    CCOLElementTypeEnum.Parameter,
+                                    CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmtx_D, realisation == 1 ? "Eerste" : "Tweede", pl.Naam, fcpl.FaseCyclus, moments[i])));
+                            }
+                        }
+                    }
                 }
 
                 _MyBitmapOutputs.Add(new CCOLIOElement(hsd.PlActUitgang, $"{_uspf}{_usplact}"));
@@ -362,8 +384,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if (c.InterSignaalGroep.Gelijkstarten.Any() ||
 					    c.InterSignaalGroep.Voorstarten.Any())
 					{
+						sb.AppendLine($"{ts}{ts}init_realisation_timers();");
 						sb.AppendLine($"{ts}{ts}reset_realisation_timers();");
-					}
+                    }
 					sb.AppendLine($"{ts}{ts}sync_pg();");
 					sb.AppendLine($"{ts}{ts}reset_fc_halfstar();");
 					sb.AppendLine($"{ts}}}");
@@ -863,7 +886,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}PP[fc] |= GL[fc] ? BIT4 : 0; /* i.v.m. overslag door conflicten */");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine($"{ts}");
-					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+
+                    #region Dubbele realisaties
+
+                    if (c.HalfstarData.SignaalPlannen.SelectMany(x => x.Fasen).Any(x => x.B2.HasValue && x.B2 != 0 && x.D2.HasValue && x.D2 != null))
+                    {
+                        sb.AppendLine($"{ts}/* Tweede realisaties (middels parameters) */");
+                        sb.AppendLine();
+                        foreach (var pl in c.HalfstarData.SignaalPlannen)
+                        {
+                            sb.AppendLine($"{ts}/* {pl.Naam} */");
+                            foreach (var fcpl in pl.Fasen)
+                            {
+                                if (fcpl.B2.HasValue && fcpl.B2 != 0 && fcpl.D2.HasValue && fcpl.D2 != 0)
+                                {
+                                    sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, (bool)(IH[{_hpf}{_hplact}]));");
+                                }
+                            }
+                            sb.AppendLine();
+                        }
+                    }
+
+                    #endregion // Dubbele realisaties
+
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}/* PP opzetten en cyclische aanvraag op TXB moment bij PP ");
 					sb.AppendLine($"{ts}{ts}{ts} Iedere richting met een C moment is onderdeel van een coordinatie en");

@@ -386,14 +386,6 @@ void reset_fc_halfstar(void)
 	}
 }
 
-void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te)
-{
-    TXA[plan][fc] = ta;
-    TXB[plan][fc] = tb;
-    TXC[plan][fc] = tc;
-    TXD[plan][fc] = td;
-    TXE[plan][fc] = te;
-}
 
 /*****************************************************************************/
 /* PP bitje opzetten en cyclische aanvraag op TXB moment als PP waar is      */
@@ -448,6 +440,51 @@ void set_yspl(count fc)
 {
 	if (SG[fc] && PR[fc] && (TXA_PL[fc]> 0))
 		YS_PL[fc] = TRUE;
+}
+
+
+/* dubbele realisatie per richting per plan. Let op, er wordt gebruik gemaakt van baseparameters:
+voor de eerste realisatie de eerste TXA parameter en voor de tweede realisatie de tweede TXA
+parameter meegeven */
+void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, bool condition)
+{
+	if (prm_tweede_txa != NG)
+	{
+		rhdhv_tx_change(fc, pl, (prm_eerste_txa + 0),
+			(prm_eerste_txa + 1),
+			(prm_eerste_txa + 2),
+			(prm_eerste_txa + 3),
+			(prm_eerste_txa + 4),
+			(prm_tweede_txa + 0),
+			(prm_tweede_txa + 1),
+			(prm_tweede_txa + 2),
+			(prm_tweede_txa + 3),
+			(prm_tweede_txa + 4),
+			condition);
+	}
+	else
+	{
+		rhdhv_tx_change(fc, pl, (prm_eerste_txa + 0),
+			(prm_eerste_txa + 1),
+			(prm_eerste_txa + 2),
+			(prm_eerste_txa + 3),
+			(prm_eerste_txa + 4),
+			(NG),
+			(NG),
+			(NG),
+			(NG),
+			(NG),
+			condition);
+	}
+}
+
+void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te)
+{
+    TXA[plan][fc] = ta;
+    TXB[plan][fc] = tb;
+    TXC[plan][fc] = tc;
+    TXD[plan][fc] = td;
+    TXE[plan][fc] = te;
 }
 
 /*****************************************************************************/
@@ -530,6 +567,128 @@ bool tussen_txb_en_txd(count fc)
     }
 
     return (FALSE);
+}
+
+/**********************************************************************************/
+void rhdhv_tx_change(count fc, /* signaalgroep         */
+	count pl, /* actieve plan         */
+	count ptxa1, /* eerste a realisatie    */
+	count ptxb1, /* eerste b realisatie    */
+	count ptxc1, /* eerste c realisatie    */
+	count ptxd1, /* eerste d realisatie    */
+	count ptxe1, /* eerste e realisatie    */
+	count ptxa2, /* tweede a realisatie    */
+	count ptxb2, /* tweede b realisatie    */
+	count ptxc2, /* tweede c realisatie    */
+	count ptxd2, /* tweede d realisatie    */
+	count ptxe2, /* tweede e realisatie    */
+	bool  condition) /* conditie             */
+{
+	/* als geen wissel toegepast mag worden of parameters zijn 0 */
+	if ((PRM[ptxb1] == 0) && (PRM[ptxb1] == 0) && (PRM[ptxb2] == 0) && (PRM[ptxb2] == 0))
+	{
+		return;
+	}
+
+	/* als geen tweede realisatie mag worden uitgevoerd, dan eerste realisatie instellen */
+	if (!condition || (PRM[ptxb2] == 0) || (ptxb2 == NG) || (pl != PL))
+	{
+		if (TXA[pl][fc] != PRM[ptxa1])
+		{
+			TXA[pl][fc] = PRM[ptxa1];
+			COPY_2_TIG = TRUE;
+		}
+
+		if (TXB[pl][fc] != PRM[ptxb1])
+		{
+			TXB[pl][fc] = PRM[ptxb1];
+			COPY_2_TIG = TRUE;
+		}
+		if (TXC[pl][fc] != PRM[ptxc1])
+		{
+			TXC[pl][fc] = PRM[ptxc1];
+			COPY_2_TIG = TRUE;
+		}
+		if (TXD[pl][fc] != PRM[ptxd1])
+		{
+			TXD[pl][fc] = PRM[ptxd1];
+			COPY_2_TIG = TRUE;
+		}
+		if (TXE[pl][fc] != PRM[ptxe1])
+		{
+			TXE[pl][fc] = PRM[ptxe1];
+			COPY_2_TIG = TRUE;
+		}
+		return;
+	}
+
+	if (PL == pl)
+	{
+		if (pl_gebied(NG, (mulv)(PRM[ptxd1] + 1), (mulv)(PRM[ptxd2])) ||
+			(pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
+		{
+			if (TXA_PL[fc] != PRM[ptxa2])
+			{
+				TXA[PL][fc] = PRM[ptxa2];
+				TXA_PL[fc] = PRM[ptxa2];
+			}
+			if (TXB_PL[fc] != PRM[ptxb2])
+			{
+				TXB[PL][fc] = PRM[ptxb2];
+				TXB_PL[fc] = PRM[ptxb2];
+			}
+			if (TXC_PL[fc] != PRM[ptxc2])
+			{
+				TXC[PL][fc] = PRM[ptxc2];
+				TXC_PL[fc] = PRM[ptxc2];
+			}
+			if (TXD_PL[fc] != PRM[ptxd2])
+			{
+				TXD[PL][fc] = PRM[ptxd2];
+				TXD_PL[fc] = PRM[ptxd2];
+			}
+			check_signalplans();
+		}
+
+		if (pl_gebied(NG, (mulv)(PRM[ptxd2] + 1), (mulv)(PRM[ptxd1])) ||
+			(pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
+		{
+			if (TXA_PL[fc] != PRM[ptxa1])
+			{
+				TXA[PL][fc] = PRM[ptxa1];
+				TXA_PL[fc] = PRM[ptxa1];
+			}
+			if (TXB_PL[fc] != PRM[ptxb1])
+			{
+				TXB[PL][fc] = PRM[ptxb1];
+				TXB_PL[fc] = PRM[ptxb1];
+			}
+			if (TXC_PL[fc] != PRM[ptxc1])
+			{
+				TXC[PL][fc] = PRM[ptxc1];
+				TXC_PL[fc] = PRM[ptxc1];
+			}
+			if (TXD_PL[fc] != PRM[ptxd1])
+			{
+				TXD[PL][fc] = PRM[ptxd1];
+				TXD_PL[fc] = PRM[ptxd1];
+			}
+			check_signalplans();
+		}
+		if ((PRM[ptxe1] > 0) && (PRM[ptxe2] > 0))
+		{
+			if (TX_timer == PRM[ptxe1])
+			{
+				TXE[PL][fc] = PRM[ptxe2];
+				TXE_PL[fc] = PRM[ptxe2];
+			}
+			if (TX_timer == PRM[ptxe2])
+			{
+				TXE[PL][fc] = PRM[ptxe1];
+				TXE_PL[fc] = PRM[ptxe1];
+			}
+		}
+	}
 }
 
 /*****************************************************************************/

@@ -1511,6 +1511,12 @@
             <Type>Uitgang</Type>
             <Description>Verklikking actief plan per plan</Description>
           </Setting>
+          <Setting>
+            <Default>tx</Default>
+            <Setting>tx</Setting>
+            <Type>Parameter</Type>
+            <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

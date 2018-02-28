@@ -48,19 +48,23 @@ bool pl_gebied(mulv tx, mulv s, mulv e);
 void reset_altreal_halfstar(void);
 void reset_fc_halfstar(void);
 void reset_realisation_timers(void);
+void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, bool condition);
 void set_special_MR(count i, count j, bool condition);
 void SetPlanTijden(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mulv te);
-bool tussen_txa_en_txb(count fc);
-bool tussen_txb_en_txc(count fc);
-bool tussen_txb_en_txd(count fc);
-void tvga_timer_halfstar(void);
-void tweederealisatie_halfstar(count fc_1, count fc_2);
 void set_pp_halfstar(count fc, bool condition, count value);
 void set_ym_pl_halfstar(count fc, bool condition);
 void set_yspl(count fc);
 void SetPlanTijden2R(count fc, mulv plan, mulv ta  , mulv tb  , mulv tc  , mulv td  , mulv te  , 
                      count fc_2,          mulv ta_2, mulv tb_2, mulv tc_2, mulv td_2, mulv te_2);
 void sync_pg(void);
+bool tussen_txa_en_txb(count fc);
+bool tussen_txb_en_txc(count fc);
+bool tussen_txb_en_txd(count fc);
+void tvga_timer_halfstar(void);
+void tweederealisatie_halfstar(count fc_1, count fc_2);
+void rhdhv_tx_change(count fc, count pl, 
+	                 count ptxa1, count ptxb1, count ptxc1, count ptxd1, count ptxe1, 
+	                 count ptxa2, count ptxb2, count ptxc2, count ptxd2, count ptxe2, bool condition);
 bool txb_gemist(count i, int marge);
 void var_txc(count fc, bool condition);
 void Verlengroen_na_Meeverlenggroen_PL(count fc, count prmvgmg);
