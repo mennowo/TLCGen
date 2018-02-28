@@ -63,6 +63,8 @@
     <Compile Include="Messages\NameChangedMessage.cs" />
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
     <Compile Include="Messages\HDIngrepenChangedMessage.cs" />
+    <Compile Include="Messages\OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage.cs" />
+    <Compile Include="Messages\OVIngreepMassaDetectieObjectActionMessage.cs" />
     <Compile Include="Messages\OVIngrepenChangedMessage.cs" />
     <Compile Include="Messages\OVIngreepSignaalGroepParametersChangedMessage.cs" />
     <Compile Include="Messages\PeriodenChangedMessage.cs" />
@@ -72,7 +74,6 @@
     <Compile Include="Messages\UpdateTabsEnabledMessage.cs" />
     <Compile Include="Messages\FasenChangedMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\GetDetectorListReqeust.cs" />
     <Compile Include="Requests\IsFasenConflictingRequest.cs" />
     <Compile Include="Requests\IsElementIdentifierUniqueRequest.cs" />
     <Compile Include="Requests\PrepareForGenerationRequest.cs" />

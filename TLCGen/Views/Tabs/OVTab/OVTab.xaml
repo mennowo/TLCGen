@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type vm:OVOverzichtTabViewModel}">
             <local:OVOverzichtTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:OVMassaDetectieTabViewModel}">
+            <local:OVMassaDetectieTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl ItemsSource="{Binding Path=TabItems}" 

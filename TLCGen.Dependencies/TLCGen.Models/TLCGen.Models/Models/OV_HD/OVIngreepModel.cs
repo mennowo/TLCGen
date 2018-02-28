@@ -17,7 +17,8 @@ namespace TLCGen.Models
 
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
-        //public bool MassaDetectie { get; set; }
+        public bool MassaDetectie { get; set; }
+        public OVIngreepMassaDetectieDataModel MassaDetectieData { get; set; }
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
 
@@ -48,10 +49,7 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
-
-        //[XmlArrayItem(ElementName = "MassaDetectieMelding")]
-        //public List<OVIngreepMassaDetectieMelding> MassaDetectieMeldingen { get; set; }
-
+        
         #endregion // Properties
 
         #region IComparable
@@ -73,47 +71,9 @@ namespace TLCGen.Models
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
-
-            //MassaDetectieMeldingen = new List<OVIngreepMassaDetectieMelding>();
+            MassaDetectieData = new OVIngreepMassaDetectieDataModel();
         }
 
         #endregion // Constructor
     }
-
-    //public class OVIngreepMassaDetectieMelding
-    //{
-    //    OVIngreepTypeEnum Type { get; set; }
-    //    public List<OVIngreepMassaDetectieMeldingVoorwaardenSet> VoorwaardenSets { get; set; }
-    //}
-    //
-    //public class OVIngreepMassaDetectieMeldingVoorwaardenSet
-    //{
-    //    public int Rangorde { get; set; }
-    //
-    //    [XmlArrayItem(ElementName = "Voorwaarde")]
-    //    public List<OVIngreepMassaDetectieMeldingVoorwaarde> Voorwaarden { get; set; }
-    //}
-    //
-    //public class OVIngreepMassaDetectieMeldingVoorwaarde
-    //{
-    //    public OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum Type { get; set; }
-    //    public string Detector { get; set; }
-    //}
-    //
-    ////[TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    //public enum OVIngreepTypeEnum
-    //{
-    //    Inmelding,
-    //    Uitmelding
-    //}
-    //
-    ////[TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    //public enum OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum
-    //{
-    //    DetectorStart,
-    //    DetectorBezet,
-    //    DetectorEind,
-    //    DetectorGeenStoring,
-    //    DetectorStoring
-    //}
 }

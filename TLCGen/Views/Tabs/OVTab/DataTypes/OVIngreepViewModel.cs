@@ -86,15 +86,16 @@ namespace TLCGen.ViewModels
             }
         }
 
-        //public bool MassaDetectie
-        //{
-        //    get { return _OVIngreep.MassaDetectie; }
-        //    set
-        //    {
-        //        _OVIngreep.MassaDetectie = value;
-        //        RaisePropertyChanged<object>("MassaDetectie", broadcast: true);
-        //    }
-        //}
+        [Description("Massa detectie")]
+        public bool MassaDetectie
+        {
+            get { return _OVIngreep.MassaDetectie; }
+            set
+            {
+                _OVIngreep.MassaDetectie = value;
+                RaisePropertyChanged<object>("MassaDetectie", broadcast: true);
+            }
+        }
 
         [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type
