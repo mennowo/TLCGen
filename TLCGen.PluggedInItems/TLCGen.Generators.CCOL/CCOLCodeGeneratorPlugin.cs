@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,109 +84,75 @@ namespace TLCGen.Generators.CCOL
 
         public void LoadSettings()
         {
+            CCOLGeneratorSettingsProvider.Default.Settings =
+                TLCGenSerialization.DeSerializeData<CCOLGeneratorSettingsModel>(
+                    ResourceReader.GetResourceTextFile("TLCGen.Generators.CCOL.Settings.ccolgendefaults.xml", this));
+
             var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var setpath = Path.Combine(appdatpath, @"TLCGen\CCOLGeneratorSettings\");
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
-	        if (File.Exists(setfile))
+	        
+            // read custom settings and overwrite defaults
+            if (File.Exists(setfile))
             {
-                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(setfile);
-	            var defsetfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml");
-				if (File.Exists(defsetfile))
-				{
-					var corrected = false;
-					var updated = false;
-					var defaultSettings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(defsetfile);
-					foreach (var def in defaultSettings.CodePieceGeneratorSettings)
-					{
-						var found = false;
-						foreach (var def2 in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
-						{
-							if (def.Item1 == def2.Item1)
-							{
-								found = true;
-								if (def.Item2.ClassName != def2.Item2.ClassName)
-								{
-									def2.Item2.ClassName = def.Item2.ClassName;
-									corrected = true;
-								}
-								foreach (var s in def.Item2.Settings)
-								{
-									bool foundSet = false;
-									foreach (var s2 in def2.Item2.Settings)
-									{
-										if (s.Type == s2.Type &&
-										    s.Default == s2.Default)
-										{
-											foundSet = true;
-										}
-									}
-									if (!foundSet)
-									{
-										def2.Item2.Settings.Add(s);
-										updated = true;
-									}
-								}
-								var remSs = new List<CCOLGeneratorCodeStringSettingModel>();
-								foreach (var s in def2.Item2.Settings)
-								{
-									bool foundSet = false;
-									foreach (var s2 in def.Item2.Settings)
-									{
-										if (s.Type == s2.Type &&
-										    s.Default == s2.Default)
-										{
-											foundSet = true;
-										}
-									}
-									if (!foundSet)
-									{
-										updated = true;
-										remSs.Add(s);
-									}
-								}
-								foreach (var s in remSs)
-								{
-									def2.Item2.Settings.Remove(s);
-								}
-							}
-						}
-						if (!found)
-						{
-							CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Add(def);
-							updated = false;
-						}
-					}
-					var remDs = new List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>>();
-					foreach (var d in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
-					{
-						bool found = false;
-						foreach (var d2 in defaultSettings.CodePieceGeneratorSettings)
-						{
-							if (d.Item1 == d2.Item1)
-							{
-								found = true;
-							}
-						}
-						if (!found)
-						{
-							updated = true;
-							remDs.Add(d);
-						}
-					}
-					foreach (var d in remDs)
-					{
-						CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Remove(d);
-					}
-					if (updated) MessageBox.Show("CCOL defaults updated", "CCOL defaults updated");
-					if (corrected) MessageBox.Show("CCOL defaults corrected", "CCOL defaults corrected");
-				}
-			}
-            else
-            {
-                CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
+                var userSettings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(setfile);
+
+                // always overwrite visual settings
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden = userSettings.VisualSettings.CCOLIncludesPaden;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibs = userSettings.VisualSettings.CCOLLibs;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath = userSettings.VisualSettings.CCOLLibsPath;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLPreprocessorDefinitions = userSettings.VisualSettings.CCOLPreprocessorDefinitions;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath = userSettings.VisualSettings.CCOLResPath;
+
+                // always overwrite visual tabspace and others
+                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
+                CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources = userSettings.AlwaysOverwriteSources;
+                CCOLGeneratorSettingsProvider.Default.Settings.TabSpace = userSettings.TabSpace;
+
+                // prefixes: overwrite where needed
+                if (userSettings.Prefixes.Any())
+                {
+                    foreach (var pf in userSettings.Prefixes)
+                    {
+                        foreach (var pf2 in CCOLGeneratorSettingsProvider.Default.Settings.Prefixes)
+                        {
+                            if (pf.Default == pf2.Default)
+                            {
+                                pf2.Setting = pf.Setting;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // element name settings: overwrite where needed
+                if (userSettings.CodePieceGeneratorSettings.Any())
+                {
+                    foreach (var cpg in userSettings.CodePieceGeneratorSettings)
+                    {
+                        foreach (var cpg2 in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
+                        {
+                            if (cpg.Item1 == cpg2.Item1)
+                            {
+                                foreach(var set in cpg.Item2.Settings)
+                                {
+                                    foreach (var set2 in cpg2.Item2.Settings)
+                                    {
+                                        if (set.Default == set2.Default)
+                                        {
+                                            set2.Setting = set.Setting;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
             _Generator.LoadSettings();
 
             if (_alwaysOverwriteSourcesMenuItem == null)
@@ -215,7 +182,68 @@ namespace TLCGen.Generators.CCOL
             if (!Directory.Exists(setpath))
                 Directory.CreateDirectory(setpath);
             var setfile = Path.Combine(setpath, @"ccolgensettings.xml");
-            TLCGenSerialization.Serialize<CCOLGeneratorSettingsModel>(setfile, CCOLGeneratorSettingsProvider.Default.Settings);
+
+            var settings = new CCOLGeneratorSettingsModel();
+
+            // always save visual settings
+            settings.VisualSettings.CCOLIncludesPaden = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden;
+            settings.VisualSettings.CCOLLibs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibs;
+            settings.VisualSettings.CCOLLibsPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath;
+            settings.VisualSettings.CCOLPreprocessorDefinitions = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLPreprocessorDefinitions;
+            settings.VisualSettings.CCOLResPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath;
+
+            // always save visual tabspace and others
+            settings.AlterAddHeadersWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+            settings.AlwaysOverwriteSources = CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
+            settings.TabSpace = CCOLGeneratorSettingsProvider.Default.Settings.TabSpace;
+
+            // save prefixes where needed
+            foreach(var pf in CCOLGeneratorSettingsProvider.Default.Settings.Prefixes)
+            {
+                if(pf.Setting != pf.Default)
+                {
+                    settings.Prefixes.Add(new CCOLGeneratorCodeStringSettingModel
+                    {
+                        Type = CCOLGeneratorSettingTypeEnum.Prefix,
+                        Description = pf.Description,
+                        Default = pf.Default,
+                        Setting = pf.Setting
+                    });
+                }
+            }
+
+            // save element naming where needed
+            foreach (var cpg in CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings)
+            {
+                var ncpg = new CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>
+                {
+                    Item1 = cpg.Item1,
+                    Item2 = new CCOLGeneratorClassWithSettingsModel()
+                };
+                ncpg.Item2.ClassName = cpg.Item2.ClassName;
+                ncpg.Item2.Description = cpg.Item2.Description;
+                ncpg.Item2.Settings = new List<CCOLGeneratorCodeStringSettingModel>();
+
+                foreach(var s in cpg.Item2.Settings)
+                {
+                    if(s.Setting != s.Default)
+                    {
+                        ncpg.Item2.Settings.Add(new CCOLGeneratorCodeStringSettingModel
+                        {
+                            Type = s.Type,
+                            Default = s.Default,
+                            Description = s.Description,
+                            Setting = s.Setting
+                        });
+                    }
+                }
+                if (ncpg.Item2.Settings.Any())
+                {
+                    settings.CodePieceGeneratorSettings.Add(ncpg);
+                }
+            }
+
+            TLCGenSerialization.Serialize(setfile, settings);
         }
 
 		#endregion // ITLCGenHasSettings
@@ -279,8 +307,10 @@ namespace TLCGen.Generators.CCOL
                     };
 	                _resetSettingsMenuItem.Click += (o, e) =>
 	                {
-						CCOLGeneratorSettingsProvider.Default.Settings = TLCGenSerialization.DeSerialize<CCOLGeneratorSettingsModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\ccolgendefaults.xml"));
-					};
+						CCOLGeneratorSettingsProvider.Default.Settings =
+                            TLCGenSerialization.DeSerializeData<CCOLGeneratorSettingsModel>(
+                                ResourceReader.GetResourceTextFile("TLCGen.Generators.CCOL.Settings.ccolgendefaults.xml", this));
+                    };
 					_pluginMenuItem.Items.Add(sitem1);
                     _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
                     _pluginMenuItem.Items.Add(_alterAddHeadersWhileGeneratingMenuItem);

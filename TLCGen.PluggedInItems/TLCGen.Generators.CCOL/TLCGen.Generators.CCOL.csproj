@@ -160,10 +160,9 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Settings\ccolgendefaults.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Include="Settings\ccolgendefaults.xml">
       <SubType>Designer</SubType>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Settings\VisualTemplates\Readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

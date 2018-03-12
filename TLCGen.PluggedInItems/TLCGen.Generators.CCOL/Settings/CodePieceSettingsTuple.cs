@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.Settings
     [Serializable]
     public class CodePieceSettingsTuple<T1, T2>
     {
-        CodePieceSettingsTuple() { }
+        public CodePieceSettingsTuple() { }
 
         [XmlAttribute(AttributeName = "CodePiece")]
         public T1 Item1 { get; set; }

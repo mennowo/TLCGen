@@ -910,7 +910,7 @@ namespace TLCGen.ViewModels
 
             Directory.SetCurrentDirectory(tmpCurDir);
 
-#if !DEBUG1
+#if !DEBUG
             // Find out if there is a newer version available via Wordpress REST API
             Task.Run(() =>
             {

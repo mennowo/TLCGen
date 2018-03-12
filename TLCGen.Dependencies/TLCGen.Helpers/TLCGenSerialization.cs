@@ -14,6 +14,33 @@ namespace TLCGen.Helpers
 {
     public static class TLCGenSerialization
     {
+        #region Xml Data Serialization
+
+        public static T DeSerializeData<T>(string data)
+        {
+            if (string.IsNullOrWhiteSpace(data))
+                return default(T);
+
+            T t = default(T);
+
+            try
+            {
+                using (TextReader sr = new StringReader(data))
+                {
+                    var serializer = new XmlSerializer(typeof(T));
+                        t = (T)serializer.Deserialize(sr);
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Data formaat onjuist. Controleer de data.", "Fout bij lezen data.");
+            }
+
+            return t;
+        }
+
+        #endregion // Xml Data Serialization
+
         #region Xml File Serialization
 
         public static bool Serialize<T>(string file, T t)
