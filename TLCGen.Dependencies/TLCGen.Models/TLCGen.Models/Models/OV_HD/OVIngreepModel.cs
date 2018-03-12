@@ -17,8 +17,6 @@ namespace TLCGen.Models
 
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
-        public bool MassaDetectie { get; set; }
-        public OVIngreepMassaDetectieDataModel MassaDetectieData { get; set; }
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
 
@@ -71,7 +69,6 @@ namespace TLCGen.Models
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
-            MassaDetectieData = new OVIngreepMassaDetectieDataModel();
         }
 
         #endregion // Constructor

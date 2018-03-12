@@ -137,12 +137,6 @@
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMassaDetectieMeldingVoorwaardeViewModel.cs">
       <DependentUpon>OVIngreepMassaDetectieMeldingVoorwaardeView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabView.xaml.cs">
-      <DependentUpon>OVMassaDetectieTabView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabViewModel.cs">
-      <DependentUpon>OVMassaDetectieTabView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml.cs">
       <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
     </Compile>
@@ -556,10 +550,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\OVTab\DataTypes\OVIngreepMassaDetectieMeldingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

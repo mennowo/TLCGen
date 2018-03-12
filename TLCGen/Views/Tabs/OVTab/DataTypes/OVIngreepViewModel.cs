@@ -86,16 +86,55 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Massa detectie")]
-        public bool MassaDetectie
-        {
-            get { return _OVIngreep.MassaDetectie; }
-            set
-            {
-                _OVIngreep.MassaDetectie = value;
-                RaisePropertyChanged<object>("MassaDetectie", broadcast: true);
-            }
-        }
+        //public bool _VerlosAanvraag;
+        //[Description("Verlos aanvraag")]
+        //public bool VerlosAanvraag
+        //{
+        //    get { return _VerlosAanvraag; }
+        //    set
+        //    {
+        //        _VerlosAanvraag = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //public string _VerlosDetector;
+        //[Description("Verlos detector")]
+        //[EnabledCondition("VerlosAanvraag")]
+        //public string VerlosDetector
+        //{
+        //    get { return _VerlosDetector; }
+        //    set
+        //    {
+        //        _VerlosDetector = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //public bool _Wissel;
+        //[Description("Wissel")]
+        //public bool Wissel
+        //{
+        //    get { return _Wissel; }
+        //    set
+        //    {
+        //        _Wissel = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //public string _WisselDetector;
+        //[Description("Wissel detector")]
+        //[EnabledCondition("Wissel")]
+        //public string WisselDetector
+        //{
+        //    get { return _WisselDetector; }
+        //    set
+        //    {
+        //        _WisselDetector = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type

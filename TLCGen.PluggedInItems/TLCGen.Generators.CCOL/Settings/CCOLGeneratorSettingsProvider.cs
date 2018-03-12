@@ -46,6 +46,7 @@ namespace TLCGen.Generators.CCOL.Settings
 			int i = 1;
 			foreach(var e in elementnames)
 			{
+                if (e == null) continue;
 				descr = descr.Replace("_E" + i + "_", e);
 				++i;
 			}

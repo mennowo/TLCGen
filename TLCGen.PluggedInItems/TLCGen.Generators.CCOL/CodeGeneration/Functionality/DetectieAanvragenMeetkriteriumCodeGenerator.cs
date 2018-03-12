@@ -56,7 +56,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         set = 3;
                         break;
                 }
-                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter, 
+                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter,  
 					CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmda_D, dm.Naam)));
             }
 
