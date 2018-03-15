@@ -18,9 +18,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
         
 #pragma warning disable 0649
-        private string _hmad; // help element meeaanvraag detector name
-        private string _prmtypema; // help element meeaanvraag detector name
-        private string _tuitgestma; // help element meeaanvraag detector name
+        private CCOLGeneratorCodeStringSettingModel _hmad; // help element meeaanvraag detector name
+        private CCOLGeneratorCodeStringSettingModel _prmtypema; // help element meeaanvraag detector name
+        private CCOLGeneratorCodeStringSettingModel _tuitgestma; // help element meeaanvraag detector name
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -33,7 +33,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach(var dm in ma.Detectoren)
                     {
-                        var elem = new CCOLElement($"{_hmad}{dm.MeeaanvraagDetector}", CCOLElementTypeEnum.HulpElement);
+                        var elem =
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_hmad}{dm.MeeaanvraagDetector}",
+                                _hmad, dm.MeeaanvraagDetector);
                         if (_MyElements.Count == 0 || _MyElements.All(x => x.Naam != elem.Naam))
                         {
                             _MyElements.Add(elem);
@@ -44,12 +47,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if ((ma.Type == MeeaanvraagTypeEnum.Startgroen || ma.TypeInstelbaarOpStraat) &&
                     ma.Uitgesteld)
                 {
+
                     _MyElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}",
                             ma.UitgesteldTijdsduur,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _tuitgestma, ma.FaseVan, ma.FaseNaar));
                 }
                 
                 if (ma.TypeInstelbaarOpStraat)
@@ -73,11 +77,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             throw new ArgumentOutOfRangeException();
                     }
                     _MyElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmtypema}{ma.FaseVan}{ma.FaseNaar}",
                             inst,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmtypema, ma.FaseVan, ma.FaseNaar));
                 }
             }
         }

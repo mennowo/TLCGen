@@ -7,7 +7,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("Naam")]
+    [RefersTo("Naam")]
     [IOElement("", BitmappedItemTypeEnum.Fase, "Naam")]
     public class FaseCyclusModel : IOElementModel, IComparable
     {

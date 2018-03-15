@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseVan", "FaseNaar")]
+    [RefersTo("FaseVan", "FaseNaar")]
     public class ConflictModel : IComparable, IInterSignaalGroepElement
     {
         #region Fields

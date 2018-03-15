@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("MeeaanvraagDetector")]
+    [RefersTo("MeeaanvraagDetector")]
     public class MeeaanvraagDetectorModel
     {
         public string MeeaanvraagDetector { get; set; }

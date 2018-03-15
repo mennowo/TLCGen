@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("Detector")]
+    [RefersTo("Detector")]
     public class NaloopDetectorModel
     {
         public string Detector { get; set; }

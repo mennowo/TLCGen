@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo("FaseCyclus")]
     public class GroentijdModel : IComparable
     {
         #region Properties

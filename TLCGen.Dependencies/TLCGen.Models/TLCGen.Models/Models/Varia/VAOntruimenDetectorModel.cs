@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("Detector")]
+    [RefersTo("Detector")]
     public class VAOntruimenDetectorModel
     {
         [XmlArrayItem(ElementName = "ConflictendeFase")]

@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseVan", "FaseNaar")]
+    [RefersTo("FaseVan", "FaseNaar")]
     public class NaloopModel : IInterSignaalGroepElement
     {
         #region Fields

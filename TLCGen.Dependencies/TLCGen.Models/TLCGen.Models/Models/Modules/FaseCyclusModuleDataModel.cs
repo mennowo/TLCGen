@@ -3,7 +3,7 @@
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo("FaseCyclus")]
     public class FaseCyclusModuleDataModel : IComparable
     {
         #region Properties

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("Detector")]
+    [RefersTo("Detector")]
     public class RatelTikkerDetectorModel
     {
         public string Detector { get; set; }

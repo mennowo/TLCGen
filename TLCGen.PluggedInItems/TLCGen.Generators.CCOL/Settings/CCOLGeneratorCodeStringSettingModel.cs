@@ -34,5 +34,10 @@ namespace TLCGen.Generators.CCOL.Settings
         {
 
         }
+
+        public override string ToString()
+        {
+            return Setting;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.CodeGeneration;
 
@@ -18,7 +19,6 @@ namespace TLCGen.Generators.CCOL.Settings
         }
 
         public Dictionary<string, string> CCOLElementNames { get; set; }
-        public Dictionary<string, string> CCOLElementDescriptions { get; set; }
 
         private CCOLGeneratorSettingsModel _settings;
         public CCOLGeneratorSettingsModel Settings
@@ -34,7 +34,7 @@ namespace TLCGen.Generators.CCOL.Settings
                 {
                     foreach(var ss in s.Item2.Settings)
                     {
-                        CCOLElementNames.Add(Default.GetPrefix(ss.Type) + ss.Default, ss.Setting);
+                        CCOLElementNames.Add(GetPrefix(ss.Type) + ss.Default, ss.Setting);
                     }
                 }
             }
@@ -42,21 +42,60 @@ namespace TLCGen.Generators.CCOL.Settings
 
 		public string GetElementDescription(string description, params string [] elementnames)
 		{
-			var descr = description;
-			int i = 1;
+			if (description == null) return null;
+            var descr = description;
+            int i = 1;
 			foreach(var e in elementnames)
 			{
                 if (e == null) continue;
-				descr = descr.Replace("_E" + i + "_", e);
+                descr = descr.Replace("_E" + i + "_", e);
 				++i;
 			}
-			return descr;
-			
+            // Remove empty tags
+            descr = Regex.Replace(descr, $"_E[0-9]_", "");
+            return descr;	
 		}
+
+        public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLGeneratorCodeStringSettingModel element, params string [] elementnames)
+        {
+            return new CCOLElement(name, setting, timeType, TranslateType(element.Type),
+                    GetElementDescription(element.Description, elementnames));
+        }
+
+        public CCOLElement CreateElement(string name, CCOLGeneratorCodeStringSettingModel element, params string[] elementnames)
+        {
+            return new CCOLElement(name, TranslateType(element.Type),
+                    GetElementDescription(element.Description, elementnames));
+        }
 
         public string GetElementName(string defaultwithprefix)
         {
-	        return CCOLElementNames.TryGetValue(defaultwithprefix, out var n) ? n : null;
+            return CCOLElementNames.TryGetValue(defaultwithprefix, out var n) ? n : null;
+        }
+
+        private CCOLElementTypeEnum TranslateType(CCOLGeneratorSettingTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLGeneratorSettingTypeEnum.Uitgang:
+                    return CCOLElementTypeEnum.Uitgang;
+                case CCOLGeneratorSettingTypeEnum.Ingang:
+                    return CCOLElementTypeEnum.Ingang;
+                case CCOLGeneratorSettingTypeEnum.Timer:
+                    return CCOLElementTypeEnum.Timer;
+                case CCOLGeneratorSettingTypeEnum.Counter:
+                    return CCOLElementTypeEnum.Counter;
+                case CCOLGeneratorSettingTypeEnum.Schakelaar:
+                    return CCOLElementTypeEnum.Schakelaar;
+                case CCOLGeneratorSettingTypeEnum.HulpElement:
+                    return CCOLElementTypeEnum.HulpElement;
+                case CCOLGeneratorSettingTypeEnum.GeheugenElement:
+                    return CCOLElementTypeEnum.GeheugenElement;
+                case CCOLGeneratorSettingTypeEnum.Parameter:
+                    return CCOLElementTypeEnum.Parameter;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public string GetPrefix(CCOLGeneratorSettingTypeEnum type)

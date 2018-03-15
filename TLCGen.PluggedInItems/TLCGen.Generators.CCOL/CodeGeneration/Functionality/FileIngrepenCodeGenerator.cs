@@ -14,15 +14,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _myBitmapOutputs;
 
 #pragma warning disable 0649
-        private string _hfile;
-        private string _usfile;
-        private string _tafv;
-        private string _trij;
-        private string _tbz;
-        private string _prmfperc;
-        private string _schparlus;
-        private string _schparstrook;
-        private string _scheerlijkdoseren;
+        private CCOLGeneratorCodeStringSettingModel _hfile;
+        private CCOLGeneratorCodeStringSettingModel _usfile;
+        private CCOLGeneratorCodeStringSettingModel _tafv;
+        private CCOLGeneratorCodeStringSettingModel _trij;
+        private CCOLGeneratorCodeStringSettingModel _tbz;
+        private CCOLGeneratorCodeStringSettingModel _prmfperc;
+        private CCOLGeneratorCodeStringSettingModel _schparlus;
+        private CCOLGeneratorCodeStringSettingModel _schparstrook;
+        private CCOLGeneratorCodeStringSettingModel _scheerlijkdoseren;
 #pragma warning restore 0649
 
         // read from other objects
@@ -40,27 +40,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if(fm.EerlijkDoseren)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_scheerlijkdoseren}{fm.Naam}",
                             fm.EerlijkDoseren ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
-                            CCOLElementTypeEnum.Schakelaar));
+                            _scheerlijkdoseren, fm.Naam));
                 }
 
                 _myElements.Add(
-                    new CCOLElement(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_usfile}{fm.Naam}",
-                        CCOLElementTypeEnum.Uitgang));
+                        _usfile, fm.Naam));
                 _myElements.Add(
-                    new CCOLElement(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_hfile}{fm.Naam}",
-                        CCOLElementTypeEnum.HulpElement));
+                        _hfile, fm.Naam));
                 _myElements.Add(
-                    new CCOLElement(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_tafv}{fm.Naam}",
                         fm.AfvalVertraging,
                         CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                        _tafv, fm.Naam));
                 
                 var detectorDict = new Dictionary<int, List<string>>();
                 foreach (var fmd in fm.FileDetectoren)
@@ -82,63 +82,65 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (fm.FileDetectoren.Count > 1)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hfile}{fm.Naam}{_schparlus}",
                             fm.MetingPerLus ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
-                            CCOLElementTypeEnum.Schakelaar));
+                            _schparlus, fm.Naam));
                     if(multiStrook)
+                    {
                         _myElements.Add(
-                            new CCOLElement(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_hfile}{fm.Naam}{_schparstrook}",
                                 fm.MetingPerStrook ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
-                                CCOLElementTypeEnum.Schakelaar));
+                                _schparstrook, fm.Naam));
+                    }
                 }
                 foreach (var fd in fm.FileDetectoren)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tafv}{fd.Detector}",
                             fd.AfvalVertraging,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _tafv, fd.Detector));
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tbz}{fd.Detector}",
                             fd.BezetTijd,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _tbz, fd.Detector));
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_trij}{fd.Detector}",
                             fd.RijTijd,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _trij, fd.Detector));
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hfile}{fd.Detector}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _hfile, fd.Detector));
                 }
                 if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmfperc}{fm.Naam}",
                             fm.TeDoserenSignaalGroepen[0].DoseerPercentage,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmfperc, fm.Naam));
                 }
                 else
                 {
                     foreach (var ff in fm.TeDoserenSignaalGroepen)
                     {
                         _myElements.Add(
-                            new CCOLElement(
-                                $"{_prmfperc}{fm.Naam}{ff.FaseCyclus}",
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmfperc}{fm.Naam}",
                                 ff.DoseerPercentage,
                                 CCOLElementTimeTypeEnum.None,
-                                CCOLElementTypeEnum.Parameter));
+                                _prmfperc, ff.FaseCyclus));
                     }
                 }
             }

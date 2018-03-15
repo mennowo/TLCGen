@@ -13,8 +13,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
 
-        private string _prmmaxtvgvlog;
-        private string _prmmaxtfb;
+#pragma warning disable 0649
+        private CCOLGeneratorCodeStringSettingModel _prmmaxtvgvlog;
+        private CCOLGeneratorCodeStringSettingModel _prmmaxtfbvlog;
+#pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -22,8 +24,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
-                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement(_prmmaxtfb, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog.Setting, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(new CCOLElement(_prmmaxtfbvlog.Setting, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
             }
         }
 
@@ -70,7 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
-                        sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfb}]);");
+                        sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfbvlog}]);");
                         if (c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
                         {
                             sb.AppendLine($"{ts}#ifndef AUTOMAAT");
@@ -92,23 +94,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        {
-            if (settings?.Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var s in settings.Settings)
-            {
-                switch (s.Default)
-                {
-                    case "maxtvg": _prmmaxtvgvlog = s.Setting ?? s.Default; break;
-                    case "maxtfb": _prmmaxtfb = s.Setting ?? s.Default; break;
-                }
-            }
-
-            return base.SetSettings(settings);
-        }
+        //public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        //{
+        //    if (settings?.Settings == null)
+        //    {
+        //        return false;
+        //    }
+        //
+        //    foreach (var s in settings.Settings)
+        //    {
+        //        switch (s.Default)
+        //        {
+        //            case "maxtvg": _prmmaxtvgvlog = s.Setting ?? s.Default; break;
+        //            case "maxtfb": _prmmaxtfb = s.Setting ?? s.Default; break;
+        //        }
+        //    }
+        //
+        //    return base.SetSettings(settings);
+        //}
     }
 }

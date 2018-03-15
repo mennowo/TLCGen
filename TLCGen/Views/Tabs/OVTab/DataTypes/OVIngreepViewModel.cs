@@ -1,11 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using TLCGen.Controls;
@@ -14,6 +10,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using System;
 
 namespace TLCGen.ViewModels
 {
@@ -24,6 +21,7 @@ namespace TLCGen.ViewModels
         private OVIngreepModel _OVIngreep;
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
         private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
+        private ObservableCollection<string> _Detectoren;
         private string _NewLijnNummer;
 
         #endregion // Fields
@@ -86,55 +84,89 @@ namespace TLCGen.ViewModels
             }
         }
 
-        //public bool _VerlosAanvraag;
-        //[Description("Verlos aanvraag")]
-        //public bool VerlosAanvraag
-        //{
-        //    get { return _VerlosAanvraag; }
-        //    set
-        //    {
-        //        _VerlosAanvraag = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //public string _VerlosDetector;
-        //[Description("Verlos detector")]
-        //[EnabledCondition("VerlosAanvraag")]
-        //public string VerlosDetector
-        //{
-        //    get { return _VerlosDetector; }
-        //    set
-        //    {
-        //        _VerlosDetector = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //public bool _Wissel;
-        //[Description("Wissel")]
-        //public bool Wissel
-        //{
-        //    get { return _Wissel; }
-        //    set
-        //    {
-        //        _Wissel = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //public string _WisselDetector;
-        //[Description("Wissel detector")]
-        //[EnabledCondition("Wissel")]
-        //public string WisselDetector
-        //{
-        //    get { return _WisselDetector; }
-        //    set
-        //    {
-        //        _WisselDetector = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
+        [Browsable(false)]
+        [Description("Verlos aanvraag")]
+        public bool VerlosAanvraag
+        {
+            get { return _OVIngreep.VerlosAanvraag; }
+            set
+            {
+                _OVIngreep.VerlosAanvraag = value;
+                RaisePropertyChanged();
+            }
+        }
+        
+        [Browsable(false)]
+        [Description("Verlos detector")]
+        [EnabledCondition("VerlosAanvraag")]
+        public string VerlosAanvraagDetector
+        {
+            get { return _OVIngreep.VerlosAanvraagDetector; }
+            set
+            {
+                if(value != null)
+                {
+                    _OVIngreep.VerlosAanvraagDetector = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        [Browsable(false)]
+        [Description("Wissel")]
+        public bool Wissel
+        {
+            get { return _OVIngreep.Wissel; }
+            set
+            {
+                _OVIngreep.Wissel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [Browsable(false)]
+        [Description("Wissel detector")]
+        [EnabledCondition("Wissel")]
+        public string WisselDetector
+        {
+            get { return _OVIngreep.WisselDetector; }
+            set
+            {
+                if (value != null)
+                {
+                    _OVIngreep.WisselDetector = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        [Browsable(false)]
+        [Description("Wissel stroomkring")]
+        public bool WisselStroomKring
+        {
+            get { return _OVIngreep.WisselStroomKring; }
+            set
+            {
+                _OVIngreep.WisselStroomKring = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [Browsable(false)]
+        [Description("Wissel stroomkring detector")]
+        [EnabledCondition("WisselStroomKring")]
+        public string WisselKontaktDetector
+        {
+            get { return _OVIngreep.WisselStroomKringDetector; }
+            set
+            {
+                if (value != null)
+                {
+                    _OVIngreep.WisselStroomKringDetector = value;
+                }
+                RaisePropertyChanged();
+            }
+        }
 
         [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type
@@ -327,7 +359,20 @@ namespace TLCGen.ViewModels
                 return _LijnNummers;
             }
         }
-        
+
+        [Browsable(false)]
+        public ObservableCollection<string> Detectoren
+        {
+            get
+            {
+                if (_Detectoren == null)
+                {
+                    _Detectoren = new ObservableCollection<string>();
+                }
+                return _Detectoren;
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -471,6 +516,38 @@ namespace TLCGen.ViewModels
             }
 
             LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+
+            RefreshDetectoren();
+        }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void RefreshDetectoren()
+        {
+            Detectoren.Clear();
+            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
+
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
+            {
+                Detectoren.Add(d.Naam);
+            }
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
+            {
+                Detectoren.Add(d.Naam);
+            }
         }
 
         #endregion // Constructor

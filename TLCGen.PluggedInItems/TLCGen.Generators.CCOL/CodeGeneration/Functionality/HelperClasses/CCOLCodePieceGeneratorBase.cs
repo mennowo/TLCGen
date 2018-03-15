@@ -109,19 +109,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 foreach (var field in fields)
                 {
-                    if (field.Name == "_" + type + s.Default)
+                    if (field.FieldType == typeof(CCOLGeneratorCodeStringSettingModel) && field.Name == "_" + type + s.Default)
                     {
-                        field.SetValue(this, s.Setting ?? s.Default);
-                    }
-					if (field.Name == "_" + type + s.Default + "_D")
-                    {
-                        field.SetValue(this, s.Description);
+                        field.SetValue(this, s);
                     }
                 }
             }
             foreach (var field in fields)
             {
-                if(__fieldregex.IsMatch(field.Name) && string.IsNullOrEmpty((string)field.GetValue(this)))
+                if(__fieldregex.IsMatch(field.Name) && field.GetValue(this) == null)
                 {
 #if DEBUG
                         System.Windows.MessageBox.Show("Setting not found: [" + this.GetType().Name + "] " + field.Name);

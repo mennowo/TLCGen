@@ -14,8 +14,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
 
 #pragma warning disable 0649
-        private string _tva;
-        private string _tvamax;
+        private CCOLGeneratorCodeStringSettingModel _tva;
+        private CCOLGeneratorCodeStringSettingModel _tvamax;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)

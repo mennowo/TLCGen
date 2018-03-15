@@ -20,10 +20,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 #pragma warning disable 0649
-        private string _uswl;
-        private string _usbel;
-        private string _usbeldim;
-        private string _schbelcontdim;
+        private CCOLGeneratorCodeStringSettingModel _uswl;
+        private CCOLGeneratorCodeStringSettingModel _usbel;
+        private CCOLGeneratorCodeStringSettingModel _usbeldim;
+        private CCOLGeneratorCodeStringSettingModel _schbelcontdim;
 #pragma warning restore 0649
         private string _hperiod;
         private string _prmperbel;

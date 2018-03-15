@@ -17,10 +17,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
         
 #pragma warning disable 0649
-        private string _prmmlfpr;
-        private string _prmaltg;
-        private string _prmaltp;
-        private string _schaltg;
+        private CCOLGeneratorCodeStringSettingModel _prmmlfpr;
+        private CCOLGeneratorCodeStringSettingModel _prmaltg;
+        private CCOLGeneratorCodeStringSettingModel _prmaltp;
+        private CCOLGeneratorCodeStringSettingModel _schaltg;
 #pragma warning restore 0649
         private string _tnlsg;
         private string _tnlfg;

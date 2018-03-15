@@ -10,6 +10,8 @@ using TLCGen.Models;
 
 namespace TLCGen.Integrity
 {
+    // TODO This all belong to the controller manager
+
     public interface ITLCGenControllerModifier
     {
         ControllerModel Controller { get; set; }
@@ -67,17 +69,40 @@ namespace TLCGen.Integrity
 
         public void RemoveSignalGroupFromController(string remsg)
         {
-            RemoveSignalGroupFromController(_Controller, remsg);
+            RemoveFromController(_Controller, remsg);
         }
 
         public void RemoveDetectorFromController(string remd)
         {
-            RemoveDetectorFromController(_Controller, remd);
+            RemoveFromController(_Controller, remd);
+
+            // Manage OV detectoren
+            var dets = _Controller.Fasen.SelectMany(x => x.Detectoren).Concat(_Controller.Detectoren);
+            foreach (var ov in _Controller.OVData.OVIngrepen)
+            {
+                if (ov.VerlosAanvraagDetector != null && !dets.Any(x => x.Naam == ov.VerlosAanvraagDetector))
+                {
+                    ov.VerlosAanvraagDetector = null;
+                    ov.VerlosAanvraag = false;
+                }
+
+                if (ov.WisselDetector != null && !dets.Any(x => x.Naam == ov.WisselDetector))
+                {
+                    ov.WisselDetector = null;
+                    ov.Wissel = false;
+                }
+
+                if (ov.WisselStroomKringDetector != null && !dets.Any(x => x.Naam == ov.WisselStroomKringDetector))
+                {
+                    ov.WisselStroomKringDetector = null;
+                    ov.WisselStroomKring = false;
+                }
+            }
         }
 
 	    public void RemoveModelItemFromController(string uniqueModelName)
 	    {
-		    RemoveDetectorFromController(_Controller, uniqueModelName);
+		    RemoveFromController(_Controller, uniqueModelName);
 	    }
 
 		public void CorrectModel_AlteredConflicts()
@@ -102,136 +127,8 @@ namespace TLCGen.Integrity
         #endregion // Public Methods
 
         #region Private Methods
-
-        private void RemoveSignalGroupFromController(object obj, string remsg)
-        {
-            if (obj == null) return;
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                Type propType = property.PropertyType;
-                if (!(propType == typeof(string)) && !propType.IsValueType)
-                {
-                    object propValue = property.GetValue(obj);
-                    var elems = propValue as IList;
-                    if (elems != null)
-                    {
-                        var t = elems.GetType();
-                        if (t.IsGenericType)
-                        {
-                            var _t = t.GetGenericArguments()[0];
-                            if (_t != typeof(List<>))
-                            {
-                                var _attr = _t.GetCustomAttribute<RefersToSignalGroupAttribute>();
-                                if (_attr != null)
-                                {
-                                    var listType = typeof(List<>).MakeGenericType(_t);
-                                    var remitems = Activator.CreateInstance(listType);
-                                    foreach (var item in elems)
-                                    {
-                                        if (_attr.SignalGroupProperty1 != null)
-                                        {
-                                            string val1 = (string)_t.GetProperty(_attr.SignalGroupProperty1).GetValue(item);
-                                            if (val1 == remsg)
-                                            {
-                                                t.GetMethod("Add").Invoke(remitems, new[] { item });
-                                            }
-                                            else if (_attr.SignalGroupProperty2 != null)
-                                            {
-                                                string val2 = (string)_t.GetProperty(_attr.SignalGroupProperty2).GetValue(item);
-                                                if (val2 == remsg)
-                                                {
-                                                    t.GetMethod("Add").Invoke(remitems, new[] { item });
-                                                }
-                                            }
-                                        }
-                                    }
-                                    foreach (var item in (IList)remitems)
-                                    {
-                                        elems.Remove(item);
-                                    }
-                                }
-                            }
-                        }
-                        foreach (var item in elems)
-                        {
-                            RemoveSignalGroupFromController(item, remsg);
-                        }
-                    }
-                    else
-                    {
-                        RemoveSignalGroupFromController(propValue, remsg);
-                    }
-                }
-            }
-        }
-
-        private void RemoveDetectorFromController(object obj, string remd)
-        {
-            if (obj == null) return;
-            Type objType = obj.GetType();
-            PropertyInfo[] properties = objType.GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                Type propType = property.PropertyType;
-                if (!(propType == typeof(string)) && !propType.IsValueType)
-                {
-                    object propValue = property.GetValue(obj);
-                    var elems = propValue as IList;
-                    if (elems != null)
-                    {
-                        var t = elems.GetType();
-                        if (t.IsGenericType)
-                        {
-                            var _t = t.GetGenericArguments()[0];
-                            if (_t != typeof(List<>))
-                            {
-                                var _attr = _t.GetCustomAttribute<RefersToDetectorAttribute>();
-                                if (_attr != null)
-                                {
-                                    var listType = typeof(List<>).MakeGenericType(_t);
-                                    var remitems = Activator.CreateInstance(listType);
-                                    foreach (var item in elems)
-                                    {
-                                        if (_attr.DetectorProperty1 != null)
-                                        {
-                                            string val1 = (string)_t.GetProperty(_attr.DetectorProperty1).GetValue(item);
-                                            if (val1 == remd)
-                                            {
-                                                t.GetMethod("Add").Invoke(remitems, new[] { item });
-                                            }
-                                            else if (_attr.DetectorProperty2 != null)
-                                            {
-                                                string val2 = (string)_t.GetProperty(_attr.DetectorProperty2).GetValue(item);
-                                                if (val2 == remd)
-                                                {
-                                                    t.GetMethod("Add").Invoke(remitems, new[] { item });
-                                                }
-                                            }
-                                        }
-                                    }
-                                    foreach (var item in (IList)remitems)
-                                    {
-                                        elems.Remove(item);
-                                    }
-                                }
-                            }
-                        }
-                        foreach (var item in elems)
-                        {
-                            RemoveDetectorFromController(item, remd);
-                        }
-                    }
-                    else
-                    {
-                        RemoveDetectorFromController(propValue, remd);
-                    }
-                }
-            }
-        }
-
-		private void RemoveFromController<T1, T2>(object obj, string remd)
+        
+		private void RemoveFromController(object obj, string remObject)
 		{
 			if (obj == null) return;
 			Type objType = obj.GetType();
@@ -261,19 +158,27 @@ namespace TLCGen.Integrity
 										if (_attr.ReferProperty1 != null)
 										{
 											string val1 = (string)_t.GetProperty(_attr.ReferProperty1).GetValue(item);
-											if (val1 == remd)
+											if (val1 == remObject)
 											{
 												t.GetMethod("Add").Invoke(remitems, new[] { item });
 											}
 											else if (_attr.ReferProperty2 != null)
 											{
 												string val2 = (string)_t.GetProperty(_attr.ReferProperty2).GetValue(item);
-												if (val2 == remd)
+												if (val2 == remObject)
 												{
 													t.GetMethod("Add").Invoke(remitems, new[] { item });
 												}
-											}
-										}
+                                                else if (_attr.ReferProperty3 != null)
+                                                {
+                                                    string val3 = (string)_t.GetProperty(_attr.ReferProperty3).GetValue(item);
+                                                    if (val3 == remObject)
+                                                    {
+                                                        t.GetMethod("Add").Invoke(remitems, new[] { item });
+                                                    }
+                                                }
+                                            }
+                                        }
 									}
 									foreach (var item in (IList)remitems)
 									{
@@ -284,16 +189,16 @@ namespace TLCGen.Integrity
 						}
 						foreach (var item in elems)
 						{
-							RemoveDetectorFromController(item, remd);
+							RemoveFromController(item, remObject);
 						}
 					}
 					else
 					{
-						RemoveDetectorFromController(propValue, remd);
+                        RemoveFromController(propValue, remObject);
 					}
 				}
 			}
-		}
+        }
 
 		private void CorrectModelWithAlteredConflicts(object obj)
         {

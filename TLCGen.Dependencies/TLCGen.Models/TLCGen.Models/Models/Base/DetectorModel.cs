@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("Naam")]
+    [RefersTo("Naam")]
     [IOElement("", BitmappedItemTypeEnum.Detector, "Naam")]
     public class DetectorModel : IOElementModel, IComparable
     {

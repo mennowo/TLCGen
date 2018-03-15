@@ -9,7 +9,7 @@ using System.ComponentModel;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo("FaseCyclus")]
     public class RoBuGroverFaseCyclusInstellingenModel
     {
         #region Properties

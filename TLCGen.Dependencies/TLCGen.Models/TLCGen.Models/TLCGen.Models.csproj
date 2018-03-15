@@ -45,8 +45,6 @@
     <Compile Include="Attributes\IOElementAttribute.cs" />
     <Compile Include="Attributes\ModelNameAttribute.cs" />
     <Compile Include="Attributes\RefersToAttribute.cs" />
-    <Compile Include="Attributes\RefersToDetectorAttribute.cs" />
-    <Compile Include="Attributes\RefersToSignalGroupAttribute.cs" />
     <Compile Include="Attributes\VissimNameAttribute.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
@@ -62,6 +60,7 @@
     <Compile Include="Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\InterSignaalGroep\LateReleaseModel.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
+    <Compile Include="Models\OV_HD\ConditionDetector.cs" />
     <Compile Include="Models\OV_HD\OVIngreepMassaDetectieDataModel.cs" />
     <Compile Include="Models\OV_HD\OVIngreepMassaDetectieMeldingModel.cs" />
     <Compile Include="Models\OV_HD\OVIngreepMassaDetectieMeldingVoorwaardeModel.cs" />

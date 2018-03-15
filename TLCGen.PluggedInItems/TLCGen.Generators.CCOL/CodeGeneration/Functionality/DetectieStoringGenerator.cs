@@ -14,9 +14,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
         
 #pragma warning disable 0649
-        private string _schdvak;
-        private string _thdv;
-        private string _prmperc;
+        private CCOLGeneratorCodeStringSettingModel _schdvak;
+        private CCOLGeneratorCodeStringSettingModel _thdv;
+        private CCOLGeneratorCodeStringSettingModel _prmperc;
 #pragma warning restore 0649
         private string _mperiod;
         private string _prmda;
@@ -33,30 +33,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
                     {
                         _MyElements.Add(
-                            new CCOLElement(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schdvak}{_dpf}{d.Naam}",
                                 d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
-                                CCOLElementTypeEnum.Schakelaar));
+                                _schdvak, fc.Naam, d.Naam));
                     }
                     if(d.Type == DetectorTypeEnum.Kop && fc.HiaatKoplusBijDetectieStoring && fc.VervangendHiaatKoplus.HasValue)
                     {
                         _MyElements.Add(
-                            new CCOLElement(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_thdv}{_dpf}{d.Naam}",
                                 fc.VervangendHiaatKoplus.Value,
                                 CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Timer));
+                                _thdv, fc.Naam, d.Naam));
                     }
                 }
                 if(fc.PercentageGroenBijDetectieStoring && fc.PercentageGroen.HasValue)
                 {
                     _MyElements.Add(
-                            new CCOLElement(
-                                $"{_prmperc}{fc.Naam}",
-                                fc.PercentageGroen.Value,
-                                CCOLElementTimeTypeEnum.None,
-                                CCOLElementTypeEnum.Parameter));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmperc}{fc.Naam}",
+                            fc.PercentageGroen.Value,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmperc, fc.Naam));
                 }
             }
         }

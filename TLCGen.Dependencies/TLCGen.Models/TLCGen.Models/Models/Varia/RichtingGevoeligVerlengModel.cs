@@ -8,8 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
-    [RefersToDetector("VanDetector", "NaarDetector")]
+    [RefersTo("FaseCyclus", "VanDetector", "NaarDetector")]
     public class RichtingGevoeligVerlengModel
     {
         #region Properties

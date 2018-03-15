@@ -7,7 +7,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo("FaseCyclus")]
     public class HDIngreepModel : IComparable
     {
         #region Properties

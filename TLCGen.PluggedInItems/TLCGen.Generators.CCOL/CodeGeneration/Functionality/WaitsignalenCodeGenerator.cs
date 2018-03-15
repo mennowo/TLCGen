@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -16,7 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLIOElement> _MyBitmapOutputs;
 
 #pragma warning disable 0649
-        private string _uswt;
+        private CCOLGeneratorCodeStringSettingModel _uswt;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)

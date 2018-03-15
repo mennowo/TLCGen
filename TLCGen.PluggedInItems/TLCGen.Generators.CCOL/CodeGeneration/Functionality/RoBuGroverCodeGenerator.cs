@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -14,21 +15,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLIOElement> _MyBitmapOutputs;
 
 #pragma warning disable 0649
-        private string _prmrgv;
-        private string _prmmin_tcyclus;
-        private string _prmmax_tcyclus;
-        private string _prmmintvg;
-        private string _prmmaxtvg;
-        private string _prmtvg_omhoog;
-        private string _prmtvg_omlaag;
-        private string _prmtvg_verschil;
-        private string _prmtvg_npr_omlaag;
-        private string _hprreal;
-        private string _schrgv;
-        private string _schrgv_snel;
-        private string _usrgv;
-        private string _tfd;
-        private string _thd;
+        private CCOLGeneratorCodeStringSettingModel _prmrgv;
+        private CCOLGeneratorCodeStringSettingModel _prmmin_tcyclus;
+        private CCOLGeneratorCodeStringSettingModel _prmmax_tcyclus;
+        private CCOLGeneratorCodeStringSettingModel _prmmintvg;
+        private CCOLGeneratorCodeStringSettingModel _prmmaxtvg;
+        private CCOLGeneratorCodeStringSettingModel _prmtvg_omhoog;
+        private CCOLGeneratorCodeStringSettingModel _prmtvg_omlaag;
+        private CCOLGeneratorCodeStringSettingModel _prmtvg_verschil;
+        private CCOLGeneratorCodeStringSettingModel _prmtvg_npr_omlaag;
+        private CCOLGeneratorCodeStringSettingModel _hprreal;
+        private CCOLGeneratorCodeStringSettingModel _schrgv;
+        private CCOLGeneratorCodeStringSettingModel _schrgv_snel;
+        private CCOLGeneratorCodeStringSettingModel _usrgv;
+        private CCOLGeneratorCodeStringSettingModel _tfd;
+        private CCOLGeneratorCodeStringSettingModel _thd;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -39,16 +40,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.RoBuGrover.ConflictGroepen?.Count == 0)
                 return;
 
-            _MyElements.Add(new CCOLElement(_prmrgv, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmmin_tcyclus, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmmax_tcyclus, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmtvg_omhoog, c.RoBuGrover.GroenOphoogFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmtvg_omlaag, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmtvg_verschil, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_prmtvg_npr_omlaag, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement(_schrgv, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _MyElements.Add(new CCOLElement(_schrgv_snel, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _MyElements.Add(new CCOLElement(_usrgv, CCOLElementTypeEnum.Uitgang));
+            _MyElements.Add(new CCOLElement(_prmrgv.Setting, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmmin_tcyclus.Setting, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmmax_tcyclus.Setting, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_omhoog.Setting, c.RoBuGrover.GroenOphoogFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_verschil.Setting, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_prmtvg_npr_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+            _MyElements.Add(new CCOLElement(_schrgv.Setting, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement(_schrgv_snel.Setting, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+            _MyElements.Add(new CCOLElement(_usrgv.Setting, CCOLElementTypeEnum.Uitgang));
 
             foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {

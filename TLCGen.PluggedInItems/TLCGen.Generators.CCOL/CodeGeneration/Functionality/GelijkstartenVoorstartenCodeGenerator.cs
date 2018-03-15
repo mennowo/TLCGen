@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
@@ -11,9 +12,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         #region Fields
 
         private List<CCOLElement> _MyElements;
-        private string _tgsot;
-        private string _tvs;
-        private string _tvsot;
+#pragma warning disable 0649
+        private CCOLGeneratorCodeStringSettingModel _tgsot;
+        private CCOLGeneratorCodeStringSettingModel _tvs;
+        private CCOLGeneratorCodeStringSettingModel _tvsot;
+#pragma warning restore 0649
 
         #endregion // Fields
 
@@ -41,34 +44,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if(gs.DeelConflict)
                 {
                     _MyElements.Add(
-                        new CCOLElement(
-                            $"{_tgsot}{gs.FaseVan}{gs.FaseNaar}",
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tgsot.Setting}{gs.FaseVan}{gs.FaseNaar}",
                             gs.GelijkstartOntruimingstijdFaseVan,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _tgsot, gs.FaseVan, gs.FaseNaar));
                     _MyElements.Add(
-                        new CCOLElement(
-                            $"{_tgsot}{gs.FaseNaar}{gs.FaseVan}",
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tgsot.Setting}{gs.FaseNaar}{gs.FaseVan}",
                             gs.GelijkstartOntruimingstijdFaseNaar,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            _tgsot, gs.FaseNaar, gs.FaseVan));
                 }
             }
 
             foreach(var vs in c.InterSignaalGroep.Voorstarten)
             {
                 _MyElements.Add(
-                    new CCOLElement(
-                        $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tvs.Setting}{vs.FaseVan}{vs.FaseNaar}",
                         vs.VoorstartTijd,
                         CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                        _tvs, vs.FaseVan, vs.FaseNaar));
                 _MyElements.Add(
-                    new CCOLElement(
-                        $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tvsot.Setting}{vs.FaseNaar}{vs.FaseVan}",
                         vs.VoorstartOntruimingstijd,
                         CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                        _tvsot, vs.FaseVan, vs.FaseNaar));
             }
         }
 

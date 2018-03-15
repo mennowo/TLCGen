@@ -17,16 +17,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private List<CCOLElement> _MyElements;
 #pragma warning disable 0649
-        private string _hnla;
-        private string _tnlfg;
-        private string _tnlfgd;
-        private string _tnlsg;
-        private string _tnlsgd;
-        private string _tnlcv;
-        private string _tnlcvd;
-        private string _tnleg;
-        private string _tnlegd;
-        private string _prmxnl;
+        private CCOLGeneratorCodeStringSettingModel _hnla;
+        private CCOLGeneratorCodeStringSettingModel _tnlfg;
+        private CCOLGeneratorCodeStringSettingModel _tnlfgd;
+        private CCOLGeneratorCodeStringSettingModel _tnlsg;
+        private CCOLGeneratorCodeStringSettingModel _tnlsgd;
+        private CCOLGeneratorCodeStringSettingModel _tnlcv;
+        private CCOLGeneratorCodeStringSettingModel _tnlcvd;
+        private CCOLGeneratorCodeStringSettingModel _tnleg;
+        private CCOLGeneratorCodeStringSettingModel _tnlegd;
+        private CCOLGeneratorCodeStringSettingModel _prmxnl;
 #pragma warning restore 0649
 	    private string _homschtegenh;
 
@@ -55,7 +55,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var nlt in nl.Tijden)
                 {
-                    string _tnl = "";
+                    CCOLGeneratorCodeStringSettingModel _tnl = null;
                     switch (nlt.Type)
                     {
                         case NaloopTijdTypeEnum.StartGroen: _tnl = _tnlsg; break;
@@ -68,17 +68,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         case NaloopTijdTypeEnum.EindeVerlengGroenDetectie: _tnl = _tnlcvd; break;
                     }
                     _MyElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tnl}{nl.FaseVan}{nl.FaseNaar}",
                             nlt.Waarde,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                            CCOLElementTimeTypeEnum.TE_type, 
+                            _tnl, nl.FaseVan, nl.FaseNaar));
                 }
                 if (nl.DetectieAfhankelijk)
                 {
                     foreach (var nld in nl.Detectoren)
                     {
-                        var elem = new CCOLElement($"{_hnla}{nld.Detector}", CCOLElementTypeEnum.HulpElement);
+                        var elem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hnla}{nld.Detector}", _hnla, nld.Detector, nl.FaseVan, nl.FaseNaar);
                         if (_MyElements.Count == 0 || _MyElements.All(x => x.Naam != elem.Naam))
                         {
                             _MyElements.Add(elem);
@@ -88,11 +88,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if(nl.MaximaleVoorstart.HasValue)
                 {
                     _MyElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmxnl}{nl.FaseVan}{nl.FaseNaar}",
                             nl.MaximaleVoorstart.Value,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Parameter));
+                            CCOLElementTimeTypeEnum.TE_type, 
+                            _prmxnl, nl.FaseVan, nl.FaseNaar));
                 }
             }
         }

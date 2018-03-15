@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
@@ -14,8 +15,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _MyBitmapInputs;
 
 #pragma warning disable 0649
-        private string _isfix;
-        private string _schbmfix;
+        private CCOLGeneratorCodeStringSettingModel _isfix;
+        private CCOLGeneratorCodeStringSettingModel _schbmfix;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -26,15 +27,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.Data.FixatieData.FixatieMogelijk)
             {
                 _MyElements.Add(
-                    new CCOLElement(
-                        $"{_isfix}", 
-                        CCOLElementTypeEnum.Ingang));
-                _MyElements.Add(
-                    new CCOLElement(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_schbmfix}",
                         c.Data.FixatieData.BijkomenTijdensFixatie ? 1 : 0,
                         CCOLElementTimeTypeEnum.SCH_type,
-                        CCOLElementTypeEnum.Schakelaar));
+                        _schbmfix));
+                _MyElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_isfix}",
+                        _isfix));
                 _MyBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData as IOElementModel, $"{_ispf}{_isfix}"));
             }
         }

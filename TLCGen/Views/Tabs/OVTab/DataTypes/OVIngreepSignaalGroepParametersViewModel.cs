@@ -10,7 +10,6 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    [RefersToSignalGroup("FaseCyclus")]
     public class OVIngreepSignaalGroepParametersViewModel : ViewModelBase, IComparable, IViewModelWithItem
     {
         #region Fields

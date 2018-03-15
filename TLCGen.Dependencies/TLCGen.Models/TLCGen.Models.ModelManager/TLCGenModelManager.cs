@@ -1,7 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Extensions;
@@ -141,6 +143,67 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
         }
 
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            ChangeNameOnObject(Controller, msg.OldName, msg.NewName);
+        }
+
+        private void ChangeNameOnObject(object obj, string oldName, string newName)
+        {
+            if (obj == null) return;
+            Type objType = obj.GetType();
+
+            // class refers to?
+            var refToAttr = objType.GetCustomAttribute<RefersToAttribute>();
+
+            PropertyInfo[] properties = objType.GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                object propValue = property.GetValue(obj);
+
+                // for strings
+                if (property.PropertyType == typeof(string))
+                {
+                    // if this is the referent string, set it if needed
+                    if (refToAttr != null &&
+                        (property.Name == refToAttr.ReferProperty1 || 
+                         property.Name == refToAttr.ReferProperty2 ||
+                         property.Name == refToAttr.ReferProperty3))
+                    {
+                        if ((string)propValue == oldName)
+                        {
+                            property.SetValue(obj, newName);
+                        }
+                    }
+                    // otherwise, check if the string has RefersTo itself, and set if needed
+                    else
+                    {
+                        var strRefToAttr = property.GetCustomAttribute<RefersToAttribute>();
+                        if (strRefToAttr != null)
+                        {
+                            if ((string)propValue == oldName)
+                            {
+                                property.SetValue(obj, newName);
+                            }
+                        }
+                    }
+                }
+                // for lists
+                else if (propValue is IList elems)
+                {
+                    foreach (var item in elems)
+                    {
+                        ChangeNameOnObject(item, oldName, newName);
+                    }
+                }
+                // for objects
+                else if(!property.PropertyType.IsValueType)
+                {
+                    ChangeNameOnObject(propValue, oldName, newName);
+                }
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -152,6 +215,7 @@ namespace TLCGen.ModelManagement
                 MessengerInstance = Messenger.Default;
             }
             MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
+            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 
         #endregion // Constructor

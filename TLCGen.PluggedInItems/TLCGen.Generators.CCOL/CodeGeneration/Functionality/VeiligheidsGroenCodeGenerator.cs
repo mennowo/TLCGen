@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -15,9 +16,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
 
 #pragma warning disable 0649
-        private string _schvg; // schakelaar veiligheidsgroen
-        private string _tvga; // veiligheidsgroen min. tijdsduur in MG
-        private string _tvgb; // tijdsduur veiligheidsgroen
+        private CCOLGeneratorCodeStringSettingModel _schvg;
+        private CCOLGeneratorCodeStringSettingModel _tvga; 
+        private CCOLGeneratorCodeStringSettingModel _tvgb; 
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)

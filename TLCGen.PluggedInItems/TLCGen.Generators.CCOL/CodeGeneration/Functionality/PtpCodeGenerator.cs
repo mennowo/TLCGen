@@ -17,28 +17,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _MyBitmapOutputs;
 
 #pragma warning disable 0649
-        private string _hptp;
-        private string _prmptp;
-        private string _usptp;
+        private CCOLGeneratorCodeStringSettingModel _hptp;
+        private CCOLGeneratorCodeStringSettingModel _prmptp;
+        private CCOLGeneratorCodeStringSettingModel _usptp;
 
-        private string _hiks;
-        private string _huks;
-        private string _hoke;
-        private string _herr;
-        private string _herr0;
-        private string _herr1;
-        private string _herr2;
+        private CCOLGeneratorCodeStringSettingModel _hiks;
+        private CCOLGeneratorCodeStringSettingModel _huks;
+        private CCOLGeneratorCodeStringSettingModel _hoke;
+        private CCOLGeneratorCodeStringSettingModel _herr;
+        private CCOLGeneratorCodeStringSettingModel _herr0;
+        private CCOLGeneratorCodeStringSettingModel _herr1;
+        private CCOLGeneratorCodeStringSettingModel _herr2;
 
-        private string _usoke;
-        private string _userr;
+        private CCOLGeneratorCodeStringSettingModel _usoke;
+        private CCOLGeneratorCodeStringSettingModel _userr;
 
-        private string _prmiks;
-        private string _prmuks;
-        private string _prmoke;
-        private string _prmerr;
-        private string _prmerr0;
-        private string _prmerr1;
-        private string _prmerr2;
+        private CCOLGeneratorCodeStringSettingModel _prmiks;
+        private CCOLGeneratorCodeStringSettingModel _prmuks;
+        private CCOLGeneratorCodeStringSettingModel _prmoke;
+        private CCOLGeneratorCodeStringSettingModel _prmerr;
+        private CCOLGeneratorCodeStringSettingModel _prmerr0;
+        private CCOLGeneratorCodeStringSettingModel _prmerr1;
+        private CCOLGeneratorCodeStringSettingModel _prmerr2;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)

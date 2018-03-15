@@ -79,19 +79,443 @@
             <Default>da</Default>
             <Setting>da</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter detectie aanvraag voor _E1_</Description>
+            <Description>Aanvraag functie voor detector _E1_</Description>
           </Setting>
           <Setting>
             <Default>mk</Default>
             <Setting>mk</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter detectie meetkriterium voor _E1_</Description>
+            <Description>Meetkriterium type voor detector _E1_</Description>
           </Setting>
           <Setting>
             <Default>km</Default>
             <Setting>km</Setting>
             <Type>Timer</Type>
-            <Description>Timer detectie kop maximum voor _E1_</Description>
+            <Description>Kop maximum voor detector _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="DetectieStoringGenerator">
+      <CodePieceData>
+        <ClassName>DetectieStoringGenerator</ClassName>
+        <Description>Detectie storing</Description>
+        <Settings>
+          <Setting>
+            <Default>dvak</Default>
+            <Setting>dvak</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Aanvraag fase _E1_ bij storing op detector _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>hdv</Default>
+            <Setting>hdv</Setting>
+            <Type>Timer</Type>
+            <Description>Vervangend hiaat koplus fase _E1_ bij defect lange lus _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>perc</Default>
+            <Setting>perc</Setting>
+            <Type>Parameter</Type>
+            <Description>Percentage groentijd fase _E1_ bij defect kop en lange lus</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="FileIngrepenCodeGenerator">
+      <CodePieceData>
+        <ClassName>FileIngrepenCodeGenerator</ClassName>
+        <Description>File ingrepen</Description>
+        <Settings>
+          <Setting>
+            <Default>file</Default>
+            <Setting>file</Setting>
+            <Type>Uitgang</Type>
+            <Description>File ingreep _E1_ actief</Description>
+          </Setting>
+          <Setting>
+            <Default>file</Default>
+            <Setting>file</Setting>
+            <Type>HulpElement</Type>
+            <Description>File _E1_ actief</Description>
+          </Setting>
+          <Setting>
+            <Default>bz</Default>
+            <Setting>bz</Setting>
+            <Type>Timer</Type>
+            <Description>Bezettijd file detector _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rij</Default>
+            <Setting>rij</Setting>
+            <Type>Timer</Type>
+            <Description>Rijtijd file detector _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>afv</Default>
+            <Setting>afv</Setting>
+            <Type>Timer</Type>
+            <Description>Afval vertraging file _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>afv</Default>
+            <Setting>afv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen afval vertraging file ingreep _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>eerlijkdoseren</Default>
+            <Setting>eerlijkdoseren</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen eerlijk doseren _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>fperc</Default>
+            <Setting>fperc</Setting>
+            <Type>Parameter</Type>
+            <Description>Doseerpercentage _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>parlus</Default>
+            <Setting>parlus</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Parallele file meldingen per lus file ingreep _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>parstrook</Default>
+            <Setting>parstrook</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Parallele file meldingen per strook file ingreep _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="FixatieCodeGenerator">
+      <CodePieceData>
+        <ClassName>FixatieCodeGenerator</ClassName>
+        <Description>Fixatie</Description>
+        <Settings>
+          <Setting>
+            <Default>fix</Default>
+            <Setting>fix</Setting>
+            <Type>Ingang</Type>
+            <Description>Fixatie regeling</Description>
+          </Setting>
+          <Setting>
+            <Default>bmfix</Default>
+            <Setting>bmfix</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Bijkomen tijdens fixatie mogelijk</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="GelijkstartenVoorstartenCodeGenerator">
+      <CodePieceData>
+        <ClassName>GelijkstartenVoorstartenCodeGenerator</ClassName>
+        <Description>Voor- en gelijkstarten</Description>
+        <Settings>
+          <Setting>
+            <Default>vs</Default>
+            <Setting>vs</Setting>
+            <Type>Timer</Type>
+            <Description>Voorstart van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>vsot</Default>
+            <Setting>vsot</Setting>
+            <Type>Timer</Type>
+            <Description>Fictief ontruimen voorstart van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>gsot</Default>
+            <Setting>gsot</Setting>
+            <Type>Timer</Type>
+            <Description>Fictief ontruimen gelijkstart van _E1_ naar _E2_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="HalfstarCodeGenerator">
+      <CodePieceData>
+        <ClassName>HalfstarCodeGenerator</ClassName>
+        <Description>Halfstar</Description>
+        <Settings>
+          <Setting>
+            <Default>mlact</Default>
+            <Setting>mlact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Module regelen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>plact</Default>
+            <Setting>plact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Signaalplan regelen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>kpact</Default>
+            <Setting>kpact</Setting>
+            <Type>Uitgang</Type>
+            <Description>Koppeling signaalplan regelen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>mlpl</Default>
+            <Setting>mlpl</Setting>
+            <Type>Uitgang</Type>
+            <Description>ML tijdens VA of PL tijdens halfstar bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>txtimer</Default>
+            <Setting>txtimer</Setting>
+            <Type>Uitgang</Type>
+            <Description>TX_timer tijdens halfstar bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>master</Default>
+            <Setting>master</Setting>
+            <Type>Uitgang</Type>
+            <Description>Master bepaald aansturing</Description>
+          </Setting>
+          <Setting>
+            <Default>slave</Default>
+            <Setting>slave</Setting>
+            <Type>Uitgang</Type>
+            <Description>Slave bepaald aansturing</Description>
+          </Setting>
+          <Setting>
+            <Default>klok</Default>
+            <Setting>klok</Setting>
+            <Type>Uitgang</Type>
+            <Description>Programma door klok bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>hand</Default>
+            <Setting>hand</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing/programma met de hand bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>Uitgang</Type>
+            <Description>levenssignaal _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>syncok</Default>
+            <Setting>syncok</Setting>
+            <Type>Uitgang</Type>
+            <Description>synchroon _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>txsok</Default>
+            <Setting>txsok</Setting>
+            <Type>Uitgang</Type>
+            <Description>txs ok _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>kpuls</Default>
+            <Setting>kpuls</Setting>
+            <Type>Uitgang</Type>
+            <Description>koppelpuls _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
+            <Type>Uitgang</Type>
+            <Description>Periode VA regelen _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
+            <Type>Uitgang</Type>
+            <Description>Periode alternatieven voor hoofdrichtingen _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>klok</Default>
+            <Setting>klok</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halfstar/va obv klokprioden</Description>
+          </Setting>
+          <Setting>
+            <Default>hand</Default>
+            <Setting>hand</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halstar/va handmatig bepaald</Description>
+          </Setting>
+          <Setting>
+            <Default>master</Default>
+            <Setting>master</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halstar/va bepaald door master</Description>
+          </Setting>
+          <Setting>
+            <Default>slave</Default>
+            <Setting>slave</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Halstar/va bepaald door slave</Description>
+          </Setting>
+          <Setting>
+            <Default>kpact</Default>
+            <Setting>kpact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Koppeling tbv halfstar actief</Description>
+          </Setting>
+          <Setting>
+            <Default>plact</Default>
+            <Setting>plact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Halfstar actief</Description>
+          </Setting>
+          <Setting>
+            <Default>mlact</Default>
+            <Setting>mlact</Setting>
+            <Type>HulpElement</Type>
+            <Description>Module regelen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>var</Default>
+            <Setting>var</Setting>
+            <Type>Schakelaar</Type>
+            <Description>VA regelen aan/uit</Description>
+          </Setting>
+          <Setting>
+            <Default>arh</Default>
+            <Setting>arh</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan alternatieven voor hoofdrichtingen</Description>
+          </Setting>
+          <Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
+            <Type>Schakelaar</Type>
+            <Description>VA regelen periode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pervar</Default>
+            <Setting>pervar</Setting>
+            <Type>HulpElement</Type>
+            <Description>Periode VA regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Alternatieven voor hoofdrichtingen periode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>perarh</Default>
+            <Setting>perarh</Setting>
+            <Type>HulpElement</Type>
+            <Description>Alternatieven voor hoofdrichtingen periode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>varstreng</Default>
+            <Setting>varstreng</Setting>
+            <Type>Schakelaar</Type>
+            <Description>VA regelen aan/uit voor gehele streng</Description>
+          </Setting>
+          <Setting>
+            <Default>vaml</Default>
+            <Setting>vaml</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Indien VA regelen, ML-bedrijf (1) of versneld PL-bedrijf (0)</Description>
+          </Setting>
+          <Setting>
+            <Default>plhulpdienst</Default>
+            <Setting>plhulpdienst</Setting>
+            <Type>HulpElement</Type>
+            <Description>Hulpdienstingreep tbv (tijdelijk) lokaal VA regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>ovpriople</Default>
+            <Setting>ovpriople</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Wel/niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
+          </Setting>
+          <Setting>
+            <Default>plxper</Default>
+            <Setting>plxper</Setting>
+            <Type>Parameter</Type>
+            <Description>Plan voor periode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>xpl</Default>
+            <Setting>xpl</Setting>
+            <Type>HulpElement</Type>
+            <Description>Tegenhouden richtingen tbv gelijkstart _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>slavebep</Default>
+            <Setting>slavebep</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Slave bepaald PL aansturing</Description>
+          </Setting>
+          <Setting>
+            <Default>inst</Default>
+            <Setting>inst</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Eenmalig instellen signaalplannen na wijziging</Description>
+          </Setting>
+          <Setting>
+            <Default>omschtegenh</Default>
+            <Setting>omschtegenh</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden of omschakelen is toegestaan</Description>
+          </Setting>
+          <Setting>
+            <Default>rstotxa</Default>
+            <Setting>rstotxa</Setting>
+            <Type>Parameter</Type>
+            <Description>Tijd tot xa dat RS opgezet wordt (anti-flitsgroen)</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>Timer</Type>
+            <Description>Frequentie verstuurd levenssignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden actief zijn levensignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>leven</Default>
+            <Setting>leven</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden actief zijn levensignaal</Description>
+          </Setting>
+          <Setting>
+            <Default>volgmasterpl</Default>
+            <Setting>volgmasterpl</Setting>
+            <Type>Parameter</Type>
+            <Description>Per plan (bitwise) instellen wel/niet volgen master</Description>
+          </Setting>
+          <Setting>
+            <Default>offset</Default>
+            <Setting>offset</Setting>
+            <Type>Timer</Type>
+            <Description>Offset in slave</Description>
+          </Setting>
+          <Setting>
+            <Default>xmarge</Default>
+            <Setting>xmarge</Setting>
+            <Type>Timer</Type>
+            <Description>Toegestane marge by sync halfstar</Description>
+          </Setting>
+          <Setting>
+            <Default>pl</Default>
+            <Setting>pl</Setting>
+            <Type>Uitgang</Type>
+            <Description>Plan _E1_ actief _E2_ _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>tx</Default>
+            <Setting>tx</Setting>
+            <Type>Parameter</Type>
+            <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -105,111 +529,19 @@
             <Default>mad</Default>
             <Setting>mad</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement onthouden detector melding meeaanvraag</Description>
+            <Description>Hulpelement onthouden melding meeaanvraag detector _E1_</Description>
           </Setting>
           <Setting>
             <Default>typema</Default>
             <Setting>typema</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter om type meeaanvraag op straat in te kunnen stellen</Description>
+            <Description>Type meeaanvraag van _E1_ naar _E2_</Description>
           </Setting>
           <Setting>
             <Default>uitgestma</Default>
             <Setting>uitgestma</Setting>
             <Type>Timer</Type>
-            <Description>Tijdsduur uitgestelde meeaanvraag op startgroen</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="PeriodenGroentijdenCodeGenerator">
-      <CodePieceData>
-        <ClassName>PeriodenGroentijdenCodeGenerator</ClassName>
-        <Description>Perioden en maxgroen</Description>
-        <Settings>
-          <Setting>
-            <Default>perdef</Default>
-            <Setting>perdef</Setting>
-            <Type>Uitgang</Type>
-            <Description>Uitgang default periode</Description>
-          </Setting>
-          <Setting>
-            <Default>per</Default>
-            <Setting>per</Setting>
-            <Type>Uitgang</Type>
-            <Description>Uitgang periode</Description>
-          </Setting>
-          <Setting>
-            <Default>stkp</Default>
-            <Setting>stkp</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter start klokperiode</Description>
-          </Setting>
-          <Setting>
-            <Default>etkp</Default>
-            <Setting>etkp</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter einde klokperiode</Description>
-          </Setting>
-          <Setting>
-            <Default>dckp</Default>
-            <Setting>dckp</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter dagsoort klokperiode</Description>
-          </Setting>
-          <Setting>
-            <Default>period</Default>
-            <Setting>period</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Geheugen element periode</Description>
-          </Setting>
-          <Setting>
-            <Default>period</Default>
-            <Setting>period</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement periode</Description>
-          </Setting>
-          <Setting>
-            <Default>perrt</Default>
-            <Setting>rt</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode rateltikkers altijd</Description>
-          </Setting>
-          <Setting>
-            <Default>perrta</Default>
-            <Setting>rta</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode rateltikkers op aanvraag</Description>
-          </Setting>
-          <Setting>
-            <Default>perrtdim</Default>
-            <Setting>rtdim</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode rateltikkers dimmen</Description>
-          </Setting>
-          <Setting>
-            <Default>perbel</Default>
-            <Setting>bel</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode bellen actief</Description>
-          </Setting>
-          <Setting>
-            <Default>perbeldim</Default>
-            <Setting>beldim</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode bellen dimmen</Description>
-          </Setting>
-          <Setting>
-            <Default>pertwl</Default>
-            <Setting>twl</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode TWLs actief</Description>
-          </Setting>
-          <Setting>
-            <Default>pero</Default>
-            <Setting>o</Setting>
-            <Type>Parameter</Type>
-            <Description>Naamgeving elementen periode overig</Description>
+            <Description>Tijdsduur uitgestelde meeaanvraag op startgroen van _E1_ naar _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -223,11 +555,173 @@
             <Default>mv</Default>
             <Setting>mv</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar meeverlengen</Description>
+            <Description>Meeverlengen fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="NalopenCodeGenerator">
+      <CodePieceData>
+        <ClassName>NalopenCodeGenerator</ClassName>
+        <Description>Nalopen</Description>
+        <Settings>
+          <Setting>
+            <Default>nla</Default>
+            <Setting>nla</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden detectiemelding detector _E1_ tbv naloop van _E2_ naar _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlsg</Default>
+            <Setting>nlsg</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop op start groen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlsgd</Default>
+            <Setting>nlsgd</Setting>
+            <Type>Timer</Type>
+            <Description>Detectieafhankelijke naloop op start groen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlfg</Default>
+            <Setting>nlfg</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop tijdens vastgroen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlfgd</Default>
+            <Setting>nlfgd</Setting>
+            <Type>Timer</Type>
+            <Description>Detectieafhankelijke naloop tijdens vastgroen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nleg</Default>
+            <Setting>nleg</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop op einde groen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlegd</Default>
+            <Setting>nlegd</Setting>
+            <Type>Timer</Type>
+            <Description>Detectieafhankelijke naloop op einde groen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlcv</Default>
+            <Setting>nlcv</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop tijdens cyclisch verlenggroen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>nlcvd</Default>
+            <Setting>nlcvd</Setting>
+            <Type>Timer</Type>
+            <Description>Detectieafhankelijke naloop tijdens cyclisch verlenggroen van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>xnl</Default>
+            <Setting>xnl</Setting>
+            <Type>Parameter</Type>
+            <Description>Tijd tegenhouden voedende richting naloop van _E1_ naar _E2_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    
+    <CodePieceGenerator CodePiece="PeriodenGroentijdenCodeGenerator">
+      <CodePieceData>
+        <ClassName>PeriodenGroentijdenCodeGenerator</ClassName>
+        <Description>Perioden en maxgroen</Description>
+        <Settings>
+          <Setting>
+            <Default>perdef</Default>
+            <Setting>perdef</Setting>
+            <Type>Uitgang</Type>
+            <Description>Default periode actief</Description>
+          </Setting>
+          <Setting>
+            <Default>per</Default>
+            <Setting>per</Setting>
+            <Type>Uitgang</Type>
+            <Description>Periode _E1_ actief</Description>
+          </Setting>
+          <Setting>
+            <Default>stkp</Default>
+            <Setting>stkp</Setting>
+            <Type>Parameter</Type>
+            <Description>Start klokperiode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>etkp</Default>
+            <Setting>etkp</Setting>
+            <Type>Parameter</Type>
+            <Description>Einde klokperiode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>dckp</Default>
+            <Setting>dckp</Setting>
+            <Type>Parameter</Type>
+            <Description>Dagsoort klokperiode _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>period</Default>
+            <Setting>period</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden actieve periode</Description>
+          </Setting>
+          <Setting>
+            <Default>period</Default>
+            <Setting>period</Setting>
+            <Type>HulpElement</Type>
+            <Description>Periode _E1_ actief</Description>
+          </Setting>
+          <Setting>
+            <Default>perrt</Default>
+            <Setting>rt</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode rateltikkers altijd</Description>
+          </Setting>
+          <Setting>
+            <Default>perrta</Default>
+            <Setting>rta</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode rateltikkers op aanvraag</Description>
+          </Setting>
+          <Setting>
+            <Default>perrtdim</Default>
+            <Setting>rtdim</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode rateltikkers dimmen</Description>
+          </Setting>
+          <Setting>
+            <Default>perbel</Default>
+            <Setting>bel</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode bellen actief</Description>
+          </Setting>
+          <Setting>
+            <Default>perbeldim</Default>
+            <Setting>beldim</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode bellen dimmen</Description>
+          </Setting>
+          <Setting>
+            <Default>pertwl</Default>
+            <Setting>twl</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode TWLs actief</Description>
+          </Setting>
+          <Setting>
+            <Default>pero</Default>
+            <Setting>o</Setting>
+            <Type>Parameter</Type>
+            <Description>Periode overig</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+
     <CodePieceGenerator CodePiece="VersneldPrimairAlternatievenCodeGenerator">
       <CodePieceData>
         <ClassName>VersneldPrimairAlternatievenCodeGenerator</ClassName>
@@ -451,169 +945,8 @@
           </Setting>
         </Settings>
       </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="FileIngrepenCodeGenerator">
-      <CodePieceData>
-        <ClassName>FileIngrepenCodeGenerator</ClassName>
-        <Description>File ingrepen</Description>
-        <Settings>
-          <Setting>
-            <Default>file</Default>
-            <Setting>file</Setting>
-            <Type>Uitgang</Type>
-            <Description>Uitgang file ingreep actief</Description>
-          </Setting>
-          <Setting>
-            <Default>file</Default>
-            <Setting>file</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement file detector/ingreep actief</Description>
-          </Setting>
-          <Setting>
-            <Default>bz</Default>
-            <Setting>bz</Setting>
-            <Type>Timer</Type>
-            <Description>Timer bezettijd file detector</Description>
-          </Setting>
-          <Setting>
-            <Default>rij</Default>
-            <Setting>rij</Setting>
-            <Type>Timer</Type>
-            <Description>Timer rijtijd file detector</Description>
-          </Setting>
-          <Setting>
-            <Default>afv</Default>
-            <Setting>afv</Setting>
-            <Type>Timer</Type>
-            <Description>Timer afval vertraging file detector/ingreep</Description>
-          </Setting>
-          <Setting>
-            <Default>afv</Default>
-            <Setting>afv</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar toepassing afval vertraging gehele file ingreep</Description>
-          </Setting>
-          <Setting>
-            <Default>eerlijkdoseren</Default>
-            <Setting>eerlijkdoseren</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar toepassen eerlijk doseren</Description>
-          </Setting>
-          <Setting>
-            <Default>fperc</Default>
-            <Setting>fperc</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter doseerpercentage</Description>
-          </Setting>
-          <Setting>
-            <Default>parlus</Default>
-            <Setting>parlus</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar parallele file meldingen per lus</Description>
-          </Setting>
-          <Setting>
-            <Default>parstrook</Default>
-            <Setting>parstrook</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar parallele file meldingen per strook</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
     </CodePieceGenerator> 
-    <CodePieceGenerator CodePiece="NalopenCodeGenerator">
-      <CodePieceData>
-        <ClassName>NalopenCodeGenerator</ClassName>
-        <Description>Nalopen</Description>
-        <Settings>
-          <Setting>
-            <Default>nla</Default>
-            <Setting>nla</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement onthouden detectiemelding tbv naloop</Description>
-          </Setting>
-          <Setting>
-            <Default>nlsg</Default>
-            <Setting>nlsg</Setting>
-            <Type>Timer</Type>
-            <Description>Timer naloop op start groen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlsgd</Default>
-            <Setting>nlsgd</Setting>
-            <Type>Timer</Type>
-            <Description>Timer detectieafhankelijke op start groen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlfg</Default>
-            <Setting>nlfg</Setting>
-            <Type>Timer</Type>
-            <Description>Timer naloop tijdens vastgroen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlfgd</Default>
-            <Setting>nlfgd</Setting>
-            <Type>Timer</Type>
-            <Description>Timer detectieafhankelijke naloop tijdens vastgroen</Description>
-          </Setting>
-          <Setting>
-            <Default>nleg</Default>
-            <Setting>nleg</Setting>
-            <Type>Timer</Type>
-            <Description>Timer naloop op einde groen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlegd</Default>
-            <Setting>nlegd</Setting>
-            <Type>Timer</Type>
-            <Description>Timer detectieafhankelijke naloop op einde groen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlcv</Default>
-            <Setting>nlcv</Setting>
-            <Type>Timer</Type>
-            <Description>Timer naloop tijdens cyclisch verlenggroen</Description>
-          </Setting>
-          <Setting>
-            <Default>nlcvd</Default>
-            <Setting>nlcvd</Setting>
-            <Type>Timer</Type>
-            <Description>Timer detectieafhankelijke naloop tijdens cyclisch verlenggroen</Description>
-          </Setting>
-          <Setting>
-            <Default>xnl</Default>
-            <Setting>xnl</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter tijd tegenhouden voedende richting</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="GelijkstartenVoorstartenCodeGenerator">
-      <CodePieceData>
-        <ClassName>GelijkstartenVoorstartenCodeGenerator</ClassName>
-        <Description>Voor- en gelijkstarten</Description>
-        <Settings>
-          <Setting>
-            <Default>vs</Default>
-            <Setting>vs</Setting>
-            <Type>Timer</Type>
-            <Description>Timer voorstart tijdsduur</Description>
-          </Setting>
-          <Setting>
-            <Default>vsot</Default>
-            <Setting>vsot</Setting>
-            <Type>Timer</Type>
-            <Description>Timer fictief ontruimen voorstart</Description>
-          </Setting>
-          <Setting>
-            <Default>gsot</Default>
-            <Setting>gsot</Setting>
-            <Type>Timer</Type>
-            <Description>Timer fictief ontruimen gelijkstart</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
+    
     <CodePieceGenerator CodePiece="RateltikkersCodeGenerator">
       <CodePieceData>
         <ClassName>RateltikkersCodeGenerator</ClassName>
@@ -679,14 +1012,14 @@
         <Settings>
           <Setting>
             <Default>maxtvgvlog</Default>
-            <Setting>maxtvg</Setting>
+            <Setting>maxtvgvlog</Setting>
             <Type>Parameter</Type>
             <Description>Parameter VLOG max. aantal volledige verlenggroen</Description>
           </Setting>
           <Setting>
-            <Default>maxtfb</Default>
-            <Setting>maxtfb</Setting>
-            <Type>Uitgang</Type>
+            <Default>maxtfbvlog</Default>
+            <Setting>maxtfbvlog</Setting>
+            <Type>Parameter</Type>
             <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
           </Setting>
         </Settings>
@@ -1003,6 +1336,143 @@
             <Type>Timer</Type>
             <Description>Timer ondergedrag KAR</Description>
           </Setting>
+          
+          <!--<Setting>
+            <Default>inmdsi</Default>
+            <Setting>inmdsi</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd inmelden DSI _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inmdsi</Default>
+            <Setting>inmdsi</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden inmelden DSI _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inmdsi</Default>
+            <Setting>inmdsi</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan inmelden DSI _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmdsi</Default>
+            <Setting>uitmdsi</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd uitmelden DSI _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmdsi</Default>
+            <Setting>uitmdsi</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden uitmelden DSI _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmdsi</Default>
+            <Setting>uitmdsi</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan uitmelden DSI _E1_</Description>
+          </Setting>
+          
+          <Setting>
+            <Default>inmkar</Default>
+            <Setting>inmkar</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd inmelden kar _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inmkar</Default>
+            <Setting>inmkar</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden inmelden kar _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmkar</Default>
+            <Setting>uitmkar</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd uitmelden kar _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmkar</Default>
+            <Setting>uitmkar</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden uitmelden kar _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>karov</Default>
+            <Setting>karov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan kar tbv in/uitmelden voor _E1_</Description>
+          </Setting>
+
+          <Setting>
+            <Default>inmwsk</Default>
+            <Setting>inmwsk</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden inmelden wsk _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inmwsk</Default>
+            <Setting>inmwsk</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan inmelden wsk _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmwsk</Default>
+            <Setting>uitmwsk</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd uitmelden wsk _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmwsk</Default>
+            <Setting>uitmwsk</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden uitmelden wsk _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmwsk</Default>
+            <Setting>uitmwsk</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan uitmelden wsk _E1_</Description>
+          </Setting>
+
+          <Setting>
+            <Default>inmss</Default>
+            <Setting>inmss</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden inmelden ss _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>inmss</Default>
+            <Setting>inmss</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan inmelden ss _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmss</Default>
+            <Setting>uitmss</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd uitmelden ss _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmss</Default>
+            <Setting>uitmss</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden uitmelden ss _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>uitmss</Default>
+            <Setting>uitmss</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toestaan uitmelden ss _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>geenwissel</Default>
+            <Setting>geenwissel</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Wisselstand van _E1_ negeren</Description>
+          </Setting>-->
+
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
@@ -1152,52 +1622,6 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="FixatieCodeGenerator">
-      <CodePieceData>
-        <ClassName>FixatieCodeGenerator</ClassName>
-        <Description>Fixatie</Description>
-        <Settings>
-          <Setting>
-            <Default>fix</Default>
-            <Setting>fix</Setting>
-            <Type>Ingang</Type>
-            <Description>Ingang fixatie regeling</Description>
-          </Setting>
-          <Setting>
-            <Default>bmfix</Default>
-            <Setting>bmfix</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar bijkomen tijdens fixatie mogelijk</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="DetectieStoringGenerator">
-      <CodePieceData>
-        <ClassName>DetectieStoringGenerator</ClassName>
-        <Description>Detectie storing</Description>
-        <Settings>
-          <Setting>
-            <Default>dvak</Default>
-            <Setting>dvak</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar aanvraag bij storing op detector</Description>
-          </Setting>
-          <Setting>
-            <Default>hdv</Default>
-            <Setting>hdv</Setting>
-            <Type>Timer</Type>
-            <Description>Timer vervangend hiaat koplus bij defect lange lus</Description>
-          </Setting>
-          <Setting>
-            <Default>perc</Default>
-            <Setting>perc</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter percentage groentijd bij defect kop en lange lus</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="VeiligheidsGroenCodeGenerator">
       <CodePieceData>
         <ClassName>VeiligheidsGroenCodeGenerator</ClassName>
@@ -1220,302 +1644,6 @@
             <Setting>vgb</Setting>
             <Type>Timer</Type>
             <Description>Tijdsduur veiligheidsgroen</Description>
-          </Setting>
-        </Settings>
-      </CodePieceData>
-    </CodePieceGenerator>
-    <CodePieceGenerator CodePiece="HalfstarCodeGenerator">
-      <CodePieceData>
-        <ClassName>HalfstarCodeGenerator</ClassName>
-        <Description>Halfstar</Description>
-        <Settings>
-          <Setting>
-            <Default>mlact</Default>
-            <Setting>mlact</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken actief zijn ML-bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>plact</Default>
-            <Setting>plact</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken actief zijn PL-bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>kpact</Default>
-            <Setting>kpact</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken koppeling actief</Description>
-          </Setting>
-          <Setting>
-            <Default>mlpl</Default>
-            <Setting>mlpl</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken ML tijdens VA of PL tijdens halfstar bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>txtimer</Default>
-            <Setting>txtimer</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken TX_timer tijdens halfstar bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>master</Default>
-            <Setting>master</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken master bepaald aansturing</Description>
-          </Setting>
-          <Setting>
-            <Default>slave</Default>
-            <Setting>slave</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken slave bepaald aansturing</Description>
-          </Setting>
-          <Setting>
-            <Default>klok</Default>
-            <Setting>klok</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken klok programma door klok bepaald</Description>
-          </Setting>
-          <Setting>
-            <Default>hand</Default>
-            <Setting>hand</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken aansturing/programma met de hand bepaald</Description>
-          </Setting>
-          <Setting>
-            <Default>leven</Default>
-            <Setting>leven</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken levenssignaal</Description>
-          </Setting>
-          <Setting>
-            <Default>syncok</Default>
-            <Setting>syncok</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken draait synchroon met</Description>
-          </Setting>
-          <Setting>
-            <Default>txsok</Default>
-            <Setting>txsok</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken txs ok naar</Description>
-          </Setting>
-          <Setting>
-            <Default>kpuls</Default>
-            <Setting>kpuls</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken uitsturing koppelpuls</Description>
-          </Setting>
-          <Setting>
-            <Default>pervar</Default>
-            <Setting>pervar</Setting>
-            <Type>Uitgang</Type>
-            <Dpescription>Verklikken periode VA regelen</Dpescription>
-          </Setting>
-          <Setting>
-            <Default>perarh</Default>
-            <Setting>perarh</Setting>
-            <Type>Uitgang</Type>
-            <Description>Periode alternatieven voor hoofdrichtingen</Description>
-          </Setting>
-          <Setting>
-            <Default>uitpl</Default>
-            <Setting>uitpl</Setting>
-            <Type>Uitgang</Type>
-            <Description>Uitsturing actief plan naar _ELEM_</Description>
-          </Setting>
-          <Setting>
-            <Default>klok</Default>
-            <Setting>klok</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Halfstar/va obv klokprioden</Description>
-          </Setting>
-          <Setting>
-            <Default>hand</Default>
-            <Setting>hand</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Halstar/va handmatig bepaald</Description>
-          </Setting>
-          <Setting>
-            <Default>master</Default>
-            <Setting>master</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Halstar/va bepaald door master</Description>
-          </Setting>
-          <Setting>
-            <Default>slave</Default>
-            <Setting>slave</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Halstar/va bepaald door slave</Description>
-          </Setting>
-          <Setting>
-            <Default>kpact</Default>
-            <Setting>kpact</Setting>
-            <Type>HulpElement</Type>
-            <Description>Halfstarre koppeling actief</Description>
-          </Setting>
-          <Setting>
-            <Default>plact</Default>
-            <Setting>plact</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement halfstar actief</Description>
-          </Setting>
-          <Setting>
-            <Default>mlact</Default>
-            <Setting>mlact</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement va regelen actief</Description>
-          </Setting>
-          <Setting>
-            <Default>var</Default>
-            <Setting>var</Setting>
-            <Type>Schakelaar</Type>
-            <Description>VA regelen aan/uit</Description>
-          </Setting>
-          <Setting>
-            <Default>arh</Default>
-            <Setting>arh</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar toestaan alternatieven voor hoofdrichtingen</Description>
-          </Setting>
-          <Setting>
-            <Default>pervar</Default>
-            <Setting>pervar</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar va regelen per periode</Description>
-          </Setting>
-          <Setting>
-            <Default>pervar</Default>
-            <Setting>pervar</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement va regelen obv schakelaar per periode</Description>
-          </Setting>
-          <Setting>
-            <Default>perarh</Default>
-            <Setting>perarh</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar alternatieven voor hoofdrichtignen per periode</Description>
-          </Setting>
-          <Setting>
-            <Default>perarh</Default>
-            <Setting>perarh</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement alternatieven voor hoofdrichtignen obv schakelaar per periode</Description>
-          </Setting>
-          <Setting>
-            <Default>varstreng</Default>
-            <Setting>varstreng</Setting>
-            <Type>Schakelaar</Type>
-            <Description>VA regelen aan/uit voor gehele streng</Description>
-          </Setting>
-          <Setting>
-            <Default>vaml</Default>
-            <Setting>vaml</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Indien VA regelen, ML-bedrijf of versneld PL-bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>plhulpdienst</Default>
-            <Setting>plhulpdienst</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement hulpdienstingreep tbv (tijdelijk) lokaal VA regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>ovpriople</Default>
-            <Setting>ovpriople</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Wel/niet toepassen prioriteit OV tijdens PL-bedrijf</Description>
-          </Setting>
-          <Setting>
-            <Default>plxper</Default>
-            <Setting>plxper</Setting>
-            <Type>Parameter</Type>
-            <Description>Instellen plan per periode</Description>
-          </Setting>
-          <Setting>
-            <Default>in</Default>
-            <Setting>in</Setting>
-            <Type>Timer</Type>
-            <Description>Timer inrijden harde koppelingen</Description>
-          </Setting>
-          <Setting>
-            <Default>xpl</Default>
-            <Setting>xpl</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement tegenhouden richtingen tbv gelijkstart</Description>
-          </Setting>
-          <Setting>
-            <Default>slavebep</Default>
-            <Setting>slavebep</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Slave bepaald PL aansturing</Description>
-          </Setting>
-          <Setting>
-            <Default>inst</Default>
-            <Setting>inst</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Schakelaar eenmalig instellen signaalplannen na wijziging</Description>
-          </Setting>
-          <Setting>
-            <Default>omschtegenh</Default>
-            <Setting>omschtegenh</Setting>
-            <Type>HulpElement</Type>
-            <Description>Hulpelement tbv bijhouden of omschakelen is toegestaan</Description>
-          </Setting>
-          <Setting>
-            <Default>rstotxa</Default>
-            <Setting>rstotxa</Setting>
-            <Type>Parameter</Type>
-            <Description>Parameter tijd tot xa dat RS opgezet wordt (anti-flitsgroen)</Description>
-          </Setting>
-          <Setting>
-            <Default>leven</Default>
-            <Setting>leven</Setting>
-            <Type>Timer</Type>
-            <Description>Frequentie verstuurd levenssignaal</Description>
-          </Setting>
-          <Setting>
-            <Default>leven</Default>
-            <Setting>leven</Setting>
-            <Type>HulpElement</Type>
-            <Description>Bijhouden actief zijn levensignaal</Description>
-          </Setting>
-          <Setting>
-            <Default>leven</Default>
-            <Setting>leven</Setting>
-            <Type>GeheugenElement</Type>
-            <Description>Bijhouden actief zijn levensignaal</Description>
-          </Setting>
-          <Setting>
-            <Default>volgmasterpl</Default>
-            <Setting>volgmasterpl</Setting>
-            <Type>Parameter</Type>
-            <Description>Per plan (bitwise) instellen wel/niet volgen master</Description>
-          </Setting>
-          <Setting>
-            <Default>offset</Default>
-            <Setting>offset</Setting>
-            <Type>Timer</Type>
-            <Description>Offset in slave</Description>
-          </Setting>
-          <Setting>
-            <Default>xmarge</Default>
-            <Setting>xmarge</Setting>
-            <Type>Timer</Type>
-            <Description>Toegestane marge by sync halfstar</Description>
-          </Setting>
-          <Setting>
-            <Default>pl</Default>
-            <Setting>pl</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikking actief plan per plan</Description>
-          </Setting>
-          <Setting>
-            <Default>tx</Default>
-            <Setting>tx</Setting>
-            <Type>Parameter</Type>
-            <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
           </Setting>
         </Settings>
       </CodePieceData>

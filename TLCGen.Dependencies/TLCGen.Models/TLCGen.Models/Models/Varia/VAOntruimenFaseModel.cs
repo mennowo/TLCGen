@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo("FaseCyclus")]
     public class VAOntruimenFaseModel
     {
         public string FaseCyclus { get; set; }

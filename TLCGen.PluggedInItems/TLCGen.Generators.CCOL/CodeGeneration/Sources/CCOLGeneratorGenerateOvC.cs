@@ -787,6 +787,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
             var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
 
+            //var _tinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
+            //var _hinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmdsi");
+            //var _tuitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmdsi");
+            //var _huitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmdsi");
+            //var _schinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmdsi");
+            //var _schuitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmdsi");
+            //var _tinmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("tinmkar");
+            //var _hinmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmkar");
+            //var _tuitmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmkar");
+            //var _huitmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmkar");
+            //var _schkarov = CCOLGeneratorSettingsProvider.Default.GetElementName("schkarov");
+            //var _hinmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmwsk");
+            //var _huitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmwsk");
+            //var _tuitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmwsk");
+            //var _schinmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmwsk");
+            //var _schuitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmwsk");
+            //var _hinmss = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmss");
+            //var _schinmss = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmss");
+            //var _huitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmss");
+            //var _tuitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmss");
+            //var _schuitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmss");
+            //var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
             sb.AppendLine("   Voor het in- en uitmelden zijn hulpelementen gedefinieerd.");
@@ -840,9 +863,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = FALSE;");
             }
 
+            #region Trams Den Haag
+
+            //foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Type == OVIngreepVoertuigTypeEnum.Tram))
+            //{
+            //    if (ov.Vecom)
+            //    {
+            //        sb.AppendLine($"{ts}IH[{_hpf}{_hinmdsi}{ov.FaseCyclus}] = RT[{_tpf}{_tinmdsi}{ov.FaseCyclus}] = SCH[{_schpf}{_schinmdsi}{ov.FaseCyclus}] && DSI_melding(ds{ov.FaseCyclus}_in, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tinmdsi}{ov.FaseCyclus}];");
+            //    }
+            //}
+
+            #endregion
+
             #region OV ingrepen KAR
 
-            var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
+                var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
 	        var ovIngreepModels = karovfcs as OVIngreepModel[] ?? karovfcs.ToArray();
 	        foreach (var ov in ovIngreepModels)
             {

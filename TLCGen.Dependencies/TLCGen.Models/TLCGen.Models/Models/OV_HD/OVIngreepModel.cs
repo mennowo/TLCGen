@@ -7,7 +7,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
+    [RefersTo(nameof(FaseCyclus))]
     public class OVIngreepModel : IComparable
     {
         #region Properties
@@ -17,6 +17,16 @@ namespace TLCGen.Models
 
         public bool KAR { get; set; }
         public bool Vecom { get; set; }
+        public bool VerlosAanvraag { get; set; }
+        [RefersTo]
+        public string VerlosAanvraagDetector { get; set; }
+        public bool Wissel { get; set; }
+        [RefersTo]
+        public string WisselDetector { get; set; }
+        public bool WisselStroomKring { get; set; }
+        [RefersTo]
+        public string WisselStroomKringDetector { get; set; }
+
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
 

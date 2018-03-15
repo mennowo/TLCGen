@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclus")]
-    [RefersToDetector("VanDetector", "NaarDetector")]
+    [RefersTo("FaseCyclus", "VanDetector", "NaarDetector")]
     public class RichtingGevoeligeAanvraagModel
     {
         [HasDefault(false)]

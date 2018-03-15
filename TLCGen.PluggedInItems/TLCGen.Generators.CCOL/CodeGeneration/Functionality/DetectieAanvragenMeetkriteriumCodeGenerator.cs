@@ -17,12 +17,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning disable 0649
 #pragma warning disable 0169
-        private string _prmda;
-		private string _prmmk;
-        private string _tkm;
-		private string _prmda_D;
-		private string _prmmk_D;
-        private string _tkm_D;
+        private CCOLGeneratorCodeStringSettingModel _prmda;
+		private CCOLGeneratorCodeStringSettingModel _prmmk;
+        private CCOLGeneratorCodeStringSettingModel _tkm;
 #pragma warning restore 0169
 #pragma warning restore 0649
 
@@ -56,8 +53,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         set = 3;
                         break;
                 }
-                _MyElements.Add(new CCOLElement($"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter,  
-					CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmda_D, dm.Naam)));
+                _MyElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
             }
 
             // Detectie verlengkriterium
@@ -65,14 +63,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
                     continue;
-                
                 _MyElements.Add(
-                    new CCOLElement(
-                        $"{_prmmk}{dm.Naam}", 
-                        (int)dm.Verlengen, 
-                        CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Parameter,
-						CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmmk_D, dm.Naam)));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmmk}{dm.Naam}", (int)dm.Verlengen, CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
             }
 
             // Collect Kopmax
@@ -89,12 +82,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 if (HasKopmax)
                 {
-                    _MyElements.Add(new CCOLElement(
-                        $"{_tkm}{fcm.Naam}",
-                        fcm.Kopmax,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer,
-						CCOLGeneratorSettingsProvider.Default.GetElementDescription(_tkm_D, fcm.Naam)));
+                    _MyElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tkm}{fcm.Naam}",
+                            fcm.Kopmax,
+                            CCOLElementTimeTypeEnum.TE_type,
+						    _tkm, fcm.Naam));
                 }
             }
         }

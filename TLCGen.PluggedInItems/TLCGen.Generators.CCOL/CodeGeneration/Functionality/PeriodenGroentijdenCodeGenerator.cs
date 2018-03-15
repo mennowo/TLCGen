@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -14,20 +15,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private List<CCOLIOElement> _myBitmapOutputs;
 
 #pragma warning disable 0649
-        private string _usperdef;
-        private string _usper;
-        private string _prmstkp;
-        private string _prmetkp;
-        private string _prmdckp;
-        private string _mperiod;
-        private string _hperiod;
-        private string _prmperrt;
-        private string _prmperrta;
-        private string _prmperrtdim;
-        private string _prmperbel;
-        private string _prmperbeldim;
-        private string _prmpertwl;
-        private string _prmpero;
+        private CCOLGeneratorCodeStringSettingModel _usperdef;
+        private CCOLGeneratorCodeStringSettingModel _usper;
+        private CCOLGeneratorCodeStringSettingModel _prmstkp;
+        private CCOLGeneratorCodeStringSettingModel _prmetkp;
+        private CCOLGeneratorCodeStringSettingModel _prmdckp;
+        private CCOLGeneratorCodeStringSettingModel _mperiod;
+        private CCOLGeneratorCodeStringSettingModel _hperiod;
+        private CCOLGeneratorCodeStringSettingModel _prmperrt;
+        private CCOLGeneratorCodeStringSettingModel _prmperrta;
+        private CCOLGeneratorCodeStringSettingModel _prmperrtdim;
+        private CCOLGeneratorCodeStringSettingModel _prmperbel;
+        private CCOLGeneratorCodeStringSettingModel _prmperbeldim;
+        private CCOLGeneratorCodeStringSettingModel _prmpertwl;
+        private CCOLGeneratorCodeStringSettingModel _prmpero;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -45,19 +46,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var ipertwl = 1;
 
             // outputs
-            _myElements.Add(new CCOLElement(_usperdef, CCOLElementTypeEnum.Uitgang));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
             _myBitmapOutputs.Add(new CCOLIOElement(c.PeriodenData.DefaultPeriodeBitmapData, $"{_uspf}{_usperdef}"));
             foreach (var per in c.PeriodenData.Perioden)
             {
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
-                        _myElements.Add(new CCOLElement(_usper + iper, CCOLElementTypeEnum.Uitgang));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{iper}", _usper));
                         _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{iper++}"));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(new CCOLElement(_usper + _prmpero + ipero, CCOLElementTypeEnum.Uitgang));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper + _prmpero}{ipero++}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{ipero}", _usper));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{_prmpero}{ipero++}"));
                         break;
                 }
             }

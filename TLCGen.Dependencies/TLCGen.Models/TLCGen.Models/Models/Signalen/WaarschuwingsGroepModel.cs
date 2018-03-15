@@ -8,7 +8,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToSignalGroup("FaseCyclusVoorAansturing")]
+    [RefersTo("FaseCyclusVoorAansturing")]
     public class WaarschuwingsGroepModel
     {
         [ModelName]

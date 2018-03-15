@@ -16,7 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _MyElements;
 
 #pragma warning disable 0649
-        private string _schmv; // schakelaar meeverlengen naam
+        private CCOLGeneratorCodeStringSettingModel _schmv; // schakelaar meeverlengen naam
 #pragma warning restore 0649
         private string _hfile;
 
@@ -30,11 +30,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                 {
                     _MyElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_schmv}{fcm.Naam}", 
                             (fcm.Meeverlengen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
                             CCOLElementTimeTypeEnum.SCH_type, 
-                            CCOLElementTypeEnum.Schakelaar));
+                            _schmv, fcm.Naam));
                 }
             }
         }

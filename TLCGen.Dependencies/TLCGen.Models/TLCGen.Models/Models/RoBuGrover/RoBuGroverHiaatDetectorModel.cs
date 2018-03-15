@@ -8,7 +8,7 @@ using System.ComponentModel;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersToDetector("Detector")]
+    [RefersTo("Detector")]
     public class RoBuGroverHiaatDetectorModel
     {
         [Browsable(false)]
