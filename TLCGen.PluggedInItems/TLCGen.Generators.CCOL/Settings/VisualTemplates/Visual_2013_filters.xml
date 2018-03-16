@@ -13,15 +13,15 @@
     <ClCompile Include="__CONTROLLERNAME__tab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-__IFOV__<ClCompile Include="__CONTROLLERNAME__ov.c">
-__IFOV__  <Filter>Source Files</Filter>
-__IFOV__</ClCompile>
-__IFSYNC__<ClCompile Include="Syncfunc.C">
-__IFSYNC__  <Filter>Source Files</Filter>
-__IFSYNC__</ClCompile>
-__IFPTP__<ClCompile Include="PTPWIN.C">
-__IFPTP__  <Filter>Source Files</Filter>
-__IFPTP__</ClCompile>
+__IF;OV__<ClCompile Include="__CONTROLLERNAME__ov.c">
+__IF;OV__  <Filter>Source Files</Filter>
+__IF;OV__</ClCompile>
+__IF;SYNC__<ClCompile Include="Syncfunc.C">
+__IF;SYNC__  <Filter>Source Files</Filter>
+__IF;SYNC__</ClCompile>
+__IF;PTP__<ClCompile Include="PTPWIN.C">
+__IF;PTP__  <Filter>Source Files</Filter>
+__IF;PTP__</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

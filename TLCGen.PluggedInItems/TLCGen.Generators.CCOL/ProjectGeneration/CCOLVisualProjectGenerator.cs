@@ -49,50 +49,49 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
             }
 
             // If conditions
-            if (!string.IsNullOrWhiteSpace(line) && Regex.IsMatch(line, @"^\s*__IF.*"))
+            if (!string.IsNullOrWhiteSpace(line) && Regex.IsMatch(line, @"^\s*__IF;.*"))
             {
-                string condition = Regex.Replace(line, @"^\s*__IF([A-Z]+)__.*", "$1");
-                if (!string.IsNullOrWhiteSpace(condition))
+                var conditionsString = Regex.Replace(line, @"^\s*__IF;([A-Z;!]+)__.*", "$1");
+                var conditions = conditionsString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach(var condition in conditions)
                 {
-                    switch (condition)
+                    bool result;
+                    var invert = condition.StartsWith("!");
+                    var actualCondition = condition.Replace("!", "");
+                    switch (actualCondition)
                     {
                         case "OV":
-                            if(!(plugin.Controller.OVData.OVIngrepen != null &&
-                                 plugin.Controller.OVData.OVIngrepen.Count > 0 || 
-                                 plugin.Controller.OVData.HDIngrepen != null &&
-                                 plugin.Controller.OVData.HDIngrepen.Count > 0))
-                                return null;
+                            result = plugin.Controller.OVData.OVIngrepen != null &&
+                                     plugin.Controller.OVData.OVIngrepen.Count > 0 ||
+                                     plugin.Controller.OVData.HDIngrepen != null &&
+                                     plugin.Controller.OVData.HDIngrepen.Count > 0;
                             break;
                         case "MV":
-                            return null;
-                        case "PTP":
-                        case "MS":
-                        case "KS":
-                            if (!(plugin.Controller.PTPData.PTPKoppelingen != null &&
-                                  plugin.Controller.PTPData.PTPKoppelingen.Count > 0))
-                                return null;
+                            result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
                             break;
-                        case "NOTMS":
-                            if ((plugin.Controller.PTPData.PTPKoppelingen != null &&
-                                 plugin.Controller.PTPData.PTPKoppelingen.Count > 0))
-                                return null;
+                        case "PTP":
+                        case "KS":
+                            result = plugin.Controller.PTPData.PTPKoppelingen != null &&
+                                     plugin.Controller.PTPData.PTPKoppelingen.Count > 0;
+                            break;
+                        case "MS":
+                            result = plugin.Controller.Data.CCOLMulti;
                             break;
                         case "SYNC":
-                            if (!plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() &&
-                                !plugin.Controller.InterSignaalGroep.Voorstarten.Any())
-                                return null;
+                            result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() &&
+                                     plugin.Controller.InterSignaalGroep.Voorstarten.Any();
                             break;
                         case "HS":
-                            if (!plugin.Controller.HalfstarData.IsHalfstar)
-                                return null;
+                            result = plugin.Controller.HalfstarData.IsHalfstar;
                             break;
-                        case "NOTHS":
-                            if (plugin.Controller.HalfstarData.IsHalfstar)
-                                return null;
+                        default:
+                            result = false;
                             break;
                     }
+                    if (invert) result = !result;
+                    if (!result) return null;
                 }
-                writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z]+__", "$1");
+                writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z;!]+__", "$1");
             }
             return writeline;
         }

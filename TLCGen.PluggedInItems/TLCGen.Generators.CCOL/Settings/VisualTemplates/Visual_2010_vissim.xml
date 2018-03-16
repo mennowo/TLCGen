@@ -79,18 +79,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-__IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
+__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
-__IFSYNC__    <ClCompile Include="Syncfunc.c" />
-__IFPTP__    <ClCompile Include="PTPWIN.C" />
+__IF;SYNC__    <ClCompile Include="Syncfunc.c" />
+__IF;PTP__    <ClCompile Include="PTPWIN.C" />
   </ItemGroup>
   <ItemGroup>
-__IFKS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
+__IF;KS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
-__IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
+__IF;OV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />

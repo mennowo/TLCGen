@@ -82,21 +82,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
-__IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
+__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
     <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
-__IFPTP__    <ClCompile Include="PTPWIN.C" />
-__IFSYNC__    <ClCompile Include="Syncfunc.c" />
+__IF;PTP__    <ClCompile Include="PTPWIN.C" />
+__IF;SYNC__    <ClCompile Include="Syncfunc.c" />
   </ItemGroup>
   <ItemGroup>
-__IFKS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
-__IFMS__    <Library Include="__CCOLLIBSDIR__CCOLMAINMS.lib" />
-__IFNOTMS__    <Library Include="__CCOLLIBSDIR__CCOLMAIN.lib" />
+__IF;KS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
+__IF;MS__    <Library Include="__CCOLLIBSDIR__CCOLMAINMS.lib" />
+__IF;NOTMS__    <Library Include="__CCOLLIBSDIR__CCOLMAIN.lib" />
     <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
-__IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
+__IF;OV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
   </ItemGroup>
@@ -104,8 +104,8 @@ __IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res" />
   </ItemGroup>
   <ItemGroup>
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
+__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
+__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

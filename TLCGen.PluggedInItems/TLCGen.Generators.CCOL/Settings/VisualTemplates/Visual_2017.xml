@@ -59,8 +59,10 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-__IFNOTHS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
-__IFHS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;!HS;!MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;!HS;MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;HS;!MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;HS;MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
     </Link>
@@ -84,19 +86,19 @@ __IFHS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;cco
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
-__IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
+__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
     <ClCompile Include="__CONTROLLERNAME__sim.c" />
     <ClCompile Include="__CONTROLLERNAME__tab.c" />
-__IFPTP__    <ClCompile Include="PTPWIN.C" />
-__IFSYNC__    <ClCompile Include="Syncfunc.c" />
+__IF;PTP__    <ClCompile Include="PTPWIN.C" />
+__IF;SYNC__    <ClCompile Include="Syncfunc.c" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res" />
   </ItemGroup>
   <ItemGroup>
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
-__IFMV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
+__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
+__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

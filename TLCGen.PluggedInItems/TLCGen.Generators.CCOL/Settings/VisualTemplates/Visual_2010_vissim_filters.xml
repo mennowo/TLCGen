@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-__IFOV__    <ClCompile Include="__CONTROLLERNAME__ov.c">
-__IFOV__      <Filter>Source Files</Filter>
-__IFOV__    </ClCompile>
+__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c">
+__IF;OV__      <Filter>Source Files</Filter>
+__IF;OV__    </ClCompile>
     <ClCompile Include="__CONTROLLERNAME__reg.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="__CONTROLLERNAME__tab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-__IFSYNC__    <ClCompile Include="Syncfunc.c">
-__IFSYNC__      <Filter>Source Files</Filter>
-__IFSYNC__    </ClCompile>
-__IFPTP__    <ClCompile Include="PTPWIN.C">
-__IFPTP__      <Filter>Source Files</Filter>
-__IFPTP__    </ClCompile>
+__IF;SYNC__    <ClCompile Include="Syncfunc.c">
+__IF;SYNC__      <Filter>Source Files</Filter>
+__IF;SYNC__    </ClCompile>
+__IF;PTP__    <ClCompile Include="PTPWIN.C">
+__IF;PTP__      <Filter>Source Files</Filter>
+__IF;PTP__    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-__IFKS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
+__IF;KS__    <Library Include="__CCOLLIBSDIR__CCOLKS.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLREG.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLSIM.LIB" />
     <Library Include="__CCOLLIBSDIR__CCOLVLOG.lib" />
-__IFOV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
+__IF;OV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
     <Library Include="__CCOLLIBSDIR__LWMLFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__STDFUNC.LIB" />
     <Library Include="__CCOLLIBSDIR__VISSIM\ccolvissim.lib" />
