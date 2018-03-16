@@ -21,6 +21,7 @@ namespace TLCGen.ViewModels
         private OVIngreepModel _OVIngreep;
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
         private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
+        private ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel> _meldingen;
         private ObservableCollection<string> _Detectoren;
         private string _NewLijnNummer;
 
@@ -38,29 +39,32 @@ namespace TLCGen.ViewModels
         }
 
         [Category("Opties")]
+        [Browsable(false)]
         public bool KAR
         {
             get { return _OVIngreep.KAR; }
             set
             {
                 _OVIngreep.KAR = value;
-                if(value)
-                {
-                    _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
-                    _OVIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
-                    _OVIngreep.DummyKARInmelding.Naam = "dummykarin" + _OVIngreep.FaseCyclus;
-                    _OVIngreep.DummyKARUitmelding.Naam = "dummykaruit" + _OVIngreep.FaseCyclus;
-                }
-                else
-                {
-                    _OVIngreep.DummyKARInmelding = null;
-                    _OVIngreep.DummyKARUitmelding = null;
-                }
-                RaisePropertyChanged<object>("KAR", broadcast: true);
+                //if(value)
+                //{
+                //    _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
+                //    _OVIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
+                //    _OVIngreep.DummyKARInmelding.Naam = "dummykarin" + _OVIngreep.FaseCyclus;
+                //    _OVIngreep.DummyKARUitmelding.Naam = "dummykaruit" + _OVIngreep.FaseCyclus;
+                //}
+                //else
+                //{
+                //    _OVIngreep.DummyKARInmelding = null;
+                //    _OVIngreep.DummyKARUitmelding = null;
+                //}
+                RaisePropertyChanged<object>(broadcast: true);
+                Messenger.Default.Send(new OVIngreepMeldingChangedMessage(OVIngreep.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
                 Messenger.Default.Send(new OVIngrepenChangedMessage());
             }
         }
 
+        [Browsable(false)]
         public bool Vecom
         {
             get { return _OVIngreep.Vecom; }
@@ -84,90 +88,94 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Browsable(false)]
-        [Description("Verlos aanvraag")]
-        public bool VerlosAanvraag
-        {
-            get { return _OVIngreep.VerlosAanvraag; }
-            set
-            {
-                _OVIngreep.VerlosAanvraag = value;
-                RaisePropertyChanged();
-            }
-        }
-        
-        [Browsable(false)]
-        [Description("Verlos detector")]
-        [EnabledCondition("VerlosAanvraag")]
-        public string VerlosAanvraagDetector
-        {
-            get { return _OVIngreep.VerlosAanvraagDetector; }
-            set
-            {
-                if(value != null)
-                {
-                    _OVIngreep.VerlosAanvraagDetector = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
+        //[Browsable(false)]
+        //[Description("Verlos aanvraag")]
+        //public bool VerlosAanvraag
+        //{
+        //    get { return _OVIngreep.VerlosAanvraag; }
+        //    set
+        //    {
+        //        _OVIngreep.VerlosAanvraag = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //[Browsable(false)]
+        //[Description("Verlos detector")]
+        //[EnabledCondition("VerlosAanvraag")]
+        //public string VerlosAanvraagDetector
+        //{
+        //    get { return _OVIngreep.VerlosAanvraagDetector; }
+        //    set
+        //    {
+        //        if(value != null)
+        //        {
+        //            _OVIngreep.VerlosAanvraagDetector = value;
+        //        }
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //[Browsable(false)]
+        //[Description("Wissel")]
+        //public bool Wissel
+        //{
+        //    get { return _OVIngreep.Wissel; }
+        //    set
+        //    {
+        //        _OVIngreep.Wissel = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //[Browsable(false)]
+        //[Description("Wissel detector")]
+        //[EnabledCondition("Wissel")]
+        //public string WisselDetector
+        //{
+        //    get { return _OVIngreep.WisselDetector; }
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            _OVIngreep.WisselDetector = value;
+        //        }
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //[Browsable(false)]
+        //[Description("Wissel stroomkring")]
+        //public bool WisselStroomKring
+        //{
+        //    get { return _OVIngreep.WisselStroomKring; }
+        //    set
+        //    {
+        //        _OVIngreep.WisselStroomKring = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //
+        //[Browsable(false)]
+        //[Description("Wissel stroomkring detector")]
+        //[EnabledCondition("WisselStroomKring")]
+        //public string WisselKontaktDetector
+        //{
+        //    get { return _OVIngreep.WisselStroomKringDetector; }
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            _OVIngreep.WisselStroomKringDetector = value;
+        //        }
+        //        RaisePropertyChanged();
+        //    }
+        //}
 
         [Browsable(false)]
-        [Description("Wissel")]
-        public bool Wissel
-        {
-            get { return _OVIngreep.Wissel; }
-            set
-            {
-                _OVIngreep.Wissel = value;
-                RaisePropertyChanged();
-            }
-        }
+        public ObservableCollection<OVIngreepMeldingViewModel> Meldingen => _meldingen;
 
-        [Browsable(false)]
-        [Description("Wissel detector")]
-        [EnabledCondition("Wissel")]
-        public string WisselDetector
-        {
-            get { return _OVIngreep.WisselDetector; }
-            set
-            {
-                if (value != null)
-                {
-                    _OVIngreep.WisselDetector = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
-
-        [Browsable(false)]
-        [Description("Wissel stroomkring")]
-        public bool WisselStroomKring
-        {
-            get { return _OVIngreep.WisselStroomKring; }
-            set
-            {
-                _OVIngreep.WisselStroomKring = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        [Browsable(false)]
-        [Description("Wissel stroomkring detector")]
-        [EnabledCondition("WisselStroomKring")]
-        public string WisselKontaktDetector
-        {
-            get { return _OVIngreep.WisselStroomKringDetector; }
-            set
-            {
-                if (value != null)
-                {
-                    _OVIngreep.WisselStroomKringDetector = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
-
+        [Category("Opties")]
         [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type
         {
@@ -504,24 +512,7 @@ namespace TLCGen.ViewModels
 
         #endregion // Collection changed
 
-        #region Constructor
-
-        public OVIngreepViewModel(OVIngreepModel ovingreep)
-        {
-            _OVIngreep = ovingreep;
-
-            foreach(OVIngreepLijnNummerModel num in _OVIngreep.LijnNummers)
-            {
-                LijnNummers.Add(new OVIngreepLijnNummerViewModel(num));
-            }
-
-            LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
-
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-
-            RefreshDetectoren();
-        }
+        #region Private Methods
 
         private void OnNameChanged(NameChangedMessage msg)
         {
@@ -548,6 +539,81 @@ namespace TLCGen.ViewModels
             {
                 Detectoren.Add(d.Naam);
             }
+        }
+
+        #endregion // Private Methods
+
+        #region Constructor
+
+        public OVIngreepViewModel(OVIngreepModel ovingreep)
+        {
+            _OVIngreep = ovingreep;
+
+            foreach(OVIngreepLijnNummerModel num in _OVIngreep.LijnNummers)
+            {
+                LijnNummers.Add(new OVIngreepLijnNummerViewModel(num));
+            }
+
+            LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+
+            _meldingen = new ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel>(ovingreep.Meldingen);
+
+            if (!_meldingen.Any())
+            {
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.KAR,
+                    Inmelding = true,
+                    Uitmelding = true,
+                    InmeldingHiaattijd = 15
+                }));
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.VECOM,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingHiaattijd = 15
+                }));
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.VerlosDetector,
+                    Inmelding = true,
+                    Uitmelding = true,
+                    InmeldingHiaattijd = 15
+                }));
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.WisselDetector,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingHiaattijd = 15
+                }));
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.WisselStandDetector,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingHiaattijd = 15
+                }));
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.WisselStroomKringDetector,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingHiaattijd = 15
+                }));
+            }
+
+            RefreshDetectoren();
         }
 
         #endregion // Constructor

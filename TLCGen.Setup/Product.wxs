@@ -5,10 +5,10 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="0.2.1" 
+    Version="0.2.2" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
-    
+       
     <Package 
       Id="*" Keywords="Installer" Description="TLCGen"
       Manufacturer="CodingConnected e.U."
@@ -17,8 +17,6 @@
     <WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
 
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-
-		<MajorUpgrade DowngradeErrorMessage="Er is reeds een nieuwere versie van [ProductName] geinstalleerd." />
 
     <MediaTemplate EmbedCab="yes" />
 
@@ -47,7 +45,9 @@
 
     <UIRef Id="WixUI_FeatureTree" />
 	  <UIRef Id="WixUI_ErrorProgressText" />
-    
+
+    <MajorUpgrade DowngradeErrorMessage="Er is reeds een nieuwere versie van [ProductName] geinstalleerd." />
+      
 	</Product>
 
 	<Fragment>
@@ -129,7 +129,6 @@
     </ComponentGroup>
     <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
       <Component Id='AllSettings' Guid='A7F61BAA-AAA1-4BF7-B2BD-200FF1E83123'>
-        <File Id='ccolgendefaults' Name='ccolgendefaults.xml' Source='$(var.ReleaseDir)/Settings/ccolgendefaults.xml' KeyPath='no' />
         <File Id='tlcgendefaultdefaults' Name='tlcgendefaultdefaults.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaultdefaults.xml' KeyPath='no' />
         <File Id='tlcgendefaulttemplates' Name='tlcgendefaulttemplates.xml' Source='$(var.ReleaseDir)/Settings/tlcgendefaulttemplates.xml' KeyPath='no' />
       </Component>

@@ -61,8 +61,8 @@
     <Compile Include="NaloopTijdTypeEnum.cs" />
     <Compile Include="NaloopTypeEnum.cs" />
     <Compile Include="NooitAltijdAanUitEnum.cs" />
-    <Compile Include="OVIngreepMassaDetectieMeldingType.cs" />
-    <Compile Include="OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.cs" />
+    <Compile Include="OVIngreepMeldingTypeEnum.cs" />
+    <Compile Include="OVIngreepMeldingInUitEnum.cs" />
     <Compile Include="OVIngreepPrioriteitEnum.cs" />
     <Compile Include="OVIngreepVoertuigTypeEnum.cs" />
     <Compile Include="OVIngreepTypeEnum.cs" />

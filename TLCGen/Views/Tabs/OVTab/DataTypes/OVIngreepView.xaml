@@ -53,35 +53,79 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Style>
-            <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />
             <Grid>
-                <Grid.ColumnDefinitions>
+                <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>-->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Content="Verlos lus" />
-                <Label Content="Wissel" Grid.Row="1" />
-                <Label Content="Wissel stroomkring" Grid.Row="2" />
-                <CheckBox Margin="5,0" VerticalAlignment="Center" IsChecked="{Binding Path=VerlosAanvraag}" Grid.Row="0" Grid.Column="1" />
-                <CheckBox Margin="5,0" VerticalAlignment="Center" IsChecked="{Binding Path=Wissel}" Grid.Row="1" Grid.Column="1" />
-                <CheckBox Margin="5,0" VerticalAlignment="Center" IsChecked="{Binding Path=WisselStroomKring}" Grid.Row="2" Grid.Column="1" />
-                <Label Content="Verlos detector" Grid.Row="0" Grid.Column="2" IsEnabled="{Binding Path=VerlosAanvraag}" />
-                <Label Content="Wissel detector" Grid.Row="1" Grid.Column="2" IsEnabled="{Binding Path=Wissel}" />
-                <Label Content="Wissel stroomkring detector" Grid.Row="2" Grid.Column="2" IsEnabled="{Binding Path=WisselStroomKring}" />
-                <ComboBox Margin="2" ItemsSource="{Binding Path=Detectoren}" SelectedItem="{Binding Path=VerlosAanvraagDetector}" 
-                          Grid.Row="0" Grid.Column="3" IsEnabled="{Binding Path=VerlosAanvraag}" />
-                <ComboBox Margin="2" ItemsSource="{Binding Path=Detectoren}" SelectedItem="{Binding Path=WisselDetector}" 
-                          Grid.Row="1" Grid.Column="3" IsEnabled="{Binding Path=Wissel}" />
-                <ComboBox Margin="2" ItemsSource="{Binding Path=Detectoren}" SelectedItem="{Binding Path=WisselStroomKringDetector}" 
-                          Grid.Row="2" Grid.Column="3"  IsEnabled="{Binding Path=WisselStroomKring}" />
+                <TextBlock Text="In- en uitmeldingen" Margin="5" Padding="0" TextDecorations="Underline" />
+                <ListView Grid.Row="1" ItemsSource="{Binding Path=Meldingen}" Width="Auto" HorizontalAlignment="Left">
+                    <ListView.Resources>
+                        <GridView x:Key="one">
+                            <GridViewColumn Header="Type">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Margin="2" Text="{Binding Type}" Foreground="DimGray" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Inmelding">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Inmelding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Uitmelding" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding Uitmelding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Inm.hiaat" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding InmeldingHiaattijd}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Detector/ingang" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                                  Visibility="{Binding Path=HasRelatedInput,Converter={StaticResource Bool2VisConv}}"
+                                                  SelectedValue="{Binding Path=RelatedInput}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.Resources>
+                    <ListView.Style>
+                        <Style TargetType="ListView">
+                            <Setter Property="View" Value="{StaticResource one}" />
+                        </Style>
+                    </ListView.Style>
+                </ListView>
+                <!--<ct:SpecialDataGrid ItemsSource="{Binding Path=Meldingen}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                    -->
+                <!--<DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=Type}" />
+                        <DataGridCheckBoxColumn Binding="{Binding Path=Inmelding}" />
+                        <DataGridCheckBoxColumn Binding="{Binding Path=Uitmelding}" />
+                        <DataGridTextColumn Binding="{Binding Path=InmeldHiaattijd}" />
+                    </DataGrid.Columns>-->
+                <!--
+                </ct:SpecialDataGrid>-->
             </Grid>
+
+            <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />
             <Label Content="Lijnnummers" />
             <ListView Height="Auto" ItemsSource="{Binding LijnNummers}" SelectedItem="{Binding SelectedLijnNummer}" Margin="2" MinHeight="24" >
                 <ListView.ItemsPanel>

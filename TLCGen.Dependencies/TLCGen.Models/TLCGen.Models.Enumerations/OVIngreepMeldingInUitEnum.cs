@@ -4,7 +4,7 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum OVIngreepMassaDetectieMeldingType
+    public enum OVIngreepMeldingInUitEnum
     {
         Inmelding,
         Uitmelding

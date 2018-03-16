@@ -204,6 +204,72 @@ namespace TLCGen.ModelManagement
             }
         }
 
+        public void OnModelManagerMessage(ModelManagerMessageBase msg)
+        {
+            switch (msg)
+            {
+                case OVIngreepMeldingChangedMessage meldingMsg:
+                    var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
+                    if (ovi != null && 
+                        meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR ||
+                        meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM)
+                    {
+                        var karMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
+                        var vecomMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
+                        if (karMelding.Inmelding && ovi.DummyKARInmelding == null)
+                        {
+                            ovi.DummyKARInmelding = new DetectorModel()
+                            {
+                                Dummy = true,
+                                Naam = "dummykarin" + ovi.FaseCyclus
+                            };
+                        }
+                        else if(!karMelding.Inmelding && ovi.DummyKARInmelding != null)
+                        {
+                            ovi.DummyKARInmelding = null;
+                        }
+                        if (karMelding.Uitmelding && ovi.DummyKARUitmelding == null)
+                        {
+                            ovi.DummyKARUitmelding = new DetectorModel()
+                            {
+                                Dummy = true,
+                                Naam = "dummykaruit" + ovi.FaseCyclus
+                            };
+                        }
+                        else if (!karMelding.Uitmelding && ovi.DummyKARUitmelding != null)
+                        {
+                            ovi.DummyKARUitmelding = null;
+                        }
+
+                        if (vecomMelding.Inmelding && ovi.DummyVecomInmelding == null)
+                        {
+                            ovi.DummyVecomInmelding = new DetectorModel()
+                            {
+                                Dummy = true,
+                                Naam = "dummyvecomin" + ovi.FaseCyclus
+                            };
+                        }
+                        else if (!vecomMelding.Inmelding && ovi.DummyVecomInmelding != null)
+                        {
+                            ovi.DummyVecomInmelding = null;
+                        }
+                        if (vecomMelding.Uitmelding && ovi.DummyVecomUitmelding == null)
+                        {
+                            ovi.DummyVecomUitmelding = new DetectorModel()
+                            {
+                                Dummy = true,
+                                Naam = "dummyvecomuit" + ovi.FaseCyclus
+                            };
+                        }
+                        else if (!vecomMelding.Uitmelding && ovi.DummyVecomUitmelding != null)
+                        {
+                            ovi.DummyVecomUitmelding = null;
+                        }
+                    }
+                    break;
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -216,6 +282,7 @@ namespace TLCGen.ModelManagement
             }
             MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
             MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            MessengerInstance.Register(this, true, new Action<ModelManagerMessageBase>(OnModelManagerMessage));
         }
 
         #endregion // Constructor

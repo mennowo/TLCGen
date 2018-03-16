@@ -77,27 +77,29 @@ namespace TLCGen.Integrity
             RemoveFromController(_Controller, remd);
 
             // Manage OV detectoren
-            var dets = _Controller.Fasen.SelectMany(x => x.Detectoren).Concat(_Controller.Detectoren);
-            foreach (var ov in _Controller.OVData.OVIngrepen)
-            {
-                if (ov.VerlosAanvraagDetector != null && !dets.Any(x => x.Naam == ov.VerlosAanvraagDetector))
-                {
-                    ov.VerlosAanvraagDetector = null;
-                    ov.VerlosAanvraag = false;
-                }
-
-                if (ov.WisselDetector != null && !dets.Any(x => x.Naam == ov.WisselDetector))
-                {
-                    ov.WisselDetector = null;
-                    ov.Wissel = false;
-                }
-
-                if (ov.WisselStroomKringDetector != null && !dets.Any(x => x.Naam == ov.WisselStroomKringDetector))
-                {
-                    ov.WisselStroomKringDetector = null;
-                    ov.WisselStroomKring = false;
-                }
-            }
+            // TODO
+#warning TODO
+            //var dets = _Controller.Fasen.SelectMany(x => x.Detectoren).Concat(_Controller.Detectoren);
+            //foreach (var ov in _Controller.OVData.OVIngrepen)
+            //{
+            //    if (ov.VerlosAanvraagDetector != null && !dets.Any(x => x.Naam == ov.VerlosAanvraagDetector))
+            //    {
+            //        ov.VerlosAanvraagDetector = null;
+            //        ov.VerlosAanvraag = false;
+            //    }
+            //
+            //    if (ov.WisselDetector != null && !dets.Any(x => x.Naam == ov.WisselDetector))
+            //    {
+            //        ov.WisselDetector = null;
+            //        ov.Wissel = false;
+            //    }
+            //
+            //    if (ov.WisselStroomKringDetector != null && !dets.Any(x => x.Naam == ov.WisselStroomKringDetector))
+            //    {
+            //        ov.WisselStroomKringDetector = null;
+            //        ov.WisselStroomKring = false;
+            //    }
+            //}
         }
 
 	    public void RemoveModelItemFromController(string uniqueModelName)

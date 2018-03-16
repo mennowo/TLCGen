@@ -60,6 +60,8 @@
     <Compile Include="Messages\FileIngreepTeDoserenSignaalGroepPercentageChangedMessage.cs" />
     <Compile Include="Messages\GroentijdChangedMessage.cs" />
     <Compile Include="Messages\InterSignaalGroepChangedMessage.cs" />
+    <Compile Include="Messages\ModelManager\ModelManagerMessageBase.cs" />
+    <Compile Include="Messages\ModelManager\OVIngreepMeldingChangedMessage.cs" />
     <Compile Include="Messages\NameChangedMessage.cs" />
     <Compile Include="Messages\GroentijdenTypeChangedMessage.cs" />
     <Compile Include="Messages\HDIngrepenChangedMessage.cs" />

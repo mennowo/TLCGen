@@ -36,8 +36,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _trthd;
         private CCOLGeneratorCodeStringSettingModel _tblk;
         private CCOLGeneratorCodeStringSettingModel _tbtovg;
-        private CCOLGeneratorCodeStringSettingModel _tdhkarin;
-        private CCOLGeneratorCodeStringSettingModel _tdhkaruit;
         private CCOLGeneratorCodeStringSettingModel _usovinm;
         private CCOLGeneratorCodeStringSettingModel _ushdinm;
         private CCOLGeneratorCodeStringSettingModel _hov;
@@ -188,11 +186,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_hovin}{ov.FaseCyclus}",   CCOLElementTypeEnum.HulpElement));
                 _MyElements.Add(new CCOLElement($"{_hovuit}{ov.FaseCyclus}",  CCOLElementTypeEnum.HulpElement));
 
-                if (ov.KAR)
-                {
-                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                }
+////////                if (ov.KAR)
+////////                {
+////////                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+////////                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+////////                }
 
                 _MyElements.Add(new CCOLElement($"{_tbtovg}{ov.FaseCyclus}",        0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_trt}{ov.FaseCyclus}",           0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
@@ -262,11 +260,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // For signal groups that have HD but not OV
                 if(c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
                 {
-                    if (hd.KAR)
-                    {
-                        _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                        _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                    }
+////////                    if (hd.KAR)
+////////                    {
+////////                        _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+////////                        _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+////////                    }
                     _MyElements.Add(new CCOLElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
 

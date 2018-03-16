@@ -61,10 +61,7 @@
     <Compile Include="Models\InterSignaalGroep\LateReleaseModel.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
     <Compile Include="Models\OV_HD\ConditionDetector.cs" />
-    <Compile Include="Models\OV_HD\OVIngreepMassaDetectieDataModel.cs" />
-    <Compile Include="Models\OV_HD\OVIngreepMassaDetectieMeldingModel.cs" />
-    <Compile Include="Models\OV_HD\OVIngreepMassaDetectieMeldingVoorwaardeModel.cs" />
-    <Compile Include="Models\OV_HD\OVIngreepMassaDetectieMeldingVoorwaardenSetModel.cs" />
+    <Compile Include="Models\OV_HD\OVIngreepMeldingModel.cs" />
     <Compile Include="Models\OV_HD\WisselContactModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerDetectorModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerModel.cs" />

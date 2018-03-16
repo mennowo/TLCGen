@@ -901,10 +901,12 @@ namespace TLCGen.ViewModels
 
                 string message = "Er is een onverwachte fout opgetreden.\n\n";
                 message += "Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n";
-                var win = new TLCGen.Dialogs.UnhandledExceptionWindow();
-                win.DialogTitle = "Onverwachte fout in TLCGen";
-                win.DialogMessage = message;
-                win.DialogExpceptionText = e.ToString();
+                var win = new UnhandledExceptionWindow
+                {
+                    DialogTitle = "Onverwachte fout in TLCGen",
+                    DialogMessage = message,
+                    DialogExpceptionText = e.ToString()
+                };
                 win.ShowDialog();
             }
 

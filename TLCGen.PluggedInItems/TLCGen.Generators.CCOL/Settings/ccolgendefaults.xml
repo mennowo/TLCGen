@@ -1115,18 +1115,6 @@
             <Description>Timer bezettijd OV gehinderde rijtijd</Description>
           </Setting>
           <Setting>
-            <Default>dhkarin</Default>
-            <Setting>dhkarin</Setting>
-            <Type>Timer</Type>
-            <Description>Timer hiaattijd inmelding KAR</Description>
-          </Setting>
-          <Setting>
-            <Default>dhkaruit</Default>
-            <Setting>dhkaruit</Setting>
-            <Type>Timer</Type>
-            <Description>Timer hiaattijd uitmelding KAR</Description>
-          </Setting>
-          <Setting>
             <Default>ov</Default>
             <Setting>ov</Setting>
             <Type>HulpElement</Type>
@@ -1337,39 +1325,33 @@
             <Description>Timer ondergedrag KAR</Description>
           </Setting>
           
-          <!--<Setting>
-            <Default>inmdsi</Default>
-            <Setting>inmdsi</Setting>
+          <Setting>
+            <Default>inmvecom</Default>
+            <Setting>inmvecom</Setting>
             <Type>Timer</Type>
             <Description>Anti jutter tijd inmelden DSI _E1_</Description>
           </Setting>
           <Setting>
-            <Default>inmdsi</Default>
-            <Setting>inmdsi</Setting>
+            <Default>inmvecom</Default>
+            <Setting>inmvecom</Setting>
             <Type>HulpElement</Type>
-            <Description>Onthouden inmelden DSI _E1_</Description>
+            <Description>Onthouden inmelden VECOM _E1_</Description>
           </Setting>
           <Setting>
-            <Default>inmdsi</Default>
-            <Setting>inmdsi</Setting>
+            <Default>inmvecom</Default>
+            <Setting>inmvecom</Setting>
             <Type>Schakelaar</Type>
-            <Description>Toestaan inmelden DSI _E1_</Description>
+            <Description>Toestaan inmelden VECOM _E1_</Description>
           </Setting>
           <Setting>
-            <Default>uitmdsi</Default>
-            <Setting>uitmdsi</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden DSI _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmdsi</Default>
-            <Setting>uitmdsi</Setting>
+            <Default>uitmvecom</Default>
+            <Setting>uitmvecom</Setting>
             <Type>HulpElement</Type>
-            <Description>Onthouden uitmelden DSI _E1_</Description>
+            <Description>Onthouden uitmelden VECOM _E1_</Description>
           </Setting>
           <Setting>
-            <Default>uitmdsi</Default>
-            <Setting>uitmdsi</Setting>
+            <Default>uitmvecom</Default>
+            <Setting>uitmvecom</Setting>
             <Type>Schakelaar</Type>
             <Description>Toestaan uitmelden DSI _E1_</Description>
           </Setting>
