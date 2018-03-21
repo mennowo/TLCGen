@@ -721,31 +721,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 
 				case CCOLCodeTypeEnum.HstCMeetkriterium:
-#warning Deze code slaat op OV: verplaatsen?
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}/* afzetten BITJES van ML-bedrijf */");
+                    sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}/* afzetten BITJES van ML-bedrijf */");
-					sb.AppendLine($"{ts}{ts}{ts} Z[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
-					sb.AppendLine($"{ts}}}");
-					sb.AppendLine();
-					var tsov = c.OVData.OVIngreepType == OVIngreepTypeEnum.Geen ? $"{ts}" : $"{ts}{ts}";
-					if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
+					sb.AppendLine($"{ts}{ts}/* OV meetkriterium bij PL bedrijf */");
+					foreach (var ov in c.OVData.OVIngrepen)
 					{
-						sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
-						sb.AppendLine($"{ts}{{");
-						sb.AppendLine($"{tsov}/* OV meetkriterium bij PL bedrijf */");
-						foreach (var ov in c.OVData.OVIngrepen)
-						{
-							sb.AppendLine($"{tsov}yv_ov_pl_halfstar({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
-						}
-						sb.AppendLine($"{ts}}}");
-					}
+					    sb.AppendLine($"{ts}{ts}yv_ov_pl_halfstar({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
+				    }
+					sb.AppendLine($"{ts}}}");
 
 					return sb.ToString();
 				
@@ -1116,7 +1111,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								sb.AppendLine($"{ts}}}");
 								sb.AppendLine();
 								// Send: leven, synch, txs
-								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
+								ipl = 1;
+                                sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}];");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = REG && (MM[{_mpf}{_mleven}{kp.KruisingNaam}] && (TXS_delta == 0) && TXS_OKE);");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ustxsok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = REG && MM[{_mpf}{_mleven}{kp.KruisingNaam}] && TXS_OKE;");
