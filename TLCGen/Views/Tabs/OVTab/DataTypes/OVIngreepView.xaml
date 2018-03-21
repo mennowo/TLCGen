@@ -54,21 +54,65 @@
                 </Style>
             </StackPanel.Style>
             <Grid>
-                <!--<Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>-->
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="In- en uitmeldingen" Margin="5" Padding="0" TextDecorations="Underline" />
-                <ListView Grid.Row="1" ItemsSource="{Binding Path=Meldingen}" Width="Auto" HorizontalAlignment="Left">
+                <TextBlock Text="In- en uitmeldingen" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
+                <!--<ct:SpecialDataGrid ItemsSource="{Binding Path=Meldingen}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
+                                    Grid.ColumnSpan="2">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=Type}" Header="Type" />
+                        <DataGridTemplateColumn Header="Inmelding">
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <CheckBox IsChecked="{Binding Path=Inmelding}" IsEnabled="{Binding Path=HasInmelding}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridCheckBoxColumn Header="Uitmelding" Binding="{Binding Path=Uitmelding}" />
+                        <DataGridTemplateColumn Header="Detector/ingang">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=RelatedInput}" IsEnabled="{Binding Path=HasRelatedInput}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                            <DataGridTemplateColumn.CellEditingTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                              IsEnabled="{Binding Path=HasRelatedInput}"
+                                              SelectedValue="{Binding Path=RelatedInput}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellEditingTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Path=InmeldFilterTijd}" Header="Inmelding filter tijd" />
+                    </DataGrid.Columns>
+                </ct:SpecialDataGrid>-->
+                <ListView 
+                    Grid.ColumnSpan="2"
+                    Grid.Row="1" ItemsSource="{Binding Path=Meldingen}" Width="Auto" HorizontalAlignment="Left">
                     <ListView.Resources>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                        <Border BorderThickness="0,0,0,1" BorderBrush="Black" Background="Transparent">
+                                            <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                        </Style>
                         <GridView x:Key="one">
-                            <GridViewColumn Header="Type">
+                            <GridViewColumn Header="Type" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Margin="2" Text="{Binding Type}" Foreground="DimGray" />
@@ -78,7 +122,8 @@
                             <GridViewColumn Header="Inmelding">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Inmelding}" />
+                                        <CheckBox IsChecked="{Binding Inmelding}"
+                                                  Visibility="{Binding Path=HasInmelding,Converter={StaticResource Bool2VisConv}}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -86,13 +131,6 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding Uitmelding}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Inm.hiaat" >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding InmeldingHiaattijd}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -105,6 +143,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            <GridViewColumn Header="Filter tijd inmelding" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding InmeldingFilterTijd}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.Resources>
                     <ListView.Style>
@@ -113,16 +158,17 @@
                         </Style>
                     </ListView.Style>
                 </ListView>
-                <!--<ct:SpecialDataGrid ItemsSource="{Binding Path=Meldingen}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                    -->
-                <!--<DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Type}" />
-                        <DataGridCheckBoxColumn Binding="{Binding Path=Inmelding}" />
-                        <DataGridCheckBoxColumn Binding="{Binding Path=Uitmelding}" />
-                        <DataGridTextColumn Binding="{Binding Path=InmeldHiaattijd}" />
-                    </DataGrid.Columns>-->
-                <!--
-                </ct:SpecialDataGrid>-->
+                <Label Content="Uitmeld filter tijd" Grid.Row="2" />
+                <TextBox Text="{Binding Path=UitmeldFilterTijd}" Margin="2" Grid.Row="2" Grid.Column="1" />
+                <Label Content="Wissel aanwezig" Grid.Row="3" />
+                <CheckBox IsChecked="{Binding Path=Wissel}" Grid.Row="3" Grid.Column="1" Margin="5" />
+                <CheckBox FlowDirection="RightToLeft" IsChecked="{Binding Path=WisselStandMiddelsDetector}" Margin="5"
+                          Grid.Row="4" IsEnabled="{Binding Path=Wissel}">
+                    <TextBlock FlowDirection="LeftToRight" Text="Wissel stand detector" />
+                </CheckBox>
+                <ComboBox ItemsSource="{Binding Path=Detectoren}" Grid.Row="4" Grid.Column="1" Margin="2"
+                          IsEnabled="{Binding Path=WisselStandMiddelsDetector}"
+                          SelectedValue="{Binding Path=WisselStandDetector}" />
             </Grid>
 
             <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />

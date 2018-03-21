@@ -11,6 +11,7 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using System;
+using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {
@@ -37,141 +38,7 @@ namespace TLCGen.ViewModels
                 _OVIngreep = value;
             }
         }
-
-        [Category("Opties")]
-        [Browsable(false)]
-        public bool KAR
-        {
-            get { return _OVIngreep.KAR; }
-            set
-            {
-                _OVIngreep.KAR = value;
-                //if(value)
-                //{
-                //    _OVIngreep.DummyKARInmelding = new DetectorModel() { Dummy = true };
-                //    _OVIngreep.DummyKARUitmelding = new DetectorModel() { Dummy = true };
-                //    _OVIngreep.DummyKARInmelding.Naam = "dummykarin" + _OVIngreep.FaseCyclus;
-                //    _OVIngreep.DummyKARUitmelding.Naam = "dummykaruit" + _OVIngreep.FaseCyclus;
-                //}
-                //else
-                //{
-                //    _OVIngreep.DummyKARInmelding = null;
-                //    _OVIngreep.DummyKARUitmelding = null;
-                //}
-                RaisePropertyChanged<object>(broadcast: true);
-                Messenger.Default.Send(new OVIngreepMeldingChangedMessage(OVIngreep.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
-                Messenger.Default.Send(new OVIngrepenChangedMessage());
-            }
-        }
-
-        [Browsable(false)]
-        public bool Vecom
-        {
-            get { return _OVIngreep.Vecom; }
-            set
-            {
-                _OVIngreep.Vecom = value;
-                if (value)
-                {
-                    _OVIngreep.DummyVecomInmelding = new DetectorModel() { Dummy = true };
-                    _OVIngreep.DummyVecomUitmelding = new DetectorModel() { Dummy = true };
-                    _OVIngreep.DummyVecomInmelding.Naam = "dummyvecomin" + _OVIngreep.FaseCyclus;
-                    _OVIngreep.DummyVecomUitmelding.Naam = "dummyvecomuit" + _OVIngreep.FaseCyclus;
-                }
-                else
-                {
-                    _OVIngreep.DummyVecomInmelding = null;
-                    _OVIngreep.DummyVecomUitmelding = null;
-                }
-                RaisePropertyChanged<object>("Vecom", broadcast: true);
-                Messenger.Default.Send(new OVIngrepenChangedMessage());
-            }
-        }
-
-        //[Browsable(false)]
-        //[Description("Verlos aanvraag")]
-        //public bool VerlosAanvraag
-        //{
-        //    get { return _OVIngreep.VerlosAanvraag; }
-        //    set
-        //    {
-        //        _OVIngreep.VerlosAanvraag = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //[Browsable(false)]
-        //[Description("Verlos detector")]
-        //[EnabledCondition("VerlosAanvraag")]
-        //public string VerlosAanvraagDetector
-        //{
-        //    get { return _OVIngreep.VerlosAanvraagDetector; }
-        //    set
-        //    {
-        //        if(value != null)
-        //        {
-        //            _OVIngreep.VerlosAanvraagDetector = value;
-        //        }
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //[Browsable(false)]
-        //[Description("Wissel")]
-        //public bool Wissel
-        //{
-        //    get { return _OVIngreep.Wissel; }
-        //    set
-        //    {
-        //        _OVIngreep.Wissel = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //[Browsable(false)]
-        //[Description("Wissel detector")]
-        //[EnabledCondition("Wissel")]
-        //public string WisselDetector
-        //{
-        //    get { return _OVIngreep.WisselDetector; }
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            _OVIngreep.WisselDetector = value;
-        //        }
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //[Browsable(false)]
-        //[Description("Wissel stroomkring")]
-        //public bool WisselStroomKring
-        //{
-        //    get { return _OVIngreep.WisselStroomKring; }
-        //    set
-        //    {
-        //        _OVIngreep.WisselStroomKring = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-        //
-        //[Browsable(false)]
-        //[Description("Wissel stroomkring detector")]
-        //[EnabledCondition("WisselStroomKring")]
-        //public string WisselKontaktDetector
-        //{
-        //    get { return _OVIngreep.WisselStroomKringDetector; }
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            _OVIngreep.WisselStroomKringDetector = value;
-        //        }
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
+        
         [Browsable(false)]
         public ObservableCollection<OVIngreepMeldingViewModel> Meldingen => _meldingen;
 
@@ -183,7 +50,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.Type = value;
-                RaisePropertyChanged<object>("Type", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }
 
@@ -195,7 +62,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.VersneldeInmeldingKoplus = value;
-                RaisePropertyChanged<object>("VersneldeInmeldingKoplus", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VersneldeInmeldingKoplus), broadcast: true);
             }
         }
 
@@ -229,7 +96,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdOngehinderd = value;
-                RaisePropertyChanged<object>("RijTijdOngehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdOngehinderd), broadcast: true);
             }
         }
 
@@ -240,7 +107,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdBeperktgehinderd = value;
-                RaisePropertyChanged<object>("RijTijdBeperktgehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdBeperktgehinderd), broadcast: true);
             }
         }
 
@@ -251,7 +118,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.RijTijdGehinderd = value;
-                RaisePropertyChanged<object>("RijTijdGehinderd", broadcast: true);
+                RaisePropertyChanged<object>(nameof(RijTijdGehinderd), broadcast: true);
             }
         }
 
@@ -262,7 +129,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.OnderMaximum = value;
-                RaisePropertyChanged<object>("OnderMaximum", broadcast: true);
+                RaisePropertyChanged<object>(nameof(OnderMaximum), broadcast: true);
             }
         }
 
@@ -273,7 +140,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.GroenBewaking = value;
-                RaisePropertyChanged<object>("GroenBewaking", broadcast: true);
+                RaisePropertyChanged<object>(nameof(GroenBewaking), broadcast: true);
             }
         }
 
@@ -285,7 +152,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AfkappenConflicten = value;
-                RaisePropertyChanged<object>("AfkappenConflicten", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AfkappenConflicten), broadcast: true);
             }
         }
 
@@ -296,7 +163,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AfkappenConflictenOV = value;
-                RaisePropertyChanged<object>("AfkappenConflictenOV", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AfkappenConflictenOV), broadcast: true);
             }
         }
 
@@ -307,7 +174,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.VasthoudenGroen = value;
-                RaisePropertyChanged<object>("VasthoudenGroen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(VasthoudenGroen), broadcast: true);
             }
         }
 
@@ -318,7 +185,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.TussendoorRealiseren = value;
-                RaisePropertyChanged<object>("TussendoorRealiseren", broadcast: true);
+                RaisePropertyChanged<object>(nameof(TussendoorRealiseren), broadcast: true);
             }
         }
 
@@ -329,7 +196,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.AlleLijnen = value;
-                RaisePropertyChanged<object>("AlleLijnen", broadcast: true);
+                RaisePropertyChanged<object>(nameof(AlleLijnen), broadcast: true);
             }
         }
 
@@ -340,7 +207,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedLijnNummer = value;
-                RaisePropertyChanged("SelectedLijnNummer");
+                RaisePropertyChanged(nameof(SelectedLijnNummer));
             }
         }
 
@@ -351,7 +218,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _NewLijnNummer = value;
-                RaisePropertyChanged("NewLijnNummer");
+                RaisePropertyChanged(nameof(NewLijnNummer));
             }
         }
 
@@ -378,6 +245,79 @@ namespace TLCGen.ViewModels
                     _Detectoren = new ObservableCollection<string>();
                 }
                 return _Detectoren;
+            }
+        }
+
+        [Browsable(false)]
+        [Description("Wissel aanwezig")]
+        public bool Wissel
+        {
+            get => _OVIngreep.Wissel;
+            set
+            {
+                _OVIngreep.Wissel = value;
+                if (!value)
+                {
+                    WisselStandMiddelsDetector = false;
+                    Meldingen.RemoveSome(x => x.Type == OVIngreepMeldingTypeEnum.WisselDetector || x.Type == OVIngreepMeldingTypeEnum.WisselStroomKringDetector);
+                    RaisePropertyChanged(nameof(WisselStandDetector));
+                }
+                else
+                {
+                    _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                    {
+                        FaseCyclus = _OVIngreep.FaseCyclus,
+                        Type = OVIngreepMeldingTypeEnum.WisselDetector,
+                        Inmelding = false,
+                        Uitmelding = false,
+                        InmeldingFilterTijd = 15
+                    }));
+                    _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                    {
+                        FaseCyclus = _OVIngreep.FaseCyclus,
+                        Type = OVIngreepMeldingTypeEnum.WisselStroomKringDetector,
+                        Inmelding = false,
+                        Uitmelding = false,
+                        InmeldingFilterTijd = 15
+                    }));
+                }
+                RaisePropertyChanged<object>(nameof(Wissel), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool WisselStandMiddelsDetector
+        {
+            get => _OVIngreep.WisselStandMiddelsDetector;
+            set
+            {
+                _OVIngreep.WisselStandMiddelsDetector = value;
+                RaisePropertyChanged<object>(nameof(WisselStandMiddelsDetector), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public string WisselStandDetector
+        {
+            get => _OVIngreep.WisselStandDetector;
+            set
+            {
+                if (value != null)
+                {
+                    _OVIngreep.WisselStandDetector = value;
+                    RaisePropertyChanged<object>(nameof(WisselStandDetector), broadcast: true);
+                }
+            }
+        }
+
+        [Browsable(false)]
+        public int UitmeldFilterTijd
+        {
+            get => _OVIngreep.UitmeldFilterTijd;
+            set
+            {
+                _OVIngreep.UitmeldFilterTijd = value;
+                RaisePropertyChanged<object>(nameof(UitmeldFilterTijd), broadcast: true);
             }
         }
 
@@ -569,7 +509,7 @@ namespace TLCGen.ViewModels
                     Type = OVIngreepMeldingTypeEnum.KAR,
                     Inmelding = true,
                     Uitmelding = true,
-                    InmeldingHiaattijd = 15
+                    InmeldingFilterTijd = 15
                 }));
                 _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
                 {
@@ -577,7 +517,7 @@ namespace TLCGen.ViewModels
                     Type = OVIngreepMeldingTypeEnum.VECOM,
                     Inmelding = false,
                     Uitmelding = false,
-                    InmeldingHiaattijd = 15
+                    InmeldingFilterTijd = 15
                 }));
                 _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
                 {
@@ -585,31 +525,7 @@ namespace TLCGen.ViewModels
                     Type = OVIngreepMeldingTypeEnum.VerlosDetector,
                     Inmelding = true,
                     Uitmelding = true,
-                    InmeldingHiaattijd = 15
-                }));
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.WisselDetector,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingHiaattijd = 15
-                }));
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.WisselStandDetector,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingHiaattijd = 15
-                }));
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.WisselStroomKringDetector,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingHiaattijd = 15
+                    InmeldingFilterTijd = 15
                 }));
             }
 

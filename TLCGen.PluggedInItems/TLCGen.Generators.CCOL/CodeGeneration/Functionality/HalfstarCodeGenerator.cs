@@ -21,7 +21,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _cvc;
 		private string _schmv;
 		private string _schwg;
-		private string _tnlsg;
+		private string _schca;
+        private string _tnlsg;
 		private string _tnlsgd;
 		private string _tnlcv;
 		private string _tnlcvd;
@@ -713,7 +714,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							}
 							else
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(TRUE), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(SCH[{_schpf}{_schca}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
@@ -1214,7 +1215,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			_cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 			_schmv = CCOLGeneratorSettingsProvider.Default.GetElementName("schmv");
 			_schwg = CCOLGeneratorSettingsProvider.Default.GetElementName("schwg");
-			_tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
+			_schca = CCOLGeneratorSettingsProvider.Default.GetElementName("schca");
+            _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
 			_tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
 			_tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
 			_tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");

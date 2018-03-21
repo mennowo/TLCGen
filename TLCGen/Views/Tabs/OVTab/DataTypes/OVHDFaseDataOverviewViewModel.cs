@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -41,15 +42,17 @@ namespace TLCGen.ViewModels
 					_controller.OVData.OVIngrepen.BubbleSort();
 					OVIngreep = new OVIngreepViewModel(ov);
 					OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
-					/* Trick to add dummy detectors */
-					if (ov.KAR)
-					{
-						OVIngreep.KAR = true;
-					}
-					if(ov.Vecom)
-					{
-						OVIngreep.Vecom = true;
-					}
+                    /* Trick to add dummy detectors */
+                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
+                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.VECOM));
+                    //if (ov.KAR)
+					//{
+					//	OVIngreep.KAR = true;
+					//}
+					//if(ov.Vecom)
+					//{
+					//	OVIngreep.Vecom = true;
+					//}
 				}
 				else
 				{

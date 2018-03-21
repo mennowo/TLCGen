@@ -30,7 +30,7 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepMelding.Type = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
             }
         }
 
@@ -41,7 +41,7 @@ namespace TLCGen.ViewModels
             {
                 OVIngreepMelding.Inmelding = value;
                 MessengerInstance.Send(new OVIngreepMeldingChangedMessage(OVIngreepMelding.FaseCyclus, Type));
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(nameof(Inmelding), broadcast: true);
             }
         }
 
@@ -52,17 +52,17 @@ namespace TLCGen.ViewModels
             {
                 OVIngreepMelding.Uitmelding = value;
                 MessengerInstance.Send(new OVIngreepMeldingChangedMessage(OVIngreepMelding.FaseCyclus, Type));
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(nameof(Uitmelding), broadcast: true);
             }
         }
 
-        public int? InmeldingHiaattijd
+        public int? InmeldingFilterTijd
         {
-            get => OVIngreepMelding.InmeldingHiaattijd;
+            get => OVIngreepMelding.InmeldingFilterTijd;
             set
             {
-                OVIngreepMelding.InmeldingHiaattijd = value;
-                RaisePropertyChanged();
+                OVIngreepMelding.InmeldingFilterTijd = value;
+                RaisePropertyChanged<object>(nameof(InmeldingFilterTijd), broadcast: true);
             }
         }
 
@@ -72,11 +72,12 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepMelding.RelatedInput = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(nameof(RelatedInput), broadcast: true);
             }
         }
 
         public bool HasRelatedInput => Type != OVIngreepMeldingTypeEnum.KAR && Type != OVIngreepMeldingTypeEnum.VECOM;
+        public bool HasInmelding => Type != OVIngreepMeldingTypeEnum.WisselDetector;
 
         #endregion // IViewModelWithItem
 

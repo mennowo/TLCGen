@@ -50,5 +50,18 @@ namespace TLCGen.Extensions
                 list.RemoveAt(list.Count - 1);
             }
         }
+
+        public static void RemoveSome<TSource>(this IList<TSource> source, Func<TSource, bool> predicate)
+        {
+            var remElems = new List<TSource>();
+            foreach(var e in source)
+            {
+                if (predicate(e)) remElems.Add(e);
+            }
+            foreach(var e in remElems)
+            {
+                source.Remove(e);
+            }
+        }
     }
 }

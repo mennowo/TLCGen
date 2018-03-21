@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
@@ -96,15 +97,17 @@ namespace TLCGen.ViewModels
                         _Controller.OVData.OVIngrepen.Add(ov);
                         _Controller.OVData.OVIngrepen.BubbleSort();
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
+                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
+                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.VECOM));
                         /* Trick to add dummy detectors */
-                        if (ov.KAR)
-                        {
-                            SelectedOVIngreep.KAR = true;
-                        }
-                        if(ov.Vecom)
-                        {
-                            SelectedOVIngreep.Vecom = true;
-                        }
+                        //if (ov.KAR)
+                        //{
+                        //    SelectedOVIngreep.KAR = true;
+                        //}
+                        //if(ov.Vecom)
+                        //{
+                        //    SelectedOVIngreep.Vecom = true;
+                        //}
                     }
                     else
                     {

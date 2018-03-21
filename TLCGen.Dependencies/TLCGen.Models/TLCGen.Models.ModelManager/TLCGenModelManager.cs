@@ -210,12 +210,10 @@ namespace TLCGen.ModelManagement
             {
                 case OVIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
-                    if (ovi != null && 
-                        meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR ||
-                        meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM)
+                    if (ovi != null && meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR)
                     {
                         var karMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
-                        var vecomMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
+
                         if (karMelding.Inmelding && ovi.DummyKARInmelding == null)
                         {
                             ovi.DummyKARInmelding = new DetectorModel()
@@ -224,7 +222,7 @@ namespace TLCGen.ModelManagement
                                 Naam = "dummykarin" + ovi.FaseCyclus
                             };
                         }
-                        else if(!karMelding.Inmelding && ovi.DummyKARInmelding != null)
+                        else if (!karMelding.Inmelding && ovi.DummyKARInmelding != null)
                         {
                             ovi.DummyKARInmelding = null;
                         }
@@ -240,6 +238,11 @@ namespace TLCGen.ModelManagement
                         {
                             ovi.DummyKARUitmelding = null;
                         }
+
+                    }
+                    if (ovi != null && meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM)
+                    {
+                        var vecomMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
 
                         if (vecomMelding.Inmelding && ovi.DummyVecomInmelding == null)
                         {

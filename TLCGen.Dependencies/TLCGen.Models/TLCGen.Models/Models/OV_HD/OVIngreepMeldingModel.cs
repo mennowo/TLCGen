@@ -11,7 +11,7 @@ namespace TLCGen.Models
         public bool Uitmelding { get; set; }
         [RefersTo]
         public string RelatedInput { get; set; }
-        public int? InmeldingHiaattijd { get; set; }
+        public int? InmeldingFilterTijd { get; set; }
 
         public OVIngreepMeldingModel()
         {

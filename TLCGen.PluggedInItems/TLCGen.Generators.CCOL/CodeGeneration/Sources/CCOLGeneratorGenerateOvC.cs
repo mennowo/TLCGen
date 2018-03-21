@@ -786,6 +786,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tdhkaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("tdhkaruit");
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
             var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
+            var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
 
             //var _tinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
             //var _hinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmdsi");
@@ -875,44 +876,162 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #endregion
 
-            #region OV ingrepen KAR
+            #region In- en uitmeldingen
 
-                var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
-	        var ovIngreepModels = karovfcs as OVIngreepModel[] ?? karovfcs.ToArray();
-	        foreach (var ov in ovIngreepModels)
+            foreach (var ov in c.OVData.OVIngrepen)
             {
-	            if (int.TryParse(ov.FaseCyclus, out var ifc))
+                if (ov.Meldingen.Any(x => x.Inmelding))
                 {
-                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSIN, SCH[{_schpf}{_schcprio}], PRM[{_prmpf}{_prmlaatcrit}], {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}in, {_tpf}{_tdhkarin}{ov.FaseCyclus});");
+                    var inmHelems = new List<string>();
+                    sb.AppendLine($"{ts}/* Inmelding {_fcpf}{ov.FaseCyclus} */");
+                    foreach (var melding in ov.Meldingen)
+                    {
+                        if (!melding.Inmelding) continue;
+                        switch (melding.Type)
+                        {
+                            case OVIngreepMeldingTypeEnum.VECOM:
+                                sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}vc] = RT[{_tpf}in{ov.FaseCyclus}vc] = SCH[{_schpf}in{ov.FaseCyclus}vc] && DSI_melding(ds{ov.FaseCyclus}_in, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}in{ov.FaseCyclus}vc];");
+                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}vc");
+                                break;
+                            case OVIngreepMeldingTypeEnum.KAR:
+                                sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}kar] = RT[{_tpf}in{ov.FaseCyclus}kar] = SCH[{_schpf}in{ov.FaseCyclus}kar] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}in{ov.FaseCyclus}kar];");
+                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}kar");
+                                break;
+                            case OVIngreepMeldingTypeEnum.VerlosDetector:
+                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                }
+                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}ss");
+                                break;
+                            case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
+                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}wsk] = SCH[{_schpf}in{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    inmHelems.Add($"{_hpf}in{ov.FaseCyclus}wsk");
+                                }
+                                break;
+                            case OVIngreepMeldingTypeEnum.WisselDetector:
+                                break;
+                            default:
+                                throw new IndexOutOfRangeException();
+                        }
+                    }
+                    sb.Append($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = ");
+                    var first = true;
+                    foreach(var i in inmHelems)
+                    {
+                        if (!first) sb.Append(" || ");
+                        sb.Append($"IH[{i}]");
+                        first = false;
+                    }
+                    sb.AppendLine(";");
+                    sb.AppendLine();
+                }
+
+                if (ov.Meldingen.Any(x => x.Uitmelding))
+                {
+                    var uitmHelems = new List<string>();
+                    sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{ov.FaseCyclus} */");
+                    foreach (var melding in ov.Meldingen)
+                    {
+                        if (!melding.Uitmelding) continue;
+                        switch (melding.Type)
+                        {
+                            case OVIngreepMeldingTypeEnum.VECOM:
+                                sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}vc] = SCH[{_schpf}uit{ov.FaseCyclus}vc] && DSI_melding(ds{ov.FaseCyclus}_uit, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}uit{ov.FaseCyclus}];");
+                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}vc");
+                                break;
+                            case OVIngreepMeldingTypeEnum.KAR:
+                                sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}kar] = SCH[{_schpf}uit{ov.FaseCyclus}kar] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSUIT, -1, -1, -1) && !T[{_tpf}uit{ov.FaseCyclus}];");
+                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}kar");
+                                break;
+                            case OVIngreepMeldingTypeEnum.VerlosDetector:
+                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                }
+                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}ss");
+                                break;
+                            case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
+                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wsk] = SCH[{_schpf}uit{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wsk");
+                                }
+                                break;
+                            case OVIngreepMeldingTypeEnum.WisselDetector:
+                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wd] = SCH[{_schpf}in{ov.FaseCyclus}wd] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wd");
+                                }
+                                break;
+                            default:
+                                throw new IndexOutOfRangeException();
+                        }
+                    }
+                    sb.Append($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = RT[{_tpf}uit{ov.FaseCyclus}] = ");
+                    var first = true;
+                    foreach (var i in uitmHelems)
+                    {
+                        if (!first) sb.Append(" || ");
+                        sb.Append($"IH[{i}]");
+                        first = false;
+                    }
+                    sb.AppendLine($";");
+                    sb.AppendLine();
                 }
             }
-            foreach (var ov in ovIngreepModels)
-            {
-	            if (int.TryParse(ov.FaseCyclus, out var ifc))
-                {
-                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSUIT, (bool)FALSE, 0, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}uit, {_tpf}{_tdhkaruit}{ov.FaseCyclus});");
-                }
-            }
 
-            #endregion // OV ingrepen KAR
+            #endregion // In- en uitmeldingen
 
-            #region OV ingrepen VECOM
-
-            var vecomovfcs = c.OVData.OVIngrepen.Where(x => x.Vecom);
-            foreach (var ov in vecomovfcs)
-            {
-                var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
-                sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_in, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
-            }
-            foreach (var ov in vecomovfcs)
-            {
-                var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
-                sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_uit, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
-            }
-
-            #endregion // OV ingrepen VECOM
+            //#region OV ingrepen KAR
+            //
+            //var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
+	        //var ovIngreepModels = karovfcs as OVIngreepModel[] ?? karovfcs.ToArray();
+	        //foreach (var ov in ovIngreepModels)
+            //{
+	        //    if (int.TryParse(ov.FaseCyclus, out var ifc))
+            //    {
+            //        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+            //        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSIN, SCH[{_schpf}{_schcprio}], PRM[{_prmpf}{_prmlaatcrit}], {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}in, {_tpf}{_tdhkarin}{ov.FaseCyclus});");
+            //    }
+            //}
+            //foreach (var ov in ovIngreepModels)
+            //{
+	        //    if (int.TryParse(ov.FaseCyclus, out var ifc))
+            //    {
+            //        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+            //        sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSUIT, (bool)FALSE, 0, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}uit, {_tpf}{_tdhkaruit}{ov.FaseCyclus});");
+            //    }
+            //}
+            //
+            //#endregion // OV ingrepen KAR
+            //
+            //#region OV ingrepen VECOM
+            //
+            //var vecomovfcs = c.OVData.OVIngrepen.Where(x => x.Vecom);
+            //foreach (var ov in vecomovfcs)
+            //{
+            //    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+            //    sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_in, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
+            //}
+            //foreach (var ov in vecomovfcs)
+            //{
+            //    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
+            //    sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_uit, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
+            //}
+            //
+            //#endregion // OV ingrepen VECOM
 
             #region HD ingrepen KAR
 
@@ -981,7 +1100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			return sb.ToString();
         }
-        
+
         private string GenerateOvCPARCorrecties(ControllerModel c)
         {
             var sb = new StringBuilder();
