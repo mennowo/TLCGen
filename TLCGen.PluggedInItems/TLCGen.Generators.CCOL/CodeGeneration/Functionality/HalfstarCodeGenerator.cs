@@ -733,14 +733,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~BIT6;");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* OV meetkriterium bij PL bedrijf */");
-					foreach (var ov in c.OVData.OVIngrepen)
-					{
-					    sb.AppendLine($"{ts}{ts}yv_ov_pl_halfstar({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
-				    }
-					sb.AppendLine($"{ts}}}");
+                    if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+                    {
+                        sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}/* OV meetkriterium bij PL bedrijf */");
+                        foreach (var ov in c.OVData.OVIngrepen)
+                        {
+                            sb.AppendLine($"{ts}{ts}yv_ov_pl_halfstar({_fcpf}{ov.FaseCyclus}, BIT7, C[{_ctpf}{_cvc}{ov.FaseCyclus}]);");
+                        }
+                        sb.AppendLine($"{ts}}}");
+                    }
 
 					return sb.ToString();
 				
@@ -1111,8 +1114,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								sb.AppendLine($"{ts}}}");
 								sb.AppendLine();
 								// Send: leven, synch, txs
-								ipl = 1;
-                                sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
+								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}];");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = REG && (MM[{_mpf}{_mleven}{kp.KruisingNaam}] && (TXS_delta == 0) && TXS_OKE);");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ustxsok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = REG && MM[{_mpf}{_mleven}{kp.KruisingNaam}] && TXS_OKE;");
