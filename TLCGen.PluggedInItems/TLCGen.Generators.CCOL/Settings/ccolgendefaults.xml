@@ -422,10 +422,10 @@
             <Description>Indien VA regelen, ML-bedrijf (1) of versneld PL-bedrijf (0)</Description>
           </Setting>
           <Setting>
-            <Default>plhulpdienst</Default>
-            <Setting>plhulpdienst</Setting>
+            <Default>plhd</Default>
+            <Setting>plhd</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpdienstingreep tbv (tijdelijk) lokaal VA regelen</Description>
+            <Description>Bijhouden hulpdienstingreep tbv (tijdelijk) lokaal VA regelen</Description>
           </Setting>
           <Setting>
             <Default>ovpriople</Default>
@@ -516,6 +516,84 @@
             <Setting>tx</Setting>
             <Type>Parameter</Type>
             <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
+          </Setting>
+          <Setting>
+            <Default>vbhst</Default>
+            <Setting>vbhst</Setting>
+            <Type>Counter</Type>
+            <Description>OV inmeldingen _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>vchst</Default>
+            <Setting>vchst</Setting>
+            <Type>Counter</Type>
+            <Description>OV inmeldingen _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>ivhst</Default>
+            <Setting>ivhst</Setting>
+            <Type>Timer</Type>
+            <Description>Inmeld vertraging _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>ibhst</Default>
+            <Setting>ibhst</Setting>
+            <Type>Timer</Type>
+            <Description>Inmeld bewaking _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>gbhst</Default>
+            <Setting>gbhst</Setting>
+            <Type>Timer</Type>
+            <Description>Groenbewaking _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>blkhst</Default>
+            <Setting>blkhst</Setting>
+            <Type>Timer</Type>
+            <Description>Blokkeringstijd _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>natxdhst</Default>
+            <Setting>natxdhst</Setting>
+            <Type>Timer</Type>
+            <Description>Extra groentijd na TXD _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>rthst</Default>
+            <Setting>rthst</Setting>
+            <Type>Timer</Type>
+            <Description>Ongehinderde rijtijd _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>gbhst</Default>
+            <Setting>gbhst</Setting>
+            <Type>HulpElement</Type>
+            <Description>Groenbewaking _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>priohst</Default>
+            <Setting>priohst</Setting>
+            <Type>HulpElement</Type>
+            <Description>Toekenning prioriteit _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>omaxhst</Default>
+            <Setting>omaxhst</Setting>
+            <Type>Parameter</Type>
+            <Description>Ondermaximum _E1_ tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>mwthst</Default>
+            <Setting>mwthst</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximale wachttijd _E1_ tbv OV ingreep tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>priohst</Default>
+            <Setting>priohst</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteit _E1_ tijdens halfstar regelen</Description>
           </Setting>
         </Settings>
       </CodePieceData>

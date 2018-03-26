@@ -35,6 +35,9 @@
 		OvCInstellingen,
 		OvCRijTijdScenario,
 		OvCInUitMelden,
+	    OvCPrioriteitsOpties,
+	    OvCPrioriteitsToekenning,
+        OvCPostAfhandelingOV,
 	    OvCPARCorrecties,
 	    OvCPARCcol,
 	    OvCSpecialSignals,
@@ -44,7 +47,8 @@
 	    TabCControlParameters,
 
 		// HST
-		HstCPostInitApplication,
+		HstCTop,
+        HstCPostInitApplication,
 		HstCPreApplication,
 		HstCKlokPerioden,
 		HstCAanvragen,

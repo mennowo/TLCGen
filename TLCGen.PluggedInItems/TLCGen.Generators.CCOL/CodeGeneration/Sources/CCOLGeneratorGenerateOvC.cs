@@ -27,6 +27,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateOvCInstellingen(controller));
             sb.Append(GenerateOvCRijTijdScenario(controller));
             sb.Append(GenerateOvCInUitMelden(controller));
+            sb.Append(GenerateOvCPrioriteitsOpties(controller));
+            sb.Append(GenerateOvCPostAfhandelingOV(controller));
             sb.Append(GenerateOvCPARCorrecties(controller));
             sb.Append(GenerateOvCPARCcol(controller));
             sb.Append(GenerateOvCSpecialSignals(controller));
@@ -128,6 +130,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine("/* Variabele tbv start KAR ondergedrag timer bij starten regeling */");
                 sb.AppendLine("static char startkarog = FALSE;");
+                
             }
 
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
@@ -1099,6 +1102,60 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.AppendLine();
 
 			return sb.ToString();
+        }
+
+        private string GenerateOvCPrioriteitsOpties(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("/* -------------------------");
+            sb.AppendLine("   Prioriteitsopties voor OV");
+            sb.AppendLine("   ------------------------- */");
+            sb.AppendLine("void PrioriteitsOpties(void)");
+            sb.AppendLine("{");
+            
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsOpties, true, true);
+
+            sb.AppendLine($"{ts}PrioriteitsOpties_Add();");
+            sb.AppendLine($"{ts}PrioriteitsNiveau_Add();");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCPrioriteitsToekenning(ControllerModel c)
+        {
+            var _hplhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hplhd");
+            var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
+            var _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
+
+            var sb = new StringBuilder();
+            sb.AppendLine("/* ------------------------------------");
+            sb.AppendLine("   Prioriteitsopties toekenning voor OV");
+            sb.AppendLine("   ------------------------------------ */");
+            sb.AppendLine("void PrioriteitsToekenningExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsToekenning, true, true);
+            
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCPostAfhandelingOV(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("/* -------------------");
+            sb.AppendLine("   Post afhandeling OV");
+            sb.AppendLine("   ------------------- */");
+            sb.AppendLine("void PostAfhandelingOV(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPostAfhandelingOV, true, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
         }
 
         private string GenerateOvCPARCorrecties(ControllerModel c)

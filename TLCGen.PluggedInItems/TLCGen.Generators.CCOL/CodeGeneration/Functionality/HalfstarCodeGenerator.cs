@@ -15,8 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 	{
 		private List<CCOLElement> _myElements;
 		private List<CCOLIOElement> _MyBitmapOutputs;
-
-#pragma warning disable 0649
+        
 		private string _mperiod;
 		private string _cvc;
 		private string _schmv;
@@ -32,7 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private string _hiks;
         private string _prmxnl;
         private string _hnla;
-#pragma warning restore 0649
+        private string _hovin;
+        private string _hovuit;
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usmlact;
@@ -68,7 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _hperarh;
 		private CCOLGeneratorCodeStringSettingModel _schvarstreng;
 		private CCOLGeneratorCodeStringSettingModel _schvaml;
-		private CCOLGeneratorCodeStringSettingModel _hplhulpdienst;
+		private CCOLGeneratorCodeStringSettingModel _hplhd;
 		private CCOLGeneratorCodeStringSettingModel _schovpriople;
 		private CCOLGeneratorCodeStringSettingModel _prmplxper;
 		private CCOLGeneratorCodeStringSettingModel _prmtx;
@@ -82,6 +82,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _toffset;
 		private CCOLGeneratorCodeStringSettingModel _txmarge;
 		private CCOLGeneratorCodeStringSettingModel _uspl;
+
+        private CCOLGeneratorCodeStringSettingModel _cvbhst;
+        private CCOLGeneratorCodeStringSettingModel _cvchst;
+        private CCOLGeneratorCodeStringSettingModel _tivhst;
+        private CCOLGeneratorCodeStringSettingModel _tibhst;
+        private CCOLGeneratorCodeStringSettingModel _tgbhst;
+        private CCOLGeneratorCodeStringSettingModel _tblkhst;
+        private CCOLGeneratorCodeStringSettingModel _tnatxdhst;
+        private CCOLGeneratorCodeStringSettingModel _trthst;
+        private CCOLGeneratorCodeStringSettingModel _hpriohst;
+        private CCOLGeneratorCodeStringSettingModel _prmomaxhst;
+        private CCOLGeneratorCodeStringSettingModel _prmmwthst;
+        private CCOLGeneratorCodeStringSettingModel _prmpriohst;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -92,6 +105,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			if (c.HalfstarData.IsHalfstar)
 			{
 				var hsd = c.HalfstarData;
+
+                if (c.OVData.OVIngrepen.Any())
+                {
+                    foreach(var ov in c.OVData.OVIngrepen)
+                    {
+                        // TODO: need this to be settings instead of hard coded values
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvbhst}", 999, CCOLElementTimeTypeEnum.CT_type, _cvbhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tivhst}", 0, CCOLElementTimeTypeEnum.TE_type, _tivhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tibhst}", 400, CCOLElementTimeTypeEnum.TE_type, _tibhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhst}", 300, CCOLElementTimeTypeEnum.TE_type, _tgbhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblkhst}", 100, CCOLElementTimeTypeEnum.TE_type, _tblkhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnatxdhst}", 50, CCOLElementTimeTypeEnum.TE_type, _tnatxdhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthst}", 50, CCOLElementTimeTypeEnum.TE_type, _trthst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}", 0, CCOLElementTimeTypeEnum.TE_type, _hpriohst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomaxhst}", 0, CCOLElementTimeTypeEnum.TE_type, _prmomaxhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}", 2, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
+                    }
+                    foreach(var fc in c.Fasen)
+                    {
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}", 60, CCOLElementTimeTypeEnum.TS_type, _prmpriohst, fc.Naam));
+                    }
+                }
 				
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact));
@@ -140,7 +176,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hmlact}", _hmlact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpervar}", _hpervar));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperarh}", _hperarh));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhulpdienst}", _hplhulpdienst));
+				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhd}", _hplhd));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_homschtegenh}", _homschtegenh));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrstotxa}", 50, CCOLElementTimeTypeEnum.TE_type, _prmrstotxa));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schinst}", 0, CCOLElementTimeTypeEnum.SCH_type, _schinst));
@@ -346,7 +382,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCPostSystemApplication:
 					return 10;
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
-					return 10;
+                    return 10;
+                case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                    return 10;
+                case CCOLCodeTypeEnum.OvCPrioriteitsToekenning:
+                    return 10;
 				default:
 					return 0;
 			}
@@ -369,8 +409,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 			switch (type)
 			{
+				case CCOLCodeTypeEnum.HstCTop:
 				case CCOLCodeTypeEnum.RegCPreApplication:
-					sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
+                    sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
 					sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");
 					return sb.ToString();
 				case CCOLCodeTypeEnum.HstCPreApplication:
@@ -397,7 +438,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 					{
 						sb.AppendLine($"{ts}/* tbv ov_ple */");
-						sb.AppendLine($"{ts}if (SCH[sch{_schovpriople}])");
+						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
 						sb.AppendLine($"{ts}{{");
 						sb.AppendLine($"{ts}{ts}/* Instellen OV parameters */");
 						sb.AppendLine($"{ts}{ts}if (CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ ||");
@@ -1202,7 +1243,98 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
 					return sb.ToString();
 
-				default:
+                case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        if (c.OVData.HDIngrepen.Any())
+                        {
+                            sb.AppendLine($"{ts}int ov;");
+                            sb.AppendLine();
+                            sb.AppendLine($"{ts}/* bijhouden of een hulpdienstingreep plaatsvindt */");
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hplhd}] = FALSE;");
+                            sb.AppendLine($"{ts}for (ov = 0; ov < ovOVMAX; ov++)");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}if (iPrioriteitsOpties[ov] & poNoodDienst)");
+                            sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hplhd}] |= TRUE;");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
+                        }
+                        if (c.OVData.OVIngrepen.Any())
+                        {
+                            sb.AppendLine($"{ts}/* tijdens halfstar bedrijf alleen optie aanvraag voor OV richtingen */");
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                            foreach (var ov in c.OVData.OVIngrepen)
+                            {
+                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = SCH[{_schpf}{_schovpriople}] ? 0 : poAanvraag; ");
+                            }
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine();
+                        }
+
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Geen prioriteit indien voorwaarden tegenhouden omschakelen waar zijn */");
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}for (ov = 0; ov < ovOVMAX; ov++)");
+                        sb.AppendLine($"{ts}{ts}{ts}iXPrio[ov] |= TRUE;");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.OvCPrioriteitsToekenning:
+                    if (c.HalfstarData.IsHalfstar && c.OVData.OVIngrepen.Any())
+                    {
+                        sb.AppendLine($"{ts}/* tijdens halfstar bedrijf wordt een evt. eerder gezette prioriteit weer afgezet */");
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}{{");
+                        foreach (var ov in c.OVData.OVIngrepen)
+                        {
+                            sb.AppendLine($"{ts}{ts}iPrioriteit[ovFC{ov.FaseCyclus}] = FALSE;");
+                        }
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+                    if (c.HalfstarData.IsHalfstar && c.OVData.OVIngrepen.Any())
+                    {
+                        sb.AppendLine($"{ts}int fc;");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}BL[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* ------------------------------------------- */");
+                        sb.AppendLine($"{ts}/* aanroep OV richtingen voor halfstar bedrijf */");
+                        sb.AppendLine($"{ts}/* ------------------------------------------- */");
+                        foreach(var ov in c.OVData.OVIngrepen)
+                        {
+                            sb.AppendLine($"{ts}OVIngreep_ple({_fcpf}{ov.FaseCyclus},");
+                            sb.AppendLine($"{ts}{ts}SH[{_hpf}{_hovin}{ov.FaseCyclus}], NG, SH[{_hpf}{_hovuit}{ov.FaseCyclus}], NG, {_ctpf}{_cvchst}{ov.FaseCyclus},");
+                            sb.AppendLine($"{ts}{ts}{_ctpf}{_cvbhst}{ov.FaseCyclus}, {_tpf}{_tivhst}{ov.FaseCyclus},{_tpf}{_tibhst}{ov.FaseCyclus},");
+                            sb.AppendLine($"{ts}{_tpf}{_tgbhst}{ov.FaseCyclus}, {_tpf}{_tblkhst}{ov.FaseCyclus}, {_tpf}{_tnatxdhst}{ov.FaseCyclus},");
+                            sb.AppendLine($"{ts}{_hpf}{_hpriohst}{ov.FaseCyclus}, T_max[{_tpf}{_trthst}{ov.FaseCyclus}], PRM[{_prmpf}{_prmpriohst}{ov.FaseCyclus}], ");
+                            sb.AppendLine($"{ts}PRM[{_prmpf}{_prmomaxhst}{ov.FaseCyclus}], {_prmpf}{_prmmwthst}{c.Fasen.First().Naam}, IH[{_hpf}{_hplact}]);");
+                            sb.AppendLine();
+                        }
+                        sb.AppendLine($"{ts}}}"); 
+                    }
+                    return sb.ToString();
+
+                default:
 					return null;
 			}
 		}
@@ -1224,6 +1356,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _hiks = CCOLGeneratorSettingsProvider.Default.GetElementName("hiks");
             _prmxnl = CCOLGeneratorSettingsProvider.Default.GetElementName("prmxnl");
             _hnla = CCOLGeneratorSettingsProvider.Default.GetElementName("hnla");
+
+            _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
+            _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
 
             return base.SetSettings(settings);
 		}

@@ -770,10 +770,9 @@ void PrioriteitsToekenning(void) {
       }
     }
   }
-#ifdef OV_ADDFILE
-  PrioriteitsOpties_Add();
-  PrioriteitsNiveau_Add();
-#endif
+  
+  PrioriteitsOpties();
+
   /* Trek prioriteiten in */
   for (ov=0;
        ov<ovOVMAX;
@@ -826,6 +825,8 @@ void PrioriteitsToekenning(void) {
       }
     }
   }
+
+  PrioriteitsToekenningExtra();
 }
 
 /* -----------------------------------------------------------
@@ -1760,9 +1761,7 @@ void AfhandelingOV(void) {
      ------------------------------------------------------------- */
   OVAlternatieven();
 
-#ifdef OV_ADDFILE
-  post_AfhandelingOV();
-#endif
+  PostAfhandelingOV();
 
 #if !defined(AUTOMAAT) || defined(VISSIM)
 #ifdef OV_ADDFILE
