@@ -66,6 +66,7 @@
     <Compile Include="OVIngreepPrioriteitEnum.cs" />
     <Compile Include="OVIngreepVoertuigTypeEnum.cs" />
     <Compile Include="OVIngreepTypeEnum.cs" />
+    <Compile Include="OVIngreepWisselTypeEnum.cs" />
     <Compile Include="PeriodeDagCodeEnum.cs" />
     <Compile Include="PeriodeTypeEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

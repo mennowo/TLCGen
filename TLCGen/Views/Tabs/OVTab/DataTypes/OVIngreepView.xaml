@@ -12,6 +12,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+        <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -64,6 +65,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="In- en uitmeldingen" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
                 <!--<ct:SpecialDataGrid ItemsSource="{Binding Path=Meldingen}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
@@ -98,6 +102,11 @@
                 <ListView 
                     Grid.ColumnSpan="2"
                     Grid.Row="1" ItemsSource="{Binding Path=Meldingen}" Width="Auto" HorizontalAlignment="Left">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.Resources>
                         <Style TargetType="{x:Type GridViewColumnHeader}">
                             <Setter Property="Template">
@@ -112,7 +121,7 @@
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                         </Style>
                         <GridView x:Key="one">
-                            <GridViewColumn Header="Type" >
+                            <GridViewColumn Header="Type" Width="220">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Margin="2" Text="{Binding Type}" Foreground="DimGray" />
@@ -122,7 +131,7 @@
                             <GridViewColumn Header="Inmelding">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Inmelding}"
+                                        <CheckBox IsChecked="{Binding Inmelding,UpdateSourceTrigger=PropertyChanged}"
                                                   Visibility="{Binding Path=HasInmelding,Converter={StaticResource Bool2VisConv}}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -130,14 +139,15 @@
                             <GridViewColumn Header="Uitmelding" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Uitmelding}" />
+                                        <CheckBox IsChecked="{Binding Uitmelding,UpdateSourceTrigger=PropertyChanged}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Detector/ingang" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                        <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput}"
+                                                  ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
                                                   Visibility="{Binding Path=HasRelatedInput,Converter={StaticResource Bool2VisConv}}"
                                                   SelectedValue="{Binding Path=RelatedInput}" />
                                     </DataTemplate>
@@ -161,14 +171,25 @@
                 <Label Content="Uitmeld filter tijd" Grid.Row="2" />
                 <TextBox Text="{Binding Path=UitmeldFilterTijd}" Margin="2" Grid.Row="2" Grid.Column="1" />
                 <Label Content="Wissel aanwezig" Grid.Row="3" />
-                <CheckBox IsChecked="{Binding Path=Wissel}" Grid.Row="3" Grid.Column="1" Margin="5" />
-                <CheckBox FlowDirection="RightToLeft" IsChecked="{Binding Path=WisselStandMiddelsDetector}" Margin="5"
-                          Grid.Row="4" IsEnabled="{Binding Path=Wissel}">
-                    <TextBlock FlowDirection="LeftToRight" Text="Wissel stand detector" />
-                </CheckBox>
-                <ComboBox ItemsSource="{Binding Path=Detectoren}" Grid.Row="4" Grid.Column="1" Margin="2"
+                <CheckBox IsChecked="{Binding Path=Wissel}" Grid.Row="3" Grid.Column="1" Margin="5" VerticalAlignment="Center" />
+
+                <Label Content="Type wissel ingang" Grid.Row="4" />
+                <RadioButton GroupName="TypeGroup" Content="Detector"  Grid.Row="5" IsEnabled="{Binding Path=Wissel}"
+                             IsChecked="{Binding Path=WisselType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:OVIngreepWisselTypeEnum.Detector}}" />
+
+                <RadioButton GroupName="TypeGroup" Content="Ingang" Grid.Row="6" IsEnabled="{Binding Path=Wissel}"
+                             IsChecked="{Binding Path=WisselType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:OVIngreepWisselTypeEnum.Ingang}}" />
+
+                <ComboBox ItemsSource="{Binding Path=Detectoren}" Grid.Row="5" Grid.Column="1" Margin="2"
                           IsEnabled="{Binding Path=WisselStandMiddelsDetector}"
-                          SelectedValue="{Binding Path=WisselStandDetector}" />
+                          SelectedValue="{Binding Path=WisselStandInput,UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBox Text="{Binding Path=WisselStandInput,UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="2"
+                         IsEnabled="{Binding Path=WisselStandMiddelsIngang}" />
+                <Label Content="Wissel ingang voorwaarde" Grid.Row="7" />
+                <CheckBox 
+                    IsEnabled="{Binding Path=WisselStandMiddelsIngang}"
+                    IsChecked="{Binding Path=WisselStandVoorwaarde}" Grid.Row="7" Grid.Column="1" Margin="5" VerticalAlignment="Center" />
             </Grid>
 
             <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />

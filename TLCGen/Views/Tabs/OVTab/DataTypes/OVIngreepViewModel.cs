@@ -258,9 +258,7 @@ namespace TLCGen.ViewModels
                 _OVIngreep.Wissel = value;
                 if (!value)
                 {
-                    WisselStandMiddelsDetector = false;
                     Meldingen.RemoveSome(x => x.Type == OVIngreepMeldingTypeEnum.WisselDetector || x.Type == OVIngreepMeldingTypeEnum.WisselStroomKringDetector);
-                    RaisePropertyChanged(nameof(WisselStandDetector));
                 }
                 else
                 {
@@ -282,31 +280,57 @@ namespace TLCGen.ViewModels
                     }));
                 }
                 RaisePropertyChanged<object>(nameof(Wissel), broadcast: true);
+                RaisePropertyChanged(nameof(WisselStandMiddelsDetector));
+                RaisePropertyChanged(nameof(WisselStandMiddelsIngang));
             }
-        }
+    }
 
         [Browsable(false)]
-        public bool WisselStandMiddelsDetector
+        public OVIngreepWisselTypeEnum WisselType
         {
-            get => _OVIngreep.WisselStandMiddelsDetector;
+            get => _OVIngreep.WisselType;
             set
             {
-                _OVIngreep.WisselStandMiddelsDetector = value;
-                RaisePropertyChanged<object>(nameof(WisselStandMiddelsDetector), broadcast: true);
+                if(_OVIngreep.WisselType != value)
+                {
+                    _OVIngreep.WisselType = value;
+                    _OVIngreep.WisselStandInput = null;
+                    RaisePropertyChanged<object>(nameof(WisselType), broadcast: true);
+                    RaisePropertyChanged(nameof(WisselStandMiddelsDetector));
+                    RaisePropertyChanged(nameof(WisselStandMiddelsIngang));
+                    RaisePropertyChanged(nameof(WisselStandInput));
+                }
             }
         }
 
         [Browsable(false)]
-        public string WisselStandDetector
+        public bool WisselStandMiddelsDetector => Wissel && WisselType == OVIngreepWisselTypeEnum.Detector;
+
+        [Browsable(false)]
+        public bool WisselStandMiddelsIngang => Wissel && WisselType == OVIngreepWisselTypeEnum.Ingang;
+
+        [Browsable(false)]
+        public string WisselStandInput
         {
-            get => _OVIngreep.WisselStandDetector;
+            get => _OVIngreep.WisselStandInput;
             set
             {
                 if (value != null)
                 {
-                    _OVIngreep.WisselStandDetector = value;
-                    RaisePropertyChanged<object>(nameof(WisselStandDetector), broadcast: true);
+                    _OVIngreep.WisselStandInput = value;
+                    RaisePropertyChanged<object>(nameof(WisselStandInput), broadcast: true);
                 }
+            }
+        }
+
+        [Browsable(false)]
+        public bool WisselStandVoorwaarde
+        {
+            get => _OVIngreep.WisselStandVoorwaarde;
+            set
+            {
+                _OVIngreep.WisselStandVoorwaarde = value;
+                RaisePropertyChanged<object>(nameof(WisselStandVoorwaarde), broadcast: true);
             }
         }
 
@@ -523,8 +547,8 @@ namespace TLCGen.ViewModels
                 {
                     FaseCyclus = ovingreep.FaseCyclus,
                     Type = OVIngreepMeldingTypeEnum.VerlosDetector,
-                    Inmelding = true,
-                    Uitmelding = true,
+                    Inmelding = false,
+                    Uitmelding = false,
                     InmeldingFilterTijd = 15
                 }));
             }

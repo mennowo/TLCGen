@@ -60,6 +60,10 @@
       <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
       <Name>TLCGen.Integrity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.ModelManager\TLCGen.ModelManager.csproj">
+      <Project>{ae032ace-62d7-4093-986e-6a436d8d8161}</Project>
+      <Name>TLCGen.ModelManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
       <Project>{B3A654CF-76A7-4AB9-B99E-870781E5D83B}</Project>
       <Name>TLCGen.Models</Name>

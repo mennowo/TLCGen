@@ -12,5 +12,6 @@ namespace TLCGen.ModelManagement
         ControllerModel Controller { get; set; }
 
 	    void InjectDefaultAction(Action<object> setDefaultsAction);
+        void CorrectModelByVersion(ControllerModel controller);
     }
 }

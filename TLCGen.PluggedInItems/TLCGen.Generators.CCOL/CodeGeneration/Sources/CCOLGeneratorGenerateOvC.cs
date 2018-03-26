@@ -898,9 +898,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 inmHelems.Add($"{_hpf}in{ov.FaseCyclus}kar");
                                 break;
                             case OVIngreepMeldingTypeEnum.VerlosDetector:
-                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                 }
                                 else
                                 {
@@ -909,9 +909,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 inmHelems.Add($"{_hpf}in{ov.FaseCyclus}ss");
                                 break;
                             case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
-                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}wsk] = SCH[{_schpf}in{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}wsk] = SCH[{_schpf}in{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                     inmHelems.Add($"{_hpf}in{ov.FaseCyclus}wsk");
                                 }
                                 break;
@@ -951,9 +951,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}kar");
                                 break;
                             case OVIngreepMeldingTypeEnum.VerlosDetector:
-                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                 }
                                 else
                                 {
@@ -962,16 +962,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}ss");
                                 break;
                             case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
-                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wsk] = SCH[{_schpf}uit{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wsk] = SCH[{_schpf}uit{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                     uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wsk");
                                 }
                                 break;
                             case OVIngreepMeldingTypeEnum.WisselDetector:
-                                if (ov.Wissel && ov.WisselStandMiddelsDetector && ov.WisselStandDetector != null)
+                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                 {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wd] = SCH[{_schpf}in{ov.FaseCyclus}wd] && (D[{_dpf}{ov.WisselStandDetector}] || SCH[{_schpf}geenwissel{ov.WisselStandDetector}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wd] = SCH[{_schpf}in{ov.FaseCyclus}wd] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                     uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wd");
                                 }
                                 break;

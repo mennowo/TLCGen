@@ -11,6 +11,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.DataAccess
 {
@@ -160,9 +161,11 @@ namespace TLCGen.DataAccess
                 {
 
                     string lastfilename = ControllerFileName;
-                    OpenFileDialog openFileDialog = new OpenFileDialog();
-                    openFileDialog.CheckFileExists = true;
-                    openFileDialog.Filter = "TLCGen files|*.tlc;*.tlcgz";
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        CheckFileExists = true,
+                        Filter = "TLCGen files|*.tlc;*.tlcgz"
+                    };
                     if (openFileDialog.ShowDialog() == true)
                     {
                         ControllerFileName = openFileDialog.FileName;
@@ -200,6 +203,7 @@ namespace TLCGen.DataAccess
                             }
                         }
                         Controller = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
+                        TLCGenModelManager.Default.CorrectModelByVersion(Controller);
                     }
                     return true;
                 }

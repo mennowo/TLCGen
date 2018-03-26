@@ -42,6 +42,7 @@ namespace TLCGen.ViewModels
                 OVIngreepMelding.Inmelding = value;
                 MessengerInstance.Send(new OVIngreepMeldingChangedMessage(OVIngreepMelding.FaseCyclus, Type));
                 RaisePropertyChanged<object>(nameof(Inmelding), broadcast: true);
+                RaisePropertyChanged(nameof(CanHaveRelatedInput));
             }
         }
 
@@ -53,6 +54,7 @@ namespace TLCGen.ViewModels
                 OVIngreepMelding.Uitmelding = value;
                 MessengerInstance.Send(new OVIngreepMeldingChangedMessage(OVIngreepMelding.FaseCyclus, Type));
                 RaisePropertyChanged<object>(nameof(Uitmelding), broadcast: true);
+                RaisePropertyChanged(nameof(CanHaveRelatedInput));
             }
         }
 
@@ -65,6 +67,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(InmeldingFilterTijd), broadcast: true);
             }
         }
+
+        public bool CanHaveRelatedInput => Inmelding || Uitmelding;
 
         public string RelatedInput
         {

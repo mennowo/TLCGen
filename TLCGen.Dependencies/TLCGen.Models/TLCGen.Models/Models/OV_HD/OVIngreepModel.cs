@@ -22,9 +22,10 @@ namespace TLCGen.Models
         public int UitmeldFilterTijd { get; set; }
         
         public bool Wissel { get; set; }
-        public bool WisselStandMiddelsDetector { get; set; }
+        public OVIngreepWisselTypeEnum WisselType { get; set; }
         [RefersTo]
-        public string WisselStandDetector { get; set; }
+        public string WisselStandInput { get; set; }
+        public bool WisselStandVoorwaarde { get; set; }
 
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }

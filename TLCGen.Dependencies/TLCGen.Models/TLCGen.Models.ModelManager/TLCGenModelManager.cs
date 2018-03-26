@@ -1,14 +1,12 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ModelManagement
 {
@@ -68,6 +66,46 @@ namespace TLCGen.ModelManagement
 	    {
 		    _setDefaultsAction = setDefaultsAction;
 	    }
+
+        public void CorrectModelByVersion(ControllerModel controller)
+        {
+            var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
+            var v1 = Version.Parse("0.2.2.0");
+            if(v < v1)
+            {
+                // In version 0.2.2.0, the OVIngreepModel object was changed
+                foreach (var ov in controller.OVData.OVIngrepen)
+                {
+                    if (!ov.Meldingen.Any())
+                    {
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.KAR,
+                            Inmelding = ov.KAR,
+                            Uitmelding = ov.KAR,
+                            InmeldingFilterTijd = 15
+                        });
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.VECOM,
+                            Inmelding = ov.Vecom,
+                            Uitmelding = ov.Vecom,
+                            InmeldingFilterTijd = 15
+                        });
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.VerlosDetector,
+                            Inmelding = false,
+                            Uitmelding = false,
+                            InmeldingFilterTijd = 15
+                        });
+                    }
+                }
+            }
+        }
 
         #endregion // Public Methods
 
