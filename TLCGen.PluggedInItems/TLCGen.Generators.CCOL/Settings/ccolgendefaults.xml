@@ -595,6 +595,12 @@
             <Type>Parameter</Type>
             <Description>Prioriteit _E1_ tijdens halfstar regelen</Description>
           </Setting>
+          <Setting>
+            <Default>mingov</Default>
+            <Setting>mingov</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimale groentijd bij afkappen fase _E1_ tijdens plan _E2_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

@@ -64,7 +64,7 @@
 		HstCPostApplication,
 		HstCPreSystemApplication,
 		HstCPostSystemApplication,
-		HstCPostDumpApplication
-
-	};
+		HstCPostDumpApplication,
+        HstCOVSettingsHalfstar
+    };
 }

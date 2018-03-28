@@ -95,6 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmomaxhst;
         private CCOLGeneratorCodeStringSettingModel _prmmwthst;
         private CCOLGeneratorCodeStringSettingModel _prmpriohst;
+        private CCOLGeneratorCodeStringSettingModel _prmmingov;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -111,21 +112,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach(var ov in c.OVData.OVIngrepen)
                     {
                         // TODO: need this to be settings instead of hard coded values
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvbhst}", 999, CCOLElementTimeTypeEnum.CT_type, _cvbhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tivhst}", 0, CCOLElementTimeTypeEnum.TE_type, _tivhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tibhst}", 400, CCOLElementTimeTypeEnum.TE_type, _tibhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhst}", 300, CCOLElementTimeTypeEnum.TE_type, _tgbhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblkhst}", 100, CCOLElementTimeTypeEnum.TE_type, _tblkhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnatxdhst}", 50, CCOLElementTimeTypeEnum.TE_type, _tnatxdhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthst}", 50, CCOLElementTimeTypeEnum.TE_type, _trthst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}", 0, CCOLElementTimeTypeEnum.TE_type, _hpriohst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomaxhst}", 0, CCOLElementTimeTypeEnum.TE_type, _prmomaxhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}", 2, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvbhst}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvbhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tivhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tivhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tibhst}{ov.FaseCyclus}", 400, CCOLElementTimeTypeEnum.TE_type, _tibhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhst}{ov.FaseCyclus}", 300, CCOLElementTimeTypeEnum.TE_type, _tgbhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblkhst}{ov.FaseCyclus}", 100, CCOLElementTimeTypeEnum.TE_type, _tblkhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnatxdhst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _tnatxdhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _trthst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _hpriohst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomaxhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _prmomaxhst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{ov.FaseCyclus}", 2, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
                     }
                     foreach(var fc in c.Fasen)
                     {
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}", 60, CCOLElementTimeTypeEnum.TS_type, _prmpriohst, fc.Naam));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwthst}{fc.Naam}", 60, CCOLElementTimeTypeEnum.TS_type, _prmmwthst, fc.Naam));
+                        foreach(var pl in c.HalfstarData.SignaalPlannen)
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmingov}{fc.Naam}{pl.Naam}", 60, CCOLElementTimeTypeEnum.TE_type, _prmmingov, fc.Naam, pl.Naam));
+                        }
                     }
                 }
 				
@@ -387,7 +392,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.OvCPrioriteitsToekenning:
                     return 10;
-				default:
+                case CCOLCodeTypeEnum.HstCOVSettingsHalfstar:
+                    return 10;
+                default:
 					return 0;
 			}
 		}
@@ -444,7 +451,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{ts}{ts}if (CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ ||");
 						sb.AppendLine($"{ts}{ts}{ts}{ts}CIF_PARM1WIJZAP != CIF_GEEN_PARMWIJZ)");
 						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}OV_ple_settings();");
+						sb.AppendLine($"{ts}{ts}{ts}OVSettingsHalfstar();");
 						sb.AppendLine($"{ts}{ts}}}");
 						sb.AppendLine($"{ts}{ts}{ts}");
 						sb.AppendLine($"{ts}{ts}BijhoudenWachtTijd();");
@@ -1331,6 +1338,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
                         sb.AppendLine($"{ts}}}"); 
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.HstCOVSettingsHalfstar:
+                    if (c.HalfstarData.Hoofdrichtingen.Any())
+                    {
+                        sb.AppendLine($"{ts}HoofdrichtingOpties(NG, ");
+                        foreach (var hr in c.HalfstarData.Hoofdrichtingen)
+                        {
+                            // TODO: make this configurable (replace FALSE...)
+                            sb.AppendLine($"{ts}                   (va_count) {_fcpf}{hr.FaseCyclus}, (va_mulv) FALSE, (va_mulv) FALSE, (va_mulv) FALSE,");
+                        }
+                        sb.AppendLine("{ts}                   (va_count)END); ");
+                    }
+
+                    sb.AppendLine();
+
+                    foreach (var fc in c.Fasen)
+                    {
+                        sb.AppendLine($"{ts}minimum_groentijden_ovprio_va_arg((count) {_fcpf}{fc.Naam},");
+                        foreach (var pl in c.HalfstarData.SignaalPlannen)
+                        {
+                            sb.AppendLine($"{ts}                                  (va_mulv) PRM[{_prmpf}{_prmmingov}{fc.Naam}{pl.Naam}], (va_mulv)(PL == {pl.Naam}),");
+                        }
+                        sb.AppendLine($"{ts}                                  (va_mulv) TFG_max[{_fcpf}{fc.Naam}], (va_mulv)END);");
                     }
                     return sb.ToString();
 

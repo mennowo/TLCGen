@@ -82,6 +82,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#define NO_REALISEREN_TOEGESTAAN");
             sb.AppendLine("#define OV_ADDFILE");
 
+            if (c.HalfstarData.IsHalfstar)
+            {
+                sb.AppendLine();
+                sb.AppendLine("/* Declareren OV settings functie halfstar */");
+            }
+
             sb.AppendLine();
             sb.AppendLine("typedef enum {");
             foreach (var fc in c.OVData.OVIngrepen)

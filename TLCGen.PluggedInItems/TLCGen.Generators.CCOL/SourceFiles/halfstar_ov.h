@@ -22,8 +22,10 @@ extern mulv TXB_PL[FCMAX], TXD_PL[FCMAX];
 /* Gereserveerde bitwaarde tbv OV ingrepen tijdens signaalplan                            */
 /* -------------------------------------------------------------------------------------- */
 
+#define OV_PLE_BIT          BIT14  /* FM tbv OV ingrepen tijdens PL             */
+
 void OV_ple_init(void);
-void OV_ple_settings(void);
+void OVSettingsHalfstar(void);
 void AlternatievePlannen(int, ...);
 bool PasSignaalplanToe(bool);
 void HoofdrichtingOpties(int, ...);

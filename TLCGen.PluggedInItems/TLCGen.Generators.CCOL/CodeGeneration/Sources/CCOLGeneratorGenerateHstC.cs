@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -40,6 +41,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        sb.Append(GenerateHstCPostDumpApplication(c));
 	        sb.Append(GenerateHstCApplicationTig1(c));
 	        sb.Append(GenerateHstCApplicationTig2(c));
+	        sb.Append(GenerateHstCOVSettingsHalfstar(c));
 
             return sb.ToString();
         }
@@ -59,7 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			sb.AppendLine("#include \"tx_synch.h\"");
 			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
 			{
-				sb.AppendLine("#include \"halfstar_ov.h\"");
+				sb.AppendLine("#include \"halfstar_ov.c\"");
 			}
 			sb.AppendLine();
             sb.AppendLine($"#include \"{c.Data.Naam}hst.add\"");
@@ -466,7 +468,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
 		}
 
-	    private string GenerateHstCSignaalPlanInstellingen(ControllerModel controller)
+        private string GenerateHstCOVSettingsHalfstar(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            if (!c.OVData.OVIngrepen.Any()) return "";
+
+            sb.AppendLine("void OVSettingsHalfstar(void)");
+            sb.AppendLine("{");
+
+            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.HstCOVSettingsHalfstar])
+            {
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.HstCOVSettingsHalfstar, ts));
+            }
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        private string GenerateHstCSignaalPlanInstellingen(ControllerModel controller)
 	    {
 		    var sb = new StringBuilder();
 
