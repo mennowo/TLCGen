@@ -1161,7 +1161,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								}
 								sb.AppendLine($"{ts}}}");
 								sb.AppendLine();
-								// Send: leven, synch, txs
+                                // Send: leven, synch, txs
+                                ipl = 1;
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}];");
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = REG && (MM[{_mpf}{_mleven}{kp.KruisingNaam}] && (TXS_delta == 0) && TXS_OKE);");

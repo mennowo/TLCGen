@@ -1214,13 +1214,13 @@
             <Default>ovin</Default>
             <Setting>ovin</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement OV inmelding</Description>
+            <Description>Hulpelement OV inmelding fase _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovuit</Default>
             <Setting>ovuit</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement OV uitmelding</Description>
+            <Description>Hulpelement OV uitmelding _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>hdin</Default>
@@ -1410,134 +1410,35 @@
           </Setting>
           
           <Setting>
-            <Default>inmvecom</Default>
-            <Setting>inmvecom</Setting>
+            <Default>ovin</Default>
+            <Setting>ovin</Setting>
             <Type>Timer</Type>
-            <Description>Anti jutter tijd inmelden DSI _E1_</Description>
+            <Description>Anti jutter tijd inmelden _E1_ _E2_</Description>
           </Setting>
           <Setting>
-            <Default>inmvecom</Default>
-            <Setting>inmvecom</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden inmelden VECOM _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>inmvecom</Default>
-            <Setting>inmvecom</Setting>
+            <Default>ovin</Default>
+            <Setting>ovin</Setting>
             <Type>Schakelaar</Type>
-            <Description>Toestaan inmelden VECOM _E1_</Description>
+            <Description>Inmelden _E1_ via _E2_ toestaan</Description>
           </Setting>
           <Setting>
-            <Default>uitmvecom</Default>
-            <Setting>uitmvecom</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden uitmelden VECOM _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmvecom</Default>
-            <Setting>uitmvecom</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toestaan uitmelden DSI _E1_</Description>
-          </Setting>
-          
-          <Setting>
-            <Default>inmkar</Default>
-            <Setting>inmkar</Setting>
+            <Default>ovuit</Default>
+            <Setting>ovuit</Setting>
             <Type>Timer</Type>
-            <Description>Anti jutter tijd inmelden kar _E1_</Description>
+            <Description>Anti jutter tijd uitmelden _E1_</Description>
           </Setting>
           <Setting>
-            <Default>inmkar</Default>
-            <Setting>inmkar</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden inmelden kar _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmkar</Default>
-            <Setting>uitmkar</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden kar _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmkar</Default>
-            <Setting>uitmkar</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden uitmelden kar _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>karov</Default>
-            <Setting>karov</Setting>
+            <Default>ovuit</Default>
+            <Setting>ovuit</Setting>
             <Type>Schakelaar</Type>
-            <Description>Toestaan kar tbv in/uitmelden voor _E1_</Description>
-          </Setting>
-
-          <Setting>
-            <Default>inmwsk</Default>
-            <Setting>inmwsk</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden inmelden wsk _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>inmwsk</Default>
-            <Setting>inmwsk</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toestaan inmelden wsk _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmwsk</Default>
-            <Setting>uitmwsk</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden wsk _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmwsk</Default>
-            <Setting>uitmwsk</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden uitmelden wsk _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmwsk</Default>
-            <Setting>uitmwsk</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toestaan uitmelden wsk _E1_</Description>
-          </Setting>
-
-          <Setting>
-            <Default>inmss</Default>
-            <Setting>inmss</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden inmelden ss _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>inmss</Default>
-            <Setting>inmss</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toestaan inmelden ss _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmss</Default>
-            <Setting>uitmss</Setting>
-            <Type>Timer</Type>
-            <Description>Anti jutter tijd uitmelden ss _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmss</Default>
-            <Setting>uitmss</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden uitmelden ss _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>uitmss</Default>
-            <Setting>uitmss</Setting>
-            <Type>Schakelaar</Type>
-            <Description>Toestaan uitmelden ss _E1_</Description>
+            <Description>Uitmelden _E1_ via _E2_ toestaan</Description>
           </Setting>
           <Setting>
             <Default>geenwissel</Default>
             <Setting>geenwissel</Setting>
             <Type>Schakelaar</Type>
             <Description>Wisselstand van _E1_ negeren</Description>
-          </Setting>-->
+          </Setting>
 
         </Settings>
       </CodePieceData>

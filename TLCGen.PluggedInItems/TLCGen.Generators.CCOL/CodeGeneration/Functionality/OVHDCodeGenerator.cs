@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -21,7 +22,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _MyBitmapInputs;
 
 #pragma warning disable 0649
-#pragma warning disable 0169
         private CCOLGeneratorCodeStringSettingModel _cvc;
         private CCOLGeneratorCodeStringSettingModel _cvchd;
         private CCOLGeneratorCodeStringSettingModel _tgb;
@@ -71,40 +71,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _uskarmelding;
         private CCOLGeneratorCodeStringSettingModel _tkarog;
         private CCOLGeneratorCodeStringSettingModel _tkarmelding;
-
-        //private CCOLGeneratorCodeStringSettingModel _tinmdsi;
-        //private CCOLGeneratorCodeStringSettingModel _hinmdsi;
-        //private CCOLGeneratorCodeStringSettingModel _tuitmdsi;
-        //private CCOLGeneratorCodeStringSettingModel _huitmdsi;
-        //private CCOLGeneratorCodeStringSettingModel _schinmdsi;
-        //private CCOLGeneratorCodeStringSettingModel _schuitmdsi;
-
-        //private CCOLGeneratorCodeStringSettingModel _tinmkar;
-        //private CCOLGeneratorCodeStringSettingModel _hinmkar;
-        //private CCOLGeneratorCodeStringSettingModel _tuitmkar;
-        //private CCOLGeneratorCodeStringSettingModel _huitmkar;
-        //private CCOLGeneratorCodeStringSettingModel _schkarov;
-
-        //private CCOLGeneratorCodeStringSettingModel _hinmwsk;
-        //private CCOLGeneratorCodeStringSettingModel _huitmwsk;
-        //private CCOLGeneratorCodeStringSettingModel _tuitmwsk;
-        //private CCOLGeneratorCodeStringSettingModel _schinmwsk;
-        //private CCOLGeneratorCodeStringSettingModel _schuitmwsk;
-
-        //private CCOLGeneratorCodeStringSettingModel _hinmss;
-        //private CCOLGeneratorCodeStringSettingModel _schinmss;
-        //private CCOLGeneratorCodeStringSettingModel _huitmss;
-        //private CCOLGeneratorCodeStringSettingModel _tuitmss;
-        //private CCOLGeneratorCodeStringSettingModel _schuitmss;
-
-        //private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
-#pragma warning restore 0169
+        
+        private CCOLGeneratorCodeStringSettingModel _tovin;
+        private CCOLGeneratorCodeStringSettingModel _tovuit;
+        private CCOLGeneratorCodeStringSettingModel _schovin;
+        private CCOLGeneratorCodeStringSettingModel _schovuit;
+        private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
 #pragma warning restore 0649
 
         #endregion // Fields
 
         #region Properties
         #endregion // Properties
+
+        private string GetMeldingShortcode(OVIngreepMeldingTypeEnum type)
+        {
+            switch (type)
+            {
+                case OVIngreepMeldingTypeEnum.VECOM:
+                    return "vec";
+                case OVIngreepMeldingTypeEnum.KAR:
+                    return "kar";
+                case OVIngreepMeldingTypeEnum.VerlosDetector:
+                    return "ss";
+                case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
+                    return "wsk";
+                case OVIngreepMeldingTypeEnum.WisselDetector:
+                    return "wd";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -116,32 +113,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
             {
                 /* Variables independent of signal groups */
-                _MyElements.Add(new CCOLElement($"{_prmmwta}",   c.OVData.MaxWachttijdAuto,       CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmmwtfts}", c.OVData.MaxWachttijdFiets,      CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement($"{_prmmwtvtg}", c.OVData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type,  CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwta}",   c.OVData.MaxWachttijdAuto,       CCOLElementTimeTypeEnum.TS_type, _prmmwta));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtfts}", c.OVData.MaxWachttijdFiets,      CCOLElementTimeTypeEnum.TS_type, _prmmwtfts));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtvtg}", c.OVData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type, _prmmwtvtg));
 
                 if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
                     c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
                 {
-                    _MyElements.Add(new CCOLElement($"{_uskarmelding}", CCOLElementTypeEnum.Uitgang));
-                    _MyElements.Add(new CCOLElement($"{_uskarog}",      CCOLElementTypeEnum.Uitgang));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}",      _uskarog));
                     _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KARMeldingBitmapData, $"{_uspf}{_uskarmelding}"));
                     _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KAROnderGedragBitmapData, $"{_uspf}{_uskarog}"));
 
-                    _MyElements.Add(new CCOLElement($"{_tkarmelding}", 15,   CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                    _MyElements.Add(new CCOLElement($"{_tkarog}",      1440, CCOLElementTimeTypeEnum.TM_type, CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarmelding}", 15,   CCOLElementTimeTypeEnum.TE_type, _tkarmelding));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarog}",      1440, CCOLElementTimeTypeEnum.TM_type, _tkarog));
                 }
             }
             if (c.OVData.OVIngrepen.Count > 0)
             {
                 /* Variables independent of signal groups */
-                _MyElements.Add(new CCOLElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-                _MyElements.Add(new CCOLElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, _schcprio));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None, _prmlaatcrit));
 
                 if (c.OVData.OVIngrepen.Any(x => x.KAR))
                 {
-                    var prmtest1 = new CCOLElement($"{_prmtestkarvert}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter);
-                    var prmtest2 = new CCOLElement($"{_prmtestkarlyn}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter);
+                    var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestkarvert}", 0, CCOLElementTimeTypeEnum.None, _prmtestkarvert);
+                    var prmtest2 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestkarlyn}", 0, CCOLElementTimeTypeEnum.None, _prmtestkarlyn);
                     prmtest1.Dummy = true;
                     prmtest2.Dummy = true;
                     _MyElements.Add(prmtest1);
@@ -151,7 +148,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				// TODO: This is not nice. Need to improve! should only be generated when needed
                 //if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
                 //{
-                _MyElements.Add(new CCOLElement($"{_schcheckopdsin}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckopdsin}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckopdsin));
                 //}
 
                 /* Variables for conflicting signal groups */
@@ -164,14 +161,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     var fct = c.Fasen.First(x => x.Naam == ovfc.FaseCyclus).Type;
                     
-                    _MyElements.Add(new CCOLElement($"{_prmpmgt}{ovfc.FaseCyclus}", ovfc.PercMaxGroentijdVoorTerugkomen, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                    _MyElements.Add(new CCOLElement($"{_prmognt}{ovfc.FaseCyclus}", ovfc.OndergrensNaTerugkomen,         CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpmgt}{ovfc.FaseCyclus}", ovfc.PercMaxGroentijdVoorTerugkomen, CCOLElementTimeTypeEnum.TE_type, _prmpmgt, ovfc.FaseCyclus));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmognt}{ovfc.FaseCyclus}", ovfc.OndergrensNaTerugkomen,         CCOLElementTimeTypeEnum.TE_type, _prmognt, ovfc.FaseCyclus));
                     if(fct != FaseTypeEnum.Voetganger)
                     {
-                        _MyElements.Add(new CCOLElement($"{_prmnofm}{ovfc.FaseCyclus}",   ovfc.AantalKerenNietAfkappen,              CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                        _MyElements.Add(new CCOLElement($"{_prmmgcov}{ovfc.FaseCyclus}",  ovfc.MinimumGroentijdConflictOVRealisatie, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                        _MyElements.Add(new CCOLElement($"{_prmpmgcov}{ovfc.FaseCyclus}", ovfc.PercMaxGroentijdConflictOVRealisatie, CCOLElementTimeTypeEnum.None,    CCOLElementTypeEnum.Parameter));
-                        _MyElements.Add(new CCOLElement($"{_prmohpmg}{ovfc.FaseCyclus}",  ovfc.OphoogpercentageNaAfkappen,           CCOLElementTimeTypeEnum.None,    CCOLElementTypeEnum.Parameter));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnofm}{ovfc.FaseCyclus}",   ovfc.AantalKerenNietAfkappen,              CCOLElementTimeTypeEnum.TE_type, _prmnofm, ovfc.FaseCyclus));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmgcov}{ovfc.FaseCyclus}",  ovfc.MinimumGroentijdConflictOVRealisatie, CCOLElementTimeTypeEnum.TE_type, _prmmgcov, ovfc.FaseCyclus));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpmgcov}{ovfc.FaseCyclus}", ovfc.PercMaxGroentijdConflictOVRealisatie, CCOLElementTimeTypeEnum.None,    _prmpmgcov, ovfc.FaseCyclus));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmohpmg}{ovfc.FaseCyclus}",  ovfc.OphoogpercentageNaAfkappen,           CCOLElementTimeTypeEnum.None,    _prmohpmg, ovfc.FaseCyclus));
                     }
                 }
             }
@@ -181,16 +178,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _MyBitmapOutputs.Add(new CCOLIOElement(ov.OVInmeldingBitmapData, $"{_uspf}{_usovinm}{ov.FaseCyclus}"));
 
-                _MyElements.Add(new CCOLElement($"{_usovinm}{ov.FaseCyclus}", CCOLElementTypeEnum.Uitgang));
-                _MyElements.Add(new CCOLElement($"{_hov}{ov.FaseCyclus}",     CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(new CCOLElement($"{_hovin}{ov.FaseCyclus}",   CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(new CCOLElement($"{_hovuit}{ov.FaseCyclus}",  CCOLElementTypeEnum.HulpElement));
-
-////////                if (ov.KAR)
-////////                {
-////////                    _MyElements.Add(new CCOLElement($"{_tdhkarin}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-////////                    _MyElements.Add(new CCOLElement($"{_tdhkaruit}{ov.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-////////                }
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovinm}{ov.FaseCyclus}", _usovinm, ov.FaseCyclus));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hov}{ov.FaseCyclus}",     _hov, ov.FaseCyclus));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovin}{ov.FaseCyclus}",   _hovin, ov.FaseCyclus));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovuit}{ov.FaseCyclus}",  _hovuit, ov.FaseCyclus));
+                
+                foreach(var m in ov.Meldingen)
+                {
+                    if (m.Inmelding)
+                    {
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _hovin, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _tovin, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _schovin, ov.FaseCyclus, m.Type.GetDescription()));
+                    }
+                    if (m.Uitmelding)
+                    {
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _hovuit, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _schovuit, ov.FaseCyclus, m.Type.GetDescription()));
+                    }
+                }
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovuit}{ov.FaseCyclus}", _tovuit, ov.FaseCyclus));
 
                 _MyElements.Add(new CCOLElement($"{_tbtovg}{ov.FaseCyclus}",        0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_trt}{ov.FaseCyclus}",           0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
@@ -260,11 +267,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 // For signal groups that have HD but not OV
                 if(c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
                 {
-////////                    if (hd.KAR)
-////////                    {
-////////                        _MyElements.Add(new CCOLElement($"{_tdhkarin}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-////////                        _MyElements.Add(new CCOLElement($"{_tdhkaruit}{hd.FaseCyclus}", 15, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-////////                    }
                     _MyElements.Add(new CCOLElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 }
 
@@ -322,6 +324,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 40;
+                case CCOLCodeTypeEnum.OvCInUitMelden:
+                    return 10;
                 default:
                     return 0;
             }
@@ -351,6 +355,162 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
+                    }
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.OvCInUitMelden:
+                    sb.AppendLine($"{ts}/* Afzetten hulpelementen voor in- en uitmeldingen */");
+                    foreach (var ov in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = FALSE;");
+                    }
+                    sb.AppendLine();
+                    foreach (var ov in c.OVData.OVIngrepen)
+                    {
+                        if (ov.Meldingen.Any(x => x.Inmelding))
+                        {
+                            var inmHelems = new List<string>();
+                            sb.AppendLine($"{ts}/* Inmelding {_fcpf}{ov.FaseCyclus} */");
+                            foreach (var melding in ov.Meldingen)
+                            {
+                                if (!melding.Inmelding) continue;
+                                switch (melding.Type)
+                                {
+                                    case OVIngreepMeldingTypeEnum.VECOM:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}] && DSI_melding(ds{ov.FaseCyclus}_in, " +
+                                            $"{_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                        inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.KAR:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                            $"DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                        inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.VerlosDetector:
+                                        if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) " +
+                                                $"&& R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
+                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
+                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                        }
+                                        inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
+                                        if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " +
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
+                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                            inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        }
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.WisselDetector:
+                                        break;
+                                    default:
+                                        throw new IndexOutOfRangeException();
+                                }
+                            }
+                            sb.Append($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = ");
+                            var first = true;
+                            foreach (var i in inmHelems)
+                            {
+                                if (!first) sb.Append(" || ");
+                                sb.Append($"IH[{i}]");
+                                first = false;
+                            }
+                            sb.AppendLine(";");
+                            sb.AppendLine();
+                        }
+
+                        if (ov.Meldingen.Any(x => x.Uitmelding))
+                        {
+                            var uitmHelems = new List<string>();
+                            sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{ov.FaseCyclus} */");
+                            foreach (var melding in ov.Meldingen)
+                            {
+                                if (!melding.Uitmelding) continue;
+                                switch (melding.Type)
+                                {
+                                    case OVIngreepMeldingTypeEnum.VECOM:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && DSI_melding(ds{ov.FaseCyclus}_uit, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
+                                        uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.KAR:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, " +
+                                            $"CIF_DSUIT, -1, -1, -1) && !T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
+                                        uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.VerlosDetector:
+                                        if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
+                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && !TDH[{_dpf}{melding.RelatedInput}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                        }
+                                        uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
+                                        if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
+                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                            uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        }
+                                        break;
+                                    case OVIngreepMeldingTypeEnum.WisselDetector:
+                                        if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        {
+                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
+                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                            uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        }
+                                        break;
+                                    default:
+                                        throw new IndexOutOfRangeException();
+                                }
+                            }
+                            sb.Append($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = RT[{_tpf}{_tovuit}{ov.FaseCyclus}] = ");
+                            var first = true;
+                            foreach (var i in uitmHelems)
+                            {
+                                if (!first) sb.Append(" || ");
+                                sb.Append($"IH[{i}]");
+                                first = false;
+                            }
+                            sb.AppendLine($";");
+                            sb.AppendLine();
+                        }
                     }
                     return sb.ToString();
                 default:

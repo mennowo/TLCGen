@@ -3,6 +3,7 @@
 
 #define MAX_INT                       32767L
 
+#include "ov.h"
 
 typedef enum {
   poGeenPrioriteit             =0,

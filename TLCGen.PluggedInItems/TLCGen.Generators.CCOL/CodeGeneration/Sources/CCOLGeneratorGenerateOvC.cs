@@ -28,6 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateOvCRijTijdScenario(controller));
             sb.Append(GenerateOvCInUitMelden(controller));
             sb.Append(GenerateOvCPrioriteitsOpties(controller));
+            sb.Append(GenerateOvCPrioriteitsToekenning(controller));
             sb.Append(GenerateOvCPostAfhandelingOV(controller));
             sb.Append(GenerateOvCPARCorrecties(controller));
             sb.Append(GenerateOvCPARCcol(controller));
@@ -101,7 +102,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}ovOVMAX");
             sb.AppendLine("} TOVRichtingIndex;");
             sb.AppendLine();
-            sb.AppendLine("#include \"ov.h\"");
+            sb.AppendLine("static int ov;");
+            sb.AppendLine();
+            sb.AppendLine("#include \"ov.c\"");
             sb.AppendLine();
             if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
                 c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
@@ -796,29 +799,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
             var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-
-            //var _tinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
-            //var _hinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmdsi");
-            //var _tuitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmdsi");
-            //var _huitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmdsi");
-            //var _schinmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmdsi");
-            //var _schuitmdsi = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmdsi");
-            //var _tinmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("tinmkar");
-            //var _hinmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmkar");
-            //var _tuitmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmkar");
-            //var _huitmkar = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmkar");
-            //var _schkarov = CCOLGeneratorSettingsProvider.Default.GetElementName("schkarov");
-            //var _hinmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmwsk");
-            //var _huitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmwsk");
-            //var _tuitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmwsk");
-            //var _schinmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmwsk");
-            //var _schuitmwsk = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmwsk");
-            //var _hinmss = CCOLGeneratorSettingsProvider.Default.GetElementName("hinmss");
-            //var _schinmss = CCOLGeneratorSettingsProvider.Default.GetElementName("schinmss");
-            //var _huitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("huitmss");
-            //var _tuitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("tuitmss");
-            //var _schuitmss = CCOLGeneratorSettingsProvider.Default.GetElementName("schuitmss");
-            //var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+            
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
 
             sb.AppendLine("/*----------------------------------------------------------------");
             sb.AppendLine("   InUitMelden verzorgt het afhandelen van in- en uitmeldingen.");
@@ -863,143 +845,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
             }
-            sb.AppendLine($"{ts}/* Opzetten hulpelementen voor in- en uitmeldingen */");
-            foreach (var ov in c.OVData.OVIngrepen)
-            {
-                sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = FALSE;");
-            }
+            
             foreach (var hd in c.OVData.HDIngrepen)
             {
                 sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = FALSE;");
             }
-
-            #region Trams Den Haag
-
-            //foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Type == OVIngreepVoertuigTypeEnum.Tram))
-            //{
-            //    if (ov.Vecom)
-            //    {
-            //        sb.AppendLine($"{ts}IH[{_hpf}{_hinmdsi}{ov.FaseCyclus}] = RT[{_tpf}{_tinmdsi}{ov.FaseCyclus}] = SCH[{_schpf}{_schinmdsi}{ov.FaseCyclus}] && DSI_melding(ds{ov.FaseCyclus}_in, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tinmdsi}{ov.FaseCyclus}];");
-            //    }
-            //}
-
-            #endregion
-
+            sb.AppendLine();
+            
             #region In- en uitmeldingen
 
-            foreach (var ov in c.OVData.OVIngrepen)
-            {
-                if (ov.Meldingen.Any(x => x.Inmelding))
-                {
-                    var inmHelems = new List<string>();
-                    sb.AppendLine($"{ts}/* Inmelding {_fcpf}{ov.FaseCyclus} */");
-                    foreach (var melding in ov.Meldingen)
-                    {
-                        if (!melding.Inmelding) continue;
-                        switch (melding.Type)
-                        {
-                            case OVIngreepMeldingTypeEnum.VECOM:
-                                sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}vc] = RT[{_tpf}in{ov.FaseCyclus}vc] = SCH[{_schpf}in{ov.FaseCyclus}vc] && DSI_melding(ds{ov.FaseCyclus}_in, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}in{ov.FaseCyclus}vc];");
-                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}vc");
-                                break;
-                            case OVIngreepMeldingTypeEnum.KAR:
-                                sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}kar] = RT[{_tpf}in{ov.FaseCyclus}kar] = SCH[{_schpf}in{ov.FaseCyclus}kar] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}in{ov.FaseCyclus}kar];");
-                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}kar");
-                                break;
-                            case OVIngreepMeldingTypeEnum.VerlosDetector:
-                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}ss] = SCH[{_schpf}in{ov.FaseCyclus}ss] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                }
-                                inmHelems.Add($"{_hpf}in{ov.FaseCyclus}ss");
-                                break;
-                            case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
-                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}in{ov.FaseCyclus}wsk] = SCH[{_schpf}in{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                    inmHelems.Add($"{_hpf}in{ov.FaseCyclus}wsk");
-                                }
-                                break;
-                            case OVIngreepMeldingTypeEnum.WisselDetector:
-                                break;
-                            default:
-                                throw new IndexOutOfRangeException();
-                        }
-                    }
-                    sb.Append($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = ");
-                    var first = true;
-                    foreach(var i in inmHelems)
-                    {
-                        if (!first) sb.Append(" || ");
-                        sb.Append($"IH[{i}]");
-                        first = false;
-                    }
-                    sb.AppendLine(";");
-                    sb.AppendLine();
-                }
-
-                if (ov.Meldingen.Any(x => x.Uitmelding))
-                {
-                    var uitmHelems = new List<string>();
-                    sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{ov.FaseCyclus} */");
-                    foreach (var melding in ov.Meldingen)
-                    {
-                        if (!melding.Uitmelding) continue;
-                        switch (melding.Type)
-                        {
-                            case OVIngreepMeldingTypeEnum.VECOM:
-                                sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}vc] = SCH[{_schpf}uit{ov.FaseCyclus}vc] && DSI_melding(ds{ov.FaseCyclus}_uit, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}uit{ov.FaseCyclus}];");
-                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}vc");
-                                break;
-                            case OVIngreepMeldingTypeEnum.KAR:
-                                sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}kar] = SCH[{_schpf}uit{ov.FaseCyclus}kar] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSUIT, -1, -1, -1) && !T[{_tpf}uit{ov.FaseCyclus}];");
-                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}kar");
-                                break;
-                            case OVIngreepMeldingTypeEnum.VerlosDetector:
-                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                }
-                                else
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}ss] = SCH[{_schpf}uit{ov.FaseCyclus}ss] && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                }
-                                uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}ss");
-                                break;
-                            case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
-                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wsk] = SCH[{_schpf}uit{ov.FaseCyclus}wsk] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                    uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wsk");
-                                }
-                                break;
-                            case OVIngreepMeldingTypeEnum.WisselDetector:
-                                if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
-                                {
-                                    sb.AppendLine($"{ts}IH[{_hpf}uit{ov.FaseCyclus}wd] = SCH[{_schpf}in{ov.FaseCyclus}wd] && (D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}geenwissel{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && !T[{_tpf}uit{ov.FaseCyclus}] && (C_counter[{_cpf}{_cvc}{ov.FaseCyclus}] == 0);");
-                                    uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}wd");
-                                }
-                                break;
-                            default:
-                                throw new IndexOutOfRangeException();
-                        }
-                    }
-                    sb.Append($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = RT[{_tpf}uit{ov.FaseCyclus}] = ");
-                    var first = true;
-                    foreach (var i in uitmHelems)
-                    {
-                        if (!first) sb.Append(" || ");
-                        sb.Append($"IH[{i}]");
-                        first = false;
-                    }
-                    sb.AppendLine($";");
-                    sb.AppendLine();
-                }
-            }
+            
 
             #endregion // In- en uitmeldingen
 
@@ -1294,8 +1149,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCBottom(ControllerModel c)
         {
             var sb = new StringBuilder();
-
-            sb.AppendLine("#include \"ov.c\"");
+            
             sb.AppendLine($"#include \"{c.Data.Naam}ov.add\"");
 
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, true, true);
