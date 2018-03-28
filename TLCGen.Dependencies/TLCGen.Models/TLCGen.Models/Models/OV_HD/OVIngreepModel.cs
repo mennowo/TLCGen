@@ -40,6 +40,7 @@ namespace TLCGen.Models
         public bool AfkappenConflictenOV { get; set; }
         public bool VasthoudenGroen { get; set; }
         public bool TussendoorRealiseren { get; set; }
+        public bool CheckLijnNummer { get; set; }
         public bool AlleLijnen { get; set; }
 
         [Browsable(false)]

@@ -105,28 +105,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("static int ov;");
             sb.AppendLine();
             sb.AppendLine("#include \"ov.c\"");
+            if (c.HalfstarData.IsHalfstar)
+            {
+                sb.AppendLine("#include \"halfstar_ov.h\"");
+            }
             sb.AppendLine();
             if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
                 c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
             {
                 var any = false;
-                var done = new List<string>();
-                sb.AppendLine("/* Structs tbv bijhouden laatste DSI berichten per richting in/uit");
-                sb.AppendLine("   tbv voorkomen dubbele in/uit meldingen */");
-                foreach (var ov in c.OVData.OVIngrepen)
-                {
-                    if (!any)
-                    {
-                        sb.AppendLine("/* Richtingen met OV ingreep */");
-                        any = true;
-                    }
-                    sb.AppendLine($"static prevOVkarstruct prevOVkar{ov.FaseCyclus}in, prevOVkar{ov.FaseCyclus}uit;");
-                    done.Add(ov.FaseCyclus);
-                }
-                any = false;
                 foreach (var hd in c.OVData.HDIngrepen)
                 {
-                    if(!done.Contains(hd.FaseCyclus))
+                    if(c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
                     {
                         if (!any)
                         {

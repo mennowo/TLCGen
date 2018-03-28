@@ -10,6 +10,17 @@ struct prevovkar
 };
 typedef struct prevovkar prevOVkarstruct;
 
+bool DSIMeldingOV_V1(
+	count dslus,
+	count vtgtype,
+	count fcnmr,
+	bool checktype,
+	count meldingtype,
+	bool checklijn,
+	count lijnparm,
+	count lijnmax,
+	bool extra);
+
 bool OVmelding_KAR_V2(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */
 	count dir,                  /*  2. fc nummer of richtingnummer (201, 202, 203)  */
 	s_int16 stp,                /*  3. stiptheidsklasse                             */

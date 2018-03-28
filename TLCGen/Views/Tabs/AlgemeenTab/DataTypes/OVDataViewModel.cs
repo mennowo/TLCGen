@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Check op DSIN")]
+        [Description("Check type op DSI bericht")]
         public bool CheckOpDSIN
         {
             get { return _Controller == null ? false : _Controller.OVData.CheckOpDSIN; }

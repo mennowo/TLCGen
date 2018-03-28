@@ -68,7 +68,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
+                    MessengerInstance.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         string oldname = _detector.Naam;
@@ -76,7 +76,7 @@ namespace TLCGen.ViewModels
                         _detector.Naam = value;
                         
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, _detector.Naam));
+                        MessengerInstance.Send(new NameChangedMessage(oldname, _detector.Naam));
                     }
                 }
                 RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
@@ -91,7 +91,7 @@ namespace TLCGen.ViewModels
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.VissimNaam);
-                    Messenger.Default.Send(message);
+                    MessengerInstance.Send(message);
                     if (message.Handled && message.IsUnique)
                     {
                         _detector.VissimNaam = value;

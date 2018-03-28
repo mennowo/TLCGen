@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -161,7 +162,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
             sb.AppendLine();
-            if (controller.OVData.DSI)
+            if (controller.OVData.HDIngrepen.Any(x => x.KAR) ||
+                controller.OVData.OVIngrepen.Any(x => x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && (x2.Type == OVIngreepMeldingTypeEnum.KAR || x2.Type == OVIngreepMeldingTypeEnum.VECOM))))
             {
                 sb.Append(GenerateTabCControlParametersDS(controller));
             }
@@ -821,19 +823,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
-
-            if (controller.OVData.OVIngrepen.Count > 0 &&
-                controller.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+            
+            // Geen VECOM? Dan dummy lus tbv KAR
+            if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
             {
-                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Vecom))
-                {
-                    sb.AppendLine($"{ts}DS_code[ds{ov.FaseCyclus}_in]  = \"ds{ov.FaseCyclus}_in\";");
-                    sb.AppendLine($"{ts}DS_code[ds{ov.FaseCyclus}_uit] = \"ds{ov.FaseCyclus}_uit\";");
-                }
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
             }
             else
             {
-                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
+                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+                {
+                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
+                    if (m.Inmelding)
+                    {
+                        sb.AppendLine($"{ts}DS_code[{_dpf}{m.RelatedInput1}]  = \"{m.RelatedInput1}\";");
+                    }
+                    if (m.Uitmelding)
+                    {
+                        sb.AppendLine($"{ts}DS_code[{_dpf}{m.RelatedInput2}]  = \"{m.RelatedInput2}\";");
+                    }
+                }
             }
             sb.AppendLine();
 

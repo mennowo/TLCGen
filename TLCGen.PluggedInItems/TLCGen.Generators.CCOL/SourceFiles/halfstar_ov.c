@@ -1016,543 +1016,476 @@ void OV_CCOL_Elementen_ple(count fc,      /* OV richting                        
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
 void OVIngreep_ple(count fc,     /* fc met prioriteit                                     */
-                   bool  inm,    /* inmeldvoorwaarde (SH[], SD[])                         */
-                   bool  inm2,   /* tweede inmeldvoorwaarde (SH[],SD[] of NG)             */
-                   bool  uitm,   /* uitmeldvoorwaarde (SH[], SD[])                        */
-                   bool  uitm2,  /* tweede uitmeldvoorwaarde (SH[],SD[] of NG)            */
-                   count cvc,    /* ov teller                                             */
-                   count cvb,    /* ov buffer teller                                      */
-                   count tiv,    /* inmeldingsvertraging                                  */
-                   count tib,    /* inmeldingsbewaking                                    */
-                   count tgb,    /* groenbewaking                                         */
-                   count tblk,   /* blokkeringstijd                                       */
-                   mulv  textra, /* extra groentijd na TXD                                */
-                   count hprio,  /* ov prioriteit                                         */
-                   count rijtijd,/* ongehinderde rijtijd tot stopstreep                   */
-                   mulv  prio,   /* prioriteitstype                                       */
-                   mulv  omax,   /* waarde ondermaximum                                   */
-                   count pmwt,   /* parameter maximum wachttijd (1e fc)                   */
-                   count mtx,    /* geheugenelement cyclustijd bij signaalplan wisseling  */
-                   count mfcpl,  /* geheugenelement actieve OV fasecyclus bij wisseling   */
-                   bool  ov_mag) /* extra voorwaarde voor toestaan OV prio                */
+	bool  inm,    /* inmeldvoorwaarde (SH[], SD[])                         */
+	bool  inm2,   /* tweede inmeldvoorwaarde (SH[],SD[] of NG)             */
+	bool  uitm,   /* uitmeldvoorwaarde (SH[], SD[])                        */
+	bool  uitm2,  /* tweede uitmeldvoorwaarde (SH[],SD[] of NG)            */
+	count cvc,    /* ov teller                                             */
+	count cvb,    /* ov buffer teller                                      */
+	count tiv,    /* inmeldingsvertraging                                  */
+	count tib,    /* inmeldingsbewaking                                    */
+	count tgb,    /* groenbewaking                                         */
+	count tblk,   /* blokkeringstijd                                       */
+	mulv  textra, /* extra groentijd na TXD                                */
+	count hprio,  /* ov prioriteit                                         */
+	count rijtijd,/* ongehinderde rijtijd tot stopstreep                   */
+	mulv  prio,   /* prioriteitstype                                       */
+	mulv  omax,   /* waarde ondermaximum                                   */
+	count pmwt,   /* parameter maximum wachttijd (1e fc)                   */
+	bool  ov_mag) /* extra voorwaarde voor toestaan OV prio                */
 {
-  int i, j;
-  mulv to_tmp, to_max;
-  bool fasevolgorde_wisselen_mag = ((prio % WISSEL_FASEVOLGORDE)<prio);
-  bool fasevolgorde_wisselen_gewenst = TRUE;
-  bool blokkeren_mag = FALSE;   /* blokkeren van conflicten mag bij absolute prioriteit  */
-  bool afkappen_mag = FALSE;    /*  afkappen van conflicten mag bij absolute prioriteit  */
-  
-  /* Resetten ConflictAfgekapt                                                           */
-  if (EG[fc])
-  {
-     for (i=0; i<FC_MAX; i++)
-     {
-        ConflictAfgekapt[fc][i] = FALSE;
-     }
-  }
-  
-  /* Resetten aanvraag indien er geen prioriteitsreden meer is                           */
-  if (!IH[hprio] && H[hprio])
-  {
-     A[fc] &= ~OV_PLE_BIT;
-     if (!A[fc]) TFB_timer[fc] = 0;
-  }
-  
-  /* Resetten geheugenelementen */
-  if (TX_PL_timer == MM[mtx] && !G[MM[mfcpl]])
-  {
-    MM[mtx] = NG;
-    MM[mfcpl] = NG;
-    PasSignaalplanToe(ORIGINEEL_PLAN);
-  }
-  
-  /* ----------------------------------------------------------------------------------- */
-  /* Bijhouden CCOL elementen tbv tellers, timers etc                                    */
-  /* ----------------------------------------------------------------------------------- */
-  OV_CCOL_Elementen_ple(fc, inm, inm2, uitm, uitm2,        /* in- en uitmeldingen        */
-                            cvc, cvb,                      /* OV tellers                 */
-                            tiv, tib, tgb, tblk, textra,   /* timers                     */
-                            hprio,                         /* hulpelement prio           */
-                            prio,                          /* prioniveau                 */
-                            omax,                          /* ondermaximum               */
-                            pmwt,                          /* maximale wachttijd (1e fc) */
-                            ov_mag);                       /* extra voorwaarde ov prio   */
-  
-  /* ----------------------------------------------------------------------------------- */
-  /* Daadwerkelijke OV ingreep                                                           */
-  /* ----------------------------------------------------------------------------------- */
-  if (ov_mag)
-  {
-     to_max = BepaalGrootsteTO(fc);
-  
-     /* -------------------------------------------------------------------------------- */
-     /* Ongeacht prioniveau altijd aanvraag OV richting opzetten                         */
-     /* (mits er geen ontruimingstijden van conflicten naar de OV richting meer lopen)   */
-     /* -------------------------------------------------------------------------------- */
-     if (R[fc] && !TRG[fc] && !CK[fc] && (T[tib] && (T_timer[tib] >= (rijtijd - to_max)) || C[cvc]))
-     {
-        A[fc] |= OV_PLE_BIT;
-     }
-  
-     switch (prio%WISSEL_FASEVOLGORDE)
-     {
-        /* -------------------------------------------------------------------------- */
-        /* prio==0: geen prioriteit, behalve eerdere A[] geen extra acties            */
-        /* -------------------------------------------------------------------------- */
-        case 0:
-           break;
-  
-        /* -------------------------------------------------------------------------- */
-        /* prio==1: verlengen groen tot TXD (mits rijtijd nog gemaakt kan worden)     */
-        /* -------------------------------------------------------------------------- */
-        case 1:
-  
-           /* MK[] opzetten zolang restant rijtijd korter is dan tijd tot TXD         */
-           if (C[cvc] && (TOTXD_PL[fc] >= (rijtijd - T_timer[tib])))
-           {
-              MK[fc] |= OV_PLE_BIT;
-  
-           /* vasthouden groen tot maximaal TXD moment                                */
-           /* bepalen of (versneld) primaire realisatie kan dmv test_pr_fk_totxb      */
-           /* bepalen of er nog ruimte is om te verlengen dmv yv_ar_max_pl()          */
-              if (IH[hprio] && (((YV_PL[fc] && PR[fc]) || (AR[fc] && yv_ar_max_pl(fc, 0)))))
-              {
-                 fasevolgorde_wisselen_gewenst = FALSE;
-                 YM[fc] |= OV_PLE_BIT;
-                 YV[fc] |= OV_PLE_BIT;
-              }
-           }
-           break;
-  
-        /* -------------------------------------------------------------------------- */
-        /* prio==2: afkappen conflictrichtingen en verlengen na TXD moment            */
-        /* -------------------------------------------------------------------------- */
-        case 2:
-  
-           blokkeren_mag = FALSE; /*    blokkeren van conflicten mag niet bij prio==2 */
-           afkappen_mag  = TRUE;  /*          afkappen van conflicten mag bij prio==2 */
-  		   
-           /* administratie extra groentijd na TXD moment                             */
-           RT[textra] = G[fc] && (TX_timer==TXD_PL[fc]);  /* herstarten op TXD moment */
-           AT[textra] = !G[fc];                    /* afbreken indien niet groen meer */
-  
-           if (IH[hprio])
-           {
-              /* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
-              /* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
-              if (CALW[fc] < PRI_CALW)
-              {
-                 set_CALW(fc, PRI_CALW);
-              }
-  
-              /* bepalen of groen van conflictrichtingen beeindigd kan worden         */
-              /* dit mag gebeuren als tenminste de minimum groentijd verstreken is    */
-              /* voor hoofdrichtingen moet ook gelden dat deze afgekapt mogen worden  */
-              /* als tenminste een van de richtingen niet afgekapt mag worden, wordt  */
-              /* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
-              for (i=0; i<FKFC_MAX[fc] && afkappen_mag; i++)
-              {
-                 j = TO_pointer[fc][i];
-                 if (HoofdRichting[j])
-                 {
-                    /* Maatregelen als conflict groen is en min. groen bereikt heeft  */
-                    if (G[j])
-                    {
-                       if (!gr_min_einde[j])
-                       {
-                          /* hoofdrichting heeft zijn min.groentijd nog niet bereikt  */
-                          /* afkappen van conflictrichtingen tbv prio mag nog niet    */
-                          afkappen_mag  = FALSE;
-                          break;
-                       }
-                       else if (YW_PL[j] && !HoofdRichtingAfkappenYWPL[j])
-                       {
-                          /* hoofdrichting wordt vastgehouden voor een peloton        */
-                          /* afkappen van conflictrichtingen tbv prio mag nog niet    */
-                          afkappen_mag  = FALSE;
-                          break;
-                       }
-                       else if (!YW_PL[j] && YV_PL[j] && !HoofdRichtingAfkappenYVPL[j])
-                       {
-                          /* hoofdrichting wordt vastgehouden in verlenggroen         */
-                          /* afkappen van conflictrichtingen tbv prio mag nog niet    */
-                          afkappen_mag  = FALSE;
-                          break;
-                       }
-                       else if (iNietAfkappen[j])
-                       {
-                         /* hoofdrichting mogen niet worden afgekapt                  */
-                         /* volgens user defined settings                             */
-                         afkappen_mag = FALSE;
-                         break;
-                       }
-                    }
-                 }
-                 else if (G[j] && !gr_min_einde[j])
-                 {
-                    /* conflictrichting heeft zijn minimumgroentijd nog niet bereikt  */
-                    /* afkappen van conflictrichtingen tbv prio mag nog niet          */
-                    afkappen_mag = FALSE;
-                    break;
-                 }
-                 else if (G[j] && iNietAfkappen[j])
-                 {
-                   /* richting mogen niet worden afgekapt                             */
-                   /* volgens user defined settings                                   */
-                   afkappen_mag = FALSE;
-                   break;
-                 }
-              }
-  
-  
-              /* groen conflictrichtingen beeindigen                                  */
-              if (afkappen_mag)
-              {
-                 fasevolgorde_wisselen_gewenst = FALSE;
-                 for (i=0; i<FKFC_MAX[fc]; i++)
-                 {
-                    j = TO_pointer[fc][i];
-                    /* Afkappen wachtgroen en/of verlenggroen door FM instructie      */
-                    RS[j] = YW[j] = RW[j] = YV[j] = FALSE;
-                    FM[j] |= OV_PLE_BIT;
-                    ConflictAfgekapt[fc][j] |= G[j];
-  
-                    /* Alternatieve realisatie conflictrichtingen terugzetten         */
-                    if (G[fc] && (RA[j] || SRV[j]) && AR[j])
-                    {
-                       RR[j] |= OV_PLE_BIT;
-                    }
-                 }
-              }
-  
-              /* groenfase OV richting verlengen tot (na) TXD moment                  */
-              if (G[fc])
-              {
-                 /* meetkriterium opzetten zolang restant rijtijd < TOTXD+rijtijd     */
-                 if ((TOTXD_PL[fc] + T_max[textra]) >= (rijtijd - T_timer[tib]))
-                 {
-                    MK[fc] |= OV_PLE_BIT;
-                 }
-  
-                 /* zolang OV richting nog in primaire gebied zit                     */
-                 if ((TOTXB_PL[fc] == 0) || YS_PL[fc] || yv_ar_max_pl(fc,0))
-                 {
-                    if ((TOTXD_PL[fc] + T_max[textra]) >= (rijtijd - T_timer[tib]))
-                    {
-                       MK[fc] |= OV_PLE_BIT;
-                       YV[fc] |= OV_PLE_BIT;
-                       YM[fc] |= OV_PLE_BIT;
-                       if ((TOTXB_PL[fc] == 0) || YS_PL[fc])
-                       {
-                          RW[fc] |= OV_PLE_BIT;
-                       }
-                    }
-                 }
-                 /* indien OV richting na TXD groen is en extra groentijd loopt       */
-                 else if (T[textra] || RT[textra])
-                 {
-                    /* maatregelen zolang extra tijd benut kan worden                 */
-                    /* tevens moet startgroen conflicten uitgesteld mogen worden om   */
-                    /* te voorkomen dat de conflicten geen realisatieruimte hebben    */
-                    if (((T_max[textra]-T_timer[textra]) >= (rijtijd-T_timer[tib])) &&
-                          StartGroenConflictenUitstellen(fc))
-                    {
-                       MK[fc] |= OV_PLE_BIT;
-                       YV[fc] |= OV_PLE_BIT;
-                       YM[fc] |= OV_PLE_BIT;
-                    }
-                 }
-              }
-           }
-           break;
-  
-        /* -------------------------------------------------------------------------- */
-        /* prio==3: absolute prioriteit                                               */
-        /* -------------------------------------------------------------------------- */
-        case 3:
-  
-           blokkeren_mag = TRUE;/* blokkeren conflicten mag bij absolute prioriteit   */
-           afkappen_mag = TRUE; /*  afkappen conflicten mag bij absolute prioriteit   */
-  
-           /* aanvraag eerder zetten dan bij lagere prioniveaus: als bus aanwezig is  */
-           if (R[fc] && !TRG[fc] && !CK[fc] && T[tib])
-           {
-              A[fc] |= OV_PLE_BIT;
-           }
-  
-           if (IH[hprio])
-           {
-              /* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
-              /* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
-              if (CALW[fc] < PRI_CALW)
-              {
-                 set_CALW(fc, PRI_CALW);
-              }
-  
-              /* -------------------------------------------------------------------- */
-              /* bepalen of groen van conflicten geblokkeerd en/of beeindigd mag      */
-              /* -------------------------------------------------------------------- */
-  
-              /* blokkeren mag als voor het TXB moment van de hoofdrichtingen de      */
-              /* ongehinderde rijtijd + ontruiming gemaakt kan worden                 */
-              /* als tenminste een van de hoofdrichtingen te snel groen wordt, wordt  */
-              /* bool blokkeren_mag FALSE en wordt geen enkele richting geblokkeerd   */
-  
-              /* afkappen mag als tenminste de minimum groentijd verstreken is        */
-              /* voor hoofdrichtingen geldt tevens dat deze afgekapt mogen worden     */
-              /* als tenminste een van de richtingen niet afgekapt mag worden, wordt  */
-              /* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
-              for (i=0; i<FKFC_MAX[fc]; i++)
-              {
-                 j = TO_pointer[fc][i];
-                 if (HoofdRichting[j])
-                 {
-                    if (R[j] && !ConflictAfgekapt[fc][j] && (TijdTotLaatsteRealisatieMomentConflict(fc, j) <= 0))
-                    {
-                       /* hoofdrichting wordt binnen de ongehinderde rijtijd groen    */
-                       /* blokkeren van conflictrichtingen tbv prio is niet mogelijk  */
-                       /* afkappen van conflictrichtingen tbv prio is niet wenselijk  */
-                       blokkeren_mag = FALSE;
-                       afkappen_mag  = FALSE;
-                       break;
-                    }
-                    if (YW_PL[j] && !HoofdRichtingAfkappenYWPL[j])
-                    {
-                       /* hoofdrichting wordt vastgehouden voor een peloton           */
-                       /* blokkeren van conflictrichtingen tbv prio is niet wenselijk */
-                       /* afkappen van conflictrichtingen tbv prio is niet mogelijk   */
-                       blokkeren_mag = FALSE;
-                       afkappen_mag  = FALSE;
-                       break;
-                    }
-                    if (!YW_PL[j] && YV_PL[j] && !HoofdRichtingAfkappenYVPL[j])
-                    {
-                       /* hoofdrichting wordt vastgehouden in verlenggroen            */
-                       /* afkappen van conflictrichtingen tbv prio is niet mogelijk   */
-                       afkappen_mag  = FALSE;
-                       break;
-                    }
-                 }
-                 if (G[j] && iNietAfkappen[j])
-                 {
-                   /* richting mogen niet worden afgekapt                             */
-                   /* volgens user defined settings                                   */
-                   afkappen_mag = FALSE;
-                   break;
-                 }
-              }
-  
-  
-              /* alle conflicten mogen geblokkeerd worden, bijzondere realisatie OV   */
-              if (blokkeren_mag)
-              {
-                 fasevolgorde_wisselen_gewenst = FALSE;
-                 for (i=0; i<FKFC_MAX[fc]; i++)
-                 {
-                    j = TO_pointer[fc][i];
-                    if (R[j])
-                    {
-                       RR[j] |= OV_PLE_BIT;
-                       BL[j] |= OV_PLE_BIT;
-                    }
-                 }
-                 if (R[fc] && !TRG[fc] && !CK[fc])
-                 {
-                    AA[fc] = TRUE;
-                 }
-              }
-  
-              /* als alle conflictrichtingen beeindigd mogen worden, afkappen groen   */
-              if (afkappen_mag)
-              {
-                 fasevolgorde_wisselen_gewenst = FALSE;
-                 for (i=0; i<FKFC_MAX[fc]; i++)
-                 {
-                    j = TO_pointer[fc][i];
-                    if (!HoofdRichting[j] || blokkeren_mag)
-                    {
-                       YW[j] = RW[j] = YV[j] = FALSE;
-                       FM[j] |= OV_PLE_BIT;
-                       ConflictAfgekapt[fc][j] |= G[j];
-                    }
-  
-                    /* Alternatieve realisatie conflictrichtingen terugzetten         */
-                    if (G[fc] && (RA[j] || SRV[j]) && AR[j])
-                    {
-                       RR[j] |= OV_PLE_BIT;
-                    }
-                 }
-              }
-  
-              /* groenfase OV richting verlengen tot OV voertuig verdwenen is         */
-              /* dit met inachtname van de conflicterende hoofdrichtingen             */
-              if (G[fc] && T[tib] && StartGroenHoofdRichtingenUitstellen(fc))
-              {
-                 /* meetkriterium opzetten zolang inmeldbewaking loopt                */
-                 MK[fc] |= OV_PLE_BIT;
-                 /* vasthouden groen                                                  */
-                 YV[fc] |= OV_PLE_BIT;
-                 YM[fc] |= OV_PLE_BIT;
-              }
-           }
-           break;
-  
-        /* -------------------------------------------------------------------------- */
-        /* prio==4: nooddienst                                                        */
-        /* -------------------------------------------------------------------------- */
-        case 4:
-  
-           fasevolgorde_wisselen_gewenst = FALSE;
-  
-           /* aanvraag eerder zetten dan bij lagere prioniveaus: als bus aanwezig is  */
-           if (R[fc] && !TRG[fc] && T[tib])
-           {
-              A[fc] |= OV_PLE_BIT;
-           }
-  
-           if (IH[hprio])
-           {
-              /* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
-              /* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
-              if (CALW[fc] < PRI_CALW)
-              {
-                 set_CALW(fc, PRI_CALW);
-              }
-              /* conflicterende hoofdrichtingen direct blokkeren en afkappen          */
-              for (i=0; i<FKFC_MAX[fc]; i++)
-              {
-                 j = TO_pointer[fc][i];
-                 if (R[j])
-                 {
-                    RR[j] |= OV_PLE_BIT;
-                    BL[j] |= OV_PLE_BIT;
-                 }
-                 if (G[j])
-                 {
-                    FM[j] |= OV_PLE_BIT;
-                    YW[j] = RW[j] = YV[j] = FALSE;
-                 }
-                 /* Alternatieve realisatie conflictrichtingen terugzetten            */
-                 if (G[fc] && (RA[j] || SRV[j]) && AR[j])
-                 {
-                    RR[j] |= OV_PLE_BIT;
-                 }
-              }
-  
-              if (R[fc] && !TRG[fc])
-              {
-                 AA[fc] = TRUE;
-              }
-              if (G[fc])
-              {
-                 MK[fc] |= OV_PLE_BIT;
-                 YM[fc] |= OV_PLE_BIT;
-                 RW[fc] |= OV_PLE_BIT;
-              }
-           }
-  
-           break;
-  
-        default:
-           break;
-     } /* switch prio                                                                 */
-  
-     /* Als de OV richting geen groen heeft gehad, maar de ingreep is niet langer actief */
-     /* dan dient de langstwachtende teller (voorkeursrealisatie) weer gereset te worden */
-     if (EH[hprio])
-     {
-        set_CALW(fc, (mulv) (10 * TFB_timer[fc]));
-     }
-  
-  
-     /* Indien de OV richting bijzonder gerealiseerd wordt (prio>=3), kan het gebeuren   */
-     /* dat een conflictrichting geen ruimte meer overhoudt voor de primaire realisatie  */
-     /* In dat geval dient het overslag-bit opgezet te worden voor de conflictrichting,  */
-     /* deze zal dan de volgende cyclus pas gerealiseerd worden                          */
-     if (G[fc] && (prio >= 3) && (IH[hprio] || !PR[fc] && !AR[fc]))
-     {
-        for (i = 0;i < FKFC_MAX[fc]; i++)
-        {
-           to_tmp= 0;
-           j = TO_pointer[fc][i];                    /* Index conflicterende fc          */
-           if (!HoofdRichting[j] || (prio > 3))
-           {
-              to_tmp = max(TFG_max[fc]- TFG_timer[fc], TGG_max[fc]-TGG_timer[fc])
-                     + TGL_max[fc] + TO_max[fc][j];
-              if (to_tmp > TOTXD_PL[j])
-              {
-                 if (!PG[j])
-                 {
-                    PG[j] = PRIMAIR_OVERSLAG;
-                 }
-                 /* Alternatieve realisatie terugzetten                                  */
-                 if ((RA[j] || SRV[j]) && (PR[j] || AR[j]))
-                 {
-                    RR[j] |= BIT6;
-                 }
-              }
-           }
-        } /* for (i = 0;i < FKFC_MAX[fc]; i++)                                           */
-     } /* if (G[fc] && (prio >= 3) && (IH[hprio] || !PR[fc] && !AR[fc]))                 */
-  
-  
-     /* Indien niet op de 'normale' wijze prioriteit is verleend, kan worden overgegaan  */
-     /* tot het wisselen van de fasevolgorde (indien prioniveau dit toelaat, dwz > 1000) */
-     if (IH[hprio] && fasevolgorde_wisselen_mag && fasevolgorde_wisselen_gewenst)
-     {
-        if (MM[mtx] == NG)
-        {
-           /* Bepalen wat de resterende tijd tot het TXB moment van de OV richting in    */
-           /* het alternatieve signaalplan is                                            */
-           int totxb = TOTXB_AlternatiefSignaalplan(fc);
-  
-           /* Als resterende tijd tot TXB kleiner is in het alternatieve plan dan in het */
-           /* actuele signaalplan, dan heeft het zin om om te schakelen naar alternatief */
-           if ((totxb > 0) && (totxb < TOTXB_PL[fc]))
-           {
-              /* Probeer TX instellingen alternatief signaalplan over te nemen           */
-              if (PasSignaalplanToe(ALTERNATIEF_PLAN))
-              {
-                 /* onthoud actuele cyclustijd (-1 seconde)                              */
-                 MM[mtx] = (TX_PL_timer > 1) ? (TX_PL_timer - 1) : TX_PL_max;
-                 MM[mfcpl] = fc;
-              }
-              else
-              {
-                 /* Originele signaalplantijden terugzetten, alternatief plan lukt niet  */
-                 PasSignaalplanToe(ORIGINEEL_PLAN);
-                 MM[mtx] = NG;
-                 MM[mfcpl] = NG;
-              }
-           } /* if ((totxb > 0) && (totxb < TOTXB_PL[fc]))                               */
-        } /* if (MM[mtx] == NG)                                                          */
-     } /* if (IH[hprio] && fasevolgorde_wisselen_mag && fasevolgorde_wisselen_gewenst)   */
-  } /* if (ov_mag)                                                                       */
+	int i, j;
+	mulv to_tmp, to_max;
+	bool fasevolgorde_wisselen_mag = ((prio % WISSEL_FASEVOLGORDE) < prio);
+	bool fasevolgorde_wisselen_gewenst = TRUE;
+	bool blokkeren_mag = FALSE;   /* blokkeren van conflicten mag bij absolute prioriteit  */
+	bool afkappen_mag = FALSE;    /*  afkappen van conflicten mag bij absolute prioriteit  */
 
-#ifndef AUTOMAAT
-  /*xyprintf(1,0,"TX: %03d", TX_PL_timer);
-  
-  if (fc==fc05) xyprintf(1,2,"fc%s prio:%1d kap:%1d blok:%1d wt:%1d StartGroenConflictenUitstellen: %1d", FC_code[fc], IH[hprio], afkappen_mag, blokkeren_mag, WachttijdOverschrijding(fc, prmmwt02ple), StartGroenConflictenUitstellen(fc05));
-  if (fc==fc05) xyprintf(1,4,"fc%s TOB:%04d TOD:%04d PG:%1d kap:%1d, tfb:%04d H:%1d, X:%1d, YW:%1d, YV:%1d, gr_min:%4d, gr_min_einde:%4d",FC_code[fc], TOTXB_PL[fc], TOTXD_PL[fc], (bool) (PG[fc]), ConflictAfgekapt[fc][fc], tfbact[fc], HoofdRichting[fc], HoofdRichtingTegenhouden[fc], HoofdRichtingAfkappenYWPL[fc], HoofdRichtingAfkappenYVPL[fc], gr_min[fc], gr_min_einde[fc]);
-  
-  for (i=0; fc==fc05 && i<FKFC_MAX[fc05]; i++)
-  {
-     j = TO_pointer[fc05][i];
-     xyprintf(1,i+5,"fc%s TOB:%04d TOD:%04d PG:%1d kap:%1d TTR:%05d tfb:%04d H:%1d, X:%1d, YW:%1d, YV:%1d, gr_min:%4d, gr_min_einde:%4d",FC_code[j], TOTXB_PL[j], TOTXD_PL[j], (bool) (PG[j]), ConflictAfgekapt[fc][j], TijdTotLaatsteRealisatieMomentConflict(fc, j), tfbact[j], HoofdRichting[j], HoofdRichtingTegenhouden[j], HoofdRichtingAfkappenYWPL[j], HoofdRichtingAfkappenYVPL[j], gr_min[j], gr_min_einde[j]);
-  }
-  
-  
-  
-  if (fc==fc11) xyprintf(1,20,"fc%s prio:%1d kap:%1d blok:%1d wt:%1d StartGroenConflictenUitstellen: %1d", FC_code[fc], IH[hprio], afkappen_mag, blokkeren_mag, WachttijdOverschrijding(fc, prmmwt02ple), StartGroenConflictenUitstellen(fc05));
-  if (fc==fc11) xyprintf(1,22,"fc%s TOB:%04d TOD:%04d PG:%1d kap:%1d, tfb:%04d H:%1d, X:%1d, YW:%1d, YV:%1d, gr_min:%4d, gr_min_einde:%4d",FC_code[fc], TOTXB_PL[fc], TOTXD_PL[fc], (bool) (PG[fc]), ConflictAfgekapt[fc][fc], tfbact[fc], HoofdRichting[fc], HoofdRichtingTegenhouden[fc], HoofdRichtingAfkappenYWPL[fc], HoofdRichtingAfkappenYVPL[fc], gr_min[fc], gr_min_einde[fc]);
-  for (i=0; fc==fc11 && i<FKFC_MAX[fc11]; i++)
-  {
-   j = TO_pointer[fc11][i];
-   xyprintf(1,i+23,"fc%s TOB:%04d TOD:%04d PG:%1d kap:%1d TTR:%05d tfb:%04d H:%1d, X:%1d, YW:%1d, YV:%1d, gr_min:%4d, gr_min_einde:%4d",FC_code[j], TOTXB_PL[j], TOTXD_PL[j], (bool) (PG[j]), ConflictAfgekapt[fc][j], TijdTotLaatsteRealisatieMomentConflict(fc, j), tfbact[j], HoofdRichting[j], HoofdRichtingTegenhouden[j], HoofdRichtingAfkappenYWPL[j], HoofdRichtingAfkappenYVPL[j], gr_min[j], gr_min_einde[j]);
-  }*/
-#endif
+	/* Resetten ConflictAfgekapt                                                           */
+	if (EG[fc])
+	{
+		for (i = 0; i < FC_MAX; i++)
+		{
+			ConflictAfgekapt[fc][i] = FALSE;
+		}
+	}
 
+	/* Resetten aanvraag indien er geen prioriteitsreden meer is                           */
+	if (!IH[hprio] && H[hprio])
+	{
+		A[fc] &= ~OV_PLE_BIT;
+		if (!A[fc]) TFB_timer[fc] = 0;
+	}
+
+	/* ----------------------------------------------------------------------------------- */
+	/* Bijhouden CCOL elementen tbv tellers, timers etc                                    */
+	/* ----------------------------------------------------------------------------------- */
+	OV_CCOL_Elementen_ple(fc, inm, inm2, uitm, uitm2,        /* in- en uitmeldingen        */
+		cvc, cvb,                      /* OV tellers                 */
+		tiv, tib, tgb, tblk, textra,   /* timers                     */
+		hprio,                         /* hulpelement prio           */
+		prio,                          /* prioniveau                 */
+		omax,                          /* ondermaximum               */
+		pmwt,                          /* maximale wachttijd (1e fc) */
+		ov_mag);                       /* extra voorwaarde ov prio   */
+
+/* ----------------------------------------------------------------------------------- */
+/* Daadwerkelijke OV ingreep                                                           */
+/* ----------------------------------------------------------------------------------- */
+	if (ov_mag)
+	{
+		to_max = BepaalGrootsteTO(fc);
+
+		/* -------------------------------------------------------------------------------- */
+		/* Ongeacht prioniveau altijd aanvraag OV richting opzetten                         */
+		/* (mits er geen ontruimingstijden van conflicten naar de OV richting meer lopen)   */
+		/* -------------------------------------------------------------------------------- */
+		if (R[fc] && !TRG[fc] && !CK[fc] && (T[tib] && (T_timer[tib] >= (rijtijd - to_max)) || C[cvc]))
+		{
+			A[fc] |= OV_PLE_BIT;
+		}
+
+		switch (prio%WISSEL_FASEVOLGORDE)
+		{
+			/* -------------------------------------------------------------------------- */
+			/* prio==0: geen prioriteit, behalve eerdere A[] geen extra acties            */
+			/* -------------------------------------------------------------------------- */
+		case 0:
+			break;
+
+			/* -------------------------------------------------------------------------- */
+			/* prio==1: verlengen groen tot TXD (mits rijtijd nog gemaakt kan worden)     */
+			/* -------------------------------------------------------------------------- */
+		case 1:
+
+			/* MK[] opzetten zolang restant rijtijd korter is dan tijd tot TXD         */
+			if (C[cvc] && (TOTXD_PL[fc] >= (rijtijd - T_timer[tib])))
+			{
+				MK[fc] |= OV_PLE_BIT;
+
+				/* vasthouden groen tot maximaal TXD moment                                */
+				/* bepalen of (versneld) primaire realisatie kan dmv test_pr_fk_totxb      */
+				/* bepalen of er nog ruimte is om te verlengen dmv yv_ar_max_pl()          */
+				if (IH[hprio] && (((YV_PL[fc] && PR[fc]) || (AR[fc] && yv_ar_max_pl(fc, 0)))))
+				{
+					fasevolgorde_wisselen_gewenst = FALSE;
+					YM[fc] |= OV_PLE_BIT;
+					YV[fc] |= OV_PLE_BIT;
+				}
+			}
+			break;
+
+			/* -------------------------------------------------------------------------- */
+			/* prio==2: afkappen conflictrichtingen en verlengen na TXD moment            */
+			/* -------------------------------------------------------------------------- */
+		case 2:
+
+			blokkeren_mag = FALSE; /*    blokkeren van conflicten mag niet bij prio==2 */
+			afkappen_mag = TRUE;  /*          afkappen van conflicten mag bij prio==2 */
+
+			/* administratie extra groentijd na TXD moment                             */
+			RT[textra] = G[fc] && (TX_timer == TXD_PL[fc]);  /* herstarten op TXD moment */
+			AT[textra] = !G[fc];                    /* afbreken indien niet groen meer */
+
+			if (IH[hprio])
+			{
+				/* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
+				/* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
+				if (CALW[fc] < PRI_CALW)
+				{
+					set_CALW(fc, PRI_CALW);
+				}
+
+				/* bepalen of groen van conflictrichtingen beeindigd kan worden         */
+				/* dit mag gebeuren als tenminste de minimum groentijd verstreken is    */
+				/* voor hoofdrichtingen moet ook gelden dat deze afgekapt mogen worden  */
+				/* als tenminste een van de richtingen niet afgekapt mag worden, wordt  */
+				/* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
+				for (i = 0; i < FKFC_MAX[fc] && afkappen_mag; i++)
+				{
+					j = TO_pointer[fc][i];
+					if (HoofdRichting[j])
+					{
+						/* Maatregelen als conflict groen is en min. groen bereikt heeft  */
+						if (G[j])
+						{
+							if (!gr_min_einde[j])
+							{
+								/* hoofdrichting heeft zijn min.groentijd nog niet bereikt  */
+								/* afkappen van conflictrichtingen tbv prio mag nog niet    */
+								afkappen_mag = FALSE;
+								break;
+							}
+							else if (YW_PL[j] && !HoofdRichtingAfkappenYWPL[j])
+							{
+								/* hoofdrichting wordt vastgehouden voor een peloton        */
+								/* afkappen van conflictrichtingen tbv prio mag nog niet    */
+								afkappen_mag = FALSE;
+								break;
+							}
+							else if (!YW_PL[j] && YV_PL[j] && !HoofdRichtingAfkappenYVPL[j])
+							{
+								/* hoofdrichting wordt vastgehouden in verlenggroen         */
+								/* afkappen van conflictrichtingen tbv prio mag nog niet    */
+								afkappen_mag = FALSE;
+								break;
+							}
+							else if (iNietAfkappen[j])
+							{
+								/* hoofdrichting mogen niet worden afgekapt                  */
+								/* volgens user defined settings                             */
+								afkappen_mag = FALSE;
+								break;
+							}
+						}
+					}
+					else if (G[j] && !gr_min_einde[j])
+					{
+						/* conflictrichting heeft zijn minimumgroentijd nog niet bereikt  */
+						/* afkappen van conflictrichtingen tbv prio mag nog niet          */
+						afkappen_mag = FALSE;
+						break;
+					}
+					else if (G[j] && iNietAfkappen[j])
+					{
+						/* richting mogen niet worden afgekapt                             */
+						/* volgens user defined settings                                   */
+						afkappen_mag = FALSE;
+						break;
+					}
+				}
+
+
+				/* groen conflictrichtingen beeindigen                                  */
+				if (afkappen_mag)
+				{
+					fasevolgorde_wisselen_gewenst = FALSE;
+					for (i = 0; i < FKFC_MAX[fc]; i++)
+					{
+						j = TO_pointer[fc][i];
+						/* Afkappen wachtgroen en/of verlenggroen door FM instructie      */
+						RS[j] = YW[j] = RW[j] = YV[j] = FALSE;
+						FM[j] |= OV_PLE_BIT;
+						ConflictAfgekapt[fc][j] |= G[j];
+
+						/* Alternatieve realisatie conflictrichtingen terugzetten         */
+						if (G[fc] && (RA[j] || SRV[j]) && AR[j])
+						{
+							RR[j] |= OV_PLE_BIT;
+						}
+					}
+				}
+
+				/* groenfase OV richting verlengen tot (na) TXD moment                  */
+				if (G[fc])
+				{
+					/* meetkriterium opzetten zolang restant rijtijd < TOTXD+rijtijd     */
+					if ((TOTXD_PL[fc] + T_max[textra]) >= (rijtijd - T_timer[tib]))
+					{
+						MK[fc] |= OV_PLE_BIT;
+					}
+
+					/* zolang OV richting nog in primaire gebied zit                     */
+					if ((TOTXB_PL[fc] == 0) || YS_PL[fc] || yv_ar_max_pl(fc, 0))
+					{
+						if ((TOTXD_PL[fc] + T_max[textra]) >= (rijtijd - T_timer[tib]))
+						{
+							MK[fc] |= OV_PLE_BIT;
+							YV[fc] |= OV_PLE_BIT;
+							YM[fc] |= OV_PLE_BIT;
+							if ((TOTXB_PL[fc] == 0) || YS_PL[fc])
+							{
+								RW[fc] |= OV_PLE_BIT;
+							}
+						}
+					}
+					/* indien OV richting na TXD groen is en extra groentijd loopt       */
+					else if (T[textra] || RT[textra])
+					{
+						/* maatregelen zolang extra tijd benut kan worden                 */
+						/* tevens moet startgroen conflicten uitgesteld mogen worden om   */
+						/* te voorkomen dat de conflicten geen realisatieruimte hebben    */
+						if (((T_max[textra] - T_timer[textra]) >= (rijtijd - T_timer[tib])) &&
+							StartGroenConflictenUitstellen(fc))
+						{
+							MK[fc] |= OV_PLE_BIT;
+							YV[fc] |= OV_PLE_BIT;
+							YM[fc] |= OV_PLE_BIT;
+						}
+					}
+				}
+			}
+			break;
+
+			/* -------------------------------------------------------------------------- */
+			/* prio==3: absolute prioriteit                                               */
+			/* -------------------------------------------------------------------------- */
+		case 3:
+
+			blokkeren_mag = TRUE;/* blokkeren conflicten mag bij absolute prioriteit   */
+			afkappen_mag = TRUE; /*  afkappen conflicten mag bij absolute prioriteit   */
+
+			/* aanvraag eerder zetten dan bij lagere prioniveaus: als bus aanwezig is  */
+			if (R[fc] && !TRG[fc] && !CK[fc] && T[tib])
+			{
+				A[fc] |= OV_PLE_BIT;
+			}
+
+			if (IH[hprio])
+			{
+				/* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
+				/* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
+				if (CALW[fc] < PRI_CALW)
+				{
+					set_CALW(fc, PRI_CALW);
+				}
+
+				/* -------------------------------------------------------------------- */
+				/* bepalen of groen van conflicten geblokkeerd en/of beeindigd mag      */
+				/* -------------------------------------------------------------------- */
+
+				/* blokkeren mag als voor het TXB moment van de hoofdrichtingen de      */
+				/* ongehinderde rijtijd + ontruiming gemaakt kan worden                 */
+				/* als tenminste een van de hoofdrichtingen te snel groen wordt, wordt  */
+				/* bool blokkeren_mag FALSE en wordt geen enkele richting geblokkeerd   */
+
+				/* afkappen mag als tenminste de minimum groentijd verstreken is        */
+				/* voor hoofdrichtingen geldt tevens dat deze afgekapt mogen worden     */
+				/* als tenminste een van de richtingen niet afgekapt mag worden, wordt  */
+				/* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
+				for (i = 0; i < FKFC_MAX[fc]; i++)
+				{
+					j = TO_pointer[fc][i];
+					if (HoofdRichting[j])
+					{
+						if (R[j] && !ConflictAfgekapt[fc][j] && (TijdTotLaatsteRealisatieMomentConflict(fc, j) <= 0))
+						{
+							/* hoofdrichting wordt binnen de ongehinderde rijtijd groen    */
+							/* blokkeren van conflictrichtingen tbv prio is niet mogelijk  */
+							/* afkappen van conflictrichtingen tbv prio is niet wenselijk  */
+							blokkeren_mag = FALSE;
+							afkappen_mag = FALSE;
+							break;
+						}
+						if (YW_PL[j] && !HoofdRichtingAfkappenYWPL[j])
+						{
+							/* hoofdrichting wordt vastgehouden voor een peloton           */
+							/* blokkeren van conflictrichtingen tbv prio is niet wenselijk */
+							/* afkappen van conflictrichtingen tbv prio is niet mogelijk   */
+							blokkeren_mag = FALSE;
+							afkappen_mag = FALSE;
+							break;
+						}
+						if (!YW_PL[j] && YV_PL[j] && !HoofdRichtingAfkappenYVPL[j])
+						{
+							/* hoofdrichting wordt vastgehouden in verlenggroen            */
+							/* afkappen van conflictrichtingen tbv prio is niet mogelijk   */
+							afkappen_mag = FALSE;
+							break;
+						}
+					}
+					if (G[j] && iNietAfkappen[j])
+					{
+						/* richting mogen niet worden afgekapt                             */
+						/* volgens user defined settings                                   */
+						afkappen_mag = FALSE;
+						break;
+					}
+				}
+
+
+				/* alle conflicten mogen geblokkeerd worden, bijzondere realisatie OV   */
+				if (blokkeren_mag)
+				{
+					fasevolgorde_wisselen_gewenst = FALSE;
+					for (i = 0; i < FKFC_MAX[fc]; i++)
+					{
+						j = TO_pointer[fc][i];
+						if (R[j])
+						{
+							RR[j] |= OV_PLE_BIT;
+							BL[j] |= OV_PLE_BIT;
+						}
+					}
+					if (R[fc] && !TRG[fc] && !CK[fc])
+					{
+						AA[fc] = TRUE;
+					}
+				}
+
+				/* als alle conflictrichtingen beeindigd mogen worden, afkappen groen   */
+				if (afkappen_mag)
+				{
+					fasevolgorde_wisselen_gewenst = FALSE;
+					for (i = 0; i < FKFC_MAX[fc]; i++)
+					{
+						j = TO_pointer[fc][i];
+						if (!HoofdRichting[j] || blokkeren_mag)
+						{
+							YW[j] = RW[j] = YV[j] = FALSE;
+							FM[j] |= OV_PLE_BIT;
+							ConflictAfgekapt[fc][j] |= G[j];
+						}
+
+						/* Alternatieve realisatie conflictrichtingen terugzetten         */
+						if (G[fc] && (RA[j] || SRV[j]) && AR[j])
+						{
+							RR[j] |= OV_PLE_BIT;
+						}
+					}
+				}
+
+				/* groenfase OV richting verlengen tot OV voertuig verdwenen is         */
+				/* dit met inachtname van de conflicterende hoofdrichtingen             */
+				if (G[fc] && T[tib] && StartGroenHoofdRichtingenUitstellen(fc))
+				{
+					/* meetkriterium opzetten zolang inmeldbewaking loopt                */
+					MK[fc] |= OV_PLE_BIT;
+					/* vasthouden groen                                                  */
+					YV[fc] |= OV_PLE_BIT;
+					YM[fc] |= OV_PLE_BIT;
+				}
+			}
+			break;
+
+			/* -------------------------------------------------------------------------- */
+			/* prio==4: nooddienst                                                        */
+			/* -------------------------------------------------------------------------- */
+		case 4:
+
+			fasevolgorde_wisselen_gewenst = FALSE;
+
+			/* aanvraag eerder zetten dan bij lagere prioniveaus: als bus aanwezig is  */
+			if (R[fc] && !TRG[fc] && T[tib])
+			{
+				A[fc] |= OV_PLE_BIT;
+			}
+
+			if (IH[hprio])
+			{
+				/* ophogen langstwachtende teller om zodoende eerder dan conflicterende */
+				/* alternatieven aan de beurt te zijn en zo prioriteit te krijgen       */
+				if (CALW[fc] < PRI_CALW)
+				{
+					set_CALW(fc, PRI_CALW);
+				}
+				/* conflicterende hoofdrichtingen direct blokkeren en afkappen          */
+				for (i = 0; i < FKFC_MAX[fc]; i++)
+				{
+					j = TO_pointer[fc][i];
+					if (R[j])
+					{
+						RR[j] |= OV_PLE_BIT;
+						BL[j] |= OV_PLE_BIT;
+					}
+					if (G[j])
+					{
+						FM[j] |= OV_PLE_BIT;
+						YW[j] = RW[j] = YV[j] = FALSE;
+					}
+					/* Alternatieve realisatie conflictrichtingen terugzetten            */
+					if (G[fc] && (RA[j] || SRV[j]) && AR[j])
+					{
+						RR[j] |= OV_PLE_BIT;
+					}
+				}
+
+				if (R[fc] && !TRG[fc])
+				{
+					AA[fc] = TRUE;
+				}
+				if (G[fc])
+				{
+					MK[fc] |= OV_PLE_BIT;
+					YM[fc] |= OV_PLE_BIT;
+					RW[fc] |= OV_PLE_BIT;
+				}
+			}
+
+			break;
+
+		default:
+			break;
+		} /* switch prio                                                                 */
+
+		/* Als de OV richting geen groen heeft gehad, maar de ingreep is niet langer actief */
+		/* dan dient de langstwachtende teller (voorkeursrealisatie) weer gereset te worden */
+		if (EH[hprio])
+		{
+			set_CALW(fc, (mulv)(10 * TFB_timer[fc]));
+		}
+
+
+		/* Indien de OV richting bijzonder gerealiseerd wordt (prio>=3), kan het gebeuren   */
+		/* dat een conflictrichting geen ruimte meer overhoudt voor de primaire realisatie  */
+		/* In dat geval dient het overslag-bit opgezet te worden voor de conflictrichting,  */
+		/* deze zal dan de volgende cyclus pas gerealiseerd worden                          */
+		if (G[fc] && (prio >= 3) && (IH[hprio] || !PR[fc] && !AR[fc]))
+		{
+			for (i = 0; i < FKFC_MAX[fc]; i++)
+			{
+				to_tmp = 0;
+				j = TO_pointer[fc][i];                    /* Index conflicterende fc          */
+				if (!HoofdRichting[j] || (prio > 3))
+				{
+					to_tmp = max(TFG_max[fc] - TFG_timer[fc], TGG_max[fc] - TGG_timer[fc])
+						+ TGL_max[fc] + TO_max[fc][j];
+					if (to_tmp > TOTXD_PL[j])
+					{
+						if (!PG[j])
+						{
+							PG[j] = PRIMAIR_OVERSLAG;
+						}
+						/* Alternatieve realisatie terugzetten                                  */
+						if ((RA[j] || SRV[j]) && (PR[j] || AR[j]))
+						{
+							RR[j] |= BIT6;
+						}
+					}
+				}
+			} /* for (i = 0;i < FKFC_MAX[fc]; i++)                                           */
+		} /* if (G[fc] && (prio >= 3) && (IH[hprio] || !PR[fc] && !AR[fc]))                 */
+	}
 }
 
 

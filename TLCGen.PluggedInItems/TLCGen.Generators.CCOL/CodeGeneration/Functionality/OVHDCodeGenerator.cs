@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmmgcov;
         private CCOLGeneratorCodeStringSettingModel _prmpmgcov;
         private CCOLGeneratorCodeStringSettingModel _prmohpmg;
-        private CCOLGeneratorCodeStringSettingModel _schcheckopdsin;
+        private CCOLGeneratorCodeStringSettingModel _schcheckdstype;
         private CCOLGeneratorCodeStringSettingModel _uskarog;
         private CCOLGeneratorCodeStringSettingModel _uskarmelding;
         private CCOLGeneratorCodeStringSettingModel _tkarog;
@@ -98,6 +98,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return "wsk";
                 case OVIngreepMeldingTypeEnum.WisselDetector:
                     return "wd";
+                case OVIngreepMeldingTypeEnum.VECOM_io:
+                    return "vecio";
+                case OVIngreepMeldingTypeEnum.Opticom:
+                    return "opt";
+                case OVIngreepMeldingTypeEnum.MassaPaarIn:
+                    return "mpi";
+                case OVIngreepMeldingTypeEnum.MassaPaarUit:
+                    return "mpu";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -148,7 +156,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				// TODO: This is not nice. Need to improve! should only be generated when needed
                 //if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
                 //{
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckopdsin}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckopdsin));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckdstype}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckdstype));
                 //}
 
                 /* Variables for conflicting signal groups */
@@ -366,6 +374,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     foreach (var ov in c.OVData.OVIngrepen)
                     {
+                        var vtgType = "";
+                        int fcNmr;
+                        if (!Int32.TryParse(ov.FaseCyclus, out fcNmr)) fcNmr = -1;
+                        switch (ov.Type)
+                        {
+                            case OVIngreepVoertuigTypeEnum.Tram:
+                                vtgType = "CIF_TRAM";
+                                break;
+                            case OVIngreepVoertuigTypeEnum.Bus:
+                                vtgType = "CIF_BUS";
+                                break;
+                            default:
+                                throw new IndexOutOfRangeException();
+                        }
                         if (ov.Meldingen.Any(x => x.Inmelding))
                         {
                             var inmHelems = new List<string>();
@@ -378,15 +400,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     case OVIngreepMeldingTypeEnum.VECOM:
                                         sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                             $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}] && DSI_melding(ds{ov.FaseCyclus}_in, " +
-                                            $"{_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}] && " +
+                                            $"DSIMeldingOV_V1({_dpf}{melding.RelatedInput1}, " +
+                                                              $"{vtgType}, " +
+                                                              $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                              $"SCH[{_schpf}{_schcheckdstype}, " +
+                                                              $"CIF_DSIN, " +
+                                                              $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
+                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
+                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"TRUE) && " +
+                                            $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     case OVIngreepMeldingTypeEnum.KAR:
                                         sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                             $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                             $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                            $"DSI_melding(0, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            $"DSIMeldingOV_V1(0, " +
+                                                              $"{vtgType}, " +
+                                                              $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                              $"TRUE, " +
+                                                              $"CIF_DSIN, " +
+                                                              $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
+                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
+                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"TRUE) && " +
+                                            $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     case OVIngreepMeldingTypeEnum.VerlosDetector:
@@ -394,16 +434,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                                 $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) " +
-                                                $"&& R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
-                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" +
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"!TRG[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"DB[{_dpf}{melding.RelatedInput1}] &&" +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                         }
                                         else
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                                 $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                                $"R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
-                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"!TRG[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"DB[{_dpf}{melding.RelatedInput1}] &&" +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                         }
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
@@ -413,8 +459,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                                 $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
                                                 $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " +
-                                                $"R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && DB[{_dpf}{melding.RelatedInput}] " +
-                                                $"&& (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"!TRG[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"DB[{_dpf}{melding.RelatedInput1}] &&" +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                             inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         }
                                         break;
@@ -447,30 +496,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     case OVIngreepMeldingTypeEnum.VECOM:
                                         sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && DSI_melding(ds{ov.FaseCyclus}_uit, {_fcpf}{ov.FaseCyclus}, CIF_DSIN, -1, -1, -1) && !T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
+                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                            $"DSIMeldingOV_V1({_dpf}{melding.RelatedInput2}, " +
+                                                              $"{vtgType}, " +
+                                                              $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                              $"SCH[{_schpf}{_schcheckdstype}, " +
+                                                              $"CIF_DSIN, " +
+                                                              $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
+                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
+                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"TRUE) && " +
+                                            $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
                                         uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     case OVIngreepMeldingTypeEnum.KAR:
                                         sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && DSI_melding(0, {_fcpf}{ov.FaseCyclus}, " +
-                                            $"CIF_DSUIT, -1, -1, -1) && !T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
+                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                            $"DSIMeldingOV_V1(0, " +
+                                                              $"{vtgType}, " +
+                                                              $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                              $"TRUE, " +
+                                                              $"CIF_DSUIT, " +
+                                                              $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
+                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
+                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"TRUE) && " +
+                                            $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
                                         uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     case OVIngreepMeldingTypeEnum.VerlosDetector:
                                         if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
-                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && " +
-                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
-                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " +
+                                                $"!TDH[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                         }
                                         else
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && !TDH[{_dpf}{melding.RelatedInput}] && " +
-                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
-                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"!TDH[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                         }
                                         uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
@@ -478,10 +552,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
-                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && !TDH[{_dpf}{melding.RelatedInput}] && " +
-                                                $"TDH_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
-                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || " +
+                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " +
+                                                $"!TDH[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"TDH_old[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                             uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         }
                                         break;
@@ -489,10 +567,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
                                             sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && (D[{_dpf}{ov.WisselStandInput}] || " +
-                                                $"SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && " +
-                                                $"DB[{_dpf}{melding.RelatedInput}] && !DB_old[{_dpf}{melding.RelatedInput}] && (CIF_IS[{_dpf}{melding.RelatedInput}] < CIF_DET_STORING) && " +
-                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && (C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
+                                                $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
+                                                $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " +
+                                                $"R[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"!TRG[{_fcpf}{ov.FaseCyclus}] && " +
+                                                $"DB[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"!DB_old[{_dpf}{melding.RelatedInput1}] && " +
+                                                $"(CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}] && " +
+                                                $"(C_counter[{_ctpf}{_cvc}{ov.FaseCyclus}] == 0);");
                                             uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         }
                                         break;

@@ -201,7 +201,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mslave}", _mslave));
 					
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schslavebep}", 0, CCOLElementTimeTypeEnum.SCH_type, _schslavebep));
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvolgmasterpl}", 65535, CCOLElementTimeTypeEnum.None, _prmvolgmasterpl));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvolgmasterpl}", 32767, CCOLElementTimeTypeEnum.None, _prmvolgmasterpl));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_toffset}", 0, CCOLElementTimeTypeEnum.TS_type, _toffset));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_txmarge}", 2, CCOLElementTimeTypeEnum.TS_type, _txmarge));
 				}
@@ -392,6 +392,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.OvCPrioriteitsToekenning:
                     return 10;
+                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+                    return 10;
                 case CCOLCodeTypeEnum.HstCOVSettingsHalfstar:
                     return 10;
                 default:
@@ -473,7 +475,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 					{
 						sb.AppendLine($"{ts}MM[{_mpf}{_mmaster}] = FALSE;");
-					}
+						sb.AppendLine($"{ts}MM[{_mpf}{_mslave}] = FALSE;");
+                    }
 					sb.AppendLine($"{ts}IH[{_hpf}{_hkpact}] = TRUE;");
 					sb.AppendLine($"{ts}IH[{_hpf}{_hplact}] = TRUE;");
 					sb.AppendLine($"{ts}IH[{_hpf}{_hmlact}] = FALSE;");

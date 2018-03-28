@@ -27,9 +27,7 @@
 bool DSI_melding(count lusnr,
                  count fcnr,
                  count inuit,
-                 count status,
-                 count lengte,
-                 count vcu_kar)
+	             count lijn)
 {
 
 	bool match = TRUE; /* Ga uit van een match. Als er iets niet klopt,
@@ -108,6 +106,36 @@ bool DSI_melding(count lusnr,
 //    }
 
 	return match;
+}
+
+bool DSIMeldingOV_V1(
+	count dslus,
+	count vtgtype,
+	count fcnmr,
+	bool checktype,
+	count meldingtype,
+	bool checklijn,
+	count lijnparm,
+	count lijnmax,
+	bool extra)
+{
+	if (!DS_MSG || !extra) return false;
+
+	if (lusnr != NG && lusnr != CIF_DSI[CIF_DSI_LUS]) return FALSE;
+	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
+	if (fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
+	if (checktype && meldingtype != -1 && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
+	if (checlijn) 
+	{
+		int index = 0;
+		if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
+		for (index = 0; index < lijnmax; ++index)
+		{
+			if(CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) break;
+		}
+	}
+
+	return TRUE;
 }
 
 bool OVmelding_KAR_V2(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */

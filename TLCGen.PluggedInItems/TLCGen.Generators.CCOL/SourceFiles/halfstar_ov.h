@@ -79,8 +79,6 @@ void OVIngreep_ple(count fc,              /* fc met prioriteit                  
                    mulv  prio,            /* prioriteitstype                              */
                    mulv  omax,            /* waarde ondermaximum                          */
                    count pmwt,            /* parameter maximum wachttijd (1e fc)          */
-                   count mtx,             /* MM cyclustijd bij signaalplan wisseling      */
-                   count mpl,             /* MM actieve signaalplan bij wisseling         */
                    bool  ov_mag);         /* extra voorwaarde voor toestaan OV prio       */
 
 

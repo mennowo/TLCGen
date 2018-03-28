@@ -70,35 +70,6 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="In- en uitmeldingen" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
-                <!--<ct:SpecialDataGrid ItemsSource="{Binding Path=Meldingen}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
-                                    Grid.ColumnSpan="2">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Type}" Header="Type" />
-                        <DataGridTemplateColumn Header="Inmelding">
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <CheckBox IsChecked="{Binding Path=Inmelding}" IsEnabled="{Binding Path=HasInmelding}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridCheckBoxColumn Header="Uitmelding" Binding="{Binding Path=Uitmelding}" />
-                        <DataGridTemplateColumn Header="Detector/ingang">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=RelatedInput}" IsEnabled="{Binding Path=HasRelatedInput}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                            <DataGridTemplateColumn.CellEditingTemplate>
-                                <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
-                                              IsEnabled="{Binding Path=HasRelatedInput}"
-                                              SelectedValue="{Binding Path=RelatedInput}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellEditingTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Binding="{Binding Path=InmeldFilterTijd}" Header="Inmelding filter tijd" />
-                    </DataGrid.Columns>
-                </ct:SpecialDataGrid>-->
                 <ListView 
                     Grid.ColumnSpan="2"
                     Grid.Row="1" ItemsSource="{Binding Path=Meldingen}" Width="Auto" HorizontalAlignment="Left">
@@ -132,24 +103,49 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding Inmelding,UpdateSourceTrigger=PropertyChanged}"
-                                                  Visibility="{Binding Path=HasInmelding,Converter={StaticResource Bool2VisConv}}"/>
+                                                  Visibility="{Binding Path=HasInmelding,Converter={StaticResource Bool2VisConv}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Header="Uitmelding" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding Uitmelding,UpdateSourceTrigger=PropertyChanged}" />
+                                        <CheckBox IsChecked="{Binding Uitmelding,UpdateSourceTrigger=PropertyChanged}" 
+                                                  Visibility="{Binding Path=HasUitmelding,Converter={StaticResource Bool2VisConv}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Detector/ingang" >
+                            <GridViewColumn Header="Ingang 1" Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput}"
-                                                  ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
-                                                  Visibility="{Binding Path=HasRelatedInput,Converter={StaticResource Bool2VisConv}}"
-                                                  SelectedValue="{Binding Path=RelatedInput}" />
+                                        <Grid>
+                                            <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput1}"
+                                                      ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                                      Visibility="{Binding Path=HasRelatedSelectableInput1,Converter={StaticResource Bool2VisConv}}"
+                                                      SelectedValue="{Binding Path=RelatedInput1}" 
+                                                      Margin="2" />
+                                            <TextBox IsEnabled="{Binding Path=CanHaveInput1}"
+                                                     Text="{Binding Path=Input1}"
+                                                     Visibility="{Binding Path=HasTypableInput1,Converter={StaticResource Bool2VisConv}}" 
+                                                     Margin="2" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Ingang 2" Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput2}"
+                                                      ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                                      Visibility="{Binding Path=HasRelatedSelectableInput2,Converter={StaticResource Bool2VisConv}}"
+                                                      SelectedValue="{Binding Path=RelatedInput2}" 
+                                                      Margin="2" />
+                                            <TextBox IsEnabled="{Binding Path=CanHaveInput2}"
+                                                     Text="{Binding Path=Input2}"
+                                                     Visibility="{Binding Path=HasTypableInput2,Converter={StaticResource Bool2VisConv}}" 
+                                                     Margin="2" />
+                                        </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

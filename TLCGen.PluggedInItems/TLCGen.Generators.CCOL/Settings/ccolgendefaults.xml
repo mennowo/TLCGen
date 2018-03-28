@@ -1277,10 +1277,10 @@
             <Description>Schakelaar versnelde inmelding</Description>
           </Setting>
           <Setting>
-            <Default>checkopdsin</Default>
-            <Setting>checkopdsin</Setting>
+            <Default>checkdstype</Default>
+            <Setting>checkdstype</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar check op DS_IN bij VECOM</Description>
+            <Description>Check type DSI bericht bij VECOM</Description>
           </Setting>
           <Setting>
             <Default>ovstp</Default>

@@ -43,10 +43,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHParameters(controller));
             sb.AppendLine();
-            if (controller.OVData.DSI)
+            if (controller.OVData.HDIngrepen.Any(x => x.KAR) || 
+                controller.OVData.OVIngrepen.Any(x => x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && (x2.Type == OVIngreepMeldingTypeEnum.KAR || x2.Type == OVIngreepMeldingTypeEnum.VECOM))))
             {
                 sb.Append(GenerateSysHDS(controller));
             }
+            
             sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
@@ -308,27 +310,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
 
-            if (controller.OVData.OVIngrepen.Count > 0 &&
-                controller.OVData.OVIngrepen.Where(x => x.Vecom).Any())
+            int index = 0;
+            // Geen VECOM? Dan dummy lus tbv KAR
+            if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
             {
-                int index = 0;
-                if(controller.OVData.OVIngrepen.Where(x => x.KAR).Any())
-                {
-                    sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR DSI berichten */");
-                    ++index;
-                }
-                foreach(var ov in controller.OVData.OVIngrepen.Where(x => x.Vecom))
-                {
-                    sb.AppendLine($"{ts}#define ds{ov.FaseCyclus}_in  {index++}");
-                    sb.AppendLine($"{ts}#define ds{ov.FaseCyclus}_uit {index++}");
-                }
-                sb.AppendLine($"{ts}#define DSMAX    {index}");
+                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR DSI berichten */");
+                ++index;
             }
             else
             {
-                sb.AppendLine($"{ts}#define dsdummy 0");
-                sb.AppendLine($"{ts}#define DSMAX   1");
+                foreach(var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+                {
+                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
+                    if (m.Inmelding)
+                    {
+                        sb.AppendLine($"{ts}#define {_dpf}{m.RelatedInput1} {index++}");
+                    }
+                    if (m.Uitmelding)
+                    {
+                        sb.AppendLine($"{ts}#define {_dpf}{m.RelatedInput2} {index++}");
+                    }
+                }
             }
+            sb.AppendLine($"{ts}#define DSMAX    {index}");
 
             return sb.ToString();
         }

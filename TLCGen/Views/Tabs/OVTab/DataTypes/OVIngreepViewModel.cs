@@ -525,7 +525,7 @@ namespace TLCGen.ViewModels
 
             _meldingen = new ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel>(ovingreep.Meldingen);
 
-            if (!_meldingen.Any())
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.KAR))
             {
                 _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
                 {
@@ -535,18 +535,77 @@ namespace TLCGen.ViewModels
                     Uitmelding = true,
                     InmeldingFilterTijd = 15
                 }));
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM))
+            {
+                var vec = new OVIngreepMeldingModel
                 {
                     FaseCyclus = ovingreep.FaseCyclus,
                     Type = OVIngreepMeldingTypeEnum.VECOM,
                     Inmelding = false,
                     Uitmelding = false,
                     InmeldingFilterTijd = 15
+                };
+                vec.Input1 = $"s{ovingreep.FaseCyclus}_in";
+                vec.Input2 = $"s{ovingreep.FaseCyclus}_uit";
+                _meldingen.Add(new OVIngreepMeldingViewModel(vec));
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM_io))
+            {
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.VECOM_io,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingFilterTijd = 15
                 }));
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.Opticom))
+            {
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.Opticom,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingFilterTijd = 15
+                }));
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VerlosDetector))
+            {
                 _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
                 {
                     FaseCyclus = ovingreep.FaseCyclus,
                     Type = OVIngreepMeldingTypeEnum.VerlosDetector,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingFilterTijd = 15
+                }));
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.MassaPaarIn))
+            {
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.MassaPaarIn,
+                    Inmelding = false,
+                    Uitmelding = false,
+                    InmeldingFilterTijd = 15
+                }));
+            }
+
+            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.MassaPaarUit))
+            {
+                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
+                {
+                    FaseCyclus = ovingreep.FaseCyclus,
+                    Type = OVIngreepMeldingTypeEnum.MassaPaarUit,
                     Inmelding = false,
                     Uitmelding = false,
                     InmeldingFilterTijd = 15
