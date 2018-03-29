@@ -46,6 +46,7 @@
     <Compile Include="Attributes\ModelNameAttribute.cs" />
     <Compile Include="Attributes\RefersToAttribute.cs" />
     <Compile Include="Attributes\VissimNameAttribute.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />

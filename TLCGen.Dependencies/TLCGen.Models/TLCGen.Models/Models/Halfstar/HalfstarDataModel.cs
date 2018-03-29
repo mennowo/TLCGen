@@ -56,7 +56,11 @@ namespace TLCGen.Models
 		[IOElement("master", BitmappedItemTypeEnum.Uitgang, conditionprop: "IsNotMaster")]
 		public BitmapCoordinatenDataModel MasterUitgang { get; set; }
 
-		[Browsable(false)]
+        [Browsable(false)]
+        [IOElement("slave", BitmappedItemTypeEnum.Uitgang, conditionprop: "IsNotMaster")]
+        public BitmapCoordinatenDataModel SlaveUitgang { get; set; }
+
+        [Browsable(false)]
 		public bool IsNotMaster => IsHalfstar && Type != HalfstarTypeEnum.Master;
 		
 		#endregion // Properties
@@ -78,7 +82,8 @@ namespace TLCGen.Models
 			KlokUitgang = new BitmapCoordinatenDataModel();
 			HandUitgang = new BitmapCoordinatenDataModel();
 			MasterUitgang = new BitmapCoordinatenDataModel();
-		}
+            SlaveUitgang = new BitmapCoordinatenDataModel();
+        }
 
 		#endregion // Constructor
 	}

@@ -21,11 +21,11 @@ namespace TLCGen.Models
         public int MaxWachttijdVoetganger { get; set; }
 
         [Browsable(false)]
-        [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
+        [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]
         public BitmapCoordinatenDataModel KARMeldingBitmapData { get; set; }
 
         [Browsable(false)]
-        [IOElement("karog", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
+        [IOElement("karog", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]
         public BitmapCoordinatenDataModel KAROnderGedragBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "OVIngreep")]
@@ -36,6 +36,8 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "WisselContact")]
         public List<WisselContactModel> WisselContacten { get; set; }
+
+        public bool HasAnyKAR => this.HasKAR();
 
         #endregion // Properties
 
@@ -49,13 +51,15 @@ namespace TLCGen.Models
             {
                 if(ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.KAR))
                 {
-                    dets.Add(ov.DummyKARInmelding);
-                    dets.Add(ov.DummyKARUitmelding);
+                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.KAR);
+                    if (m.Inmelding) dets.Add(ov.DummyKARInmelding);
+                    if (m.Uitmelding) dets.Add(ov.DummyKARUitmelding);
                 }
                 if (ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM))
                 {
-                    dets.Add(ov.DummyVecomInmelding);
-                    dets.Add(ov.DummyVecomUitmelding);
+                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
+                    if (m.Inmelding) dets.Add(ov.DummyVecomInmelding);
+                    if (m.Uitmelding) dets.Add(ov.DummyVecomUitmelding);
                 }
             }
             foreach (var hd in HDIngrepen)

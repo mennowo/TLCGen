@@ -196,8 +196,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				{
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaster}", _usmaster));
 					_MyBitmapOutputs.Add(new CCOLIOElement(hsd.MasterUitgang, $"{_uspf}{_usmaster}"));
-					
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mmaster}", _mmaster));
+
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usslave}", _usslave));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(hsd.SlaveUitgang, $"{_uspf}{_usslave}"));
+
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mmaster}", _mmaster));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mslave}", _mslave));
 					
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schslavebep}", 0, CCOLElementTimeTypeEnum.SCH_type, _schslavebep));
@@ -1242,7 +1245,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}GUS[{_uspf}{_ushand}] = MM[{_mpf}{_mhand}];");
 					if (c.HalfstarData.Type != HalfstarTypeEnum.Master)
 					{
-						sb.AppendLine($"{ts}GUS[{_uspf}{_usmaster}] = MM[{_mpf}{_mmaster}];");									
+						sb.AppendLine($"{ts}GUS[{_uspf}{_usmaster}] = MM[{_mpf}{_mmaster}];");
+                        sb.AppendLine($"{ts}GUS[{_uspf}{_usslave}] = MM[{_mpf}{_mslave}];");									
 					}
 					sb.AppendLine();
 

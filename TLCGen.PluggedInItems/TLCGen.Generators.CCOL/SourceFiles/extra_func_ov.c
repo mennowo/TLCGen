@@ -1,113 +1,5 @@
 #include "extra_func_ov.h"
 
-/*
-  * Functie: DSI_melding
-  *
-  * Abstract: afhandeling DSI melding
-  *
-  * Argumenten:
-  * lusnr              = (virtuele) lusnummer
-  * fcnr               = signaalgroep
-  * inuit              = type melding
-  * status             = status melding (bv vertrekmelding)
-  * lengte             = voertuiglengte (0 = enkele tram; 1 = dubbele tram)
-  * vcu_kar            = terugmelding bij een KAR bericht
-  *
-  * Voor alle argumenten geldt: -1 = don’t care. Er wordt dan niet gecheckt op
-  *                                  dat item.
-  *
-  * Andere zaken die de functie beinvloeden:
-  * SCH[schdsi]        = uitschakelen DSI ingreep
-  * SCH[schdsi_test]   = info dsi-buffer tonen in de CCOL-terminal als er
-  *                      een match is
-  *
-  * Decisions: Returns TRUE  als er een match is. Anders FALSE.
-  *
-  */
-bool DSI_melding(count lusnr,
-                 count fcnr,
-                 count inuit,
-	             count lijn)
-{
-
-	bool match = TRUE; /* Ga uit van een match. Als er iets niet klopt,
-						  zetten we de bool op FALSE. */
-
-	/* Helemaal geen DSI; ook niets op de CCOL-terminal. */
-//	if (SCH[schdsi] == 0)
-//	{
-//		return FALSE;
-//	}
-
-	if (CIF_DSIWIJZ)
-	{
-		if (lusnr != -1)
-		{
-			if (lusnr != CIF_DSI[CIF_DSI_LUS]) match = FALSE;
-		}
-		if (fcnr != -1)
-		{
-			if (atoi(FC_code[fcnr]) != CIF_DSI[CIF_DSI_DIR]) match = FALSE;
-		}
-		if (inuit != -1)
-		{
-			if (inuit != CIF_DSI[CIF_DSI_TYPE]) match = FALSE;
-		}
-		if (status != -1)
-		{
-			if (status != CIF_DSI[CIF_DSI_STAT]) match = FALSE;
-		}
-		if (lengte != -1)
-		{
-			if (lengte != CIF_DSI[CIF_DSI_LEN]) match = FALSE;
-		}
-		if (vcu_kar != -1)
-		{
-			/* Maak onderscheid tussen VECOM en KAR.
-			 * We houden aan dat als er een GPS-locatie beschikbaar
-			 * is, het gaan om een KAR-bericht, zo niet, is het
-			 * een VECOM-bericht. */
-//			if ((vcu_kar == DSI_KAR) && (CIF_DSI[CIF_DSI_XGRAD] == 0))
-//			{
-//				match = FALSE;
-//			}
-//			if ((vcu_kar == DSI_VCU) && (CIF_DSI[CIF_DSI_XGRAD] != 0))
-//			{
-//				match = FALSE;
-//			}
-		}	 	
-	}
-	else
-	{
-		/* Bij geen wijziging in het DSI-buffer is er nooit een match. */
-		match = FALSE;
-	}
-
-	/* Tonen van lusinfo op de CCOL-terminal.
-	* Alleen als er een nieuw bericht is. */
-//	if (CIF_DSIWIJZ && !cif_dsiwijz_geprint && SCH[schdsi_test])
-//	{
-//		_DSI_print();
-//	}
-//	if (CIF_DSIWIJZ && !cif_accept_geprint && match  && SCH[schdsi_test])
-//	{
-//      uber_puts("DSI-melding geaccepteerd door programma.\n");
-//      cif_accept_geprint=1;
-//    }
-
-	/* Houd bij of deze wijziging al geprint is. Als er in 1 systeemronde
-	 * meerdere keren de inhouf van het buffer wordt opgevraagd, dan printen
-	 * we maar 1 keer. */
-//	cif_dsiwijz_geprint=CIF_DSIWIJZ;
-//
-//    if (!CIF_DSIWIJZ)
-//    {
-//      cif_accept_geprint=0;
-//    }
-
-	return match;
-}
-
 bool DSIMeldingOV_V1(
 	count dslus,
 	count vtgtype,
@@ -119,13 +11,13 @@ bool DSIMeldingOV_V1(
 	count lijnmax,
 	bool extra)
 {
-	if (!DS_MSG || !extra) return false;
+	if (!DS_MSG || !extra) return FALSE;
 
-	if (lusnr != NG && lusnr != CIF_DSI[CIF_DSI_LUS]) return FALSE;
+	if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) return FALSE;
 	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
 	if (fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
 	if (checktype && meldingtype != -1 && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
-	if (checlijn) 
+	if (checklijn) 
 	{
 		int index = 0;
 		if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
@@ -326,7 +218,7 @@ bool OVmelding_DSI_BUS(
 #ifndef VISSIM
 		&& DS_MSG
 #endif
-		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckopdsin]) && CIF_DSI[CIF_DSI_VTG] == CIF_BUS)
+		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckdstype]) && CIF_DSI[CIF_DSI_VTG] == CIF_BUS)
 		&& ((PRM[lijnparm] == 1) || check_lijn))              return TRUE;
 	else                                                        return FALSE;
 }
@@ -358,7 +250,7 @@ bool OVmelding_DSI_TRAM(
 #ifndef VISSIM
 		&& DS_MSG
 #endif
-		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckopdsin]) && CIF_DSI[CIF_DSI_VTG] == CIF_TRAM)
+		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckdstype]) && CIF_DSI[CIF_DSI_VTG] == CIF_TRAM)
 		&& ((PRM[lijnparm] == 1) || check_lijn))              return TRUE;
 	else                                                        return FALSE;
 }

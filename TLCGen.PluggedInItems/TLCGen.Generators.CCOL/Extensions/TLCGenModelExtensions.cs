@@ -10,39 +10,6 @@ namespace TLCGen.Generators.CCOL.Extensions
 {
     public static class TLCGenModelExtensions
     {
-        public static bool HasOVIngreepDSI(this OVIngreepModel ov)
-        {
-            return ov.Meldingen.Any(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR ||
-                                         x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
-        }
-
-        public static bool HasOVIngreepVecom(this OVIngreepModel ov)
-        {
-            return ov.Meldingen.Any(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
-        }
-
-        public static bool HasOVIngreepKAR(this OVIngreepModel ov)
-        {
-            return ov.Meldingen.Any(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
-        }
-
-        public static bool HasDSI(this ControllerModel c)
-        {
-            return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||
-                   c.OVData.HDIngrepen.Any(x => x.KAR);
-        }
-
-        public static bool HasKAR(this ControllerModel c)
-        {
-            return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()) ||
-                   c.OVData.HDIngrepen.Any(x => x.KAR);
-        }
-
-        public static bool HasPTorHD(this ControllerModel c)
-        {
-            return c.OVData.OVIngrepen.Any() ||
-                   c.OVData.HDIngrepen.Any();
-        }
 
         public static string GetDefine(this DetectorModel d)
         {

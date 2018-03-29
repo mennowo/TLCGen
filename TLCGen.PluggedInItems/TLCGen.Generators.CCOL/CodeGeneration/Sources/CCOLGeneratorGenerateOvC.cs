@@ -1095,16 +1095,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
 	                if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
+                        var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.KAR);
                         var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                        if (m.Inmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
+                        if (m.Uitmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                     }
                 }
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.HasOVIngreepVecom()))
                 {
+                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
                     var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    if (m.Inmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    if (m.Uitmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                 }
                 sb.AppendLine();
             }

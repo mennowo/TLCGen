@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_prmfperc}{fm.Naam}",
+                                $"{_prmfperc}{fm.Naam}{ff.FaseCyclus}",
                                 ff.DoseerPercentage,
                                 CCOLElementTimeTypeEnum.None,
                                 _prmfperc, ff.FaseCyclus));

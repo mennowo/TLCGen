@@ -63,7 +63,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* include files */");
             sb.AppendLine("/* ------------- */");
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
-#warning TODO - make includes dependent on the kind of controller and its settings
             sb.AppendLine($"{ts}#include \"fcvar.c\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.c\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.c\"    /* uitgangs elementen                */");
@@ -76,7 +75,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"tgg_min.c\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.c\"  /* garantie-geeltijden               */");
             sb.AppendLine($"{ts}#include \"isvar.c\"    /* ingangs elementen                 */");
-            sb.AppendLine($"{ts}#include \"dsivar.c\"   /* selectieve detectie               */");
+            if (controller.HasDSI())
+            {
+                sb.AppendLine($"{ts}#include \"dsivar.c\"   /* selectieve detectie               */");
+            }
             sb.AppendLine($"{ts}#include \"hevar.c\"    /* hulp elementen                    */");
             sb.AppendLine($"{ts}#include \"mevar.c\"    /* geheugen elementen                */");
             sb.AppendLine($"{ts}#include \"tmvar.c\"    /* tijd elementen                    */");
@@ -89,12 +91,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        }
             sb.AppendLine($"{ts}#include \"prmvar.c\"   /* parameters                        */");
             sb.AppendLine($"{ts}#include \"lwmlvar.c\"  /* langstwachtende modulen structuur */");
-            sb.AppendLine($"{ts}#ifndef NO_VLOG");
-            sb.AppendLine($"{ts}{ts}#include \"vlogvar.c\"  /* variabelen t.b.v. vlogfuncties                */");
-            sb.AppendLine($"{ts}{ts}#include \"logvar.c\"   /* variabelen t.b.v. logging                     */");
-            sb.AppendLine($"{ts}{ts}#include \"monvar.c\"   /* variabelen t.b.v. realtime monitoring         */");
-            sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
-            sb.AppendLine($"{ts}#endif");
+            if(controller.Data.VLOGType != VLOGTypeEnum.Geen)
+            {
+                sb.AppendLine($"{ts}#ifndef NO_VLOG");
+                sb.AppendLine($"{ts}{ts}#include \"vlogvar.c\"  /* variabelen t.b.v. vlogfuncties                */");
+                sb.AppendLine($"{ts}{ts}#include \"logvar.c\"   /* variabelen t.b.v. logging                     */");
+                sb.AppendLine($"{ts}{ts}#include \"monvar.c\"   /* variabelen t.b.v. realtime monitoring         */");
+                sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
+                sb.AppendLine($"{ts}#endif");
+            }
             sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
             sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
@@ -125,10 +130,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        if (controller.HalfstarData.IsHalfstar)
 	        {
 		        sb.AppendLine($"{ts}#include \"{controller.Data.Naam}hst.c\"");
-		        //if (controller.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
-		        //{
-				//	sb.AppendLine($"{ts}#include {controller.Data.Naam}hst_ov.c");
-		        //}
 	        }
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCIncludes])
             {

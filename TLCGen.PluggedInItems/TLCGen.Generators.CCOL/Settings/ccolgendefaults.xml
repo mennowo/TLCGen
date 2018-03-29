@@ -281,13 +281,13 @@
             <Default>master</Default>
             <Setting>master</Setting>
             <Type>Uitgang</Type>
-            <Description>Master bepaald aansturing</Description>
+            <Description>Master bepaalt aansturing</Description>
           </Setting>
           <Setting>
             <Default>slave</Default>
             <Setting>slave</Setting>
             <Type>Uitgang</Type>
-            <Description>Slave bepaald aansturing</Description>
+            <Description>Slave bepaalt aansturing</Description>
           </Setting>
           <Setting>
             <Default>klok</Default>
@@ -299,7 +299,7 @@
             <Default>hand</Default>
             <Setting>hand</Setting>
             <Type>Uitgang</Type>
-            <Description>Aansturing/programma met de hand bepaald</Description>
+            <Description>Aansturing handmatig aangepast</Description>
           </Setting>
           <Setting>
             <Default>leven</Default>

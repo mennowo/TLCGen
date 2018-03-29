@@ -153,10 +153,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(prmtest2);
                 }
 
-				if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecom()))
-                {
+				//if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecom()))
+                //{
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckdstype}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckdstype));
-                }
+                //}
 
                 /* Variables for conflicting signal groups */
                 foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
