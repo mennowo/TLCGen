@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -110,8 +111,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#include \"halfstar_ov.h\"");
             }
             sb.AppendLine();
-            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
-                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
+            if (c.HasKAR())
             {
                 var any = false;
                 foreach (var hd in c.OVData.HDIngrepen)
@@ -235,7 +235,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine();
 
-            if (_anyOVorHd)
+            if (c.HasPTorHD())
             {
                 sb.AppendLine($"{ts}/* Fasecyclus voor OV-richtingen */");
             }
@@ -937,8 +937,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #endregion // HD ingrepen mee inmelden
 
-            if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
-                c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
+            if (c.HasKAR())
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
@@ -1089,10 +1088,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();
-            if (c.OVData.OVIngrepen.Count > 0)
+            if (c.OVData.OVIngrepen.Any())
             {
                 sb.AppendLine($"{ts}/* OV ingrepen */");
-                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.KAR))
+                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.HasOVIngreepKAR()))
                 {
 	                if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
@@ -1101,14 +1100,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestkarvert}], PRM[{_prmpf}{_prmtestkarlyn}], 0);");
                     }
                 }
-                if (c.OVData.DSI)
+                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.HasOVIngreepVecom()))
                 {
-                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.Vecom))
-                    {
-                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                    }
+                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                 }
                 sb.AppendLine();
             }

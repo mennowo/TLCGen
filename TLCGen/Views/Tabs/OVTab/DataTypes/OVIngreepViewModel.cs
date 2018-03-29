@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public ObservableCollection<OVIngreepMeldingViewModel> Meldingen => _meldingen;
 
-        [Category("Opties")]
+        [Category("Algemene opties")]
         [Description("Type voertuig")]
         public OVIngreepVoertuigTypeEnum Type
         {
@@ -189,6 +189,20 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        [Description("Check op lijnnummers")]
+        public bool CheckLijnNummer
+        {
+            get { return _OVIngreep.CheckLijnNummer; }
+            set
+            {
+                _OVIngreep.CheckLijnNummer = value;
+                RaisePropertyChanged<object>(nameof(CheckLijnNummer), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        [EnabledCondition(nameof(CheckLijnNummer))]
         [Description("Prioriteit voor alle lijnen")]
         public bool AlleLijnen
         {

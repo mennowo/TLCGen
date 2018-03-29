@@ -15,23 +15,10 @@ namespace TLCGen.Models
         #region Properties
 
         public OVIngreepTypeEnum OVIngreepType { get; set; }
-        public bool DSI { get; set; }
         public bool CheckOpDSIN { get; set; }
         public int MaxWachttijdAuto { get; set; }
         public int MaxWachttijdFiets { get; set; }
         public int MaxWachttijdVoetganger { get; set; }
-
-        [Browsable(false)]
-        [HasDefault(false)]
-        [XmlIgnore]
-        public bool HasKAR
-        {
-            get
-            {
-                return this.OVIngrepen.Count > 0 && this.OVIngrepen.Where(x => x.KAR).Any() ||
-                       this.HDIngrepen.Count > 0 && this.HDIngrepen.Where(x => x.KAR).Any();
-            }
-        }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasKAR")]
@@ -60,12 +47,12 @@ namespace TLCGen.Models
 
             foreach(var ov in OVIngrepen)
             {
-                if(ov.KAR)
+                if(ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.KAR))
                 {
                     dets.Add(ov.DummyKARInmelding);
                     dets.Add(ov.DummyKARUitmelding);
                 }
-                if (ov.Vecom)
+                if (ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM))
                 {
                     dets.Add(ov.DummyVecomInmelding);
                     dets.Add(ov.DummyVecomUitmelding);

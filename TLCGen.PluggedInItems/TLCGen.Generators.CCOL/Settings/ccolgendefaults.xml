@@ -140,6 +140,12 @@
             <Description>File _E1_ actief</Description>
           </Setting>
           <Setting>
+            <Default>file</Default>
+            <Setting>file</Setting>
+            <Type>Schakelaar</Type>
+            <Description>File ingreep _E1_ toepassen</Description>
+          </Setting>
+          <Setting>
             <Default>bz</Default>
             <Setting>bz</Setting>
             <Type>Timer</Type>

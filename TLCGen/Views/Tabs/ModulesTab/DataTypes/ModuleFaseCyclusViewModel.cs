@@ -17,7 +17,6 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private ModuleFaseCyclusModel _ModuleFaseCyclus;
-        private ObservableCollection<ModuleFaseCyclusAlternatiefModel> _Alternatieven;
         
         #endregion // Fields
 

@@ -65,7 +65,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.h\"  /* garantie-geeltijden               */");
             sb.AppendLine($"{ts}#include \"isvar.h\"    /* ingangs elementen                 */");
-            if (controller.OVData.DSI)
+            if (controller.HasDSI())
             {
                 sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
             }
@@ -824,13 +824,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
             
-            // Geen VECOM? Dan dummy lus tbv KAR
             if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
             {
                 sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
             }
-            else
+            else if(controller.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()))
             {
+                sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
                 foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
                 {
                     var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);

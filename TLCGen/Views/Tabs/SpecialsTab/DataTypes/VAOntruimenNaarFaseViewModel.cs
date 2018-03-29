@@ -14,8 +14,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private VAOntruimenNaarFaseModel _VAOntruimenNaarFase;
-        private int _OntruimingsTijd;
-
+        
         #endregion // Fields
 
         #region Properties

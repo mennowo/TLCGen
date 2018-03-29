@@ -38,8 +38,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string _prmpf;
         private string _hpf;
 
-        private bool _anyOVorHd;
-
         private string ts => CCOLGeneratorSettingsProvider.Default.Settings.TabSpace ?? "";
 
         private string _beginGeneratedHeader = "/* BEGIN GEGENEREERDE HEADER */";
@@ -75,9 +73,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _hpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("h");
                 _cpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("c");
                 _prmpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("prm");
-
-                _anyOVorHd = c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
-                             c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR);
 
                 foreach (var pgen in PieceGenerators)
                 {

@@ -63,7 +63,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        }
 	        sb.AppendLine("/* Aantal perioden voor max groen */");
             sb.AppendLine("/* ------- */");
-			#warning Why is this +1 ? 
+			// Here: +1 to allow room for default period in arrays made with this value
             sb.AppendLine($"{ts}#define MPERIODMAX {controller.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
@@ -314,12 +314,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             // Geen VECOM? Dan dummy lus tbv KAR
             if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
             {
-                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR DSI berichten */");
+                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR */");
                 ++index;
             }
-            else
+            else if (controller.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()))
             {
-                foreach(var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR + VECOM start op 1 */");
+                ++index;
+                
+                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
                 {
                     var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
                     if (m.Inmelding)

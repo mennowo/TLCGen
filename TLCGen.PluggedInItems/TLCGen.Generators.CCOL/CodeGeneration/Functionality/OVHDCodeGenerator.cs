@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -125,8 +126,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtfts}", c.OVData.MaxWachttijdFiets,      CCOLElementTimeTypeEnum.TS_type, _prmmwtfts));
                 _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwtvtg}", c.OVData.MaxWachttijdVoetganger, CCOLElementTimeTypeEnum.TS_type, _prmmwtvtg));
 
-                if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
-                    c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
+                if (c.HasKAR())
                 {
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding));
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}",      _uskarog));
@@ -143,7 +143,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, _schcprio));
                 _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None, _prmlaatcrit));
 
-                if (c.OVData.OVIngrepen.Any(x => x.KAR))
+                if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()))
                 {
                     var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestkarvert}", 0, CCOLElementTimeTypeEnum.None, _prmtestkarvert);
                     var prmtest2 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestkarlyn}", 0, CCOLElementTimeTypeEnum.None, _prmtestkarlyn);
@@ -153,11 +153,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(prmtest2);
                 }
 
-				// TODO: This is not nice. Need to improve! should only be generated when needed
-                //if (c.OVData.OVIngrepen.Where(x => x.Vecom).Any())
-                //{
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckdstype}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckdstype));
-                //}
+				if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecom()))
+                {
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcheckdstype}", c.OVData.CheckOpDSIN ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcheckdstype));
+                }
 
                 /* Variables for conflicting signal groups */
                 foreach (var ovfc in c.OVData.OVIngreepSignaalGroepParameters)
@@ -230,23 +229,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (ov.VasthoudenGroen) opties += 2;
                 _MyElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", opties, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
-                // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
-                _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None,     CCOLElementTypeEnum.Parameter));
-                var n = 1;
-                foreach (var l in ov.LijnNummers)
+                if (ov.CheckLijnNummer)
                 {
-	                if (!int.TryParse(l.Nummer, out var num)) continue;
-	                _MyElements.Add(
-		                new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-	                ++n;
+                    // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
+                    _MyElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    var n = 1;
+                    foreach (var l in ov.LijnNummers)
+                    {
+                        if (!int.TryParse(l.Nummer, out var num)) continue;
+                        _MyElements.Add(
+                            new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                        ++n;
+                    }
                 }
 
-                if(ov.KAR)
+                if(ov.HasOVIngreepKAR())
                 {
                     _MyDetectors.Add(ov.DummyKARInmelding);
                     _MyDetectors.Add(ov.DummyKARUitmelding);
                 }
-                if (ov.Vecom)
+                if (ov.HasOVIngreepVecom())
                 {
                     _MyDetectors.Add(ov.DummyVecomInmelding);
                     _MyDetectors.Add(ov.DummyVecomUitmelding);
@@ -357,8 +359,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
                     sb.AppendLine();
-                    if (c.OVData.OVIngrepen.Count > 0 && c.OVData.OVIngrepen.Any(x => x.KAR) ||
-                        c.OVData.HDIngrepen.Count > 0 && c.OVData.HDIngrepen.Any(x => x.KAR))
+                    if (c.HasKAR())
                     {
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
@@ -407,8 +408,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                               $"SCH[{_schpf}{_schcheckdstype}, " +
                                                               $"CIF_DSIN, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
-                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
-                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
+                                                              $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
                                                               $"TRUE) && " +
                                             $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
@@ -423,8 +424,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                               $"TRUE, " +
                                                               $"CIF_DSIN, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
-                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
-                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
+                                                              $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
                                                               $"TRUE) && " +
                                             $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
@@ -503,8 +504,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                               $"SCH[{_schpf}{_schcheckdstype}, " +
                                                               $"CIF_DSIN, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
-                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
-                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
+                                                              $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
                                                               $"TRUE) && " +
                                             $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
                                         uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
@@ -518,8 +519,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                               $"TRUE, " +
                                                               $"CIF_DSUIT, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
-                                                              $"{_prmpf}{_prmallelijnen}{ov.FaseCyclus}, " +
-                                                              $"{ov.LijnNummers.Count}, " +
+                                                              $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
+                                                              $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
                                                               $"TRUE) && " +
                                             $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
                                         uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");

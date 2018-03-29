@@ -31,7 +31,7 @@ namespace TLCGen.Helpers
                         t = (T)serializer.Deserialize(sr);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show($"Data formaat onjuist. Controleer de data.", "Fout bij lezen data.");
             }

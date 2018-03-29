@@ -48,18 +48,7 @@ namespace TLCGen.ViewModels
         }
 
         [Category("Opties OV")]
-        [Description("Regeling heeft DSI")]
-        public bool DSI
-        {
-            get { return _Controller == null ? false : _Controller.OVData.DSI; }
-            set
-            {
-                _Controller.OVData.DSI = value;
-                RaisePropertyChanged<object>(nameof(DSI), broadcast: true);
-            }
-        }
-
-        [Description("Check type op DSI bericht")]
+        [Description("Check type op DSI bericht bij VECOM")]
         public bool CheckOpDSIN
         {
             get { return _Controller == null ? false : _Controller.OVData.CheckOpDSIN; }

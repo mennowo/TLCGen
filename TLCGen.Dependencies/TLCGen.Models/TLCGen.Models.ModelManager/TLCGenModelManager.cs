@@ -82,16 +82,20 @@ namespace TLCGen.ModelManagement
                         {
                             FaseCyclus = ov.FaseCyclus,
                             Type = OVIngreepMeldingTypeEnum.KAR,
+#pragma warning disable CS0618 // Type or member is obsolete
                             Inmelding = ov.KAR,
                             Uitmelding = ov.KAR,
+#pragma warning restore CS0618 // Type or member is obsolete
                             InmeldingFilterTijd = 15
                         });
                         ov.Meldingen.Add(new OVIngreepMeldingModel
                         {
                             FaseCyclus = ov.FaseCyclus,
                             Type = OVIngreepMeldingTypeEnum.VECOM,
+#pragma warning disable CS0618 // Type or member is obsolete
                             Inmelding = ov.Vecom,
                             Uitmelding = ov.Vecom,
+#pragma warning restore CS0618 // Type or member is obsolete
                             InmeldingFilterTijd = 15
                         });
                         ov.Meldingen.Add(new OVIngreepMeldingModel

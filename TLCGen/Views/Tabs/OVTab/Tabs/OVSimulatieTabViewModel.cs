@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -105,31 +106,43 @@ namespace TLCGen.ViewModels
         {
             foreach (var ov in _Controller.OVData.OVIngrepen)
             {
-                if(ov.KAR)
+                if(ov.HasOVIngreepKAR())
                 {
-                    ov.DummyKARInmelding.Simulatie.Q1 = 3;
-                    ov.DummyKARInmelding.Simulatie.Q2 = 5;
-                    ov.DummyKARInmelding.Simulatie.Q3 = 10;
-                    ov.DummyKARInmelding.Simulatie.Q4 = 15;
-                    ov.DummyKARInmelding.Simulatie.Stopline = 1800;
-                    ov.DummyKARUitmelding.Simulatie.Q1 = 30;
-                    ov.DummyKARUitmelding.Simulatie.Q2 = 50;
-                    ov.DummyKARUitmelding.Simulatie.Q3 = 100;
-                    ov.DummyKARUitmelding.Simulatie.Q4 = 150;
-                    ov.DummyKARUitmelding.Simulatie.Stopline = 1800;
+                    if(ov.DummyKARInmelding != null)
+                    {
+                        ov.DummyKARInmelding.Simulatie.Q1 = 3;
+                        ov.DummyKARInmelding.Simulatie.Q2 = 5;
+                        ov.DummyKARInmelding.Simulatie.Q3 = 10;
+                        ov.DummyKARInmelding.Simulatie.Q4 = 15;
+                        ov.DummyKARInmelding.Simulatie.Stopline = 1800;
+                    }
+                    if (ov.DummyKARUitmelding != null)
+                    {
+                        ov.DummyKARUitmelding.Simulatie.Q1 = 30;
+                        ov.DummyKARUitmelding.Simulatie.Q2 = 50;
+                        ov.DummyKARUitmelding.Simulatie.Q3 = 100;
+                        ov.DummyKARUitmelding.Simulatie.Q4 = 150;
+                        ov.DummyKARUitmelding.Simulatie.Stopline = 1800;
+                    }
                 }
-                if (ov.Vecom)
+                if (ov.HasOVIngreepVecom())
                 {
-                    ov.DummyVecomInmelding.Simulatie.Q1 = 3;
-                    ov.DummyVecomInmelding.Simulatie.Q2 = 5;
-                    ov.DummyVecomInmelding.Simulatie.Q3 = 10;
-                    ov.DummyVecomInmelding.Simulatie.Q4 = 15;
-                    ov.DummyVecomInmelding.Simulatie.Stopline = 1800;
-                    ov.DummyVecomUitmelding.Simulatie.Q1 = 30;
-                    ov.DummyVecomUitmelding.Simulatie.Q2 = 50;
-                    ov.DummyVecomUitmelding.Simulatie.Q3 = 100;
-                    ov.DummyVecomUitmelding.Simulatie.Q4 = 150;
-                    ov.DummyVecomUitmelding.Simulatie.Stopline = 1800;
+                    if (ov.DummyVecomInmelding != null)
+                    {
+                        ov.DummyVecomInmelding.Simulatie.Q1 = 3;
+                        ov.DummyVecomInmelding.Simulatie.Q2 = 5;
+                        ov.DummyVecomInmelding.Simulatie.Q3 = 10;
+                        ov.DummyVecomInmelding.Simulatie.Q4 = 15;
+                        ov.DummyVecomInmelding.Simulatie.Stopline = 1800;
+                    }
+                    if (ov.DummyVecomUitmelding != null)
+                    {
+                        ov.DummyVecomUitmelding.Simulatie.Q1 = 30;
+                        ov.DummyVecomUitmelding.Simulatie.Q2 = 50;
+                        ov.DummyVecomUitmelding.Simulatie.Q3 = 100;
+                        ov.DummyVecomUitmelding.Simulatie.Q4 = 150;
+                        ov.DummyVecomUitmelding.Simulatie.Stopline = 1800;
+                    }
                 }
             }
 
@@ -168,15 +181,29 @@ namespace TLCGen.ViewModels
 
             foreach (var ov in Controller.OVData.OVIngrepen)
             {
-                if (ov.KAR)
+                if (ov.HasOVIngreepKAR())
                 {
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
+                    var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
+                    if (m.Inmelding)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
+                    if (m.Uitmelding)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
                 }
-                if (ov.Vecom)
+                if (ov.HasOVIngreepVecom())
                 {
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
-                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
+                    var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
+                    if (m.Inmelding)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
+                    if (m.Uitmelding)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
                 }
             }
             foreach (var hd in Controller.OVData.HDIngrepen)

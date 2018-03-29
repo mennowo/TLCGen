@@ -52,7 +52,6 @@ namespace TLCGen.ViewModels
             get { return _DisplayType; }
             set
             {
-#warning TODO: check integrity before proceding
                 _DisplayType = value;
                 if (ConflictMatrix != null)
                 {

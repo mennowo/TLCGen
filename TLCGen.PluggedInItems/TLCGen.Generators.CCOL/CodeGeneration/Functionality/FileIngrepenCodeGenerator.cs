@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hfile;
+        private CCOLGeneratorCodeStringSettingModel _schfile;
         private CCOLGeneratorCodeStringSettingModel _usfile;
         private CCOLGeneratorCodeStringSettingModel _tafv;
         private CCOLGeneratorCodeStringSettingModel _trij;
@@ -55,6 +56,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_hfile}{fm.Naam}",
                         _hfile, fm.Naam));
+                _myElements.Add(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_schfile}{fm.Naam}",
+                        1, 
+                        CCOLElementTimeTypeEnum.SCH_type,
+                        _schfile, fm.Naam));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_tafv}{fm.Naam}",
@@ -468,12 +475,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine($";");
                         }
-
-#warning Add switch to control file ingreep active
-
+                        
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* percentage MG bij filemelding */");
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}])");
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}])");
                         sb.AppendLine($"{ts}{{");
                         foreach (var ff in fm.TeDoserenSignaalGroepen)
                         {
