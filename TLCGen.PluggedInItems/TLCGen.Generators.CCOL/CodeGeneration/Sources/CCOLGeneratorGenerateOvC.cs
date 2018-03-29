@@ -896,11 +896,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	            if (int.TryParse(hd.FaseCyclus, out var ifc))
                 {
                     var start = $"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] |= ";
-                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
+                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSIN) ||");
                     sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus}) ||");
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSIN) ||");
                     sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSIN, &prevOVkar{hd.FaseCyclus}in, {_tpf}{_tdhkarin}{hd.FaseCyclus});");
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSIN);");
                 }
             }
             foreach (var hd in hdIngreepModels)
@@ -908,11 +908,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	            if (int.TryParse(hd.FaseCyclus, out var ifc))
                 {
                     var start = $"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] |= ";
-                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkaruit}{hd.FaseCyclus}) ||");
+                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSUIT) ||");
                     sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkaruit}{hd.FaseCyclus}) ||");
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSUIT) ||");
                     sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSUIT, &prevOVkar{hd.FaseCyclus}uit, {_tpf}{_tdhkaruit}{hd.FaseCyclus});");
+                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSUIT);");
                 }
             }
 

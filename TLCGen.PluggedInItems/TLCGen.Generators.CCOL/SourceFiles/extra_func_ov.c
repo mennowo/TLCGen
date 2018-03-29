@@ -95,21 +95,21 @@ struct prevovkar * prevOV,  /*  9. opslag data laatste DSI bericht              
 bool HDmelding_KAR_V1(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */
 	count prio,                 /*  2. Voert voertuig SIRENE */
 	count dir,                  /*  3. fc nummer of richtingnummer (201, 202, 203)  */
-	count meldingtype,          /*  5. type melding (CIF_DSIN / CIF_DSUIT)          */
-struct prevovkar * prevOV,  /* 10. opslag data laatste DSI bericht              */
-	count tdh)                  /* 11. hiaat timer tbv voorkomen dubbele melding    */
+	count meldingtype          /*  5. type melding (CIF_DSIN / CIF_DSUIT)          */
+/*struct prevovkar * prevOV, */ /* 10. opslag data laatste DSI bericht              */
+/*	count tdh*/)                  /* 11. hiaat timer tbv voorkomen dubbele melding    */
 {
 	bool check_lijn = FALSE;
 	bool isov = FALSE;
 
-	/* Check op eerder bericht voor hetzelfde voertuig */
+	/* Check op eerder bericht voor hetzelfde voertuig 
 	if ((T[tdh] || RT[tdh]) &&
 		CIF_DSI[CIF_DSI_TYPE] == prevOV->prevtype &&
 		CIF_DSI[CIF_DSI_VTG] == prevOV->prevvtg &&
 		CIF_DSI[CIF_DSI_DIR] == prevOV->prevdir)
 		return 0;
 	RT[tdh] = FALSE;
-
+	*/
 	/* Kijken of lijnnummer overeenkomt met een parameter voor deze richting */
 
 	if ((CIF_DSI[CIF_DSI_VTG] == vtgtype) &&  /* juiste voertuigtype? */
@@ -121,7 +121,7 @@ struct prevovkar * prevOV,  /* 10. opslag data laatste DSI bericht              
 #endif
 		)                          isov = TRUE;
 
-	/* Opslaan huidige waarden en herstart hiaat timer */
+	/* Opslaan huidige waarden en herstart hiaat timer 
 	if (isov)
 	{
 		RT[tdh] = TRUE;
@@ -129,7 +129,7 @@ struct prevovkar * prevOV,  /* 10. opslag data laatste DSI bericht              
 		prevOV->prevtype = CIF_DSI[CIF_DSI_TYPE];
 		prevOV->prevvtg = CIF_DSI[CIF_DSI_VTG];
 		prevOV->prevdir = CIF_DSI[CIF_DSI_DIR];
-	}
+	}*/
 
 	return isov;
 }

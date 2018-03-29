@@ -34,9 +34,9 @@ struct prevovkar * prevOV,  /*  9. opslag data laatste DSI bericht              
 bool HDmelding_KAR_V1(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */
 	count prio,                 /*  2. Voert voertuig SIRENE */
 	count dir,                  /*  3. fc nummer of richtingnummer (201, 202, 203)  */
-	count meldingtype,          /*  5. type melding (CIF_DSIN / CIF_DSUIT)          */
-struct prevovkar * prevOV,  /* 10. opslag data laatste DSI bericht              */
-	count tdh);                  /* 11. hiaat timer tbv voorkomen dubbele melding    */
+	count meldingtype          /*  5. type melding (CIF_DSIN / CIF_DSUIT)          */
+/*struct prevovkar * prevOV,*/  /* 10. opslag data laatste DSI bericht              */
+/*	count tdh*/);                  /* 11. hiaat timer tbv voorkomen dubbele melding    */
 
 bool OVmelding_DSI_TRAM(
 	count seldet1,              /* eerste selectieve detectielus            */

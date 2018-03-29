@@ -15,9 +15,9 @@ namespace TLCGen.Models
         [Browsable(false)]
         public string FaseCyclus { get; set; }
 
-        [Obsolete("This property has been deprecated: use Meldingen instead.")]
+        //[Obsolete("This property has been deprecated: use Meldingen instead.")]
         public bool KAR { get; set; }
-        [Obsolete("This property has been deprecated: use Meldingen instead.")]
+        //[Obsolete("This property has been deprecated: use Meldingen instead.")]
         public bool Vecom { get; set; }
 
         public List<OVIngreepMeldingModel> Meldingen { get; set; }

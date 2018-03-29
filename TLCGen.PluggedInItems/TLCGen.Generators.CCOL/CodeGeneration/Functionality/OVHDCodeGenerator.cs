@@ -195,16 +195,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (m.Inmelding)
                     {
                         _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _hovin, ov.FaseCyclus, m.Type.GetDescription()));
-                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _tovin, ov.FaseCyclus, m.Type.GetDescription()));
-                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _schovin, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", m.InmeldingFilterTijd ?? 15, CCOLElementTimeTypeEnum.TE_type, _tovin, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", 1, CCOLElementTimeTypeEnum.SCH_type, _schovin, ov.FaseCyclus, m.Type.GetDescription()));
                     }
                     if (m.Uitmelding)
                     {
                         _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _hovuit, ov.FaseCyclus, m.Type.GetDescription()));
-                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", _schovuit, ov.FaseCyclus, m.Type.GetDescription()));
+                        _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(m.Type)}", 1, CCOLElementTimeTypeEnum.SCH_type, _schovuit, ov.FaseCyclus, m.Type.GetDescription()));
                     }
                 }
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovuit}{ov.FaseCyclus}", _tovuit, ov.FaseCyclus));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovuit}{ov.FaseCyclus}", ov.UitmeldFilterTijd, CCOLElementTimeTypeEnum.TE_type, _tovuit, ov.FaseCyclus));
 
                 _MyElements.Add(new CCOLElement($"{_tbtovg}{ov.FaseCyclus}",        0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_trt}{ov.FaseCyclus}",           0,                             CCOLElementTimeTypeEnum.TE_type,  CCOLElementTypeEnum.Timer));

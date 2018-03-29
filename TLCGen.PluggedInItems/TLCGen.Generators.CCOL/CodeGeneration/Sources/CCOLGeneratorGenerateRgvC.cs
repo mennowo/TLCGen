@@ -276,7 +276,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     continue;
                 }
-                sb.AppendLine($"{ts}rgv_niet_primair(fc{fc.FaseCyclus}, PRML, ML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PRML, ML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Opslaan 'oude' TVG tijd volgens RoBuGrover */");
@@ -305,7 +305,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb2.Append($"{ts}{ts}TC_rgv[teller++] = rgv_verlenggroentijd_correctie_va_arg(PRM[{_prmpf}{_prmrgv}], DD_anyfase, PRM[{_prmpf}{_prmmin_tcyclus}], PRM[{_prmpf}{_prmmax_tcyclus}], ");
                 foreach (var fc in gr.Fasen)
                 {
-                    sb2.Append($"fc{fc.FaseCyclus}, ");
+                    sb2.Append($"{_fcpf}{fc.FaseCyclus}, ");
                 }
                 sb2.AppendLine("END);");
             }
@@ -382,7 +382,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(SYSTEM, ");
             foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
-                sb.Append($"fc{fc.FaseCyclus}, ");
+                sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
             }
             sb.AppendLine("END);");
             sb.AppendLine($"{ts}{ts}{ts}MG_Bars();");
