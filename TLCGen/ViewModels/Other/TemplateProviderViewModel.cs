@@ -119,22 +119,28 @@ namespace TLCGen.ViewModels
             {
                 foreach(var i in ApplyToItems)
                 {
-                    ApplyTo(i);
+                    ApplyTo(i, obj);
                     _SourceVM.UpdateAfterApplyTemplate(i);
                 }
             }
             if (ApplyToItem is T2 item)
             {
-                ApplyTo(item);
+                ApplyTo(item, obj);
                 _SourceVM.UpdateAfterApplyTemplate(item);
             }
         }
 
-        private void ApplyTo(T2 item)
+        private void ApplyTo(T2 item, object obj)
         {
             TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
             var tempitem = template.GetItems()?.FirstOrDefault();
-            var orignalName = (item as IHaveName)?.Naam;
+            // originalName: name of item if no argument was passed; otherwise, the argument
+            // this allows for renaming items in lists belonging to an item
+            var orignalName = obj == null ? (item as IHaveName)?.Naam : obj as string;
+            // originalItemName: store the item name if an argument was passed
+            // this allows to rename potential items in lists of this item while 
+            // maintaining the name of the item itself
+            var orignalItemName = obj != null ? (item as IHaveName)?.Naam : null;
             if (tempitem != null && orignalName != null)
             {
                 var cloneditem = DeepCloner.DeepClone((T2)tempitem);
@@ -149,7 +155,22 @@ namespace TLCGen.ViewModels
                     }
                     else if (valueOriginal is IList elems)
                     {
-                        elems.Clear();
+                        if(elems.Count == 0 || !(elems[0] is IHaveName))
+                        {
+                            elems.Clear();
+                        }
+                        else
+                        {
+                            var l = new List<IHaveName>();
+                            foreach(IHaveName i in elems)
+                            {
+                                l.Add(i);
+                            }
+                            foreach(var i in l)
+                            {
+                                Integrity.TLCGenControllerModifier.Default.RemoveModelItemFromController(i.Naam);
+                            }
+                        }
                         var clonedItems = (IList)valueCloned;
                         foreach (var e in clonedItems)
                         {
@@ -158,6 +179,10 @@ namespace TLCGen.ViewModels
                     }
                 }
                 ModelStringSetter.ReplaceStringInModel(item, template.Replace, orignalName);
+                if(orignalItemName != null)
+                {
+                    ((IHaveName)item).Naam = orignalItemName;
+                }
             }
         }
 

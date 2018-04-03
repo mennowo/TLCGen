@@ -366,7 +366,8 @@ namespace TLCGen.ViewModels
 
         public void UpdateAfterApplyTemplate(PeriodeModel item)
         {
-            throw new NotImplementedException();
+            var p = Periodes.First(x => x.Periode == item);
+            p.RaisePropertyChanged("");
         }
 
         #endregion // IAllowTemplates

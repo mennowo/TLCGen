@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class ModuleModel
+    public class ModuleModel : IHaveName
     {
         [ModelName]
         public string Naam { get; set; }

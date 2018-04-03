@@ -7,8 +7,8 @@ namespace TLCGen.Models
 {
 	[Serializable]
 	[IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
-	public class SignaalPlanModel : IOElementModel
-	{
+	public class SignaalPlanModel : IOElementModel, IHaveName
+    {
 		#region Fields
 		#endregion // Fields
 

@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class GroentijdenSetModel
+    public class GroentijdenSetModel : IHaveName
     {
         #region Properties
 

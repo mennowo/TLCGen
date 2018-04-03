@@ -3,7 +3,7 @@
 namespace TLCGen.Models
 {
     [Serializable]
-    public class WisselContactModel
+    public class WisselContactModel : IHaveName
     {
         #region Properties
 

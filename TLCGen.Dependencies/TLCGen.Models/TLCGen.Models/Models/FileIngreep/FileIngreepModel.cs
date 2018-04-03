@@ -9,7 +9,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class FileIngreepModel
+    public class FileIngreepModel : IHaveName
     {
         [ModelName]
         [HasDefault(false)]

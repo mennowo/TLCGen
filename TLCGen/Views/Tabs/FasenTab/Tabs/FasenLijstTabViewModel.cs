@@ -54,7 +54,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedFaseCyclus = value;
                 RaisePropertyChanged("SelectedFaseCyclus");
-                TemplatesProviderVM.SetSelectedApplyToItem(value.FaseCyclus);
+                if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.FaseCyclus);
             }
         }
 
@@ -66,12 +66,15 @@ namespace TLCGen.ViewModels
                 _SelectedFaseCycli = value;
                 _SettingMultiple = false;
                 RaisePropertyChanged("SelectedFaseCycli");
-                var sl = new List<FaseCyclusModel>();
-                foreach(var s in value)
+                if (value != null)
                 {
-                    sl.Add((s as FaseCyclusViewModel).FaseCyclus);
+                    var sl = new List<FaseCyclusModel>();
+                    foreach(var s in value)
+                    {
+                        sl.Add((s as FaseCyclusViewModel).FaseCyclus);
+                    }
+                    TemplatesProviderVM.SetSelectedApplyToItems(sl);
                 }
-                TemplatesProviderVM.SetSelectedApplyToItems(sl);
             }
         }
 
@@ -382,6 +385,7 @@ namespace TLCGen.ViewModels
         {
             var fc = Fasen.First(x => x.FaseCyclus == item);
             fc.RaisePropertyChanged("");
+			Messenger.Default.Send(new DetectorenChangedMessage());
         }
 
         #endregion // IAllowTemplates
