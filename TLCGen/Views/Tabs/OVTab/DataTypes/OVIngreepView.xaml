@@ -152,7 +152,9 @@
                             <GridViewColumn Header="Filter tijd inmelding" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding InmeldingFilterTijd}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+                                        <TextBox 
+                                            Visibility="{Binding Path=Inmelding,Converter={StaticResource Bool2VisConv}}" 
+                                            Text="{Binding InmeldingFilterTijd}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
