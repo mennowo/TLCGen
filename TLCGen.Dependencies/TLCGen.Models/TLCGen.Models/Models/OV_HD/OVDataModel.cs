@@ -37,6 +37,8 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "WisselContact")]
         public List<WisselContactModel> WisselContacten { get; set; }
 
+        [Browsable(false)]
+        [HasDefault(false)]
         public bool HasAnyKAR => this.HasKAR();
 
         #endregion // Properties

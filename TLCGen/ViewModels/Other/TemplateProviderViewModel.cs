@@ -11,6 +11,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Settings;
+using System.Collections;
 
 namespace TLCGen.ViewModels
 {
@@ -44,7 +45,29 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedTemplate = value;
-                RaisePropertyChanged("SelectedTemplate");
+                RaisePropertyChanged(nameof(SelectedTemplate));
+            }
+        }
+
+        private T2 _ApplyToItem;
+        public T2 ApplyToItem
+        {
+            get { return _ApplyToItem; }
+            set
+            {
+                _ApplyToItem = value;
+                RaisePropertyChanged(nameof(ApplyToItem));
+            }
+        }
+
+        private IList<T2> _ApplyToItems;
+        public IList<T2> ApplyToItems
+        {
+            get { return _ApplyToItems; }
+            set
+            {
+                _ApplyToItems = value;
+                RaisePropertyChanged(nameof(ApplyToItems));
             }
         }
 
@@ -65,16 +88,85 @@ namespace TLCGen.ViewModels
             }
         }
 
+        RelayCommand _AddFromTemplateCommand;
+        public ICommand AddFromTemplateCommand
+        {
+            get
+            {
+                if (_AddFromTemplateCommand == null)
+                {
+                    _AddFromTemplateCommand = new RelayCommand(AddFromTemplateCommand_Executed, AddFromTemplateCommand_CanExecute);
+                }
+                return _AddFromTemplateCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Commands Functionality
 
         private bool ApplyTemplateCommand_CanExecute(object obj)
         {
-            return SelectedTemplate != null;
+            return
+                !string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>).Replace) &&
+                SelectedTemplate != null && 
+                (ApplyToItem != null || ApplyToItems != null && ApplyToItems.Any());
         }
 
         private void ApplyTemplateCommand_Executed(object obj)
+        {
+            if(ApplyToItems != null)
+            {
+                foreach(var i in ApplyToItems)
+                {
+                    ApplyTo(i);
+                    _SourceVM.UpdateAfterApplyTemplate(i);
+                }
+            }
+            if (ApplyToItem is T2 item)
+            {
+                ApplyTo(item);
+                _SourceVM.UpdateAfterApplyTemplate(item);
+            }
+        }
+
+        private void ApplyTo(T2 item)
+        {
+            TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
+            var tempitem = template.GetItems()?.FirstOrDefault();
+            var orignalName = (item as IHaveName)?.Naam;
+            if (tempitem != null && orignalName != null)
+            {
+                var cloneditem = DeepCloner.DeepClone((T2)tempitem);
+                var props = typeof(T2).GetProperties().Where(x => x.CanWrite && x.CanRead).ToList();
+                foreach (var prop in props)
+                {
+                    object valueOriginal = prop.GetValue(item);
+                    object valueCloned = prop.GetValue(cloneditem);
+                    if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                    {
+                        prop.SetValue(item, valueCloned);
+                    }
+                    else if (valueOriginal is IList elems)
+                    {
+                        elems.Clear();
+                        var clonedItems = (IList)valueCloned;
+                        foreach (var e in clonedItems)
+                        {
+                            elems.Add(e);
+                        }
+                    }
+                }
+                ModelStringSetter.ReplaceStringInModel(item, template.Replace, orignalName);
+            }
+        }
+
+        private bool AddFromTemplateCommand_CanExecute(object obj)
+        {
+            return SelectedTemplate != null;
+        }
+
+        private void AddFromTemplateCommand_Executed(object obj)
         {
             List<T2> items = new List<T2>();
             TLCGenTemplateModel<T2> template = SelectedTemplate as TLCGenTemplateModel<T2>;
@@ -133,10 +225,22 @@ namespace TLCGen.ViewModels
 
         #endregion // Commands Functionality
 
+        #region Public Methods
+
+        public void SetSelectedApplyToItem(T2 item)
+        {
+            ApplyToItem = item;
+        }
+
+        public void SetSelectedApplyToItems(List<T2> items)
+        {
+            if(items != null && items.Any()) ApplyToItem = null;
+            ApplyToItems = items;
+        }
+
         public void Update()
         {
             Templates.Clear();
-#warning This is not so nice. Could be more generic!
             if (TemplatesProvider.Default.Templates != null)
             {
                 if (typeof(T2) == typeof(FaseCyclusModel))
@@ -146,20 +250,23 @@ namespace TLCGen.ViewModels
                         Templates.Add(t as T1);
                     }
                 }
-                if (typeof(T2) == typeof(DetectorModel))
+                else if (typeof(T2) == typeof(DetectorModel))
                 {
                     foreach (var t in TemplatesProvider.Default.Templates.DetectorenTemplates)
                     {
                         Templates.Add(t as T1);
                     }
                 }
-
-                if (typeof(T2) == typeof(PeriodeModel))
+                else if (typeof(T2) == typeof(PeriodeModel))
                 {
                     foreach (var t in TemplatesProvider.Default.Templates.PeriodenTemplates)
                     {
                         Templates.Add(t as T1);
                     }
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
                 }
             }
             if(Templates.Count > 0)
@@ -173,11 +280,17 @@ namespace TLCGen.ViewModels
             this.Update();
         }
 
+        #endregion // Public Methods
+
+        #region Constructor
+
         public TemplateProviderViewModel(IAllowTemplates<T2> vm)
         {
             _SourceVM = vm;
             this.Update();
             Messenger.Default.Register(this, new Action<TemplatesChangedMessage>(OnTemplatesChanged));
         }
+
+        #endregion // Constructor
     }
 }

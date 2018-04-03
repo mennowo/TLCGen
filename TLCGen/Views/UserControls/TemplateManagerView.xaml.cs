@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TLCGen.ViewModels;
 
 namespace TLCGen.Views
 {
@@ -20,19 +21,15 @@ namespace TLCGen.Views
     /// </summary>
     public partial class TemplateManagerView : UserControl
     {
-
-
-        public string ApplyToItem
+        public string ParentItemName
         {
-            get { return (string)GetValue(ApplyToItemProperty); }
-            set { SetValue(ApplyToItemProperty, value); }
+            get { return (string)GetValue(ParentItemNameProperty); }
+            set { SetValue(ParentItemNameProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for ApplyToItem.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ApplyToItemProperty =
-            DependencyProperty.Register("ApplyToItem", typeof(string), typeof(TemplateManagerView), new PropertyMetadata(null));
-
-
+        public static readonly DependencyProperty ParentItemNameProperty =
+            DependencyProperty.Register("ParentItemName", typeof(string), typeof(TemplateManagerView), new PropertyMetadata(null));
 
         public TemplateManagerView()
         {

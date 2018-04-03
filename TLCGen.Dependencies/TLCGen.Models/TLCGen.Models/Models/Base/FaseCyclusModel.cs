@@ -9,7 +9,7 @@ namespace TLCGen.Models
     [Serializable]
     [RefersTo("Naam")]
     [IOElement("", BitmappedItemTypeEnum.Fase, "Naam")]
-    public class FaseCyclusModel : IOElementModel, IComparable
+    public class FaseCyclusModel : IOElementModel, IComparable, IHaveName
     {
         #region Fields
 

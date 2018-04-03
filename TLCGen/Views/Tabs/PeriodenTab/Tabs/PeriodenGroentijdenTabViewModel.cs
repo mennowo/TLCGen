@@ -57,6 +57,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedPeriode = value;
                 RaisePropertyChanged("SelectedPeriode");
+                TemplatesProviderVM.SetSelectedApplyToItem(value.Periode);
             }
         }
 
@@ -361,6 +362,11 @@ namespace TLCGen.ViewModels
                 Periodes.Add(new PeriodeViewModel(per));
             }
 	        Messenger.Default.Send(new PeriodenChangedMessage());
+        }
+
+        public void UpdateAfterApplyTemplate(PeriodeModel item)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion // IAllowTemplates

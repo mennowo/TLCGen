@@ -11,7 +11,7 @@ namespace TLCGen.Models
 {
     [Serializable]
 	[RefersTo("Naam")]
-    public class PeriodeModel
+    public class PeriodeModel : IHaveName
     {
         #region Properties
 

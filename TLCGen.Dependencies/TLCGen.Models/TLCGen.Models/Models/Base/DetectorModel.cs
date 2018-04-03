@@ -11,7 +11,7 @@ namespace TLCGen.Models
     [Serializable]
     [RefersTo("Naam")]
     [IOElement("", BitmappedItemTypeEnum.Detector, "Naam")]
-    public class DetectorModel : IOElementModel, IComparable
+    public class DetectorModel : IOElementModel, IComparable, IHaveName
     {
         #region Fields
 

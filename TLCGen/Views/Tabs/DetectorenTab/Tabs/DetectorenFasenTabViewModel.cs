@@ -114,6 +114,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetector = value;
                 RaisePropertyChanged();
+                TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
             }
         }
 
@@ -124,6 +125,12 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetectoren = value;
                 RaisePropertyChanged();
+                var sl = new List<DetectorModel>();
+                foreach (var s in value)
+                {
+                    sl.Add((s as DetectorViewModel).Detector);
+                }
+                TemplatesProviderVM.SetSelectedApplyToItems(sl);
             }
         }
 
@@ -355,6 +362,11 @@ namespace TLCGen.ViewModels
 
                 Messenger.Default.Send(new ControllerDataChangedMessage());
             }
+        }
+
+        public void UpdateAfterApplyTemplate(DetectorModel item)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion // IAllowTemplates
