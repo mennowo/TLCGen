@@ -72,8 +72,7 @@ namespace TLCGen.Settings
         {
             try
             {
-#warning Move this to app data...   
-                string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
+                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "settings.xml");
                 if (File.Exists(settingsfile))
                 {
                     _Settings = TLCGenSerialization.DeSerialize<TLCGenSettingsModel>(settingsfile);
@@ -93,8 +92,16 @@ namespace TLCGen.Settings
         /// </summary>
         public void SaveApplicationSettings()
         {
-            string settingsfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "TLCGenSettings.xml");
-            TLCGenSerialization.Serialize(settingsfile, _Settings);
+            try
+            {
+                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "settings.xml");
+                TLCGenSerialization.Serialize(settingsfile, _Settings);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error saving application settings:\n\n" + e.ToString() + "\n\nReverting to defaults.", "Error saving application settings");
+                _Settings = new TLCGenSettingsModel();
+            }
         }
 
         #endregion Serialize Methods
