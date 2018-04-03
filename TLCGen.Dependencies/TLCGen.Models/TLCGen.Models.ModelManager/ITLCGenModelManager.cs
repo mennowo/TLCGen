@@ -8,6 +8,7 @@ namespace TLCGen.ModelManagement
         ControllerModel Controller { get; set; }
 
 	    void InjectDefaultAction(Action<object> setDefaultsAction);
+        bool CheckVersionOrder(ControllerModel controller);
         void CorrectModelByVersion(ControllerModel controller);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -66,6 +67,21 @@ namespace TLCGen.ModelManagement
 	    {
 		    _setDefaultsAction = setDefaultsAction;
 	    }
+
+        public bool CheckVersionOrder(ControllerModel controller)
+        {
+            var vc = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
+            var vp = Assembly.GetEntryAssembly().GetName().Version;
+            if(vc > vp)
+            {
+                MessageBox.Show($"Dit bestand is gemaakt met een nieuwere versie van TLCGen,\n" +
+                                $"en kan met deze versie niet worden geopend.\n\n" +
+                                $"Versie TLCGen: {vp.ToString()}\n" +
+                                $"Versie bestand: {vc.ToString()}", "Versies komen niet overeen");
+                return false;
+            }
+            return true;
+        }
 
         public void CorrectModelByVersion(ControllerModel controller)
         {

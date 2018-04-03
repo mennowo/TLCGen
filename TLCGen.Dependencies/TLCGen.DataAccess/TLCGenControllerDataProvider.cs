@@ -202,7 +202,12 @@ namespace TLCGen.DataAccess
                                 writer.GetXmlFromDocument(doc);
                             }
                         }
-                        Controller = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
+                        var c = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
+                        if (!TLCGenModelManager.Default.CheckVersionOrder(c))
+                        {
+                            return false;
+                        }
+                        Controller = c;
                         TLCGenModelManager.Default.CorrectModelByVersion(Controller);
                     }
                     return true;

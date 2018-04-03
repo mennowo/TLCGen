@@ -359,6 +359,12 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool HasKAR => OVIngreep.HasOVIngreepKAR();
+
+        [Browsable(false)]
+        public bool HasVecom => OVIngreep.HasOVIngreepVecom();
+
         #endregion // Properties
 
         #region Commands

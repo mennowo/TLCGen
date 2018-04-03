@@ -24,6 +24,28 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
+                    <Style x:Key="HasOvIngreepKARCellStyle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=HasOVIngreep}" Value="false">
+                                <Setter Property="DataGridCell.IsEnabled" Value="False" />
+                                <Setter Property="DataGridCell.Foreground" Value="LightGray" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Style.Setters>
+                            <Setter Property="DataGridCell.Background" Value="LightGray" />
+                        </Style.Setters>
+                    </Style>
+                    <Style x:Key="HasOvIngreepVecomCellStyle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=HasOVIngreep}" Value="false">
+                                <Setter Property="DataGridCell.IsEnabled" Value="False" />
+                                <Setter Property="DataGridCell.Foreground" Value="LightGray" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <Style.Setters>
+                            <Setter Property="DataGridCell.Background" Value="LightGray" />
+                        </Style.Setters>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -43,8 +65,8 @@
                     </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Header="OV" Binding="{Binding HasOVIngreep,UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridCheckBoxColumn Header="KAR" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.KAR,UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridCheckBoxColumn Header="Vecom" CellStyle="{StaticResource HasOvIngreepCellStyle}" Binding="{Binding OVIngreep.Vecom,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="KAR" IsReadOnly="True" CellStyle="{StaticResource HasOvIngreepKARCellStyle}" Binding="{Binding OVIngreep.HasKAR,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridCheckBoxColumn Header="Vecom" IsReadOnly="True" CellStyle="{StaticResource HasOvIngreepVecomCellStyle}" Binding="{Binding OVIngreep.HasVecom,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridComboBoxColumn Header="Vtg.type" CellStyle="{StaticResource HasOvIngreepCellStyle}"
                                                 SelectedItemBinding="{Binding Path=OVIngreep.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type enums:OVIngreepVoertuigTypeEnum}}}" />

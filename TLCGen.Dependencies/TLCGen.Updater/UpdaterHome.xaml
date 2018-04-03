@@ -24,8 +24,9 @@
             </Italic>
         </TextBlock>
         <TextBox 
+            Name="UpdateInfoTB"
             TextWrapping="Wrap" Margin="2" IsReadOnly="True" Background="LightGray"
-            Grid.Row="1" VerticalAlignment="Stretch">Dit veld wordt in de toekomst gebruikt om informatie weer te geven over de update.</TextBox>
+            Grid.Row="1" VerticalAlignment="Stretch">Geen informatie beschikbaar.</TextBox>
         <TextBlock FontWeight="Bold" Foreground="Crimson"
                    Grid.Row="2" Margin="5" Visibility="{Binding Path=TLCGenInstanceRunning,Converter={StaticResource BooleanToVisibilityConverter}}">
             Sluit voor de update alle geopende TLCGen vensters af.

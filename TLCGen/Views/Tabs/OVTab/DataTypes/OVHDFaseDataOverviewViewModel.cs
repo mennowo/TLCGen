@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Extensions;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
@@ -45,14 +46,6 @@ namespace TLCGen.ViewModels
                     /* Trick to add dummy detectors */
                     MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
                     MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.VECOM));
-                    //if (ov.KAR)
-					//{
-					//	OVIngreep.KAR = true;
-					//}
-					//if(ov.Vecom)
-					//{
-					//	OVIngreep.Vecom = true;
-					//}
 				}
 				else
 				{
@@ -67,7 +60,11 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public bool HasHDIngreep
+        public bool HasOVIngreepKAR => OVIngreep.OVIngreep.HasOVIngreepKAR();
+
+        public bool HasOVIngreepVECOM => OVIngreep.OVIngreep.HasOVIngreepVecom();
+
+        public bool HasHDIngreep
 		{
 			get => _faseCyclus.HDIngreep;
 			set
