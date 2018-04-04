@@ -48,7 +48,7 @@ namespace TLCGen.Settings
             {
                 if (_AddPeriodeTemplateCommand == null)
                 {
-                    _AddPeriodeTemplateCommand = new RelayCommand(new Action<object>(AddPeriodeTemplateCommand_Executed));
+                    _AddPeriodeTemplateCommand = new RelayCommand(AddPeriodeTemplateCommand_Executed, AddPeriodeTemplateCommand_CanExecute);
                 }
                 return _AddPeriodeTemplateCommand;
             }
@@ -62,7 +62,7 @@ namespace TLCGen.Settings
             {
                 if (_RemovePeriodeTemplateCommand == null)
                 {
-                    _RemovePeriodeTemplateCommand = new RelayCommand(new Action<object>(RemovePeriodeTemplateCommand_Executed), new Predicate<object>(RemovePeriodeTemplateCommand_CanExecute));
+                    _RemovePeriodeTemplateCommand = new RelayCommand(RemovePeriodeTemplateCommand_Executed, RemovePeriodeTemplateCommand_CanExecute);
                 }
                 return _RemovePeriodeTemplateCommand;
             }
@@ -74,15 +74,28 @@ namespace TLCGen.Settings
 
         private void AddPeriodeTemplateCommand_Executed(object prm)
         {
-            var dtm = new TLCGenTemplateModel<PeriodeModel>();
-            dtm.Naam = "Nieuw template";
-            dtm.Replace = "fase";
-            var dm = new PeriodeModel();
-            dm.Naam = "fase_1";
-            DefaultsProvider.Default.SetDefaultsOnModel(dm, "Auto");
-            dtm.Items.Add(dm);
-            PeriodenTemplates.Add(new PeriodeTemplateViewModel(dtm));
+            var pmt = new TLCGenTemplateModel<PeriodeModel>
+            {
+                Naam = "Nieuw template",
+                Replace = "per"
+            };
+            var pm = new PeriodeModel
+            {
+                Type = Models.Enumerations.PeriodeTypeEnum.Groentijden,
+                Naam = "per_1"
+            };
+            DefaultsProvider.Default.SetDefaultsOnModel(pm, pm.Type.ToString());
+            pmt.Items.Add(pm);
+            var pvm = new PeriodeTemplateViewModel(pmt);
+            PeriodenTemplates.Add(pvm);
+            TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.PeriodenTemplates.Add(pmt);
             MessengerInstance.Send(new TemplatesChangedMessage());
+            SelectedPeriodeTemplate = pvm;
+        }
+
+        bool AddPeriodeTemplateCommand_CanExecute(object prm)
+        {
+            return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
         void RemovePeriodeTemplateCommand_Executed(object prm)

@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TLCGen.Models;
 
-namespace TLCGen.Models.Settings
+namespace TLCGen.Settings
 {
-    [Editor()]
+    [Serializable]
     public class TLCGenSettingsModel
     {
+        public string DefaultsFileLocation { get; set; }
+        public string TemplatesFolderLocation { get; set; }
+
         [Browsable(false)]
         public CustomDataModel CustomData { get; set; }
-        
+
         public TLCGenSettingsModel()
         {
             CustomData = new CustomDataModel();

@@ -1,10 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -48,7 +44,7 @@ namespace TLCGen.Settings
             {
                 if (_AddFaseTemplateCommand == null)
                 {
-                    _AddFaseTemplateCommand = new RelayCommand(new Action<object>(AddFaseTemplateCommand_Executed));
+                    _AddFaseTemplateCommand = new RelayCommand(AddFaseTemplateCommand_Executed, AddFaseTemplateCommand_CanExecute);
                 }
                 return _AddFaseTemplateCommand;
             }
@@ -62,7 +58,7 @@ namespace TLCGen.Settings
             {
                 if (_RemoveFaseTemplateCommand == null)
                 {
-                    _RemoveFaseTemplateCommand = new RelayCommand(new Action<object>(RemoveFaseTemplateCommand_Executed), new Predicate<object>(RemoveFaseTemplateCommand_CanExecute));
+                    _RemoveFaseTemplateCommand = new RelayCommand(RemoveFaseTemplateCommand_Executed, RemoveFaseTemplateCommand_CanExecute);
                 }
                 return _RemoveFaseTemplateCommand;
             }
@@ -74,15 +70,27 @@ namespace TLCGen.Settings
 
         private void AddFaseTemplateCommand_Executed(object prm)
         {
-            var fct = new TLCGenTemplateModel<FaseCyclusModel>();
-            fct.Naam = "Nieuw template";
-            fct.Replace = "fase";
-            var fc = new FaseCyclusModel();
-            fc.Naam = "fase";
+            var fct = new TLCGenTemplateModel<FaseCyclusModel>
+            {
+                Naam = "Nieuw template",
+                Replace = "fase"
+            };
+            var fc = new FaseCyclusModel
+            {
+                Naam = "fase"
+            };
             DefaultsProvider.Default.SetDefaultsOnModel(fc);
             fct.Items.Add(fc);
-            FasenTemplates.Add(new FaseCyclusTemplateViewModel(fct));
+            var f = new FaseCyclusTemplateViewModel(fct);
+            FasenTemplates.Add(f);
+            TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.FasenTemplates.Add(fct);
             MessengerInstance.Send(new TemplatesChangedMessage());
+            SelectedFaseCyclusTemplate = f;
+        }
+
+        bool AddFaseTemplateCommand_CanExecute(object prm)
+        {
+            return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
         void RemoveFaseTemplateCommand_Executed(object prm)

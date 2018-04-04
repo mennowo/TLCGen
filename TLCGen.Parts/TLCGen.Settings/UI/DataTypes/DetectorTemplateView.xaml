@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:TLCGen.Settings.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid IsEnabled="{Binding Path=Editable,Mode=OneTime}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -16,6 +16,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical">
+            <Label Content="Locatie" />
+            <ComboBox ItemsSource="{Binding Path=Locations,Mode=OneWay}"
+                      SelectedValue="{Binding Path=Location}" Margin="2" />
             <Label Content="Template naam" />
             <TextBox Text="{Binding Path=Naam}" Margin="2" />
             <StackPanel Orientation="Horizontal">

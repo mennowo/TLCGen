@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
-using TLCGen.Models.Settings;
 
 namespace TLCGen.Models
 {

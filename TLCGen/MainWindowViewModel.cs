@@ -603,7 +603,7 @@ namespace TLCGen.ViewModels
                 SaveGeneratorControllerSettingsToModel();
                 SettingsProvider.Default.SaveApplicationSettings();
                 DefaultsProvider.Default.SaveSettings();
-                TemplatesProvider.Default.SaveSettings();
+                //TemplatesProvider.Default.SaveSettings();
             }
         }
 

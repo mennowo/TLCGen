@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using TLCGen.Helpers;
-using TLCGen.Models;
-using TLCGen.Models.Enumerations;
-using TLCGen.Models.Settings;
-using TLCGen.Settings.Utilities;
 
 namespace TLCGen.Settings
 {

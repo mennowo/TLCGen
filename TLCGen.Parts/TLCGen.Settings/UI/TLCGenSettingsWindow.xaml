@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TLCGen.Settings.Views"
+        xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
         xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="TLCGenSettingsWindow" Height="400" Width="600" >
+        Title="TLCGen instellingen" Height="400" Width="600" >
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="2" />
@@ -18,6 +19,24 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TabControl Margin="2">
+            <TabItem Header="Instellingen">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Instellingen voor templates en defaults" FontWeight="Bold" />
+                    <Label Content="Locatie voor defaults" Grid.Row="1" />
+                    <ct:FileTextBox File="{Binding Path=DefaultsFileLocation}" Grid.Row="2" />
+                    <Label Content="Locatie voor templates" Grid.Row="3" />
+                    <ct:FolderTextBox Folder="{Binding Path=TemplatesFolderLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" />
+                    <Button Content="Nieuwe template file aanmaken in map" Command="{Binding Path=CreateTemplateFileCommand}" Grid.Row="5" Margin="2" />
+                </Grid>
+            </TabItem>
             <TabItem Header="Templates">
                 <Grid>
                     <Grid.RowDefinitions>

@@ -52,7 +52,17 @@ namespace TLCGen.Controls
 	    public static readonly DependencyProperty ChooseDialogFilterProperty =
 		    DependencyProperty.Register("ChooseDialogFilter", typeof(string), typeof(FileTextBox), new PropertyMetadata("*.*|All files"));
 
-	    public FileTextBox()
+        public bool EnsurePathExists
+        {
+            get { return (bool)GetValue(EnsurePathExistsProperty); }
+            set { SetValue(EnsurePathExistsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EnsurePathExists.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EnsurePathExistsProperty =
+            DependencyProperty.Register("EnsurePathExists", typeof(bool), typeof(FileTextBox), new PropertyMetadata(true));
+
+        public FileTextBox()
         {
             InitializeComponent();
         }
@@ -63,7 +73,7 @@ namespace TLCGen.Controls
 	        {
 		        IsFolderPicker = false,
 				Title = ChooseDialogTitle,
-		        EnsurePathExists = true,
+		        EnsurePathExists = EnsurePathExists,
 		        Multiselect = false
 	        };
 

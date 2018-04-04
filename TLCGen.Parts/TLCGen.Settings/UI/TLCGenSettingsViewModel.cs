@@ -1,9 +1,15 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using TLCGen.Dialogs;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -17,6 +23,20 @@ namespace TLCGen.Settings
         #endregion // Fields
 
         #region Properties
+
+        public string TemplatesFolderLocation
+        {
+            get => SettingsProvider.Default.Settings.TemplatesFolderLocation;
+            set
+            {
+                SettingsProvider.Default.Settings.TemplatesFolderLocation = value;
+                TemplatesProvider.Default.LoadSettings();
+                _FasenTemplatesEditorTabVM = null;
+                _DetectorenTemplatesEditorTabVM = null;
+                _PeriodenTemplatesEditorTabVM = null;
+                RaisePropertyChanged("");
+            }
+        }
 
         private DefaultsTabViewModel _DefaultsTabVM;
         public DefaultsTabViewModel DefaultsTabVM
@@ -71,6 +91,59 @@ namespace TLCGen.Settings
         }
 
         #endregion // Properties
+
+
+        #region Commands
+
+        RelayCommand _CreateTemplateFileCommand;
+        public ICommand CreateTemplateFileCommand
+        {
+            get
+            {
+                if (_CreateTemplateFileCommand == null)
+                {
+                    _CreateTemplateFileCommand = new RelayCommand(CreateTemplateFileCommand_Executed, CreateTemplateFileCommand_CanExecute);
+                }
+                return _CreateTemplateFileCommand;
+            }
+        }
+
+        #endregion // Commands
+
+        #region Command Functionality
+
+        private bool CreateTemplateFileCommand_CanExecute()
+        {
+            return !string.IsNullOrEmpty(TemplatesFolderLocation) && Directory.Exists(TemplatesFolderLocation);
+        }
+
+        private void CreateTemplateFileCommand_Executed()
+        {
+            if (Directory.Exists(TemplatesFolderLocation))
+            {
+                var dlg = new AddNewTemplateFileWindow();
+                if(dlg.ShowDialog() == true)
+                {
+                    if (TemplatesProvider.Default.LoadedTemplates.Any(x => x.Location == dlg.Name))
+                    {
+                        MessageBox.Show($"Een template file genaamd \"{dlg.Name}\" bestaat al.", "Naam reeds in gebruik");
+                    }
+                    else
+                    {
+                        var t = new TLCGenTemplatesModel();
+                        var twl = new TLCGenTemplatesModelWithLocation
+                        {
+                            Location = dlg.Name,
+                            Editable = true,
+                            Templates = t
+                        };
+                        TemplatesProvider.Default.LoadedTemplates.Add(twl);
+                    }
+                }
+            }
+        }
+
+        #endregion // Command Functionality
 
         #region Private Methods
 

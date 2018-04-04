@@ -195,6 +195,7 @@
           <Meeverlengen>SchAan</Meeverlengen>
           <MeeverlengenType>To</MeeverlengenType>
           <MeeverlengenVerschil xsi:nil="true" />
+          <Rijstroken>2</Rijstroken>
           <Detectoren>
             <Detector>
               <Naam>FC_1a</Naam>
@@ -315,6 +316,7 @@
           <Meeverlengen>SchAan</Meeverlengen>
           <MeeverlengenType>To</MeeverlengenType>
           <MeeverlengenVerschil xsi:nil="true" />
+          <Rijstroken>3</Rijstroken>
           <Detectoren>
             <Detector>
               <Naam>FC_1a</Naam>

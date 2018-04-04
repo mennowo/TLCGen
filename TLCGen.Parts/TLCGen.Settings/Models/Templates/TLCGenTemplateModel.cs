@@ -7,12 +7,15 @@ using System.Xml.Serialization;
 
 namespace TLCGen.Settings
 {
-    [Serializable]
-    public class TLCGenTemplateModel<T>
+    public class TLCGenTemplateModelBase
     {
         public string Naam { get; set; }
         public string Replace { get; set; }
+    }
 
+    [Serializable]
+    public class TLCGenTemplateModel<T> : TLCGenTemplateModelBase
+    {
         public List<object> GetItems()
         {
             List<object> items = new List<object>();

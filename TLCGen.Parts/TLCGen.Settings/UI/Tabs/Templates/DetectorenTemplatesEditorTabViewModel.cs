@@ -48,7 +48,7 @@ namespace TLCGen.Settings
             {
                 if (_AddDetectorTemplateCommand == null)
                 {
-                    _AddDetectorTemplateCommand = new RelayCommand(new Action<object>(AddDetectorTemplateCommand_Executed));
+                    _AddDetectorTemplateCommand = new RelayCommand(AddDetectorTemplateCommand_Executed, AddDetectorTemplateCommand_CanExecute);
                 }
                 return _AddDetectorTemplateCommand;
             }
@@ -62,7 +62,7 @@ namespace TLCGen.Settings
             {
                 if (_RemoveDetectorTemplateCommand == null)
                 {
-                    _RemoveDetectorTemplateCommand = new RelayCommand(new Action<object>(RemoveDetectorTemplateCommand_Executed), new Predicate<object>(RemoveDetectorTemplateCommand_CanExecute));
+                    _RemoveDetectorTemplateCommand = new RelayCommand(RemoveDetectorTemplateCommand_Executed, RemoveDetectorTemplateCommand_CanExecute);
                 }
                 return _RemoveDetectorTemplateCommand;
             }
@@ -74,15 +74,27 @@ namespace TLCGen.Settings
 
         private void AddDetectorTemplateCommand_Executed(object prm)
         {
-            var dtm = new TLCGenTemplateModel<DetectorModel>();
-            dtm.Naam = "Nieuw template";
-            dtm.Replace = "fase";
-            var dm = new DetectorModel();
-            dm.Naam = "fase_1";
+            var dtm = new TLCGenTemplateModel<DetectorModel>
+            {
+                Naam = "Nieuw template",
+                Replace = "fase"
+            };
+            var dm = new DetectorModel
+            {
+                Naam = "fase_1"
+            };
             DefaultsProvider.Default.SetDefaultsOnModel(dm, "Auto");
             dtm.Items.Add(dm);
-            DetectorenTemplates.Add(new DetectorTemplateViewModel(dtm));
+            var d = new DetectorTemplateViewModel(dtm);
+            DetectorenTemplates.Add(d);
+            TemplatesProvider.Default.LoadedTemplates.First(x => x.Editable).Templates.DetectorenTemplates.Add(dtm);
             MessengerInstance.Send(new TemplatesChangedMessage());
+            SelectedDetectorTemplate = d;
+        }
+
+        bool AddDetectorTemplateCommand_CanExecute(object prm)
+        {
+            return TemplatesProvider.Default.LoadedTemplates.Any(x => x.Editable);
         }
 
         void RemoveDetectorTemplateCommand_Executed(object prm)

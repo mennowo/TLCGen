@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
@@ -19,6 +20,77 @@ namespace TLCGen.Settings
         #endregion // Fields
 
         #region Properties
+
+        public bool Editable
+        {
+            get
+            {
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach (var td in t.Templates.DetectorenTemplates)
+                    {
+                        if (ReferenceEquals(td, _Template))
+                        {
+                            return t.Editable;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        private List<string> _Locations;
+        public List<string> Locations
+        {
+            get
+            {
+                if (_Locations == null)
+                {
+                    _Locations = new List<string>();
+                    foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                    {
+                        _Locations.Add(t.Location);
+                    }
+                }
+                return _Locations;
+            }
+        }
+
+        public string Location
+        {
+            get
+            {
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach (var td in t.Templates.DetectorenTemplates)
+                    {
+                        if (ReferenceEquals(td, _Template))
+                        {
+                            return t.Location;
+                        }
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null) return;
+
+                var rem = new TLCGenTemplatesModelWithLocation();
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    if (t.Location != value && t.Templates.DetectorenTemplates.Contains(_Template))
+                    {
+                        rem = t;
+                    }
+                    if (t.Location == value && !t.Templates.DetectorenTemplates.Contains(_Template))
+                    {
+                        t.Templates.DetectorenTemplates.Add(_Template);
+                    }
+                }
+                if (rem != null) rem.Templates.DetectorenTemplates.Remove(_Template);
+            }
+        }
 
         public string Naam
         {
@@ -274,6 +346,7 @@ namespace TLCGen.Settings
                 Detectoren.Add(fc);
             }
             Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            if (Detectoren.Any()) SelectedDetector = Detectoren.First();
 
             DetectorTypeOpties.Clear();
             var descs = Enum.GetValues(typeof(DetectorTypeEnum));

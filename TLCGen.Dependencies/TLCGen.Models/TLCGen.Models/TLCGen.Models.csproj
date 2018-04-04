@@ -122,7 +122,6 @@
     <Compile Include="Models\Controller\VersieModel.cs" />
     <Compile Include="Models\InterSignaalGroep\VoorstartModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\TLCGenSettingsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\TLCGen.Extensions\TLCGen.Extensions.csproj">

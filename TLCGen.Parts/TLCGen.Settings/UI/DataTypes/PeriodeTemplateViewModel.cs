@@ -23,6 +23,77 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public bool Editable
+        {
+            get
+            {
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach (var tp in t.Templates.PeriodenTemplates)
+                    {
+                        if (ReferenceEquals(tp, _Template))
+                        {
+                            return t.Editable;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        private List<string> _Locations;
+        public List<string> Locations
+        {
+            get
+            {
+                if (_Locations == null)
+                {
+                    _Locations = new List<string>();
+                    foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                    {
+                        _Locations.Add(t.Location);
+                    }
+                }
+                return _Locations;
+            }
+        }
+
+        public string Location
+        {
+            get
+            {
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach (var tp in t.Templates.PeriodenTemplates)
+                    {
+                        if (ReferenceEquals(tp, _Template))
+                        {
+                            return t.Location;
+                        }
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null) return;
+
+                var rem = new TLCGenTemplatesModelWithLocation();
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    if (t.Location != value && t.Templates.PeriodenTemplates.Contains(_Template))
+                    {
+                        rem = t;
+                    }
+                    if (t.Location == value && !t.Templates.PeriodenTemplates.Contains(_Template))
+                    {
+                        t.Templates.PeriodenTemplates.Add(_Template);
+                    }
+                }
+                if (rem != null) rem.Templates.PeriodenTemplates.Remove(_Template);
+            }
+        }
+
         public string Naam
         {
             get { return _Template.Naam; }

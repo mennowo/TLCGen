@@ -15,10 +15,13 @@ namespace TLCGen.Settings
 
         private static readonly object _Locker = new object();
         private static ITemplatesProvider _Default;
+        private List<TLCGenTemplatesModelWithLocation> _LoadedTemplates;
 
         #endregion // Fields
 
         #region Properties
+
+        public List<TLCGenTemplatesModelWithLocation> LoadedTemplates => _LoadedTemplates;
 
         private TLCGenTemplatesModel _Templates;
         public TLCGenTemplatesModel Templates
@@ -56,25 +59,64 @@ namespace TLCGen.Settings
         {
             try
             {
-                var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                var setpath = Path.Combine(appdatpath, @"TLCGen\Templates\");
-                if (!Directory.Exists(setpath))
-                    Directory.CreateDirectory(setpath);
-                var setfile = Path.Combine(setpath, @"templates.xml");
-                if (File.Exists(setfile))
+                Templates = new TLCGenTemplatesModel();
+                _LoadedTemplates = new List<TLCGenTemplatesModelWithLocation>();
+                if (SettingsProvider.Default.Settings.TemplatesFolderLocation != null &&
+                    Directory.Exists(SettingsProvider.Default.Settings.TemplatesFolderLocation))
                 {
-                    Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(setfile);
+                    var files = Directory.EnumerateFiles(SettingsProvider.Default.Settings.TemplatesFolderLocation, "*.xml");
+                    foreach (var f in files)
+                    {
+                        try
+                        {
+                            var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(f);
+                            var twl = new TLCGenTemplatesModelWithLocation
+                            {
+                                Location = Path.GetFileNameWithoutExtension(f),
+                                Editable = true,
+                                Templates = t
+                            };
+                            _LoadedTemplates.Add(twl);
+                            if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
+                            if (twl.Templates.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
+                            if (twl.Templates.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                        }
+                        catch
+                        {
+                            // ignored (file not right)
+                        }
+                    }
                 }
-                else if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
+                if (string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesFolderLocation) ||
+                    !string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesFolderLocation) &&
+                    !Directory.Exists(SettingsProvider.Default.Settings.TemplatesFolderLocation))
                 {
-                    Templates = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
-                }
-                else
-                {
-                    MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading defaults");
-                    setfile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
-                    Templates = new TLCGenTemplatesModel();
-                    return;
+                    if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesFolderLocation) &&
+                        !Directory.Exists(SettingsProvider.Default.Settings.TemplatesFolderLocation))
+                        MessageBox.Show("De ingestelde map met templates is niet gevonden\n\n" +
+                                       $"{SettingsProvider.Default.Settings.TemplatesFolderLocation}\n\n" +
+                                       $"De default templates worden geladen", "Map met templates gevonden");
+                
+                    if (File.Exists(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")))
+                    {
+                        var t = TLCGenSerialization.DeSerialize<TLCGenTemplatesModel>(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml"));
+                        var twl = new TLCGenTemplatesModelWithLocation
+                        {
+                            Location = Path.GetFileNameWithoutExtension(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaulttemplates.xml")),
+                            Editable = false,
+                            Templates = t
+                        };
+                        _LoadedTemplates.Add(twl);
+                        if (t.FasenTemplates != null) foreach (var tfc in t.FasenTemplates) Templates.FasenTemplates.Add(tfc);
+                        if (twl.Templates.DetectorenTemplates != null) foreach (var td in t.DetectorenTemplates) Templates.DetectorenTemplates.Add(td);
+                        if (twl.Templates.PeriodenTemplates != null) foreach (var tp in t.PeriodenTemplates) Templates.PeriodenTemplates.Add(tp);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading default template");
+                        Templates = new TLCGenTemplatesModel();
+                        return;
+                    }
                 }
             }
             catch (Exception e)
@@ -85,12 +127,15 @@ namespace TLCGen.Settings
 
         public void SaveSettings()
         {
-            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var setpath = Path.Combine(appdatpath, @"TLCGen\Templates\");
-            if (!Directory.Exists(setpath))
-                Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"templates.xml");
-            TLCGenSerialization.Serialize<TLCGenTemplatesModel>(setfile, Templates);
+            if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesFolderLocation) &&
+                Directory.Exists(SettingsProvider.Default.Settings.TemplatesFolderLocation))
+            {
+                foreach(var t in _LoadedTemplates)
+                {
+                    var fn = Path.Combine(SettingsProvider.Default.Settings.TemplatesFolderLocation, t.Location + ".xml");
+                    TLCGenSerialization.Serialize<TLCGenTemplatesModel>(fn, t.Templates);
+                }
+            }
         }
 
         #endregion // ITemplatesProvider

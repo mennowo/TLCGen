@@ -26,6 +26,7 @@ namespace TLCGen.Settings.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            TemplatesProvider.Default.SaveSettings();
             this.Close();
         }
     }

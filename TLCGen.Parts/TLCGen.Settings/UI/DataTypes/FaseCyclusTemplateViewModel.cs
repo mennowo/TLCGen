@@ -23,6 +23,77 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public bool Editable
+        {
+            get
+            {
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach (var tfc in t.Templates.FasenTemplates)
+                    {
+                        if (ReferenceEquals(tfc, _Template))
+                        {
+                            return t.Editable;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        private List<string> _Locations;
+        public List<string> Locations
+        {
+            get
+            {
+                if (_Locations == null)
+                {
+                    _Locations = new List<string>();
+                    foreach(var t in TemplatesProvider.Default.LoadedTemplates)
+                    {
+                        _Locations.Add(t.Location);
+                    }
+                }
+                return _Locations;
+            }
+        }
+
+        public string Location
+        {
+            get
+            {
+                foreach(var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    foreach(var tfc in t.Templates.FasenTemplates)
+                    {
+                        if(ReferenceEquals(tfc, _Template))
+                        {
+                            return t.Location;
+                        }
+                    }
+                }
+                return null;
+            }
+            set
+            {
+                if (value == null) return;
+
+                var rem = new TLCGenTemplatesModelWithLocation();
+                foreach (var t in TemplatesProvider.Default.LoadedTemplates)
+                {
+                    if (t.Location != value && t.Templates.FasenTemplates.Contains(_Template))
+                    {
+                        rem = t;
+                    }
+                    if (t.Location == value && !t.Templates.FasenTemplates.Contains(_Template))
+                    {
+                        t.Templates.FasenTemplates.Add(_Template);
+                    }
+                }
+                if (rem != null) rem.Templates.FasenTemplates.Remove(_Template);
+            }
+        }
+
         public string Naam
         {
             get { return _Template.Naam; }
@@ -506,6 +577,7 @@ namespace TLCGen.Settings
                 Fasen.Add(fc);
             }
             Fasen.CollectionChanged += Fasen_CollectionChanged;
+            if(Fasen.Any()) SelectedFaseCyclus = Fasen.First();
 
             FaseCyclusTypeOpties.Clear();
             var fdescs = Enum.GetValues(typeof(FaseTypeEnum));
