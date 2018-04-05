@@ -36,7 +36,8 @@
                     <ct:FileTextBox File="{Binding Path=DefaultsFileLocation}" Grid.Row="2" />
                     <Label Content="Locatie van templates" Grid.Row="3" />
                     <ct:FileTextBox File="{Binding Path=TemplatesLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" 
-                                    Visibility="{Binding Path=UseFileForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"/>
+                                    Visibility="{Binding Path=UseFileForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
+                                    EnsurePathExists="False" />
                     <ct:FolderTextBox 
                         Visibility="{Binding Path=UseFolderForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
                         Folder="{Binding Path=TemplatesLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" />
