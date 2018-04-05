@@ -16,6 +16,11 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public System.Windows.Visibility HasDC =>
+            SelectedFaseCyclusTemplate == null ?
+            System.Windows.Visibility.Collapsed :
+            System.Windows.Visibility.Visible;
+
         public ObservableCollectionAroundList<FaseCyclusTemplateViewModel, TLCGenTemplateModel<FaseCyclusModel>> FasenTemplates
         {
             get;
@@ -29,7 +34,8 @@ namespace TLCGen.Settings
             set
             {
                 _SelectedFaseCyclusTemplate = value;
-                RaisePropertyChanged("SelectedFaseCyclusTemplate");
+                RaisePropertyChanged(nameof(SelectedFaseCyclusTemplate));
+                RaisePropertyChanged(nameof(HasDC));
             }
         }
 
@@ -101,7 +107,7 @@ namespace TLCGen.Settings
 
         bool RemoveFaseTemplateCommand_CanExecute(object prm)
         {
-            return SelectedFaseCyclusTemplate != null;
+            return SelectedFaseCyclusTemplate != null && SelectedFaseCyclusTemplate.Editable;
         }
 
         #endregion // Command Functionality

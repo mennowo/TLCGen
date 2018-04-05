@@ -24,12 +24,29 @@ namespace TLCGen.Settings
 
         #region Properties
 
-        public string TemplatesFolderLocation
+        public bool UseFileForTemplates => !UseFolderForTemplates;
+
+        public bool UseFolderForTemplates
         {
-            get => SettingsProvider.Default.Settings.TemplatesFolderLocation;
+            get => SettingsProvider.Default.Settings.UseFolderForTemplates;
             set
             {
-                SettingsProvider.Default.Settings.TemplatesFolderLocation = value;
+                SettingsProvider.Default.Settings.UseFolderForTemplates = value;
+                SettingsProvider.Default.Settings.TemplatesLocation = null;
+                TemplatesProvider.Default.LoadSettings();
+                _FasenTemplatesEditorTabVM = null;
+                _DetectorenTemplatesEditorTabVM = null;
+                _PeriodenTemplatesEditorTabVM = null;
+                RaisePropertyChanged("");
+            }
+        }
+
+        public string TemplatesLocation
+        {
+            get => SettingsProvider.Default.Settings.TemplatesLocation;
+            set
+            {
+                SettingsProvider.Default.Settings.TemplatesLocation = value;
                 TemplatesProvider.Default.LoadSettings();
                 _FasenTemplatesEditorTabVM = null;
                 _DetectorenTemplatesEditorTabVM = null;
@@ -114,12 +131,12 @@ namespace TLCGen.Settings
 
         private bool CreateTemplateFileCommand_CanExecute()
         {
-            return !string.IsNullOrEmpty(TemplatesFolderLocation) && Directory.Exists(TemplatesFolderLocation);
+            return !string.IsNullOrEmpty(TemplatesLocation) && Directory.Exists(TemplatesLocation);
         }
 
         private void CreateTemplateFileCommand_Executed()
         {
-            if (Directory.Exists(TemplatesFolderLocation))
+            if (Directory.Exists(TemplatesLocation))
             {
                 var dlg = new AddNewTemplateFileWindow();
                 if(dlg.ShowDialog() == true)

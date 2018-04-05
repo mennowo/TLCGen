@@ -23,6 +23,8 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public bool UseFolderForTemplates => SettingsProvider.Default.Settings.UseFolderForTemplates;
+
         public bool Editable
         {
             get

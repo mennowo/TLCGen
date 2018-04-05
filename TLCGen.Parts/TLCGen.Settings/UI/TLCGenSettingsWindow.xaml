@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="TLCGen instellingen" Height="400" Width="600" >
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="2" />
         </Style>
@@ -28,13 +29,21 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Content="Instellingen voor templates en defaults" FontWeight="Bold" />
-                    <Label Content="Locatie voor defaults" Grid.Row="1" />
+                    <Label Content="Locatie van defaults" Grid.Row="1" />
                     <ct:FileTextBox File="{Binding Path=DefaultsFileLocation}" Grid.Row="2" />
-                    <Label Content="Locatie voor templates" Grid.Row="3" />
-                    <ct:FolderTextBox Folder="{Binding Path=TemplatesFolderLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" />
-                    <Button Content="Nieuwe template file aanmaken in map" Command="{Binding Path=CreateTemplateFileCommand}" Grid.Row="5" Margin="2" />
+                    <Label Content="Locatie van templates" Grid.Row="3" />
+                    <ct:FileTextBox File="{Binding Path=TemplatesLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" 
+                                    Visibility="{Binding Path=UseFileForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"/>
+                    <ct:FolderTextBox 
+                        Visibility="{Binding Path=UseFolderForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
+                        Folder="{Binding Path=TemplatesLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" />
+                    <CheckBox IsChecked="{Binding Path=UseFolderForTemplates}" Content="Gebruik map" Margin="5" VerticalAlignment="Center" Grid.Row="5" />
+                    <Button 
+                        Visibility="{Binding Path=UseFolderForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
+                        Content="Nieuwe template file aanmaken in map" Command="{Binding Path=CreateTemplateFileCommand}" Grid.Row="6" Margin="2" />
                 </Grid>
             </TabItem>
             <TabItem Header="Templates">

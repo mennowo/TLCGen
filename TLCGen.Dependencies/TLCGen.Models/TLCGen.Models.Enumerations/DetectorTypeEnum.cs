@@ -27,10 +27,16 @@ namespace TLCGen.Models.Enumerations
         KnopBuiten,
         [Description("Radar")]
         Radar,
+        [Description("Opticom ingang")]
+        OpticomDetector,
+        [Description("Vecom detector")]
+        VecomDetector,
         [Description("Vecom ingang")]
         VecomIngang,
-        [Description("Opticom ingang")]
-        OpticomIngang,
+        [Description("Wissel detector")]
+        WisselDetector,
+        [Description("Wissel ingang")]
+        WisselIngang,
         [Description("Overig")]
         Overig
     }

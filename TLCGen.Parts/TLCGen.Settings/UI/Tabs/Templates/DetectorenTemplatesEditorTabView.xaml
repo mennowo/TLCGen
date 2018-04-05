@@ -16,12 +16,14 @@
             <Label Content="Templates" DockPanel.Dock="Top" />
             <Button DockPanel.Dock="Bottom" Margin="2" Content="Verwijderen" Command="{Binding Path=RemoveDetectorTemplateCommand}" />
             <Button DockPanel.Dock="Bottom" Margin="2" Content="Nieuw" Command="{Binding Path=AddDetectorTemplateCommand}" />
-            <ListView DockPanel.Dock="Top"
+            <ListView DockPanel.Dock="Top" SelectionMode="Single"
                       ItemsSource="{Binding Path=DetectorenTemplates}" DisplayMemberPath="Naam"
                       SelectedItem="{Binding Path=SelectedDetectorTemplate,UpdateSourceTrigger=PropertyChanged}" 
                       Margin="2" />
         </DockPanel>
         <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
-        <local:DetectorTemplateView DataContext="{Binding Path=SelectedDetectorTemplate}" Grid.Column="2" Margin="2" />
+        <Grid Visibility="{Binding Path=HasDC,Mode=OneWay}" Grid.Column="2">
+            <local:DetectorTemplateView DataContext="{Binding Path=SelectedDetectorTemplate}" Margin="2" />
+        </Grid>
     </Grid>
 </UserControl>

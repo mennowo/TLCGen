@@ -898,13 +898,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("DL_type | DLNG_type;");
                             break;
                         case Models.Enumerations.DetectorTypeEnum.VecomIngang:
-                        case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                        case Models.Enumerations.DetectorTypeEnum.OpticomDetector:
                             // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                             sb.AppendLine("DS_type;");
                             break;
                         case Models.Enumerations.DetectorTypeEnum.Overig:
                             sb.AppendLine("DL_type;");
                             break;
+                        case Models.Enumerations.DetectorTypeEnum.WisselDetector:
                         case Models.Enumerations.DetectorTypeEnum.Radar:
                             // TODO: what type to use here?
                             break;
@@ -934,13 +935,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine("DL_type | DLNG_type;");
                         break;
                     case Models.Enumerations.DetectorTypeEnum.VecomIngang:
-                    case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                    case Models.Enumerations.DetectorTypeEnum.OpticomDetector:
                         // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                         sb.AppendLine("DS_type;");
                         break;
                     case Models.Enumerations.DetectorTypeEnum.Overig:
                         sb.AppendLine("DL_type;");
                         break;
+                    case Models.Enumerations.DetectorTypeEnum.WisselDetector:
                     case Models.Enumerations.DetectorTypeEnum.Radar:
                         // TODO: what type to use here?
                         break;

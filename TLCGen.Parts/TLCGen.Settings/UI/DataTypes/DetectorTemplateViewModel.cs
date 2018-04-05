@@ -21,6 +21,8 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public bool UseFolderForTemplates => SettingsProvider.Default.Settings.UseFolderForTemplates;
+
         public bool Editable
         {
             get
@@ -196,13 +198,25 @@ namespace TLCGen.Settings
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Radar;
                     }
+                    else if (value == DetectorTypeEnum.OpticomDetector.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.OpticomDetector;
+                    }
+                    else if (value == DetectorTypeEnum.VecomDetector.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.VecomDetector;
+                    }
                     else if (value == DetectorTypeEnum.VecomIngang.GetDescription())
                     {
                         SelectedDetector.Type = DetectorTypeEnum.VecomIngang;
                     }
-                    else if (value == DetectorTypeEnum.OpticomIngang.GetDescription())
+                    else if (value == DetectorTypeEnum.WisselDetector.GetDescription())
                     {
-                        SelectedDetector.Type = DetectorTypeEnum.OpticomIngang;
+                        SelectedDetector.Type = DetectorTypeEnum.WisselDetector;
+                    }
+                    else if (value == DetectorTypeEnum.WisselIngang.GetDescription())
+                    {
+                        SelectedDetector.Type = DetectorTypeEnum.WisselIngang;
                     }
                     else if (value == DetectorTypeEnum.Overig.GetDescription())
                     {

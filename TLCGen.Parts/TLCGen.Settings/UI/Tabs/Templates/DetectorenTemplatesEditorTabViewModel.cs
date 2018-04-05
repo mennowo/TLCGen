@@ -20,6 +20,11 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public System.Windows.Visibility HasDC => 
+            SelectedDetectorTemplate == null ? 
+            System.Windows.Visibility.Collapsed : 
+            System.Windows.Visibility.Visible;
+
         public ObservableCollectionAroundList<DetectorTemplateViewModel, TLCGenTemplateModel<DetectorModel>> DetectorenTemplates
         {
             get;
@@ -34,6 +39,7 @@ namespace TLCGen.Settings
             {
                 _SelectedDetectorTemplate = value;
                 RaisePropertyChanged("SelectedDetectorTemplate");
+                RaisePropertyChanged(nameof(HasDC));
             }
         }
 
@@ -105,7 +111,7 @@ namespace TLCGen.Settings
 
         bool RemoveDetectorTemplateCommand_CanExecute(object prm)
         {
-            return SelectedDetectorTemplate != null;
+            return SelectedDetectorTemplate != null && SelectedDetectorTemplate.Editable;
         }
 
         #endregion // Command Functionality

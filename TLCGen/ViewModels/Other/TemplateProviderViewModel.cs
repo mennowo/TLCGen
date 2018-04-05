@@ -108,6 +108,7 @@ namespace TLCGen.ViewModels
         private bool ApplyTemplateCommand_CanExecute(object obj)
         {
             return
+                SelectedTemplate != null &&
                 !string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>).Replace) &&
                 SelectedTemplate != null && 
                 (ApplyToItem != null || ApplyToItems != null && ApplyToItems.Any());

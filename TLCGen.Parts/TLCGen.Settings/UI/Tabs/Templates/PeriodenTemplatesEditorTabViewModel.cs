@@ -20,6 +20,11 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public System.Windows.Visibility HasDC =>
+            SelectedPeriodeTemplate == null ?
+            System.Windows.Visibility.Collapsed :
+            System.Windows.Visibility.Visible;
+
         public ObservableCollectionAroundList<PeriodeTemplateViewModel, TLCGenTemplateModel<PeriodeModel>> PeriodenTemplates
         {
             get;
@@ -34,6 +39,7 @@ namespace TLCGen.Settings
             {
                 _SelectedPeriodeTemplate = value;
                 RaisePropertyChanged("SelectedPeriodeTemplate");
+                RaisePropertyChanged(nameof(HasDC));
             }
         }
 
@@ -106,7 +112,7 @@ namespace TLCGen.Settings
 
         bool RemovePeriodeTemplateCommand_CanExecute(object prm)
         {
-            return SelectedPeriodeTemplate != null;
+            return SelectedPeriodeTemplate != null && SelectedPeriodeTemplate.Editable;
         }
 
         #endregion // Command Functionality
