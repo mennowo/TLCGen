@@ -313,9 +313,72 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool IsLooseDetector => FaseCyclus == null;
+        public bool DetectorCanRequest =>
+            FaseCyclus != null &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang;
 
-	    public bool AanvraagDirectPossible => FaseCyclus != null && (Type == DetectorTypeEnum.Kop || Type == DetectorTypeEnum.Lang);
+        public bool DetectorCanRequestDirect =>
+            FaseCyclus != null &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang &&
+            Type != DetectorTypeEnum.Knop &&
+            Type != DetectorTypeEnum.KnopBinnen &&
+            Type != DetectorTypeEnum.KnopBuiten;
+
+        public bool DetectorCanExtend =>
+            FaseCyclus != null &&
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang;
+
+        public bool DetectorCanHaveError =>
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.WisselIngang;
+
+        public bool DetectorCanHaveTDH =>
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang &&
+            Type != DetectorTypeEnum.Knop &&
+            Type != DetectorTypeEnum.KnopBinnen &&
+            Type != DetectorTypeEnum.KnopBuiten;
+
+        public bool DetectorCanHaveTDB =>
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang &&
+            Type != DetectorTypeEnum.Knop &&
+            Type != DetectorTypeEnum.KnopBinnen &&
+            Type != DetectorTypeEnum.KnopBuiten;
+
+        public bool DetectorCanHaveWaitingLight =>
+            Type == DetectorTypeEnum.Knop ||
+            Type == DetectorTypeEnum.KnopBuiten ||
+            Type == DetectorTypeEnum.KnopBinnen;
+
+        public bool DetectorCanHaveLaneNumber => 
+            FaseCyclus != null &&
+            Type != DetectorTypeEnum.VecomIngang &&
+            Type != DetectorTypeEnum.OpticomDetector &&
+            Type != DetectorTypeEnum.VecomDetector &&
+            Type != DetectorTypeEnum.WisselDetector &&
+            Type != DetectorTypeEnum.WisselIngang;
+
+        public bool AanvraagDirectPossible => 
+            FaseCyclus != null && (Type == DetectorTypeEnum.Kop || Type == DetectorTypeEnum.Lang);
 
 	    #endregion // Properties
 

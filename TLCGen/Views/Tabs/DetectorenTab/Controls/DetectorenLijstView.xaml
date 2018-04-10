@@ -15,9 +15,9 @@
              d:DesignHeight="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
-        <Style TargetType="{x:Type DataGridCell}" x:Key="LooseDetectorStyle">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestStyle">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsLooseDetector}" Value="true">
+                <DataTrigger Binding="{Binding Path=DetectorCanRequest}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="Background" Value="LightGray" />
                     <Setter Property="Foreground" Value="LightGray" />
@@ -25,63 +25,138 @@
             </Style.Triggers>
             <!-- here, we need to redo what the specialdatagrid has, cause the style for datagridcell is overwritten 
                  not sweet, but so far, found no better way -->
-            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
-            <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />
+            <!--<EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
+            <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />-->
         </Style>
-        <Style x:Key="DisabledIfDrukknopStyle" TargetType="{x:Type DataGridCell}">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestDirectStyle">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="True">
+                <DataTrigger Binding="{Binding Path=DetectorCanRequestDirect}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="Background" Value="LightGray" />
                     <Setter Property="Foreground" Value="LightGray" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DisabledIfNotDrukknopStyle" TargetType="{x:Type DataGridCell}">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithExtendStyle">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="False">
+                <DataTrigger Binding="{Binding Path=DetectorCanExtend}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="Background" Value="LightGray" />
                     <Setter Property="Foreground" Value="LightGray" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="LooseDisabledIfDrukknopStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource LooseDetectorStyle}">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithErrorStyle">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsDrukknop}" Value="True">
+                <DataTrigger Binding="{Binding Path=DetectorCanHaveError}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
                     <Setter Property="Background" Value="LightGray" />
                     <Setter Property="Foreground" Value="LightGray" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <DataGridTextColumn x:Key="FaseCyclusColumn"
-                            Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
-                            Header="Fase" 
-                            Foreground="Gray" IsReadOnly="True"
-                            Visibility="{Binding Path=ShowFaseCyclus, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridComboBoxColumn x:Key="AanvraagColumn" Header="Aanvraag" 
-                                SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
-                                Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                                CellStyle="{StaticResource LooseDetectorStyle}" />
-        <DataGridComboBoxColumn x:Key="VerlengenColumn" Header="Verlengen" 
-                                SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
-                                Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                                CellStyle="{StaticResource LooseDisabledIfDrukknopStyle}" />
-        <DataGridComboBoxColumn x:Key="StoringColumn" Header="Aanvr. bij storing" 
-                                SelectedItemBinding="{Binding Path=AanvraagBijStoring,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                                Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridComboBoxColumn x:Key="VeiligheidsGroenColumn" Header="Veiligheidsgroen" 
-                                SelectedItemBinding="{Binding Path=VeiligheidsGroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                                CellStyle="{StaticResource LooseDetectorStyle}"
-                                Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridTemplateColumn x:Key="RijstrookColumn" Header="Rijstrook" Width="Auto" 
-                                Visibility="{Binding Path=ShowRijstrook, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
-                                CellStyle="{StaticResource LooseDetectorStyle}">
+        <Style x:Key="DetectorWithWaitingLightStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=DetectorCanHaveWaitingLight}" Value="false">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DetectorWithLaneNumberStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=DetectorCanHaveLaneNumber}" Value="false">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DetectorWithTDHStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=DetectorCanHaveTDH}" Value="false">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DetectorWithTDBStyle" TargetType="{x:Type DataGridCell}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=DetectorCanHaveTDB}" Value="false">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <DataGridTextColumn 
+            x:Key="NaamColumn"
+            Binding="{Binding Path=Naam}" Header="Naam" />
+        <DataGridComboBoxColumn 
+            x:Key="TypeColumn"
+            Header="Type" 
+            SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
+        <DataGridTextColumn
+            x:Key="FaseColumn"
+            Binding="{Binding Path=FaseCyclus,FallbackValue=Geen,TargetNullValue=Geen}" 
+            Header="Fase"
+            Foreground="Gray" IsReadOnly="True"
+            Visibility="{Binding Path=ShowFaseCyclus, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn 
+            x:Key="TDBColumn"
+            CellStyle="{StaticResource DetectorWithTDBStyle}"
+            Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" />
+        <DataGridTextColumn 
+            x:Key="TDHColumn"
+            CellStyle="{StaticResource DetectorWithTDHStyle}"
+            Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" />
+        <DataGridComboBoxColumn 
+            x:Key="AanvraagColumn"
+            Header="Aanvraag"
+            SelectedItemBinding="{Binding Path=Aanvraag,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
+            Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithRequestStyle}" />
+        <DataGridComboBoxColumn 
+            x:Key="VerlengenColumn"
+            Header="Verlengen" 
+            SelectedItemBinding="{Binding Path=Verlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
+            Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithExtendStyle}" />
+        <DataGridTextColumn 
+            x:Key="TBGColumn"
+            Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" 
+            CellStyle="{StaticResource DetectorWithErrorStyle}" />
+        <DataGridTextColumn 
+            x:Key="TOGColumn"
+            Binding="{Binding Path=TOG,TargetNullValue={x:Static sys:String.Empty}}" Header="TOG"
+            CellStyle="{StaticResource DetectorWithErrorStyle}" />
+        <DataGridTextColumn 
+            x:Key="TFLColumn"
+            Binding="{Binding Path=TFL,TargetNullValue={x:Static sys:String.Empty}}" Header="TFL"
+            CellStyle="{StaticResource DetectorWithErrorStyle}" />
+        <DataGridTextColumn 
+            x:Key="CFLColumn"
+            Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" 
+            CellStyle="{StaticResource DetectorWithErrorStyle}" />
+        <DataGridCheckBoxColumn 
+            x:Key="AanvraagDirectColumn"
+            Binding="{Binding Path=AanvraagDirect}" Header="Direct" 
+            CellStyle="{StaticResource DetectorWithRequestDirectStyle}" />
+        <DataGridCheckBoxColumn 
+            x:Key="WachtlichtColumn"
+            Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" 
+            CellStyle="{StaticResource DetectorWithWaitingLightStyle}" />
+        <DataGridTemplateColumn 
+            x:Key="RijstrookColumn"
+            Header="Rijstrook" Width="Auto" 
+            Visibility="{Binding Path=ShowRijstrook, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithLaneNumberStyle}">
             <DataGridTemplateColumn.CellTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=Rijstrook}" Margin="2" />
@@ -90,12 +165,28 @@
             <DataGridTemplateColumn.CellEditingTemplate>
                 <DataTemplate>
                     <ComboBox 
-                                ItemsSource="{Binding Path=Rijstroken}" 
-                                FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                                SelectedItem="{Binding Path=Rijstrook,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        ItemsSource="{Binding Path=Rijstroken}" 
+                        FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                        SelectedItem="{Binding Path=Rijstrook,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </DataTemplate>
             </DataGridTemplateColumn.CellEditingTemplate>
         </DataGridTemplateColumn>
+        <DataGridComboBoxColumn
+            x:Key="AanvrBijStorColumn"
+            Header="Aanvr. bij storing" 
+            SelectedItemBinding="{Binding Path=AanvraagBijStoring,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+            Visibility="{Binding Path=ShowStoring, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithRequestStyle}" />
+        <DataGridComboBoxColumn 
+            x:Key="VeiligheidsGrColumn"
+            Header="Veiligheidsgroen" 
+            SelectedItemBinding="{Binding Path=VeiligheidsGroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+            CellStyle="{StaticResource DetectorWithExtendStyle}"
+            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        
+        
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -113,36 +204,22 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
-                <DataGridComboBoxColumn Header="Type" 
-                                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorTypeEnum}}}" />
-                <StaticResource ResourceKey="FaseCyclusColumn" />
-                <DataGridTextColumn Binding="{Binding Path=TDB,TargetNullValue={x:Static sys:String.Empty}}" Header="TDB" />
-                <DataGridTextColumn Binding="{Binding Path=TDH,TargetNullValue={x:Static sys:String.Empty}}" Header="TDH" />
+                <StaticResource ResourceKey="NaamColumn" />
+                <StaticResource ResourceKey="TypeColumn" />
+                <StaticResource ResourceKey="FaseColumn" />
                 <StaticResource ResourceKey="AanvraagColumn" />
                 <StaticResource ResourceKey="VerlengenColumn" />
-                <DataGridTextColumn Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" />
-                <DataGridTextColumn Binding="{Binding Path=TOG,TargetNullValue={x:Static sys:String.Empty}}" Header="TOG" />
-                <DataGridTextColumn Binding="{Binding Path=TFL,TargetNullValue={x:Static sys:String.Empty}}" Header="TFL" />
-                <DataGridTextColumn Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" />
-                <DataGridCheckBoxColumn Binding="{Binding Path=AanvraagDirect}" Header="Direct" >
-                    <DataGridCheckBoxColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=AanvraagDirectPossible}" Value="False">
-                                    <Setter Property="IsEnabled" Value="False" />
-                                    <Setter Property="Background" Value="LightGray" />
-                                    <Setter Property="Foreground" Value="LightGray" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridCheckBoxColumn.CellStyle>
-                </DataGridCheckBoxColumn>
-                <DataGridCheckBoxColumn Binding="{Binding Path=Wachtlicht}" Header="Wachtlicht" CellStyle="{StaticResource DisabledIfNotDrukknopStyle}" />
+                <StaticResource ResourceKey="TDBColumn" />
+                <StaticResource ResourceKey="TDHColumn" />
+                <StaticResource ResourceKey="TOGColumn" />
+                <StaticResource ResourceKey="TBGColumn" />
+                <StaticResource ResourceKey="TFLColumn" />
+                <StaticResource ResourceKey="CFLColumn" />
+                <StaticResource ResourceKey="AanvraagDirectColumn" />
+                <StaticResource ResourceKey="WachtlichtColumn" />
                 <StaticResource ResourceKey="RijstrookColumn" />
-                <StaticResource ResourceKey="StoringColumn" />
-                <StaticResource ResourceKey="VeiligheidsGroenColumn" />
+                <StaticResource ResourceKey="AanvrBijStorColumn" />
+                <StaticResource ResourceKey="VeiligheidsGrColumn" />
             </DataGrid.Columns>
         </controls:SpecialDataGrid>
     </Grid>
