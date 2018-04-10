@@ -50,12 +50,27 @@ namespace TLCGen.Settings
                 SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
                 if (!UseFolderForTemplates && !File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
-                    TLCGenSerialization.Serialize<TLCGenTemplatesModel>(SettingsProvider.Default.Settings.TemplatesLocation, new TLCGenTemplatesModel());
+                    TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, new TLCGenTemplatesModel());
                 }
                 TemplatesProvider.Default.LoadSettings();
                 _FasenTemplatesEditorTabVM = null;
                 _DetectorenTemplatesEditorTabVM = null;
                 _PeriodenTemplatesEditorTabVM = null;
+                RaisePropertyChanged("");
+            }
+        }
+
+        public string DefaultsFileLocation
+        {
+            get => SettingsProvider.Default.Settings.DefaultsFileLocation;
+            set
+            {
+                SettingsProvider.Default.Settings.DefaultsFileLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
+                if (!File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
+                {
+                    TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.DefaultsFileLocation, new TLCGenDefaultsModel());
+                }
+                DefaultsProvider.Default.LoadSettings();
                 RaisePropertyChanged("");
             }
         }

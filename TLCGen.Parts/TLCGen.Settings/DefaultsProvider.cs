@@ -349,25 +349,28 @@ namespace TLCGen.Settings
 
         public void SaveSettings()
         {
-            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var setpath = Path.Combine(appdatpath, @"TLCGen\Defaults\");
-            if (!Directory.Exists(setpath))
-                Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"settings.xml");
-            using (FileStream fs = new FileStream(setfile, FileMode.Create, FileAccess.Write))
+            if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation))
             {
-                List<Type> et = new List<Type>();
-                foreach(var def in Defaults.Defaults)
+                if (File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
                 {
-                    if(!et.Contains(def.Data.GetType()))
-                    {
-                        et.Add(def.Data.GetType());
-                    }
+                    File.Delete(SettingsProvider.Default.Settings.DefaultsFileLocation);
                 }
 
-                var serializer = new XmlSerializer(typeof(TLCGenDefaultsModel), et.ToArray());
-                serializer.Serialize(fs, Defaults);
-                fs.Close();
+                using (FileStream fs = new FileStream(SettingsProvider.Default.Settings.DefaultsFileLocation, FileMode.Create, FileAccess.Write))
+                {
+                    List<Type> et = new List<Type>();
+                    foreach (var def in Defaults.Defaults)
+                    {
+                        if (!et.Contains(def.Data.GetType()))
+                        {
+                            et.Add(def.Data.GetType());
+                        }
+                    }
+
+                    var serializer = new XmlSerializer(typeof(TLCGenDefaultsModel), et.ToArray());
+                    serializer.Serialize(fs, Defaults);
+                    fs.Close();
+                }
             }
         }
 
