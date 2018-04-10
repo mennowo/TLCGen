@@ -511,7 +511,6 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
-
         private void RefreshDetectoren()
         {
             WisselDetectoren.Clear();
@@ -556,6 +555,12 @@ namespace TLCGen.ViewModels
         }
 
         private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void OnFaseDetectorTypeChangedChanged(FaseDetectorTypeChangedMessage msg)
         {
             RefreshDetectoren();
             RaisePropertyChanged("");
@@ -653,6 +658,7 @@ namespace TLCGen.ViewModels
 
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
 
             RefreshDetectoren();
         }

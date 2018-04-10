@@ -63,7 +63,7 @@ namespace TLCGen.Settings
                 _LoadedTemplates = new List<TLCGenTemplatesModelWithLocation>();
                 if (SettingsProvider.Default.Settings.UseFolderForTemplates)
                 {
-                    if (SettingsProvider.Default.Settings.TemplatesLocation != null &&
+                    if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
                         Directory.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                     {
                         var files = Directory.EnumerateFiles(SettingsProvider.Default.Settings.TemplatesLocation, "*.xml");

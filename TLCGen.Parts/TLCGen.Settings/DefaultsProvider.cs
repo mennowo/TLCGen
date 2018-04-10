@@ -182,7 +182,7 @@ namespace TLCGen.Settings
 
         public void LoadSettings()
         {
-            if (SettingsProvider.Default.Settings.DefaultsFileLocation != null &&
+            if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
                 File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
             {
                 try
@@ -199,7 +199,7 @@ namespace TLCGen.Settings
             }
             else
             {
-                if (SettingsProvider.Default.Settings.DefaultsFileLocation != null &&
+                if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
                     !File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
                 {
                     MessageBox.Show("Het ingestelde defaults bestand is niet gevonden:\n\n" +

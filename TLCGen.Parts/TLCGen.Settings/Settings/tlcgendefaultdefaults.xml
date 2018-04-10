@@ -472,7 +472,7 @@
         <Wachtlicht>false</Wachtlicht>
         <WachtlichtBitmapData />
         <Simulatie />
-        <Type>VecomIngang</Type>
+        <Type>OpticomIngang</Type>
         <Aanvraag>Geen</Aanvraag>
         <Verlengen>Geen</Verlengen>
       </Data>

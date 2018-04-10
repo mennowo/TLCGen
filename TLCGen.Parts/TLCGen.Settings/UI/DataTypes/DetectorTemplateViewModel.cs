@@ -198,9 +198,9 @@ namespace TLCGen.Settings
                     {
                         SelectedDetector.Type = DetectorTypeEnum.Radar;
                     }
-                    else if (value == DetectorTypeEnum.OpticomDetector.GetDescription())
+                    else if (value == DetectorTypeEnum.OpticomIngang.GetDescription())
                     {
-                        SelectedDetector.Type = DetectorTypeEnum.OpticomDetector;
+                        SelectedDetector.Type = DetectorTypeEnum.OpticomIngang;
                     }
                     else if (value == DetectorTypeEnum.VecomDetector.GetDescription())
                     {

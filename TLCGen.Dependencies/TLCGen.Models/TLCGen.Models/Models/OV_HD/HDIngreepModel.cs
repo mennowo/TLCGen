@@ -16,8 +16,9 @@ namespace TLCGen.Models
         public string FaseCyclus { get; set; }
 
         public bool KAR { get; set; }
-        [Browsable(false)] // Opticom is not (yet) supported
         public bool Opticom { get; set; }
+        [Browsable(false)]
+        public string OpticomRelatedInput { get; set; }
         [Browsable(false)] // Not (yet) used
         public bool Sirene { get; set; }
 

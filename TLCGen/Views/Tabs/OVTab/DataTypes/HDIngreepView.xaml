@@ -48,6 +48,12 @@
                 </Style>
             </StackPanel.Style>
             <TextBlock Text="Overig" Margin="5" Padding="0" TextDecorations="Underline" />
+            <Label Content="Opticom" />
+            <CheckBox Content="Opticom aanwezig" IsChecked="{Binding Path=Opticom}" 
+                      Margin="5" VerticalAlignment="Center" IsEnabled="{Binding Path=OpticomAvailable}" />
+            <Label Content="Opticom ingang" IsEnabled="{Binding Path=Opticom}" />
+            <ComboBox Margin="2" ItemsSource="{Binding Path=OpticomIngangen}" IsEnabled="{Binding Path=OpticomOn}"
+                      SelectedValue="{Binding Path=OpticomRelatedInput}" />
             <Label Content="Meerealiserende fasen" />
             <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeFasen}" SelectedItem="{Binding SelectedMeerealiserendeFase,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" MinHeight="24" >
                 <ListView.ItemsPanel>

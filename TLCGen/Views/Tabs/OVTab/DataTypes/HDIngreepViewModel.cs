@@ -25,6 +25,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _Fasen;
         private string _SelectedFase;
         private ControllerModel _Controller;
+        private ObservableCollection<string> _OpticomIngangen;
 
         #endregion // Fields
 
@@ -63,25 +64,48 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool OpticomAvailable => OpticomIngangen != null && OpticomIngangen.Any();
+
+        [Browsable(false)]
+        public bool OpticomOn => Opticom && OpticomIngangen != null && OpticomIngangen.Any();
+
+        [Browsable(false)]
         public bool Opticom
         {
             get { return _HDIngreep.Opticom; }
             set
             {
                 _HDIngreep.Opticom = value;
-                RaisePropertyChanged<object>("Opticom", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Opticom), broadcast: true);
+                RaisePropertyChanged(nameof(OpticomOn));
             }
         }
 
-        public bool Sirene
+        [Browsable(false)]
+        public string OpticomRelatedInput
         {
-            get { return _HDIngreep.Sirene; }
+            get { return _HDIngreep.OpticomRelatedInput; }
             set
             {
-                _HDIngreep.Sirene = value;
-                RaisePropertyChanged<object>("Sirene", broadcast: true);
+                if(value != null)
+                {
+                    _HDIngreep.OpticomRelatedInput = value;
+                    RaisePropertyChanged<object>(nameof(OpticomRelatedInput), broadcast: true);
+                }
             }
         }
+
+        // TODO: this is not yet supported, because it is unclear what this should do
+        //public bool Sirene
+        //{
+        //    get { return _HDIngreep.Sirene; }
+        //    set
+        //    {
+        //        _HDIngreep.Sirene = value;
+        //        RaisePropertyChanged<object>("Sirene", broadcast: true);
+        //    }
+        //}
 
         [Category("Tijden")]
         [Description("Rijtijd ongehinderd")]
@@ -168,6 +192,18 @@ namespace TLCGen.ViewModels
         {
             get;
             private set;
+        }
+
+        public ObservableCollection<string> OpticomIngangen
+        {
+            get
+            {
+                if (_OpticomIngangen == null)
+                {
+                    _OpticomIngangen = new ObservableCollection<string>();
+                }
+                return _OpticomIngangen;
+            }
         }
 
         #endregion // Properties
@@ -268,7 +304,55 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private void RefreshDetectoren()
+        {
+            OpticomIngangen.Clear();
+            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
+
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                SelectMany(x => x.Detectoren))
+            {
+                switch (d.Type)
+                {
+                    case DetectorTypeEnum.OpticomIngang:
+                        OpticomIngangen.Add(d.Naam);
+                        break;
+                }
+            }
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
+            {
+                switch (d.Type)
+                {
+                    case DetectorTypeEnum.OpticomIngang:
+                        OpticomIngangen.Add(d.Naam);
+                        break;
+                }
+            }
+        }
+
         #endregion // Private Methods
+        
+        #region TLCGen Messaging
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void OnFaseDetectorTypeChangedChanged(FaseDetectorTypeChangedMessage msg)
+        {
+            RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        #endregion // TLCGen Messaging
 
         #region Constructor
 
@@ -280,6 +364,12 @@ namespace TLCGen.ViewModels
             BuildFasenList();
 
             MeerealiserendeFasen = new ObservableCollectionAroundList<HDIngreepMeerealiserendeFaseCyclusViewModel, HDIngreepMeerealiserendeFaseCyclusModel>(hdingreep.MeerealiserendeFaseCycli);
+
+            RefreshDetectoren();
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
         }
 
         #endregion // Constructor

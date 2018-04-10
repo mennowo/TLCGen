@@ -120,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblkhst}{ov.FaseCyclus}", 100, CCOLElementTimeTypeEnum.TE_type, _tblkhst, ov.FaseCyclus));
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnatxdhst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _tnatxdhst, ov.FaseCyclus));
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _trthst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _hpriohst, ov.FaseCyclus));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}{ov.FaseCyclus}", _hpriohst, ov.FaseCyclus));
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomaxhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _prmomaxhst, ov.FaseCyclus));
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{ov.FaseCyclus}", 2, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
                     }
@@ -133,8 +133,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                 }
-				
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact));
+                if (c.OVData.HDIngrepen.Any())
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhd}", _hplhd));
+                }
+
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usplact}", _usplact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskpact}", _uskpact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlact}", _usmlact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmlpl}", _usmlpl));
@@ -181,7 +185,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hmlact}", _hmlact));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpervar}", _hpervar));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperarh}", _hperarh));
-				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hplhd}", _hplhd));
+				
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_homschtegenh}", _homschtegenh));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrstotxa}", 50, CCOLElementTimeTypeEnum.TE_type, _prmrstotxa));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schinst}", 0, CCOLElementTimeTypeEnum.SCH_type, _schinst));
@@ -724,7 +728,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if (c.OVData.HDIngrepen.Any())
 					{
 						sb.AppendLine($"{ts}/* Bij hulpdienstingreep, lokaal VA regelen */");
-						sb.AppendLine($"{ts}if (IH[{_hpf}hulpdienst])");
+						sb.AppendLine($"{ts}if (IH[{_hpf}{_hplhd}])");
 						sb.AppendLine($"{ts}{{");
 						sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hmlact}] = TRUE;");
 						sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hplact}] = FALSE;");

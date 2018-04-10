@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TLCGen.Helpers;
 
 namespace TLCGen.Models.Enumerations
@@ -28,7 +29,7 @@ namespace TLCGen.Models.Enumerations
         [Description("Radar")]
         Radar,
         [Description("Opticom ingang")]
-        OpticomDetector,
+        OpticomIngang,
         [Description("Vecom detector")]
         VecomDetector,
         [Description("Vecom ingang")]

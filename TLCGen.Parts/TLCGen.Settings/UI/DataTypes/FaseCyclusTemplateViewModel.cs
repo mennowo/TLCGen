@@ -336,9 +336,9 @@ namespace TLCGen.Settings
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.Radar;
                     }
-                    else if (value == DetectorTypeEnum.OpticomDetector.GetDescription())
+                    else if (value == DetectorTypeEnum.OpticomIngang.GetDescription())
                     {
-                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.OpticomDetector;
+                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.OpticomIngang;
                     }
                     else if (value == DetectorTypeEnum.VecomDetector.GetDescription())
                     {
