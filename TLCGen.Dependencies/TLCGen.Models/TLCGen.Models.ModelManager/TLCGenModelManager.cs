@@ -114,10 +114,38 @@ namespace TLCGen.ModelManagement
 #pragma warning restore CS0618 // Type or member is obsolete
                             InmeldingFilterTijd = 15
                         });
+
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.VECOM_io,
+                            Inmelding = false,
+                            Uitmelding = false,
+                            InmeldingFilterTijd = 15
+                        });
+
                         ov.Meldingen.Add(new OVIngreepMeldingModel
                         {
                             FaseCyclus = ov.FaseCyclus,
                             Type = OVIngreepMeldingTypeEnum.VerlosDetector,
+                            Inmelding = false,
+                            Uitmelding = false,
+                            InmeldingFilterTijd = 15
+                        });
+
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.MassaPaarIn,
+                            Inmelding = false,
+                            Uitmelding = false,
+                            InmeldingFilterTijd = 15
+                        });
+
+                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        {
+                            FaseCyclus = ov.FaseCyclus,
+                            Type = OVIngreepMeldingTypeEnum.MassaPaarUit,
                             Inmelding = false,
                             Uitmelding = false,
                             InmeldingFilterTijd = 15

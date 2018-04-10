@@ -182,93 +182,103 @@ namespace TLCGen.Settings
 
         public void LoadSettings()
         {
-            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var setpath = Path.Combine(appdatpath, @"TLCGen\Defaults\");
-            if (!Directory.Exists(setpath))
-                Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"settings.xml");
-	        string defsetfile = null;
-            if (!File.Exists(setfile))
+            if (SettingsProvider.Default.Settings.DefaultsFileLocation != null &&
+                File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
             {
-                setfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+                try
+                {
+                    Defaults = DeserializeDefaultsFile(SettingsProvider.Default.Settings.DefaultsFileLocation);
+                }
+                catch
+                {
+                    Defaults = null;
+                    MessageBox.Show("Het ingestelde defaults bestand heeft een onjuist formaat:\n\n" +
+                                    SettingsProvider.Default.Settings.DefaultsFileLocation +
+                                    "\n\nDe meegeleverde defaults worden geladen", "Onjuist formaat defaults bestand");
+                }
             }
-			else
-			{
-				defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
-			}
-            if (!File.Exists(setfile))
+            else
             {
-                MessageBox.Show("Could not find defaults for default settings. None loaded.", "Error loading defaults");
-                Defaults = new TLCGenDefaultsModel();
-                return;
+                if (SettingsProvider.Default.Settings.DefaultsFileLocation != null &&
+                    !File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
+                {
+                    MessageBox.Show("Het ingestelde defaults bestand is niet gevonden:\n\n" +
+                                    SettingsProvider.Default.Settings.DefaultsFileLocation +
+                                    "\n\nDe meegeleverde defaults worden geladen", "Kan defaults bestand niet vinden");
+                }
             }
-	        try
-	        {
-		        Defaults = DeserializeDefaultsFile(setfile);
-				if (defsetfile != null && File.Exists(defsetfile))
-				{
-					var message = "";
-					var message2 = "";
-					var defaultDefaults = DeserializeDefaultsFile(defsetfile);
-			        foreach (var d in defaultDefaults.Defaults)
-			        {
-				        bool found = false;
-				        foreach (var d2 in Defaults.Defaults)
-				        {
-					        if (d.DataType == d2.DataType &&
-					            d.Category == d2.Category &&
-					            d.Selector1 == d2.Selector1 &&
-					            d.Selector2 == d2.Selector2)
-					        {
-						        found = true;
-					        }
-				        }
-				        if (!found)
-				        {
-					        message += d.DefaultName + "; ";
-					        Defaults.Defaults.Add(d);
-				        }
-			        }
-					var remDs = new List<TLCGenDefaultModel>();
-					foreach (var d in Defaults.Defaults)
-					{
-						bool found = false;
-						foreach (var d2 in defaultDefaults.Defaults)
-						{
-							if (d.DataType == d2.DataType &&
-							    d.Category == d2.Category &&
-							    d.Selector1 == d2.Selector1 &&
-							    d.Selector2 == d2.Selector2)
-							{
-								found = true;
-							}
-						}
-						if (!found)
-						{
-							message2 += d.DefaultName + "; ";
-							remDs.Add(d);
-						}
-					}
-					foreach (var d in remDs)
-					{
-						Defaults.Defaults.Remove(d);
-					}
-					if (message.Length > 0 || message2.Length > 0)
-					{
-						var s = "";
-						if (message.Length > 0) s += "Defaults added: " + message;
-						if (message2.Length > 0)
-						{
-							if (message.Length > 0) s += Environment.NewLine;
-							s += "Defaults removed: " + message2;
-						}
-						MessageBox.Show(s, "Defaults updated");
-					}
-		        }
-	        }
-            catch (Exception e)
+
+            string defsetfile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings\\tlcgendefaultdefaults.xml");
+            if (Defaults != null && File.Exists(defsetfile))
             {
-                MessageBox.Show("An error occured while loading the defaults:\n " + e.ToString() + "\nPlease report this.", "Error while loading defaults");
+                try
+                {
+                    var message = "";
+                    var message2 = "";
+                    var defaultDefaults = DeserializeDefaultsFile(defsetfile);
+                    foreach (var d in defaultDefaults.Defaults)
+                    {
+                        bool found = false;
+                        foreach (var d2 in Defaults.Defaults)
+                        {
+                            if (d.DataType == d2.DataType &&
+                                d.Category == d2.Category &&
+                                d.Selector1 == d2.Selector1 &&
+                                d.Selector2 == d2.Selector2)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            message += d.DefaultName + "; ";
+                            Defaults.Defaults.Add(d);
+                        }
+                    }
+                    var remDs = new List<TLCGenDefaultModel>();
+                    foreach (var d in Defaults.Defaults)
+                    {
+                        bool found = false;
+                        foreach (var d2 in defaultDefaults.Defaults)
+                        {
+                            if (d.DataType == d2.DataType &&
+                                d.Category == d2.Category &&
+                                d.Selector1 == d2.Selector1 &&
+                                d.Selector2 == d2.Selector2)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (!found)
+                        {
+                            message2 += d.DefaultName + "; ";
+                            remDs.Add(d);
+                        }
+                    }
+                    foreach (var d in remDs)
+                    {
+                        Defaults.Defaults.Remove(d);
+                    }
+                    if (message.Length > 0 || message2.Length > 0)
+                    {
+                        var s = "";
+                        if (message.Length > 0) s += "Defaults added: " + message;
+                        if (message2.Length > 0)
+                        {
+                            if (message.Length > 0) s += Environment.NewLine;
+                            s += "Defaults removed: " + message2;
+                        }
+                        MessageBox.Show(s, "Defaults updated");
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("An error occured while loading the defaults:\n " + e.ToString() + "\nPlease report this.", "Error while loading defaults");
+                }
+            }
+            else if(File.Exists(defsetfile))
+            {
+                Defaults = DeserializeDefaultsFile(defsetfile);
             }
         }
 

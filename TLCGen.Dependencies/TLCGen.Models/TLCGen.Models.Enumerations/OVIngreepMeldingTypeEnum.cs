@@ -12,8 +12,6 @@ namespace TLCGen.Models.Enumerations
         VECOM_io,
         [Description("KAR")]
         KAR,
-        [Description("Opticom")]
-        Opticom,
         [Description("Verlos detector")]
         VerlosDetector,
         [Description("Wissel stroomkring detector")]

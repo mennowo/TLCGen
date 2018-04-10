@@ -120,14 +120,10 @@
                                     <DataTemplate>
                                         <Grid>
                                             <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput1}"
-                                                      ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                                      ItemsSource="{Binding Path=Detectoren}" 
                                                       Visibility="{Binding Path=HasRelatedSelectableInput1,Converter={StaticResource Bool2VisConv}}"
                                                       SelectedValue="{Binding Path=RelatedInput1}" 
                                                       Margin="2" />
-                                            <TextBox IsEnabled="{Binding Path=CanHaveInput1}"
-                                                     Text="{Binding Path=Input1}"
-                                                     Visibility="{Binding Path=HasTypableInput1,Converter={StaticResource Bool2VisConv}}" 
-                                                     Margin="2" />
                                         </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -137,14 +133,10 @@
                                     <DataTemplate>
                                         <Grid>
                                             <ComboBox IsEnabled="{Binding Path=CanHaveRelatedInput2}"
-                                                      ItemsSource="{Binding Path=DataContext.Detectoren,ElementName=root}" 
+                                                      ItemsSource="{Binding Path=Detectoren}" 
                                                       Visibility="{Binding Path=HasRelatedSelectableInput2,Converter={StaticResource Bool2VisConv}}"
                                                       SelectedValue="{Binding Path=RelatedInput2}" 
                                                       Margin="2" />
-                                            <TextBox IsEnabled="{Binding Path=CanHaveInput2}"
-                                                     Text="{Binding Path=Input2}"
-                                                     Visibility="{Binding Path=HasTypableInput2,Converter={StaticResource Bool2VisConv}}" 
-                                                     Margin="2" />
                                         </Grid>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -178,12 +170,14 @@
                 <RadioButton GroupName="TypeGroup" Content="Ingang" Grid.Row="6" IsEnabled="{Binding Path=Wissel}"
                              IsChecked="{Binding Path=WisselType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static enums:OVIngreepWisselTypeEnum.Ingang}}" />
 
-                <ComboBox ItemsSource="{Binding Path=Detectoren}" Grid.Row="5" Grid.Column="1" Margin="2"
+                <ComboBox ItemsSource="{Binding Path=WisselDetectoren}" Grid.Row="5" Grid.Column="1" Margin="2"
                           IsEnabled="{Binding Path=WisselStandMiddelsDetector}"
                           SelectedValue="{Binding Path=WisselStandInput,UpdateSourceTrigger=PropertyChanged}" />
 
-                <TextBox Text="{Binding Path=WisselStandInput,UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Margin="2"
-                         IsEnabled="{Binding Path=WisselStandMiddelsIngang}" />
+                <ComboBox ItemsSource="{Binding Path=WisselIngangen}" Grid.Row="6" Grid.Column="1" Margin="2"
+                          IsEnabled="{Binding Path=WisselStandMiddelsIngang}"
+                          SelectedValue="{Binding Path=WisselStandInput,UpdateSourceTrigger=PropertyChanged}" />
+                
                 <Label Content="Wissel ingang voorwaarde" Grid.Row="7" />
                 <CheckBox 
                     IsEnabled="{Binding Path=WisselStandMiddelsIngang}"

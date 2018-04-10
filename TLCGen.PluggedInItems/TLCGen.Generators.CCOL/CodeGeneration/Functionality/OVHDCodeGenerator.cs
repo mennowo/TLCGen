@@ -101,8 +101,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return "wd";
                 case OVIngreepMeldingTypeEnum.VECOM_io:
                     return "vecio";
-                case OVIngreepMeldingTypeEnum.Opticom:
-                    return "opt";
                 case OVIngreepMeldingTypeEnum.MassaPaarIn:
                     return "mpi";
                 case OVIngreepMeldingTypeEnum.MassaPaarUit:

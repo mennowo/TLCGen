@@ -13,10 +13,6 @@ namespace TLCGen.Models
         public string RelatedInput1 { get; set; }
         [RefersTo]
         public string RelatedInput2 { get; set; }
-        [ModelName]
-        public string Input1 { get; set; }
-        [ModelName]
-        public string Input2 { get; set; }
         public int? InmeldingFilterTijd { get; set; }
 
         public OVIngreepMeldingModel()

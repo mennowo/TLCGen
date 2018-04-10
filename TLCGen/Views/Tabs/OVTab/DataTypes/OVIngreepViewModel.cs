@@ -23,8 +23,10 @@ namespace TLCGen.ViewModels
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
         private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
         private ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel> _meldingen;
-        private ObservableCollection<string> _Detectoren;
         private string _NewLijnNummer;
+
+        private ObservableCollection<string> _WisselDetectoren;
+        private ObservableCollection<string> _WisselIngangen;
 
         #endregion // Fields
 
@@ -248,20 +250,7 @@ namespace TLCGen.ViewModels
                 return _LijnNummers;
             }
         }
-
-        [Browsable(false)]
-        public ObservableCollection<string> Detectoren
-        {
-            get
-            {
-                if (_Detectoren == null)
-                {
-                    _Detectoren = new ObservableCollection<string>();
-                }
-                return _Detectoren;
-            }
-        }
-
+        
         [Browsable(false)]
         [Description("Wissel aanwezig")]
         public bool Wissel
@@ -364,6 +353,30 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public bool HasVecom => OVIngreep.HasOVIngreepVecom();
+
+        public ObservableCollection<string> WisselDetectoren
+        {
+            get
+            {
+                if (_WisselDetectoren == null)
+                {
+                    _WisselDetectoren = new ObservableCollection<string>();
+                }
+                return _WisselDetectoren;
+            }
+        }
+
+        public ObservableCollection<string> WisselIngangen
+        {
+            get
+            {
+                if (_WisselIngangen == null)
+                {
+                    _WisselIngangen = new ObservableCollection<string>();
+                }
+                return _WisselIngangen;
+            }
+        }
 
         #endregion // Properties
 
@@ -498,6 +511,44 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
+
+        private void RefreshDetectoren()
+        {
+            WisselDetectoren.Clear();
+            WisselIngangen.Clear();
+            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
+
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
+                SelectMany(x => x.Detectoren))
+            {
+                switch (d.Type)
+                {
+                    case DetectorTypeEnum.WisselDetector:
+                        WisselDetectoren.Add(d.Naam);
+                        break;
+                    case DetectorTypeEnum.WisselIngang:
+                        WisselIngangen.Add(d.Naam);
+                        break;
+                }
+            }
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
+            {
+                switch (d.Type)
+                {
+                    case DetectorTypeEnum.WisselDetector:
+                        WisselDetectoren.Add(d.Naam);
+                        break;
+                    case DetectorTypeEnum.WisselIngang:
+                        WisselIngangen.Add(d.Naam);
+                        break;
+                }
+            }
+        }
+
+        #endregion // Private Methods
+
+        #region TLCGen Messaging
+
         private void OnNameChanged(NameChangedMessage msg)
         {
             RefreshDetectoren();
@@ -510,22 +561,7 @@ namespace TLCGen.ViewModels
             RaisePropertyChanged("");
         }
 
-        private void RefreshDetectoren()
-        {
-            Detectoren.Clear();
-            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
-
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
-            {
-                Detectoren.Add(d.Naam);
-            }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
-            {
-                Detectoren.Add(d.Naam);
-            }
-        }
-
-        #endregion // Private Methods
+        #endregion // TLCGen Messaging
 
         #region Constructor
 
@@ -539,9 +575,6 @@ namespace TLCGen.ViewModels
             }
 
             LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
-
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
 
             _meldingen = new ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel>(ovingreep.Meldingen);
 
@@ -567,8 +600,6 @@ namespace TLCGen.ViewModels
                     Uitmelding = false,
                     InmeldingFilterTijd = 15
                 };
-                vec.Input1 = $"s{ovingreep.FaseCyclus}_in";
-                vec.Input2 = $"s{ovingreep.FaseCyclus}_uit";
                 _meldingen.Add(new OVIngreepMeldingViewModel(vec));
             }
 
@@ -578,18 +609,6 @@ namespace TLCGen.ViewModels
                 {
                     FaseCyclus = ovingreep.FaseCyclus,
                     Type = OVIngreepMeldingTypeEnum.VECOM_io,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.Opticom))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.Opticom,
                     Inmelding = false,
                     Uitmelding = false,
                     InmeldingFilterTijd = 15
@@ -631,6 +650,9 @@ namespace TLCGen.ViewModels
                     InmeldingFilterTijd = 15
                 }));
             }
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
 
             RefreshDetectoren();
         }
