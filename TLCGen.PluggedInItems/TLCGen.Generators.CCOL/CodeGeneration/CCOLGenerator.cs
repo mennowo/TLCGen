@@ -442,7 +442,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         /// - if it is null, lines are generated like this: #define ElemName #
         /// - if it is not null, it goes like this: #define ElemName (numberdefine + #)</param>
         /// <returns></returns>
-        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null)
+        private string GetAllElementsSysHLines(CCOLElemListData data, string numberdefine = null, List<CCOLElement> extraElements = null)
         {
             var sb = new StringBuilder();
 

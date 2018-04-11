@@ -64,6 +64,28 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Inmelding filtertijd KAR")]
+        public int? KARInmeldingFilterTijd
+        {
+            get => _HDIngreep.KARInmeldingFilterTijd;
+            set
+            {
+                _HDIngreep.KARInmeldingFilterTijd = value;
+                RaisePropertyChanged<object>(nameof(KARInmeldingFilterTijd), broadcast: true);
+            }
+        }
+
+        [Description("Uitmelding filtertijd KAR")]
+        public int? KARUitmeldingFilterTijd
+        {
+            get => _HDIngreep.KARUitmeldingFilterTijd;
+            set
+            {
+                _HDIngreep.KARUitmeldingFilterTijd = value;
+                RaisePropertyChanged<object>(nameof(KARUitmeldingFilterTijd), broadcast: true);
+            }
+        }
+
         [Browsable(false)]
         public bool OpticomAvailable => OpticomIngangen != null && OpticomIngangen.Any();
 
@@ -92,6 +114,20 @@ namespace TLCGen.ViewModels
                 {
                     _HDIngreep.OpticomRelatedInput = value;
                     RaisePropertyChanged<object>(nameof(OpticomRelatedInput), broadcast: true);
+                }
+            }
+        }
+
+        [Browsable(false)]
+        public int? OpticomInmeldingFilterTijd
+        {
+            get { return _HDIngreep.OpticomInmeldingFilterTijd; }
+            set
+            {
+                if (value != null)
+                {
+                    _HDIngreep.OpticomInmeldingFilterTijd = value;
+                    RaisePropertyChanged<object>(nameof(OpticomInmeldingFilterTijd), broadcast: true);
                 }
             }
         }

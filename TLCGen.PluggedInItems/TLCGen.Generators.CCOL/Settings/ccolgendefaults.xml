@@ -1445,7 +1445,50 @@
             <Type>Schakelaar</Type>
             <Description>Wisselstand van _E1_ negeren</Description>
           </Setting>
+          
+          <Setting>
+            <Default>hdin</Default>
+            <Setting>hdin</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd inmelden HD _E1_ _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>hdin</Default>
+            <Setting>hdin</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Inmelden _E1_ via _E2_ HD toestaan</Description>
+          </Setting>
+          <Setting>
+            <Default>hduit</Default>
+            <Setting>hduit</Setting>
+            <Type>Timer</Type>
+            <Description>Anti jutter tijd uitmelden HD _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>hduit</Default>
+            <Setting>hduit</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Uitmelden _E1_ via _E2_ HD toestaan</Description>
+          </Setting>
+          <Setting>
+            <Default>hdinuit</Default>
+            <Setting>hdinuit</Setting>
+            <Type>Schakelaar</Type>
+            <Description>In- en uitmelden _E1_ via _E2_ HD toestaan</Description>
+          </Setting>
 
+          <Setting>
+            <Default>checksirene</Default>
+            <Setting>checksirene</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Bij HD meldingen bij _E1_ via DSI controleren op CIF_SIR</Description>
+          </Setting>
+        <Setting>
+            <Default>wisselpol</Default>
+            <Setting>wisselpol</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Polariteit van wissel ingang _E1_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

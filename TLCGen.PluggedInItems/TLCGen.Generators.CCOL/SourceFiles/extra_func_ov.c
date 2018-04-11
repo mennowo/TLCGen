@@ -30,110 +30,23 @@ bool DSIMeldingOV_V1(
 	return TRUE;
 }
 
-bool OVmelding_KAR_V2(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */
-	count dir,                  /*  2. fc nummer of richtingnummer (201, 202, 203)  */
-	s_int16 stp,                /*  3. stiptheidsklasse                             */
-	count meldingtype,          /*  4. type melding (CIF_DSIN / CIF_DSUIT)          */
-	bool cprio,                 /*  5. alleen inmelden bij geconditioneerde prio    */
-	s_int16 laatcrit,           /*  6. aantal seconden waarna bus te laat is        */
-	count lijnparm,             /*  7. eerste lijnparameter (prmov##_allelijnen)    */
-	count bufmax,               /*  8. max aantal lijnen in buffer                  */
-struct prevovkar * prevOV,  /*  9. opslag data laatste DSI bericht              */
-	count tdh)                  /* 10. hiaat timer tbv voorkomen dubbele melding    */
+bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201, 202, 203)  */
+	                  count meldingtype, /* 2. Type melding: in of uit */
+	                  bool check_sirene) /* 3. Check SIRENE */
 {
-	bool check_lijn = FALSE;
-	count index;
-	bool isov = FALSE;
-
-	/* Check op eerder bericht voor hetzelfde voertuig */
-	if ((T[tdh] || RT[tdh]) &&
-		CIF_DSI[CIF_DSI_LYN] == prevOV->prevlijn &&
-		CIF_DSI[CIF_DSI_TYPE] == prevOV->prevtype &&
-		CIF_DSI[CIF_DSI_VTG] == prevOV->prevvtg &&
-		CIF_DSI[CIF_DSI_DIR] == prevOV->prevdir)
-		return 0;
-	RT[tdh] = FALSE;
-
-	/* Kijken of lijnnummer overeenkomt met een parameter voor deze richting */
-	if (CIF_DSI[CIF_DSI_LYN] != 0)
-	{
-		for (index = 0; index < bufmax; ++index)
-		{
-			check_lijn = (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]);
-			if (check_lijn)
-				break;
-		}
-	}
-
-	if ((PRM[lijnparm] == 1 || check_lijn) &&  /* lijnnummer juist voor deze richting? */
-		(CIF_DSI[CIF_DSI_VTG] == vtgtype) &&  /* juiste voertuigtype? */
-		(CIF_DSI[CIF_DSI_DIR] == dir) &&  /* geldt deze melding voor deze richting? */
-		(!cprio ||              /* staat geconditioneerde prio uit?
-								/* zo nee, behoeft het voertuig prioriteit irt ingestelde stiptheid? */
-								(((stp > 0) && (CIF_DSI[CIF_DSI_STP] <= stp)) ||/* enerzijds vanwege de mate van stiptheid, */
-								(CIF_DSI[CIF_DSI_TSTP] > laatcrit))) &&  /* of anders omdat de bus meer dan laatcrit seconden vertraagd? */
-								(CIF_DSI[CIF_DSI_TYPE] == meldingtype)      /* is dit een in of een uitmelding? */
-#if !defined (VISSIM) && DSMAX
-								&& DS_MSG
-#endif
-								)
-								isov = TRUE;
-
-	/* Opslaan huidige waarden en herstart hiaat timer */
-	if (isov)
-	{
-		RT[tdh] = TRUE;
-		prevOV->prevlijn = CIF_DSI[CIF_DSI_LYN];
-		prevOV->prevtype = CIF_DSI[CIF_DSI_TYPE];
-		prevOV->prevvtg = CIF_DSI[CIF_DSI_VTG];
-		prevOV->prevdir = CIF_DSI[CIF_DSI_DIR];
-	}
-
-	return isov;
-}
-
-bool HDmelding_KAR_V1(count vtgtype,  /*  1. voertuigtype (CIF_BUS CIF_TRAM CIF_BRA) etc  */
-	count prio,                 /*  2. Voert voertuig SIRENE */
-	count dir,                  /*  3. fc nummer of richtingnummer (201, 202, 203)  */
-	count meldingtype          /*  5. type melding (CIF_DSIN / CIF_DSUIT)          */
-/*struct prevovkar * prevOV, */ /* 10. opslag data laatste DSI bericht              */
-/*	count tdh*/)                  /* 11. hiaat timer tbv voorkomen dubbele melding    */
-{
-	bool check_lijn = FALSE;
-	bool isov = FALSE;
-
-	/* Check op eerder bericht voor hetzelfde voertuig 
-	if ((T[tdh] || RT[tdh]) &&
-		CIF_DSI[CIF_DSI_TYPE] == prevOV->prevtype &&
-		CIF_DSI[CIF_DSI_VTG] == prevOV->prevvtg &&
-		CIF_DSI[CIF_DSI_DIR] == prevOV->prevdir)
-		return 0;
-	RT[tdh] = FALSE;
-	*/
-	/* Kijken of lijnnummer overeenkomt met een parameter voor deze richting */
-
-	if ((CIF_DSI[CIF_DSI_VTG] == vtgtype) &&  /* juiste voertuigtype? */
-		(CIF_DSI[CIF_DSI_PRI] == prio) &&
+	if ((CIF_DSI[CIF_DSI_VTG] == CIF_POL || 
+		 CIF_DSI[CIF_DSI_VTG] == CIF_BRA || 
+		 CIF_DSI[CIF_DSI_VTG] == CIF_AMB) &&  /* juiste voertuigtype? */
+		(!check_sirene || (CIF_DSI[CIF_DSI_PRI] == CIF_SIR)) &&
 		(CIF_DSI[CIF_DSI_DIR] == dir) &&  /* geldt deze melding voor deze richting? */
 		(CIF_DSI[CIF_DSI_TYPE] == meldingtype)      /* is dit een in of een uitmelding? */
 #if !defined (VISSIM) && DSMAX
 		&& DS_MSG
 #endif
-		)                          isov = TRUE;
+		) return TRUE;
 
-	/* Opslaan huidige waarden en herstart hiaat timer 
-	if (isov)
-	{
-		RT[tdh] = TRUE;
-		prevOV->prevlijn = CIF_DSI[CIF_DSI_LYN];
-		prevOV->prevtype = CIF_DSI[CIF_DSI_TYPE];
-		prevOV->prevvtg = CIF_DSI[CIF_DSI_VTG];
-		prevOV->prevdir = CIF_DSI[CIF_DSI_DIR];
-	}*/
-
-	return isov;
+	return FALSE;
 }
-
 
 #ifdef CCOL_IS_SPECIAL
 /*  de functie reset_DSI-message()
@@ -190,67 +103,3 @@ void set_DSI_message(mulv ds, mulv vtg, mulv melding, mulv PRM_lijnnr, mulv stip
 	CIF_DSIWIJZ = 1;
 }
 #endif
-
-bool OVmelding_DSI_BUS(
-	count seldet1,              /* eerste selectieve detectielus            */
-	count seldet2,              /* tweede selectieve detectielus (of NG)    */
-	count seldet3,              /* derde selectieve detectielus (of NG)     */
-	count lijnparm,             /* eerste lijnparameter (prmov##_allelijnen)*/
-	count bufmax)               /* max aantal lijnen in buffer              */
-	/*  Aanroep voor fc02:
-	IH[hsd_02in]= OVmelding_DSI(ds02_1a, ds02_1b, NG, prmov02_allelijnen, 10);
-	*/
-{
-	bool check_lijn = FALSE;
-	int  index;
-	if (CIF_DSI[CIF_DSI_LYN] != 0)
-	{
-		for (index = 0; index<bufmax; index++)    /* bufmax = aantal lijn-parameters in tab.c */
-		{
-			check_lijn = (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]);
-			if (check_lijn == TRUE) break;
-		}
-	}
-
-	if (((CIF_DSI[CIF_DSI_LUS] == seldet1) ||
-		(CIF_DSI[CIF_DSI_LUS] == seldet2) ||
-		(CIF_DSI[CIF_DSI_LUS] == seldet3))
-#ifndef VISSIM
-		&& DS_MSG
-#endif
-		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckdstype]) && CIF_DSI[CIF_DSI_VTG] == CIF_BUS)
-		&& ((PRM[lijnparm] == 1) || check_lijn))              return TRUE;
-	else                                                        return FALSE;
-}
-
-bool OVmelding_DSI_TRAM(
-	count seldet1,              /* eerste selectieve detectielus            */
-	count seldet2,              /* tweede selectieve detectielus (of NG)    */
-	count seldet3,              /* derde selectieve detectielus (of NG)     */
-	count lijnparm,             /* eerste lijnparameter (prmov##_allelijnen)*/
-	count bufmax)               /* max aantal lijnen in buffer              */
-	/*  Aanroep voor fc02:
-	IH[hsd_02in]= OVmelding_DSI(ds02_1a, ds02_1b, NG, prmov02_allelijnen, 10);
-	*/
-{
-	bool check_lijn = FALSE;
-	int  index;
-	if (CIF_DSI[CIF_DSI_LYN] != 0)
-	{
-		for (index = 0; index<bufmax; index++)    /* bufmax = aantal lijn-parameters in tab.c */
-		{
-			check_lijn = (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]);
-			if (check_lijn == TRUE) break;
-		}
-	}
-
-	if (((CIF_DSI[CIF_DSI_LUS] == seldet1) ||
-		(CIF_DSI[CIF_DSI_LUS] == seldet2) ||
-		(CIF_DSI[CIF_DSI_LUS] == seldet3))
-#ifndef VISSIM
-		&& DS_MSG
-#endif
-		&& (((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) || !SCH[schcheckdstype]) && CIF_DSI[CIF_DSI_VTG] == CIF_TRAM)
-		&& ((PRM[lijnparm] == 1) || check_lijn))              return TRUE;
-	else                                                        return FALSE;
-}

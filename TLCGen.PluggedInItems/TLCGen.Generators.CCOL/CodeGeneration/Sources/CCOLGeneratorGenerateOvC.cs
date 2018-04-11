@@ -104,6 +104,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("} TOVRichtingIndex;");
             sb.AppendLine();
             sb.AppendLine("static int ov;");
+            sb.AppendLine("extern mulv TDH_old[];");
             sb.AppendLine();
             sb.AppendLine("#include \"ov.c\"");
             if (c.HalfstarData.IsHalfstar)
@@ -113,23 +114,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             if (c.HasKAR())
             {
-                var any = false;
-                foreach (var hd in c.OVData.HDIngrepen)
-                {
-                    if(c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
-                    {
-                        if (!any)
-                        {
-                            sb.AppendLine("/* Richtingen met HD ingreep zonder OV ingreep */");
-                            any = true;
-                        }
-                        sb.AppendLine($"static prevOVkarstruct prevOVkar{hd.FaseCyclus}in, prevOVkar{hd.FaseCyclus}uit;");
-                    }
-                }
-                sb.AppendLine();
                 sb.AppendLine("/* Variabele tbv start KAR ondergedrag timer bij starten regeling */");
                 sb.AppendLine("static char startkarog = FALSE;");
-                
             }
 
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
@@ -841,82 +827,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = FALSE;");
             }
             sb.AppendLine();
-            
-            #region In- en uitmeldingen
 
-            
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, true, true);
 
-            #endregion // In- en uitmeldingen
-
-            //#region OV ingrepen KAR
-            //
-            //var karovfcs = c.OVData.OVIngrepen.Where(x => x.KAR);
-	        //var ovIngreepModels = karovfcs as OVIngreepModel[] ?? karovfcs.ToArray();
-	        //foreach (var ov in ovIngreepModels)
-            //{
-	        //    if (int.TryParse(ov.FaseCyclus, out var ifc))
-            //    {
-            //        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-            //        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSIN, SCH[{_schpf}{_schcprio}], PRM[{_prmpf}{_prmlaatcrit}], {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}in, {_tpf}{_tdhkarin}{ov.FaseCyclus});");
-            //    }
-            //}
-            //foreach (var ov in ovIngreepModels)
-            //{
-	        //    if (int.TryParse(ov.FaseCyclus, out var ifc))
-            //    {
-            //        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-            //        sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_KAR_V2({type}, {ifc}, PRM[{_prmpf}{_prmovstp}{ov.FaseCyclus}], CIF_DSUIT, (bool)FALSE, 0, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count}, &prevOVkar{ov.FaseCyclus}uit, {_tpf}{_tdhkaruit}{ov.FaseCyclus});");
-            //    }
-            //}
-            //
-            //#endregion // OV ingrepen KAR
-            //
-            //#region OV ingrepen VECOM
-            //
-            //var vecomovfcs = c.OVData.OVIngrepen.Where(x => x.Vecom);
-            //foreach (var ov in vecomovfcs)
-            //{
-            //    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
-            //    sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_in, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
-            //}
-            //foreach (var ov in vecomovfcs)
-            //{
-            //    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "BUS" : "TRAM";
-            //    sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] |= OVmelding_DSI_{type}(ds{ov.FaseCyclus}_uit, NG, NG, {_prmpf}{_prmallelijnen}{ov.FaseCyclus}, {ov.LijnNummers.Count});");
-            //}
-            //
-            //#endregion // OV ingrepen VECOM
-
-            #region HD ingrepen KAR
-
-            var karhdfcs = c.OVData.HDIngrepen.Where(x => x.KAR);
-	        var hdIngreepModels = karhdfcs as HDIngreepModel[] ?? karhdfcs.ToArray();
-	        foreach (var hd in hdIngreepModels)
+            if (c.HasKAR())
             {
-	            if (int.TryParse(hd.FaseCyclus, out var ifc))
-                {
-                    var start = $"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] |= ";
-                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSIN) ||");
-                    sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSIN) ||");
-                    sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSIN);");
-                }
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
+                sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
+                sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
+                sb.AppendLine($"{ts}if (!startkarog) startkarog = TRUE;");
             }
-            foreach (var hd in hdIngreepModels)
-            {
-	            if (int.TryParse(hd.FaseCyclus, out var ifc))
-                {
-                    var start = $"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] |= ";
-                    sb.AppendLine($"{start}HDmelding_KAR_V1(CIF_AMB, CIF_SIR, {ifc}, CIF_DSUIT) ||");
-                    sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_POL, CIF_SIR, {ifc}, CIF_DSUIT) ||");
-                    sb.Append("".PadRight(start.Length));
-                    sb.AppendLine($"HDmelding_KAR_V1(CIF_BRA, CIF_SIR, {ifc}, CIF_DSUIT);");
-                }
-            }
-
-            #endregion // HD ingrepen KAR
 
             #region HD ingrepen mee inmelden
 
@@ -937,18 +858,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #endregion // HD ingrepen mee inmelden
 
-            if (c.HasKAR())
-            {
-                sb.AppendLine();
-                sb.AppendLine($"{ts}/* Bijhouden melding en ondergedrag KAR */");
-                sb.AppendLine($"{ts}RT[{_tpf}{_tkarmelding}] = CIF_DSIWIJZ != 0;");
-                sb.AppendLine($"{ts}RT[{_tpf}{_tkarog}] = T[{_tpf}{_tkarmelding}] || !startkarog;");
-                sb.AppendLine($"{ts}if (!startkarog) startkarog = TRUE;");
-            }
-
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, true, true);
-
-			sb.AppendLine("}");
+            sb.AppendLine("}");
 	        sb.AppendLine();
 
 			return sb.ToString();

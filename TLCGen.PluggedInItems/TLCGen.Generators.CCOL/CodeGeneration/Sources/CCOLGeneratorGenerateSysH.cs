@@ -124,13 +124,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* -------- */");
 
             int pad1 = "ISMAX".Length;
-            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any())
+            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.IsDetector()))
             {
-                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
+                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector()).Max(x => x.GetDefine().Length);
             }
-            if(controller.Detectoren.Any())
+            if(controller.Detectoren.Any(x => x.IsDetector()))
             {
-                int _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
+                int _pad1 = controller.Detectoren.Where(x => x.IsDetector()).Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             var ovdummies = controller.OVData.GetAllDummyDetectors();
@@ -143,19 +143,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad2 = controller.Fasen.Count.ToString().Length;
 
             int index = 0;
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach (DetectorModel dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector()))
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                if (!dm.Dummy)
                 {
-                    if (!dm.Dummy)
-                    {
-                        sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                        sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                        ++index;
-                    }
+                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    ++index;
                 }
             }
-            foreach (DetectorModel dm in controller.Detectoren)
+            foreach (DetectorModel dm in controller.Detectoren.Where(x => x.IsDetector()))
             {
                 if (!dm.Dummy)
                 {
@@ -168,31 +165,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int autom_index = index;
 
             /* Dummies */
-            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy).Any() ||
-                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
+            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector() && x.Dummy).Any() ||
+                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.IsDetector() && x.Dummy).Any() ||
                 ovdummies.Any())
             {
                 sb.AppendLine("#ifndef AUTOMAAT");
-                foreach (FaseCyclusModel fcm in controller.Fasen)
+                foreach (var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector() && x.Dummy))
                 {
-                    foreach (DetectorModel dm in fcm.Detectoren)
-                    {
-                        if (dm.Dummy)
-                        {
-                            sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                            sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                            ++index;
-                        }
-                    }
+                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    ++index;
                 }
-                foreach (DetectorModel dm in controller.Detectoren)
+                foreach (var dm in controller.Detectoren.Where(x => x.IsDetector() && x.Dummy))
                 {
-                    if (dm.Dummy)
-                    {
-                        sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                        sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                        ++index;
-                    }
+                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
+                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
+                    ++index;
                 }
                 foreach(var dm in ovdummies)
                 {
@@ -213,7 +201,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.Append($"{ts}#define DPMAX1 ".PadRight(pad1));
                 sb.Append($"{index.ToString()} ".PadLeft(pad2));
-                sb.AppendLine("/* aantal fasecycli */");
+                sb.AppendLine("/* aantal detectoren */");
             }
 
             return sb.ToString();
@@ -225,6 +213,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
+
+            var extra = new List<CCOLElement>();
+            foreach(var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsInput()))
+            {
+                extra.Add(new CCOLElement
+                {
+                    Define = $"{_ispf}{dm.Naam}",
+                    Naam = dm.Naam,
+                    Dummy = false,
+                    TType = CCOLElementTimeTypeEnum.None,
+                    Type = CCOLElementTypeEnum.Ingang
+                });
+            }
+            foreach (var dm in controller.Detectoren.Where(x => x.IsInput()))
+            {
+                extra.Add(new CCOLElement
+                {
+                    Define = $"{_ispf}{dm.Naam}",
+                    Naam = dm.Naam,
+                    Dummy = false,
+                    TType = CCOLElementTimeTypeEnum.None,
+                    Type = CCOLElementTypeEnum.Ingang
+                });
+            }
 
             sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX"));
 
@@ -311,28 +323,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ------------------- */");
 
             int index = 0;
-            // Geen VECOM? Dan dummy lus tbv KAR
-            if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+            var isvecom = controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Type == DetectorTypeEnum.VecomDetector) ||
+                          controller.Detectoren.Any(x => x.Type == DetectorTypeEnum.VecomDetector);
+            // Geen VECOM? Dan alleen een dummy lus tbv KAR
+            if (!isvecom)
             {
                 sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR */");
                 ++index;
             }
-            else if (controller.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()))
+            // Anders ook een dummy lus, voor KAR en zodat VECOM begint op 1
+            else
             {
-                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR + VECOM start op 1 */");
+                sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR & VECOM start op 1 */");
                 ++index;
                 
-                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+                foreach (var d in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Type == DetectorTypeEnum.VecomDetector))
                 {
-                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
-                    if (m.Inmelding)
-                    {
-                        sb.AppendLine($"{ts}#define {_dpf}{m.RelatedInput1} {index++}");
-                    }
-                    if (m.Uitmelding)
-                    {
-                        sb.AppendLine($"{ts}#define {_dpf}{m.RelatedInput2} {index++}");
-                    }
+                    sb.AppendLine($"{ts}#define {_dpf}{d.Naam} {index++}");
+                }
+                foreach (var d in controller.Detectoren.Where(x => x.Type == DetectorTypeEnum.VecomDetector))
+                {
+                    sb.AppendLine($"{ts}#define {_dpf}{d.Naam} {index++}");
                 }
             }
             sb.AppendLine($"{ts}#define DSMAX    {index}");

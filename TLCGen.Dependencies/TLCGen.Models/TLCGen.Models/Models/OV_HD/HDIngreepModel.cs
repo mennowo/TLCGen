@@ -17,9 +17,11 @@ namespace TLCGen.Models
 
         public bool KAR { get; set; }
         public bool Opticom { get; set; }
+        public int? KARInmeldingFilterTijd { get; set; }
+        public int? KARUitmeldingFilterTijd { get; set; }
+        public int? OpticomInmeldingFilterTijd { get; set; }
         [Browsable(false)]
         public string OpticomRelatedInput { get; set; }
-        [Browsable(false)] // Not (yet) used
         public bool Sirene { get; set; }
 
         public int RijTijdOngehinderd { get; set; }

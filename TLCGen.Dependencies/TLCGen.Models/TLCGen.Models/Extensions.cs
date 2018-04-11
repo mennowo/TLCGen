@@ -8,6 +8,22 @@ namespace TLCGen.Models
 {
     public static class Extensions
     {
+        public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c)
+        {
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
+        }
+
+        public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, Func<DetectorModel, bool> predicate)
+        {
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Where(predicate);
+        }
+
+        public static bool HasOVIngreepVecomIO(this OVIngreepModel ov)
+        {
+            return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) &&
+                                         (x.Type == Enumerations.OVIngreepMeldingTypeEnum.VECOM_io));
+        }
+
         public static bool HasOVIngreepDSI(this OVIngreepModel ov)
         {
             return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) && 
@@ -49,6 +65,20 @@ namespace TLCGen.Models
         {
             return c.OVData.OVIngrepen.Any() ||
                    c.OVData.HDIngrepen.Any();
+        }
+
+        public static bool IsDetector(this DetectorModel det)
+        {
+            return det.Type != Enumerations.DetectorTypeEnum.VecomDetector &&
+                   det.Type != Enumerations.DetectorTypeEnum.VecomIngang &&
+                   det.Type != Enumerations.DetectorTypeEnum.WisselIngang;
+        }
+
+        public static bool IsInput(this DetectorModel det)
+        {
+            return det.Type == Enumerations.DetectorTypeEnum.VecomDetector &&
+                   det.Type == Enumerations.DetectorTypeEnum.VecomIngang &&
+                   det.Type == Enumerations.DetectorTypeEnum.WisselIngang;
         }
 
     }
