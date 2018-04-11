@@ -138,52 +138,67 @@ namespace TLCGen.Importers.TabC
 			            if (mtdb.Groups.Count > 1)
 				            int.TryParse(mtdb.Groups[1].Value, out tog);
 		            }
-					var nd = new DetectorModel
-					{
-						Naam = dd, Rijstrook = 1
-					};
-		            if (tdb != -1) nd.TDB = tdb;
-		            if (tdh != -1) nd.TDH = tdh;
-		            if (tbg != -1) nd.TBG = tbg;
-		            if (tog != -1) nd.TOG = tog;
-		            if (nd.Naam.StartsWith("k"))
-		            {
-			            nd.Type = DetectorTypeEnum.Knop;
-			            nd.Aanvraag = DetectorAanvraagTypeEnum.RoodGeel;
-			            nd.Verlengen = DetectorVerlengenTypeEnum.Geen;
-		            }
-		            else if (Regex.IsMatch(nd.Naam, "1[a-z]?$"))
-		            {
-			            nd.Type = DetectorTypeEnum.Kop;
-			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-			            nd.AanvraagDirect = true;
-			            nd.Verlengen = DetectorVerlengenTypeEnum.Kopmax;
-		            }
-		            else if (Regex.IsMatch(nd.Naam, "2[a-z]?$"))
-		            {
-			            nd.Type = DetectorTypeEnum.Lang;
-			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-			            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
-		            }
-		            else if (Regex.IsMatch(nd.Naam, "3[a-z]?$"))
-		            {
-			            nd.Type = DetectorTypeEnum.Verweg;
-			            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-			            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
-		            }
-		            else 
-		            {
-			            nd.Type = DetectorTypeEnum.Overig;
-			            nd.Aanvraag = DetectorAanvraagTypeEnum.Uit;
-		            }
-		            foreach (var fc in outcome.Fasen)
-		            {
-			            if (fc.Naam.Length < nd.Naam.Length &&
-			                Regex.IsMatch(nd.Naam, $@"^k?{fc.Naam}"))
-			            {
-							fc.Detectoren.Add(nd);
-			            }
-		            }
+                    // Detector: try to find, otherwise add new
+                    DetectorModel nd = null;
+                    foreach (var fc in outcome.Fasen)
+                    {
+                        var bd = fc.Detectoren.First(x => x.Naam == dd);
+                        if(bd != null)
+                        {
+                            nd = bd;
+                            break;
+                        }
+                    }
+                    if (nd == null)
+                    {
+                        nd = new DetectorModel()
+                        {
+                            Naam = dd,
+                            Rijstrook = 1
+                        };
+                        if (nd.Naam.StartsWith("k"))
+                        {
+                            nd.Type = DetectorTypeEnum.Knop;
+                            nd.Aanvraag = DetectorAanvraagTypeEnum.RoodGeel;
+                            nd.Verlengen = DetectorVerlengenTypeEnum.Geen;
+                        }
+                        else if (Regex.IsMatch(nd.Naam, "1[a-z]?$"))
+                        {
+                            nd.Type = DetectorTypeEnum.Kop;
+                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+                            nd.AanvraagDirect = true;
+                            nd.Verlengen = DetectorVerlengenTypeEnum.Kopmax;
+                        }
+                        else if (Regex.IsMatch(nd.Naam, "2[a-z]?$"))
+                        {
+                            nd.Type = DetectorTypeEnum.Lang;
+                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+                            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
+                        }
+                        else if (Regex.IsMatch(nd.Naam, "3[a-z]?$"))
+                        {
+                            nd.Type = DetectorTypeEnum.Verweg;
+                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
+                            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
+                        }
+                        else
+                        {
+                            nd.Type = DetectorTypeEnum.Overig;
+                            nd.Aanvraag = DetectorAanvraagTypeEnum.Uit;
+                        }
+                        foreach (var fc in outcome.Fasen)
+                        {
+                            if (fc.Naam.Length < nd.Naam.Length &&
+                                Regex.IsMatch(nd.Naam, $@"^k?{fc.Naam}"))
+                            {
+                                fc.Detectoren.Add(nd);
+                            }
+                        }
+                    }
+		            if (!nd.TDB.HasValue && tdb != -1) nd.TDB = tdb;
+		            if (!nd.TDH.HasValue && tdh != -1) nd.TDH = tdh;
+		            if (!nd.TBG.HasValue && tbg != -1) nd.TBG = tbg;
+		            if (!nd.TOG.HasValue && tog != -1) nd.TOG = tog;
 	            }
             }
             return outcome;
