@@ -535,49 +535,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     #endregion //Inmelding OV Wisselstroomkring detector
                                     #region Inmelding OV Massa paar in
                                     case OVIngreepMeldingTypeEnum.MassaPaarIn:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                      $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                      $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && ");
                                         if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                            $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" + Environment.NewLine +
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}] && D[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            sb.AppendLine($"{ts}{ts}(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && ");
                                         }
                                         else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                            (ov.WisselStandVoorwaarde ?
-                                                    $"((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" :
-                                                    $"((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? IS[{_ispf}{ov.WisselStandInput}] : !IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&") + Environment.NewLine +
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}] && D[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            sb.AppendLine((ov.WisselStandVoorwaarde ?
+                                                          $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " :
+                                                          $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? IS[{_ispf}{ov.WisselStandInput}] : !IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && "));
                                         }
-                                        else
-                                        {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " + Environment.NewLine + 
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}] && D[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"SD[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
-                                        }
+                                        sb.AppendLine($"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                      $"SD[{_dpf}{melding.RelatedInput2}] && D[{_dpf}{melding.RelatedInput1}] ||" + Environment.NewLine +
+                                                      $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                      $"ED[{_dpf}{melding.RelatedInput1}] ||" + Environment.NewLine +
+                                                      $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && " +
+                                                      $"SD[{_dpf}{melding.RelatedInput2}]) && " +
+                                                      $"!T[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
                                         inmHelems.Add($"{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     #endregion // Inmelding OV Massa paar in
@@ -818,46 +795,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     #endregion // Uitmelding OV VECOM IO
                                     #region Uitmelding OV Massa paar uit
                                     case OVIngreepMeldingTypeEnum.MassaPaarUit:
+                                        sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
+                                                      $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && ");
                                         if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                            $"(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" + Environment.NewLine +
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"D[{_dpf}{melding.RelatedInput1}] && ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            sb.AppendLine($"{ts}{ts}(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && ");
                                         }
                                         else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
                                         {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
-                                            (ov.WisselStandVoorwaarde ?
-                                                    $"((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" :
-                                                    $"((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? IS[{_ispf}{ov.WisselStandInput}] : !IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&") + Environment.NewLine +
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"D[{_dpf}{melding.RelatedInput1}] && ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
+                                            sb.AppendLine((ov.WisselStandVoorwaarde ?
+                                                          $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" :
+                                                          $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? IS[{_ispf}{ov.WisselStandInput}] : !IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&"));
                                         }
-                                        else
-                                        {
-                                            sb.AppendLine($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " + Environment.NewLine +
-                                            $"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"D[{_dpf}{melding.RelatedInput1}] && ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput2}] ||" + Environment.NewLine +
-                                            $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING)" +
-                                                $"ED[{_dpf}{melding.RelatedInput1}])" + Environment.NewLine +
-                                            $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}];");
-                                        }
+                                        sb.AppendLine($"{ts}{ts}((CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                      $"D[{_dpf}{melding.RelatedInput2}] && ED[{_dpf}{melding.RelatedInput1}] ||" + Environment.NewLine +
+                                                      $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput2}] >= CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && " +
+                                                      $"ED[{_dpf}{melding.RelatedInput1}] ||" + Environment.NewLine +
+                                                      $"{ts}{ts} (CIF_IS[{_dpf}{melding.RelatedInput2}] < CIF_DET_STORING) && (CIF_IS[{_dpf}{melding.RelatedInput1}] >= CIF_DET_STORING) && " +
+                                                      $"ED[{_dpf}{melding.RelatedInput2}]) && " +
+                                                      $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
                                         uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     #endregion // Uitmelding OV Massa paar uit

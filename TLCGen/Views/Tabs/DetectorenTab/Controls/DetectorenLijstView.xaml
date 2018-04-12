@@ -15,7 +15,13 @@
              d:DesignHeight="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
-        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestStyle">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorBaseStyle">
+            <!-- here, we need to redo what the specialdatagrid has, cause the style for datagridcell is overwritten 
+                 not sweet, but so far, found no better way -->
+            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
+            <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />
+        </Style>
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestStyle" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanRequest}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -23,12 +29,8 @@
                     <Setter Property="Foreground" Value="LightGray" />
                 </DataTrigger>
             </Style.Triggers>
-            <!-- here, we need to redo what the specialdatagrid has, cause the style for datagridcell is overwritten 
-                 not sweet, but so far, found no better way -->
-            <!--<EventSetter Event="PreviewMouseLeftButtonDown" Handler="DataGridCell_PreviewMouseLeftButtonDown" />
-            <EventSetter Event="PreviewTextInput" Handler="DataGridCell_PreviewTextInput" />-->
         </Style>
-        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestDirectStyle">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithRequestDirectStyle" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanRequestDirect}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -37,7 +39,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithExtendStyle">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithExtendStyle" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanExtend}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -46,7 +48,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithErrorStyle">
+        <Style TargetType="{x:Type DataGridCell}" x:Key="DetectorWithErrorStyle" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanHaveError}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -55,7 +57,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DetectorWithWaitingLightStyle" TargetType="{x:Type DataGridCell}">
+        <Style x:Key="DetectorWithWaitingLightStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanHaveWaitingLight}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -64,7 +66,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DetectorWithLaneNumberStyle" TargetType="{x:Type DataGridCell}">
+        <Style x:Key="DetectorWithLaneNumberStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanHaveLaneNumber}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -73,7 +75,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DetectorWithTDHStyle" TargetType="{x:Type DataGridCell}">
+        <Style x:Key="DetectorWithTDHStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanHaveTDH}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />
@@ -82,7 +84,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="DetectorWithTDBStyle" TargetType="{x:Type DataGridCell}">
+        <Style x:Key="DetectorWithTDBStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DetectorBaseStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=DetectorCanHaveTDB}" Value="false">
                     <Setter Property="IsEnabled" Value="False" />

@@ -189,31 +189,14 @@ namespace TLCGen.ViewModels
             VecomIngangen.Clear();
             if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
 
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                SelectMany(x => x.Detectoren))
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.GetAllDetectors())
             {
                 switch (d.Type)
                 {
                     case DetectorTypeEnum.Kop:
                     case DetectorTypeEnum.Lang:
                     case DetectorTypeEnum.Verweg:
-                        MassaDetectoren.Add(d.Naam);
-                        break;
-                    case DetectorTypeEnum.VecomDetector:
-                        VecomDetectoren.Add(d.Naam);
-                        break;
-                    case DetectorTypeEnum.VecomIngang:
-                        VecomIngangen.Add(d.Naam);
-                        break;
-                }
-            }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
-            {
-                switch (d.Type)
-                {
-                    case DetectorTypeEnum.Kop:
-                    case DetectorTypeEnum.Lang:
-                    case DetectorTypeEnum.Verweg:
+                    case DetectorTypeEnum.Overig:
                         MassaDetectoren.Add(d.Naam);
                         break;
                     case DetectorTypeEnum.VecomDetector:
