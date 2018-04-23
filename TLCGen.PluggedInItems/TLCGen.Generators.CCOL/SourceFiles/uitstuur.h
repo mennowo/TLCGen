@@ -1,7 +1,7 @@
 ﻿#ifndef __UITSTUUR_H__
 #define __UITSTUUR_H__
 
-  #if MLMAX
+  #if defined MLMAX || defined PLMAX
   void SegmentSturing(count displ,
                       count us1, count us2, count us3, count us4, count us5, count us6, count us7);
   void SegmentSturingDubbel(count displ,
