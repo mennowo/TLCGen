@@ -237,6 +237,7 @@ namespace TLCGen.ViewModels
             ModuleViewModel mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
             SelectedModule = mvm;
+            MessengerInstance.Send(new ModulesChangedMessage());
         }
 
         bool AddNewModuleCommand_CanExecute(object prm)
@@ -259,6 +260,7 @@ namespace TLCGen.ViewModels
                     SelectedModule = Modules[index];
                 }
             }
+            MessengerInstance.Send(new ModulesChangedMessage());
         }
 
         bool ChangeModuleCommand_CanExecute(object prm)

@@ -580,6 +580,8 @@
         <TLCGenVersie>V0_1</TLCGenVersie>
         <SegmentenDisplayBitmapData />
         <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
+        <ModulenDisplayBitmapData />
+        <UitgangPerModule>false</UitgangPerModule>
         <FixatieData>
           <FixatieMogelijk>true</FixatieMogelijk>
           <BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>

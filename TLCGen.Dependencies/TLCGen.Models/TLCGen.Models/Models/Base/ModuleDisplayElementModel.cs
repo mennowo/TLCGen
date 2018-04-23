@@ -8,11 +8,13 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class SegmentDisplayElementModel
+    public class ModuleDisplayElementModel : IComparable
     {
-        [IOElement("segm", BitmappedItemTypeEnum.Uitgang, "Naam")]
+        [IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
+
         private string _Naam;
+        [RefersTo]
         public string Naam
         {
             get
@@ -26,9 +28,14 @@ namespace TLCGen.Models
             }
         }
 
-        public SegmentDisplayElementModel()
+        public ModuleDisplayElementModel()
         {
             BitmapData = new BitmapCoordinatenDataModel();
+        }
+
+        public int CompareTo(object obj)
+        {
+            return string.Compare(Naam, ((ModuleDisplayElementModel)obj).Naam, StringComparison.Ordinal);
         }
     }
 }

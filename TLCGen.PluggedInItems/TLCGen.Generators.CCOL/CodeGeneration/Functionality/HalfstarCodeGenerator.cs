@@ -1257,7 +1257,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCPostSystemApplication:
-					return sb.ToString();
+                    return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
 					return sb.ToString();

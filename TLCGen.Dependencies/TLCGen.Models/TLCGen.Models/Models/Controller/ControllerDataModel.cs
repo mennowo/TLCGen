@@ -57,7 +57,9 @@ namespace TLCGen.Models
         [Browsable(false)]
         public List<SegmentDisplayElementModel> SegmentenDisplayBitmapData { get; set; }
 
-        // Note: this is a feature for future use; it is not yet disclosed to the user
+        [Browsable(false)]
+        public List<ModuleDisplayElementModel> ModulenDisplayBitmapData { get; set; }
+        
         private SegmentDisplayTypeEnum _segmentDisplayType;
         [Browsable(false)]
         public SegmentDisplayTypeEnum SegmentDisplayType
@@ -65,6 +67,8 @@ namespace TLCGen.Models
             get => _segmentDisplayType;
             set => _segmentDisplayType = value;
         }
+
+        public bool UitgangPerModule { get; set; }
 
         public FixatieModel FixatieData { get; set; }
 
@@ -96,30 +100,26 @@ namespace TLCGen.Models
             switch (_segmentDisplayType)
             {
                 case SegmentDisplayTypeEnum.EnkelDisplay:
-                    if (SegmentenDisplayBitmapData.Count == 0)
+                    for (int i = 1; i <= 7; ++i)
                     {
-                        for (int i = 1; i <= 7; ++i)
-                        {
-                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segm" + i });
-                        }
+                        SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = i.ToString() });
                     }
                     break;
                 case SegmentDisplayTypeEnum.DrieCijferDisplay:
-                    if (SegmentenDisplayBitmapData.Count == 0)
+                    for (int i = 1; i <= 7; ++i)
                     {
-                        for (int i = 1; i <= 7; ++i)
-                        {
-                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segma" + i });
-                        }
-                        for (int i = 1; i <= 7; ++i)
-                        {
-                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segmb" + i });
-                        }
-                        for (int i = 1; i <= 7; ++i)
-                        {
-                            SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "segmc" + i });
-                        }
+                        SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "a" + i });
                     }
+                    for (int i = 1; i <= 7; ++i)
+                    {
+                        SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "b" + i });
+                    }
+                    for (int i = 1; i <= 7; ++i)
+                    {
+                        SegmentenDisplayBitmapData.Add(new SegmentDisplayElementModel() { Naam = "c" + i });
+                    }
+                    break;
+                case SegmentDisplayTypeEnum.GeenSegmenten:
                     break;
             }
         }

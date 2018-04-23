@@ -94,7 +94,7 @@ namespace TLCGen.Importers.TabC
                 }
 
 	            if (dz != MessageBoxResult.No &&
-	                Regex.IsMatch(line, @"^\s+D_code\[") || Regex.IsMatch(line, @"^\s+TBG_max\["))
+	                (Regex.IsMatch(line, @"^\s+D_code\[") || Regex.IsMatch(line, @"^\s+TBG_max\[")))
 	            {
 		            if (dz != MessageBoxResult.Yes)
 		            {
@@ -142,7 +142,7 @@ namespace TLCGen.Importers.TabC
                     DetectorModel nd = null;
                     foreach (var fc in outcome.Fasen)
                     {
-                        var bd = fc.Detectoren.First(x => x.Naam == dd);
+                        var bd = fc.Detectoren.FirstOrDefault(x => x.Naam == dd);
                         if(bd != null)
                         {
                             nd = bd;

@@ -178,6 +178,49 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Type segmenten display")]
+        public SegmentDisplayTypeEnum SegmentDisplayType
+        {
+            get { return _Controller?.Data?.SegmentDisplayType ?? SegmentDisplayTypeEnum.GeenSegmenten; }
+            set
+            {
+                if(_Controller.Data.SegmentDisplayType != value)
+                {
+                    _Controller.Data.SegmentDisplayType = value;
+                    _Controller.Data.SetSegmentOutputs();
+                }
+                RaisePropertyChanged<object>(nameof(SegmentDisplayType), broadcast: true);
+            }
+        }
+
+        [Description("Uitgang per module")]
+        public bool UitgangPerModule
+        {
+            get { return _Controller?.Data?.UitgangPerModule ?? false; }
+            set
+            {
+                if (_Controller.Data.UitgangPerModule != value)
+                {
+                    _Controller.Data.UitgangPerModule = value;
+                    if (value)
+                    {
+                        foreach(var m in _Controller.ModuleMolen.Modules)
+                        {
+                            _Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                            {
+                                Naam = m.Naam
+                            });
+                        }
+                    }
+                    else
+                    {
+                        _Controller.Data.ModulenDisplayBitmapData.Clear();
+                    }
+                }
+                RaisePropertyChanged<object>(nameof(SegmentDisplayType), broadcast: true);
+            }
+        }
+
         [Description("Fixatie mogelijk")]
         public bool FixatieMogelijk
         {

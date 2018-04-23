@@ -176,11 +176,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnNameChanged(NameChangedMessage message)
-        {
-            ModelStringSetter.SetStringInModel(_Controller, message.OldName, message.NewName);
-        }
-
         private void OnIsElementIdentifierUniqueRequestReceived(IsElementIdentifierUniqueRequest request)
         {
             if (request.Handled == false)
@@ -256,7 +251,6 @@ namespace TLCGen.ViewModels
                 }
             }
             
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
             MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
             MessengerInstance.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
             MessengerInstance.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));

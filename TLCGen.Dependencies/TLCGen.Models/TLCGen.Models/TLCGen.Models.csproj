@@ -50,6 +50,7 @@
     <Compile Include="Interfaces\IHaveName.cs" />
     <Compile Include="Interfaces\IInterSignaalGroepElement.cs" />
     <Compile Include="Attributes\HasDefaultAttribute.cs" />
+    <Compile Include="Models\Base\ModuleDisplayElementModel.cs" />
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />

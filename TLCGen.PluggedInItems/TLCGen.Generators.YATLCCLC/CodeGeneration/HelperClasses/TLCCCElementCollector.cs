@@ -33,6 +33,10 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration.HelperClasses
             {
                 lists[0].Elements.Add(new TLCCCElement(segm.Naam, TLCCCElementTypeEnum.Output));
             }
+            foreach (var segm in controller.Data.ModulenDisplayBitmapData)
+            {
+                lists[0].Elements.Add(new TLCCCElement(segm.Naam, TLCCCElementTypeEnum.Output));
+            }
 
             // inputs: none, no dummy needed
 

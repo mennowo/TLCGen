@@ -59,13 +59,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var data = new CCOLElemListData {CCOLCode = "US_code"};
 
-            // Segment display elements
-            foreach(var item in controller.Data.SegmentenDisplayBitmapData)
-            {
-                var _item = item.BitmapData as IOElementModel;
-                data.Elements.Add(new CCOLElement() { Define = _item.GetBitmapCoordinaatOutputDefine(), Naam = item.Naam });
-            }
-
             foreach (var pgen in pgens)
             {
                 if (pgen.HasCCOLElements())

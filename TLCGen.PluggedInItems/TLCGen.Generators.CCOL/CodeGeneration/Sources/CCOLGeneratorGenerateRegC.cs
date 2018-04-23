@@ -663,10 +663,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}check_trg_min();");
             sb.AppendLine();
 
-            sb.AppendLine($"{ts}SegmentSturing(ML+1, ussegm1, ussegm2, ussegm3, ussegm4, ussegm5, ussegm6, ussegm7);");
-            sb.AppendLine();
-
-
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPostSystemApplication])
             {
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPostSystemApplication, ts));

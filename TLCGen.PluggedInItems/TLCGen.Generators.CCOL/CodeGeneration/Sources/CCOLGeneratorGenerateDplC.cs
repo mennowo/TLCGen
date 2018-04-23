@@ -183,14 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
-            // Segment display
-            foreach (var item in controller.Data.SegmentenDisplayBitmapData)
-            {
-                var _item = item.BitmapData as IOElementModel;
-                sb.Append(GetCoordinatesString(_item, _item.GetBitmapCoordinaatOutputDefine(), "us"));
-            }
-            
-            foreach(var pgen in PieceGenerators)
+            foreach (var pgen in PieceGenerators)
             {
                 if (pgen.HasCCOLBitmapOutputs())
                 {

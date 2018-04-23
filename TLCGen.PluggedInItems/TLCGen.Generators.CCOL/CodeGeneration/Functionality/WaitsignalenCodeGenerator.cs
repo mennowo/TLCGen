@@ -70,13 +70,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            if (!c.Fasen.SelectMany(x => x.Detectoren).Any(x2 => x2.Wachtlicht))
+                return "";
+
+            var sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    sb.AppendLine("/* wachtlicht uitsturing */");
-                    sb.AppendLine("/* --------------------- */");
+                    sb.AppendLine($"{ts}/* wachtlicht uitsturing */");
+                    sb.AppendLine($"{ts}/* --------------------- */");
                     foreach (var fc in c.Fasen)
                     {
                         foreach (var d in fc.Detectoren)

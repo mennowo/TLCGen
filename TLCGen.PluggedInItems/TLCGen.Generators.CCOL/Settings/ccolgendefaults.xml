@@ -70,6 +70,26 @@
     </Prefix>
   </Prefixes>
   <CodePieceGeneratorSettings>
+    <CodePieceGenerator CodePiece="AlgemeenCodeGenerator">
+      <CodePieceData>
+        <ClassName>AlgemeenCodeGenerator</ClassName>
+        <Description>Algemeen</Description>
+        <Settings>
+          <Setting>
+            <Default>segm</Default>
+            <Setting>segm</Setting>
+            <Type>Uitgang</Type>
+            <Description>Segmenten display</Description>
+          </Setting>
+          <Setting>
+            <Default>toon7s</Default>
+            <Setting>toon7s</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Actueel houden 7 segemten display</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="DetectieAanvragenMeetkriteriumCodeGenerator">
       <CodePieceData>
         <ClassName>DetectieAanvragenMeetkriteriumCodeGenerator</ClassName>

@@ -453,8 +453,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    sb.AppendLine("/* periode verklikking */");
-                    sb.AppendLine("/* ------------------- */");
+                    sb.AppendLine($"{ts}/* periode verklikking */");
+                    sb.AppendLine($"{ts}/* ------------------- */");
                     iper = 0;
                     sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usperdef}] = (MM[{_mpf}{_mperiod}] == {iper++});");
                     foreach (var per in c.PeriodenData.Perioden)

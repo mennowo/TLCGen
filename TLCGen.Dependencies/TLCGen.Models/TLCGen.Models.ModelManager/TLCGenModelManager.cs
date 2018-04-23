@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -234,7 +235,7 @@ namespace TLCGen.ModelManagement
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName);
         }
 
-        private void ChangeNameOnObject(object obj, string oldName, string newName)
+        public void ChangeNameOnObject(object obj, string oldName, string newName)
         {
             if (obj == null) return;
             Type objType = obj.GetType();
@@ -356,6 +357,32 @@ namespace TLCGen.ModelManagement
                         }
                     }
                     break;
+                case ModulesChangedMessage modulesMessage:
+                    foreach(var m in Controller.ModuleMolen.Modules)
+                    {
+                        if(!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                        {
+                            Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                            {
+                                Naam = m.Naam
+                            });
+                            Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                        }
+                    }
+                    var rd = new List<ModuleDisplayElementModel>();
+                    foreach(var md in Controller.Data.ModulenDisplayBitmapData)
+                    {
+                        if(!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                        {
+                            rd.Add(md);
+                        }
+                    }
+                    foreach (var r in rd)
+                    {
+                        Controller.Data.ModulenDisplayBitmapData.Remove(r);
+                    }
+                    break;
+
             }
         }
 

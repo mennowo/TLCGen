@@ -880,33 +880,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 foreach (DetectorModel dm in fc.Detectoren)
                 {
                     sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
-                    switch(dm.Type)
+                    switch (dm.Type)
                     {
-                        case Models.Enumerations.DetectorTypeEnum.Knop:
-                        case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
-                        case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
+                        case DetectorTypeEnum.Knop:
+                        case DetectorTypeEnum.KnopBinnen:
+                        case DetectorTypeEnum.KnopBuiten:
                             sb.AppendLine("DK_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.File:
-                        case Models.Enumerations.DetectorTypeEnum.Verweg:
+                        case DetectorTypeEnum.File:
+                        case DetectorTypeEnum.Verweg:
                             sb.AppendLine("DL_type | DVER_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.Kop:
+                        case DetectorTypeEnum.Kop:
                             sb.AppendLine("DL_type | DKOP_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.Lang:
+                        case DetectorTypeEnum.Lang:
                             sb.AppendLine("DL_type | DLNG_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.VecomIngang:
-                        case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                        case DetectorTypeEnum.VecomIngang:
+                        case DetectorTypeEnum.OpticomIngang:
                             // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                             sb.AppendLine("DS_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.Overig:
+                        case DetectorTypeEnum.Overig:
                             sb.AppendLine("DL_type;");
                             break;
-                        case Models.Enumerations.DetectorTypeEnum.WisselDetector:
-                        case Models.Enumerations.DetectorTypeEnum.Radar:
+                        case DetectorTypeEnum.WisselDetector:
+                        case DetectorTypeEnum.WisselIngang:
+                        case DetectorTypeEnum.VecomDetector:
+                        case DetectorTypeEnum.Radar:
                             // TODO: what type to use here?
                             break;
                         default:
@@ -919,31 +921,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
                 switch (dm.Type)
                 {
-                    case Models.Enumerations.DetectorTypeEnum.Knop:
-                    case Models.Enumerations.DetectorTypeEnum.KnopBinnen:
-                    case Models.Enumerations.DetectorTypeEnum.KnopBuiten:
+                    case DetectorTypeEnum.Knop:
+                    case DetectorTypeEnum.KnopBinnen:
+                    case DetectorTypeEnum.KnopBuiten:
                         sb.AppendLine("DK_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.File:
-                    case Models.Enumerations.DetectorTypeEnum.Verweg:
+                    case DetectorTypeEnum.File:
+                    case DetectorTypeEnum.Verweg:
                         sb.AppendLine("DL_type | DVER_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.Kop:
+                    case DetectorTypeEnum.Kop:
                         sb.AppendLine("DL_type | DKOP_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.Lang:
+                    case DetectorTypeEnum.Lang:
                         sb.AppendLine("DL_type | DLNG_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.VecomIngang:
-                    case Models.Enumerations.DetectorTypeEnum.OpticomIngang:
+                    case DetectorTypeEnum.VecomIngang:
+                    case DetectorTypeEnum.OpticomIngang:
                         // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                         sb.AppendLine("DS_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.Overig:
+                    case DetectorTypeEnum.Overig:
                         sb.AppendLine("DL_type;");
                         break;
-                    case Models.Enumerations.DetectorTypeEnum.WisselDetector:
-                    case Models.Enumerations.DetectorTypeEnum.Radar:
+                    case DetectorTypeEnum.WisselDetector:
+                    case DetectorTypeEnum.Radar:
+                    case DetectorTypeEnum.VecomDetector:
+                    case DetectorTypeEnum.WisselIngang:
                         // TODO: what type to use here?
                         break;
                     default:
@@ -1007,7 +1011,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             foreach (var u in _uitgangen.Elements)
             {
-                sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
+                if(u.Naam != null)
+                {
+                    sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
+                }
             }
 
             sb.AppendLine();

@@ -62,6 +62,15 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
                         $"{ts}X_us[{_ospf}{item.Naam}+SGMAX] = {item.BitmapData.BitmapCoordinaten[0].X}; Y_us[{_ospf}{item.Naam}+SGMAX] = {item.BitmapData.BitmapCoordinaten[0].Y};");
                 }
             }
+            foreach (var item in controller.Data.ModulenDisplayBitmapData)
+            {
+                if (item.BitmapData?.BitmapCoordinaten != null && item.BitmapData.BitmapCoordinaten.Count > 0 &&
+                    item.BitmapData.BitmapCoordinaten[0].X > 0 && item.BitmapData.BitmapCoordinaten[0].Y > 0)
+                {
+                    sb.Append(
+                        $"{ts}X_us[{_ospf}{item.Naam}+SGMAX] = {item.BitmapData.BitmapCoordinaten[0].X}; Y_us[{_ospf}{item.Naam}+SGMAX] = {item.BitmapData.BitmapCoordinaten[0].Y};");
+                }
+            }
             sb.AppendLine();
 
             foreach (var d in controller.Fasen.SelectMany(x => x.Detectoren))

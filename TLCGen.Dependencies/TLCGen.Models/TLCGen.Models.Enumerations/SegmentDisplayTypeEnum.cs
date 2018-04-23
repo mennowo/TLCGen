@@ -9,6 +9,7 @@ namespace TLCGen.Models.Enumerations
     public enum SegmentDisplayTypeEnum
     {
         EnkelDisplay,
-        DrieCijferDisplay
+        DrieCijferDisplay,
+        GeenSegmenten
     }
 }

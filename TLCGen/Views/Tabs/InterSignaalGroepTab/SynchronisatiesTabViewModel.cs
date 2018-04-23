@@ -184,7 +184,7 @@ namespace TLCGen.ViewModels
 
         public bool UseGarantieOntruimingsTijden
         {
-            get { return _Controller.Data.GarantieOntruimingsTijden; }
+            get { return _Controller?.Data?.GarantieOntruimingsTijden ?? false; }
             set
             {
                 _Controller.Data.GarantieOntruimingsTijden = value;

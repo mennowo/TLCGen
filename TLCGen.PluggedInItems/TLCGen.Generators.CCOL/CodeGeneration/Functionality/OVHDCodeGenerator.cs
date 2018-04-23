@@ -393,6 +393,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
+                        sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCInUitMelden:
@@ -542,7 +543,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             sb.AppendLine($"{ts}{ts}(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && ");
                                         }
-                                        else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Ingang && ov.WisselStandInput != null)
                                         {
                                             sb.AppendLine((ov.WisselStandVoorwaarde ?
                                                           $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && " :
@@ -801,7 +802,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         {
                                             sb.AppendLine($"{ts}{ts}(D[{_dpf}{ov.WisselStandInput}] || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) && ");
                                         }
-                                        else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Detector && ov.WisselStandInput != null)
+                                        else if (ov.Wissel && ov.WisselType == OVIngreepWisselTypeEnum.Ingang && ov.WisselStandInput != null)
                                         {
                                             sb.AppendLine((ov.WisselStandVoorwaarde ?
                                                           $"{ts}{ts}((SCH[{_schpf}{_schwisselpol}{ov.WisselStandInput}] ? !IS[{_ispf}{ov.WisselStandInput}] : IS[{_ispf}{ov.WisselStandInput}]) || SCH[{_schpf}{_schgeenwissel}{ov.WisselStandInput}]) &&" :
