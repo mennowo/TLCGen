@@ -10,6 +10,8 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
+using TLCGen.Messaging;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -67,16 +69,14 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    MessengerInstance.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, value))
                     {
                         string oldname = _detector.Naam;
 
                         _detector.Naam = value;
                         
                         // Notify the messenger
-                        MessengerInstance.Send(new NameChangedMessage(oldname, _detector.Naam));
+                        MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldname, _detector.Naam));
                     }
                 }
                 RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
@@ -90,9 +90,7 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.VissimNaam);
-                    MessengerInstance.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, value, true))
                     {
                         _detector.VissimNaam = value;
                     }

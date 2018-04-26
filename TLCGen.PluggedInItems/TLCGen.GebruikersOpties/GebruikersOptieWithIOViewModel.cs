@@ -8,6 +8,8 @@ using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.Messaging;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -36,20 +38,20 @@ namespace TLCGen.GebruikersOpties
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(ObjectType, value))
                     {
                         string oldname = _GebruikersOptieWithOI.Naam;
                         _GebruikersOptieWithOI.Naam = value;
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                        Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
                     }
                 }
                 RaisePropertyChanged<object>("Naam", broadcast: true);
             }
         }
+
+        public TLCGenObjectTypeEnum ObjectType { get; set; }
 
         public string Commentaar
         {

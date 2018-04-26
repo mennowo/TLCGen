@@ -15,6 +15,7 @@ using TLCGen.Helpers;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
@@ -154,15 +155,12 @@ namespace TLCGen.ViewModels
                     string next = m.Value;
                     if (Int32.TryParse(next, out inewname))
                     {
-                        IsElementIdentifierUniqueRequest message;
-                        do
+                        newname = inewname.ToString("000");
+                        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, newname))
                         {
-                            newname = inewname.ToString("000");
-                            message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                            Messenger.Default.Send(message);
-                            if(!message.IsUnique) inewname++;
+                            inewname++;
+                            newname = inewname.ToString();
                         }
-                        while (!message.IsUnique);
                     }
                 }
             }

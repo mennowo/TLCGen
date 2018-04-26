@@ -44,7 +44,6 @@ namespace TLCGen.GebruikersOpties
         }
     }
 
-
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum CCOLElementTypeEnum
     {

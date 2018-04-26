@@ -778,7 +778,7 @@ namespace TLCGen.ViewModels
                 DefaultsProvider.Default.LoadSettings();
                 TemplatesProvider.Default.LoadSettings();
 
-	            TLCGenModelManager.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
+	            TLCGenModelManager.Default.InjectDefaultAction((x, s) => DefaultsProvider.Default.SetDefaultsOnModel(x, s));
 	            TLCGenControllerDataProvider.Default.InjectDefaultAction(x => DefaultsProvider.Default.SetDefaultsOnModel(x));
 
                 // Load available applicationparts and plugins

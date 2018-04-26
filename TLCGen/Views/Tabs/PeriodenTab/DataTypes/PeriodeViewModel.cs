@@ -15,6 +15,7 @@ using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Extensions;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -41,12 +42,10 @@ namespace TLCGen.ViewModels
 	            var oldName = _Periode.Naam;
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, value))
                     {
                         _Periode.Naam = value;
-						MessengerInstance.Send(new NameChangedMessage(oldName, value));
+						MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
                     }
                 }
                 RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
@@ -118,14 +117,10 @@ namespace TLCGen.ViewModels
                     string name = _Periode.Naam;
                     string newname = _Periode.Naam;
                     _Periode.Naam = "";
-                    var message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
                     int i = 0;
-                    while (!(message.Handled && message.IsUnique))
+                    while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, newname))
                     {
                         newname = name + (i++);
-                        message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                        Messenger.Default.Send(message);
                     }
                     _Periode.Naam = newname;
                 }

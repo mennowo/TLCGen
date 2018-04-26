@@ -13,8 +13,10 @@ using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
@@ -138,15 +140,12 @@ namespace TLCGen.ViewModels
                     var next = m.Value;
                     if (int.TryParse(next, out int inewname))
                     {
-                        IsElementIdentifierUniqueRequest message;
                         do
                         {
                             inewname++;
                             newname = (inewname < 10 ? "0" : "") + inewname;
-                            message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-                            Messenger.Default.Send(message);
                         }
-                        while (!message.IsUnique);
+                        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, newname));
                     }
                 }
 	            break;

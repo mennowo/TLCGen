@@ -9,6 +9,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
@@ -100,15 +101,13 @@ namespace TLCGen.ViewModels
             {
 	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
 	            {
-		            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-		            Messenger.Default.Send(message);
-		            if (message.Handled && message.IsUnique)
-		            {
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.FileIngreep, value))
+                    {
                         string oldname = _FileIngreep.Naam;
 			            _FileIngreep.Naam = value;
 
 						// Notify the messenger
-						Messenger.Default.Send(new NameChangedMessage(oldname, value));
+						Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.FileIngreep, oldname, value));
 						RaisePropertyChanged<object>(nameof(Naam), broadcast: true);
 		            }
 				}

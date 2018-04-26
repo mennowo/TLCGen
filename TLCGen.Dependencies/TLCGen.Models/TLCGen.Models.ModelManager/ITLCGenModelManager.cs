@@ -1,4 +1,5 @@
 ﻿using System;
+using TLCGen.Messaging;
 using TLCGen.Models;
 
 namespace TLCGen.ModelManagement
@@ -7,7 +8,8 @@ namespace TLCGen.ModelManagement
     {
         ControllerModel Controller { get; set; }
 
-	    void InjectDefaultAction(Action<object> setDefaultsAction);
+        bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false);
+        void InjectDefaultAction(Action<object, string> setDefaultsAction);
         bool CheckVersionOrder(ControllerModel controller);
         void CorrectModelByVersion(ControllerModel controller);
         void ChangeNameOnObject(object obj, string oldName, string newName);

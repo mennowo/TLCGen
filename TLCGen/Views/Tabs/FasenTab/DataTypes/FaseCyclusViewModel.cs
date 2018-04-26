@@ -15,6 +15,7 @@ using TLCGen.Messaging.Requests;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.Extensions;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -38,9 +39,7 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, value))
                     {
                         string oldname = _FaseCyclus.Naam;
                         _FaseCyclus.Naam = value;
@@ -51,25 +50,21 @@ namespace TLCGen.ViewModels
                         foreach(var d in FaseCyclus.Detectoren)
                         {
                             string nd = d.Naam.Replace(oldname, value);
-                            var _message = new IsElementIdentifierUniqueRequest(nd, ElementIdentifierType.Naam);
-                            Messenger.Default.Send(_message);
-                            if (_message.Handled && _message.IsUnique)
+                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
                             {
                                 var oldD = d.Naam;
                                 d.Naam = nd;
-                                Messenger.Default.Send(new NameChangedMessage(oldD, d.Naam));
+                                Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Detector, oldD, d.Naam));
                             }
-                            nd = d.VissimNaam.Replace(oldname, value);
-                            _message = new IsElementIdentifierUniqueRequest(nd, ElementIdentifierType.VissimNaam);
-                            Messenger.Default.Send(_message);
-                            if (_message.Handled && _message.IsUnique)
+                            nd = d.VissimNaam?.Replace(oldname, value);
+                            if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
                             {
                                 d.VissimNaam = nd;
                             }
                         }
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                        Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Fase, oldname, value));
                     }
                 }
                 RaisePropertyChanged(string.Empty); // Update all properties

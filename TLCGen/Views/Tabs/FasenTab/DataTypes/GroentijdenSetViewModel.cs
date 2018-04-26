@@ -15,6 +15,7 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels
 {
@@ -38,15 +39,13 @@ namespace TLCGen.ViewModels
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
-                    var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-                    Messenger.Default.Send(message);
-                    if (message.Handled && message.IsUnique)
+                    if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.GroenTijdenSet, value))
                     {
                         string oldname = _GroentijdenSet.Naam;
                         _GroentijdenSet.Naam = value;
 
                         // Notify the messenger
-                        Messenger.Default.Send(new NameChangedMessage(oldname, value));
+                        Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.GroenTijdenSet, oldname, value));
                     }
                 }
                 _GroentijdenSet.Naam = value;

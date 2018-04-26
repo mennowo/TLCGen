@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using TLCGen.Extensions;
+using TLCGen.Integrity;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -20,7 +22,7 @@ namespace TLCGen.ModelManagement
         private static ITLCGenModelManager _Default;
 
         private IMessenger _MessengerInstance;
-	    private Action<object> _setDefaultsAction;
+	    private Action<object, string> _setDefaultsAction;
 
 	    #endregion // Fields
 
@@ -64,7 +66,7 @@ namespace TLCGen.ModelManagement
             _Default = provider;
         }
 
-	    public void InjectDefaultAction(Action<object> setDefaultsAction)
+	    public void InjectDefaultAction(Action<object, string> setDefaultsAction)
 	    {
 		    _setDefaultsAction = setDefaultsAction;
 	    }
@@ -156,6 +158,12 @@ namespace TLCGen.ModelManagement
             }
         }
 
+        public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)
+        {
+            if(!vissim) return TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier);
+            return TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
+        }
+
         #endregion // Public Methods
 
         #region TLCGen Messaging
@@ -170,15 +178,23 @@ namespace TLCGen.ModelManagement
                     if (Controller.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen)
                     {
                         var prms = new OVIngreepSignaalGroepParametersModel();
-                        _setDefaultsAction?.Invoke(prms);
+                        _setDefaultsAction?.Invoke(prms, null);
                         prms.FaseCyclus = fcm.Naam;
                         Controller.OVData.OVIngreepSignaalGroepParameters.Add(prms);
                     }
 
                     // Module settings
                     var fcmlm = new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam };
-	                _setDefaultsAction?.Invoke(fcmlm);
+	                _setDefaultsAction?.Invoke(fcmlm, null);
                     Controller.ModuleMolen.FasenModuleData.Add(fcmlm);
+
+                    // Green times
+                    foreach (var set in Controller.GroentijdenSets)
+                    {
+                        var mgm = new GroentijdModel { FaseCyclus = fcm.Naam };
+                        _setDefaultsAction(mgm, fcm.Type.ToString());
+                        set.Groentijden.Add(mgm);
+                    }
                 }
             }
             if (message.RemovedFasen != null)
@@ -215,6 +231,23 @@ namespace TLCGen.ModelManagement
                     {
                         Controller.ModuleMolen.FasenModuleData.Remove(fcvm);
                     }
+
+                    // Green times
+                    foreach (var set in Controller.GroentijdenSets)
+                    {
+                        GroentijdModel mgm = null;
+                        foreach (var mgvm in set.Groentijden)
+                        {
+                            if (mgvm.FaseCyclus == fcm.Naam)
+                            {
+                                mgm = mgvm;
+                            }
+                        }
+                        if (mgm != null)
+                        {
+                            set.Groentijden.Remove(mgm);
+                        }
+                    }
                 }
             }
 
@@ -230,9 +263,10 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Send(new FasenChangedMessage(message.AddedFasen, message.RemovedFasen));
         }
 
-        private void OnNameChanged(NameChangedMessage msg)
+        private void OnNameChanging(NameChangingMessage msg)
         {
             ChangeNameOnObject(Controller, msg.OldName, msg.NewName);
+            MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
         }
 
         public void ChangeNameOnObject(object obj, string oldName, string newName)
@@ -397,7 +431,7 @@ namespace TLCGen.ModelManagement
                 MessengerInstance = Messenger.Default;
             }
             MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
-            MessengerInstance.Register(this, new Action<NameChangedMessage>(OnNameChanged));
+            MessengerInstance.Register(this, new Action<NameChangingMessage>(OnNameChanging));
             MessengerInstance.Register(this, true, new Action<ModelManagerMessageBase>(OnModelManagerMessage));
         }
 

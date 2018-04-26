@@ -11,6 +11,7 @@ using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
 using TLCGen.Models.Enumerations;
+using TLCGen.Messaging;
 
 namespace TLCGen.UnitTests
 {
@@ -270,7 +271,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             string oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "07";
-            vm.OnNameChanged(new NameChangedMessage(oldname, vmfasen.Fasen[2].Naam));
+            vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
             
             Assert.AreEqual(
                 new string[5] { "01", "02", "04", "05", "07" },
@@ -297,7 +298,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             string oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "07";
-            vm.OnNameChanged(new NameChangedMessage(oldname, vmfasen.Fasen[2].Naam));
+            vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
             Assert.AreEqual(
                 new string[5] { "01", "02", "04", "05", "07" },
@@ -324,7 +325,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             string oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "02";
-            vm.OnNameChanged(new NameChangedMessage(oldname, vmfasen.Fasen[2].Naam));
+            vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
             Assert.AreEqual(
                 new string[5] { "02", "05", "06", "08", "09" },
@@ -351,7 +352,7 @@ namespace TLCGen.UnitTests
             vm.AddGroentijdenSetCommand.Execute(null);
             string oldname = vmfasen.Fasen[2].Naam;
             vmfasen.Fasen[2].Naam = "02";
-            vm.OnNameChanged(new NameChangedMessage(oldname, vmfasen.Fasen[2].Naam));
+            vm.OnNameChanged(new NameChangedMessage(TLCGenObjectTypeEnum.Fase, oldname, vmfasen.Fasen[2].Naam));
 
             Assert.AreEqual(
                 new string[5] { "02", "05", "06", "08", "09" },

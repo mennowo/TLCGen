@@ -233,12 +233,8 @@ namespace TLCGen.ViewModels
 
             foreach (var mgsvm in GroentijdenSets)
             {
-#warning CHECK > why is this needed? It's double, only the first one should be necessary.
                 mgsvm.Groentijden.BubbleSort();
-                if (!mgsvm.GroentijdenSet.Groentijden.IsSorted())
-                {
-                    mgsvm.GroentijdenSet.Groentijden.BubbleSort();
-                }
+                mgsvm.GroentijdenSet.Groentijden.BubbleSort();
             }
 
             SetNames.Clear();
@@ -399,40 +395,6 @@ namespace TLCGen.ViewModels
 
         public void OnFasenChanged(FasenChangedMessage message)
         {
-            if (message.AddedFasen != null)
-            {
-                foreach (var fcm in message.AddedFasen)
-                {
-                    foreach (var set in Controller.GroentijdenSets)
-                    {
-                        var mgm = new GroentijdModel {FaseCyclus = fcm.Naam};
-                        DefaultsProvider.Default.SetDefaultsOnModel(mgm, fcm.Type.ToString());
-                        set.Groentijden.Add(mgm);
-                    }
-                }
-            }
-            if (message.RemovedFasen != null)
-            {
-                foreach (var fcm in message.RemovedFasen)
-                {
-                    foreach (var set in Controller.GroentijdenSets)
-                    {
-                        GroentijdModel mgm = null;
-                        foreach (var mgvm in set.Groentijden)
-                        {
-                            if (mgvm.FaseCyclus == fcm.Naam)
-                            {
-                                mgm = mgvm;
-                            }
-                        }
-                        if (mgm != null)
-                        {
-                            set.Groentijden.Remove(mgm);
-                        }
-                    }
-                }
-            }
-
             foreach (var set in GroentijdenSets)
             {
                 set.Groentijden.Rebuild();
@@ -447,16 +409,6 @@ namespace TLCGen.ViewModels
 
         public void OnNameChanged(NameChangedMessage message)
         {
-            foreach(var mgsvm in GroentijdenSets)
-            {
-                foreach(var mgvm in mgsvm.Groentijden)
-                {
-                    if(mgvm.FaseCyclus == message.OldName)
-                    {
-                        mgvm.FaseCyclus = message.NewName;
-                    }
-                }
-            }
             BuildGroentijdenMatrix();
         }
 

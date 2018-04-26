@@ -2,8 +2,10 @@
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -84,15 +86,12 @@ namespace TLCGen.ViewModels
         {
 	        var inewname = 1;
 			var ptp = new PTPKoppelingModel();
-	        IsElementIdentifierUniqueRequest message;
 	        do
 	        {
 		        inewname++;
 		        ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
-		        message = new IsElementIdentifierUniqueRequest(ptp.TeKoppelenKruispunt, ElementIdentifierType.Naam);
-		        Messenger.Default.Send(message);
 	        }
-	        while (!message.IsUnique);
+	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
 			PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
 			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
         }

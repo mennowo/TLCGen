@@ -8,7 +8,7 @@ namespace TLCGen.Models
     public class GroentijdModel : IComparable
     {
         #region Properties
-
+        
         [Browsable(false)]
         public string FaseCyclus { get; set; }
         public int? Waarde { get; set; }

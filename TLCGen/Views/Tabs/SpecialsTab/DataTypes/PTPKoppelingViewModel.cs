@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
@@ -31,14 +33,12 @@ namespace TLCGen.ViewModels
             get { return _PTPKoppeling.TeKoppelenKruispunt; }
             set
             {
-	            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-	            Messenger.Default.Send(message);
-	            if (message.Handled && message.IsUnique)
-	            {
+                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, value))
+                {
                     var oldname = _PTPKoppeling.TeKoppelenKruispunt;
 		            _PTPKoppeling.TeKoppelenKruispunt = value;
 		            RaisePropertyChanged<object>(nameof(TeKoppelenKruispunt), broadcast: true);
-		            Messenger.Default.Send(new NameChangedMessage(oldname, value));
+		            Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PTPKruising, oldname, value));
 	            }
             }
         }

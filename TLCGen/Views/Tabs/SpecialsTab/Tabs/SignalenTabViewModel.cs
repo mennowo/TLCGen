@@ -5,8 +5,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -234,14 +236,10 @@ namespace TLCGen.ViewModels
 		    var name = p.Naam;
 		    var newname = p.Naam;
 		    p.Naam = "";
-		    var message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-		    Messenger.Default.Send(message);
 		    var i = 0;
-		    while (!(message.Handled && message.IsUnique))
-		    {
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, newname))
+            {
 			    newname = name + (i++);
-			    message = new IsElementIdentifierUniqueRequest(newname, ElementIdentifierType.Naam);
-			    Messenger.Default.Send(message);
 		    }
 		    p.Naam = newname;
 		    _Controller.PeriodenData.Perioden.Add(p);

@@ -55,6 +55,10 @@
       <Project>{8E0A63D9-07BF-4440-BE4F-A17B3C395FB6}</Project>
       <Name>TLCGen.Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TLCGen.Integrity\TLCGen.Integrity.csproj">
+      <Project>{B3AF9767-3F8D-45C9-81BF-4C9BB67E339C}</Project>
+      <Name>TLCGen.Integrity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
       <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
       <Name>TLCGen.Models.Enumerations</Name>

@@ -71,17 +71,16 @@ namespace TLCGen.ViewModels
             {
                 var fcvm = new FaseCyclusViewModel(fcm);
                 if (sel != null && fcvm.Naam == sel.Naam)
+                {
+                    sel = null;
                     SelectedFaseCyclus = fcvm;
+                }
                 Fasen.Add(fcvm);
             }
         }
 
         #endregion // TabItem Overrides
-
-        #region Collection Changed
-
-        #endregion // Collection Changed
-
+        
         #region Constructor
 
         public FasenDetailsTabViewModel() : base()

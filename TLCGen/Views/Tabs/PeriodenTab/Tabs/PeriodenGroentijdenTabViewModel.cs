@@ -12,8 +12,10 @@ using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -76,13 +78,11 @@ namespace TLCGen.ViewModels
             get { return _Controller?.PeriodenData.DefaultPeriodeNaam; }
             set
             {
-	            var message = new IsElementIdentifierUniqueRequest(value, ElementIdentifierType.Naam);
-		        Messenger.Default.Send(message);
-	            if (message.IsUnique)
-	            {
+                if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, value))
+                {
 		            var oldName = _Controller.PeriodenData.DefaultPeriodeNaam;
 					_Controller.PeriodenData.DefaultPeriodeNaam = value;
-		            MessengerInstance.Send(new NameChangedMessage(oldName, value));
+		            MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Periode, oldName, value));
 	            }
                 RaisePropertyChanged<object>(nameof(DefaultPeriodeNaam), null, null, true);
             }
@@ -216,15 +216,12 @@ namespace TLCGen.ViewModels
             mm.Type = PeriodeTypeEnum.Groentijden;
             mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
 	        var inewname = Periodes.Count;
-	        IsElementIdentifierUniqueRequest message;
 	        do
 	        {
 		        inewname++;
 				mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
-		        message = new IsElementIdentifierUniqueRequest(mm.Naam, ElementIdentifierType.Naam);
-		        Messenger.Default.Send(message);
 	        }
-	        while (!message.IsUnique);
+	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
 			var mvm = new PeriodeViewModel(mm);
 
             if (Periodes.Any(x => x.Type == PeriodeTypeEnum.Groentijden))

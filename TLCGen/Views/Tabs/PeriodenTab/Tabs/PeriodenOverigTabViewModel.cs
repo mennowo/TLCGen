@@ -11,8 +11,10 @@ using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Integrity;
+using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
@@ -174,15 +176,12 @@ namespace TLCGen.ViewModels
             mm.Type = PeriodeTypeEnum.Overig;
             mm.DagCode = PeriodeDagCodeEnum.AlleDagen;
 			var inewname = Periodes.Count;
-	        IsElementIdentifierUniqueRequest message;
 	        do
 	        {
 		        inewname++;
 		        mm.Naam = "periode" + (inewname < 10 ? "0" : "") + inewname;
-		        message = new IsElementIdentifierUniqueRequest(mm.Naam, ElementIdentifierType.Naam);
-		        Messenger.Default.Send(message);
 	        }
-	        while (!message.IsUnique);
+	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
 
 			PeriodeViewModel mvm = new PeriodeViewModel(mm);
 

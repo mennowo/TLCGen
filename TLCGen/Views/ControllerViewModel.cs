@@ -176,24 +176,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private void OnIsElementIdentifierUniqueRequestReceived(IsElementIdentifierUniqueRequest request)
-        {
-            if (request.Handled == false)
-            {
-                switch(request.Type)
-                {
-                    case ElementIdentifierType.Naam:
-                        request.IsUnique = TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, request.Identifier);
-                        request.Handled = true;
-                        break;
-                    case ElementIdentifierType.VissimNaam:
-                        request.IsUnique = TLCGenIntegrityChecker.IsElementVissimNaamUnique(_Controller, request.Identifier);
-                        request.Handled = true;
-                        break;
-                }
-            }
-        }
-
         private void OnIsFasenConflictRequestReceived(IsFasenConflictingRequest request)
         {
             if (request.Handled == false)
@@ -252,7 +234,6 @@ namespace TLCGen.ViewModels
             }
             
             MessengerInstance.Register(this, new Action<UpdateTabsEnabledMessage>(OnUpdateTabsEnabled));
-            MessengerInstance.Register(this, new Action<IsElementIdentifierUniqueRequest>(OnIsElementIdentifierUniqueRequestReceived));
             MessengerInstance.Register(this, new Action<IsFasenConflictingRequest>(OnIsFasenConflictRequestReceived));
             MessengerInstance.Register(this, new Action<ControllerDataChangedMessage>(OnControllerDataChanged));
             MessengerInstance.Register(this, new Action<PropertyChangedMessage<object>>(OnPropertyChangedMessageBase));

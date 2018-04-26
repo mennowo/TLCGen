@@ -246,6 +246,18 @@ namespace TLCGen.GebruikersOpties
                     o.Type = CCOLElementTypeEnum.Geen;
                 }
 
+                switch (OptiesNames[SelectedTabIndex])
+                {
+                    case "us": o.ObjectType = Messaging.TLCGenObjectTypeEnum.Output; break;
+                    case "is": o.ObjectType = Messaging.TLCGenObjectTypeEnum.Input; break;
+                    case "h": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLHelpElement; break;
+                    case "t": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLTimer; break;
+                    case "c": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLCounter; break;
+                    case "sch": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLSchakelaar; break;
+                    case "m": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLMemoryElement; break;
+                    case "prm": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLParameter; break;
+                }
+
                 if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count)
                     ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
                 else
@@ -674,6 +686,15 @@ namespace TLCGen.GebruikersOpties
                 _AlleOpties[SchakelaarsConst] = Schakelaars;
                 _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
                 _AlleOpties[ParametersConst] = Parameters;
+
+                foreach (var el in Uitgangen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.Output;
+                foreach (var el in Ingangen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.Input;
+                foreach (var el in HulpElementen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLHelpElement;
+                foreach (var el in Timers) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLTimer;
+                foreach (var el in Counters) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLCounter;
+                foreach (var el in Schakelaars) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLSchakelaar;
+                foreach (var el in GeheugenElementen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLMemoryElement;
+                foreach (var el in Parameters) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLParameter;
 
                 RaisePropertyChanged("");
             }
