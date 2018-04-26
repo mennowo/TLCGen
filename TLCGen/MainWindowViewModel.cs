@@ -21,6 +21,11 @@ using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 using System.Windows.Shell;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+using System.Net;
+using System.Web.Script.Serialization;
+using GalaSoft.MvvmLight.Threading;
 
 namespace TLCGen.ViewModels
 {
