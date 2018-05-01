@@ -45,6 +45,11 @@ namespace TLCGen.Models
         public bool CheckLijnNummer { get; set; }
         public bool AlleLijnen { get; set; }
 
+        public NooitAltijdAanUitEnum GeconditioneerdePrioriteit { get; set; }
+        public int GeconditioneerdePrioTeVroeg { get; set; }
+        public int GeconditioneerdePrioOpTijd { get; set; }
+        public int GeconditioneerdePrioTeLaat { get; set; }
+
         [Browsable(false)]
         [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }

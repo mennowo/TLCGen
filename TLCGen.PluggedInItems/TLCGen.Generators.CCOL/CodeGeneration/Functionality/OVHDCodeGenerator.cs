@@ -48,13 +48,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmomx;
         private CCOLGeneratorCodeStringSettingModel _prmprio;
         private CCOLGeneratorCodeStringSettingModel _prmpriohd;
-        private CCOLGeneratorCodeStringSettingModel _prmlaatcrit;
         private CCOLGeneratorCodeStringSettingModel _prmallelijnen;
         private CCOLGeneratorCodeStringSettingModel _prmlijn;
         private CCOLGeneratorCodeStringSettingModel _prmmwta;
         private CCOLGeneratorCodeStringSettingModel _prmmwtfts;
         private CCOLGeneratorCodeStringSettingModel _prmmwtvtg;
-        private CCOLGeneratorCodeStringSettingModel _schcprio;
         private CCOLGeneratorCodeStringSettingModel _prmovstp;
         private CCOLGeneratorCodeStringSettingModel _prmtestkarvert;
         private CCOLGeneratorCodeStringSettingModel _prmtestkarlyn;
@@ -147,9 +145,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.OVData.OVIngrepen.Any())
             {
                 /* Variables independent of signal groups */
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcprio}",    0, CCOLElementTimeTypeEnum.SCH_type, _schcprio));
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlaatcrit}", 0, CCOLElementTimeTypeEnum.None, _prmlaatcrit));
-
+                
                 if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()))
                 {
                     var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestkarvert}", 0, CCOLElementTimeTypeEnum.None, _prmtestkarvert);
@@ -239,9 +235,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var opties = 0;
                 if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
                 if (ov.AfkappenConflictenOV) opties += 300;
-                if (ov.TussendoorRealiseren) opties += 30;
-                if (ov.VasthoudenGroen) opties += 2;
-                _MyElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", opties, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                if (ov.TussendoorRealiseren) opties += 3;
+                if (ov.VasthoudenGroen) opties += 20;
+                var sopties = opties.ToString().Replace("0", "");
+                _MyElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 if (ov.CheckLijnNummer)
                 {

@@ -48,6 +48,67 @@ bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201,
 	return FALSE;
 }
 
+/* Bijhouden stiptheid inkomende KAR berichten */
+void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc)
+{
+	/* reset alles */
+	if (EC[cvc])
+	{
+		int i = 0;
+		*iAantInm = 0;
+		for (; i < MAX_AANTAL_INMELDINGEN; ++i)
+		{
+			iKARInSTP[i] = 0;
+		}
+	}
+
+	/* Bijhouden stiptheidsklassen ingemelde voertuigen */
+	/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */
+	if (IH[hin] && !H[hin])
+	{
+		if (*iAantInm < MAX_AANTAL_INMELDINGEN)
+		{
+			/* Bepalen stiptheidsklasse op basis van afwijking van de dienstregeling */
+			if (CIF_DSI[CIF_DSI_TSTP] > PRM[prmOVtstpgrenslaat])              iKARInSTP[*iAantInm] = CIF_TE_LAAT;
+			else if (CIF_DSI[CIF_DSI_TSTP] < (-1 * PRM[prmOVtstpgrensvroeg])) iKARInSTP[*iAantInm] = CIF_TE_VROEG;
+			else                                                              iKARInSTP[*iAantInm] = CIF_OP_TIJD;
+			*iAantInm = (*iAantInm) + 1;
+		}
+	}
+
+	/* Bij uitmelding: opschuiven resterende registraties naar voren */
+	if (IH[huit] && !H[huit])
+	{
+		if (*iAantInm > 1)
+		{
+			int i = 0;
+			int t1 = 0;
+			for (; i < (MAX_AANTAL_INMELDINGEN - 1); ++i)
+			{
+				t1 = iKARInSTP[i + 1];
+				iKARInSTP[i] = t1;
+			}
+			iKARInSTP[*iAantInm - 1] = 0;
+			*iAantInm = (*iAantInm) - 1;
+		}
+		else if (*iAantInm == 1)
+		{
+			iKARInSTP[*iAantInm - 1] = 0;
+			*iAantInm = (*iAantInm) - 1;
+		}
+		else /* failsafe */
+		{
+			int i = 0;
+			*iAantInm = 0;
+			for (; i < MAX_AANTAL_INMELDINGEN; ++i)
+			{
+				iKARInSTP[i] = 0;
+			}
+		}
+	}
+}
+
+
 #ifdef CCOL_IS_SPECIAL
 /*  de functie reset_DSI-message()
 -  kan worden gebruikt voor het verwijderen van een oud DSI-bericht.

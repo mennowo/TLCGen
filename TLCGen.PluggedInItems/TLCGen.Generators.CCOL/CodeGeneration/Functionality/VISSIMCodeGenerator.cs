@@ -31,6 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"#if !defined AUTOMAAT || defined VISSIM");
 					sb.AppendLine($"{ts}code SCJ_code[] = \"{c.Data.VissimNaam}\";");
 					sb.AppendLine($"#endif");
+					sb.AppendLine();
                     return sb.ToString();
 
 	            case CCOLCodeTypeEnum.TabCControlParameters:

@@ -55,7 +55,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.CheckOpDSIN = value;
-                RaisePropertyChanged<object>("CheckOpDSIN", broadcast: true);
+                RaisePropertyChanged<object>(nameof(CheckOpDSIN), broadcast: true);
             }
         }
 
@@ -66,7 +66,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdAuto = value;
-                RaisePropertyChanged<object>("MaxWachttijdAuto", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MaxWachttijdAuto), broadcast: true);
             }
         }
 
@@ -77,7 +77,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdFiets = value;
-                RaisePropertyChanged<object>("MaxWachttijdFiets", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MaxWachttijdFiets), broadcast: true);
             }
         }
 
@@ -88,7 +88,29 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller.OVData.MaxWachttijdVoetganger = value;
-                RaisePropertyChanged<object>("MaxWachttijdVoetganger", broadcast: true);
+                RaisePropertyChanged<object>(nameof(MaxWachttijdVoetganger), broadcast: true);
+            }
+        }
+
+        [Description("Grens te vroeg tbv geconditioneerde prio")]
+        public int GeconditioneerdePrioGrensTeVroeg
+        {
+            get { return _Controller == null ? 0 : _Controller.OVData.GeconditioneerdePrioGrensTeVroeg; }
+            set
+            {
+                _Controller.OVData.GeconditioneerdePrioGrensTeVroeg = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeVroeg), broadcast: true);
+            }
+        }
+
+        [Description("Grens te laat tbv geconditioneerde prio")]
+        public int GeconditioneerdePrioGrensTeLaat
+        {
+            get { return _Controller == null ? 0 : _Controller.OVData.GeconditioneerdePrioGrensTeLaat; }
+            set
+            {
+                _Controller.OVData.GeconditioneerdePrioGrensTeLaat = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioGrensTeLaat), broadcast: true);
             }
         }
 

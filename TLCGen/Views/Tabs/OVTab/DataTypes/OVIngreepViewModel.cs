@@ -192,6 +192,54 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
+        public NooitAltijdAanUitEnum GeconditioneerdePrioriteit
+        {
+            get { return _OVIngreep.GeconditioneerdePrioriteit; }
+            set
+            {
+                _OVIngreep.GeconditioneerdePrioriteit = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioriteit), broadcast: true);
+                RaisePropertyChanged(nameof(HasGeconditioneerdePrioriteit));
+            }
+        }
+        
+        [Browsable(false)]
+        public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit;
+
+        [Browsable(false)]
+        public int GeconditioneerdePrioTeVroeg
+        {
+            get { return _OVIngreep.GeconditioneerdePrioTeVroeg; }
+            set
+            {
+                _OVIngreep.GeconditioneerdePrioTeVroeg = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioTeVroeg), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public int GeconditioneerdePrioOpTijd
+        {
+            get { return _OVIngreep.GeconditioneerdePrioOpTijd; }
+            set
+            {
+                _OVIngreep.GeconditioneerdePrioOpTijd = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioOpTijd), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public int GeconditioneerdePrioTeLaat
+        {
+            get { return _OVIngreep.GeconditioneerdePrioTeLaat; }
+            set
+            {
+                _OVIngreep.GeconditioneerdePrioTeLaat = value;
+                RaisePropertyChanged<object>(nameof(GeconditioneerdePrioTeLaat), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
         [Description("Check op lijnnummers")]
         public bool CheckLijnNummer
         {

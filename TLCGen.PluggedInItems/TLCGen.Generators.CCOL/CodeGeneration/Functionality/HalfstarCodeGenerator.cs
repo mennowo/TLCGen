@@ -426,6 +426,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			switch (type)
 			{
 				case CCOLCodeTypeEnum.HstCTop:
+                    return sb.ToString();
 				case CCOLCodeTypeEnum.RegCPreApplication:
                     sb.AppendLine($"{ts}/* bepalen of regeling mag omschakelen */");
 					sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] = FALSE;");

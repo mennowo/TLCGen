@@ -19,6 +19,8 @@ namespace TLCGen.Models
         public int MaxWachttijdAuto { get; set; }
         public int MaxWachttijdFiets { get; set; }
         public int MaxWachttijdVoetganger { get; set; }
+        public int GeconditioneerdePrioGrensTeVroeg { get; set; }
+        public int GeconditioneerdePrioGrensTeLaat { get; set; }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]

@@ -59,6 +59,7 @@
     <Compile Include="CodeGeneration\Functionality\FixatieCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\GelijkstartenVoorstartenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\HalfstarCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\OVGeconditioneerdePrioGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VISSIMCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VeiligheidsGroenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\NalopenCodeGenerator.cs" />

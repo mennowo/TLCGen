@@ -36,7 +36,7 @@
       <Default>h</Default>
       <Setting>h</Setting>
       <Type>Prefix</Type>
-      <Description>Hulpelement</Description>
+      <Description>HulpElement</Description>
     </Prefix>
     <Prefix>
       <Default>c</Default>
@@ -60,7 +60,7 @@
       <Default>m</Default>
       <Setting>m</Setting>
       <Type>Prefix</Type>
-      <Description>Geheugenelement</Description>
+      <Description>GeheugenElement</Description>
     </Prefix>
     <Prefix>
       <Default>prm</Default>
@@ -1131,6 +1131,62 @@
             <Setting>maxtfbvlog</Setting>
             <Type>Parameter</Type>
             <Description>Parameter VLOG max. wachttijd na aanvraag</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="OVGeconditioneerdePrioGenerator">
+      <CodePieceData>
+        <ClassName>OVGeconditioneerdePrioGenerator</ClassName>
+        <Description>Geconditioneerde prioriteit OV</Description>
+        <Settings>
+          <Setting>
+            <Default>stp</Default>
+            <Setting>stp</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Stiptheid voorste OV voertuig bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>stp</Default>
+            <Setting>stp</Setting>
+            <Type>HulpElement</Type>
+            <Description>Geconditioneerde prio OV mogelijk bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipt</Default>
+            <Setting>ovstipt</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Geconditioneerde prioteit voor OV bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipttevroeg</Default>
+            <Setting>ovstipttevroeg</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV te vroeg bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstiptoptijd</Default>
+            <Setting>ovstiptoptijd</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV op tijd bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>ovstipttelaat</Default>
+            <Setting>ovstipttelaat</Setting>
+            <Type>Parameter</Type>
+            <Description>Prioriteitsnveau OV te laat bij _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>OVtstpgrenslaat</Default>
+            <Setting>OVtstpgrenslaat</Setting>
+            <Type>Parameter</Type>
+            <Description>Grens waarboven een OV voertuig als te laat wordt aangemerkt</Description>
+          </Setting>
+          <Setting>
+            <Default>OVtstpgrensvroeg</Default>
+            <Setting>OVtstpgrensvroeg</Setting>
+            <Type>Parameter</Type>
+            <Description>Grens waarboven een OV voertuig als te vroeg wordt aangemerkt</Description>
           </Setting>
         </Settings>
       </CodePieceData>
