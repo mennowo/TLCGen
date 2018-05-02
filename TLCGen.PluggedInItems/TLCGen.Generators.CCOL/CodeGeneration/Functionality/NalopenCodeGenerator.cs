@@ -141,9 +141,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							if (k != 0)
 							{
-								sb.AppendLine(" &&");
+								sb.AppendLine(" ||");
 							}
-							sb.Append($"{ts}{ts}!T[{_tpf}{t.Naam}]");
+							sb.Append($"{ts}{ts}T[{_tpf}{t.Naam}]");
 							++k;
 						}
 						sb.AppendLine(";");
