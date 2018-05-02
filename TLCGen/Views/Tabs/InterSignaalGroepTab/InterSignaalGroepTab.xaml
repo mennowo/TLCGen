@@ -68,6 +68,7 @@
 
             <CheckBox 
                 IsEnabled="{Binding Path=SelectedSynchronisatie.IsEnabled}"
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.SomeSynchronisatie}}"
                 IsChecked="{Binding Path=SelectedSynchronisatie.IsCoupled,UpdateSourceTrigger=PropertyChanged}" Margin="5" Content="Actief" />
 
             <Grid Grid.Row="0" Grid.RowSpan="2"
