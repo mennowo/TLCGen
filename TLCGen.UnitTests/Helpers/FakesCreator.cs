@@ -24,28 +24,6 @@ namespace TLCGen.UnitTests
         {
             var _messenger = Substitute.For<IMessenger>();
 
-            // Send methods: fake checking for unique elements
-            _messenger.
-                When(x => x.Send(Arg.Any<IsElementIdentifierUniqueRequest>())).
-                Do(c =>
-                {
-                    c.Arg<IsElementIdentifierUniqueRequest>().Handled = true;
-	                if (controller == null)
-	                {
-		                c.Arg<IsElementIdentifierUniqueRequest>().IsUnique = true;
-	                }
-	                else
-	                {
-		                c.Arg<IsElementIdentifierUniqueRequest>().IsUnique =
-			                controller.Fasen.All(x =>
-				                c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam &&
-				                x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier) &&
-			                controller.Fasen.SelectMany(x => x.Detectoren).All(x =>
-				                c.Arg<IsElementIdentifierUniqueRequest>().Type == ElementIdentifierType.Naam &&
-				                x.Naam != c.Arg<IsElementIdentifierUniqueRequest>().Identifier);
-	                }
-                });
-
             return _messenger;
         }
 

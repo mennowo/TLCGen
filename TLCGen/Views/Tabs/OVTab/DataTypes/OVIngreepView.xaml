@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <!--<Label Content="Geen instellingen beschikbaar" Grid.Row="0">
+        <Label Content="Geen instellingen beschikbaar" Grid.Row="0">
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -31,7 +31,7 @@
                     </Style.Triggers>
                 </Style>
             </Label.Style>
-        </Label>-->
+        </Label>
         <ct:SimplePropertyEditor BoundObject="{Binding ElementName=root,Path=DataContext}" CheckBrowsable="True" Grid.Row="1">
             <ct:SimplePropertyEditor.Style>
                 <Style TargetType="UserControl">
@@ -45,7 +45,7 @@
             </ct:SimplePropertyEditor.Style>
         </ct:SimplePropertyEditor>
         <StackPanel Orientation="Vertical" Grid.Row="2" >
-            <!--<StackPanel.Style>
+            <StackPanel.Style>
                 <Style TargetType="StackPanel">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding ElementName=root,Path=DataContext}" Value="{x:Null}">
@@ -53,7 +53,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </StackPanel.Style>-->
+            </StackPanel.Style>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -83,7 +83,9 @@
                 <Label 
                     IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
                     Grid.Row="4" Content="Prioriteit te laat" />
-                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Path=GeconditioneerdePrioTeLaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                <TextBox 
+                    IsEnabled="{Binding Path=HasGeconditioneerdePrioriteit,Mode=OneWay}"
+                    Grid.Row="4" Grid.Column="1" Text="{Binding Path=GeconditioneerdePrioTeLaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
