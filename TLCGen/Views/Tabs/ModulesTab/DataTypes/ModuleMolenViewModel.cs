@@ -73,12 +73,16 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedModule = value;
-                if (value != null)
+                if (_ModulesTabVM != null)
                 {
-                    SelectedModuleFase = null;
-                    _ModulesTabVM.SetSelectedModuleFase(null);
+                    if (value != null)
+                    {
+                        SelectedModuleFase = null;
+                        _ModulesTabVM.SetSelectedModuleFase(null);
+                    }
+                    _ModulesTabVM.SetSelectedModule(value);
                 }
-                _ModulesTabVM.SetSelectedModule(value);
+
                 RaisePropertyChanged("SelectedModule");
             }
         }
@@ -91,39 +95,48 @@ namespace TLCGen.ViewModels
                 _SelectedModuleFase = null;
                 RaisePropertyChanged("SelectedModuleFase");
                 _SelectedModuleFase = value;
-                if (value != null)
+                if (_ModulesTabVM != null)
                 {
-                    _ModulesTabVM.SetSelectedModule(Modules.First(x => x.Fasen.Contains(value)));
-                    SelectedModule = null;
+                    if (value != null)
+                    {
+                        _ModulesTabVM.SetSelectedModule(Modules.First(x => x.Fasen.Contains(value)));
+                        SelectedModule = null;
+                    }
+                    _ModulesTabVM.SetSelectedModuleFase(value);
                 }
-                _ModulesTabVM.SetSelectedModuleFase(value);
             }
         }
 
         public bool LangstWachtendeAlternatief
         {
-            get { return _ModuleMolen.LangstWachtendeAlternatief; }
+            get { return _ModuleMolen == null ? false : _ModuleMolen.LangstWachtendeAlternatief; }
             set
             {
-                _ModuleMolen.LangstWachtendeAlternatief = value;
-                RaisePropertyChanged<object>("LangstWachtendeAlternatief", broadcast: true);
-                RaisePropertyChanged("NotLangstWachtendeAlternatief");
-                MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                if (_ModuleMolen != null)
+                {
+                    _ModuleMolen.LangstWachtendeAlternatief = value;
+                    RaisePropertyChanged<object>("LangstWachtendeAlternatief", broadcast: true);
+                    RaisePropertyChanged("NotLangstWachtendeAlternatief");
+                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                }
             }
         }
 
         public bool NotLangstWachtendeAlternatief
         {
-            get => !_ModuleMolen.LangstWachtendeAlternatief;
+            get => _ModuleMolen == null ? false : !_ModuleMolen.LangstWachtendeAlternatief;
         }
 
         public string WachtModule
         {
-            get { return _ModuleMolen.WachtModule; }
+            get { return _ModuleMolen?.WachtModule; }
             set
             {
-                _ModuleMolen.WachtModule = value;
-                RaisePropertyChanged<object>("WachtModule", broadcast: true);
+                if (_ModuleMolen != null)
+                {
+                    _ModuleMolen.WachtModule = value;
+                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                }
             }
         }
 
@@ -322,10 +335,12 @@ namespace TLCGen.ViewModels
                     ++i;
                 }
                 // Set WachtModule if needed
-                if (Modules.Count == 1)
+                if (Modules.Any() &&
+                    (Modules.All(x => x.Naam != WachtModule) || string.IsNullOrWhiteSpace(WachtModule)))
                 {
                     WachtModule = Modules[0].Naam;
                 }
+                RaisePropertyChanged(nameof(WachtModule));
                 Messenger.Default.Send(new ControllerDataChangedMessage());
             }
         }

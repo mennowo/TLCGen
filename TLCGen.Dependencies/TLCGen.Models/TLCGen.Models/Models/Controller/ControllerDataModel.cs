@@ -149,6 +149,7 @@ namespace TLCGen.Models
             FixatieData = new FixatieModel();
             Versies = new List<VersieModel>();
             SegmentenDisplayBitmapData = new List<SegmentDisplayElementModel>();
+            ModulenDisplayBitmapData = new List<ModuleDisplayElementModel>();
         }
 
         #endregion // Constructor
