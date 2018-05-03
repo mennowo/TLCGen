@@ -18,9 +18,9 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			set
 			{
 				Hoofdrichting.FaseCyclus = value;
-				RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(nameof(FaseCyclus), broadcast: true);
+            }
+        }
 
 		#endregion // Properties
 

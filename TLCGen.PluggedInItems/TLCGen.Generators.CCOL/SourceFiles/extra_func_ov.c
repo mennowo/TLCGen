@@ -49,7 +49,7 @@ bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201,
 }
 
 /* Bijhouden stiptheid inkomende KAR berichten */
-void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc)
+void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat)
 {
 	/* reset alles */
 	if (EC[cvc])
@@ -69,8 +69,8 @@ void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], c
 		if (*iAantInm < MAX_AANTAL_INMELDINGEN)
 		{
 			/* Bepalen stiptheidsklasse op basis van afwijking van de dienstregeling */
-			if (CIF_DSI[CIF_DSI_TSTP] > PRM[prmOVtstpgrenslaat])              iKARInSTP[*iAantInm] = CIF_TE_LAAT;
-			else if (CIF_DSI[CIF_DSI_TSTP] < (-1 * PRM[prmOVtstpgrensvroeg])) iKARInSTP[*iAantInm] = CIF_TE_VROEG;
+			if (CIF_DSI[CIF_DSI_TSTP] > grenslaat)              iKARInSTP[*iAantInm] = CIF_TE_LAAT;
+			else if (CIF_DSI[CIF_DSI_TSTP] < (-1 * grensvroeg)) iKARInSTP[*iAantInm] = CIF_TE_VROEG;
 			else                                                              iKARInSTP[*iAantInm] = CIF_OP_TIJD;
 			*iAantInm = (*iAantInm) + 1;
 		}

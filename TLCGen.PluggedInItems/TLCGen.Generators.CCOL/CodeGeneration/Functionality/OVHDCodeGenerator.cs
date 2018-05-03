@@ -429,11 +429,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     case OVIngreepMeldingTypeEnum.VECOM:
                                         sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
                                             $"RT[{_tpf}{_tovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] = " +
-                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}] && " +
+                                            $"SCH[{_schpf}{_schovin}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}] && " +
                                             $"DSIMeldingOV_V1({_dpf}{melding.RelatedInput1}, " +
                                                               $"{vtgType}, " +
                                                               $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
-                                                              $"SCH[{_schpf}{_schcheckdstype}, " +
+                                                              $"SCH[{_schpf}{_schcheckdstype}], " +
                                                               $"CIF_DSIN, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
                                                               $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
@@ -627,14 +627,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             $"DSIMeldingOV_V1({_dpf}{melding.RelatedInput2}, " +
                                                               $"{vtgType}, " +
                                                               $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
-                                                              $"SCH[{_schpf}{_schcheckdstype}, " +
+                                                              $"SCH[{_schpf}{_schcheckdstype}], " +
                                                               $"CIF_DSIN, " +
                                                               $"{(ov.CheckLijnNummer ? "TRUE" : "FALSE")}, " +
                                                               $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
                                                               $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
                                                               $"TRUE) && " +
                                             $"!T[{_tpf}{_tovuit}{ov.FaseCyclus}];");
-                                        uitmHelems.Add($"{_hpf}uit{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
+                                        uitmHelems.Add($"{_hpf}{_hovuit}{ov.FaseCyclus}{GetMeldingShortcode(melding.Type)}");
                                         break;
                                     #endregion // Uitmelding OV Vecom
                                     #region Uitmelding OV KAR

@@ -593,7 +593,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					#region Klok bepaling VA bedrijf
 
 					sb.AppendLine($"{mts}/* Klokbepaling voor VA-bedrijf */");
-					sb.AppendLine($"{mts}if (IH[{_hpf}{_homschtegenh}])");
+					sb.AppendLine($"{mts}if (!IH[{_hpf}{_homschtegenh}])");
 					sb.AppendLine($"{mts}{{");
 					sb.Append($"{mts}{ts}if ((SCH[{_schpf}{_schpervar}def] && (MM[{_mpf}{_mperiod}] == 0)");
 					iper = 1;
@@ -693,10 +693,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
 							break;
 						case HalfstarTypeEnum.FallbackMaster:
-							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}] || MM[{_mpf}{_mslave}])");
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || SCH[{_schpf}{_schvarstreng}])");
 							break;
 						case HalfstarTypeEnum.Slave:
-							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}] || MM[{_mpf}{_mslave}])");
+							sb.AppendLine($"{ts}if (H[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvar}])");
 							break;
 						default:
 							throw new ArgumentOutOfRangeException();
@@ -1044,7 +1044,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					foreach (var kp in c.HalfstarData.GekoppeldeKruisingen)
 					{
 						sb.AppendLine($"{ts}/* Levensignaal van {kp.KruisingNaam} */");
-						sb.AppendLine($"{ts}RT[{_tpf}{_tleven}{kp.KruisingNaam}] = SH[{_hpf}{kp.KruisingNaam}{_hiks}01];");
+						sb.AppendLine($"{ts}RT[{_tpf}{_tleven}{kp.KruisingNaam}] = SH[{_hpf}{kp.PTPKruising}{_hiks}01];");
 						sb.AppendLine($"{ts}MM[{_mpf}{_mleven}{kp.KruisingNaam}] = T[{_tpf}{_tleven}{kp.KruisingNaam}];");
 					}
 
@@ -1363,7 +1363,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             // TODO: make this configurable (replace FALSE...)
                             sb.AppendLine($"{ts}                   (va_count) {_fcpf}{hr.FaseCyclus}, (va_mulv) FALSE, (va_mulv) FALSE, (va_mulv) FALSE,");
                         }
-                        sb.AppendLine("{ts}                   (va_count)END); ");
+                        sb.AppendLine($"{ts}                   (va_count)END); ");
                     }
 
                     sb.AppendLine();

@@ -1015,8 +1015,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
                     var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    if (m.Inmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_in, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
-                    if (m.Uitmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message(ds{ov.FaseCyclus}_uit, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    if (m.Inmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomInmelding.Naam}]) set_DSI_message({_dpf}{m.RelatedInput1}, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
+                    if (m.Uitmelding) sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyVecomUitmelding.Naam}]) set_DSI_message({_dpf}{m.RelatedInput2}, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestkarlyn}], NG);");
                 }
                 sb.AppendLine();
             }

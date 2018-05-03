@@ -21,9 +21,9 @@ namespace TLCGen.ViewModels
 			set
 			{
 				PeriodeData.Signaalplan = value;
-				RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(nameof(Signaalplan), broadcast: true);
+            }
+        }
 
 		public bool VARegelen
 		{
@@ -31,9 +31,9 @@ namespace TLCGen.ViewModels
 			set
 			{
 				PeriodeData.VARegelen = value;
-				RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(nameof(VARegelen), broadcast: true);
+            }
+        }
 
 		#endregion // Properties
 

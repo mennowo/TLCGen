@@ -29,7 +29,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				{
 					u.Kruising = value;
 				}
-				RaisePropertyChanged();
+                RaisePropertyChanged<object>(nameof(KruisingNaam), broadcast: true);
 			}
 		}
 		
@@ -43,9 +43,9 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				{
 					u.Type = value;
 				}
-				RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+            }
+        }
 
 		public HalfstarGekoppeldWijzeEnum KoppelWijze
 		{
@@ -53,8 +53,8 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			set
 			{
 				_gekoppeldeKruising.KoppelWijze = value;
-				RaisePropertyChanged();
-				RaisePropertyChanged(nameof(ShowPTPOptions));
+                RaisePropertyChanged<object>(nameof(KoppelWijze), broadcast: true);
+                RaisePropertyChanged(nameof(ShowPTPOptions));
 				RaisePropertyChanged(nameof(ShowKoppelsignalenOpties));
 			}
 		}
@@ -67,9 +67,9 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 				if (value != null)
 				{
 					_gekoppeldeKruising.PTPKruising = value;
-					RaisePropertyChanged();
-				}
-			}
+                    RaisePropertyChanged<object>(nameof(PTPKruising), broadcast: true);
+                }
+            }
 		}
 
 		public bool ShowPTPOptions => _gekoppeldeKruising.KoppelWijze == HalfstarGekoppeldWijzeEnum.PTP;
