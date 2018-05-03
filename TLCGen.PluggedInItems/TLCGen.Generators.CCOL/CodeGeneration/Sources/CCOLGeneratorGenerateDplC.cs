@@ -12,6 +12,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         private string GenerateDplC(ControllerModel controller)
         {
+            CollectAllIO();
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* DISPLAY APPLICATIE */");
             sb.AppendLine("/* ------------------ */");
@@ -29,6 +31,40 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateDplCDisplayParameters(controller));
 
             return sb.ToString();
+        }
+
+        private List<CCOLIOElement> AllCCOLOutputElements;
+        private List<CCOLIOElement> AllCCOLInputElements;
+        private List<IOElementModel> AllOutputModelElements;
+        private List<IOElementModel> AllInputModelElements;
+
+        private void CollectAllIO()
+        {
+            AllCCOLOutputElements = new List<CCOLIOElement>();
+            AllCCOLInputElements = new List<CCOLIOElement>();
+            AllOutputModelElements = new List<IOElementModel>();
+            AllInputModelElements = new List<IOElementModel>();
+
+            foreach (var pgen in PieceGenerators)
+            {
+                if (pgen.HasCCOLBitmapOutputs())
+                {
+                    AllCCOLOutputElements.AddRange(pgen.GetCCOLBitmapOutputs());
+                }
+                if (pgen.HasCCOLBitmapInputs())
+                {
+                    AllCCOLInputElements.AddRange(pgen.GetCCOLBitmapInputs());
+                }
+            }
+
+            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            {
+                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
+                {
+                    AllOutputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems());
+                    AllInputModelElements.AddRange(((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems());
+                }
+            }
         }
 
         private string GenerateDplCIncludes(ControllerModel controller)
@@ -65,22 +101,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            foreach (FaseCyclusModel fcm in controller.Fasen)
+            foreach (var item in AllCCOLOutputElements)
             {
-                foreach (DetectorModel dm in fcm.Detectoren)
+                if (item.Element.BitmapCoordinaten?.Count > 1)
                 {
-                    if (dm.BitmapCoordinaten?.Count > 1)
+                    for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
                     {
-                        for (int i = 1; i < dm.BitmapCoordinaten.Count; ++i)
-                        {
-                            sb.AppendLine($"{ts}#define {dm.GetDefine()}_{i} (ISMAX + {ismaxplus})");
-                            ++ismaxplus;
-                        }
+                        sb.AppendLine($"{ts}#define {item.Naam}_{i} (USMAX + {usmaxplus})");
+                        ++usmaxplus;
                     }
                 }
             }
 
-            foreach (DetectorModel dm in controller.Detectoren)
+            foreach (var item in AllOutputModelElements)
+            {
+                if (item.BitmapCoordinaten?.Count > 1)
+                {
+                    for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    {
+                        sb.AppendLine($"{ts}#define {_uspf}{item.Naam}_{i} (USMAX + {usmaxplus})");
+                        ++usmaxplus;
+                    }
+                }
+            }
+
+            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
+            var controllerdets = controller.Detectoren;
+            var ovdummydets = controller.OVData.GetAllDummyDetectors();
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+
+            foreach (var dm in alldets)
             {
                 if (dm.BitmapCoordinaten?.Count > 1)
                 {
@@ -92,7 +142,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-#warning Collecting double IO coordinates should also happen for inputs and outputs
+            foreach (var item in AllCCOLInputElements)
+            {
+                if (item.Element.BitmapCoordinaten?.Count > 1)
+                {
+                    for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
+                    {
+                        sb.AppendLine($"{ts}#define {item.Naam}_{i} (ISMAX + {ismaxplus})");
+                        ++ismaxplus;
+                    }
+                }
+            }
+
+            foreach (var item in AllInputModelElements)
+            {
+                if (item.BitmapCoordinaten?.Count > 1)
+                {
+                    for (int i = 1; i < item.BitmapCoordinaten.Count; ++i)
+                    {
+                        sb.AppendLine($"{ts}#define {_ispf}{item.Naam}_{i} (ISMAX + {ismaxplus})");
+                        ++ismaxplus;
+                    }
+                }
+            }
 
             sb.AppendLine();
 
@@ -183,53 +255,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
-            foreach (var pgen in PieceGenerators)
+            foreach (var item in AllCCOLOutputElements)
             {
-                if (pgen.HasCCOLBitmapOutputs())
-                {
-                    foreach (var item in pgen.GetCCOLBitmapOutputs())
-                    {
-                        sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
-                    }
-                }
+                sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
             }
 
-            foreach(var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
+            foreach (var item in AllOutputModelElements)
             {
-                if((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
-                {
-                    foreach(var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetOutputItems())
-                    {
-                        sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
-                    }
-                }
+                sb.Append(GetCoordinatesString(item, _uspf + item.Naam, "us"));
             }
 
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
+            
+            foreach (var item in AllCCOLInputElements)
+            {
+                sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+            }
 
-            foreach (var pgen in PieceGenerators)
+            foreach (var item in AllInputModelElements)
             {
-                if (pgen.HasCCOLBitmapInputs())
-                {
-                    foreach (var item in pgen.GetCCOLBitmapInputs())
-                    {
-                        sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
-                    }
-                }
+                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
             }
-            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationParts.Concat(Plugins.TLCGenPluginManager.Default.ApplicationPlugins))
-            {
-                if ((pl.Item1 & Plugins.TLCGenPluginElems.IOElementProvider) == Plugins.TLCGenPluginElems.IOElementProvider)
-                {
-                    foreach (var item in ((Plugins.ITLCGenElementProvider)pl.Item2).GetInputItems())
-                    {
-                        sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
-                    }
-                }
-            }
+
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* Gebruikers toevoegingen file includen */");
