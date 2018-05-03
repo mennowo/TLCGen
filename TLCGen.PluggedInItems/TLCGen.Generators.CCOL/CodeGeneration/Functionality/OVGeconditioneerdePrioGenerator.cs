@@ -25,6 +25,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hstp;
         private CCOLGeneratorCodeStringSettingModel _schovstipt;
         private CCOLGeneratorCodeStringSettingModel _prmovstipttevroeg;
+        private CCOLGeneratorCodeStringSettingModel _usovtevroeg;
+        private CCOLGeneratorCodeStringSettingModel _usovoptijd;
+        private CCOLGeneratorCodeStringSettingModel _usovtelaat;
         private CCOLGeneratorCodeStringSettingModel _prmovstiptoptijd;
         private CCOLGeneratorCodeStringSettingModel _prmovstipttelaat;
         private CCOLGeneratorCodeStringSettingModel _prmOVtstpgrenslaat;
@@ -58,6 +61,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{ov.FaseCyclus}{_prmovstipttevroeg}", ov.GeconditioneerdePrioTeVroeg, CCOLElementTimeTypeEnum.None, _prmovstipttevroeg, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{ov.FaseCyclus}{_prmovstiptoptijd}", ov.GeconditioneerdePrioOpTijd, CCOLElementTimeTypeEnum.None, _prmovstiptoptijd, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{ov.FaseCyclus}{_prmovstipttelaat}", ov.GeconditioneerdePrioTeLaat, CCOLElementTimeTypeEnum.None, _prmovstipttelaat, ov.FaseCyclus));
+
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtevroeg}{ov.FaseCyclus}", _usovtevroeg, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{ov.FaseCyclus}", _usovoptijd, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{ov.FaseCyclus}", _usovtelaat, ov.FaseCyclus));
+
+                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_uspf}{_usovtevroeg}{ov.FaseCyclus}"));
+                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_uspf}{_usovoptijd}{ov.FaseCyclus}"));
+                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_uspf}{_usovtelaat}{ov.FaseCyclus}"));
             }
         }
 
@@ -91,6 +102,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 20;
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                     return 20;
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    return 10;
             }
             return 0;
         }
@@ -158,6 +171,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine();
                     return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    sb.AppendLine($"{ts}/* Verklikken stiptheid OV */");
+                    foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtevroeg}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_VROEG;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovoptijd}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtelaat}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT;");
+                    }
+                    sb.AppendLine();
+                    return sb.ToString();
+
             }
             return null;
         }

@@ -1188,6 +1188,24 @@
             <Type>Parameter</Type>
             <Description>Grens waarboven een OV voertuig als te vroeg wordt aangemerkt</Description>
           </Setting>
+          <Setting>
+            <Default>ovtevroeg</Default>
+            <Setting>ovtevroeg</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ te vroeg</Description>
+          </Setting>
+          <Setting>
+            <Default>ovoptijd</Default>
+            <Setting>ovoptijd</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ op tijd</Description>
+          </Setting>
+          <Setting>
+            <Default>ovtelaat</Default>
+            <Setting>ovtelaat</Setting>
+            <Type>Uitgang</Type>
+            <Description>Voorste OV voertuig bij _E1_ te laat</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

@@ -50,9 +50,25 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioOpTijd { get; set; }
         public int GeconditioneerdePrioTeLaat { get; set; }
 
+        [HasDefault(false)]
+        [Browsable(false)]
+        public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit;
+
         [Browsable(false)]
         [IOElement("vc", BitmappedItemTypeEnum.Uitgang, "FaseCyclus")]
         public BitmapCoordinatenDataModel OVInmeldingBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("tv", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioTeVroegBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("ot", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioOpTijdBitmapData { get; set; }
+
+        [Browsable(false)]
+        [IOElement("tl", BitmappedItemTypeEnum.Uitgang, "FaseCyclus", "HasGeconditioneerdePrioriteit")]
+        public BitmapCoordinatenDataModel GeconditioneerdePrioTeLaatBitmapData { get; set; }
 
         [Browsable(false)]
         public DetectorModel DummyKARInmelding { get; set; }
@@ -87,6 +103,9 @@ namespace TLCGen.Models
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
+            GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
 
             Meldingen = new List<OVIngreepMeldingModel>();
         }
