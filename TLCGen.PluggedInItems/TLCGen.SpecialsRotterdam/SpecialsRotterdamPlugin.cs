@@ -192,14 +192,6 @@ namespace TLCGen.SpecialsRotterdam
             _FasenWithDummies = new List<string>();
             _MyElements = new List<CCOLElement>();
 
-            #region Versie xx yy zz
-
-            _MyElements.Add(new CCOLElement("xx", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("yy", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-            _MyElements.Add(new CCOLElement("zz", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-
-            #endregion // Versie xx yy zz
-
             #region OVM
 
             if (_MyModel.ToevoegenOVM)
@@ -237,9 +229,19 @@ namespace TLCGen.SpecialsRotterdam
                                 error = true;
                                 MessageBox.Show($"Dummy fase {fc2.Naam} is niet juist als dummy geconfigureerd.\nControleer: nooit meeverlengen/wachtgroen/vaste aanvraag, en niet alternatief",
                                                 "AFM: Foutieve instellingen dummy fase");
+                                break;
                             }
                         }
                     }
+                }
+                if(!_FasenWithDummies.Any() || error)
+                {
+                    if (!_FasenWithDummies.Any())
+                    {
+                        MessageBox.Show($"Er zijn geen dummy fasen gevonden in de regeling.\nControleer: TLCGen verwacht voor auto fasen te relateren 9## fasen.",
+                                                "AFM: Foutieve instellingen dummy fasen");
+                    }
+                    return;
                 }
 
                 foreach (var fc in c.Fasen)
@@ -332,12 +334,13 @@ namespace TLCGen.SpecialsRotterdam
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
+
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCTop:
-                    if (!_MyModel.ToepassenAFM)
+                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
                         return "";
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     int index = 0;
@@ -354,7 +357,7 @@ namespace TLCGen.SpecialsRotterdam
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (!_MyModel.ToepassenAFM)
+                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
                         return "";
                     sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
                     sb.AppendLine($"{ts}AFMinit();");
@@ -367,7 +370,7 @@ namespace TLCGen.SpecialsRotterdam
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    if (!_MyModel.ToepassenAFM)
+                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
                         return "";
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old);");
@@ -394,7 +397,7 @@ namespace TLCGen.SpecialsRotterdam
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-                    if (!_MyModel.ToepassenAFM)
+                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
                         return "";
                     sb.AppendLine($"{ts}/* AFM */");
                     sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && PRM[{_prmpf}AFM_Beschikbaar])");
@@ -420,7 +423,7 @@ namespace TLCGen.SpecialsRotterdam
                         }
                         sb.AppendLine();
                     }
-                    if (_MyModel.ToepassenAFM)
+                    if (_MyModel.ToepassenAFM && _FasenWithDummies.Any())
                     {
                         sb.AppendLine($"{ts}/* AFM */");
                         foreach (var fc in _FasenWithDummies)

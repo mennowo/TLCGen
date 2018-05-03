@@ -28,8 +28,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
-                _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{_ussegm}{item.Naam}"));
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm));
+                _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam}"));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{item.Naam}", _ussegm));
             }
 
             // Module display elements
