@@ -274,7 +274,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
                         }
                     }
-                    sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
+                    if (halfstar)
+                    {
+                        sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
+                        sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
+
+                        var defmg = c.GroentijdenSets.FirstOrDefault(
+                            x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
+                        var defmgfc = defmg?.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                        if (defmgfc?.Waarde != null)
+                        {
+                            sb.Append($"{_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{fc.Naam}");
+                        }
+
+                        foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                        {
+                            foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
+                            {
+                                foreach (var unused in mgsm.Groentijden.Where(x => x.FaseCyclus == fc.Naam && x.Waarde.HasValue))
+                                {
+                                    sb.Append(", ");
+                                    sb.Append($"{_prmpf}{mgsm.Naam.ToLower()}_{fc.Naam}");
+                                }
+                            }
+                        }
+
+                        sb.AppendLine(");");
+                    }
                     sb.AppendLine($"{ts}}}");
                 }
             }
