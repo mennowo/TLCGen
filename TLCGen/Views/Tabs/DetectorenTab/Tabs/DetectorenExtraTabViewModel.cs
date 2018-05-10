@@ -101,7 +101,7 @@ namespace TLCGen.ViewModels
             {
                 if (_TemplatesProviderVM == null)
                 {
-                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel>(this);
+                    _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel>(this, false);
                 }
                 return _TemplatesProviderVM;
             }

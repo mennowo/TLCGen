@@ -21,6 +21,8 @@ namespace TLCGen.ViewModels
 
         private IAllowTemplates<T2> _SourceVM;
 
+        private bool _replaceNameOnApply;
+
         #endregion // Fields
 
         #region Properties
@@ -109,8 +111,7 @@ namespace TLCGen.ViewModels
         {
             return
                 SelectedTemplate != null &&
-                !string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>).Replace) &&
-                SelectedTemplate != null && 
+                (!string.IsNullOrWhiteSpace((SelectedTemplate as TLCGenTemplateModel<T2>).Replace) || !_replaceNameOnApply) &&
                 (ApplyToItem != null || ApplyToItems != null && ApplyToItems.Any());
         }
 
@@ -179,7 +180,10 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
-                ModelStringSetter.ReplaceStringInModel(item, template.Replace, orignalName);
+                if (_replaceNameOnApply)
+                {
+                    ModelStringSetter.ReplaceStringInModel(item, template.Replace, orignalName);
+                }
                 if(orignalItemName != null)
                 {
                     ((IHaveName)item).Naam = orignalItemName;
@@ -310,9 +314,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public TemplateProviderViewModel(IAllowTemplates<T2> vm)
+        public TemplateProviderViewModel(IAllowTemplates<T2> vm, bool replacenameonapply = true)
         {
             _SourceVM = vm;
+            _replaceNameOnApply = replacenameonapply;
             this.Update();
             Messenger.Default.Register(this, new Action<TemplatesChangedMessage>(OnTemplatesChanged));
         }

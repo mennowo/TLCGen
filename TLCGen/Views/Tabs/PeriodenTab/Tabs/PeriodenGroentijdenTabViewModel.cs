@@ -59,7 +59,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedPeriode = value;
                 RaisePropertyChanged("SelectedPeriode");
-                TemplatesProviderVM.SetSelectedApplyToItem(value.Periode);
+                TemplatesProviderVM.SetSelectedApplyToItem(value?.Periode);
             }
         }
 

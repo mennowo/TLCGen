@@ -131,25 +131,23 @@ namespace TLCGen.ViewModels
         void AddNewFaseCommand_Executed(object prm)
         {
             var fcm = new FaseCyclusModel();
-            var newname = "01";
+
+            string newname;
+            var inext = 0;
             foreach (var fcvm in Fasen)
             {
-                if (Regex.IsMatch(fcvm.Naam, @"[0-9]+"))
+                if (int.TryParse(fcvm.Naam, out int inewname))
                 {
-                    var m = Regex.Match(fcvm.Naam, @"[0-9]+");
-                    var next = m.Value;
-                    if (int.TryParse(next, out int inewname))
-                    {
-                        do
-                        {
-                            inewname++;
-                            newname = (inewname < 10 ? "0" : "") + inewname;
-                        }
-                        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, newname));
-                    }
+                    inext = inewname > inext ? inewname : inext;
                 }
-	            break;
             }
+            do
+            {
+                inext++;
+                newname = (inext < 10 ? "0" : "") + inext;
+            }
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, newname));
+
             fcm.Naam = newname;
             fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
             DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());

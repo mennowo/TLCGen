@@ -66,7 +66,7 @@ namespace TLCGen.Settings
             set
             {
                 SettingsProvider.Default.Settings.DefaultsFileLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
-                if (!File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
+                if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) && !File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
                 {
                     TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.DefaultsFileLocation, new TLCGenDefaultsModel());
                 }

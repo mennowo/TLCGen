@@ -82,11 +82,11 @@ namespace TLCGen.Settings
         {
             var pmt = new TLCGenTemplateModel<PeriodeModel>
             {
-                Naam = "Nieuw template",
-                Replace = "per"
+                Naam = "Nieuw template"
             };
             var pm = new PeriodeModel
             {
+                DagCode = Models.Enumerations.PeriodeDagCodeEnum.AlleDagen,
                 Type = Models.Enumerations.PeriodeTypeEnum.Groentijden,
                 Naam = "per_1"
             };
