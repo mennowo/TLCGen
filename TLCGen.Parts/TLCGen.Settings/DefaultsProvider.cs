@@ -22,6 +22,8 @@ namespace TLCGen.Settings
 
         #region Properties
 
+        public event EventHandler DefaultsChanged;
+
         private ControllerModel _Controller;
         public ControllerModel Controller
         {
@@ -39,6 +41,7 @@ namespace TLCGen.Settings
             set
             {
                 _Defaults = value;
+                DefaultsChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -182,12 +185,14 @@ namespace TLCGen.Settings
 
         public void LoadSettings()
         {
-            if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
+            Defaults = null;
+                if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
                 File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
             {
                 try
                 {
                     Defaults = DeserializeDefaultsFile(SettingsProvider.Default.Settings.DefaultsFileLocation);
+                    foreach (var d in Defaults.Defaults) d.Editable = true;
                 }
                 catch
                 {
@@ -279,6 +284,7 @@ namespace TLCGen.Settings
             else if(File.Exists(defsetfile))
             {
                 Defaults = DeserializeDefaultsFile(defsetfile);
+                foreach (var d in Defaults.Defaults) d.Editable = false;
             }
         }
 

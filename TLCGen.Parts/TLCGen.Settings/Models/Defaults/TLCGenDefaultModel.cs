@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace TLCGen.Settings
 {
@@ -15,5 +12,8 @@ namespace TLCGen.Settings
         public string Selector2 { get; set; }
         public string DataType { get; set; }
         public object Data { get; set; }
+
+        [XmlIgnore]
+        public bool Editable { get; set; }
     }
 }

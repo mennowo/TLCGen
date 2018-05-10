@@ -18,12 +18,16 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0">
-            <Label Content="Template" DockPanel.Dock="Top" />
+            <Label Content="Type default" DockPanel.Dock="Top" />
             <ListView ItemsSource="{Binding ElementName=root,Path=Defaults}"
                       DisplayMemberPath="DefaultName"
                       SelectedItem="{Binding ElementName=root,Path=SelectedDefault,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         </DockPanel>
         <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
-        <ct:SimplePropertyEditor BoundObject="{Binding ElementName=root,Path=SelectedDefault.Data}" Grid.Column="2" CheckHasDefault="True" />
+        <Grid IsEnabled="{Binding ElementName=root,Path=SelectedDefault.Editable,Mode=OneWay}" Grid.Column="2" >
+            <ct:SimplePropertyEditor 
+                BoundObject="{Binding ElementName=root,Path=SelectedDefault.Data}" 
+                CheckHasDefault="True" />
+        </Grid>
     </Grid>
 </UserControl>

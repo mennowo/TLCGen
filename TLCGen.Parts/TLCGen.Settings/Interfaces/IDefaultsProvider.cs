@@ -12,6 +12,8 @@ namespace TLCGen.Settings
         ControllerModel Controller { get; set; }
         TLCGenDefaultsModel Defaults { get; set; }
 
+        event EventHandler DefaultsChanged;
+
         void LoadSettings();
         void SaveSettings();
 

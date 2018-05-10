@@ -88,12 +88,15 @@ namespace TLCGen.Settings
 
         #region Private Methods
 
-        #endregion // Private Methods
-
-        #region Constructor
-
-        public DefaultsTabViewModel()
+        private void RefreshDefaults()
         {
+            FaseCyclusDefaults.Clear();
+            DetectorDefaults.Clear();
+            OtherDefaults.Clear();
+            SelectedFaseCyclusDefault = null;
+            SelectedDetectorDefault = null;
+            SelectedOtherDefault = null;
+            if (DefaultsProvider.Default.Defaults == null) return;
             foreach (var def in DefaultsProvider.Default.Defaults.Defaults)
             {
                 if (def.Category == "FaseCyclus") FaseCyclusDefaults.Add(def);
@@ -103,6 +106,19 @@ namespace TLCGen.Settings
             if (FaseCyclusDefaults.Count > 0) SelectedFaseCyclusDefault = FaseCyclusDefaults[0];
             if (DetectorDefaults.Count > 0) SelectedDetectorDefault = DetectorDefaults[0];
             if (OtherDefaults.Count > 0) SelectedOtherDefault = OtherDefaults[0];
+        }
+
+        #endregion // Private Methods
+
+        #region Constructor
+
+        public DefaultsTabViewModel()
+        {
+            RefreshDefaults();
+            DefaultsProvider.Default.DefaultsChanged += (o, e) =>
+            {
+                RefreshDefaults();
+            };
         }
 
         #endregion // Constructor
