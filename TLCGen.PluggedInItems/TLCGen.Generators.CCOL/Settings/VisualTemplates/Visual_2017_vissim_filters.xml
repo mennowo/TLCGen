@@ -11,19 +11,16 @@
     </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;res;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="__CONTROLLERNAME__sys.h">
+    <ClInclude Include="__CONTROLLERNAME__sys.h">
       <Filter>Header Files</Filter>
-    </ClCompile>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__reg.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="__CONTROLLERNAME__sim.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="__CONTROLLERNAME__tab.c">
@@ -35,6 +32,9 @@ __IF;OV__    </ClCompile>
 __IF;SYNC__    <ClCompile Include="syncfunc.c">
 __IF;SYNC__      <Filter>Source Files</Filter>
 __IF;SYNC__    </ClCompile>
+__IF;PTP__    <ClCompile Include="PTPWIN.C">
+__IF;PTP__      <Filter>Source Files</Filter>
+__IF;PTP__    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__ccolvissim_e.res">

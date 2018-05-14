@@ -88,14 +88,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            if (c.ModuleMolen.LangstWachtendeAlternatief)
-            {
-                sb.AppendLine("void Alternatief_Add()");
-                sb.AppendLine("{");
-                sb.AppendLine("");
-                sb.AppendLine("}");
-                sb.AppendLine();
-            }
+            sb.AppendLine("void Alternatief_Add()");
+            sb.AppendLine("{");
+            sb.AppendLine("");
+            sb.AppendLine("}");
+            sb.AppendLine();
             sb.AppendLine("void Modules_Add()");
             sb.AppendLine("{");
             sb.AppendLine("");

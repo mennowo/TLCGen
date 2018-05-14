@@ -1,6 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;res;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__CONTROLLERNAME__sys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="__CONTROLLERNAME__sys.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="__CONTROLLERNAME__dpl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -13,32 +35,19 @@
     <ClCompile Include="__CONTROLLERNAME__tab.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-__IF;OV__<ClCompile Include="__CONTROLLERNAME__ov.c">
-__IF;OV__  <Filter>Source Files</Filter>
-__IF;OV__</ClCompile>
-__IF;SYNC__<ClCompile Include="Syncfunc.C">
-__IF;SYNC__  <Filter>Source Files</Filter>
-__IF;SYNC__</ClCompile>
-__IF;PTP__<ClCompile Include="PTPWIN.C">
-__IF;PTP__  <Filter>Source Files</Filter>
-__IF;PTP__</ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
-    </Filter>
+__IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c">
+__IF;OV__      <Filter>Source Files</Filter>
+__IF;OV__    </ClCompile>
+__IF;SYNC__    <ClCompile Include="Syncfunc.C">
+__IF;SYNC__      <Filter>Source Files</Filter>
+__IF;SYNC__    </ClCompile>
+__IF;PTP__    <ClCompile Include="PTPWIN.C">
+__IF;PTP__      <Filter>Source Files</Filter>
+__IF;PTP__    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res">
       <Filter>Resource Files</Filter>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\__CONTROLLERNAME__sys.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

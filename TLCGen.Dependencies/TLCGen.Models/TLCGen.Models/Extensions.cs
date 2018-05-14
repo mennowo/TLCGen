@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
@@ -46,7 +47,9 @@ namespace TLCGen.Models
         public static bool HasDSI(this ControllerModel c)
         {
             return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||
-                   c.OVData.HDIngrepen.Any(x => x.KAR);
+                   c.OVData.HDIngrepen.Any(x => x.KAR) ||
+                   c.Detectoren.Any(x => x.Type == DetectorTypeEnum.VecomDetector) ||
+                   c.Fasen.SelectMany(x => x.Detectoren).Any(x2 => x2.Type == DetectorTypeEnum.VecomDetector);
         }
 
         public static bool HasKAR(this ControllerModel c)

@@ -96,10 +96,12 @@ __IF;SYNC__    <ClCompile Include="Syncfunc.c" />
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res" />
   </ItemGroup>
-  <ItemGroup>
-__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
-__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
-  </ItemGroup>
+__IF;MV__  <ItemGroup>
+__IF;MVVIALIS__    <Object Include="pi_ccol_7.obj" />
+__IF;MVVIALIS__    <Object Include="pi_fab_3.obj" />
+__IF;MVOVERIG__    <Object Include="mv_ccol_7.obj" />
+__IF;MVOVERIG__    <Object Include="mv_fab_3.obj" />
+__IF;MV__  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

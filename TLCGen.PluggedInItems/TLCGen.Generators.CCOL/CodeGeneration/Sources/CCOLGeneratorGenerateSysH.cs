@@ -43,8 +43,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateSysHParameters(controller));
             sb.AppendLine();
-            if (controller.OVData.HDIngrepen.Any(x => x.KAR) || 
-                controller.OVData.OVIngrepen.Any(x => x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && (x2.Type == OVIngreepMeldingTypeEnum.KAR || x2.Type == OVIngreepMeldingTypeEnum.VECOM))))
+            if (controller.HasDSI())
             {
                 sb.Append(GenerateSysHDS(controller));
             }

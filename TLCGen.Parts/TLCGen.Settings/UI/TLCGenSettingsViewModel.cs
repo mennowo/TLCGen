@@ -48,7 +48,8 @@ namespace TLCGen.Settings
             set
             {
                 SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
-                if (!UseFolderForTemplates && !File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
+                if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
+                    !UseFolderForTemplates && !File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
                     TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, new TLCGenTemplatesModel());
                 }

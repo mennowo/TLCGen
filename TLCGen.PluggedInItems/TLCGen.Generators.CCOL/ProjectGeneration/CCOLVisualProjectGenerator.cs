@@ -69,6 +69,13 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                         case "MV":
                             result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
                             break;
+                        case "MVVIALIS":
+                            result = plugin.Controller.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis;
+                            break;
+                        case "MVOVERIG":
+                            result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Vialis &&
+                                     plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
+                            break;
                         case "PTP":
                         case "KS":
                             result = plugin.Controller.PTPData.PTPKoppelingen != null &&
@@ -78,7 +85,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                             result = plugin.Controller.Data.CCOLMulti;
                             break;
                         case "SYNC":
-                            result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() &&
+                            result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() ||
                                      plugin.Controller.InterSignaalGroep.Voorstarten.Any();
                             break;
                         case "HS":

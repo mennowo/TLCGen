@@ -88,11 +88,20 @@ namespace TLCGen.ModelManagement
 
         public void CorrectModelByVersion(ControllerModel controller)
         {
+            foreach(var s in controller.Data.SegmentenDisplayBitmapData)
+            {
+                if (s.Naam.StartsWith("segm"))
+                {
+                    s.Naam = s.Naam.Replace("segm", "");
+                }
+            }
+
             var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
+            
+            // In version 0.2.2.0, the OVIngreepModel object was changed
             var v1 = Version.Parse("0.2.2.0");
             if(v < v1)
             {
-                // In version 0.2.2.0, the OVIngreepModel object was changed
                 foreach (var ov in controller.OVData.OVIngrepen)
                 {
                     if (!ov.Meldingen.Any())
@@ -153,6 +162,19 @@ namespace TLCGen.ModelManagement
                             Uitmelding = false,
                             InmeldingFilterTijd = 15
                         });
+                    }
+                }
+            }
+
+            // In version 0.2.3.0, handling of segments was altered
+            v1 = Version.Parse("0.2.3.0");
+            if(v < v1)
+            {
+                foreach (var s in controller.Data.SegmentenDisplayBitmapData)
+                {
+                    if (s.Naam.StartsWith("segm"))
+                    {
+                        s.Naam = s.Naam.Replace("segm", "");
                     }
                 }
             }
@@ -392,28 +414,31 @@ namespace TLCGen.ModelManagement
                     }
                     break;
                 case ModulesChangedMessage modulesMessage:
-                    foreach(var m in Controller.ModuleMolen.Modules)
+                    if (Controller.Data.UitgangPerModule)
                     {
-                        if(!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                        foreach (var m in Controller.ModuleMolen.Modules)
                         {
-                            Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                            if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
                             {
-                                Naam = m.Naam
-                            });
-                            Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                                Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                {
+                                    Naam = m.Naam
+                                });
+                                Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                            }
                         }
-                    }
-                    var rd = new List<ModuleDisplayElementModel>();
-                    foreach(var md in Controller.Data.ModulenDisplayBitmapData)
-                    {
-                        if(!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                        var rd = new List<ModuleDisplayElementModel>();
+                        foreach (var md in Controller.Data.ModulenDisplayBitmapData)
                         {
-                            rd.Add(md);
+                            if (!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                            {
+                                rd.Add(md);
+                            }
                         }
-                    }
-                    foreach (var r in rd)
-                    {
-                        Controller.Data.ModulenDisplayBitmapData.Remove(r);
+                        foreach (var r in rd)
+                        {
+                            Controller.Data.ModulenDisplayBitmapData.Remove(r);
+                        }
                     }
                     break;
 

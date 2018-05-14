@@ -1,6 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{__GUID__}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__CONTROLLERNAME__sys.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__dpl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -24,21 +40,8 @@ __IF;PTP__  <Filter>Source Files</Filter>
 __IF;PTP__</ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{__GUIDSOURCEFILES__}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{__GUIDRESOURCEFILES__}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res">
       <Filter>Resource Files</Filter>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\__CONTROLLERNAME__sys.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

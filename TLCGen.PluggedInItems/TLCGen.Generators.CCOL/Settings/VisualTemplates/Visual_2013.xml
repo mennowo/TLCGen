@@ -81,6 +81,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="__CONTROLLERNAME__sys.h" />
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
 __IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />
     <ClCompile Include="__CONTROLLERNAME__reg.c" />
@@ -103,10 +104,12 @@ __IF;OV__    <Library Include="__CCOLLIBSDIR__DSIFUNC.lib" />
   <ItemGroup>
     <Resource Include="__CCOLLRESDIR__Ccolmenu.res" />
   </ItemGroup>
-  <ItemGroup>
-__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_ccol_7.obj" />
-__IF;MV__    <Object Include="__MVOBJECTSFOLDER__pi_fab_3.obj" />
-  </ItemGroup>
+__IF;MV__  <ItemGroup>
+__IF;MVVIALIS__    <Object Include="pi_ccol_7.obj" />
+__IF;MVVIALIS__    <Object Include="pi_fab_3.obj" />
+__IF;MVOVERIG__    <Object Include="mv_ccol_7.obj" />
+__IF;MVOVERIG__    <Object Include="mv_fab_3.obj" />
+__IF;MV__  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

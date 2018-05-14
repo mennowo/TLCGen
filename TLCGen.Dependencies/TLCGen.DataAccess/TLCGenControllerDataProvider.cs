@@ -120,7 +120,7 @@ namespace TLCGen.DataAccess
 				}
                 if(Controller.Data.SegmentenDisplayBitmapData.Count == 0)
                 {
-                    // Force adding the segments; this is because this is fixed list, 
+                    // Force adding the segments; this is because this is a fixed list, 
                     // which we cannot add in the constructor for it will cause double items
                     Controller.Data.SetSegmentOutputs();
                 }

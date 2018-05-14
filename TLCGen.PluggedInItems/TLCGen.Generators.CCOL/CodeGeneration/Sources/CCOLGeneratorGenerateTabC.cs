@@ -162,8 +162,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateTabCControlParametersExtraData(controller));
             sb.AppendLine();
-            if (controller.OVData.HDIngrepen.Any(x => x.KAR) ||
-                controller.OVData.OVIngrepen.Any(x => x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && (x2.Type == OVIngreepMeldingTypeEnum.KAR || x2.Type == OVIngreepMeldingTypeEnum.VECOM))))
+            if (controller.HasDSI())
             {
                 sb.Append(GenerateTabCControlParametersDS(controller));
             }
@@ -596,7 +595,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(var dm in alldets)
             {
-                if (!dm.Dummy)
+                if (!dm.Dummy && dm.IsDetector())
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }

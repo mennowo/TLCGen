@@ -514,6 +514,7 @@ namespace TLCGen.SpecialsRotterdam
 
         public override List<string> GetSourcesToCopy()
         {
+            if (!_MyModel.ToepassenAFM) return null;
             return new List<string>
             {
                 "afmroutines.c",
