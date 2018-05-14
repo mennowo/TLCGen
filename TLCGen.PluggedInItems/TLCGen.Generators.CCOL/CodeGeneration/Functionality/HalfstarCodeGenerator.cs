@@ -1323,23 +1323,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}int fc;");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{ts}{{");
-                        sb.AppendLine($"{ts}{ts}{ts}BL[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}MK[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}RW[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}YV[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}YM[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}PP[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}FM[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}{ts}RR[fc] &= ~OV_PLE_BIT;");
-                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}BL[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}MK[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}RW[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}YV[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}YM[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}PP[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}FM[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}{ts}RR[fc] &= ~OV_PLE_BIT;");
+                        sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* ------------------------------------------- */");
                         sb.AppendLine($"{ts}/* aanroep OV richtingen voor halfstar bedrijf */");
                         sb.AppendLine($"{ts}/* ------------------------------------------- */");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}] && !IH[{_hpf}{_hmlact}])");
+                        sb.AppendLine($"{ts}{{");
                         foreach(var ov in c.OVData.OVIngrepen)
                         {
                             sb.AppendLine($"{ts}OVIngreep_ple({_fcpf}{ov.FaseCyclus},");
