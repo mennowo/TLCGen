@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
-using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels

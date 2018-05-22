@@ -11,7 +11,7 @@ namespace TLCGen.Models
     [Serializable]
     public class FileIngreepModel : IHaveName
     {
-        [ModelName]
+        [ModelName(TLCGenObjectTypeEnum.FileIngreep)]
         [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]

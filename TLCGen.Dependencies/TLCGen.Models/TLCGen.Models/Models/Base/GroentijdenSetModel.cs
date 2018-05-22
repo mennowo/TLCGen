@@ -13,7 +13,7 @@ namespace TLCGen.Models
     {
         #region Properties
 
-        [ModelName]
+        [ModelName(TLCGenObjectTypeEnum.GroenTijdenSet)]
         public string Naam { get; set; }
         public GroentijdenTypeEnum Type { get; set; }
         [XmlElement(ElementName = "Groentijd")]

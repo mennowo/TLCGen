@@ -15,6 +15,7 @@ using TLCGen.Integrity;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
 using GalaSoft.MvvmLight;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -248,14 +249,14 @@ namespace TLCGen.GebruikersOpties
 
                 switch (OptiesNames[SelectedTabIndex])
                 {
-                    case "us": o.ObjectType = Messaging.TLCGenObjectTypeEnum.Output; break;
-                    case "is": o.ObjectType = Messaging.TLCGenObjectTypeEnum.Input; break;
-                    case "h": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLHelpElement; break;
-                    case "t": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLTimer; break;
-                    case "c": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLCounter; break;
-                    case "sch": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLSchakelaar; break;
-                    case "m": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLMemoryElement; break;
-                    case "prm": o.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLParameter; break;
+                    case "us": o.ObjectType = TLCGenObjectTypeEnum.Output; break;
+                    case "is": o.ObjectType = TLCGenObjectTypeEnum.Input; break;
+                    case "h": o.ObjectType = TLCGenObjectTypeEnum.CCOLHelpElement; break;
+                    case "t": o.ObjectType = TLCGenObjectTypeEnum.CCOLTimer; break;
+                    case "c": o.ObjectType = TLCGenObjectTypeEnum.CCOLCounter; break;
+                    case "sch": o.ObjectType = TLCGenObjectTypeEnum.CCOLSchakelaar; break;
+                    case "m": o.ObjectType = TLCGenObjectTypeEnum.CCOLMemoryElement; break;
+                    case "prm": o.ObjectType = TLCGenObjectTypeEnum.CCOLParameter; break;
                 }
 
                 if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count)
@@ -687,14 +688,14 @@ namespace TLCGen.GebruikersOpties
                 _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
                 _AlleOpties[ParametersConst] = Parameters;
 
-                foreach (var el in Uitgangen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.Output;
-                foreach (var el in Ingangen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.Input;
-                foreach (var el in HulpElementen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLHelpElement;
-                foreach (var el in Timers) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLTimer;
-                foreach (var el in Counters) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLCounter;
-                foreach (var el in Schakelaars) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLSchakelaar;
-                foreach (var el in GeheugenElementen) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLMemoryElement;
-                foreach (var el in Parameters) el.ObjectType = Messaging.TLCGenObjectTypeEnum.CCOLParameter;
+                foreach (var el in Uitgangen) el.ObjectType = TLCGenObjectTypeEnum.Output;
+                foreach (var el in Ingangen) el.ObjectType = TLCGenObjectTypeEnum.Input;
+                foreach (var el in HulpElementen) el.ObjectType = TLCGenObjectTypeEnum.CCOLHelpElement;
+                foreach (var el in Timers) el.ObjectType = TLCGenObjectTypeEnum.CCOLTimer;
+                foreach (var el in Counters) el.ObjectType = TLCGenObjectTypeEnum.CCOLCounter;
+                foreach (var el in Schakelaars) el.ObjectType = TLCGenObjectTypeEnum.CCOLSchakelaar;
+                foreach (var el in GeheugenElementen) el.ObjectType = TLCGenObjectTypeEnum.CCOLMemoryElement;
+                foreach (var el in Parameters) el.ObjectType = TLCGenObjectTypeEnum.CCOLParameter;
 
                 RaisePropertyChanged("");
             }

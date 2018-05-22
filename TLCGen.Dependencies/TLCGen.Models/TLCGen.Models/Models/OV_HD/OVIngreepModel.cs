@@ -81,7 +81,9 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
-        
+
+        public OVIngreepMeldingenDataModel MeldingenData { get; set; }
+
         #endregion // Properties
 
         #region IComparable
@@ -108,6 +110,8 @@ namespace TLCGen.Models
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
 
             Meldingen = new List<OVIngreepMeldingModel>();
+
+            MeldingenData = new OVIngreepMeldingenDataModel();
         }
 
         #endregion // Constructor

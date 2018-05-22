@@ -14,7 +14,7 @@ namespace TLCGen.Models
 
 		#region Properties
 
-		[ModelName]
+		[ModelName(TLCGenObjectTypeEnum.SignaalPlan)]
 		[Browsable(false)]
 		public override string Naam { get; set; }
 		public string Commentaar { get; set; }

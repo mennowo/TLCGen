@@ -45,6 +45,8 @@
     <Compile Include="AansturingWaitsignalenEnum.cs" />
     <Compile Include="BitmappedItemTypeEnum.cs" />
     <Compile Include="CCOLVersieEnum.cs" />
+    <Compile Include="InUit\Class1.cs" />
+    <Compile Include="SelectieveDetectorTypeEnum.cs" />
     <Compile Include="GroentijdenTypeEnum.cs" />
     <Compile Include="DetectorAanvraagTypeEnum.cs" />
     <Compile Include="DetectorTypeEnum.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="HalfstarGekoppeldWijzeEnum.cs" />
     <Compile Include="HalfstarGekoppeldTypeEnum.cs" />
     <Compile Include="HalfstarTypeEnum.cs" />
+    <Compile Include="IngangTypeEnum.cs" />
     <Compile Include="KWCTypeEnum.cs" />
     <Compile Include="MeeaanvraagTypeEnum.cs" />
     <Compile Include="MeeVerlengenTypeEnum.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="RoBuGroverMethodeEnum.cs" />
     <Compile Include="SegmentDisplayTypeEnum.cs" />
     <Compile Include="SynchronisatieTypeEnum.cs" />
+    <Compile Include="TLCGenObjectTypeEnum.cs" />
     <Compile Include="VLOGTypeEnum.cs" />
   </ItemGroup>
   <ItemGroup>

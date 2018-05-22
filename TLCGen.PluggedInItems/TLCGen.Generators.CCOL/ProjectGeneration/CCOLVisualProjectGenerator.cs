@@ -17,11 +17,22 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
         {
             string writeline = line;
 
-            string _ccolinclpaths = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLIncludesPaden;
-            string _ccollibs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibs;
-            string _ccollibspath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLLibsPath;
-            string _ccolppdefs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLPreprocessorDefinitions;
-            string _ccolrespath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings.CCOLResPath;
+            CCOLGeneratorVisualSettingsModel settings = null;
+            switch (plugin.Controller.Data.CCOLVersie)
+            {
+                case Models.Enumerations.CCOLVersieEnum.CCOL8:
+                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettings;
+                    break;
+                case Models.Enumerations.CCOLVersieEnum.CCOL9:
+                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL9;
+                    break;
+            }
+
+            string _ccolinclpaths = settings.CCOLIncludesPaden;
+            string _ccollibs = settings.CCOLLibs;
+            string _ccollibspath = settings.CCOLLibsPath;
+            string _ccolppdefs = settings.CCOLPreprocessorDefinitions;
+            string _ccolrespath = settings.CCOLResPath;
 
             // Replace all
             if (writeline.Contains("__"))
@@ -60,6 +71,9 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     var actualCondition = condition.Replace("!", "");
                     switch (actualCondition)
                     {
+                        case "CCOL9ORHIGHER":
+                            result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9;
+                            break;
                         case "OV":
                             result = plugin.Controller.OVData.OVIngrepen != null &&
                                      plugin.Controller.OVData.OVIngrepen.Count > 0 ||

@@ -48,8 +48,7 @@ namespace TLCGen.Models
         {
             return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||
                    c.OVData.HDIngrepen.Any(x => x.KAR) ||
-                   c.Detectoren.Any(x => x.Type == DetectorTypeEnum.VecomDetector) ||
-                   c.Fasen.SelectMany(x => x.Detectoren).Any(x2 => x2.Type == DetectorTypeEnum.VecomDetector);
+                   c.SelectieveDetectoren.Any(x => x.Type == SelectieveDetectorTypeEnum.VECOM);
         }
 
         public static bool HasKAR(this ControllerModel c)
@@ -69,20 +68,5 @@ namespace TLCGen.Models
             return c.OVData.OVIngrepen.Any() ||
                    c.OVData.HDIngrepen.Any();
         }
-
-        public static bool IsDetector(this DetectorModel det)
-        {
-            return det.Type != Enumerations.DetectorTypeEnum.VecomDetector &&
-                   det.Type != Enumerations.DetectorTypeEnum.VecomIngang &&
-                   det.Type != Enumerations.DetectorTypeEnum.WisselIngang;
-        }
-
-        public static bool IsInput(this DetectorModel det)
-        {
-            return det.Type == Enumerations.DetectorTypeEnum.VecomDetector &&
-                   det.Type == Enumerations.DetectorTypeEnum.VecomIngang &&
-                   det.Type == Enumerations.DetectorTypeEnum.WisselIngang;
-        }
-
     }
 }

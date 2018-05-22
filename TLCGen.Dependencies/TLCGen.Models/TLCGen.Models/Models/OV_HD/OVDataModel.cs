@@ -36,9 +36,6 @@ namespace TLCGen.Models
         public List<HDIngreepModel> HDIngrepen { get; set; }
         public List<OVIngreepSignaalGroepParametersModel> OVIngreepSignaalGroepParameters { get; set; }
 
-        [XmlArrayItem(ElementName = "WisselContact")]
-        public List<WisselContactModel> WisselContacten { get; set; }
-
         [Browsable(false)]
         [HasDefault(false)]
         public bool HasAnyKAR => this.HasKAR();
@@ -89,7 +86,6 @@ namespace TLCGen.Models
             OVIngrepen = new List<OVIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
             OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();
-            WisselContacten = new List<WisselContactModel>();
         }
         
         #endregion // Constructor

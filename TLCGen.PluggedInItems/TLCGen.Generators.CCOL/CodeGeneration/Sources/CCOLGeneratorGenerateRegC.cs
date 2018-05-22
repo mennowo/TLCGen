@@ -50,6 +50,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateRegCPostApplication(controller));
             sb.Append(GenerateRegCApplication(controller));
             sb.Append(GenerateRegCSystemApplication(controller));
+            if(controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
+            {
+                sb.Append(GenerateRegCSystemApplication2(controller));
+            }
             sb.Append(GenerateRegCDumpApplication(controller));
             sb.Append(GenerateRegCSpecialSignals(controller));
 
@@ -679,11 +683,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+
+        private string GenerateRegCSystemApplication2(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void system_application2(void)");
+            sb.AppendLine("{");
+
+            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPreSystemApplication2])
+            {
+                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPreSystemApplication2, ts));
+            }
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         private string GenerateRegCDumpApplication(ControllerModel controller)
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("#define ENDDUMP   21");
+            sb.AppendLine("#define ENDDUMP 21");
             sb.AppendLine("");
             sb.AppendLine("void dump_application(void)");
             sb.AppendLine("{");

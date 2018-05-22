@@ -13,6 +13,8 @@ namespace TLCGen.Settings
     [Serializable]
     public class TLCGenDefaultsModel
     {
+        public string DefaultsSetName { get; set; }
+
         [XmlArrayItem(ElementName = "Default")]
         public List<TLCGenDefaultModel> Defaults { get; set; }
 

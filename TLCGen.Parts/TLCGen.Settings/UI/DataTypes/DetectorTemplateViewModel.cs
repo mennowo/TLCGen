@@ -206,17 +206,9 @@ namespace TLCGen.Settings
                     {
                         SelectedDetector.Type = DetectorTypeEnum.VecomDetector;
                     }
-                    else if (value == DetectorTypeEnum.VecomIngang.GetDescription())
-                    {
-                        SelectedDetector.Type = DetectorTypeEnum.VecomIngang;
-                    }
                     else if (value == DetectorTypeEnum.WisselDetector.GetDescription())
                     {
                         SelectedDetector.Type = DetectorTypeEnum.WisselDetector;
-                    }
-                    else if (value == DetectorTypeEnum.WisselIngang.GetDescription())
-                    {
-                        SelectedDetector.Type = DetectorTypeEnum.WisselIngang;
                     }
                     else if (value == DetectorTypeEnum.Overig.GetDescription())
                     {

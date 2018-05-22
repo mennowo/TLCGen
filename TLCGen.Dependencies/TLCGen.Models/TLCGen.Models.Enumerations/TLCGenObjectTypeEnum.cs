@@ -1,4 +1,4 @@
-﻿namespace TLCGen.Messaging
+﻿namespace TLCGen.Models.Enumerations
 {
     public enum TLCGenObjectTypeEnum
     {
@@ -15,6 +15,10 @@
         GroenTijdenSet,
         Periode,
         FileIngreep,
-        PTPKruising
+        PTPKruising,
+        SignaalPlan,
+        WaarschuwingsGroep,
+        Module,
+        SelectieveDetector
     }
 }

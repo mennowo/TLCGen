@@ -23,6 +23,12 @@
         <DataTemplate DataType="{x:Type vm:DetectorenSimulatieTabViewModel}">
             <local:DetectorenSimulatieTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:IngangenTabViewModel}">
+            <local:IngangenTabView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SelectieveDetectorenTabViewModel}">
+            <local:SelectieveDetectorenTabView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>

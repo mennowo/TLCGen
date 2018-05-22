@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace TLCGen.Models
@@ -24,6 +21,12 @@ namespace TLCGen.Models
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
+
+        [XmlArrayItem(ElementName = "SelectieveDetector")]
+        public List<SelectieveDetectorModel> SelectieveDetectoren { get; set; }
+
+        [XmlArrayItem(ElementName = "Ingang")]
+        public List<IngangModel> Ingangen { get; set; }
 
         [XmlArrayItem(ElementName = "RichtingGevoeligeAanvraag")]
         public List<RichtingGevoeligeAanvraagModel> RichtingGevoeligeAanvragen { get; set; }
@@ -67,6 +70,8 @@ namespace TLCGen.Models
             Data = new ControllerDataModel();
             Fasen = new List<FaseCyclusModel>();
             Detectoren = new List<DetectorModel>();
+            SelectieveDetectoren = new List<SelectieveDetectorModel>();
+            Ingangen = new List<IngangModel>();
             GroentijdenSets = new List<GroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
             PeriodenData = new PeriodenDataModel();

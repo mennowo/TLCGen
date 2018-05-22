@@ -1,4 +1,4 @@
-﻿
+﻿using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Messaging.Messages
 {

@@ -20,9 +20,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="__CONTROLLERNAME__sys.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="__CONTROLLERNAME__dpl.c">
       <Filter>Source Files</Filter>
     </ClCompile>

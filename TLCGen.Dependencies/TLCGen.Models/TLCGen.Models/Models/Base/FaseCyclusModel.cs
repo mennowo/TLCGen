@@ -17,7 +17,7 @@ namespace TLCGen.Models
 
         #region Properties
         
-        [ModelName]
+        [ModelName(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
         public override string Naam { get; set; }
         [Browsable(false)]

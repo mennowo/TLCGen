@@ -314,48 +314,34 @@ namespace TLCGen.ViewModels
         public bool DetectorCanRequest =>
             FaseCyclus != null &&
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.OpticomIngang &&
-            Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang;
+            Type != DetectorTypeEnum.WisselDetector;
 
         public bool DetectorCanRequestDirect =>
             FaseCyclus != null &&
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.OpticomIngang &&
             Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
             Type != DetectorTypeEnum.KnopBuiten;
 
         public bool DetectorCanExtend =>
             FaseCyclus != null &&
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.OpticomIngang &&
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang;
-
-        public bool DetectorCanHaveError =>
-            Type != DetectorTypeEnum.VecomIngang &&
-            Type != DetectorTypeEnum.WisselIngang;
+            Type != DetectorTypeEnum.WisselDetector;
 
         public bool DetectorCanHaveTDH =>
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.VecomDetector &&
             Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
             Type != DetectorTypeEnum.KnopBuiten;
 
         public bool DetectorCanHaveTDB =>
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.VecomDetector &&
             Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang &&
             Type != DetectorTypeEnum.Knop &&
             Type != DetectorTypeEnum.KnopBinnen &&
             Type != DetectorTypeEnum.KnopBuiten;
@@ -367,11 +353,9 @@ namespace TLCGen.ViewModels
 
         public bool DetectorCanHaveLaneNumber => 
             FaseCyclus != null &&
-            Type != DetectorTypeEnum.VecomIngang &&
             Type != DetectorTypeEnum.OpticomIngang &&
             Type != DetectorTypeEnum.VecomDetector &&
-            Type != DetectorTypeEnum.WisselDetector &&
-            Type != DetectorTypeEnum.WisselIngang;
+            Type != DetectorTypeEnum.WisselDetector;
 
         public bool AanvraagDirectPossible => 
             FaseCyclus != null && (Type == DetectorTypeEnum.Kop || Type == DetectorTypeEnum.Lang);

@@ -595,7 +595,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach(var dm in alldets)
             {
-                if (!dm.Dummy && dm.IsDetector())
+                if (!dm.Dummy)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }
@@ -896,8 +896,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case DetectorTypeEnum.Lang:
                             sb.AppendLine("DL_type | DLNG_type;");
                             break;
-                        case DetectorTypeEnum.VecomIngang:
                         case DetectorTypeEnum.OpticomIngang:
+                        case DetectorTypeEnum.VecomDetector:
                             // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                             sb.AppendLine("DS_type;");
                             break;
@@ -905,10 +905,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine("DL_type;");
                             break;
                         case DetectorTypeEnum.WisselDetector:
-                        case DetectorTypeEnum.WisselIngang:
-                        case DetectorTypeEnum.VecomDetector:
                         case DetectorTypeEnum.Radar:
-                            // TODO: what type to use here?
+                            sb.AppendLine("DL_type | DKOP_type;");
                             break;
                         default:
                             throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type);
@@ -935,8 +933,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case DetectorTypeEnum.Lang:
                         sb.AppendLine("DL_type | DLNG_type;");
                         break;
-                    case DetectorTypeEnum.VecomIngang:
                     case DetectorTypeEnum.OpticomIngang:
+                    case DetectorTypeEnum.VecomDetector:
                         // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
                         sb.AppendLine("DS_type;");
                         break;
@@ -945,9 +943,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         break;
                     case DetectorTypeEnum.WisselDetector:
                     case DetectorTypeEnum.Radar:
-                    case DetectorTypeEnum.VecomDetector:
-                    case DetectorTypeEnum.WisselIngang:
-                        // TODO: what type to use here?
+                        sb.AppendLine("DL_type | DKOP_type;");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());

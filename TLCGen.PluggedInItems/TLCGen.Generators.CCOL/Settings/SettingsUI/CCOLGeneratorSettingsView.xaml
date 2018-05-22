@@ -10,9 +10,18 @@
     <Grid>
         <TabControl>
             <TabItem Header="Visual project">
-                <xctk:PropertyGrid Margin="2" 
-                                 ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                 Grid.Row="1" SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                <TabControl>
+                    <TabItem Header="CCOL 8">
+                        <xctk:PropertyGrid Margin="2" 
+                                         ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
+                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettings}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                    </TabItem>
+                    <TabItem Header="CCOL 9">
+                        <xctk:PropertyGrid Margin="2" 
+                                         ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
+                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL9}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                    </TabItem>
+                </TabControl>
             </TabItem>
             <TabItem Header="Element prefixes">
                 <DataGrid CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Margin="2"

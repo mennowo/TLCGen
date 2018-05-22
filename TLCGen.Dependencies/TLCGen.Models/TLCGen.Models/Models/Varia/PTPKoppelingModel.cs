@@ -6,7 +6,7 @@ namespace TLCGen.Models
 	[Serializable]
     public class PTPKoppelingModel
     {
-		[ModelName]
+		[ModelName(TLCGenObjectTypeEnum.PTPKruising)]
         public string TeKoppelenKruispunt { get; set; }
         public int AantalsignalenIn { get; set; }
         public int AantalsignalenUit { get; set; }

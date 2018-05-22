@@ -1,6 +1,6 @@
 ﻿using System;
-using TLCGen.Messaging;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ModelManagement
 {

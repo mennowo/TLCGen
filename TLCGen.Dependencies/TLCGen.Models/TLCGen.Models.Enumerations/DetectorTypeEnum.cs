@@ -30,14 +30,14 @@ namespace TLCGen.Models.Enumerations
         Radar,
         [Description("Opticom ingang")]
         OpticomIngang,
-        [Description("Vecom detector")]
+        [Description("Vecom ingang (ext.)")]
         VecomDetector,
-        [Description("Vecom ingang")]
-        VecomIngang,
         [Description("Wissel detector")]
         WisselDetector,
-        [Description("Wissel ingang")]
-        WisselIngang,
+        [Description("Wissel stroom kring detector")]
+        WisselStroomKringDetector,
+        [Description("Wissel stand detector")]
+        WisselStandDetector,
         [Description("Overig")]
         Overig
     }

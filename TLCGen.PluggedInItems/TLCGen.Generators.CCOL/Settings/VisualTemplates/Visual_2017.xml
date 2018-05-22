@@ -63,6 +63,10 @@ __IF;!HS;!MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.l
 __IF;!HS;MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
 __IF;HS;!MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
 __IF;HS;MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;!HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;!HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
+__IF;HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
     </Link>
@@ -84,6 +88,9 @@ __IF;HS;MS__      <AdditionalDependencies>%(AdditionalDependencies);comctl32.lib
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="__CONTROLLERNAME__sys.h" />
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="__CONTROLLERNAME__dpl.c" />
 __IF;OV__    <ClCompile Include="__CONTROLLERNAME__ov.c" />

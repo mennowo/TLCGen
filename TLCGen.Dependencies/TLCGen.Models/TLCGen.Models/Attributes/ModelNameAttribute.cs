@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class ModelNameAttribute : Attribute
     {
+        public TLCGenObjectTypeEnum Type { get; }
+
+        public ModelNameAttribute(TLCGenObjectTypeEnum type)
+        {
+            Type = type;
+        }
     }
 }

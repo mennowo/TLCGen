@@ -50,7 +50,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "Detectie";
+                return "Detectie/ingangen";
             }
         }
 

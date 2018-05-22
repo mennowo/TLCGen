@@ -19,7 +19,7 @@ namespace TLCGen.Models
 
         #region Properties
         
-        [ModelName]
+        [ModelName(TLCGenObjectTypeEnum.Detector)]
         [Browsable(false)]
         public override string Naam { get; set; }
         [VissimName]

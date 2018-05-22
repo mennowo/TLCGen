@@ -12,6 +12,8 @@ namespace TLCGen.Models.Enumerations
     public enum CCOLVersieEnum
     {
         [Description("8.0")]
-        CCOL8
+        CCOL8,
+        [Description("9.0")]
+        CCOL9
     }
 }

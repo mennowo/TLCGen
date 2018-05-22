@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="TLCGen.Views.SelectieveDetectorenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ct:SpecialDataGrid ItemsSource="{Binding Path=SelectieveDetectoren}" CanUserAddRows="False" CanUserDeleteRows="False"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=DetectorAanmaken}" Header="Gewone detector" />
+                <DataGridTextColumn Binding="{Binding Path=TOG}" Header="TOG" />
+                <DataGridTextColumn Binding="{Binding Path=TBG}" Header="TBG" />
+                <DataGridTextColumn Binding="{Binding Path=TFL}" Header="TFL" />
+                <DataGridTextColumn Binding="{Binding Path=CFL}" Header="CFL" />
+                <!--<DataGridComboBoxColumn 
+                    Header="Type"
+                    SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:SelectieveDetectorTypeEnum}}}" />-->
+                <DataGridTextColumn Binding="{Binding Path=Omschrijving}" Header="Omschrijving" Width="*" />
+            </DataGrid.Columns>
+        </ct:SpecialDataGrid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Content="Toevoegen" Command="{Binding Path=AddSelectieveDetectorCommand}" Margin="2" />
+            <Button Content="Verwijderen" Command="{Binding Path=RemoveSelectieveDetectorCommand}" Margin="2" />
+        </StackPanel>
+    </Grid>
+</UserControl>

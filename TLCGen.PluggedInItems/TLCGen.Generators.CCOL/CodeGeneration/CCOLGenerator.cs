@@ -60,6 +60,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Public Methods
 
+        public static CCOLElemListData[] GetAllCCOLElements(ControllerModel c)
+        {
+            foreach (var pgen in PieceGenerators)
+            {
+                pgen.CollectCCOLElements(c);
+            }
+            return CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
+        }
+
         public string GenerateSourceFiles(ControllerModel c, string sourcefilepath)
         {
             if (Directory.Exists(sourcefilepath))

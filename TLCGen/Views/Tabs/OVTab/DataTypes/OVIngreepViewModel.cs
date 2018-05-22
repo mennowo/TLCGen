@@ -559,10 +559,24 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
+        private void RefreshIngangen()
+        {
+            WisselIngangen.Clear();
+            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen)
+            {
+                switch (d.Type)
+                {
+                    case IngangTypeEnum.WisselContact:
+                        WisselIngangen.Add(d.Naam);
+                        break;
+                }
+            }
+        }
+
         private void RefreshDetectoren()
         {
             WisselDetectoren.Clear();
-            WisselIngangen.Clear();
             if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
 
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
@@ -573,9 +587,6 @@ namespace TLCGen.ViewModels
                     case DetectorTypeEnum.WisselDetector:
                         WisselDetectoren.Add(d.Naam);
                         break;
-                    case DetectorTypeEnum.WisselIngang:
-                        WisselIngangen.Add(d.Naam);
-                        break;
                 }
             }
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
@@ -584,9 +595,6 @@ namespace TLCGen.ViewModels
                 {
                     case DetectorTypeEnum.WisselDetector:
                         WisselDetectoren.Add(d.Naam);
-                        break;
-                    case DetectorTypeEnum.WisselIngang:
-                        WisselIngangen.Add(d.Naam);
                         break;
                 }
             }
@@ -605,6 +613,12 @@ namespace TLCGen.ViewModels
         private void OnDetectorenChanged(DetectorenChangedMessage msg)
         {
             RefreshDetectoren();
+            RaisePropertyChanged("");
+        }
+
+        private void OnIngangenChanged(IngangenChangedMessage msg)
+        {
+            RefreshIngangen();
             RaisePropertyChanged("");
         }
 
@@ -705,6 +719,7 @@ namespace TLCGen.ViewModels
             }
 
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
             MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
 

@@ -156,12 +156,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyElements.Add(prmtest2);
                 }
                 
-                foreach (var d in c.GetAllDetectors(x => x.Type == DetectorTypeEnum.WisselIngang || x.Type == DetectorTypeEnum.WisselDetector))
+                foreach (var d in c.GetAllDetectors(x => x.Type == DetectorTypeEnum.WisselDetector))
                 {
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schgeenwissel}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schgeenwissel, d.Naam));
                 }
-                
-                foreach(var d in c.GetAllDetectors(x => x.Type == DetectorTypeEnum.WisselIngang))
+                foreach (var d in c.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
+                {
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schgeenwissel}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schgeenwissel, d.Naam));
+                }
+
+                foreach (var d in c.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
                 {
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwisselpol}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schwisselpol, d.Naam));
                 }

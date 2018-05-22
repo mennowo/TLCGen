@@ -344,17 +344,9 @@ namespace TLCGen.Settings
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.VecomDetector;
                     }
-                    else if (value == DetectorTypeEnum.VecomIngang.GetDescription())
-                    {
-                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.VecomIngang;
-                    }
                     else if (value == DetectorTypeEnum.WisselDetector.GetDescription())
                     {
                         SelectedFaseCyclusDetector.Type = DetectorTypeEnum.WisselDetector;
-                    }
-                    else if (value == DetectorTypeEnum.WisselIngang.GetDescription())
-                    {
-                        SelectedFaseCyclusDetector.Type = DetectorTypeEnum.WisselIngang;
                     }
                     else if (value == DetectorTypeEnum.Overig.GetDescription())
                     {

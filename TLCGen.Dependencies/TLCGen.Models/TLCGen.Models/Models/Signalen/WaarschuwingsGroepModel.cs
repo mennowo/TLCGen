@@ -11,7 +11,7 @@ namespace TLCGen.Models
     [RefersTo("FaseCyclusVoorAansturing")]
     public class WaarschuwingsGroepModel
     {
-        [ModelName]
+        [ModelName(TLCGenObjectTypeEnum.WaarschuwingsGroep)]
         public string Naam { get; set; }
         public bool Lichten { get; set; }
         public bool Bellen { get; set; }

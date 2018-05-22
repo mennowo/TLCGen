@@ -123,13 +123,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* -------- */");
 
             int pad1 = "ISMAX".Length;
-            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.IsDetector()))
+            if(controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Any())
             {
-                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector()).Max(x => x.GetDefine().Length);
+                pad1 = controller.Fasen.SelectMany(x => x.Detectoren).Max(x => x.GetDefine().Length);
             }
-            if(controller.Detectoren.Any(x => x.IsDetector()))
+            if(controller.Detectoren.Any())
             {
-                int _pad1 = controller.Detectoren.Where(x => x.IsDetector()).Max(x => x.GetDefine().Length);
+                int _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
             var ovdummies = controller.OVData.GetAllDummyDetectors();
@@ -142,7 +142,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad2 = controller.Fasen.Count.ToString().Length;
 
             int index = 0;
-            foreach (DetectorModel dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector()))
+            foreach (DetectorModel dm in controller.Fasen.SelectMany(x => x.Detectoren))
             {
                 if (!dm.Dummy)
                 {
@@ -151,7 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     ++index;
                 }
             }
-            foreach (DetectorModel dm in controller.Detectoren.Where(x => x.IsDetector()))
+            foreach (DetectorModel dm in controller.Detectoren)
             {
                 if (!dm.Dummy)
                 {
@@ -164,18 +164,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int autom_index = index;
 
             /* Dummies */
-            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector() && x.Dummy).Any() ||
-                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.IsDetector() && x.Dummy).Any() ||
+            if (controller.Fasen.Any() && controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy).Any() ||
+                controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
                 ovdummies.Any())
             {
                 sb.AppendLine("#ifndef AUTOMAAT");
-                foreach (var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsDetector() && x.Dummy))
+                foreach (var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
                     ++index;
                 }
-                foreach (var dm in controller.Detectoren.Where(x => x.IsDetector() && x.Dummy))
+                foreach (var dm in controller.Detectoren.Where(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
@@ -214,18 +214,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ---------------- */");
 
             var extra = new List<CCOLElement>();
-            foreach(var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.IsInput()))
-            {
-                extra.Add(new CCOLElement
-                {
-                    Define = $"{_ispf}{dm.Naam}",
-                    Naam = dm.Naam,
-                    Dummy = false,
-                    TType = CCOLElementTimeTypeEnum.None,
-                    Type = CCOLElementTypeEnum.Ingang
-                });
-            }
-            foreach (var dm in controller.Detectoren.Where(x => x.IsInput()))
+            foreach(var dm in controller.Ingangen)
             {
                 extra.Add(new CCOLElement
                 {

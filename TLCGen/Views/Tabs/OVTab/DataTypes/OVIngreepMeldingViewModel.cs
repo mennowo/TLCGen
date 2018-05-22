@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TLCGen.Helpers;
@@ -15,6 +16,7 @@ namespace TLCGen.ViewModels
         
         private ObservableCollection<string> _MassaDetectoren;
         private ObservableCollection<string> _VecomDetectoren;
+        private ObservableCollection<string> _VecomSelectieveDetectoren;
         private ObservableCollection<string> _VecomIngangen;
 
         #endregion // Fields
@@ -128,9 +130,9 @@ namespace TLCGen.ViewModels
                 switch (Type)
                 {
                     case OVIngreepMeldingTypeEnum.VECOM:
-                        return VecomDetectoren;
+                        return VecomSelectieveDetectoren;
                     case OVIngreepMeldingTypeEnum.VECOM_io:
-                        return VecomIngangen;
+                        return VecomDetectoren;
                     case OVIngreepMeldingTypeEnum.VerlosDetector:
                     case OVIngreepMeldingTypeEnum.WisselStroomKringDetector:
                     case OVIngreepMeldingTypeEnum.WisselDetector:
@@ -156,6 +158,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ObservableCollection<string> VecomSelectieveDetectoren
+        {
+            get
+            {
+                if (_VecomDetectoren == null)
+                {
+                    _VecomDetectoren = new ObservableCollection<string>();
+                }
+                return _VecomDetectoren;
+            }
+        }
+
         public ObservableCollection<string> VecomDetectoren
         {
             get
@@ -168,25 +182,12 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public ObservableCollection<string> VecomIngangen
-        {
-            get
-            {
-                if (_VecomIngangen == null)
-                {
-                    _VecomIngangen = new ObservableCollection<string>();
-                }
-                return _VecomIngangen;
-            }
-        }
-
         #endregion // Properties
 
         private void RefreshDetectoren()
         {
             MassaDetectoren.Clear();
             VecomDetectoren.Clear();
-            VecomIngangen.Clear();
             if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
 
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.GetAllDetectors())
@@ -202,8 +203,21 @@ namespace TLCGen.ViewModels
                     case DetectorTypeEnum.VecomDetector:
                         VecomDetectoren.Add(d.Naam);
                         break;
-                    case DetectorTypeEnum.VecomIngang:
-                        VecomIngangen.Add(d.Naam);
+                }
+            }
+        }
+
+        private void RefreshSelectieveDetectoren()
+        {
+            VecomSelectieveDetectoren.Clear();
+            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
+
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.SelectieveDetectoren)
+            {
+                switch (d.Type)
+                {
+                    case SelectieveDetectorTypeEnum.VECOM:
+                        VecomSelectieveDetectoren.Add(d.Naam);
                         break;
                 }
             }
@@ -232,6 +246,12 @@ namespace TLCGen.ViewModels
             RaisePropertyChanged("");
         }
 
+        private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
+        {
+            RefreshSelectieveDetectoren();
+            RaisePropertyChanged("");
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -241,9 +261,11 @@ namespace TLCGen.ViewModels
             OVIngreepMelding = oVIngreepMelding;
 
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
             MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
 
             RefreshDetectoren();
+            RefreshSelectieveDetectoren();
         }
 
         #endregion Constructor

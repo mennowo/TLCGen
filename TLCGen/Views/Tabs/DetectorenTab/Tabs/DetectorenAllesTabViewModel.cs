@@ -97,7 +97,7 @@ namespace TLCGen.ViewModels
 
         #region TabItem Overrides
 
-        public override string DisplayName => "Alles";
+        public override string DisplayName => "Alle detectie";
 
 	    public override bool IsEnabled
         {

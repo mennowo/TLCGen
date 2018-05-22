@@ -10,7 +10,7 @@ namespace TLCGen.Models
     [Serializable]
     public class ModuleModel : IHaveName
     {
-        [ModelName]
+        [ModelName(Enumerations.TLCGenObjectTypeEnum.Module)]
         public string Naam { get; set; }
 
         [XmlArrayItem(ElementName = "FaseCyclus")]

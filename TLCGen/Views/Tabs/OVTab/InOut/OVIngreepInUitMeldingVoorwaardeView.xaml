@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="TLCGen.Views.OVIngreepInUitMeldingVoorwaardeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="Omschrijving" />
+        <TextBox Text="{Binding Path=Omschrijving,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" />
+        <Label Content="Type" Grid.Row="1" />
+        <ComboBox Grid.Row="1" Grid.Column="1"
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum}}}"
+                    SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        <Label Content="Detector" Grid.Row="2" Visibility="{Binding Path=TypeIsLus,Converter={StaticResource bool2vis}}" />
+        <Label Content="Wissel" Grid.Row="2" Visibility="{Binding Path=TypeIsWissel,Converter={StaticResource bool2vis}}" />
+        <ComboBox Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=TypeIsLus,Converter={StaticResource bool2vis}}"
+                  ItemsSource="{Binding Detectoren}"
+                  SelectedItem="{Binding SelectedDetector}" Margin="2" />
+        <ComboBox Grid.Row="2" Grid.Column="1" Visibility="{Binding Path=TypeIsWissel,Converter={StaticResource bool2vis}}"
+                  ItemsSource="{Binding Wissels}"
+                  SelectedItem="{Binding SelectedWissel}" Margin="2" />
+    </Grid>
+</UserControl>

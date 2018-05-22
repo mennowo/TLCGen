@@ -4,19 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using TLCGen.DataAccess;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
-using TLCGen.Messaging.Requests;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 
@@ -159,7 +155,7 @@ namespace TLCGen.ViewModels
                         while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, newname))
                         {
                             inewname++;
-                            newname = inewname.ToString();
+                            newname = inewname.ToString("000");
                         }
                     }
                 }
@@ -235,7 +231,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                return "Extra";
+                return "Extra detectie";
             }
         }
 
