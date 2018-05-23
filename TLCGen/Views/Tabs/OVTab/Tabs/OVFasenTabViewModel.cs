@@ -97,8 +97,7 @@ namespace TLCGen.ViewModels
                         _Controller.OVData.OVIngrepen.Add(ov);
                         _Controller.OVData.OVIngrepen.BubbleSort();
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
-                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
-                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.VECOM));
+                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
                         /* Trick to add dummy detectors */
                         //if (ov.KAR)
                         //{

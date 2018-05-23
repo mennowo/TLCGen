@@ -822,25 +822,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* Selectieve detectie */");
             sb.AppendLine("/* ------------------- */");
-            
-            if (controller.OVData.OVIngrepen.All(x => !x.Meldingen.Any(x2 => (x2.Inmelding || x2.Uitmelding) && x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+            if (!controller.SelectieveDetectoren.Any())
             {
+                // dummy lus voor KAR
                 sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
             }
-            else if(controller.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()))
+            else
             {
+                // dummy lus voor KAR
                 sb.AppendLine($"{ts}DS_code[dsdummy] = \"dsdummy\";");
-                foreach (var ov in controller.OVData.OVIngrepen.Where(x => x.Meldingen.Any(x2 => x2.Type == OVIngreepMeldingTypeEnum.VECOM)))
+                // selectieve lussen
+                foreach (var sd in controller.SelectieveDetectoren)
                 {
-                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
-                    if (m.Inmelding)
-                    {
-                        sb.AppendLine($"{ts}DS_code[{_dpf}{m.RelatedInput1}]  = \"{m.RelatedInput1}\";");
-                    }
-                    if (m.Uitmelding)
-                    {
-                        sb.AppendLine($"{ts}DS_code[{_dpf}{m.RelatedInput2}]  = \"{m.RelatedInput2}\";");
-                    }
+                    sb.AppendLine($"{ts}DS_code[{(_dpf + sd.Naam).ToUpper()}]  = \"{sd.Naam.ToUpper()}\";");
                 }
             }
             sb.AppendLine();
@@ -904,7 +898,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         case DetectorTypeEnum.Overig:
                             sb.AppendLine("DL_type;");
                             break;
+                        case DetectorTypeEnum.WisselStandDetector:
                         case DetectorTypeEnum.WisselDetector:
+                        case DetectorTypeEnum.WisselStroomKringDetector:
                         case DetectorTypeEnum.Radar:
                             sb.AppendLine("DL_type | DKOP_type;");
                             break;
@@ -941,7 +937,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case DetectorTypeEnum.Overig:
                         sb.AppendLine("DL_type;");
                         break;
+                    case DetectorTypeEnum.WisselStandDetector:
                     case DetectorTypeEnum.WisselDetector:
+                    case DetectorTypeEnum.WisselStroomKringDetector:
                     case DetectorTypeEnum.Radar:
                         sb.AppendLine("DL_type | DKOP_type;");
                         break;

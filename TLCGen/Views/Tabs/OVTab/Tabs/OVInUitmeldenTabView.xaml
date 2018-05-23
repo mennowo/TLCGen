@@ -1,0 +1,641 @@
+﻿<UserControl x:Class="TLCGen.Views.OVInUitmeldenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:models="clr-namespace:TLCGen.Models;assembly=TLCGen.Dependencies"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:vm="clr-namespace:TLCGen.ViewModels"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             mc:Ignorable="d" x:Name="root"
+             d:DesignHeight="300" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <Label DockPanel.Dock="Top" Content="Fasen" />
+            <ListBox 
+                Margin="2" 
+                ItemsSource="{Binding Path=Fasen}" 
+                DisplayMemberPath="Naam"
+                SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay}"
+                SelectionMode="Single" />
+        </DockPanel>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+        <Label Content="Geen instellingen beschikbaar" Grid.Row="0" Grid.Column="2">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=SelectedMeldingenData}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Style>
+        </Label>
+        <Grid Grid.Column="2" DataContext="{Binding Path=SelectedMeldingenData}" Name="meldGrid">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=meldGrid,Path=DataContext}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <TabControl>
+                <TabItem Header="Inmeldingen">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Label Content="Inmeldingen" />
+                        <ct:SpecialDataGrid ItemsSource="{Binding Path=Inmeldingen}" Margin="2" Grid.Row="1"
+                          SelectedItem="{Binding Path=SelectedInmelding}"
+                          RowDetailsVisibilityMode="Visible"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <Grid x:Name="main">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <ScrollViewer MaxHeight="120" Background="LightGray">
+                                            <ScrollViewer.Resources>
+                                                <DataTemplate DataType="{x:Type vm:OVIngreepInUitMeldingViewModel}">
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="5" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Label Padding="1" Content="Opvang storing:" Grid.Column="0" Grid.ColumnSpan="13" />
+                                                        <Label Content="Type" Grid.Row="1" Grid.Column="1" />
+                                                        <Label Content="Input 1" Grid.Row="1" Grid.Column="2" />
+                                                        <Label Content="Input 1 type" Grid.Row="1" Grid.Column="3" />
+                                                        <Label Content="2e input" Grid.Row="1" Grid.Column="4" />
+                                                        <Label Content="Input 2" Grid.Row="1" Grid.Column="5" />
+                                                        <Label Content="Input 2 type" Grid.Row="1" Grid.Column="6" />
+                                                        <Label Content="Wisselstand" Grid.Row="1" Grid.Column="7" />
+                                                        <Label Content="Geen inm." Grid.Row="1" Grid.Column="8" />
+                                                        <Label Content="Anti jutter" Grid.Row="1" Grid.Column="9" />
+                                                        <Label Content="Anti jutter tijd" Grid.Row="1" Grid.Column="10" />
+                                                        <Label Content="Opvang storing" Grid.Row="1" Grid.Column="11" />
+                                                        <ComboBox
+                                                        Grid.Row="2" Grid.Column="1" Margin="2"
+                                                        SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                                        <ComboBox
+                                                        Grid.Row="2" Grid.Column="2" Margin="2" 
+                                                        ItemsSource="{Binding Path=AvailableInputs}" IsEnabled="{Binding Path=HasInput1}"
+                                                        SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <ComboBox
+                                                        Grid.Row="2" Grid.Column="3" Margin="2" IsEnabled="{Binding Path=HasInput1}"
+                                                        SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="4" Margin="5" IsEnabled="{Binding Path=CanHaveInput2}"
+                                                        IsChecked="{Binding Path=TweedeInput,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <ComboBox
+                                                        Grid.Row="2" Grid.Column="5" Margin="2" IsEnabled="{Binding Path=HasInput2}"
+                                                        ItemsSource="{Binding Path=AvailableInputs}"
+                                                        SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <ComboBox
+                                                        Grid.Row="2" Grid.Column="6" Margin="2" IsEnabled="{Binding Path=HasInput2}"
+                                                        SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="7" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}"
+                                                        Margin="5" IsChecked="{Binding Path=KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="8"
+                                                        Margin="5" IsChecked="{Binding Path=AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="9"
+                                                        Margin="5" IsChecked="{Binding Path=AntiJutterTijdToepassen,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox 
+                                                        Grid.Row="2" Grid.Column="10" IsEnabled="{Binding AntiJutterTijdToepassen}"
+                                                        Text="{Binding Path=AntiJutterTijd}" Margin="2" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="11" IsEnabled="{Binding HasInput1}"
+                                                        Margin="5" IsChecked="{Binding Path=OpvangStoring,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="12" Orientation="Horizontal" x:Name="child">
+                                                            <ContentControl Content="{Binding MeldingBijstoring}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <DataTemplate.Triggers>
+                                                        <DataTrigger Binding="{Binding OpvangStoring}" Value="False">
+                                                            <Setter TargetName="child" Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </DataTemplate.Triggers>
+                                                </DataTemplate>
+                                            </ScrollViewer.Resources>
+                                            <ContentControl Content="{Binding MeldingBijstoring}" >
+                                                <ContentControl.RenderTransform>
+                                                    <ScaleTransform ScaleX=".75" ScaleY=".75" />
+                                                </ContentControl.RenderTransform>
+                                            </ContentControl>
+                                        </ScrollViewer>
+                                        <Border BorderThickness="0" Background="White" Height="3" HorizontalAlignment="Stretch" Grid.Row="1" />
+                                    </Grid>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding OpvangStoring}" Value="False">
+                                            <Setter TargetName="main" Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
+                            <DataGrid.Resources>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput1Style">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasInput1,Mode=OneWay}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfDSI">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasInput1,Mode=OneWay}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput2Style">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasInput2,Mode=OneWay}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput1TypeStyle">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasInput1Type,Mode=OneWay}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput2StoringStyle">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=HasInput2Storing,Mode=OneWay}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <Style TargetType="DataGridCell" x:Key="DisabledIfNoWisselStyle">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                            <Setter Property="Background" Value="LightGray" />
+                                            <Setter Property="Foreground" Value="LightGray" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                                <local:IsInmeldingTypeConverter x:Key="IsInmConv" />
+                            </DataGrid.Resources>
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn 
+                            Header="Type"
+                            SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                <DataGridComboBoxColumn 
+                            Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
+                            SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridComboBoxColumn.ElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.ElementStyle>
+                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                </DataGridComboBoxColumn>
+                                <DataGridComboBoxColumn 
+                            Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
+                            SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+                                </DataGridComboBoxColumn>
+                                <DataGridCheckBoxColumn Header="2e input" Binding="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                    <DataGridCheckBoxColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=CanHaveInput2,Mode=OneWay}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                    <Setter Property="Foreground" Value="LightGray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.CellStyle>
+                                </DataGridCheckBoxColumn>
+                                <DataGridComboBoxColumn 
+                            Header="Input 2" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                            SelectedValueBinding="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGridComboBoxColumn.ElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.ElementStyle>
+                                    <DataGridComboBoxColumn.EditingElementStyle>
+                                        <Style TargetType="{x:Type ComboBox}">
+                                            <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                        </Style>
+                                    </DataGridComboBoxColumn.EditingElementStyle>
+                                </DataGridComboBoxColumn>
+                                <DataGridComboBoxColumn 
+                            Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                            SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" Binding="{Binding AlleenIndienGeenInmelding}" Header="Geen inm." />
+                                <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
+                                <DataGridCheckBoxColumn 
+                                Binding="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Anti jutter" 
+                                Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"/>
+                                <DataGridTextColumn 
+                                Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                                Binding="{Binding AntiJutterTijd}" Header="Anti jutter tijd">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=AntiJutterTijdToepassen,Mode=OneWay}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                    <Setter Property="Foreground" Value="LightGray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridCheckBoxColumn CellStyle="{StaticResource DisabledIfDSI}" Binding="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Header="Opvang storing" />
+                            </DataGrid.Columns>
+                        </ct:SpecialDataGrid>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <Button Margin="2" Content="Melding toevoegen" Command="{Binding Path=AddInmeldingCommand}" />
+                            <Button Margin="2" Content="Melding verwijderen" Command="{Binding Path=RemoveInmeldingCommand}" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Uitmeldingen">
+                    <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Uitmeldingen" Grid.Row="0" />
+                    <ct:SpecialDataGrid ItemsSource="{Binding Path=Uitmeldingen}" Margin="2" Grid.Row="1"
+                          SelectedItem="{Binding Path=SelectedUitmelding}"
+                          RowDetailsVisibilityMode="Visible"
+                          CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <Grid x:Name="main">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <ScrollViewer MaxHeight="120" Background="LightGray">
+                                        <ScrollViewer.Resources>
+                                            <DataTemplate DataType="{x:Type vm:OVIngreepInUitMeldingViewModel}">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition Height="Auto" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="5" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Padding="1" Content="Opvang storing:" Grid.Column="0" Grid.ColumnSpan="10" />
+                                                    <Label Content="Type" Grid.Row="1" Grid.Column="1" />
+                                                    <Label Content="Input 1" Grid.Row="1" Grid.Column="2" />
+                                                    <Label Content="Input 1 type" Grid.Row="1" Grid.Column="3" />
+                                                    <Label Content="2e input" Grid.Row="1" Grid.Column="4" />
+                                                    <Label Content="Input 2" Grid.Row="1" Grid.Column="5" />
+                                                    <Label Content="Input 2 type" Grid.Row="1" Grid.Column="6" />
+                                                    <Label Content="Wisselstand" Grid.Row="1" Grid.Column="7" />
+                                                    <Label Content="Opvang storing" Grid.Row="1" Grid.Column="11" />
+                                                    <ComboBox
+                                                        Grid.Row="2" Grid.Column="1" Margin="2"
+                                                        SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                                    <ComboBox
+                                                        Grid.Row="2" Grid.Column="2" Margin="2" 
+                                                        ItemsSource="{Binding Path=AvailableInputs}" IsEnabled="{Binding Path=HasInput1}"
+                                                        SelectedValue="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                                    <ComboBox
+                                                        Grid.Row="2" Grid.Column="3" Margin="2" IsEnabled="{Binding Path=HasInput1}"
+                                                        SelectedValue="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                    <CheckBox 
+                                                        Grid.Row="2" Grid.Column="4" Margin="5" IsEnabled="{Binding Path=CanHaveInput2}"
+                                                        IsChecked="{Binding Path=TweedeInput,UpdateSourceTrigger=PropertyChanged}" />
+                                                    <ComboBox
+                                                        Grid.Row="2" Grid.Column="5" Margin="2" IsEnabled="{Binding Path=HasInput2}"
+                                                        ItemsSource="{Binding Path=AvailableInputs}"
+                                                        SelectedValue="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                                    <ComboBox
+                                                        Grid.Row="2" Grid.Column="6" Margin="2" IsEnabled="{Binding Path=HasInput2}"
+                                                        SelectedValue="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                                    <CheckBox 
+                                                        Grid.Row="2" Grid.Column="7" IsEnabled="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}"
+                                                        Margin="5" IsChecked="{Binding Path=KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" />
+                                                    <CheckBox 
+                                                        Grid.Row="2" Grid.Column="8" IsEnabled="{Binding HasInput1}"
+                                                        Margin="5" IsChecked="{Binding Path=OpvangStoring,UpdateSourceTrigger=PropertyChanged}" />
+                                                    <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="9" Orientation="Horizontal" x:Name="child">
+                                                        <ContentControl Content="{Binding MeldingBijstoring}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding OpvangStoring}" Value="False">
+                                                        <Setter TargetName="child" Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
+                                            </DataTemplate>
+                                        </ScrollViewer.Resources>
+                                        <ContentControl Content="{Binding MeldingBijstoring}" >
+                                            <ContentControl.RenderTransform>
+                                                <ScaleTransform ScaleX=".75" ScaleY=".75" />
+                                            </ContentControl.RenderTransform>
+                                        </ContentControl>
+                                    </ScrollViewer>
+                                    <Border BorderThickness="0" Background="White" Height="3" HorizontalAlignment="Stretch" Grid.Row="1" />
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding OpvangStoring}" Value="False">
+                                        <Setter TargetName="main" Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput1Style">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasInput1,Mode=OneWay}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfDSI">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasInput1,Mode=OneWay}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput2Style">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasInput2,Mode=OneWay}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput1TypeStyle">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasInput1Type,Mode=OneWay}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfNoInput2StoringStyle">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=HasInput2Storing,Mode=OneWay}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <Style TargetType="DataGridCell" x:Key="DisabledIfNoWisselStyle">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=DataGrid},Path=DataContext.HasWissel}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                            <local:IsInmeldingTypeConverter x:Key="IsInmConv" />
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridComboBoxColumn 
+                                Header="Type"
+                                SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                            <DataGridComboBoxColumn 
+                                Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
+                                SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
+                                SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+                            </DataGridComboBoxColumn>
+                            <DataGridCheckBoxColumn Header="2e input" Binding="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                <DataGridCheckBoxColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=CanHaveInput2,Mode=OneWay}" Value="False">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="Background" Value="LightGray" />
+                                                <Setter Property="Foreground" Value="LightGray" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.CellStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Input 2" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                                SelectedValueBinding="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <DataGridComboBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                    </Style>
+                                </DataGridComboBoxColumn.ElementStyle>
+                                <DataGridComboBoxColumn.EditingElementStyle>
+                                    <Style TargetType="{x:Type ComboBox}">
+                                        <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
+                                    </Style>
+                                </DataGridComboBoxColumn.EditingElementStyle>
+                            </DataGridComboBoxColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                                SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                            <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
+                            <DataGridCheckBoxColumn CellStyle="{StaticResource DisabledIfDSI}" Binding="{Binding OpvangStoring,UpdateSourceTrigger=PropertyChanged}" Header="Opvang storing" />
+                        </DataGrid.Columns>
+                    </ct:SpecialDataGrid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <Button Margin="2" Content="Melding toevoegen" Command="{Binding Path=AddUitmeldingCommand}" />
+                        <Button Margin="2" Content="Melding verwijderen" Command="{Binding Path=RemoveUitmeldingCommand}" />
+                    </StackPanel>
+                </Grid>
+                </TabItem>
+                <TabItem Header="Overig/wissels">
+                    <Grid Grid.Row="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Label Content="Anti jutter uitmelding" />
+                        <CheckBox IsChecked="{Binding Path=AntiJutterVoorAlleUitmeldingen,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="0" Grid.Column="1" />
+
+                        <Label Content="Anti jutter tijd uitmelding" Grid.Row="1" />
+                        <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=AntiJutterVoorAlleUitmeldingen}" Margin="2"
+                             Text="{Binding Path=AntiJutterTijdVoorAlleUitmeldingen,UpdateSourceTrigger=PropertyChanged}" />
+
+                        <Label Content="Wissel 1 aanwezig"  Grid.Row="2" />
+                        <CheckBox IsChecked="{Binding Path=Wissel1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                              Grid.Column="1" Grid.Row="2" Margin="5" />
+
+                        <Label Content="Wissel 1 type" Grid.Row="3" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel1}" Margin="2"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            SelectedItem="{Binding Path=Wissel1Type}" Grid.Row="3" Grid.Column="1" />
+
+                        <Label Content="Wissel 1 ingang" Grid.Row="4" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+                        <Label Content="Wissel 1 detector" Grid.Row="4" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource bool2vis}}" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel1}" Margin="2"
+                            ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel1Input}" Grid.Row="4" Grid.Column="1" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel1}" Margin="2"
+                            ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel1Detector}" Grid.Row="4" Grid.Column="1" />
+
+                        <Label Content="Wissel 1 voorwaarde" Grid.Row="5" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+                        <CheckBox IsChecked="{Binding Path=Wissel1Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                              Grid.Column="1" Grid.Row="5" Margin="5" />
+
+                        <Label Content="Wissel 2 aanwezig" Grid.Row="6" />
+                        <CheckBox IsChecked="{Binding Path=Wissel2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                              Grid.Column="1" Grid.Row="6" Margin="5" />
+
+                        <Label Content="Wissel 2 type" Grid.Row="7" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel2}" Margin="2"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            SelectedItem="{Binding Path=Wissel2Type}" Grid.Row="7" Grid.Column="1" />
+
+                        <Label Content="Wissel 2 ingang" Grid.Row="8" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />
+                        <Label Content="Wissel 2 detector" Grid.Row="8" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel2}" Margin="2"
+                            ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel2Input}" Grid.Row="8" Grid.Column="1" />
+                        <ComboBox 
+                            IsEnabled="{Binding Path=Wissel2}"
+                            ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel2Detector}" Grid.Row="8" Grid.Column="1" />
+
+                        <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+                        <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                              Grid.Column="1" Grid.Row="5" Margin="5" />
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <!--<Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="1" />
+                
+            </Grid>-->
+        </Grid>
+    </Grid>
+</UserControl>

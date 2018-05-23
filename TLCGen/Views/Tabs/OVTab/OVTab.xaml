@@ -20,8 +20,8 @@
         <DataTemplate DataType="{x:Type vm:OVOverzichtTabViewModel}">
             <local:OVOverzichtTabView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:OVMassaDetectieTabViewModel}">
-            <local:OVMassaDetectieTabView />
+        <DataTemplate DataType="{x:Type vm:OVInUitmeldenTabViewModel}">
+            <local:OVInUitmeldenTabView />
         </DataTemplate>
     </UserControl.Resources>
     <Grid>

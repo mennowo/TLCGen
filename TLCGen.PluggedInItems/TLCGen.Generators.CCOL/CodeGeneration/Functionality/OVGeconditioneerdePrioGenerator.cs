@@ -115,6 +115,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.OvCTop:
+                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"/* Variabelen tbv registreren stiptheid bij inmelding via KAR: tbv bepalen prioriteit in OV.ADD */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
@@ -124,13 +125,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCInUitMelden:
+                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Bijhouden stiptheidsklassen ingemelde voertuigen */");
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hovin}{ov.FaseCyclus}, {_hpf}{_hovuit}{ov.FaseCyclus}, &iAantInm{ov.FaseCyclus}, iKARInSTP{ov.FaseCyclus}, {_ctpf}{_cvc}{ov.FaseCyclus}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
                     }
-                    sb.AppendLine($"{ts}/* Doorgeven actuele stiptheid aan OV.ADD */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
                         sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{ov.FaseCyclus}] = iAantInm{ov.FaseCyclus} > 0 ? iKARInSTP{ov.FaseCyclus}[0] : 0;");
@@ -138,6 +139,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Geconditioneerde prioriteit instellen */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
@@ -172,6 +174,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
+                    if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
                     sb.AppendLine($"{ts}/* Verklikken stiptheid OV */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {

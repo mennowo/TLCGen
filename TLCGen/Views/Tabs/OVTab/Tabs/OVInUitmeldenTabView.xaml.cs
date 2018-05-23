@@ -18,11 +18,11 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Views
 {
     /// <summary>
-    /// Interaction logic for OVMassaDetectieTabView.xaml
+    /// Interaction logic for OVInUitmeldenTabView.xaml
     /// </summary>
-    public partial class OVMassaDetectieTabView : UserControl
+    public partial class OVInUitmeldenTabView : UserControl
     {
-        public OVMassaDetectieTabView()
+        public OVInUitmeldenTabView()
         {
             InitializeComponent();
         }
@@ -32,12 +32,12 @@ namespace TLCGen.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var t = (OVIngreepInUitMeldingType)value;
+            var t = (OVIngreepInUitMeldingTypeEnum)value;
             switch (t)
             {
-                case OVIngreepInUitMeldingType.Inmelding:
+                case OVIngreepInUitMeldingTypeEnum.Inmelding:
                     return true;
-                case OVIngreepInUitMeldingType.Uitmelding:
+                case OVIngreepInUitMeldingTypeEnum.Uitmelding:
                     return false;
             }
             return false;

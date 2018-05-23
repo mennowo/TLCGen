@@ -1389,16 +1389,16 @@
             <Description>Parameter minimale stiptheid voor inmelding OV</Description>
           </Setting>
           <Setting>
-            <Default>testkarvert</Default>
-            <Setting>testkarvert</Setting>
+            <Default>testdsivert</Default>
+            <Setting>testdsivert</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter testen vertraging in KAR bericht in testomgeving</Description>
+            <Description>Parameter testen vertraging in DSI bericht in testomgeving</Description>
           </Setting>
           <Setting>
-            <Default>testkarlyn</Default>
-            <Setting>testkarlyn</Setting>
+            <Default>testdsilyn</Default>
+            <Setting>testdsilyn</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter testen lijnnummer KAR bericht in testomgeving</Description>
+            <Description>Parameter testen lijnnummer DSI bericht in testomgeving</Description>
           </Setting>
           <Setting>
             <Default>prio</Default>

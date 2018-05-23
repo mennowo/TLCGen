@@ -11,44 +11,43 @@ namespace TLCGen.Models
     {
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c)
         {
-            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren);
         }
 
         public static IEnumerable<DetectorModel> GetAllDetectors(this ControllerModel c, Func<DetectorModel, bool> predicate)
         {
-            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Where(predicate);
+            return c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren).Concat(c.SelectieveDetectoren).Where(predicate);
         }
 
         public static bool HasOVIngreepVecomIO(this OVIngreepModel ov)
         {
-            return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) &&
-                                         (x.Type == Enumerations.OVIngreepMeldingTypeEnum.VECOM_io));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector));
         }
 
         public static bool HasOVIngreepDSI(this OVIngreepModel ov)
         {
-            return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) && 
-                                         (x.Type == Enumerations.OVIngreepMeldingTypeEnum.KAR ||
-                                          x.Type == Enumerations.OVIngreepMeldingTypeEnum.VECOM));
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding || x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
         }
 
         public static bool HasOVIngreepVecom(this OVIngreepModel ov)
         {
-            return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) &&
-                                         x.Type == Enumerations.OVIngreepMeldingTypeEnum.VECOM);
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector));
         }
 
         public static bool HasOVIngreepKAR(this OVIngreepModel ov)
         {
-            return ov.Meldingen.Any(x => (x.Inmelding || x.Uitmelding) &&
-                                         x.Type == Enumerations.OVIngreepMeldingTypeEnum.KAR);
+            return ov.MeldingenData.Inmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)) ||
+                   ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
         public static bool HasDSI(this ControllerModel c)
         {
             return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||
                    c.OVData.HDIngrepen.Any(x => x.KAR) ||
-                   c.SelectieveDetectoren.Any(x => x.Type == SelectieveDetectorTypeEnum.VECOM);
+                   c.SelectieveDetectoren.Any(x => x.SdType == SelectieveDetectorTypeEnum.VECOM);
         }
 
         public static bool HasKAR(this ControllerModel c)

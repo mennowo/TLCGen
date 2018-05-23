@@ -96,6 +96,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 foreach (var dm in c.Detectoren)
                     _alleDetectoren.Add(dm);
+                foreach (var dm in c.SelectieveDetectoren)
+                    _alleDetectoren.Add(dm);
 
                 var CCOLElementLists = CCOLElementCollector.CollectAllCCOLElements(c, PieceGenerators);
 
@@ -127,13 +129,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
 
-                CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
-
-                foreach (var l in CCOLElementLists)
-                {
-                    l.SetMax();
-                }
-
                 _uitgangen = CCOLElementLists[0];
                 _ingangen = CCOLElementLists[1];
                 _hulpElementen = CCOLElementLists[2];
@@ -142,6 +137,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _counters = CCOLElementLists[5];
                 _schakelaars = CCOLElementLists[6];
                 _parameters = CCOLElementLists[7];
+
+                foreach (var i in c.Ingangen)
+                {
+                    _ingangen.Elements.Add(new CCOLElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
+                }
+
+                foreach (var l in CCOLElementLists)
+                {
+                    l.SetMax();
+                }
+
+                CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
 
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c));
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c));

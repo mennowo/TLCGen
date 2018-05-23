@@ -22,11 +22,7 @@ namespace TLCGen.ViewModels
         private OVIngreepModel _OVIngreep;
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
         private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
-        private ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel> _meldingen;
         private string _NewLijnNummer;
-
-        private ObservableCollection<string> _WisselDetectoren;
-        private ObservableCollection<string> _WisselIngangen;
 
         #endregion // Fields
 
@@ -40,9 +36,6 @@ namespace TLCGen.ViewModels
                 _OVIngreep = value;
             }
         }
-        
-        [Browsable(false)]
-        public ObservableCollection<OVIngreepMeldingViewModel> Meldingen => _meldingen;
 
         [Category("Algemene opties")]
         [Description("Type voertuig")]
@@ -298,92 +291,6 @@ namespace TLCGen.ViewModels
                 return _LijnNummers;
             }
         }
-        
-        [Browsable(false)]
-        [Description("Wissel aanwezig")]
-        public bool Wissel
-        {
-            get => _OVIngreep.Wissel;
-            set
-            {
-                _OVIngreep.Wissel = value;
-                if (!value)
-                {
-                    Meldingen.RemoveSome(x => x.Type == OVIngreepMeldingTypeEnum.WisselDetector || x.Type == OVIngreepMeldingTypeEnum.WisselStroomKringDetector);
-                }
-                else
-                {
-                    _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                    {
-                        FaseCyclus = _OVIngreep.FaseCyclus,
-                        Type = OVIngreepMeldingTypeEnum.WisselDetector,
-                        Inmelding = false,
-                        Uitmelding = false,
-                        InmeldingFilterTijd = 15
-                    }));
-                    _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                    {
-                        FaseCyclus = _OVIngreep.FaseCyclus,
-                        Type = OVIngreepMeldingTypeEnum.WisselStroomKringDetector,
-                        Inmelding = false,
-                        Uitmelding = false,
-                        InmeldingFilterTijd = 15
-                    }));
-                }
-                RaisePropertyChanged<object>(nameof(Wissel), broadcast: true);
-                RaisePropertyChanged(nameof(WisselStandMiddelsDetector));
-                RaisePropertyChanged(nameof(WisselStandMiddelsIngang));
-            }
-    }
-
-        [Browsable(false)]
-        public OVIngreepWisselTypeEnum WisselType
-        {
-            get => _OVIngreep.WisselType;
-            set
-            {
-                if(_OVIngreep.WisselType != value)
-                {
-                    _OVIngreep.WisselType = value;
-                    _OVIngreep.WisselStandInput = null;
-                    RaisePropertyChanged<object>(nameof(WisselType), broadcast: true);
-                    RaisePropertyChanged(nameof(WisselStandMiddelsDetector));
-                    RaisePropertyChanged(nameof(WisselStandMiddelsIngang));
-                    RaisePropertyChanged(nameof(WisselStandInput));
-                }
-            }
-        }
-
-        [Browsable(false)]
-        public bool WisselStandMiddelsDetector => Wissel && WisselType == OVIngreepWisselTypeEnum.Detector;
-
-        [Browsable(false)]
-        public bool WisselStandMiddelsIngang => Wissel && WisselType == OVIngreepWisselTypeEnum.Ingang;
-
-        [Browsable(false)]
-        public string WisselStandInput
-        {
-            get => _OVIngreep.WisselStandInput;
-            set
-            {
-                if (value != null)
-                {
-                    _OVIngreep.WisselStandInput = value;
-                    RaisePropertyChanged<object>(nameof(WisselStandInput), broadcast: true);
-                }
-            }
-        }
-
-        [Browsable(false)]
-        public bool WisselStandVoorwaarde
-        {
-            get => _OVIngreep.WisselStandVoorwaarde;
-            set
-            {
-                _OVIngreep.WisselStandVoorwaarde = value;
-                RaisePropertyChanged<object>(nameof(WisselStandVoorwaarde), broadcast: true);
-            }
-        }
 
         [Browsable(false)]
         public int UitmeldFilterTijd
@@ -401,30 +308,6 @@ namespace TLCGen.ViewModels
 
         [Browsable(false)]
         public bool HasVecom => OVIngreep.HasOVIngreepVecom();
-
-        public ObservableCollection<string> WisselDetectoren
-        {
-            get
-            {
-                if (_WisselDetectoren == null)
-                {
-                    _WisselDetectoren = new ObservableCollection<string>();
-                }
-                return _WisselDetectoren;
-            }
-        }
-
-        public ObservableCollection<string> WisselIngangen
-        {
-            get
-            {
-                if (_WisselIngangen == null)
-                {
-                    _WisselIngangen = new ObservableCollection<string>();
-                }
-                return _WisselIngangen;
-            }
-        }
 
         #endregion // Properties
 
@@ -559,74 +442,9 @@ namespace TLCGen.ViewModels
 
         #region Private Methods
 
-        private void RefreshIngangen()
-        {
-            WisselIngangen.Clear();
-            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen)
-            {
-                switch (d.Type)
-                {
-                    case IngangTypeEnum.WisselContact:
-                        WisselIngangen.Add(d.Naam);
-                        break;
-                }
-            }
-        }
-
-        private void RefreshDetectoren()
-        {
-            WisselDetectoren.Clear();
-            if (DataAccess.TLCGenControllerDataProvider.Default.Controller == null) return;
-
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.
-                SelectMany(x => x.Detectoren))
-            {
-                switch (d.Type)
-                {
-                    case DetectorTypeEnum.WisselDetector:
-                        WisselDetectoren.Add(d.Naam);
-                        break;
-                }
-            }
-            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
-            {
-                switch (d.Type)
-                {
-                    case DetectorTypeEnum.WisselDetector:
-                        WisselDetectoren.Add(d.Naam);
-                        break;
-                }
-            }
-        }
-
         #endregion // Private Methods
 
         #region TLCGen Messaging
-
-        private void OnNameChanged(NameChangedMessage msg)
-        {
-            RefreshDetectoren();
-            RaisePropertyChanged("");
-        }
-
-        private void OnDetectorenChanged(DetectorenChangedMessage msg)
-        {
-            RefreshDetectoren();
-            RaisePropertyChanged("");
-        }
-
-        private void OnIngangenChanged(IngangenChangedMessage msg)
-        {
-            RefreshIngangen();
-            RaisePropertyChanged("");
-        }
-
-        private void OnFaseDetectorTypeChangedChanged(FaseDetectorTypeChangedMessage msg)
-        {
-            RefreshDetectoren();
-            RaisePropertyChanged("");
-        }
 
         #endregion // TLCGen Messaging
 
@@ -635,95 +453,13 @@ namespace TLCGen.ViewModels
         public OVIngreepViewModel(OVIngreepModel ovingreep)
         {
             _OVIngreep = ovingreep;
-
+            
             foreach(OVIngreepLijnNummerModel num in _OVIngreep.LijnNummers)
             {
                 LijnNummers.Add(new OVIngreepLijnNummerViewModel(num));
             }
-
+           
             LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
-
-            _meldingen = new ObservableCollectionAroundList<OVIngreepMeldingViewModel, OVIngreepMeldingModel>(ovingreep.Meldingen);
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.KAR))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.KAR,
-                    Inmelding = true,
-                    Uitmelding = true,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM))
-            {
-                var vec = new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.VECOM,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                };
-                _meldingen.Add(new OVIngreepMeldingViewModel(vec));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM_io))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.VECOM_io,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VerlosDetector))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.VerlosDetector,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.MassaPaarIn))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.MassaPaarIn,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            if (!_meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.MassaPaarUit))
-            {
-                _meldingen.Add(new OVIngreepMeldingViewModel(new OVIngreepMeldingModel
-                {
-                    FaseCyclus = ovingreep.FaseCyclus,
-                    Type = OVIngreepMeldingTypeEnum.MassaPaarUit,
-                    Inmelding = false,
-                    Uitmelding = false,
-                    InmeldingFilterTijd = 15
-                }));
-            }
-
-            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
-            MessengerInstance.Register<IngangenChangedMessage>(this, OnIngangenChanged);
-            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
-            MessengerInstance.Register<FaseDetectorTypeChangedMessage>(this, OnFaseDetectorTypeChangedChanged);
-
-            RefreshDetectoren();
         }
 
         #endregion // Constructor

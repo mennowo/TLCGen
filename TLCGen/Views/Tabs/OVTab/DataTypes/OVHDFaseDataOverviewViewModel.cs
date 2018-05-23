@@ -44,8 +44,7 @@ namespace TLCGen.ViewModels
 					OVIngreep = new OVIngreepViewModel(ov);
 					OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
                     /* Trick to add dummy detectors */
-                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.KAR));
-                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepMeldingTypeEnum.VECOM));
+                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
 				}
 				else
 				{

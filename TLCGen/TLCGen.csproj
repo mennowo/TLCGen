@@ -110,17 +110,10 @@
     <Compile Include="Views\ControllerViewModel.cs">
       <DependentUpon>ControllerView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\InOut\OVIngreepMeldingenDataViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingView.xaml.cs">
-      <DependentUpon>OVIngreepInUitMeldingView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingVoorwaardeView.xaml.cs">
-      <DependentUpon>OVIngreepInUitMeldingVoorwaardeView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingVoorwaardeViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabView.xaml.cs">
-      <DependentUpon>OVMassaDetectieTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingenDataViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepInUitMeldingViewModel.cs" />
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml.cs">
+      <DependentUpon>OVInUitmeldenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Resources\InputBindingsBehaviour.cs" />
     <Compile Include="Views\Tabs\DetectorenTab\DataTypes\IngangViewModel.cs" />
@@ -144,12 +137,11 @@
       <DependentUpon>GelijkstartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVHDFaseDataOverviewViewModel.cs" />
-    <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepView.xaml.cs">
       <DependentUpon>OVIngreepView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabViewModel.cs">
-      <DependentUpon>OVMassaDetectieTabView.xaml</DependentUpon>
+    <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabViewModel.cs">
+      <DependentUpon>OVInUitmeldenTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\OVTab\Tabs\OVOverzichtTabView.xaml.cs">
       <DependentUpon>OVOverzichtTabView.xaml</DependentUpon>
@@ -548,15 +540,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Tabs\OVTab\InOut\OVIngreepInUitMeldingVoorwaardeView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Tabs\OVTab\Tabs\OVMassaDetectieTabView.xaml">
+    <Page Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -11,10 +11,18 @@ namespace TLCGen.ViewModels
 {
     public class OVIngreepInUitMeldingViewModel : ViewModelBase, IViewModelWithItem
     {
-        //private RelayCommand _removeMeldingCommand;
-        //private RelayCommand _addVoorwaardeCommand;
+        #region Fields
+
+        private OVIngreepInUitMeldingViewModel _meldingBijstoring;
+
+        #endregion // Fields
+
+        #region Properties
+
+        public OVIngreepInUitMeldingModel OVIngreepInUitMelding { get; }
 
         public ObservableCollection<string> Detectoren { get; }
+
         public ObservableCollection<string> SelectieveDetectoren { get; }
 
         public ObservableCollection<string> AvailableInputs
@@ -23,49 +31,42 @@ namespace TLCGen.ViewModels
             {
                 switch (Type)
                 {
-                    case OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.Detector:
+                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                         return Detectoren;
-                    case OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.SelectieveDetector:
+                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                         return SelectieveDetectoren;
                 }
                 return null;
             }
         }
 
-        public OVIngreepInUitMeldingType InUit => OVIngreepInUitMelding.InUit;
+        public OVIngreepInUitMeldingTypeEnum InUit => OVIngreepInUitMelding.InUit;
 
-        public bool HasInput1 => Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.KARMelding;
+        public bool HasInput1 => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
 
-        public bool DisabledIfDSI => Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.KARMelding;
+        public bool DisabledIfDSI => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding;
 
-        public bool HasInput1Type => Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.KARMelding && 
-            Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.SelectieveDetector;
+        public bool HasInput1Type => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding && 
+            Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
 
         public bool HasInput2 => CanHaveInput2 && TweedeInput;
+        
+        public bool CanHaveInput2 => Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding &&
+            Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector;
 
-        public bool HasInput2Storing => HasInput2 && OpvangStoring;
-        public bool CanHaveInput2 => Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.KARMelding &&
-            Type != OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.SelectieveDetector;
-
-        public OVIngreepInUitMeldingModel OVIngreepInUitMelding { get; }
-
-        //public string Omschrijving
-        //{
-        //    get => OVIngreepInUitMelding.Omschrijving;
-        //    set
-        //    {
-        //        OVIngreepInUitMelding.Omschrijving = value;
-        //        RaisePropertyChanged<object>(broadcast: true);
-        //    }
-        //}
-
-        public OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum Type
+        public OVIngreepInUitMeldingVoorwaardeTypeEnum Type
         {
             get => OVIngreepInUitMelding.Type;
             set
             {
                 OVIngreepInUitMelding.Type = value;
+                RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged("");
+
+                var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+                MessengerInstance.Send(msg);
+                if (msg.FaseCyclus == null) return;
+                MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
             }
         }
 
@@ -75,9 +76,8 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepInUitMelding.TweedeInput = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(HasInput2));
-                RaisePropertyChanged(nameof(HasInput2Storing));
             }
         }
 
@@ -90,7 +90,7 @@ namespace TLCGen.ViewModels
                 {
                     OVIngreepInUitMelding.RelatedInput1 = value;
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -100,7 +100,7 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepInUitMelding.RelatedInput1Type = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -113,7 +113,7 @@ namespace TLCGen.ViewModels
                 {
                     OVIngreepInUitMelding.RelatedInput2 = value;
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -123,40 +123,9 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepInUitMelding.RelatedInput2Type = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
-
-
-        //public bool AlleenIndienGeenInmelding
-        //{
-        //    get => OVIngreepInUitMelding.AlleenIndienGeenInmelding;
-        //    set
-        //    {
-        //        OVIngreepInUitMelding.AlleenIndienGeenInmelding = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //public bool AntiJutterTijdToepassen
-        //{
-        //    get => OVIngreepInUitMelding.AntiJutterTijdToepassen;
-        //    set
-        //    {
-        //        OVIngreepInUitMelding.AntiJutterTijdToepassen = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
-
-        //public int AntiJutterTijd
-        //{
-        //    get => OVIngreepInUitMelding.AntiJutterTijd;
-        //    set
-        //    {
-        //        OVIngreepInUitMelding.AntiJutterTijd = value;
-        //        RaisePropertyChanged();
-        //    }
-        //}
 
         public bool KijkNaarWisselStand
         {
@@ -164,7 +133,7 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepInUitMelding.KijkNaarWisselStand = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -174,30 +143,23 @@ namespace TLCGen.ViewModels
             set
             {
                 OVIngreepInUitMelding.OpvangStoring = value;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(HasInput2Storing));
+                if (value)
+                {
+                    _meldingBijstoring = null;
+                    OVIngreepInUitMelding.MeldingBijstoring = new OVIngreepInUitMeldingModel()
+                    {
+                        InUit = this.InUit
+                    };
+                }
+                else
+                {
+                    OVIngreepInUitMelding.MeldingBijstoring = null;
+                    _meldingBijstoring = null;
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(MeldingBijstoring));
             }
         }
-
-        public OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum OpvangStoring2Detectors
-        {
-            get => OVIngreepInUitMelding.OpvangStoring2Detectors;
-            set
-            {
-                OVIngreepInUitMelding.OpvangStoring2Detectors = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        //public OVIngreepMassaDetectieMeldingType Type
-        //{
-        //    get => OVIngreepInUitMelding.Type;
-        //    set
-        //    {
-        //        OVIngreepInUitMelding.Type = value;
-        //        RaisePropertyChanged<object>(broadcast: true);
-        //    }
-        //}
 
         public bool AlleenIndienGeenInmelding
         {
@@ -229,21 +191,14 @@ namespace TLCGen.ViewModels
             }
         }
 
-        //public ObservableCollectionAroundList<OVIngreepInUitMeldingVoorwaardeViewModel, OVIngreepInUitMeldingVoorwaardeModel> Voorwaarden { get; }
+        public OVIngreepInUitMeldingViewModel MeldingBijstoring
+        {
+            get => OpvangStoring ? _meldingBijstoring ?? (_meldingBijstoring = new OVIngreepInUitMeldingViewModel(OVIngreepInUitMelding.MeldingBijstoring)) : null;
+        }
 
-        //public ICommand RemoveMeldingCommand => _removeMeldingCommand ?? (_removeMeldingCommand = new RelayCommand(RemoveMeldingCommand_Executed));
-        //public ICommand AddVoorwaardeCommand => _addVoorwaardeCommand ?? (_addVoorwaardeCommand = new RelayCommand(AddVoorwaardeCommand_Executed));
-        //
-        //private void RemoveMeldingCommand_Executed(object prm)
-        //{
-        //    MessengerInstance.Send(new OVIngreepMassaDetectieObjectActionMessage(this, false, true));
-        //}
-        //
-        //private void AddVoorwaardeCommand_Executed(object prm)
-        //{
-        //    MessengerInstance.Send(new OVIngreepMassaDetectieObjectActionMessage(this, true, false));
-        //}
+        #endregion //Properties
 
+        #region TLCGen events
 
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
@@ -253,23 +208,27 @@ namespace TLCGen.ViewModels
 
             var sd1 = "";
             var sd2 = "";
-            if (Type == OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.Detector)
+            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
             {
                 sd1 = RelatedInput1;
                 sd2 = RelatedInput2;
             }
 
-            var fc = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == msg.FaseCyclus).FirstOrDefault();
-            if (fc != null)
+            //var fc = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == msg.FaseCyclus).FirstOrDefault();
+            //if (fc != null)
+            //{
+            Detectoren.Clear();
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
             {
-                Detectoren.Clear();
-                foreach (var d in fc.Detectoren)
-                {
-                    Detectoren.Add(d.Naam);
-                }
+                Detectoren.Add(d.Naam);
             }
-            
-            if (Type == OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.Detector)
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren)
+            {
+                Detectoren.Add(d.Naam);
+            }
+            //}
+
+            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
             {
                 if (Detectoren.Contains(sd1))
                 {
@@ -285,7 +244,7 @@ namespace TLCGen.ViewModels
         private void OnSelectieveDetectorenChanged(SelectieveDetectorenChangedMessage obj)
         {
             var sd = "";
-            if (Type == OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.SelectieveDetector)
+            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector)
             {
                 sd = RelatedInput1;
             }
@@ -296,17 +255,25 @@ namespace TLCGen.ViewModels
                 SelectieveDetectoren.Add(seld.Naam);
             }
 
-            if (Type == OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.SelectieveDetector &&
+            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector &&
                 SelectieveDetectoren.Contains(sd))
             {
                 RelatedInput1 = sd;
             }
         }
 
+        #endregion // TLCGen events
+
+        #region IViewModelWithItem
+
         public object GetItem()
         {
             return OVIngreepInUitMelding;
         }
+
+        #endregion // IViewModelWithItem
+
+        #region Constructor
 
         public OVIngreepInUitMeldingViewModel(OVIngreepInUitMeldingModel oVIngreepMassaDetectieMelding)
         {
@@ -319,7 +286,8 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<SelectieveDetectorenChangedMessage>(this, OnSelectieveDetectorenChanged);
             OnDetectorenChanged(null);
             OnSelectieveDetectorenChanged(null);
-            //Voorwaarden = new ObservableCollectionAroundList<OVIngreepInUitMeldingVoorwaardeViewModel, OVIngreepInUitMeldingVoorwaardeModel>(oVIngreepMassaDetectieMelding.Voorwaarden);
         }
+
+        #endregion //Constructor
     }
 }

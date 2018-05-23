@@ -45,7 +45,11 @@
     <Compile Include="AansturingWaitsignalenEnum.cs" />
     <Compile Include="BitmappedItemTypeEnum.cs" />
     <Compile Include="CCOLVersieEnum.cs" />
-    <Compile Include="InUit\Class1.cs" />
+    <Compile Include="InUit\OVIngreepInUitDataWisselTypeEnum.cs" />
+    <Compile Include="InUit\OVIngreepInUitMeldingTypeEnum.cs" />
+    <Compile Include="InUit\OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum.cs" />
+    <Compile Include="InUit\OVIngreepInUitMeldingVoorwaardeInputTypeEnum.cs" />
+    <Compile Include="InUit\OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.cs" />
     <Compile Include="SelectieveDetectorTypeEnum.cs" />
     <Compile Include="GroentijdenTypeEnum.cs" />
     <Compile Include="DetectorAanvraagTypeEnum.cs" />
@@ -64,8 +68,6 @@
     <Compile Include="NaloopTijdTypeEnum.cs" />
     <Compile Include="NaloopTypeEnum.cs" />
     <Compile Include="NooitAltijdAanUitEnum.cs" />
-    <Compile Include="OVIngreepMeldingTypeEnum.cs" />
-    <Compile Include="OVIngreepMeldingInUitEnum.cs" />
     <Compile Include="OVIngreepPrioriteitEnum.cs" />
     <Compile Include="OVIngreepVoertuigTypeEnum.cs" />
     <Compile Include="OVIngreepTypeEnum.cs" />

@@ -50,17 +50,15 @@ namespace TLCGen.Models
 
             foreach(var ov in OVIngrepen)
             {
-                if(ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.KAR))
+                if(ov.MeldingenData.Inmeldingen.Any(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
                 {
-                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.KAR);
-                    if (m.Inmelding) dets.Add(ov.DummyKARInmelding);
-                    if (m.Uitmelding) dets.Add(ov.DummyKARUitmelding);
+                    var m = ov.MeldingenData.Inmeldingen.First(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    dets.Add(ov.DummyKARInmelding);
                 }
-                if (ov.Meldingen.Any(x => x.Type == OVIngreepMeldingTypeEnum.VECOM))
+                if (ov.MeldingenData.Uitmeldingen.Any(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding))
                 {
-                    var m = ov.Meldingen.First(x => x.Type == OVIngreepMeldingTypeEnum.VECOM);
-                    if (m.Inmelding) dets.Add(ov.DummyVecomInmelding);
-                    if (m.Uitmelding) dets.Add(ov.DummyVecomUitmelding);
+                    var m = ov.MeldingenData.Uitmeldingen.First(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    dets.Add(ov.DummyKARUitmelding);
                 }
             }
             foreach (var hd in HDIngrepen)

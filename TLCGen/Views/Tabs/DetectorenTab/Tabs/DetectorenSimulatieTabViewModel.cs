@@ -126,6 +126,21 @@ namespace TLCGen.ViewModels
                 dm.Simulatie.Q4 = qs[next];
                 dm.Simulatie.Stopline = 1800;
             }
+            foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
+            {
+                int qthis = rd.Next(qsmax);
+                dm.Simulatie.Q1 = qs[qthis];
+                int next = qthis + 1;
+                if (next >= qsmax) next -= qsmax;
+                dm.Simulatie.Q2 = qs[next];
+                ++next;
+                if (next >= qsmax) next -= qsmax;
+                dm.Simulatie.Q3 = qs[next];
+                ++next;
+                if (next >= qsmax) next -= qsmax;
+                dm.Simulatie.Q4 = qs[next];
+                dm.Simulatie.Stopline = 1800;
+            }
 
             RaisePropertyChanged("");
             Messenger.Default.Send(new ControllerDataChangedMessage());
@@ -150,6 +165,10 @@ namespace TLCGen.ViewModels
                 }
             }
             foreach (DetectorModel dm in _Controller.Detectoren)
+            {
+                Detectoren.Add(new DetectorViewModel(dm));
+            }
+            foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
             {
                 Detectoren.Add(new DetectorViewModel(dm));
             }

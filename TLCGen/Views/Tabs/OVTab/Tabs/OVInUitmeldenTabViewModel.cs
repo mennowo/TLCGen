@@ -6,7 +6,7 @@ using TLCGen.Plugins;
 namespace TLCGen.ViewModels
 {
     [TLCGenTabItem(index: 4, type: TabItemTypeEnum.OVTab)]
-    public class OVMassaDetectieTabViewModel : TLCGenTabItemViewModel
+    public class OVInUitmeldenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields
 
@@ -36,14 +36,14 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedFaseCyclus = value;
-                SelectedMassaDetectieData = null;
+                SelectedMeldingenData = null;
                 if (_SelectedFaseCyclus != null)
                 {
                     foreach (OVIngreepModel ovm in _Controller.OVData.OVIngrepen)
                     {
                         if (ovm.FaseCyclus == SelectedFaseCyclus.Naam)
                         {
-                            SelectedMassaDetectieData = new OVIngreepMassaDetectieDataViewModel(ovm.MeldingenData);
+                            SelectedMeldingenData = new OVIngreepInUitMeldingenDataViewModel(ovm.MeldingenData);
                             break;
                         }
                     }
@@ -53,13 +53,13 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private OVIngreepMassaDetectieDataViewModel _selectedMassaDetectieData;
-        public OVIngreepMassaDetectieDataViewModel SelectedMassaDetectieData
+        private OVIngreepInUitMeldingenDataViewModel _selectedMeldingenData;
+        public OVIngreepInUitMeldingenDataViewModel SelectedMeldingenData
         {
-            get => _selectedMassaDetectieData;
+            get => _selectedMeldingenData;
             set
             {
-                _selectedMassaDetectieData = value;
+                _selectedMeldingenData = value;
                 RaisePropertyChanged();
             }
         }
@@ -109,7 +109,7 @@ namespace TLCGen.ViewModels
         private void OnNeedsFaseCyclus(OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage msg)
         {
             if (msg.RequestingObject is OVIngreepInUitMeldingViewModel ||
-                msg.RequestingObject is OVIngreepMassaDetectieDataViewModel)
+                msg.RequestingObject is OVIngreepInUitMeldingenDataViewModel)
             {
                 msg.FaseCyclus = SelectedFaseCyclus.Naam;
             }
@@ -117,7 +117,7 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public OVMassaDetectieTabViewModel() : base()
+        public OVInUitmeldenTabViewModel() : base()
         {
             MessengerInstance.Register<OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage>(this, OnNeedsFaseCyclus);
         }

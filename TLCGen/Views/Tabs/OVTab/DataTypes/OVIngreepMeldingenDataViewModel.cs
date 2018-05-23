@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
+using TLCGen.Controls;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
@@ -10,7 +12,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepMassaDetectieDataViewModel : ViewModelBase
+    public class OVIngreepInUitMeldingenDataViewModel : ViewModelBase
     {
         #region Fields
 
@@ -27,25 +29,20 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public OVIngreepMeldingenDataModel OVIngreepMassaDetectieData { get; }
+        [Browsable(false)]
+        public OVIngreepMeldingenDataModel OVIngreepMeldingenData { get; }
 
+        [Browsable(false)]
         public ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel> Inmeldingen { get; }
+        [Browsable(false)]
         public ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel> Uitmeldingen { get; }
 
+        [Browsable(false)]
         public ObservableCollection<string> WisselDetectoren { get; }
+        [Browsable(false)]
         public ObservableCollection<string> WisselInputs { get; }
 
-        public object SelectedObject
-        {
-            get => _selectedObject;
-            set
-            {
-                _selectedObject = value;
-                RaisePropertyChanged();
-                //RaisePropertyChanged(nameof(SelectedObjectDescription));
-            }
-        }
-
+        [Browsable(false)]
         public OVIngreepInUitMeldingViewModel SelectedInmelding
         {
             get => _selectedInmelding;
@@ -56,6 +53,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
         public OVIngreepInUitMeldingViewModel SelectedUitmelding
         {
             get => _selectedUitmelding;
@@ -66,141 +64,175 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool Wissel1
+        [Category("Anti jutter uitmelding")]
+        [Description("Toepassen")]
+        public bool AntiJutterVoorAlleUitmeldingen
         {
-            get => OVIngreepMassaDetectieData.Wissel1;
+            get => OVIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen;
             set
             {
-                OVIngreepMassaDetectieData.Wissel1 = value;
-                RaisePropertyChanged();
+                OVIngreepMeldingenData.AntiJutterVoorAlleUitmeldingen = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public OVIngreepInUitDataWisselType Wissel1Type
+        [Description("Anti jutter tijd")]
+        public int AntiJutterTijdVoorAlleUitmeldingen
         {
-            get => OVIngreepMassaDetectieData.Wissel1Type;
+            get => OVIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen;
             set
             {
-                OVIngreepMassaDetectieData.Wissel1Type = value;
-                RaisePropertyChanged();
+                OVIngreepMeldingenData.AntiJutterTijdVoorAlleUitmeldingen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool IsWissel1Ingang => Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        [Browsable(false)]
+        public bool IsWissel2Ingang => Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang;
+        [Browsable(false)]
+        public bool IsWissel1Detector => Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector;
+        [Browsable(false)]
+        public bool IsWissel2Detector => Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector;
+
+        [Category("Wissels")]
+        [Description("Wissel 1")]
+        public bool Wissel1
+        {
+            get => OVIngreepMeldingenData.Wissel1;
+            set
+            {
+                OVIngreepMeldingenData.Wissel1 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasWissel));
+            }
+        }
+
+        [Description("Wissel 1 type")]
+        public OVIngreepInUitDataWisselTypeEnum Wissel1Type
+        {
+            get => OVIngreepMeldingenData.Wissel1Type;
+            set
+            {
+                OVIngreepMeldingenData.Wissel1Type = value;
+                RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsWissel1Ingang));
                 RaisePropertyChanged(nameof(IsWissel1Detector));
             }
         }
 
-        public bool IsWissel1Ingang => Wissel1Type == OVIngreepInUitDataWisselType.Ingang;
-        public bool IsWissel2Ingang => Wissel2Type == OVIngreepInUitDataWisselType.Ingang;
-        public bool IsWissel1Detector => Wissel1Type == OVIngreepInUitDataWisselType.Detector;
-        public bool IsWissel2Detector => Wissel2Type == OVIngreepInUitDataWisselType.Detector;
-
-        public OVIngreepInUitDataWisselType Wissel2Type
+        [Description("Wissel 1 input")]
+        [BrowsableCondition(nameof(IsWissel1Ingang))]
+        public string Wissel1Input
         {
-            get => OVIngreepMassaDetectieData.Wissel2Type;
+            get => OVIngreepMeldingenData.Wissel1Input;
             set
             {
-                OVIngreepMassaDetectieData.Wissel2Type = value;
-                RaisePropertyChanged();
+                if (value != null)
+                {
+                    OVIngreepMeldingenData.Wissel1Input = value;
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        [Description("Wissel 1 voorwaarde")]
+        [BrowsableCondition(nameof(IsWissel1Ingang))]
+        public bool Wissel1Voorwaarde
+        {
+            get => OVIngreepMeldingenData.Wissel1;
+            set
+            {
+                OVIngreepMeldingenData.Wissel1 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        [Description("Wissel 1 detector")]
+        [BrowsableCondition(nameof(IsWissel1Detector))]
+        public string Wissel1Detector
+        {
+            get => OVIngreepMeldingenData.Wissel1Detector;
+            set
+            {
+                if (value != null)
+                {
+                    OVIngreepMeldingenData.Wissel1Detector = value;
+                }
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        [Description("Wissel 2")]
+        public bool Wissel2
+        {
+            get => OVIngreepMeldingenData.Wissel2;
+            set
+            {
+                OVIngreepMeldingenData.Wissel2 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasWissel));
+            }
+        }
+
+        [Description("Wissel 2 type")]
+        public OVIngreepInUitDataWisselTypeEnum Wissel2Type
+        {
+            get => OVIngreepMeldingenData.Wissel2Type;
+            set
+            {
+                OVIngreepMeldingenData.Wissel2Type = value;
+                RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsWissel2Ingang));
                 RaisePropertyChanged(nameof(IsWissel2Detector));
             }
         }
 
-        public bool Wissel1Voorwaarde
-        {
-            get => OVIngreepMassaDetectieData.Wissel1;
-            set
-            {
-                OVIngreepMassaDetectieData.Wissel1 = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Wissel1Input
-        {
-            get => OVIngreepMassaDetectieData.Wissel1Input;
-            set
-            {
-                if (value != null)
-                {
-                    OVIngreepMassaDetectieData.Wissel1Input = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Wissel1Detector
-        {
-            get => OVIngreepMassaDetectieData.Wissel1Detector;
-            set
-            {
-                if (value != null)
-                {
-                    OVIngreepMassaDetectieData.Wissel1Detector = value;
-                }
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Wissel2
-        {
-            get => OVIngreepMassaDetectieData.Wissel2;
-            set
-            {
-                OVIngreepMassaDetectieData.Wissel2 = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Wissel2Voorwaarde
-        {
-            get => OVIngreepMassaDetectieData.Wissel2;
-            set
-            {
-                OVIngreepMassaDetectieData.Wissel2 = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        [Description("Wissel 2 input")]
+        [BrowsableCondition(nameof(IsWissel2Ingang))]
         public string Wissel2Input
         {
-            get => OVIngreepMassaDetectieData.Wissel2Input;
+            get => OVIngreepMeldingenData.Wissel2Input;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMassaDetectieData.Wissel2Input = value;
+                    OVIngreepMeldingenData.Wissel2Input = value;
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
+        [Description("Wissel 2 detector")]
+        [BrowsableCondition(nameof(IsWissel2Detector))]
         public string Wissel2Detector
         {
-            get => OVIngreepMassaDetectieData.Wissel2Detector;
+            get => OVIngreepMeldingenData.Wissel2Detector;
             set
             {
                 if (value != null)
                 {
-                    OVIngreepMassaDetectieData.Wissel2Detector = value;
+                    OVIngreepMeldingenData.Wissel2Detector = value;
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        //public string SelectedObjectDescription
-        //{
-        //    get
-        //    {
-        //        switch (SelectedObject)
-        //        {
-        //            case OVIngreepInUitMeldingViewModel melding:
-        //                return "Melding data";
-        //            case OVIngreepInUitMeldingVoorwaardeViewModel voorwaarde:
-        //                return "Voorwaarde data";
-        //        }
-        //        return "Geen selectie";
-        //    }
-        //}
+        [Description("Wissel 2 voorwaarde")]
+        [BrowsableCondition(nameof(IsWissel2Detector))]
+        public bool Wissel2Voorwaarde
+        {
+            get => OVIngreepMeldingenData.Wissel2;
+            set
+            {
+                OVIngreepMeldingenData.Wissel2 = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool HasWissel => Wissel1 || Wissel2;
 
         #endregion // Properties
 
@@ -220,19 +252,29 @@ namespace TLCGen.ViewModels
         {
             Inmeldingen.Add(new OVIngreepInUitMeldingViewModel(new OVIngreepInUitMeldingModel
             {
-                InUit = OVIngreepInUitMeldingType.Inmelding
+                InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+                Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
             }));
+
+            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            MessengerInstance.Send(msg);
+            if (msg.FaseCyclus == null) return;
+            MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
         private void AddUitmeldingCommand_Executed(object prm)
         {
             Uitmeldingen.Add(new OVIngreepInUitMeldingViewModel(new OVIngreepInUitMeldingModel
             {
-                InUit = OVIngreepInUitMeldingType.Uitmelding
+                InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+                Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
             }));
+
+            var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+            MessengerInstance.Send(msg);
+            if (msg.FaseCyclus == null) return;
+            MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
-
-
 
         private void RemoveInmeldingCommand_Executed(object prm)
         {
@@ -252,51 +294,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        //private void AddVoorwaardeCommand_Executed(object obj)
-        //{
-        //    SelectedMelding.Voorwaarden.Add(new OVIngreepInUitMeldingVoorwaardeViewModel(new OVIngreepInUitMeldingVoorwaardeModel()));
-        //}
-
-        private bool AddVoorwaardeCommand_CanExecute(object prm)
-        {
-            return SelectedObject != null && SelectedObject is OVIngreepInUitMeldingModel;
-        }
-
         #endregion // Command functionality
 
-        // private void OnObjectAction(OVIngreepMassaDetectieObjectActionMessage msg)
-        // {
-        //     RaisePropertyChanged<object>(broadcast: true);
-        //     switch (msg.Object)
-        //     {
-        //         case OVIngreepInUitMeldingViewModel melding:
-        //             if (msg.Add)
-        //             {
-        //                 melding.Voorwaarden.Add(new OVIngreepInUitMeldingVoorwaardeViewModel(new OVIngreepInUitMeldingVoorwaardeModel()));
-        //             }
-        //             if (msg.Remove)
-        //             {
-        //                 Inmeldingen.Remove(melding);
-        //                 if (SelectedObject == melding) SelectedObject = null;
-        //             }
-        //             break;
-        //         case OVIngreepInUitMeldingVoorwaardeViewModel voorwaarde:
-        //             if (msg.Remove)
-        //             {
-        //                 foreach (var m in Inmeldingen)
-        //                 {
-        //                     if (m.Voorwaarden.Contains(voorwaarde))
-        //                     {
-        //                         m.Voorwaarden.Remove(voorwaarde);
-        //                         if (SelectedObject == voorwaarde) SelectedObject = null;
-        //                         return;
-        //                     }
-        //                 }
-        //             }
-        //             break;
-        //     }
-        // }
-
+        #region TLCGen events
 
         private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
         {
@@ -306,11 +306,11 @@ namespace TLCGen.ViewModels
 
             var sd1 = "";
             var sd2 = "";
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselType.Detector)
+            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector)
             {
                 sd1 = Wissel1Detector;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselType.Detector)
+            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector)
             {
                 sd2 = Wissel2Detector;
             }
@@ -326,11 +326,11 @@ namespace TLCGen.ViewModels
                 WisselDetectoren.Add(d.Naam);
             }
 
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselType.Detector && WisselDetectoren.Contains(sd1))
+            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
             {
                 Wissel1Detector = sd1;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselType.Detector && WisselDetectoren.Contains(sd2))
+            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
             {
                 Wissel2Detector = sd2;
             }
@@ -340,11 +340,11 @@ namespace TLCGen.ViewModels
         {
             var sd1 = "";
             var sd2 = "";
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselType.Ingang)
+            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
             {
                 sd1 = Wissel1Input;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselType.Ingang)
+            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
             {
                 sd2 = Wissel2Input;
             }
@@ -355,21 +355,23 @@ namespace TLCGen.ViewModels
                 WisselInputs.Add(seld.Naam);
             }
 
-            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselType.Ingang && WisselInputs.Contains(sd1))
+            if (Wissel1 && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
             {
                 Wissel1Input = sd1;
             }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselType.Ingang && WisselInputs.Contains(sd2))
+            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
             {
                 Wissel2Input = sd2;
             }
         }
 
+        #endregion // TLCGen events
+
         #region Constructor
 
-        public OVIngreepMassaDetectieDataViewModel(OVIngreepMeldingenDataModel ovIngreepMassaDetectieData)
+        public OVIngreepInUitMeldingenDataViewModel(OVIngreepMeldingenDataModel ovIngreepMassaDetectieData)
         {
-            OVIngreepMassaDetectieData = ovIngreepMassaDetectieData;
+            OVIngreepMeldingenData = ovIngreepMassaDetectieData;
             Inmeldingen = new ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel>(ovIngreepMassaDetectieData.Inmeldingen);
             Uitmeldingen = new ObservableCollectionAroundList<OVIngreepInUitMeldingViewModel, OVIngreepInUitMeldingModel>(ovIngreepMassaDetectieData.Uitmeldingen);
             WisselInputs = new ObservableCollection<string>();

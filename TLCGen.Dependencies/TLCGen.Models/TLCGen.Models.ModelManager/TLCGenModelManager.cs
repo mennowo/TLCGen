@@ -99,76 +99,46 @@ namespace TLCGen.ModelManagement
             var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
             
             // In version 0.2.2.0, the OVIngreepModel object was changed
-            var v1 = Version.Parse("0.2.2.0");
-            if(v < v1)
+            var v0220 = Version.Parse("0.2.2.0");
+            if(v < v0220)
             {
+                bool vecom = false;
                 foreach (var ov in controller.OVData.OVIngrepen)
                 {
-                    if (!ov.Meldingen.Any())
+                    if (ov.KAR)
                     {
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel
                         {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.KAR,
-#pragma warning disable CS0618 // Type or member is obsolete
-                            Inmelding = ov.KAR,
-                            Uitmelding = ov.KAR,
-#pragma warning restore CS0618 // Type or member is obsolete
-                            InmeldingFilterTijd = 15
+                            AlleenIndienGeenInmelding = false,
+                            AntiJutterTijd = 15,
+                            AntiJutterTijdToepassen = true,
+                            InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+                            KijkNaarWisselStand = false,
+                            OpvangStoring = false,
+                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
                         });
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
+                        ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel
                         {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.VECOM,
-#pragma warning disable CS0618 // Type or member is obsolete
-                            Inmelding = ov.Vecom,
-                            Uitmelding = ov.Vecom,
-#pragma warning restore CS0618 // Type or member is obsolete
-                            InmeldingFilterTijd = 15
+                            AlleenIndienGeenInmelding = false,
+                            AntiJutterTijd = 15,
+                            AntiJutterTijdToepassen = true,
+                            InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+                            KijkNaarWisselStand = false,
+                            OpvangStoring = false,
+                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
                         });
-
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
-                        {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.VECOM_io,
-                            Inmelding = false,
-                            Uitmelding = false,
-                            InmeldingFilterTijd = 15
-                        });
-
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
-                        {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.VerlosDetector,
-                            Inmelding = false,
-                            Uitmelding = false,
-                            InmeldingFilterTijd = 15
-                        });
-
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
-                        {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.MassaPaarIn,
-                            Inmelding = false,
-                            Uitmelding = false,
-                            InmeldingFilterTijd = 15
-                        });
-
-                        ov.Meldingen.Add(new OVIngreepMeldingModel
-                        {
-                            FaseCyclus = ov.FaseCyclus,
-                            Type = OVIngreepMeldingTypeEnum.MassaPaarUit,
-                            Inmelding = false,
-                            Uitmelding = false,
-                            InmeldingFilterTijd = 15
-                        });
+                    }
+                    if(ov.Vecom && !vecom)
+                    {
+                        vecom = true;
+                        MessageBox.Show("Dit is oud type TLCGen bestand. OV via VECOM moet opnieuw worden opgegeven.", "VECOM opnieuw invoeren.", MessageBoxButton.OK);
                     }
                 }
             }
 
             // In version 0.2.3.0, handling of segments was altered
-            v1 = Version.Parse("0.2.3.0");
-            if(v < v1)
+            v0220 = Version.Parse("0.2.3.0");
+            if(v < v0220)
             {
                 foreach (var s in controller.Data.SegmentenDisplayBitmapData)
                 {
@@ -353,11 +323,11 @@ namespace TLCGen.ModelManagement
             {
                 case OVIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
-                    if (ovi != null && meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR)
+                    if (ovi != null && meldingMsg.MeldingType == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
                     {
-                        var karMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
+                        var karMelding = ovi.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
 
-                        if (karMelding.Inmelding && ovi.DummyKARInmelding == null)
+                        if (karMelding != null && ovi.DummyKARInmelding == null)
                         {
                             ovi.DummyKARInmelding = new DetectorModel()
                             {
@@ -365,11 +335,14 @@ namespace TLCGen.ModelManagement
                                 Naam = "dummykarin" + ovi.FaseCyclus
                             };
                         }
-                        else if (!karMelding.Inmelding && ovi.DummyKARInmelding != null)
+                        else if (karMelding == null && ovi.DummyKARInmelding != null)
                         {
                             ovi.DummyKARInmelding = null;
                         }
-                        if (karMelding.Uitmelding && ovi.DummyKARUitmelding == null)
+
+                        karMelding = ovi.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+
+                        if (karMelding != null && ovi.DummyKARUitmelding == null)
                         {
                             ovi.DummyKARUitmelding = new DetectorModel()
                             {
@@ -377,39 +350,9 @@ namespace TLCGen.ModelManagement
                                 Naam = "dummykaruit" + ovi.FaseCyclus
                             };
                         }
-                        else if (!karMelding.Uitmelding && ovi.DummyKARUitmelding != null)
+                        else if (karMelding == null && ovi.DummyKARUitmelding != null)
                         {
                             ovi.DummyKARUitmelding = null;
-                        }
-
-                    }
-                    if (ovi != null && meldingMsg.MeldingType == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM)
-                    {
-                        var vecomMelding = ovi.Meldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
-
-                        if (vecomMelding.Inmelding && ovi.DummyVecomInmelding == null)
-                        {
-                            ovi.DummyVecomInmelding = new DetectorModel()
-                            {
-                                Dummy = true,
-                                Naam = "dummyvecomin" + ovi.FaseCyclus
-                            };
-                        }
-                        else if (!vecomMelding.Inmelding && ovi.DummyVecomInmelding != null)
-                        {
-                            ovi.DummyVecomInmelding = null;
-                        }
-                        if (vecomMelding.Uitmelding && ovi.DummyVecomUitmelding == null)
-                        {
-                            ovi.DummyVecomUitmelding = new DetectorModel()
-                            {
-                                Dummy = true,
-                                Naam = "dummyvecomuit" + ovi.FaseCyclus
-                            };
-                        }
-                        else if (!vecomMelding.Uitmelding && ovi.DummyVecomUitmelding != null)
-                        {
-                            ovi.DummyVecomUitmelding = null;
                         }
                     }
                     break;

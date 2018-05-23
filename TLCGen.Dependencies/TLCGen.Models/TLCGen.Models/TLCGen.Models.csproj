@@ -65,8 +65,8 @@
     <Compile Include="Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\InterSignaalGroep\LateReleaseModel.cs" />
     <Compile Include="Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
-    <Compile Include="Models\OV_HD\InOut\OVIngreepInUitMeldingModel.cs" />
-    <Compile Include="Models\OV_HD\OVIngreepMeldingModel.cs" />
+    <Compile Include="Models\OV_HD\OVIngreepInUitMeldingModel.cs" />
+    <Compile Include="Models\OV_HD\OVIngreepMeldingenDataModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerDetectorModel.cs" />
     <Compile Include="Models\Signalen\RatelTikkerModel.cs" />
     <Compile Include="Models\Signalen\SignalenDataModel.cs" />
@@ -142,6 +142,7 @@
   <ItemGroup>
     <None Include="paket.references" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

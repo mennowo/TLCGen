@@ -4,11 +4,9 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    public class SelectieveDetectorModel
+    public class SelectieveDetectorModel : DetectorModel
     {
-        [ModelName(TLCGenObjectTypeEnum.SelectieveDetector)]
-        public string Naam { get; set; }
         public string Omschrijving { get; set; }
-        public SelectieveDetectorTypeEnum Type { get; set; }
+        public SelectieveDetectorTypeEnum SdType { get; set; }
     }
 }

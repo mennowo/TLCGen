@@ -151,6 +151,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"static int fc;");
             sb.AppendLine("mulv TDH_old[DPMAX];");
+            sb.AppendLine("mulv DB_old[DPMAX];");
             sb.AppendLine();
             if (controller.Data.CCOLMulti)
             {
@@ -614,6 +615,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}for (; i < DPMAX; ++i)");
             sb.AppendLine($"{ts}{{");
             sb.AppendLine($"{ts}{ts}TDH_old[i] = TDH[i];");
+            sb.AppendLine($"{ts}{ts}DB_old[i] = DB[i];");
             sb.AppendLine($"{ts}}}");
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPostApplication])

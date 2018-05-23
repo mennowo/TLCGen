@@ -213,19 +213,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* overige ingangen */");
             sb.AppendLine("/* ---------------- */");
 
-            var extra = new List<CCOLElement>();
-            foreach(var dm in controller.Ingangen)
-            {
-                extra.Add(new CCOLElement
-                {
-                    Define = $"{_ispf}{dm.Naam}",
-                    Naam = dm.Naam,
-                    Dummy = false,
-                    TType = CCOLElementTimeTypeEnum.None,
-                    Type = CCOLElementTypeEnum.Ingang
-                });
-            }
-
             sb.Append(GetAllElementsSysHLines(_ingangen, "DPMAX"));
 
             return sb.ToString();
@@ -311,8 +298,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ------------------- */");
 
             int index = 0;
-            var isvecom = controller.Fasen.SelectMany(x => x.Detectoren).Any(x => x.Type == DetectorTypeEnum.VecomDetector) ||
-                          controller.Detectoren.Any(x => x.Type == DetectorTypeEnum.VecomDetector);
+            var isvecom = controller.SelectieveDetectoren.Any();
             // Geen VECOM? Dan alleen een dummy lus tbv KAR
             if (!isvecom)
             {
@@ -325,13 +311,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR & VECOM start op 1 */");
                 ++index;
                 
-                foreach (var d in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Type == DetectorTypeEnum.VecomDetector))
+                foreach (var d in controller.SelectieveDetectoren)
                 {
-                    sb.AppendLine($"{ts}#define {_dpf}{d.Naam} {index++}");
-                }
-                foreach (var d in controller.Detectoren.Where(x => x.Type == DetectorTypeEnum.VecomDetector))
-                {
-                    sb.AppendLine($"{ts}#define {_dpf}{d.Naam} {index++}");
+                    sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}");
                 }
             }
             sb.AppendLine($"{ts}#define DSMAX    {index}");

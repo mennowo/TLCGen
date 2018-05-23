@@ -4,10 +4,10 @@ namespace TLCGen.Messaging.Messages
 {
     public class OVIngreepMeldingChangedMessage : ModelManagerMessageBase
     {
+        public OVIngreepInUitMeldingVoorwaardeTypeEnum MeldingType { get; }
         public string FaseCyclus { get; }
-        public OVIngreepMeldingTypeEnum MeldingType { get; }
 
-        public OVIngreepMeldingChangedMessage(string faseCyclus, OVIngreepMeldingTypeEnum type)
+        public OVIngreepMeldingChangedMessage(string faseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum type)
         {
             FaseCyclus = faseCyclus;
             MeldingType = type;

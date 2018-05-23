@@ -125,25 +125,6 @@ namespace TLCGen.ViewModels
                         ov.DummyKARUitmelding.Simulatie.Stopline = 1800;
                     }
                 }
-                if (ov.HasOVIngreepVecom())
-                {
-                    if (ov.DummyVecomInmelding != null)
-                    {
-                        ov.DummyVecomInmelding.Simulatie.Q1 = 3;
-                        ov.DummyVecomInmelding.Simulatie.Q2 = 5;
-                        ov.DummyVecomInmelding.Simulatie.Q3 = 10;
-                        ov.DummyVecomInmelding.Simulatie.Q4 = 15;
-                        ov.DummyVecomInmelding.Simulatie.Stopline = 1800;
-                    }
-                    if (ov.DummyVecomUitmelding != null)
-                    {
-                        ov.DummyVecomUitmelding.Simulatie.Q1 = 30;
-                        ov.DummyVecomUitmelding.Simulatie.Q2 = 50;
-                        ov.DummyVecomUitmelding.Simulatie.Q3 = 100;
-                        ov.DummyVecomUitmelding.Simulatie.Q4 = 150;
-                        ov.DummyVecomUitmelding.Simulatie.Stopline = 1800;
-                    }
-                }
             }
 
             foreach (var hd in _Controller.OVData.HDIngrepen)
@@ -179,33 +160,33 @@ namespace TLCGen.ViewModels
         {
             DummyDetectoren.Clear();
 
-            foreach (var ov in Controller.OVData.OVIngrepen)
-            {
-                if (ov.HasOVIngreepKAR())
-                {
-                    var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
-                    if (m.Inmelding)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
-                    }
-                    if (m.Uitmelding)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
-                    }
-                }
-                if (ov.HasOVIngreepVecom())
-                {
-                    var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
-                    if (m.Inmelding)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
-                    }
-                    if (m.Uitmelding)
-                    {
-                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
-                    }
-                }
-            }
+    ////        foreach (var ov in Controller.OVData.OVIngrepen)
+    ////        {
+    ////            if (ov.HasOVIngreepKAR())
+    ////            {
+    ////                var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
+    ////                if (m.Inmelding)
+    ////                {
+    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
+    ////                }
+    ////                if (m.Uitmelding)
+    ////                {
+    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
+    ////                }
+    ////            }
+    ////            if (ov.HasOVIngreepVecom())
+    ////            {
+    ////                var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
+    ////                if (m.Inmelding)
+    ////                {
+    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
+    ////                }
+    ////                if (m.Uitmelding)
+    ////                {
+    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
+    ////                }
+    ////            }
+    ////        }
             foreach (var hd in Controller.OVData.HDIngrepen)
             {
                 if (hd.KAR)

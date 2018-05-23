@@ -19,7 +19,7 @@ namespace TLCGen.ViewModels
                 {
                     SelectieveDetector.Naam = value;
                 }
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -29,20 +29,60 @@ namespace TLCGen.ViewModels
             set
             {
                 SelectieveDetector.Omschrijving = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
-        public SelectieveDetectorTypeEnum Type
+        public SelectieveDetectorTypeEnum SdType
         {
-            get => SelectieveDetector.Type;
+            get => SelectieveDetector.SdType;
             set
             {
-                SelectieveDetector.Type = value;
-                RaisePropertyChanged();
+                SelectieveDetector.SdType = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
+        public int? TOG
+        {
+            get => SelectieveDetector.TOG;
+            set
+            {
+                SelectieveDetector.TOG = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int? TBG
+        {
+            get => SelectieveDetector.TBG;
+            set
+            {
+                SelectieveDetector.TBG = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+
+        public int? TFL
+        {
+            get => SelectieveDetector.TFL;
+            set
+            {
+                SelectieveDetector.TFL = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int? CFL
+        {
+            get => SelectieveDetector.CFL;
+            set
+            {
+                SelectieveDetector.CFL = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
         public SelectieveDetectorViewModel(SelectieveDetectorModel ingang)
         {
             SelectieveDetector = ingang;
