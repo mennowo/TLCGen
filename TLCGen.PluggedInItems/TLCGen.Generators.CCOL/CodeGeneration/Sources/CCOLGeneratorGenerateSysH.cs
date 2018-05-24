@@ -132,6 +132,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 int _pad1 = controller.Detectoren.Max(x => x.GetDefine().Length);
                 pad1 = _pad1 > pad1 ? _pad1 : pad1;
             }
+            if (controller.SelectieveDetectoren.Any())
+            {
+                int _pad1 = controller.SelectieveDetectoren.Max(x => x.GetDefine().Length);
+                pad1 = _pad1 > pad1 ? _pad1 : pad1;
+            }
             var ovdummies = controller.OVData.GetAllDummyDetectors();
             if (ovdummies.Any())
             {
@@ -142,16 +147,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad2 = controller.Fasen.Count.ToString().Length;
 
             int index = 0;
-            foreach (DetectorModel dm in controller.Fasen.SelectMany(x => x.Detectoren))
-            {
-                if (!dm.Dummy)
-                {
-                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                    ++index;
-                }
-            }
-            foreach (DetectorModel dm in controller.Detectoren)
+            foreach (var dm in controller.GetAllDetectors())
             {
                 if (!dm.Dummy)
                 {
@@ -169,13 +165,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 ovdummies.Any())
             {
                 sb.AppendLine("#ifndef AUTOMAAT");
-                foreach (var dm in controller.Fasen.SelectMany(x => x.Detectoren).Where(x => x.Dummy))
-                {
-                    sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
-                    sb.AppendLine($"{index.ToString()}".PadLeft(pad2));
-                    ++index;
-                }
-                foreach (var dm in controller.Detectoren.Where(x => x.Dummy))
+                foreach (var dm in controller.GetAllDetectors(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
                     sb.AppendLine($"{index.ToString()}".PadLeft(pad2));

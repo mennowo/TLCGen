@@ -619,9 +619,9 @@
                             ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}"
                             SelectedItem="{Binding Path=Wissel2Detector}" Grid.Row="8" Grid.Column="1" />
 
-                        <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+                        <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />
                         <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                              Grid.Column="1" Grid.Row="5" Margin="5" />
+                              Grid.Column="1" Grid.Row="9" Margin="5" />
                     </Grid>
                 </TabItem>
             </TabControl>

@@ -3,12 +3,19 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    [RefersTo("Naam")]
     [Serializable]
-    public class IngangModel
+    [IOElement("", BitmappedItemTypeEnum.Ingang, "Naam")]
+    public class IngangModel : IOElementModel, IComparable, IHaveName
     {
         [ModelName(TLCGenObjectTypeEnum.Input)]
-        public string Naam { get; set; }
+        public override string Naam { get; set; }
         public string Omschrijving { get; set; }
         public IngangTypeEnum Type { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            return Naam.CompareTo(((IngangModel)obj).Naam);
+        }
     }
 }

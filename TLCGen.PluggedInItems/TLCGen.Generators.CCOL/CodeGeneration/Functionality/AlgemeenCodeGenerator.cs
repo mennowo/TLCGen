@@ -12,6 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         private List<CCOLElement> _MyElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
+        private List<CCOLIOElement> _MyBitmapInputs;
 
         private string _hplact;
 
@@ -24,6 +25,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _MyElements = new List<CCOLElement>();
             _MyBitmapOutputs = new List<CCOLIOElement>();
+            _MyBitmapInputs = new List<CCOLIOElement>();
 
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
@@ -40,6 +42,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam}"));
                     _MyElements.Add(new CCOLElement($"{item.Naam}", CCOLElementTypeEnum.Uitgang, item.Naam));
                 }
+            }
+
+            // Inputs
+            foreach (var i in c.Ingangen)
+            {
+                _MyElements.Add(new CCOLElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
+                _MyBitmapInputs.Add(new CCOLIOElement(i, $"{_ispf}{i.Naam}"));
             }
 
             if (c.Data.SegmentDisplayType == Models.Enumerations.SegmentDisplayTypeEnum.DrieCijferDisplay)
@@ -66,6 +75,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
             return _MyBitmapOutputs;
+        }
+
+        public override bool HasCCOLBitmapInputs()
+        {
+            return true;
+        }
+
+        public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
+        {
+            return _MyBitmapInputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

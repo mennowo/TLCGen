@@ -141,10 +141,10 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel1Ingang))]
         public bool Wissel1Voorwaarde
         {
-            get => OVIngreepMeldingenData.Wissel1;
+            get => OVIngreepMeldingenData.Wissel1InputVoorwaarde;
             set
             {
-                OVIngreepMeldingenData.Wissel1 = value;
+                OVIngreepMeldingenData.Wissel1InputVoorwaarde = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -223,10 +223,10 @@ namespace TLCGen.ViewModels
         [BrowsableCondition(nameof(IsWissel2Detector))]
         public bool Wissel2Voorwaarde
         {
-            get => OVIngreepMeldingenData.Wissel2;
+            get => OVIngreepMeldingenData.Wissel2InputVoorwaarde;
             set
             {
-                OVIngreepMeldingenData.Wissel2 = value;
+                OVIngreepMeldingenData.Wissel2InputVoorwaarde = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

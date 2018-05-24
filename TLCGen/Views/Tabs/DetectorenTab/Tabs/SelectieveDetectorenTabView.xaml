@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"             
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -15,7 +16,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ct:SpecialDataGrid ItemsSource="{Binding Path=SelectieveDetectoren}" CanUserAddRows="False" CanUserDeleteRows="False"
+        <ct:SpecialDataGrid ItemsSource="{Binding Path=SelectieveDetectoren}" SelectedItem="{Binding Path=SelectedSelectieveDetector}"
+                            ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedSelectieveDetectoren,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            CanUserAddRows="False" CanUserDeleteRows="False"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />
@@ -23,6 +26,7 @@
                 <DataGridTextColumn Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" />
                 <DataGridTextColumn Binding="{Binding Path=TFL,TargetNullValue={x:Static sys:String.Empty}}" Header="TFL" />
                 <DataGridTextColumn Binding="{Binding Path=CFL,TargetNullValue={x:Static sys:String.Empty}}" Header="CFL" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=Dummy}" Header="Det. is dummy" />
                 <!--<DataGridComboBoxColumn 
                     Header="Type"
                     SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 

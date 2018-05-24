@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"             
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -14,7 +15,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ct:SpecialDataGrid ItemsSource="{Binding Path=Ingangen}" CanUserAddRows="False" CanUserDeleteRows="False"
+        <ct:SpecialDataGrid ItemsSource="{Binding Path=Ingangen}" SelectedItem="{Binding Path=SelectedIngang}"
+                            ext:DataGridExtensions.SelectedItemsList="{Binding Path=SelectedIngangen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            CanUserAddRows="False" CanUserDeleteRows="False"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Path=Naam}" Header="Naam" />

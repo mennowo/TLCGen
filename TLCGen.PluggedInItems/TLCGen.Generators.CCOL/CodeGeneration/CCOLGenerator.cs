@@ -138,11 +138,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _schakelaars = CCOLElementLists[6];
                 _parameters = CCOLElementLists[7];
 
-                foreach (var i in c.Ingangen)
-                {
-                    _ingangen.Elements.Add(new CCOLElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
-                }
-
                 foreach (var l in CCOLElementLists)
                 {
                     l.SetMax();

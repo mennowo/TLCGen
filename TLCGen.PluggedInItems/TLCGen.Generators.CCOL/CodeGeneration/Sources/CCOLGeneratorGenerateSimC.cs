@@ -103,7 +103,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
                 sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
-                sb.AppendLine($"{ts}FC_nr[{index}] = {(dm.Simulatie.FCNr != null && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
+                sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
                 sb.AppendLine($"{ts}S_generator[{index}] = NG;");
                 sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
                 sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");

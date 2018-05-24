@@ -83,6 +83,17 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
+
+        public bool Dummy
+        {
+            get => SelectieveDetector.Dummy;
+            set
+            {
+                SelectieveDetector.Dummy = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public SelectieveDetectorViewModel(SelectieveDetectorModel ingang)
         {
             SelectieveDetector = ingang;

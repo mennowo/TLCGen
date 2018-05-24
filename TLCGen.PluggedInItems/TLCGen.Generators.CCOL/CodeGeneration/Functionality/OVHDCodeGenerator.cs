@@ -468,7 +468,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return sb.ToString();
         }
 
-        private List<string> GetMeldingCode(OVIngreepModel ov, OVIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
+        private List<string> GetMeldingCode(ControllerModel c, OVIngreepModel ov, OVIngreepInUitMeldingModel melding, StringBuilder sb, string vtgType, int fcNmr, string ts, bool antiJutVoorAlles, bool opvang = false, string otherHov = null)
         {
             var inmHelems = new List<string>();
             string hov;
@@ -538,13 +538,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
                     if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
                     {
-                        sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && ");
+                        sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
                     }
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
-                    if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
+                    var sd = c.SelectieveDetectoren.FirstOrDefault(x => x.Naam == melding.RelatedInput1);
+                    if (sd != null && !sd.Dummy)
                     {
-                        sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING) && ");
+                        if (!string.IsNullOrWhiteSpace(melding.RelatedInput1))
+                        {
+                            sb.Append($" && (CIF_IS[{_dpf}{melding.RelatedInput1}] < CIF_DET_STORING)");
+                        }
                     }
                     break;
             }
@@ -638,7 +642,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine($"{ts}}}");
             if (melding.OpvangStoring && melding.MeldingBijstoring != null && melding.Type != OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
             {
-                inmHelems.AddRange(GetMeldingCode(ov, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
+                inmHelems.AddRange(GetMeldingCode(c, ov, melding.MeldingBijstoring, sb, vtgType, fcNmr, ts, antiJutVoorAlles, true, he));
             }
             return inmHelems;
         }
@@ -701,7 +705,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var sb2 = new StringBuilder();
                             foreach (var inm in ov.MeldingenData.Inmeldingen)
                             {
-                                inmHelems.AddRange(GetMeldingCode(ov, inm, sb2, vtgType, fcNmr, ts, ov.MeldingenData.AntiJutterVoorAlleInmeldingen));
+                                inmHelems.AddRange(GetMeldingCode(c, ov, inm, sb2, vtgType, fcNmr, ts, ov.MeldingenData.AntiJutterVoorAlleInmeldingen));
                             }
                             sb.Append($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = ");
                             foreach (var i in inmHelems)
@@ -736,7 +740,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var sb2 = new StringBuilder();
                             foreach (var uitm in ov.MeldingenData.Uitmeldingen)
                             {
-                                uitmHelems.AddRange(GetMeldingCode(ov, uitm, sb2, vtgType, fcNmr, ts, ov.MeldingenData.AntiJutterVoorAlleUitmeldingen));
+                                uitmHelems.AddRange(GetMeldingCode(c, ov, uitm, sb2, vtgType, fcNmr, ts, ov.MeldingenData.AntiJutterVoorAlleUitmeldingen));
                             }
                             sb.Append($"{ts}IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = ");
                             foreach (var i in uitmHelems)
