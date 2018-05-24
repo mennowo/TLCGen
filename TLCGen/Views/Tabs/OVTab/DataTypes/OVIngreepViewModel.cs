@@ -49,8 +49,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Versnelde inmelding koplus")]
-        [EnabledCondition("HasKoplus")]
+        [Browsable(false)]
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus
         {
             get => _OVIngreep.VersneldeInmeldingKoplus;
@@ -60,6 +59,50 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(VersneldeInmeldingKoplus), broadcast: true);
             }
         }
+
+        [Browsable(false)]
+        public string Koplus
+        {
+            get => _OVIngreep.Koplus;
+            set
+            {
+                if(value != null)
+                {
+                    _OVIngreep.Koplus = value;
+                }
+                RaisePropertyChanged<object>(nameof(Koplus), broadcast: true);
+                RaisePropertyChanged(nameof(HasKoplus));
+                RaisePropertyChanged(nameof(HasWisselstand));
+            }
+        }
+
+        [Browsable(false)]
+        public bool NoodaanvraagKoplus
+        {
+            get => _OVIngreep.NoodaanvraagKoplus;
+            set
+            {
+                _OVIngreep.NoodaanvraagKoplus = value;
+                RaisePropertyChanged<object>(nameof(NoodaanvraagKoplus), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool KoplusKijkNaarWisselstand
+        {
+            get => _OVIngreep.KoplusKijkNaarWisselstand;
+            set
+            {
+                _OVIngreep.KoplusKijkNaarWisselstand = value;
+                RaisePropertyChanged<object>(nameof(KoplusKijkNaarWisselstand), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public bool HasKoplus => !string.IsNullOrWhiteSpace(Koplus) && Koplus != "NG";
+
+        [Browsable(false)]
+        public bool HasWisselstand => HasKoplus && OVIngreep.MeldingenData.Wissel1 || OVIngreep.MeldingenData.Wissel2;
 
         //[Description("Min. rijtijd versn. inm.")]
         //[EnabledCondition("VersneldeInmeldingKoplus")]
@@ -72,16 +115,6 @@ namespace TLCGen.ViewModels
         //        RaisePropertyChanged<object>("MinimaleRijtijdVoorVersneldeInmelding", broadcast: true);
         //    }
         //}
-
-        [Browsable(false)]
-        public bool HasKoplus
-        {
-            get
-            {
-                var fc = TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == _OVIngreep.FaseCyclus);
-                return fc != null && fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop);
-            }
-        }
 
         [Category("Tijden")]
         [Description("Rijtijd ongehinderd")]
@@ -309,6 +342,9 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public bool HasVecom => OVIngreep.HasOVIngreepVecom();
 
+        [Browsable(false)]
+        public ObservableCollection<string> Detectoren { get; }
+
         #endregion // Properties
 
         #region Commands
@@ -446,6 +482,28 @@ namespace TLCGen.ViewModels
 
         #region TLCGen Messaging
 
+        private void OnDetectorenChanged(DetectorenChangedMessage dmsg)
+        {
+            var sd1 = Koplus;
+
+            Detectoren.Clear();
+            Detectoren.Add("NG");
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.GetAllDetectors(x => x.Type == DetectorTypeEnum.Kop))
+            {
+                Detectoren.Add(d.Naam);
+            }
+
+            if (!string.IsNullOrWhiteSpace(sd1) && Detectoren.Contains(sd1))
+            {
+                Koplus = sd1;
+            }
+            else
+            {
+                _OVIngreep.Koplus = "NG";
+                RaisePropertyChanged(nameof(Koplus));
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -460,6 +518,10 @@ namespace TLCGen.ViewModels
             }
            
             LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
+
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            Detectoren = new ObservableCollection<string>();
+            OnDetectorenChanged(null);
         }
 
         #endregion // Constructor

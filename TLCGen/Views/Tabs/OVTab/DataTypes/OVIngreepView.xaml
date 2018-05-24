@@ -66,6 +66,36 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <TextBlock Text="Inmelden/aanvragen koplus" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
+                <Label Grid.Row="1" Content="Koplus" />
+                <ComboBox
+                    Grid.Row="1" Grid.Column="1" Margin="2"
+                    SelectedItem="{Binding Path=Koplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl},Path=DataContext.Detectoren}" />
+                <Label Grid.Row="2" Content="Versneld inmelden" />
+                <ComboBox
+                    Grid.Row="2" Grid.Column="1" Margin="2" IsEnabled="{Binding HasKoplus,Mode=OneWay}"
+                    SelectedItem="{Binding Path=VersneldeInmeldingKoplus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <Label Grid.Row="3" Content="Noodaanvraag" />
+                <CheckBox IsEnabled="{Binding HasKoplus,Mode=OneWay}"
+                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                <Label Grid.Row="4" Content="Wisselstand" />
+                <CheckBox IsEnabled="{Binding HasWisselstand,Mode=OneWay}"
+                    Grid.Row="4" Grid.Column="1" Margin="5" IsChecked="{Binding Path=KoplusKijkNaarWisselstand}" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <TextBlock Text="Geconditioneerde prioriteit" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
                 <Label Grid.Row="1" Content="Toepassen" />
                 <ComboBox

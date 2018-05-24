@@ -24,6 +24,10 @@ namespace TLCGen.Models
         
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
+        public bool NoodaanvraagKoplus { get; set; }
+        public bool KoplusKijkNaarWisselstand { get; set; }
+        [RefersTo]
+        public string Koplus { get; set; }
 
         public int RijTijdOngehinderd { get; set; }
         public int RijTijdBeperktgehinderd { get; set; }

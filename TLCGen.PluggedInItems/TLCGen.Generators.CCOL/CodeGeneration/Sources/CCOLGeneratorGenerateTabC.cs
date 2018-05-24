@@ -563,10 +563,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? cflmax = 0;
             int? tflmax = 0;
 
-            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
-            var controllerdets = controller.Detectoren;
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+            var alldets = controller.GetAllDetectors().Concat(ovdummydets);
 
             foreach (var dm in alldets.Where(x => !x.Dummy))
             {

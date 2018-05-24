@@ -240,10 +240,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* detectie */");
             sb.AppendLine($"{ts}/* -------- */");
 
-            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
-            var controllerdets = controller.Detectoren;
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+            var alldets = controller.GetAllDetectors().Concat(ovdummydets);
 
             foreach (var dm in alldets)
             {

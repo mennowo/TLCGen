@@ -3,6 +3,7 @@
 bool DSIMeldingOV_V1(
 	count dslus,
 	count vtgtype,
+	bool checkfcnmr,
 	count fcnmr,
 	bool checktype,
 	count meldingtype,
@@ -15,16 +16,18 @@ bool DSIMeldingOV_V1(
 
 	if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) return FALSE;
 	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
-	if (fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
-	if (checktype && meldingtype != -1 && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
-	if (checklijn) 
+	if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
+	if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
+	if (checklijn)
 	{
 		int index = 0;
+		if (PRM[lijnparm]) return TRUE;
 		if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
 		for (index = 0; index < lijnmax; ++index)
 		{
-			if(CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) break;
+			if (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) return TRUE;
 		}
+		return FALSE;
 	}
 
 	return TRUE;

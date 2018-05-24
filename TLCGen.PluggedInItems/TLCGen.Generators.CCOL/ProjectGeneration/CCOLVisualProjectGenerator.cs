@@ -42,21 +42,21 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     prepro = "";
                 writeline = writeline.Replace("__CONTROLLERNAME__", plugin.Controller.Data.Naam);
                 writeline = writeline.Replace("__GUID__", Guid.NewGuid().ToString());
-                string ccollibspath = _ccollibspath.Remove(_ccollibspath.Length - 1);
+                string ccollibspath = _ccollibspath == null ? "" : _ccollibspath.Remove(_ccollibspath == null ? 0 : _ccollibspath.Length - 1);
                 if(!ccollibspath.EndsWith("\\"))
                 {
                     ccollibspath = ccollibspath + "\\";
                 }
-                writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath);
-                writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs);
-                string ccolrespath = _ccolrespath.Remove(_ccolrespath.Length - 1);
+                writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath == null ? "" : ccollibspath);
+                writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs == null ? "" : _ccollibs);
+                string ccolrespath = _ccolrespath == null ? "" : _ccolrespath.Remove(_ccolrespath == null ? 0 : _ccolrespath.Length - 1);
                 if (!ccolrespath.EndsWith("\\"))
                 {
                     ccolrespath = ccolrespath + "\\";
                 }
-                writeline = writeline.Replace("__CCOLLRESDIR__", ccolrespath);
-                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", _ccolinclpaths);
-                writeline = writeline.Replace("__PREPROCESSORDEFS__", prepro);
+                writeline = writeline.Replace("__CCOLLRESDIR__", ccolrespath == null ? "" : ccolrespath);
+                writeline = writeline.Replace("__ADDITIONALINCLUDEDIRS__", _ccolinclpaths == null ? "" : _ccolinclpaths);
+                writeline = writeline.Replace("__PREPROCESSORDEFS__", prepro == null ? "" : prepro);
             }
 
             // If conditions

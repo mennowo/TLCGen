@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -17,6 +18,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tva;
         private CCOLGeneratorCodeStringSettingModel _tvamax;
 #pragma warning restore 0649
+        private string _schwisselpol;
+        private string _schgeenwissel;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -94,7 +97,42 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* Fase {va.FaseCyclus} */");
                             foreach (var d in va.VADetectoren)
                             {
-                                sb.AppendLine($"{ts}if (!(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING))");
+                                sb.Append($"{ts}if (!(CIF_IS[{_dpf}{d.Detector}] >= CIF_DET_STORING)");
+                                if (va.KijkNaarWisselstand &&
+                                    (((va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel1Input)) ||
+                                       (va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel1Detector))) ||
+                                     (va.Wissel2 &&
+                                      ((va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(va.Wissel2Input)) ||
+                                       (va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(va.Wissel2Detector))))))
+                                {
+                                    if (va.KijkNaarWisselstand)
+                                    {
+                                        if (va.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                        {
+                                            sb.Append(va.Wissel1InputVoorwaarde ?
+                                                $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel1Input}] ? !IS[{_ispf}{va.Wissel1Input}] : IS[{_ispf}{va.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Input}])" :
+                                                $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel1Input}] ? IS[{_ispf}{va.Wissel1Input}] : !IS[{_ispf}{va.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Input}])");
+                                        }
+                                        else
+                                        {
+                                            sb.Append($" && (D[{_dpf}{va.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{va.Wissel1Detector}]) &&");
+                                        }
+                                    }
+                                    if (va.Wissel2)
+                                    {
+                                        if (va.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                        {
+                                            sb.Append(va.Wissel2InputVoorwaarde ?
+                                                $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel2Input}] ? !IS[{_ispf}{va.Wissel2Input}] : IS[{_ispf}{va.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel2Input}])" :
+                                                $" && ((SCH[{_schpf}{_schwisselpol}{va.Wissel2Input}] ? IS[{_ispf}{va.Wissel2Input}] : !IS[{_ispf}{va.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{va.Wissel2Input}])");
+                                        }
+                                        else
+                                        {
+                                            sb.Append($" && (D[{_dpf}{va.Wissel2Detector}] || SCH[{_schpf}{_schgeenwissel}{va.Wissel2Detector}])");
+                                        }
+                                    }
+                                }
+                                sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
                                 foreach (var cf in d.ConflicterendeFasen)
                                 {
@@ -163,6 +201,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 default:
                     return null;
             }
+        }
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
+            _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+
+            return base.SetSettings(settings);
         }
     }
 }

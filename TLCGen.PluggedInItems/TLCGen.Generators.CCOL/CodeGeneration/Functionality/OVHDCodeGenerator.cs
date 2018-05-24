@@ -282,8 +282,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(new CCOLElement($"{_tblk}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
                 _MyElements.Add(new CCOLElement($"{_schupinagb}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 _MyElements.Add(new CCOLElement($"{_prmovstp}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                if (ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
-                    ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit)
+                if ((ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
+                     ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit) &&
+                     !string.IsNullOrWhiteSpace(ov.Koplus) && ov.Koplus != "NG")
                 {
                     _MyElements.Add(new CCOLElement($"{_schvi}{ov.FaseCyclus}", ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
                 }
@@ -570,7 +571,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
             if (melding.AlleenIndienGeenInmelding)
             {
-                sb.Append($"!C[{_ctpf}{_cvc}{ov.FaseCyclus})] && ");
+                sb.Append($"!C[{_ctpf}{_cvc}{ov.FaseCyclus}] && ");
             }
             if (melding.KijkNaarWisselStand &&
                 ((ov.MeldingenData.Wissel1 &&
@@ -613,24 +614,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
                     sb.AppendLine($"DSIMeldingOV_V1(0, " +
                                                     $"{vtgType}, " +
+                                                    "TRUE, " + 
                                                     $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
-                                                    $"TRUE, " +
+                                                    "TRUE, " +
                                                     (melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"CIF_DSIN, " : $"CIF_DSUIT, ") +
                                                     (ov.CheckLijnNummer ? "TRUE, " : "FALSE, ") +
                                                     $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
                                                     $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
-                                                    $"TRUE);");
+                                                    "TRUE);");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                     sb.AppendLine($"DSIMeldingOV_V1({(_dpf + melding.RelatedInput1).ToUpper()}, " +
                                                     $"{vtgType}, " +
+                                                    "FALSE, " + 
                                                     $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
                                                     $"SCH[{_schpf}{_schcheckdstype}], " +
                                                     "CIF_DSIN, " +
                                                     (ov.CheckLijnNummer ? "TRUE, " : "FALSE, ") +
                                                     $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
                                                     $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
-                                                    $"TRUE);");
+                                                    "TRUE);");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                     sb.AppendLine(GetMeldingDetectieCode(melding) + ";");

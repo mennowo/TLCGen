@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dg2d="http://gu.se/DataGrid2D"
              xmlns:controls="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" >
@@ -24,6 +26,7 @@
                     FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                     Text="{Binding Path=VAOntruimingsTijd,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
         </DataTemplate>
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -35,10 +38,79 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <DockPanel Grid.ColumnSpan="2">
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Label Content="Herstart VA ontr. tijdens rood" />
             <TextBox Text="{Binding Path=VAOntrTijdensRood}" Margin="2" Grid.Column="1" />
-        </DockPanel>
+            <Label Content="Kijk naar wisselstand"  Grid.Row="2" />
+            <CheckBox IsChecked="{Binding Path=KijkNaarWisselstand,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                              Grid.Column="1" Grid.Row="2" Margin="5" />
+
+            <Label Content="Wissel type" Grid.Row="3" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel1}" Margin="2"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            SelectedItem="{Binding Path=Wissel1Type}" Grid.Row="3" Grid.Column="1" />
+
+            <Label Content="Wissel ingang" Grid.Row="4" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+            <Label Content="Wissel detector" Grid.Row="4" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource bool2vis}}" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel1}" Margin="2"
+                            ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel1Input}" Grid.Row="4" Grid.Column="1" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel1}" Margin="2"
+                            ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel1Detector}" Grid.Row="4" Grid.Column="1" />
+
+            <Label Content="Wissel voorwaarde" Grid.Row="5" 
+                   Visibility="{Binding Path=HasWissel1Voorwaarde,Converter={StaticResource bool2vis}}" />
+            <CheckBox IsChecked="{Binding Path=Wissel1Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Visibility="{Binding Path=HasWissel1Voorwaarde,Converter={StaticResource bool2vis}}"
+                              Grid.Column="1" Grid.Row="5" Margin="5" />
+
+            <Label Content="Wissel 2 aanwezig" Grid.Row="6" />
+            <CheckBox IsChecked="{Binding Path=Wissel2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      IsEnabled="{Binding Path=HasWissel1}"
+                              Grid.Column="1" Grid.Row="6" Margin="5" />
+
+            <Label Content="Wissel 2 type" Grid.Row="7" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel2}" Margin="2"
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitDataWisselTypeEnum}}}"
+                            SelectedItem="{Binding Path=Wissel2Type}" Grid.Row="7" Grid.Column="1" />
+
+            <Label Content="Wissel 2 ingang" Grid.Row="8" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />
+            <Label Content="Wissel 2 detector" Grid.Row="8" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel2}" Margin="2"
+                            ItemsSource="{Binding Path=WisselInputs}" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel2Input}" Grid.Row="8" Grid.Column="1" />
+            <ComboBox 
+                            IsEnabled="{Binding Path=HasWissel2}" Margin="2"
+                            ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}"
+                            SelectedItem="{Binding Path=Wissel2Detector}" Grid.Row="8" Grid.Column="1" />
+
+            <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=HasWissel2Voorwaarde,Converter={StaticResource bool2vis}}" />
+            <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                      Visibility="{Binding Path=HasWissel2Voorwaarde,Converter={StaticResource bool2vis}}"
+                              Grid.Column="1" Grid.Row="9" Margin="5" />
+        </Grid>
         <DataGrid
             Grid.Row="1" Grid.ColumnSpan="2" Margin="2"
             SelectionUnit="Cell"
