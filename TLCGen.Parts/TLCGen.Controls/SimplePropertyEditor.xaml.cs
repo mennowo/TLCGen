@@ -264,6 +264,7 @@ namespace TLCGen.Controls
                             visibleBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                             visibleBinding.Converter = visibilityConverter;
                             BindingOperations.SetBinding(editor, VisibilityProperty, visibleBinding);
+                            BindingOperations.SetBinding(label, VisibilityProperty, visibleBinding);
                         }
 
                         o.MainGrid.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });

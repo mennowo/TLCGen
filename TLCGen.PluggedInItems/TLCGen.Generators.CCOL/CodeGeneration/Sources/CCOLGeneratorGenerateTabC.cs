@@ -117,14 +117,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TFG_defmax = NG;");
             sb.AppendLine($"{ts}TVG_defmax = NG;");
             sb.AppendLine();
+            sb.AppendLine($"{ts}TRG_type    |= RO_type; /* Garantieroodtijden  read-only */");
+            sb.AppendLine($"{ts}TGG_type    |= RO_type; /* Garantiegroentijden read-only */");
             sb.AppendLine($"{ts}TVG_deftype |= RO_type; /* Verlenggroentijden  read-only */");
-            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
-            {
-                sb.AppendLine();
-                sb.AppendLine($"{ts}MON_def = 1;");
-                sb.AppendLine($"{ts}LOG_def = 1;");
-            }
-            sb.AppendLine();
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, true, true);
+            
             sb.AppendLine("}");
 
             return sb.ToString();
@@ -863,6 +861,79 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.AppendLine("/* VLOG */");
+            sb.AppendLine("/* ---- */");
+            sb.AppendLine();
+            sb.AppendLine("#ifndef NO_VLOG");
+
+            if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/*VLOG - logging */");
+                sb.AppendLine($"{ts}/*-------------- */");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
+                if (controller.Data.VLOGType == VLOGTypeEnum.Filebased)
+                {
+                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
+                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
+                }
+
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* VLOG - monitoring */");
+                sb.AppendLine($"{ts}/* ----------------- */");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = BIT0+BIT1;");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = BIT0+BIT1;");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = BIT0+BIT1;");
+
+                sb.AppendLine();
+                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = VLOGMODE_MON_ASCII;");
+            }
+            else
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* VLOG - logging */");
+                sb.AppendLine($"{ts}/* -------------- */");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DATI] = {controller.Data.VLOGSettings.LOGTYPE_DATI};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DP] = {controller.Data.VLOGSettings.LOGTYPE_DP};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_IS] = {controller.Data.VLOGSettings.LOGTYPE_IS};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = {controller.Data.VLOGSettings.LOGTYPE_FC};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = {controller.Data.VLOGSettings.LOGTYPE_US};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = {controller.Data.VLOGSettings.LOGTYPE_PS};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = {controller.Data.VLOGSettings.LOGTYPE_DS};");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_MLX] = {controller.Data.VLOGSettings.LOGTYPE_MLX};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_OMG] = {controller.Data.VLOGSettings.LOGTYPE_OMG};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CRC] = {controller.Data.VLOGSettings.LOGTYPE_CRC};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CFG] = {controller.Data.VLOGSettings.LOGTYPE_CFG};");
+                sb.AppendLine($"#endif");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {controller.Data.VLOGSettings.LOGPRM_VLOGMODE.ToString()};");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {controller.Data.VLOGSettings.LOGPRM_EVENT};");
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* VLOG - monitoring */");
+                sb.AppendLine($"{ts}/* ----------------- */");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DATI] = {controller.Data.VLOGSettings.MONTYPE_DATI};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DP] = {controller.Data.VLOGSettings.MONTYPE_DP};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_IS] = {controller.Data.VLOGSettings.MONTYPE_IS};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = {controller.Data.VLOGSettings.MONTYPE_FC};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = {controller.Data.VLOGSettings.MONTYPE_US};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = {controller.Data.VLOGSettings.MONTYPE_PS};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = {controller.Data.VLOGSettings.MONTYPE_DS};");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_MLX] = {controller.Data.VLOGSettings.MONTYPE_MLX};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_OMG] = {controller.Data.VLOGSettings.MONTYPE_OMG};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CRC] = {controller.Data.VLOGSettings.MONTYPE_CRC};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CFG] = {controller.Data.VLOGSettings.MONTYPE_CFG};");
+                sb.AppendLine($"#endif");
+                sb.AppendLine($"{ts}MONPRM[LOGPRM_VLOGMODE] = {controller.Data.VLOGSettings.LOGPRM_VLOGMODE};");
+                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {controller.Data.VLOGSettings.LOGPRM_EVENT};");
+                sb.AppendLine();
+            }
+
             sb.AppendLine("/* Typen ingangen */");
             sb.AppendLine("/* -------------- */");
 
@@ -972,45 +1043,50 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/*VLOG - logging */");
-            sb.AppendLine($"{ts}/*-------------- */");
-            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
-            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
-            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
-            sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
-            if(controller.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
+            if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
-            }
-
-            sb.AppendLine();
-            sb.AppendLine($"{ts}/* VLOG - monitoring */");
-            sb.AppendLine($"{ts}/* ----------------- */");
-            sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = BIT0+BIT1+BIT2+BIT3+BIT5;");
-            sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = BIT0+BIT1;");
-            sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = BIT0+BIT1;");
-            sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = BIT0+BIT1;");
-
-            sb.AppendLine();
-            foreach (FaseCyclusModel fc in controller.Fasen)
-            {
-                sb.AppendLine($"{ts}MONFC[{_fcpf}{fc.Naam}] = BIT0+BIT1+BIT2+BIT3;");
-            }
-
-            sb.AppendLine();
-            foreach (var u in _uitgangen.Elements)
-            {
-                if(u.Naam != null)
+                sb.AppendLine();
+                foreach (FaseCyclusModel fc in controller.Fasen)
                 {
-                    sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
+                    sb.AppendLine($"{ts}MONFC[{_fcpf}{fc.Naam}] = BIT0+BIT1+BIT2+BIT3;");
+                }
+                sb.AppendLine();
+                foreach (var u in _uitgangen.Elements)
+                {
+                    if (u.Naam != null)
+                    {
+                        sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
+                    }
                 }
             }
+            if (controller.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+                AllCCOLInputElements.Any(x => x.Multivalent))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Multivalente ingangen */");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent))
+                {
+                    sb.AppendLine($"{ts}IS_type[{_ispf}{i.Naam}] = ISM_type;");
+                }
+                sb.AppendLine("#endif /* NO_VLOG_300 */");
+            }
+            if (controller.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+                AllCCOLOutputElements.Any(x => x.Multivalent))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Multivalente ingangen */");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
+                {
+                    sb.AppendLine($"{ts}US_type[{_uspf}{i.Naam}] = USM_type;");
+                }
+                sb.AppendLine("#endif /* NO_VLOG_300 */");
+            }
 
             sb.AppendLine();
-            sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = VLOGMODE_MON_ASCII;");
-
+            sb.AppendLine("#endif /* NO_VLOG */");
+            
             sb.AppendLine();
             return sb.ToString();
         }

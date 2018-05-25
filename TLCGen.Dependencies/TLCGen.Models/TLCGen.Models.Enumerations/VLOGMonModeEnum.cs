@@ -10,13 +10,11 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum VLOGTypeEnum
+    public enum VLOGMonModeEnum
     {
-        [Description("Geen")]
-        Geen,
-        [Description("VLOG 2.x streaming")]
-        Streaming,
-        [Description("VLOG 2.x filebased")]
-        Filebased
+        [Description("Monitor data binair")]
+        Binair = 0,
+        [Description("Monitor data  ASCII")]
+        ASCII = 1
     }
 }

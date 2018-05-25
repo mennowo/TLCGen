@@ -43,6 +43,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.TabCControlDefaults:
+                    return 10;
+                case CCOLCodeTypeEnum.TabCControlParameters:
+                    return 0;
                 case CCOLCodeTypeEnum.RegCTop:
                     return 20;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -58,6 +62,49 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.TabCControlDefaults:
+
+                    if (c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                        c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+                    {
+                        sb.AppendLine($"{ts}MON_def = 1;");
+                        sb.AppendLine($"{ts}LOG_def = 1;");
+                    }
+                    else if (c.Data.VLOGSettings?.VLOGToepassen == true)
+                    {
+                        sb.AppendLine($"#ifndef NO_VLOG");
+                        sb.AppendLine($"#if !defined NO_VLOG_300");
+                        sb.AppendLine($"{ts}/* Defaults voor VLOG");
+                        sb.AppendLine($"{ts}   Toelichting instellingen:");
+                        sb.AppendLine($"{ts}   - MONDP   1=DP-status");
+                        sb.AppendLine($"{ts}   - MONIS   1=IS-status, 2=IS-snelheid (ISV_type) 4=IS-lengte (ISL_type), 8=IS-mulv");
+                        sb.AppendLine($"{ts}   - MONFC   1=FCWUS, 2=FCGUS, 4=FCMON2, 8=FCMON3, 32=OVMON5, 64=FCTIMING, 128=FCRWT");
+                        sb.AppendLine($"{ts}   - MONUS   1=WUS-status, 2=GUS-status, 4=WUS-mulv, 8=GUS-mulv");
+                        sb.AppendLine($"{ts}   - MONDS   1=DS-status");
+                        sb.AppendLine($"{ts}*/");
+                        sb.AppendLine($"{ts}MONTYPE_def = {c.Data.VLOGSettings.MONTYPE_def};");
+                        sb.AppendLine($"{ts}MONDP_def   = {c.Data.VLOGSettings.MONDP_def};");
+                        sb.AppendLine($"{ts}MONIS_def   = {c.Data.VLOGSettings.MONIS_def};");
+                        sb.AppendLine($"{ts}MONFC_def   = {c.Data.VLOGSettings.MONFC_def};");
+                        sb.AppendLine($"{ts}MONUS_def   = {c.Data.VLOGSettings.MONUS_def};");
+                        sb.AppendLine($"{ts}MONDS_def   = {c.Data.VLOGSettings.MONDS_def};");
+                        sb.AppendLine($"{ts}LOGTYPE_def = {c.Data.VLOGSettings.LOGTYPE_def};");
+                        sb.AppendLine($"#else /* VLOG 2.0 */");
+                        sb.AppendLine($"{ts}MON_def = 1;");
+                        sb.AppendLine($"{ts}LOG_def = 1;");
+                        sb.AppendLine($"#endif");
+                        sb.AppendLine($"#endif");
+                        sb.AppendLine($"");
+                        sb.AppendLine($"");
+                        sb.AppendLine($"");
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.TabCControlParameters:
+                    // dit zit in "CCOLGeneratorGenerateTabC.cs" omdat we hier een 
+                    // lijst met CCOL uitgangen nodig hebben
+                    return null;
+
                 case CCOLCodeTypeEnum.RegCTop:
                     if (!c.Data.VLOGInTestOmgeving)
                     {

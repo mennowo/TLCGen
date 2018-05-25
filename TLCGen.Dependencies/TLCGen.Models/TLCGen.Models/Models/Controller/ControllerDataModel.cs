@@ -37,6 +37,7 @@ namespace TLCGen.Models
         public KWCTypeEnum KWCType { get; set; }
         public bool KWCUitgebreid { get; set; } // Note: this is not used yet, only meant for potential future functionality
         public VLOGTypeEnum VLOGType { get; set; }
+        public VLOGSettingsDataModel VLOGSettings { get; set; }
         public bool VLOGInTestOmgeving { get; set; }
         public bool GarantieOntruimingsTijden { get; set; }
         public bool ExtraMeeverlengenInWG { get; set; }

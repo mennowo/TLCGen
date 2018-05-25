@@ -45,10 +45,11 @@
 		OvCBottom,
 
 		// TAB
+	    TabCControlDefaults,
 	    TabCControlParameters,
 
-		// HST
-		HstCTop,
+        // HST
+        HstCTop,
         HstCPostInitApplication,
 		HstCPreApplication,
 		HstCKlokPerioden,

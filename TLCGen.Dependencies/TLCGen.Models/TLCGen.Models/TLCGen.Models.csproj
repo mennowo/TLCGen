@@ -55,6 +55,7 @@
     <Compile Include="Models\Base\SegmentDisplayElementModel.cs" />
     <Compile Include="Models\Base\SelectieveDetectorModel.cs" />
     <Compile Include="Models\Controller\FixatieModel.cs" />
+    <Compile Include="Models\Controller\VLOGSettingsDataModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarDataModel.cs" />
     <Compile Include="Models\Halfstar\HalfstarGekoppeldeKruisingPlanIngangModel.cs" />

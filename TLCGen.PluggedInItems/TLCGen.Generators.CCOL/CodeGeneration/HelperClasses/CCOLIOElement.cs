@@ -11,6 +11,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         public string Naam { get; set; }
         public IOElementModel Element { get; set; }
+        public bool Multivalent { get; set; }
         public bool Dummy { get; set; }
 
         public CCOLIOElement(IOElementModel ioelem, string naam)

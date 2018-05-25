@@ -120,6 +120,16 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.CCOLVersie = value;
                 RaisePropertyChanged<object>("CCOLVersie", broadcast: true);
+                if(value > CCOLVersieEnum.CCOL8)
+                {
+                    if(_Controller.Data.VLOGSettings == null)
+                    {
+                        _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, _Controller.Data.VLOGSettings.VLOGVersie.ToString());
+                    }
+                }
+                RaisePropertyChanged(nameof(IsVLOGVersieLowerThan9));
+                MessengerInstance.Send(new UpdateTabsEnabledMessage());
             }
         }
 
@@ -135,6 +145,7 @@ namespace TLCGen.ViewModels
         }
 
         [Description("Type VLOG")]
+        [BrowsableCondition("IsVLOGVersieLowerThan9")]
         public VLOGTypeEnum VLOGType
         {
             get { return _Controller?.Data == null ? VLOGTypeEnum.Geen : _Controller.Data.VLOGType; }
@@ -144,6 +155,9 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>("VLOGType", broadcast: true);
             }
         }
+
+        [Browsable(false)]
+        public bool IsVLOGVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;
 
         [Description("VLOG in testomgeving")]
         public bool VLOGInTestOmgeving

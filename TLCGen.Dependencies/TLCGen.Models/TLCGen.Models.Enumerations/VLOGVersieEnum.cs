@@ -10,13 +10,9 @@ using TLCGen.Helpers;
 namespace TLCGen.Models.Enumerations
 {
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum VLOGTypeEnum
+    public enum VLOGVersieEnum
     {
-        [Description("Geen")]
-        Geen,
-        [Description("VLOG 2.x streaming")]
-        Streaming,
-        [Description("VLOG 2.x filebased")]
-        Filebased
+        [Description("VLOG 3.0.x")]
+        VLOG30x
     }
 }
