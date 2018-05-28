@@ -91,10 +91,6 @@ namespace TLCGen.ViewModels
                 {
                     Type = PeriodeTypeEnum.RateltikkersDimmen;
                 }
-                else if (value == PeriodeTypeEnum.WaarschuwingsLichten.GetDescription())
-                {
-                    Type = PeriodeTypeEnum.WaarschuwingsLichten;
-                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("Unknown period type: " + value);

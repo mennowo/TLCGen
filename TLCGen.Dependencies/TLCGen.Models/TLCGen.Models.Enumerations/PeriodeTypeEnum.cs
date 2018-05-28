@@ -19,8 +19,6 @@ namespace TLCGen.Models.Enumerations
         RateltikkersAanvraag,
         [Description("Rateltikkers dimmen")]
         RateltikkersDimmen,
-        [Description("Waarschuwingslichten")]
-        WaarschuwingsLichten,
         [Description("Bellen actief")]
         BellenActief,
         [Description("Bellen dimmen")]

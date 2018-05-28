@@ -27,7 +27,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLGeneratorCodeStringSettingModel _prmperrtdim;
         private CCOLGeneratorCodeStringSettingModel _prmperbel;
         private CCOLGeneratorCodeStringSettingModel _prmperbeldim;
-        private CCOLGeneratorCodeStringSettingModel _prmpertwl;
         private CCOLGeneratorCodeStringSettingModel _prmpero;
 #pragma warning restore 0649
 
@@ -43,7 +42,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var iperrtdim = 1;
             var iperbel = 1;
             var iperbeldim = 1;
-            var ipertwl = 1;
 
             // outputs
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usperdef.Setting, _usperdef));
@@ -101,7 +99,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case PeriodeTypeEnum.RateltikkersDimmen: pertypeandnum = _prmperrtdim + iperrtdim.ToString(); iperrtdim++; break;
                     case PeriodeTypeEnum.BellenActief: pertypeandnum = _prmperbel + iperbel.ToString(); iperbel++; break;
                     case PeriodeTypeEnum.BellenDimmen: pertypeandnum = _prmperbeldim + iperbeldim.ToString(); iperbeldim++; break;
-                    case PeriodeTypeEnum.WaarschuwingsLichten: pertypeandnum = _prmpertwl + ipertwl.ToString(); ipertwl++; break;
                     case PeriodeTypeEnum.Overig: pertypeandnum = _prmpero + ipero.ToString(); break;
                     case PeriodeTypeEnum.Groentijden:
                         break;
@@ -140,19 +137,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperrtdim > 1)  _myElements.Add(new CCOLElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement));
             if (iperbel > 1)    _myElements.Add(new CCOLElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement));
             if (iperbeldim > 1) _myElements.Add(new CCOLElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement));
-            if (ipertwl > 1)    _myElements.Add(new CCOLElement($"{_hperiod}{_prmpertwl}", CCOLElementTypeEnum.HulpElement));
             if (iperrt > 1)     _myElements.Add(new CCOLElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang));
             if (iperrta > 1)    _myElements.Add(new CCOLElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang));
             if (iperrtdim > 1)  _myElements.Add(new CCOLElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang));
             if (iperbel > 1)    _myElements.Add(new CCOLElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang));
             if (iperbeldim > 1) _myElements.Add(new CCOLElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang));
-            if (ipertwl > 1)    _myElements.Add(new CCOLElement($"{_usper}{_prmpertwl}", CCOLElementTypeEnum.Uitgang));
             if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_uspf}{_usper}{_prmperrt}"));
             if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_uspf}{_usper}{_prmperrta}"));
             if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));
             if (iperbel > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenActiefBitmapData, $"{_uspf}{_usper}{_prmperbel}"));
             if (iperbeldim > 1) _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
-            if (ipertwl > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.WaarschuwingsLichtenActiefBitmapData, $"{_uspf}{_usper}{_prmpertwl}"));
 
             // groentijden
             foreach (var mgset in c.GroentijdenSets)
@@ -364,26 +358,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine(";");
                             sb.AppendLine();
                         }
-                        if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten))
-                        {
-                            sb.AppendLine($"{ts}/* klokperiode twl's actief */");
-                            sb.AppendLine($"{ts}/* ------------------------ */");
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmpertwl}] = ");
-                            foreach (var per in c.PeriodenData.Perioden)
-                            {
-                                if (per.Type != PeriodeTypeEnum.RateltikkersAanvraag) continue;
-                                if (ipertwl != 1)
-                                {
-                                    sb.AppendLine(" || ");
-                                }
-                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpertwl}{ipertwl}], ");
-                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmpertwl}{ipertwl}]) && ");
-                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpertwl}{ipertwl}]))");
-                                ipertwl++;
-                            }
-                            sb.AppendLine(";");
-                            sb.AppendLine();
-                        }
                     }
                     return sb.ToString();
 
@@ -485,10 +459,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen))
                         {
                             sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmperbeldim}] = (IH[{_hpf}{_hperiod}{_prmperbeldim}] == TRUE);");
-                        }
-                        if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.WaarschuwingsLichten))
-                        {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpertwl}] = (IH[{_hpf}{_hperiod}{_prmpertwl}] == TRUE);");
                         }
                     }
                     ipero = 1;

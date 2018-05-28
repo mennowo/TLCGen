@@ -57,6 +57,9 @@
             PreviewKeyDown="DataGrid_PreviewKeyDown"
             BeginningEdit="DataGrid_BeginningEdit"
             SelectedCellsChanged="DataGrid_SelectedCellsChanged">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DodgerBlue"/>
+            </DataGrid.Resources>
         </DataGrid>
     </Grid>
 </UserControl>

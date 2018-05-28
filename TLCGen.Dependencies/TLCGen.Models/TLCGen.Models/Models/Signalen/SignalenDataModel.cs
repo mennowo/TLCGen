@@ -27,8 +27,6 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel BellenActiefBitmapData { get; set; }
         [IOElement("beldim", BitmappedItemTypeEnum.Uitgang, "", "WaarschuwingsGroepenBitmapDataRelevant")]
         public BitmapCoordinatenDataModel BellenDimmenBitmapData { get; set; }
-        [IOElement("wlactief", BitmappedItemTypeEnum.Uitgang, "", "WaarschuwingsGroepenBitmapDataRelevant")]
-        public BitmapCoordinatenDataModel WaarschuwingsLichtenActiefBitmapData { get; set; }
 
         [XmlIgnore]
         public bool RatelTikkersBitmapDataRelevant
@@ -51,7 +49,6 @@ namespace TLCGen.Models
             RatelTikkerDimmenBitmapData = new BitmapCoordinatenDataModel();
             BellenActiefBitmapData = new BitmapCoordinatenDataModel();
             BellenDimmenBitmapData = new BitmapCoordinatenDataModel();
-            WaarschuwingsLichtenActiefBitmapData = new BitmapCoordinatenDataModel();
         }
     }
 }
