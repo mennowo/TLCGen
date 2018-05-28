@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -50,6 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCTop:
                     return 20;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
+                case CCOLCodeTypeEnum.RegCSystemApplication2:
                     return 30;
                 default:
                     return 0;
@@ -114,14 +116,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
                     return sb.ToString();
-
+                    
                 case CCOLCodeTypeEnum.RegCSystemApplication:
-                    if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+                case CCOLCodeTypeEnum.RegCSystemApplication2:
+                    if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen ||
+                        c.Data.VLOGSettings.VLOGToepassen)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
                         sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfbvlog}]);");
+                        if(c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
+                        {
+                            sb.AppendLine($"{ts}#ifndef NO_VLOG_200");
+                            sb.AppendLine($"{ts}{ts}VLOG_mon5_buffer();");
+                            sb.AppendLine($"{ts}#endif ");
+                        }
                         if (c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
                         {
+
                             sb.AppendLine($"{ts}#ifndef AUTOMAAT");
                             sb.AppendLine($"{ts}{ts}file_uber_to_file_hour(LOGFILE_NUMBER_MAX, LOGFILE_LENGTH_MAX);");
                             sb.AppendLine($"{ts}#endif");
@@ -140,24 +151,5 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             return true;
         }
-
-        //public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
-        //{
-        //    if (settings?.Settings == null)
-        //    {
-        //        return false;
-        //    }
-        //
-        //    foreach (var s in settings.Settings)
-        //    {
-        //        switch (s.Default)
-        //        {
-        //            case "maxtvg": _prmmaxtvgvlog = s.Setting ?? s.Default; break;
-        //            case "maxtfb": _prmmaxtfb = s.Setting ?? s.Default; break;
-        //        }
-        //    }
-        //
-        //    return base.SetSettings(settings);
-        //}
     }
 }

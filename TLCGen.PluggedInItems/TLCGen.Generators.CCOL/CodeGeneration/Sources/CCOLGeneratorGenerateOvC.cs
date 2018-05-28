@@ -121,6 +121,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
 
+            if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType != VLOGTypeEnum.Geen ||
+                c.Data.VLOGSettings.VLOGToepassen)
+            {
+                sb.AppendLine("/* VLOG mon5 buffer: monitoring/logging OV */");
+                sb.AppendLine("#ifndef NO_VLOG");
+                sb.AppendLine($"{ts}#ifndef NO_VLOG_200");
+                sb.AppendLine($"{ts}{ts}/* VLOG_mon5_buffer afhandeling */");
+                sb.AppendLine($"{ts}{ts}/* ---------------------------- */");
+                sb.AppendLine($"{ts}{ts}void VLOG_mon5_buffer(void)");
+                sb.AppendLine($"{ts}{ts}{{");
+                sb.AppendLine($"{ts}{ts}{ts}int ifc;");
+                sb.AppendLine($"{ts}{ts}{ts}for (ifc = 0; ifc < FCMAX; ++ifc)");
+                sb.AppendLine($"{ts}{ts}{ts}{{");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}mon5_buffer(SAPPLPROG, ifc,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].voorinov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].inmov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmbewov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].foutuitmov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uituitmov,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].voorinhd,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].inmhd,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmhd,");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmbewhd);");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].voorinov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].inmov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmbewov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].foutuitmov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uituitmov = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].voorinhd = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].inmhd = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmhd = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}VLOG_mon5[ifc].uitmbewhd = FALSE;");
+                sb.AppendLine($"{ts}{ts}{ts}}}");
+                sb.AppendLine($"{ts}{ts}}}");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine($"#endif");
+            }
+
 			sb.AppendLine("/*-------------------------------------------------------------------------------------------");
             sb.AppendLine("   OVInstellingen voorziet alle OV-instellingen van een juiste waarde.");
             sb.AppendLine("   Het gaat om de volgende instellingen:");

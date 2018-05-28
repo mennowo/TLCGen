@@ -276,6 +276,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
+                    if (!c.FileIngrepen.Any()) return "";
+
                     sb.AppendLine($"{ts}/* File afhandeling */");
                     sb.AppendLine($"{ts}/* ---------------- */");
                     sb.AppendLine();
@@ -539,6 +541,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
+                    if (!c.FileIngrepen.Any()) return "";
+
                     sb.AppendLine($"{ts}/* file verklikking */");
                     sb.AppendLine($"{ts}/* ---------------- */");
                     foreach (var f in c.FileIngrepen)

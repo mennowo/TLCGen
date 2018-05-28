@@ -114,7 +114,7 @@ namespace TLCGen.ViewModels
                     VAOntruimenFasen.Remove(SelectedVAOntruimenFase);
                     SelectedVAOntruimenFase = null;
                 }
-                RaisePropertyChanged<object>("SelectedFaseHasVAOntruimen", null, null, true);
+                RaisePropertyChanged();
             }
             get
             {

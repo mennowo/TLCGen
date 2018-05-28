@@ -33,7 +33,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.FaseCyclus = value;
-                RaisePropertyChanged<object>("FaseCyclus", broadcast: true);
+                RaisePropertyChanged();
             }
         }
         public int VAOntrTijdensRood
@@ -42,7 +42,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _VAOntruimenFase.VAOntrTijdensRood = value;
-                RaisePropertyChanged<object>("VAOntrTijdensRood", broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -80,8 +80,15 @@ namespace TLCGen.ViewModels
             get => _VAOntruimenFase.Wissel1Input;
             set
             {
-                _VAOntruimenFase.Wissel1Input = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                if(value != null)
+                {
+                    _VAOntruimenFase.Wissel1Input = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+                else
+                {
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -90,8 +97,15 @@ namespace TLCGen.ViewModels
             get => _VAOntruimenFase.Wissel1Detector;
             set
             {
-                _VAOntruimenFase.Wissel1Detector = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                if (value != null)
+                {
+                    _VAOntruimenFase.Wissel1Detector = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+                else
+                {
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -137,8 +151,15 @@ namespace TLCGen.ViewModels
             get => _VAOntruimenFase.Wissel2Input;
             set
             {
-                _VAOntruimenFase.Wissel2Input = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                if (value != null)
+                {
+                    _VAOntruimenFase.Wissel2Input = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+                else
+                {
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -147,8 +168,15 @@ namespace TLCGen.ViewModels
             get => _VAOntruimenFase.Wissel2Detector;
             set
             {
-                _VAOntruimenFase.Wissel2Detector = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                if (value != null)
+                {
+                    _VAOntruimenFase.Wissel2Detector = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+                else
+                {
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -321,7 +349,9 @@ namespace TLCGen.ViewModels
 
         public void Refresh()
         {
+            VAOntruimenDetectoren.CollectionChanged -= VAOntruimenDetectoren_CollectionChanged;
             VAOntruimenDetectoren.Rebuild();
+            VAOntruimenDetectoren.CollectionChanged += VAOntruimenDetectoren_CollectionChanged;
             RebuildVAOnruimenMatrix();
             DetectorManager = null;
             RaisePropertyChanged("DetectorManager");
@@ -336,16 +366,16 @@ namespace TLCGen.ViewModels
             _DetectorManager = null;
             RaisePropertyChanged("DetectorManager");
 
-            var sd1 = "";
-            var sd2 = "";
-            if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector)
-            {
-                sd1 = Wissel1Detector;
-            }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector)
-            {
-                sd2 = Wissel2Detector;
-            }
+            //var sd1 = "";
+            //var sd2 = "";
+            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            //{
+            //    sd1 = Wissel1Detector;
+            //}
+            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector)
+            //{
+            //    sd2 = Wissel2Detector;
+            //}
 
             WisselDetectoren.Clear();
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.WisselDetector)))
@@ -357,28 +387,28 @@ namespace TLCGen.ViewModels
                 WisselDetectoren.Add(d.Naam);
             }
 
-            if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
-            {
-                Wissel1Detector = sd1;
-            }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
-            {
-                Wissel2Detector = sd2;
-            }
+            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd1))
+            //{
+            //    Wissel1Detector = sd1;
+            //}
+            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && WisselDetectoren.Contains(sd2))
+            //{
+            //    Wissel2Detector = sd2;
+            //}
         }
 
         private void OnIngangenChanged(IngangenChangedMessage obj)
         {
-            var sd1 = "";
-            var sd2 = "";
-            if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-            {
-                sd1 = Wissel1Input;
-            }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-            {
-                sd2 = Wissel2Input;
-            }
+            //var sd1 = "";
+            //var sd2 = "";
+            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+            //{
+            //    sd1 = Wissel1Input;
+            //}
+            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+            //{
+            //    sd2 = Wissel2Input;
+            //}
 
             WisselInputs.Clear();
             foreach (var seld in DataAccess.TLCGenControllerDataProvider.Default.Controller.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
@@ -386,14 +416,14 @@ namespace TLCGen.ViewModels
                 WisselInputs.Add(seld.Naam);
             }
 
-            if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
-            {
-                Wissel1Input = sd1;
-            }
-            if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
-            {
-                Wissel2Input = sd2;
-            }
+            //if (KijkNaarWisselstand && Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd1))
+            //{
+            //    Wissel1Input = sd1;
+            //}
+            //if (Wissel2 && Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && WisselInputs.Contains(sd2))
+            //{
+            //    Wissel2Input = sd2;
+            //}
         }
 
         #endregion // TLCGen Events
@@ -407,12 +437,22 @@ namespace TLCGen.ViewModels
 
         #endregion // IViewModelWithItem
 
+        #region Collection changed
+        
+        private void VAOntruimenDetectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        #endregion // Collection changed
+        
         #region Constructor
 
         public VAOntruimenFaseViewModel(VAOntruimenFaseModel vaontruimenfase)
         {
             _VAOntruimenFase = vaontruimenfase;
             VAOntruimenDetectoren = new ObservableCollectionAroundList<VAOntruimenDetectorViewModel, VAOntruimenDetectorModel>(vaontruimenfase.VADetectoren);
+            VAOntruimenDetectoren.CollectionChanged += VAOntruimenDetectoren_CollectionChanged;
 
             WisselDetectoren = new ObservableCollection<string>();
             WisselInputs = new ObservableCollection<string>();
@@ -423,6 +463,7 @@ namespace TLCGen.ViewModels
 
             Refresh();
         }
+
 
         #endregion // Constructor
     }

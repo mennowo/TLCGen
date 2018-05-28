@@ -693,9 +693,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application2(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPreSystemApplication2])
+            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSystemApplication2])
             {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPreSystemApplication2, ts));
+                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSystemApplication2, ts));
             }
 
             sb.AppendLine("}");

@@ -25,8 +25,8 @@
         RegCApplication,
         RegCPostApplication,
         RegCPreSystemApplication,
-        RegCPreSystemApplication2,
         RegCSystemApplication,
+        RegCSystemApplication2,
         RegCPostSystemApplication,
         RegCDumpApplication,
 
