@@ -25,7 +25,7 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_gelijkstart.DeelConflict = value;
-				RaisePropertyChanged();
+				RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
@@ -35,8 +35,8 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
-				RaisePropertyChanged();
-			}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 
 		public int OntruimingstijdFaseNaar
@@ -45,8 +45,8 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
-				RaisePropertyChanged();
-			}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 
 		public string Comment1 =>

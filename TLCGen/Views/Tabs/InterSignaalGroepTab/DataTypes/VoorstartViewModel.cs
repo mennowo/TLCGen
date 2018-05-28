@@ -27,8 +27,8 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_voorstart.VoorstartTijd = value;
-				RaisePropertyChanged();
-			}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 
 		public int VoorstartOntruimingstijd
@@ -37,8 +37,8 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_voorstart.VoorstartOntruimingstijd = value;
-				RaisePropertyChanged();
-			}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 
         #endregion // Properties

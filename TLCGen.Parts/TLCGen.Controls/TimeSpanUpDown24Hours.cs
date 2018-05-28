@@ -13,15 +13,34 @@ namespace TLCGen.Controls
         {
             if (string.IsNullOrEmpty(text))
                 return null;
-            
-            var hours = Convert.ToInt32(text.Substring(0, 2));
+
+            var hours = 0;
+            if (text.Contains(":"))
+            {
+                var parts = text.Split(':');
+                if (!int.TryParse(parts[0], out hours)) return null;
+            }
+            else
+            {
+                if (!int.TryParse(text, out hours)) return null;
+            }
             int days = 0;
             if (hours == 24)
             {
                 days = 1;
                 hours = 0;
             }
-            return new TimeSpan(days, hours, Convert.ToInt32(text.Substring(3, 2)), 0);
+            var mins = 0;
+            if (text.Contains(":"))
+            {
+                var parts = text.Split(':');
+                if(parts.Length <= 1 || !int.TryParse(parts[1], out mins)) return null;
+            }
+            else
+            {
+                mins = 0;
+            }
+            return new TimeSpan(days, hours, mins, 0);
         }
 
         protected override string ConvertValueToText()
