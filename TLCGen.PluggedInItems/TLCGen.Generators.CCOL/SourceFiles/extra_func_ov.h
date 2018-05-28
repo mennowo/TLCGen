@@ -6,6 +6,7 @@
 bool DSIMeldingOV_V1(
 	count dslus,
 	count vtgtype,
+	bool checkfcnmr,
 	count fcnmr,
 	bool checktype,
 	count meldingtype,
@@ -18,7 +19,7 @@ bool DSIMelding_HD_V1(count dir, /* 1. fc nummer of richtingnummer (201, 202, 20
 	count meldingtype,           /* 2. Type melding: in of uit */
 	bool check_sirene);          /* 3. Check SIRENE */
 
-void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc);
+void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat);
 
 #ifdef CCOL_IS_SPECIAL
 void reset_DSI_message(void);

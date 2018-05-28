@@ -66,13 +66,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.TabCControlDefaults:
 
-                    if (c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                    if (c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
                         c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
                     {
                         sb.AppendLine($"{ts}MON_def = 1;");
                         sb.AppendLine($"{ts}LOG_def = 1;");
                     }
-                    else if (c.Data.VLOGSettings?.VLOGToepassen == true)
+                    else if (c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                             c.Data.VLOGSettings?.VLOGToepassen == true)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
                         sb.AppendLine($"#if !defined NO_VLOG_300");
@@ -119,8 +120,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
+                    if (type == CCOLCodeTypeEnum.RegCSystemApplication && c.Data.CCOLVersie > CCOLVersieEnum.CCOL8) return "";
+                    if (type == CCOLCodeTypeEnum.RegCSystemApplication2 && c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8) return "";
+
                     if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen ||
-                        c.Data.VLOGSettings.VLOGToepassen)
+                        c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && c.Data.VLOGSettings.VLOGToepassen)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
                         sb.AppendLine($"{ts}mon3_mon4_buffers(SAPPLPROG, PRM[{_prmpf}{_prmmaxtvgvlog}], PRM[{_prmpf}{_prmmaxtfbvlog}]);");
@@ -130,9 +134,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}VLOG_mon5_buffer();");
                             sb.AppendLine($"{ts}#endif ");
                         }
-                        if (c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased)
+                        if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased ||
+                            c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_ASCII)
                         {
-
                             sb.AppendLine($"{ts}#ifndef AUTOMAAT");
                             sb.AppendLine($"{ts}{ts}file_uber_to_file_hour(LOGFILE_NUMBER_MAX, LOGFILE_LENGTH_MAX);");
                             sb.AppendLine($"{ts}#endif");

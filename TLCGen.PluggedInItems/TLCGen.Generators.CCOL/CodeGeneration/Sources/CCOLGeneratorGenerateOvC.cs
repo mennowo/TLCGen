@@ -122,7 +122,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
 
             if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType != VLOGTypeEnum.Geen ||
-                c.Data.VLOGSettings.VLOGToepassen)
+                c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && c.Data.VLOGSettings.VLOGToepassen)
             {
                 sb.AppendLine("/* VLOG mon5 buffer: monitoring/logging OV */");
                 sb.AppendLine("#ifndef NO_VLOG");

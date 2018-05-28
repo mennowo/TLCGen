@@ -861,10 +861,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             StringBuilder sb = new StringBuilder();
 
+            sb.AppendLine("#ifndef NO_VLOG");
             sb.AppendLine("/* VLOG */");
             sb.AppendLine("/* ---- */");
-            sb.AppendLine();
-            sb.AppendLine("#ifndef NO_VLOG");
 
             if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
@@ -890,7 +889,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = BIT0+BIT1;");
 
                 sb.AppendLine();
-                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = VLOGMODE_MON_ASCII;");
+                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = 1; /* 1 = ASCII */");
+                sb.AppendLine();
             }
             else
             {

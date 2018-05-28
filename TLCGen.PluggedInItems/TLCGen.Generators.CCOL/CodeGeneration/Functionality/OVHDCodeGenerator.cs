@@ -109,6 +109,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
+        private string GetDetectorTypeSCHString(OVIngreepInUitMeldingVoorwaardeInputTypeEnum type)
+        {
+            switch (type)
+            {
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectie:
+                    return "SD";
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieOp:
+                    return "D";
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.DetectieBezet:
+                    return "DB";
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.StartDetectieBezet:
+                    return "SDB";
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectie:
+                    return "ED";
+                case OVIngreepInUitMeldingVoorwaardeInputTypeEnum.EindeDetectieHiaat:
+                    return "ETDH";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public List<CCOLElement> GetMeldingElements(OVIngreepModel ov, OVIngreepInUitMeldingModel melding, bool addHov)
         {
             var elements = new List<CCOLElement>();
@@ -139,12 +160,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 he = he + melding.RelatedInput1;
                 ti = ti + melding.RelatedInput1;
-                sw = sw + melding.RelatedInput1;
+                sw = sw + melding.RelatedInput1 + GetDetectorTypeSCHString(melding.RelatedInput1Type);
                 if (melding.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector && melding.TweedeInput)
                 {
                     he = he + melding.RelatedInput2;
                     ti = ti + melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2;
+                    sw = sw + melding.RelatedInput2 + GetDetectorTypeSCHString(melding.RelatedInput2Type);
                 }
             }
 
@@ -163,7 +184,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             if(melding.OpvangStoring && melding.MeldingBijstoring != null)
             {
-                elements.AddRange(GetMeldingElements(ov, melding.MeldingBijstoring, false));
+                var elems = GetMeldingElements(ov, melding.MeldingBijstoring, false);
+                foreach(var e in elems)
+                {
+                    if(_MyElements.All(x => x.Naam != e.Naam))
+                    {
+                        _MyElements.Add(e);
+                    }
+                }
             }
 
             return elements;
@@ -499,12 +527,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 he = he + melding.RelatedInput1;
                 ti = ti + melding.RelatedInput1;
-                sw = sw + melding.RelatedInput1;
+                sw = sw + melding.RelatedInput1 + GetDetectorTypeSCHString(melding.RelatedInput1Type);
                 if (melding.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector && melding.TweedeInput)
                 {
                     he = he + melding.RelatedInput2;
                     ti = ti + melding.RelatedInput2;
-                    sw = sw + melding.RelatedInput2;
+                    sw = sw + melding.RelatedInput2 + GetDetectorTypeSCHString(melding.RelatedInput2Type);
                 }
             }
             if (otherHov != null) he = otherHov;
