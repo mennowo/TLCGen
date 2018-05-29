@@ -45,6 +45,7 @@
     <Compile Include="AansturingWaitsignalenEnum.cs" />
     <Compile Include="BitmappedItemTypeEnum.cs" />
     <Compile Include="CCOLVersieEnum.cs" />
+    <Compile Include="HardMeevelengenTypeEnum.cs" />
     <Compile Include="InUit\OVIngreepInUitDataWisselTypeEnum.cs" />
     <Compile Include="InUit\OVIngreepInUitMeldingTypeEnum.cs" />
     <Compile Include="InUit\OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum.cs" />

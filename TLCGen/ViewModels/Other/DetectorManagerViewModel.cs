@@ -10,53 +10,54 @@ using GalaSoft.MvvmLight;
 
 namespace TLCGen.ViewModels
 {
-    public class DetectorManagerViewModel<T1, T2> : ViewModelBase where T1 : class where T2 : class
+    public class ItemsManagerViewModel<T1, T2> : ViewModelBase where T1 : class where T2 : class
     {
         #region Fields
 
-        private Func<T2, T1> _GetDetectorToAdd;
-        private Func<T2, T1> _GetDetectorToRemove;
-        private Action _AfterDetectorAddedAction;
-        private Action _AfterDetectorRemovedAction;
-        private Predicate<T2> _IsDetectorSelectable;
-        private T1 _SelectedDetector;
+        private Func<T2, T1> _getItemToAdd;
+        private Func<T2, T1> _getItemToRemove;
+        private Action _afterItemAddedAction;
+        private Action _afterItemRemovedAction;
+        private Predicate<T2> _isItemSelectable;
+        private T1 _selectedItem;
+        private T2 _selectedItemToRemove;
+        private T2 _selectedItemToAdd;
+        private RelayCommand _addItemCommand;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<T1> DetectorenInCollection { get; }
-        public List<T2> AllDetectoren { get; }
-        public ObservableCollection<T2> SelectableDetectoren { get; }
-        public ObservableCollection<T2> RemovableDetectoren { get; }
+        public ObservableCollection<T1> ItemsInCollection { get; }
+        public List<T2> AllAvailableItems { get; }
+        public ObservableCollection<T2> SelectableItems { get; }
+        public ObservableCollection<T2> RemovableItems { get; }
 
-        private T2 _SelectedDetectorToAdd;
-        public T2 SelectedDetectorToAdd
+        public T2 SelectedItemToAdd
         {
-            get => _SelectedDetectorToAdd;
+            get => _selectedItemToAdd;
 	        set
             {
-                _SelectedDetectorToAdd = value;
+                _selectedItemToAdd = value;
                 RaisePropertyChanged();
             }
         }
-        private T2 _SelectedDetectorToRemove;
-        public T2 SelectedDetectorToRemove
+        public T2 SelectedItemToRemove
         {
-            get => _SelectedDetectorToRemove;
+            get => _selectedItemToRemove;
 	        set
             {
-                _SelectedDetectorToRemove = value;
+                _selectedItemToRemove = value;
                 RaisePropertyChanged();
             }
         }
 
-        public T1 SelectedDetector
+        public T1 SelectedItem
         {
-            get => _SelectedDetector;
+            get => _selectedItem;
 	        set
             {
-                _SelectedDetector = value;
+                _selectedItem = value;
                 RaisePropertyChanged();
             }
         }
@@ -66,29 +67,28 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        private RelayCommand _AddDetectorCommand;
-        public ICommand AddDetectorCommand
+        public ICommand AddItemCommand
         {
             get
             {
-                if (_AddDetectorCommand == null)
+                if (_addItemCommand == null)
                 {
-                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
+                    _addItemCommand = new RelayCommand(AddItemCommand_Executed, AddItemCommand_CanExecute);
                 }
-                return _AddDetectorCommand;
+                return _addItemCommand;
             }
         }
 
-        private RelayCommand _RemoveDetectorCommand;
-        public ICommand RemoveDetectorCommand
+        private RelayCommand _removeItemCommand;
+        public ICommand RemoveItemCommand
         {
             get
             {
-                if (_RemoveDetectorCommand == null)
+                if (_removeItemCommand == null)
                 {
-                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
+                    _removeItemCommand = new RelayCommand(RemoveItemCommand_Executed, RemoveItemCommand_CanExecute);
                 }
-                return _RemoveDetectorCommand;
+                return _removeItemCommand;
             }
         }
 
@@ -96,51 +96,51 @@ namespace TLCGen.ViewModels
 
         #region Command functionality
 
-        private bool AddDetectorCommand_CanExecute()
+        private bool AddItemCommand_CanExecute()
         {
-            return SelectedDetectorToAdd != null;
+            return SelectedItemToAdd != null;
         }
 
-        private void AddDetectorCommand_Executed()
+        private void AddItemCommand_Executed()
         {
-            T1 d = _GetDetectorToAdd(SelectedDetectorToAdd);
-            DetectorenInCollection.Add(d);
-            SelectedDetector = d;
+            T1 d = _getItemToAdd(SelectedItemToAdd);
+            ItemsInCollection.Add(d);
+            SelectedItem = d;
             Refresh();
-            _AfterDetectorAddedAction?.Invoke();
+            _afterItemAddedAction?.Invoke();
         }
 
-        private bool RemoveDetectorCommand_CanExecute()
+        private bool RemoveItemCommand_CanExecute()
         {
-            return SelectedDetectorToRemove != null || _SelectedDetector != null;
+            return SelectedItemToRemove != null || _selectedItem != null;
         }
 
-        private void RemoveDetectorCommand_Executed()
+        private void RemoveItemCommand_Executed()
         {
-            if(_SelectedDetector != null)
+            if(_selectedItem != null)
             {
-                int i = DetectorenInCollection.IndexOf(_SelectedDetector);
-                DetectorenInCollection.Remove(_SelectedDetector);
-                if(i < (DetectorenInCollection.Count - 1))
+                int i = ItemsInCollection.IndexOf(_selectedItem);
+                ItemsInCollection.Remove(_selectedItem);
+                if(i < (ItemsInCollection.Count - 1))
                 {
-                    SelectedDetector = DetectorenInCollection[i];
+                    SelectedItem = ItemsInCollection[i];
                 }
-                else if (DetectorenInCollection.Count > 0)
+                else if (ItemsInCollection.Count > 0)
                 {
-                    SelectedDetector = DetectorenInCollection[DetectorenInCollection.Count - 1];
+                    SelectedItem = ItemsInCollection[ItemsInCollection.Count - 1];
                 }
                 else
                 {
-                    SelectedDetector = null;
+                    SelectedItem = null;
                 }
             }
-            else if (SelectedDetectorToRemove != null && _GetDetectorToRemove != null)
+            else if (SelectedItemToRemove != null && _getItemToRemove != null)
             {
-                T1 d = _GetDetectorToRemove(SelectedDetectorToRemove);
-                DetectorenInCollection.Remove(d);
+                T1 d = _getItemToRemove(SelectedItemToRemove);
+                ItemsInCollection.Remove(d);
             }
             Refresh();
-            _AfterDetectorRemovedAction?.Invoke();
+            _afterItemRemovedAction?.Invoke();
         }
 
         #endregion // Command functionality
@@ -149,37 +149,37 @@ namespace TLCGen.ViewModels
 
         private void Refresh()
         {
-            var sdta = SelectedDetectorToAdd;
-            SelectedDetectorToAdd = null;
-            var sdtr = SelectedDetectorToRemove;
-            SelectedDetectorToRemove = null;
+            var sdta = SelectedItemToAdd;
+            SelectedItemToAdd = null;
+            var sdtr = SelectedItemToRemove;
+            SelectedItemToRemove = null;
 
-            SelectableDetectoren.Clear();
-            foreach (var d in AllDetectoren)
+            SelectableItems.Clear();
+            foreach (var d in AllAvailableItems)
             {
-                if (_IsDetectorSelectable(d))
+                if (_isItemSelectable(d))
                 {
-                    SelectableDetectoren.Add(d);
+                    SelectableItems.Add(d);
                 }
             }
-            RemovableDetectoren.Clear();
-            foreach (var d in AllDetectoren)
+            RemovableItems.Clear();
+            foreach (var d in AllAvailableItems)
             {
-                if (!_IsDetectorSelectable(d))
+                if (!_isItemSelectable(d))
                 {
-                    RemovableDetectoren.Add(d);
+                    RemovableItems.Add(d);
                 }
             }
 
-            if(sdta != null && SelectableDetectoren.Contains(sdta))
-                SelectedDetectorToAdd = sdta;
-            else if (SelectableDetectoren.Count > 0)
-                SelectedDetectorToAdd = SelectableDetectoren[0];
+            if(sdta != null && SelectableItems.Contains(sdta))
+                SelectedItemToAdd = sdta;
+            else if (SelectableItems.Count > 0)
+                SelectedItemToAdd = SelectableItems[0];
 
-            if (sdtr != null && RemovableDetectoren.Contains(sdtr))
-                SelectedDetectorToRemove = sdtr;
-            else if (RemovableDetectoren.Count > 0)
-                SelectedDetectorToRemove = RemovableDetectoren[0];
+            if (sdtr != null && RemovableItems.Contains(sdtr))
+                SelectedItemToRemove = sdtr;
+            else if (RemovableItems.Count > 0)
+                SelectedItemToRemove = RemovableItems[0];
         }
 
         #endregion // Private Methods
@@ -187,43 +187,43 @@ namespace TLCGen.ViewModels
         #region Constructor
 
         /// <summary>
-        /// Wrapper class to support easy management of a list of specific detectors
+        /// Wrapper class to support easy management of a list of specific items
         /// belonging to an object. This situation occurs more often, which is why this
-        /// class automizes the process of adding and removing detectors to a given list.
-        /// The class is meant to be coupled with an instance of DetectorManagerView.
+        /// class automizes the process of adding and removing items to a given list.
+        /// The class is meant to be coupled with an instance of ItemsManagerView.
         /// The class allows for multiple scenarios.
         /// T1 = the type of class of items in the list to be managed
         /// T2 = the type of class of items in list(s) to be displayed to the user, to
-        /// allow selection of detectors to add (and remove if needed).
+        /// allow selection of items to add (and remove if needed).
         /// </summary>
-        /// <param name="detectoren">The actual list (T1) that is to be managed.</param>
-        /// <param name="alldetectoren">A list (T2) holding all detectors that could be added.</param>
-        /// <param name="getdetectortoaddfunc">A function that converts T2 to T1 and supplies a new instance of T1.</param>
-        /// <param name="isdetectorselectable">Predicate that indicates if an instance of T2 is selectable.
+        /// <param name="items">The actual list (T1) that is to be managed.</param>
+        /// <param name="allAvaiableItems">A list (T2) holding all items that could be added.</param>
+        /// <param name="getItemsToAddFunc">A function that converts T2 to T1 and supplies a new instance of T1.</param>
+        /// <param name="isItemSelectablePredicate">Predicate that indicates if an instance of T2 is selectable.
         /// It is presumed that if it is not selectable, it is in the managed list.</param>
-        /// <param name="getdetectortoremovefunc">Meant to be used instead of the property SelectedDetector: function to get the detector 
-        /// to remove, based on the selected item T2 from the RemovableDetectors list</param>
-        /// <param name="afterdetectoraddedaction">Things to do after adding a detector</param>
-        /// <param name="afterdetectorremovedaction">Things to do after removing a detector</param>
-        public DetectorManagerViewModel(
-            ObservableCollection<T1> detectoren,
-            List<T2> alldetectoren,
-            Func<T2, T1> getdetectortoaddfunc, 
-            Predicate<T2> isdetectorselectable,
-            Func<T2, T1> getdetectortoremovefunc = null,
-            Action afterdetectoraddedaction = null, 
-            Action afterdetectorremovedaction = null)
+        /// <param name="getItemtoRemoveFunc">Meant to be used instead of the property SelectedItem: function to get the detector 
+        /// to remove, based on the selected item T2 from the RemovableItems list</param>
+        /// <param name="afterItemAddedAction">Things to do after adding an item</param>
+        /// <param name="afterItemRemovedAction">Things to do after removing an item</param>
+        public ItemsManagerViewModel(
+            ObservableCollection<T1> items,
+            List<T2> allAvaiableItems,
+            Func<T2, T1> getItemsToAddFunc, 
+            Predicate<T2> isItemSelectablePredicate,
+            Func<T2, T1> getItemtoRemoveFunc = null,
+            Action afterItemAddedAction = null, 
+            Action afterItemRemovedAction = null)
         {
-            DetectorenInCollection = detectoren;
-            AllDetectoren = alldetectoren;
-            _GetDetectorToAdd = getdetectortoaddfunc;
-            _GetDetectorToRemove = getdetectortoremovefunc;
-            _IsDetectorSelectable = isdetectorselectable;
-            _AfterDetectorAddedAction = afterdetectoraddedaction;
-            _AfterDetectorRemovedAction = afterdetectorremovedaction;
+            ItemsInCollection = items;
+            AllAvailableItems = allAvaiableItems;
+            _getItemToAdd = getItemsToAddFunc;
+            _getItemToRemove = getItemtoRemoveFunc;
+            _isItemSelectable = isItemSelectablePredicate;
+            _afterItemAddedAction = afterItemAddedAction;
+            _afterItemRemovedAction = afterItemRemovedAction;
 
-            SelectableDetectoren = new ObservableCollection<T2>();
-            RemovableDetectoren = new ObservableCollection<T2>();
+            SelectableItems = new ObservableCollection<T2>();
+            RemovableItems = new ObservableCollection<T2>();
 
             Refresh();
         }

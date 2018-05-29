@@ -13,6 +13,7 @@
              d:DesignHeight="300" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModels:FaseCyclusViewModel}">
     <UserControl.Resources>
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
+        <BooleanToVisibilityConverter x:Key="Bool2VisConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -119,6 +120,25 @@
                         </StackPanel.Style>
                         <Label Content="Ontruimingstijd verschil" />
                         <TextBox Text="{Binding Path=MeeverlengenVerschil,TargetNullValue={x:Static sys:String.Empty}}" Margin="2" />
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Content="Hard meeverlengen met" />
+                        <ct:SpecialDataGrid ItemsSource="{Binding Path=HardMeeverlengenFaseCycli}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False"
+                                  AutoGenerateColumns="False" Visibility="{Binding Path=HasHardMeeverlengenFasen,Mode=OneWay,Converter={StaticResource Bool2VisConverter}}">
+                            <DataGrid.RowHeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.FaseCyclus}"/>
+                                </DataTemplate>
+                            </DataGrid.RowHeaderTemplate>
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:HardMeevelengenTypeEnum}}}"
+                                    SelectedValueBinding="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}" />
+                            </DataGrid.Columns>
+                        </ct:SpecialDataGrid>
+                        <local:ItemsManagerView DataContext="{Binding Path=HardMeeverlengenFasenManager}" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

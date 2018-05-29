@@ -50,7 +50,7 @@
                         <DataGridTextColumn Binding="{Binding Path=MeeaanvraagDetector}" IsReadOnly="True" Header="Detector" MinWidth="100" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" />
+                <local:ItemsManagerView DataContext="{Binding Path=DetectorManager}" />
             </StackPanel>
         </StackPanel>
     </Grid>

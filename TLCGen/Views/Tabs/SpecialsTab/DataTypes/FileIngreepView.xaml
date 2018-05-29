@@ -74,7 +74,7 @@
         <CheckBox IsChecked="{Binding Path=EerlijkDoseren}" Margin="5" Grid.Row="4" Grid.Column="1" />
         <DockPanel Grid.Row="5" Grid.ColumnSpan="2">
             <Label Content="File detectoren" DockPanel.Dock="Top" />
-            <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" DockPanel.Dock="Bottom"/>
+            <local:ItemsManagerView DataContext="{Binding Path=DetectorManager}" Caption="Detectoren" DockPanel.Dock="Bottom"/>
             <!--<StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                 <Label Content="File detector" />
                 <ComboBox ItemsSource="{Binding Path=SelectableDetectoren}" 

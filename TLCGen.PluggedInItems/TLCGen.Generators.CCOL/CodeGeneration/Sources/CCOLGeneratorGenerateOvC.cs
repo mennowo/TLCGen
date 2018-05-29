@@ -1106,9 +1106,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                 }
+                var done = new List<string>();
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.HasOVIngreepVecom()))
                 {
                     var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
+                    if (done.Any(x => x == m.RelatedInput1)) continue;
                     var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                     if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
                     {
@@ -1118,6 +1120,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
                     {
                         sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestdsilyn}], NG);");
+                    }
+                    if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                    {
+                        done.Add(m.RelatedInput1);
                     }
                 }
                 sb.AppendLine();

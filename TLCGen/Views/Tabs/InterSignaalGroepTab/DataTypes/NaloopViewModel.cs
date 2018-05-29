@@ -110,17 +110,17 @@ namespace TLCGen.ViewModels
 
         public NaloopDetectorModel SelectedDetector
         {
-            get => DetectorManager?.SelectedDetector;
+            get => DetectorManager?.SelectedItem;
             set
             {
                 if (DetectorManager == null) return;
-                DetectorManager.SelectedDetector = value;
+                DetectorManager.SelectedItem = value;
                 RaisePropertyChanged();
             }
         }
 
-        private DetectorManagerViewModel<NaloopDetectorModel, string> _detectorManager;
-        public DetectorManagerViewModel<NaloopDetectorModel, string> DetectorManager
+        private ItemsManagerViewModel<NaloopDetectorModel, string> _detectorManager;
+        public ItemsManagerViewModel<NaloopDetectorModel, string> DetectorManager
         {
             get
             {
@@ -132,7 +132,7 @@ namespace TLCGen.ViewModels
                                 Detectoren.
                                 Select(x => x.Naam).
                                 ToList();
-                    _detectorManager = new DetectorManagerViewModel<NaloopDetectorModel, string>(
+                    _detectorManager = new ItemsManagerViewModel<NaloopDetectorModel, string>(
                         Detectoren,
                         dets,
                         x => { var md = new NaloopDetectorModel { Detector = x }; return md; },

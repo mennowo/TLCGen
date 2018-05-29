@@ -25,20 +25,20 @@ namespace TLCGen.ViewModels
 
         public RoBuGroverFileDetectorViewModel SelectedFileDetector
         {
-            get { return FileDetectorManager.SelectedDetector; }
+            get { return FileDetectorManager.SelectedItem; }
             set
             {
-                FileDetectorManager.SelectedDetector = value;
+                FileDetectorManager.SelectedItem = value;
                 RaisePropertyChanged("SelectedFileDetector");
             }
         }
 
         public RoBuGroverHiaatDetectorViewModel SelectedHiaatDetector
         {
-            get { return HiaatDetectorManager.SelectedDetector; }
+            get { return HiaatDetectorManager.SelectedItem; }
             set
             {
-                HiaatDetectorManager.SelectedDetector = value;
+                HiaatDetectorManager.SelectedItem = value;
                 RaisePropertyChanged("SelectedHiaatDetector");
             }
         }
@@ -83,8 +83,8 @@ namespace TLCGen.ViewModels
             private set;
         }
 
-        private DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string> _FileDetectorManager;
-        public DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string> FileDetectorManager
+        private ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> _FileDetectorManager;
+        public ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string> FileDetectorManager
         {
             get
             {
@@ -97,7 +97,7 @@ namespace TLCGen.ViewModels
                             Detectoren.
                             Select(x => x.Naam).
                             ToList();
-                    _FileDetectorManager = new DetectorManagerViewModel<RoBuGroverFileDetectorViewModel, string>(
+                    _FileDetectorManager = new ItemsManagerViewModel<RoBuGroverFileDetectorViewModel, string>(
                         FileDetectoren,
                         dets,
                         (x) => 
@@ -113,13 +113,11 @@ namespace TLCGen.ViewModels
                         (x) => { return SelectedFileDetector; },
                         () => 
                         {
-                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                            RaisePropertyChanged("SelectedFileDetector");
+                            RaisePropertyChanged<object>(broadcast: true);
                         },
                         () => 
                         {
-                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-                            RaisePropertyChanged("SelectedFileDetector");
+                            RaisePropertyChanged<object>(broadcast: true);
                         }
                         );
                 }
@@ -127,8 +125,8 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> _HiaatDetectorManager;
-        public DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager
+        private ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> _HiaatDetectorManager;
+        public ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string> HiaatDetectorManager
         {
             get
             {
@@ -141,7 +139,7 @@ namespace TLCGen.ViewModels
                             Detectoren.
                             Select(x => x.Naam).
                             ToList();
-                    _HiaatDetectorManager = new DetectorManagerViewModel<RoBuGroverHiaatDetectorViewModel, string>(
+                    _HiaatDetectorManager = new ItemsManagerViewModel<RoBuGroverHiaatDetectorViewModel, string>(
                         HiaatDetectoren,
                         dets,
                         (x) =>

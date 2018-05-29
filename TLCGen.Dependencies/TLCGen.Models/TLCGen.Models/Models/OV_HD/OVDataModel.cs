@@ -30,6 +30,10 @@ namespace TLCGen.Models
         [IOElement("karog", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]
         public BitmapCoordinatenDataModel KAROnderGedragBitmapData { get; set; }
 
+        [Browsable(false)]
+        [IOElement("maxwt", BitmappedItemTypeEnum.Uitgang, null, "IsOVUitgebreid")]
+        public BitmapCoordinatenDataModel MaximaleWachttijdOverschredenBitmapData { get; set; }
+
         [XmlArrayItem(ElementName = "OVIngreep")]
         public List<OVIngreepModel> OVIngrepen { get; set; }
         [XmlArrayItem(ElementName = "HDIngreep")]
@@ -39,6 +43,10 @@ namespace TLCGen.Models
         [Browsable(false)]
         [HasDefault(false)]
         public bool HasAnyKAR => this.HasKAR();
+
+        [Browsable(false)]
+        [HasDefault(false)]
+        public bool IsOVUitgebreid => this.OVIngreepType == OVIngreepTypeEnum.Uitgebreid;
 
         #endregion // Properties
 
@@ -81,6 +89,7 @@ namespace TLCGen.Models
         {
             KARMeldingBitmapData = new BitmapCoordinatenDataModel();
             KAROnderGedragBitmapData = new BitmapCoordinatenDataModel();
+            MaximaleWachttijdOverschredenBitmapData = new BitmapCoordinatenDataModel();
             OVIngrepen = new List<OVIngreepModel>();
             HDIngrepen = new List<HDIngreepModel>();
             OVIngreepSignaalGroepParameters = new List<OVIngreepSignaalGroepParametersModel>();

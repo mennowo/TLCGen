@@ -54,6 +54,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
 
+        [XmlArrayItem(ElementName = "HardMeeverlengFaseCyclus")]
+        public List<HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli { get; set; }
+
         #endregion // Properties
 
         #region IComparable

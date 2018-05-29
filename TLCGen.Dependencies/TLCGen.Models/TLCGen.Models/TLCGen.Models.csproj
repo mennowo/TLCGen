@@ -109,6 +109,7 @@
     <Compile Include="Models\OV_HD\OVIngreepModel.cs" />
     <Compile Include="Models\OV_HD\OVIngreepSignaalGroepParametersModel.cs" />
     <Compile Include="Models\Perioden\PeriodeModel.cs" />
+    <Compile Include="Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
     <Compile Include="Models\Varia\PTPDataModel.cs" />
     <Compile Include="Models\Varia\PTPKoppelingModel.cs" />
     <Compile Include="Models\Varia\RichtingGevoeligeAanvraagModel.cs" />

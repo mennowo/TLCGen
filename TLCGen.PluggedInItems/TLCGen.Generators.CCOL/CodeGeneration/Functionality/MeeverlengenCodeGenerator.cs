@@ -69,6 +69,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCMeeverlengen:
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT1;  /* reset BIT-sturing */");
                     sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
@@ -106,18 +107,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
                         {
+                            var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                            if (fm != null)
                             {
-                                var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
-                                if (fm != null)
+                                if (!file)
                                 {
-                                    if (!file)
-                                    {
-                                        file = true;
-                                        sb.AppendLine();
-                                        sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file */");
-                                    }
-                                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
+                                    file = true;
+                                    sb.AppendLine();
+                                    sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file */");
                                 }
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
+                            }
+                        }
+                    }
+                    var hard = false;
+                    foreach (FaseCyclusModel fcm in c.Fasen)
+                    {
+                        if (fcm.HardMeeverlengenFaseCycli.Any())
+                        {
+                            if (!hard)
+                            {
+                                hard = true;
+                                sb.AppendLine();
+                                sb.AppendLine($"{ts}/* Hard meeverlengen */");
+                            }
+                            foreach(var mvfc in fcm.HardMeeverlengenFaseCycli)
+                            {
+                                sb.Append($"{ts}if (");
+                                switch (mvfc.Type)
+                                {
+                                    case HardMeevelengenTypeEnum.Groen:
+                                        sb.Append($"G[{_fcpf}{mvfc.FaseCyclus}]");
+                                        break;
+                                    case HardMeevelengenTypeEnum.CyclischVerlengGroen:
+                                        sb.Append($"CV[{_fcpf}{mvfc.FaseCyclus}]");
+                                        break;
+                                    case HardMeevelengenTypeEnum.CyclischVerlengGroenEnGroen:
+                                        sb.Append($"(CV[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
+                                        break;
+                                }
+                                sb.AppendLine($" && !kcv({_fcpf}{mvfc.FaseCyclus})) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
                             }
                         }
                     }

@@ -1476,27 +1476,33 @@
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang verklikken inmelding OV</Description>
+            <Description>Verklikken inmelding OV</Description>
           </Setting>
           <Setting>
             <Default>hdinm</Default>
             <Setting>hdinm</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang verklikken inmelding HD</Description>
+            <Description>Verklikken inmelding HD</Description>
           </Setting>
           <Setting>
             <Default>karmelding</Default>
             <Setting>karmelding</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang verklikken ontvangst melding KAR</Description>
+            <Description>Verklikken ontvangst melding KAR</Description>
           </Setting>
           <Setting>
             <Default>karog</Default>
             <Setting>karog</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang verklikken ondergedrag KAR</Description>
+            <Description>Verklikken ondergedrag KAR</Description>
           </Setting>
-        <Setting>
+          <Setting>
+            <Default>maxwt</Default>
+            <Setting>maxwt</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken maximale wachttijd overschreden</Description>
+          </Setting>
+          <Setting>
             <Default>karmelding</Default>
             <Setting>karmelding</Setting>
             <Type>Timer</Type>

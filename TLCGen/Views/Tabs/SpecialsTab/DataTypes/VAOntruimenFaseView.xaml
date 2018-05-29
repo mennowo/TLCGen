@@ -129,6 +129,6 @@
             PreviewKeyDown="VaOntruimenGrid_PreviewKeyDown"
             CellEditEnding="VaOntruimenGrid_CellEditEnding"
             BeginningEdit="VaOntruimenGrid_BeginningEdit"/>
-        <local:DetectorManagerView DataContext="{Binding Path=DetectorManager}" RemovableDetectorsVisibility="Visible" Grid.Row="3" />
+        <local:ItemsManagerView DataContext="{Binding Path=DetectorManager}" RemovableItemsVisibility="Visible" Grid.Row="3" />
     </Grid>
 </UserControl>

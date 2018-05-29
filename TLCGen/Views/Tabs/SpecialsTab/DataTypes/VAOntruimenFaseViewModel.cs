@@ -247,9 +247,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        private DetectorManagerViewModel<VAOntruimenDetectorViewModel, string> _DetectorManager;
+        private ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> _DetectorManager;
 
-        public DetectorManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
+        public ItemsManagerViewModel<VAOntruimenDetectorViewModel, string> DetectorManager
         {
             get
             {
@@ -260,7 +260,7 @@ namespace TLCGen.ViewModels
                             GetAllDetectors().
                             Select(x => x.Naam).
                             ToList();
-                    _DetectorManager = new DetectorManagerViewModel<VAOntruimenDetectorViewModel, string>(
+                    _DetectorManager = new ItemsManagerViewModel<VAOntruimenDetectorViewModel, string>(
                         VAOntruimenDetectoren,
                         dets,
                         (x) =>

@@ -53,10 +53,10 @@ namespace TLCGen.ViewModels
 
         public RatelTikkerDetectorViewModel SelectedDetector
         {
-            get { return DetectorManager.SelectedDetector; }
+            get { return DetectorManager.SelectedItem; }
             set
             {
-                DetectorManager.SelectedDetector = value;
+                DetectorManager.SelectedItem = value;
                 RaisePropertyChanged("SelectedDetector");
             }
         }
@@ -68,8 +68,8 @@ namespace TLCGen.ViewModels
         }
 
 
-        private DetectorManagerViewModel<RatelTikkerDetectorViewModel, string> _DetectorManager;
-        public DetectorManagerViewModel<RatelTikkerDetectorViewModel, string> DetectorManager
+        private ItemsManagerViewModel<RatelTikkerDetectorViewModel, string> _DetectorManager;
+        public ItemsManagerViewModel<RatelTikkerDetectorViewModel, string> DetectorManager
         {
             get
             {
@@ -83,7 +83,7 @@ namespace TLCGen.ViewModels
                                         x.Type == DetectorTypeEnum.KnopBuiten)
                             .Select(x => x.Naam).
                             ToList();
-                    _DetectorManager = new DetectorManagerViewModel<RatelTikkerDetectorViewModel, string>(
+                    _DetectorManager = new ItemsManagerViewModel<RatelTikkerDetectorViewModel, string>(
                         Detectoren as ObservableCollection<RatelTikkerDetectorViewModel>,
                         dets,
                         (x) => { var rtd = new RatelTikkerDetectorViewModel(new RatelTikkerDetectorModel { Detector = x }); return rtd; },

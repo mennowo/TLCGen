@@ -18,26 +18,22 @@ namespace TLCGen.Views
     /// <summary>
     /// Interaction logic for DetectorManagerView.xaml
     /// </summary>
-    public partial class DetectorManagerView : UserControl
+    public partial class ItemsManagerView : UserControl
     {
-        public DetectorManagerView()
+        public ItemsManagerView()
         {
             InitializeComponent();
         }
 
-
-
-        public Visibility RemovableDetectorsVisibility
+        public Visibility RemovableItemsVisibility
         {
-            get { return (Visibility)GetValue(RemovableDetectorsVisibilityProperty); }
-            set { SetValue(RemovableDetectorsVisibilityProperty, value); }
+            get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }
+            set { SetValue(RemovableItemsVisibilityProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for RemovableDetectorsVisibility.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty RemovableDetectorsVisibilityProperty =
-            DependencyProperty.Register("RemovableDetectorsVisibility", typeof(Visibility), typeof(DetectorManagerView), new PropertyMetadata(Visibility.Collapsed));
-
-
+        public static readonly DependencyProperty RemovableItemsVisibilityProperty =
+            DependencyProperty.Register("RemovableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
 
         public string Caption
         {
@@ -47,9 +43,7 @@ namespace TLCGen.Views
 
         // Using a DependencyProperty as the backing store for Caption.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CaptionProperty =
-            DependencyProperty.Register("Caption", typeof(string), typeof(DetectorManagerView), new PropertyMetadata("Detectoren"));
-
-
+            DependencyProperty.Register("Caption", typeof(string), typeof(ItemsManagerView), new PropertyMetadata("Items"));
 
         public bool ShowCaption
         {
@@ -59,8 +53,7 @@ namespace TLCGen.Views
 
         // Using a DependencyProperty as the backing store for ShowCaption.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowCaptionProperty =
-            DependencyProperty.Register("ShowCaption", typeof(bool), typeof(DetectorManagerView), new PropertyMetadata(true));
-
+            DependencyProperty.Register("ShowCaption", typeof(bool), typeof(ItemsManagerView), new PropertyMetadata(true));
 
     }
 }

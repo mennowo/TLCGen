@@ -77,6 +77,10 @@ namespace TLCGen.ViewModels
                 }
                 Fasen.Add(fcvm);
             }
+            if(SelectedFaseCyclus == null && Fasen.Any())
+            {
+                SelectedFaseCyclus = Fasen[0];
+            }
         }
 
         #endregion // TabItem Overrides

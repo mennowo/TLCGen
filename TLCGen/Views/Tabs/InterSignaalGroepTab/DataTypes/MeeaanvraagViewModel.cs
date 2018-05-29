@@ -78,15 +78,15 @@ namespace TLCGen.ViewModels
 			            case FaseTypeEnum.OV:
 				            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop))
 				            {
-					            DetectorManager.SelectedDetectorToAdd = d.Naam;
-								DetectorManager.AddDetectorCommand.Execute(null);
+					            DetectorManager.SelectedItemToAdd = d.Naam;
+								DetectorManager.AddItemCommand.Execute(null);
 							}
 				            break;
 			            case FaseTypeEnum.Voetganger:
 				            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.KnopBuiten))
 				            {
-								DetectorManager.SelectedDetectorToAdd = d.Naam;
-					            DetectorManager.AddDetectorCommand.Execute(null);
+								DetectorManager.SelectedItemToAdd = d.Naam;
+					            DetectorManager.AddItemCommand.Execute(null);
 							}
 							break;
 			            default:
@@ -131,19 +131,19 @@ namespace TLCGen.ViewModels
         
         public MeeaanvraagDetectorModel SelectedDetector
         {
-            get => DetectorManager?.SelectedDetector;
+            get => DetectorManager?.SelectedItem;
 	        set
             {
                 if (DetectorManager != null)
                 {
-                    DetectorManager.SelectedDetector = value;
+                    DetectorManager.SelectedItem = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        private DetectorManagerViewModel<MeeaanvraagDetectorModel, string> _DetectorManager;
-        public DetectorManagerViewModel<MeeaanvraagDetectorModel, string> DetectorManager
+        private ItemsManagerViewModel<MeeaanvraagDetectorModel, string> _DetectorManager;
+        public ItemsManagerViewModel<MeeaanvraagDetectorModel, string> DetectorManager
         {
             get
             {
@@ -155,7 +155,7 @@ namespace TLCGen.ViewModels
                             Detectoren.
                             Select(x => x.Naam).
                             ToList();
-                    _DetectorManager = new DetectorManagerViewModel<MeeaanvraagDetectorModel, string>(
+                    _DetectorManager = new ItemsManagerViewModel<MeeaanvraagDetectorModel, string>(
                         Detectoren,
                         dets,
                         x => { var md = new MeeaanvraagDetectorModel() { MeeaanvraagDetector = x }; return md; },

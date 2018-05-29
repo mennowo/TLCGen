@@ -106,7 +106,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <local:DetectorManagerView DataContext="{Binding Path=SelectedRatelTikker.DetectorManager}" Grid.Row="2" />
+                <local:ItemsManagerView DataContext="{Binding Path=SelectedRatelTikker.DetectorManager}" Grid.Row="2" />
                 <!--<StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2">
                     <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerDetectoren}" 
                               SelectedValue="{Binding Path=SelectedRatelTikkerDetectorToAdd,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />

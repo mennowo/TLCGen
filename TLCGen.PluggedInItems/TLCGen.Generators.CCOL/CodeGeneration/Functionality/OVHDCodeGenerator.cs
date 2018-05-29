@@ -67,6 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmohpmg;
         private CCOLGeneratorCodeStringSettingModel _schcheckdstype;
         private CCOLGeneratorCodeStringSettingModel _uskarog;
+        private CCOLGeneratorCodeStringSettingModel _usmaxwt;
         private CCOLGeneratorCodeStringSettingModel _uskarmelding;
         private CCOLGeneratorCodeStringSettingModel _tkarog;
         private CCOLGeneratorCodeStringSettingModel _tkarmelding;
@@ -215,8 +216,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarmelding}", _uskarmelding));
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uskarog}", _uskarog));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usmaxwt}", _usmaxwt));
                     _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KARMeldingBitmapData, $"{_uspf}{_uskarmelding}"));
                     _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.KAROnderGedragBitmapData, $"{_uspf}{_uskarog}"));
+                    _MyBitmapOutputs.Add(new CCOLIOElement(c.OVData.MaximaleWachttijdOverschredenBitmapData, $"{_uspf}{_usmaxwt}"));
 
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarmelding}", 15, CCOLElementTimeTypeEnum.TE_type, _tkarmelding));
                     _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tkarog}", 1440, CCOLElementTimeTypeEnum.TM_type, _tkarog));
@@ -701,6 +704,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
+                        sb.AppendLine();
+                    }
+                    if(c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+                    {
+                        sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usmaxwt}] = iMaximumWachtTijdOverschreden;");
                         sb.AppendLine();
                     }
                     return sb.ToString();

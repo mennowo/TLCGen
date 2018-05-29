@@ -86,10 +86,10 @@ namespace TLCGen.ViewModels
 
         public FileIngreepDetectorViewModel SelectedFileDetector
         {
-            get { return DetectorManager.SelectedDetector; }
+            get { return DetectorManager.SelectedItem; }
             set
             {
-                DetectorManager.SelectedDetector = value;
+                DetectorManager.SelectedItem = value;
                 RaisePropertyChanged("SelectedFileDetector");
             }
         }
@@ -198,8 +198,8 @@ namespace TLCGen.ViewModels
             get { return _FileIngreep.FileDetectoren.Count; }
         }
 
-        private DetectorManagerViewModel<FileIngreepDetectorViewModel, string> _DetectorManager;
-        public DetectorManagerViewModel<FileIngreepDetectorViewModel, string> DetectorManager
+        private ItemsManagerViewModel<FileIngreepDetectorViewModel, string> _DetectorManager;
+        public ItemsManagerViewModel<FileIngreepDetectorViewModel, string> DetectorManager
         {
             get
             {
@@ -215,7 +215,7 @@ namespace TLCGen.ViewModels
                             .Where(x => x.Type == DetectorTypeEnum.File)
                             .Select(x => x.Naam);
                     var dets = dets1.Concat(dets2).ToList();
-                    _DetectorManager = new DetectorManagerViewModel<FileIngreepDetectorViewModel, string>(
+                    _DetectorManager = new ItemsManagerViewModel<FileIngreepDetectorViewModel, string>(
                         FileDetectoren as ObservableCollection<FileIngreepDetectorViewModel>,
                         dets,
                         (x) => { var fd = new FileIngreepDetectorViewModel(new FileIngreepDetectorModel { Detector = x }); return fd; },

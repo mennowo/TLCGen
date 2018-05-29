@@ -118,6 +118,7 @@
     <Compile Include="Views\Tabs\AlgemeenTab\Tabs\VLOGSettingsTabViewModel.cs">
       <DependentUpon>VLOGSettingsTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\FasenTab\DataTypes\HardMeeverlengenFaseCyclusViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingenDataViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepInUitMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml.cs">
