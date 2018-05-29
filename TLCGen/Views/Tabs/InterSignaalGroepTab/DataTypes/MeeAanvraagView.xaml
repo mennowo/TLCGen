@@ -29,6 +29,10 @@
             <ComboBox 
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:MeeaanvraagTypeEnum}}}"
                     SelectedItem="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Toepassen:" />
+            <ComboBox 
+                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:AltijdAanUitEnum}}}"
+                    SelectedItem="{Binding Path=AanUit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <CheckBox Content="Type meeaanvraag instelbaar op straat" 
                       IsChecked="{Binding Path=TypeInstelbaarOpStraat}" Margin="5" />
             <CheckBox Content="Detectie afhankelijk" 

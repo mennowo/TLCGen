@@ -11,6 +11,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.ViewModels.Enums;
 using System.Windows.Media;
+using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {

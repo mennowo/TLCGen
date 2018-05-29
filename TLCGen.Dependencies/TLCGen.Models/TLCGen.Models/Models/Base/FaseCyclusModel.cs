@@ -82,6 +82,7 @@ namespace TLCGen.Models
         public FaseCyclusModel() : base()
         {
             Detectoren = new List<DetectorModel>();
+            HardMeeverlengenFaseCycli = new List<HardMeeverlengenFaseCyclusModel>();
             AantalRijstroken = 1;
         }
 

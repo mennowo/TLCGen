@@ -41,6 +41,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public AltijdAanUitEnum AanUit
+        {
+            get => _Meeaanvraag.AanUit;
+            set
+            {
+                _Meeaanvraag.AanUit = value;
+                RaisePropertyChanged<object>(nameof(AanUit), broadcast: true);
+            }
+        }
+
         public bool TypeInstelbaarOpStraat
         {
             get => _Meeaanvraag.TypeInstelbaarOpStraat;

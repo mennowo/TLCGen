@@ -99,8 +99,8 @@ namespace TLCGen.ModelManagement
             var v = Version.Parse(string.IsNullOrWhiteSpace(controller.Data.TLCGenVersie) ? "0.0.0.0" : controller.Data.TLCGenVersie);
             
             // In version 0.2.2.0, the OVIngreepModel object was changed
-            var v0220 = Version.Parse("0.2.2.0");
-            if(v < v0220)
+            var checkVer = Version.Parse("0.2.2.0");
+            if(v < checkVer)
             {
                 bool vecom = false;
                 foreach (var ov in controller.OVData.OVIngrepen)
@@ -136,9 +136,9 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            // In version 0.2.3.0, handling of segments was altered
-            v0220 = Version.Parse("0.2.3.0");
-            if(v < v0220)
+            // In version 0.2.3.0, handling of segments was altered.
+            checkVer = Version.Parse("0.2.3.0");
+            if(v < checkVer)
             {
                 foreach (var s in controller.Data.SegmentenDisplayBitmapData)
                 {

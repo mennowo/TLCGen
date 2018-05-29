@@ -12,15 +12,14 @@ namespace TLCGen.Models
     [RefersTo("FaseVan", "FaseNaar")]
     public class MeeaanvraagModel : IInterSignaalGroepElement
     {
-        #region Fields
-
-        #endregion // Fields
-
         #region Properties
 
+        [HasDefault(false)]
         public string FaseVan { get; set; }
+        [HasDefault(false)]
         public string FaseNaar { get; set; }
         public MeeaanvraagTypeEnum Type { get; set; }
+        public AltijdAanUitEnum AanUit { get; set; }
         public bool TypeInstelbaarOpStraat { get; set; }
         public bool DetectieAfhankelijk { get; set; }
         public bool Uitgesteld { get; set; }

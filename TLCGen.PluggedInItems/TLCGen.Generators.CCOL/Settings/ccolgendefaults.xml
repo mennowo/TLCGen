@@ -636,6 +636,12 @@
         <Description>Meeaanvragen</Description>
         <Settings>
           <Setting>
+            <Default>ma</Default>
+            <Setting>ma</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Meeaanvraag van _E1_ naar _E2_ actief</Description>
+          </Setting>
+          <Setting>
             <Default>mad</Default>
             <Setting>mad</Setting>
             <Type>HulpElement</Type>

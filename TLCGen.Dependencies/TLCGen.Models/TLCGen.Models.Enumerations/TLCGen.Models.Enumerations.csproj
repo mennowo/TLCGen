@@ -51,6 +51,7 @@
     <Compile Include="InUit\OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum.cs" />
     <Compile Include="InUit\OVIngreepInUitMeldingVoorwaardeInputTypeEnum.cs" />
     <Compile Include="InUit\OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.cs" />
+    <Compile Include="AltijdAanUitEnum.cs" />
     <Compile Include="SelectieveDetectorTypeEnum.cs" />
     <Compile Include="GroentijdenTypeEnum.cs" />
     <Compile Include="DetectorAanvraagTypeEnum.cs" />
