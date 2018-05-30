@@ -180,6 +180,11 @@ namespace TLCGen.ViewModels
                 SelectedItemToRemove = sdtr;
             else if (RemovableItems.Count > 0)
                 SelectedItemToRemove = RemovableItems[0];
+
+            if(SelectedItem == null && ItemsInCollection.Any())
+            {
+                SelectedItem = ItemsInCollection[0];
+            }
         }
 
         #endregion // Private Methods

@@ -68,8 +68,11 @@ namespace TLCGen.ViewModels
             get { return _Controller?.PeriodenData.DefaultPeriodeGroentijdenSet; }
             set
             {
-                _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
-                RaisePropertyChanged<object>(nameof(DefaultPeriodeGroentijdenSet), null, null, true);
+                if (value != null)
+                {
+                    _Controller.PeriodenData.DefaultPeriodeGroentijdenSet = value;
+                    RaisePropertyChanged<object>(nameof(DefaultPeriodeGroentijdenSet), null, null, true);
+                }
             }
         }
 
@@ -374,7 +377,9 @@ namespace TLCGen.ViewModels
         private void OnPeriodenChanged(PeriodenChangedMessage message)
         {
             var sel = SelectedPeriode;
+            Periodes.CollectionChanged -= Periodes_CollectionChanged;
             Periodes.Rebuild();
+            Periodes.CollectionChanged += Periodes_CollectionChanged;
             if (sel != null)
             {
                 foreach (var p in Periodes)

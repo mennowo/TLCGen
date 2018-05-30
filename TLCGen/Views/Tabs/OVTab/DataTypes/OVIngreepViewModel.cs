@@ -495,11 +495,11 @@ namespace TLCGen.ViewModels
 
             if (!string.IsNullOrWhiteSpace(sd1) && Detectoren.Contains(sd1))
             {
-                Koplus = sd1;
+                _OVIngreep.Koplus = sd1;
+                RaisePropertyChanged(nameof(Koplus));
             }
             else
             {
-                _OVIngreep.Koplus = "NG";
                 RaisePropertyChanged(nameof(Koplus));
             }
         }

@@ -160,33 +160,22 @@ namespace TLCGen.ViewModels
         {
             DummyDetectoren.Clear();
 
-    ////        foreach (var ov in Controller.OVData.OVIngrepen)
-    ////        {
-    ////            if (ov.HasOVIngreepKAR())
-    ////            {
-    ////                var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.KAR);
-    ////                if (m.Inmelding)
-    ////                {
-    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
-    ////                }
-    ////                if (m.Uitmelding)
-    ////                {
-    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
-    ////                }
-    ////            }
-    ////            if (ov.HasOVIngreepVecom())
-    ////            {
-    ////                var m = ov.Meldingen.First(x => x.Type == Models.Enumerations.OVIngreepMeldingTypeEnum.VECOM);
-    ////                if (m.Inmelding)
-    ////                {
-    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomInmelding) { FaseCyclus = ov.FaseCyclus });
-    ////                }
-    ////                if (m.Uitmelding)
-    ////                {
-    ////                    DummyDetectoren.Add(new DetectorViewModel(ov.DummyVecomUitmelding) { FaseCyclus = ov.FaseCyclus });
-    ////                }
-    ////            }
-    ////        }
+            foreach (var ov in Controller.OVData.OVIngrepen)
+            {
+                if (ov.HasOVIngreepKAR())
+                {
+                    var m = ov.MeldingenData.Inmeldingen.First(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    if (m != null)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
+                    m = ov.MeldingenData.Uitmeldingen.First(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    if (m != null)
+                    {
+                        DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
+                    }
+                }
+            }
             foreach (var hd in Controller.OVData.HDIngrepen)
             {
                 if (hd.KAR)

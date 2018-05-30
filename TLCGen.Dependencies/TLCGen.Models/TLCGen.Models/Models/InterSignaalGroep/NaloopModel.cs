@@ -12,10 +12,6 @@ namespace TLCGen.Models
     [RefersTo("FaseVan", "FaseNaar")]
     public class NaloopModel : IInterSignaalGroepElement
     {
-        #region Fields
-
-        #endregion // Fields
-
         #region Properties
 
         public string FaseVan { get; set; }

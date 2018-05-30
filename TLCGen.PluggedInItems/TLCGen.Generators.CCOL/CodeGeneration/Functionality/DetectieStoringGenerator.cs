@@ -126,13 +126,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     for (int str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.All(x => x.Rijstrook != str)) continue;
+                        if (fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen).All(x => x.Rijstrook != str)) continue;
 
                         int det = 0;
                         if (str > 1)
                         {
                             sb.AppendLine(" ||");
                         }
+                        var ds = new List<string>();
                         foreach (var d in fc.Detectoren)
                         {
                             if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
@@ -143,21 +144,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (det > 1)
                                 {
                                     sb.AppendLine(" &&");
-                                    sb.Append($"{pre}((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
+                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
                                 }
                                 else
                                 {
                                     sb.Append(str > 1
-                                        ? $"{pre}((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))"
-                                        : $"((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
+                                        ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
+                                        : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
                                 }
+                                ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                             }
                         }
+                        sb.Append(" && !(");
+                        det = 0;
+                        foreach(var d in ds)
+                        {
+                            if (det > 0) sb.Append(" && ");
+                            sb.Append(d + " == 0");
+                            det++;
+                        }
+                        sb.Append(")");
                     }
                 }
                 else
                 {
                     var det = 0;
+                    var ds = new List<string>();
                     foreach (var d in fc.Detectoren)
                     {
                         if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
@@ -166,13 +178,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (det > 1)
                         {
                             sb.AppendLine(" &&");
-                            sb.Append($"{pre}((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
+                            sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
                         }
                         else
                         {
-                            sb.Append($"((CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING) && (PRM[{_prmpf}{_prmda}{d.Naam}] > 0))");
+                            sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
                         }
+                        ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                     }
+                    sb.Append(" && !(");
+                    det = 0;
+                    foreach (var d in ds)
+                    {
+                        if (det > 0) sb.Append(" && ");
+                        sb.Append(d + " == 0");
+                        det++;
+                    }
+                    sb.AppendLine(")");
                 }
                 sb.AppendLine(";");
             }
@@ -228,7 +250,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.Append($"{ts}if (");
                     for (var str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.All(x => x.Rijstrook != str)) continue;
+                        if (fc.Detectoren.Where(x => !x.IsDrukKnop()).All(x => x.Rijstrook != str)) continue;
 
                         var det = 0;
                         if (str > 1)

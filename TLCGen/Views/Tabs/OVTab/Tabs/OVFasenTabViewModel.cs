@@ -176,7 +176,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedHDIngreep = value;
-                RaisePropertyChanged("SelectedHDIngreep");
+                RaisePropertyChanged();
             }
         }
 

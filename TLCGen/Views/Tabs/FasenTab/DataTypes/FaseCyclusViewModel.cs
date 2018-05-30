@@ -28,6 +28,9 @@ namespace TLCGen.ViewModels
         private ObservableCollection<string> _meeverlengenOpties;
         private List<string> _controllerFasen;
         private string _meeverlengenTypeString;
+        private ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string> _hardMeeverlengenFasenManager;
+        private HardMeeverlengenFaseCyclusViewModel _selectedHardMeeverlengenFase;
+
         #endregion // Fields
 
         #region Properties
@@ -49,7 +52,7 @@ namespace TLCGen.ViewModels
                         // set new type
                         this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
 
-                        foreach(var d in FaseCyclus.Detectoren)
+                        foreach (var d in FaseCyclus.Detectoren)
                         {
                             string nd = d.Naam.Replace(oldname, value);
                             if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, nd))
@@ -85,8 +88,8 @@ namespace TLCGen.ViewModels
 
                     // Apply new defaults
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
-                    
-                    if(value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
+
+                    if (value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
                     {
                         MeeverlengenType = MeeVerlengenTypeEnum.Default;
                     }
@@ -297,7 +300,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(UitgesteldeVasteAanvraag), broadcast: true);
             }
         }
-        
+
         public int UitgesteldeVasteAanvraagTijdsDuur
         {
             get => _faseCyclus.UitgesteldeVasteAanvraagTijdsduur;
@@ -316,7 +319,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.HiaatKoplusBijDetectieStoring = value;
-                if(value && !VervangendHiaatKoplus.HasValue)
+                if (value && !VervangendHiaatKoplus.HasValue)
                 {
                     VervangendHiaatKoplus = 25;
                 }
@@ -342,7 +345,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.PercentageGroenBijDetectieStoring = value;
-                if(!PercentageGroenBijStoring.HasValue)
+                if (!PercentageGroenBijStoring.HasValue)
                 {
                     PercentageGroenBijStoring = 65;
                 }
@@ -438,7 +441,17 @@ namespace TLCGen.ViewModels
             get => _hardMeeverlengenFaseCycli ?? (_hardMeeverlengenFaseCycli = new ObservableCollectionAroundList<HardMeeverlengenFaseCyclusViewModel, HardMeeverlengenFaseCyclusModel>(FaseCyclus.HardMeeverlengenFaseCycli));
         }
 
-        private ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string> _hardMeeverlengenFasenManager;
+        public HardMeeverlengenFaseCyclusViewModel SelectedHardMeeverlengenFase
+        {
+            get => _selectedHardMeeverlengenFase;
+            set
+            {
+                _selectedHardMeeverlengenFase = value;
+                HardMeeverlengenFasenManager.SelectedItem = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ItemsManagerViewModel<HardMeeverlengenFaseCyclusViewModel, string> HardMeeverlengenFasenManager
         {
             get => _hardMeeverlengenFasenManager ?? (
@@ -446,18 +459,19 @@ namespace TLCGen.ViewModels
                     HardMeeverlengenFaseCycli,
                     _controllerFasen,
                     (e) => { return new HardMeeverlengenFaseCyclusViewModel(new HardMeeverlengenFaseCyclusModel() { FaseCyclus = e }); },
-                    (e) => {
+                    (e) =>
+                    {
                         return e != Naam &&
                                !TLCGenControllerChecker.IsFasenConflicting(DataAccess.TLCGenControllerDataProvider.Default.Controller, Naam, e) &&
                                HardMeeverlengenFaseCycli.All(x => x.FaseCyclus != e);
                     },
                     null,
-                    () => 
+                    () =>
                     {
                         RaisePropertyChanged<object>(broadcast: true);
                         RaisePropertyChanged("HasHardMeeverlengenFasen");
                     },
-                    () => 
+                    () =>
                     {
                         RaisePropertyChanged<object>(broadcast: true);
                         RaisePropertyChanged("HasHardMeeverlengenFasen");
@@ -467,14 +481,14 @@ namespace TLCGen.ViewModels
         public bool HasHardMeeverlengenFasen => HardMeeverlengenFaseCycli.Any();
 
         public ObservableCollection<string> MeeverlengenOpties => _meeverlengenOpties ?? (_meeverlengenOpties = new ObservableCollection<string>());
-        
+
         public string MeeverlengenTypeString
         {
             get => _meeverlengenTypeString;
             set
             {
                 _meeverlengenTypeString = value;
-                if(value == MeeVerlengenTypeEnum.Default.GetDescription())
+                if (value == MeeVerlengenTypeEnum.Default.GetDescription())
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.Default;
                 }
@@ -515,7 +529,7 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-	        if (!(obj is FaseCyclusViewModel fcvm))
+            if (!(obj is FaseCyclusViewModel fcvm))
                 throw new InvalidCastException();
             else
             {
@@ -566,7 +580,7 @@ namespace TLCGen.ViewModels
         {
             _hardMeeverlengenFasenManager = null;
             _controllerFasen = new List<string>();
-            foreach(var fc in TLCGenControllerDataProvider.Default.Controller.Fasen)
+            foreach (var fc in TLCGenControllerDataProvider.Default.Controller.Fasen)
             {
                 _controllerFasen.Add(fc.Naam);
             }

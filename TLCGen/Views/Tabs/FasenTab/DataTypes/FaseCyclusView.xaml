@@ -10,7 +10,7 @@
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:viewModels="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="500" d:DataContext="{d:DesignInstance viewModels:FaseCyclusViewModel}">
+             d:DataContext="{d:DesignInstance viewModels:FaseCyclusViewModel}">
     <UserControl.Resources>
         <local:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter" />
         <BooleanToVisibilityConverter x:Key="Bool2VisConverter" />
@@ -124,7 +124,9 @@
                     <StackPanel>
                         <Label Content="Hard meeverlengen met" />
                         <ct:SpecialDataGrid ItemsSource="{Binding Path=HardMeeverlengenFaseCycli}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False"
-                                  AutoGenerateColumns="False" Visibility="{Binding Path=HasHardMeeverlengenFasen,Mode=OneWay,Converter={StaticResource Bool2VisConverter}}">
+                                  AutoGenerateColumns="False" 
+                                            SelectedItem="{Binding SelectedHardMeeverlengenFase,UpdateSourceTrigger=PropertyChanged}"
+                                            Visibility="{Binding Path=HasHardMeeverlengenFasen,Mode=OneWay,Converter={StaticResource Bool2VisConverter}}">
                             <DataGrid.RowHeaderTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
