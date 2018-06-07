@@ -231,7 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()))
                 {
-                    var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 0, CCOLElementTimeTypeEnum.None, _prmtestdsivert);
+                    var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 120, CCOLElementTimeTypeEnum.None, _prmtestdsivert);
                     var prmtest2 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsilyn}", 0, CCOLElementTimeTypeEnum.None, _prmtestdsilyn);
                     prmtest1.Dummy = true;
                     prmtest2.Dummy = true;

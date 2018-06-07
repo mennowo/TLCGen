@@ -52,10 +52,10 @@ bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201,
 }
 
 /* Bijhouden stiptheid inkomende KAR berichten */
-void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat)
+void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count hov, int grensvroeg, int grenslaat)
 {
 	/* reset alles */
-	if (EC[cvc])
+	if (EH[hov])
 	{
 		int i = 0;
 		*iAantInm = 0;

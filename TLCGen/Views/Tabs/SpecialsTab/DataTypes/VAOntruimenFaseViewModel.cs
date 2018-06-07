@@ -36,12 +36,13 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged();
             }
         }
-        public int VAOntrTijdensRood
+
+        public int VAOntrMax
         {
-            get { return _VAOntruimenFase.VAOntrTijdensRood; }
+            get { return _VAOntruimenFase.VAOntrMax; }
             set
             {
-                _VAOntruimenFase.VAOntrTijdensRood = value;
+                _VAOntruimenFase.VAOntrMax = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

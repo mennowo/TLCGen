@@ -128,7 +128,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any())
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
-                sb.AppendLine($"{ts}#include \"syncfunc.c\"");
             }
 
 	        if (controller.HalfstarData.IsHalfstar)

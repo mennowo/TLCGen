@@ -13,7 +13,7 @@ namespace TLCGen.Models
     public class VAOntruimenFaseModel
     {
         public string FaseCyclus { get; set; }
-        public int VAOntrTijdensRood { get; set; }
+        public int VAOntrMax { get; set; }
         public bool KijkNaarWisselstand { get; set; }
         public OVIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
         public string Wissel1Input { get; set; }

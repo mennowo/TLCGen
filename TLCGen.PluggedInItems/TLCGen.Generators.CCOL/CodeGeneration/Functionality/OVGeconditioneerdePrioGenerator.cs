@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLElement> _myElements;
         private List<CCOLIOElement> _MyBitmapOutputs;
 
+        private string _hov;
         private string _hovin;
         private string _hovuit;
         private string _cvc;
@@ -130,7 +131,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Bij inmelding: registeren stiptheidsklasse achterste voertuig */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hovin}{ov.FaseCyclus}, {_hpf}{_hovuit}{ov.FaseCyclus}, &iAantInm{ov.FaseCyclus}, iKARInSTP{ov.FaseCyclus}, {_ctpf}{_cvc}{ov.FaseCyclus}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
+                        sb.AppendLine($"{ts}TrackStiptObvTSTP({_hpf}{_hovin}{ov.FaseCyclus}, {_hpf}{_hovuit}{ov.FaseCyclus}, &iAantInm{ov.FaseCyclus}, iKARInSTP{ov.FaseCyclus}, {_hpf}{_hov}{ov.FaseCyclus}, PRM[{_prmpf}{_prmOVtstpgrensvroeg}], PRM[{_prmpf}{_prmOVtstpgrenslaat}]);");
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
@@ -191,6 +192,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
             _hovin = CCOLGeneratorSettingsProvider.Default.GetElementName("hovin");
             _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
             _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");

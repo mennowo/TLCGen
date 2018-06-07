@@ -30,7 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _MyElements.Add(
                             new CCOLElement(
                                 $"{_tvamax}{va.FaseCyclus}",
-                                va.VAOntrTijdensRood,
+                                va.VAOntrMax,
                                 CCOLElementTimeTypeEnum.TE_type,
                                 CCOLElementTypeEnum.Timer));
                 foreach (var d in va.VADetectoren)
