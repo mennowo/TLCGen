@@ -109,7 +109,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return null;
 
                 case CCOLCodeTypeEnum.RegCTop:
-                    if (!c.Data.VLOGInTestOmgeving)
+                    if ((c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                         c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen ||
+                         c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                         c.Data.VLOGSettings?.VLOGToepassen == true) &&
+                        !c.Data.VLOGInTestOmgeving)
                     {
                         sb.AppendLine("#ifndef AUTOMAAT");
                         sb.AppendLine($"{ts}#define NO_VLOG");

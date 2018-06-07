@@ -49,6 +49,7 @@
     <Compile Include="Messages\ControllerCodeGeneratedMessage.cs" />
     <Compile Include="Messages\ControllerDataChangedMessage.cs" />
     <Compile Include="Messages\ControllerHasOVChangedMessage.cs" />
+    <Compile Include="Messages\ControllerIntergreenTimesTypeChangedMessage.cs" />
     <Compile Include="Messages\ControllerProjectGeneratedMessage.cs" />
     <Compile Include="Messages\SelectieveDetectorenChangedMessage.cs" />
     <Compile Include="Messages\IngangenChangedMessage.cs" />

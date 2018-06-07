@@ -88,6 +88,10 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string TijdenLabel => _Controller.Data.Intergroen ? "Intergroen tijden" : "Ontruimingstijden";
+
+        public string GarantieTijdenLabel => _Controller.Data.Intergroen ? "Gar. interg. tijden" : "Gar. ontr. tijden";
+
         public ObservableCollection<string> Detectoren
         {
             get
@@ -160,11 +164,7 @@ namespace TLCGen.ViewModels
         /// <summary>
         /// Symmetrical, two dimensional matrix used to display phasecycle conflicts.
         /// </summary>
-        public SynchronisatieViewModel[,] ConflictMatrix
-        {
-            get => _conflictMatrix;
-            set => _conflictMatrix = value;
-        }
+        public SynchronisatieViewModel[,] ConflictMatrix { get; set; }
 
         /// <summary>
         /// Boolean set by instances of ConflictViewModel when their DisplayWaarde property is 
@@ -658,7 +658,7 @@ namespace TLCGen.ViewModels
                 _Controller.Fasen == null ||
                 _Controller.Fasen.Count <= 0)
             {
-                _conflictMatrix = null;
+                ConflictMatrix = null;
                 RaisePropertyChanged("ConflictMatrix");
                 return;
             }
@@ -672,7 +672,7 @@ namespace TLCGen.ViewModels
             }
             RaisePropertyChanged("FasenNames");
 
-            _conflictMatrix = new SynchronisatieViewModel[fccount, fccount];
+            ConflictMatrix = new SynchronisatieViewModel[fccount, fccount];
             for (var fcm_from = 0; fcm_from < fccount; ++fcm_from)
             {
                 for (var fcm_to = 0; fcm_to < fccount; ++fcm_to)
@@ -1058,7 +1058,6 @@ namespace TLCGen.ViewModels
         }
 
         private bool _IsProcessing = false;
-        private SynchronisatieViewModel[,] _conflictMatrix;
 
         private void OnProcesSynchornisationsRequested(ProcessSynchronisationsRequest request)
         {
@@ -1068,6 +1067,12 @@ namespace TLCGen.ViewModels
             _IsProcessing = true;
             SaveConflictMatrix();
             _IsProcessing = false;
+        }
+
+        private void OnIntergreenTimesTypeChanged(ControllerIntergreenTimesTypeChangedMessage msg)
+        {
+            RaisePropertyChanged(nameof(TijdenLabel));
+            RaisePropertyChanged(nameof(GarantieTijdenLabel));
         }
 
         #endregion // TLCGen Event handling

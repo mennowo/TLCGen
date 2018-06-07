@@ -26,9 +26,9 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <RadioButton Content="Ontruimingstijden" GroupName="SynchronisatieType" Margin="5"
+            <RadioButton Content="{Binding Path=TijdenLabel,Mode=OneWay}" GroupName="SynchronisatieType" Margin="5"
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Conflict}}" />
-            <RadioButton Content="Gar. ontr. tijden" GroupName="SynchronisatieType" Margin="5"
+            <RadioButton Content="{Binding Path=GarantieTijdenLabel,Mode=OneWay}" GroupName="SynchronisatieType" Margin="5"
                          IsEnabled="{Binding Path=UseGarantieOntruimingsTijden}"
                          IsChecked="{Binding Path=DisplayType,Converter={StaticResource RadioButtonCheckedConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.GarantieConflict}}" />
             <RadioButton Content="Gelijkstarten" GroupName="SynchronisatieType" Margin="5"

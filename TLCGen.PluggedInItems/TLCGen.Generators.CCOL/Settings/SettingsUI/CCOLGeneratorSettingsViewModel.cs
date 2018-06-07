@@ -38,6 +38,15 @@ namespace TLCGen.Generators.CCOL
             }
         }
 
+
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL95
+        {
+            get
+            {
+                return _Settings?.VisualSettingsCCOL95;
+            }
+        }
+
         public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings
         {
             get

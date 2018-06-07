@@ -129,7 +129,22 @@ namespace TLCGen.ViewModels
                     }
                 }
                 RaisePropertyChanged(nameof(IsVLOGVersieLowerThan9));
+                RaisePropertyChanged(nameof(IsVLOGVersieHigherThan9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());
+            }
+        }
+
+
+        [Description("Intergroen")]
+        [BrowsableCondition("IsVLOGVersieHigherThan9")]
+        public bool Intergroen
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.Intergroen; }
+            set
+            {
+                _Controller.Data.Intergroen = value;
+                RaisePropertyChanged<object>("Intergroen", broadcast: true);
             }
         }
 
@@ -155,6 +170,9 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>("VLOGType", broadcast: true);
             }
         }
+
+        [Browsable(false)]
+        public bool IsVLOGVersieHigherThan9 => CCOLVersie > CCOLVersieEnum.CCOL9;
 
         [Browsable(false)]
         public bool IsVLOGVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;

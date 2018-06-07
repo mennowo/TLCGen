@@ -73,6 +73,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
+
+                    var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_to";
+
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
@@ -89,10 +92,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && hf_wsg() ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.To:
-                                    sb.AppendLine($"ym_max_to({fcm.GetDefine()}, {verschil}) && hf_wsg() ? BIT4 : 0;");
+                                    sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && hf_wsg() ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.MKTo:
-                                    sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || ym_max_to({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && hf_wsg() ? BIT4 : 0;");
+                                    sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && hf_wsg() ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.Voetganger:
                                     sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && hf_wsg() ? BIT4 : 0;");

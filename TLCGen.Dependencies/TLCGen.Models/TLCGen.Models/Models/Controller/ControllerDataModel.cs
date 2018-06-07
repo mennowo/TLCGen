@@ -13,10 +13,6 @@ namespace TLCGen.Models
     [Serializable]
     public class ControllerDataModel
     {
-        #region Fields
-
-        #endregion // Fields
-
         #region Properties
 
         [HasDefault(false)]
@@ -44,6 +40,8 @@ namespace TLCGen.Models
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
         public SynchronisatieTypeEnum NaloopSynchronisatieType { get; set; }
+
+        public bool Intergroen { get; set; }
 
         public bool CCOLMulti { get; set; }
         public int CCOLMultiSlave { get; set; }

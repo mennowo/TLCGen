@@ -218,6 +218,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* conflicten */");
             sb.AppendLine("/* ---------- */");
             
+            var totigmax = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_max" : "TO_max";
+            var totigmin = controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen ? "TIG_min" : "TO_min";
+
             if (controller.InterSignaalGroep.Conflicten?.Count > 0)
             {
                 string prevfasefrom = "";
@@ -237,8 +240,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         prevfasefrom = ff;
                         sb.AppendLine();
                     }
-
-                    sb.AppendLine($"{ts}TO_max[{ff}][{ft}] = {conflict.SerializedWaarde};");
+                    sb.AppendLine($"{ts}{totigmax}[{ff}][{ft}] = {conflict.SerializedWaarde};");
                 }
             }
 
@@ -380,7 +382,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         var k = "FK";
                         if (matrix[i, j] == -3 || matrix[i, j] == -30) k = "GK";
                         if (matrix[i, j] == -4 || matrix[i, j] == -40) k = "GKL";
-                        sb.AppendLine($"{ts}TO_max[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
+                        sb.AppendLine($"{ts}{totigmax}[{_fcpf}{controller.Fasen[i].Naam}][{_fcpf}{controller.Fasen[j].Naam}] = {k};");
                         AppendEmptyLine = true;
                     }
                     if (AppendEmptyLine) sb.AppendLine();
@@ -497,33 +499,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
-                        var counters = new Dictionary<int, int>();
+                        //var counters = new Dictionary<int, int>();
+                        //foreach (var conflict in controller.InterSignaalGroep.Conflicten)
+                        //{
+                        //    if (conflict.GarantieWaarde.HasValue && !counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
+                        //    {
+                        //        counters.Add(conflict.Waarde - conflict.GarantieWaarde.Value, 1);
+                        //    }
+                        //    else if(conflict.GarantieWaarde.HasValue)
+                        //    {
+                        //        counters[conflict.Waarde - conflict.GarantieWaarde.Value]++;
+                        //    }
+                        //}
+                        //var most = 0;
+                        //var val = 0;
+                        //foreach (var i in counters)
+                        //{
+                        //    if (i.Value > most)
+                        //    {
+                        //        most = i.Value;
+                        //        val = i.Key;
+                        //    }
+                        //}
+                        //sb.AppendLine($"{ts}default_to_min({val});");
                         foreach (var conflict in controller.InterSignaalGroep.Conflicten)
                         {
-                            if (conflict.GarantieWaarde.HasValue && !counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
-                            {
-                                counters.Add(conflict.Waarde - conflict.GarantieWaarde.Value, 1);
-                            }
-                            else if(conflict.GarantieWaarde.HasValue)
-                            {
-                                counters[conflict.Waarde - conflict.GarantieWaarde.Value]++;
-                            }
-                        }
-                        var most = 0;
-                        var val = 0;
-                        foreach (var i in counters)
-                        {
-                            if (i.Value > most)
-                            {
-                                most = i.Value;
-                                val = i.Key;
-                            }
-                        }
-                        sb.AppendLine($"{ts}default_to_min({val});");
-                        foreach (var conflict in controller.InterSignaalGroep.Conflicten)
-                        {
-                            if(conflict.GarantieWaarde.HasValue && (conflict.Waarde - conflict.GarantieWaarde.Value) != val)
-                                sb.AppendLine($"{ts}TO_min[{conflict.GetFaseToDefine()}][{_fcpf}{conflict.FaseNaar}] = {conflict.GarantieWaarde.Value};");
+                            //if(conflict.GarantieWaarde.HasValue && (conflict.Waarde - conflict.GarantieWaarde.Value) != val)
+                            sb.AppendLine($"{ts}{totigmin}[{conflict.GetFaseToDefine()}][{_fcpf}{conflict.FaseNaar}] = {conflict.GarantieWaarde.Value};");
                         }
                     }
                 }
@@ -857,15 +859,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCControlParametersVLOG(ControllerModel controller)
+        private string GenerateTabCControlParametersVLOG(ControllerModel c)
         {
+            if ((c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                 c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Geen ||
+                 c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&
+                 c.Data.VLOGSettings?.VLOGToepassen != true))
+                return "";
+
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine("#ifndef NO_VLOG");
             sb.AppendLine("/* VLOG */");
             sb.AppendLine("/* ---- */");
 
-            if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/*VLOG - logging */");
@@ -874,7 +882,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
-                if (controller.Data.VLOGType == VLOGTypeEnum.Filebased)
+                if (c.Data.VLOGType == VLOGTypeEnum.Filebased)
                 {
                     sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
                     sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
@@ -897,47 +905,47 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - logging */");
                 sb.AppendLine($"{ts}/* -------------- */");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DATI] = {controller.Data.VLOGSettings.LOGTYPE_DATI};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DP] = {controller.Data.VLOGSettings.LOGTYPE_DP};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_IS] = {controller.Data.VLOGSettings.LOGTYPE_IS};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = {controller.Data.VLOGSettings.LOGTYPE_FC};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = {controller.Data.VLOGSettings.LOGTYPE_US};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = {controller.Data.VLOGSettings.LOGTYPE_PS};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = {controller.Data.VLOGSettings.LOGTYPE_DS};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DATI] = {c.Data.VLOGSettings.LOGTYPE_DATI};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DP] = {c.Data.VLOGSettings.LOGTYPE_DP};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_IS] = {c.Data.VLOGSettings.LOGTYPE_IS};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_FC] = {c.Data.VLOGSettings.LOGTYPE_FC};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = {c.Data.VLOGSettings.LOGTYPE_US};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = {c.Data.VLOGSettings.LOGTYPE_PS};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = {c.Data.VLOGSettings.LOGTYPE_DS};");
                 sb.AppendLine($"#if !defined NO_VLOG_300");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_MLX] = {controller.Data.VLOGSettings.LOGTYPE_MLX};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_OMG] = {controller.Data.VLOGSettings.LOGTYPE_OMG};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CRC] = {controller.Data.VLOGSettings.LOGTYPE_CRC};");
-                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CFG] = {controller.Data.VLOGSettings.LOGTYPE_CFG};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_MLX] = {c.Data.VLOGSettings.LOGTYPE_MLX};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_OMG] = {c.Data.VLOGSettings.LOGTYPE_OMG};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CRC] = {c.Data.VLOGSettings.LOGTYPE_CRC};");
+                sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CFG] = {c.Data.VLOGSettings.LOGTYPE_CFG};");
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {controller.Data.VLOGSettings.LOGPRM_VLOGMODE.ToString()};");
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {controller.Data.VLOGSettings.LOGPRM_EVENT};");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE.ToString()};");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - monitoring */");
                 sb.AppendLine($"{ts}/* ----------------- */");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DATI] = {controller.Data.VLOGSettings.MONTYPE_DATI};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DP] = {controller.Data.VLOGSettings.MONTYPE_DP};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_IS] = {controller.Data.VLOGSettings.MONTYPE_IS};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = {controller.Data.VLOGSettings.MONTYPE_FC};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = {controller.Data.VLOGSettings.MONTYPE_US};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = {controller.Data.VLOGSettings.MONTYPE_PS};");
-                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = {controller.Data.VLOGSettings.MONTYPE_DS};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DATI] = {c.Data.VLOGSettings.MONTYPE_DATI};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DP] = {c.Data.VLOGSettings.MONTYPE_DP};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_IS] = {c.Data.VLOGSettings.MONTYPE_IS};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_FC] = {c.Data.VLOGSettings.MONTYPE_FC};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_US] = {c.Data.VLOGSettings.MONTYPE_US};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = {c.Data.VLOGSettings.MONTYPE_PS};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = {c.Data.VLOGSettings.MONTYPE_DS};");
                 sb.AppendLine($"#if !defined NO_VLOG_300");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_MLX] = {controller.Data.VLOGSettings.MONTYPE_MLX};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_OMG] = {controller.Data.VLOGSettings.MONTYPE_OMG};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CRC] = {controller.Data.VLOGSettings.MONTYPE_CRC};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CFG] = {controller.Data.VLOGSettings.MONTYPE_CFG};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_MLX] = {c.Data.VLOGSettings.MONTYPE_MLX};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_OMG] = {c.Data.VLOGSettings.MONTYPE_OMG};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CRC] = {c.Data.VLOGSettings.MONTYPE_CRC};");
+                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
                 sb.AppendLine($"#endif");
-                sb.AppendLine($"{ts}MONPRM[LOGPRM_VLOGMODE] = {controller.Data.VLOGSettings.LOGPRM_VLOGMODE};");
-                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {controller.Data.VLOGSettings.LOGPRM_EVENT};");
+                sb.AppendLine($"{ts}MONPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE};");
+                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine();
             }
 
             sb.AppendLine("/* Typen ingangen */");
             sb.AppendLine("/* -------------- */");
 
-            foreach(FaseCyclusModel fc in controller.Fasen)
+            foreach(FaseCyclusModel fc in c.Fasen)
             {
                 foreach (DetectorModel dm in fc.Detectoren)
                 {
@@ -978,7 +986,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-            foreach (DetectorModel dm in controller.Detectoren)
+            foreach (DetectorModel dm in c.Detectoren)
             {
                 sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
                 switch (dm.Type)
@@ -1021,7 +1029,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* Typen uitgangen */");
             sb.AppendLine("/* --------------- */");
 
-            foreach(FaseCyclusModel fc in controller.Fasen)
+            foreach(FaseCyclusModel fc in c.Fasen)
             {
                 sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
                 switch (fc.Type)
@@ -1043,10 +1051,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-            if (controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
+            if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
                 sb.AppendLine();
-                foreach (FaseCyclusModel fc in controller.Fasen)
+                foreach (FaseCyclusModel fc in c.Fasen)
                 {
                     sb.AppendLine($"{ts}MONFC[{_fcpf}{fc.Naam}] = BIT0+BIT1+BIT2+BIT3;");
                 }
@@ -1059,7 +1067,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-            if (controller.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
                 AllCCOLInputElements.Any(x => x.Multivalent))
             {
                 sb.AppendLine();
@@ -1071,7 +1079,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }
-            if (controller.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
                 AllCCOLOutputElements.Any(x => x.Multivalent))
             {
                 sb.AppendLine();

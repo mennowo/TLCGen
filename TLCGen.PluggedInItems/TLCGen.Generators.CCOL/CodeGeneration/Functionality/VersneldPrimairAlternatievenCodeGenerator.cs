@@ -254,6 +254,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
+                        var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
+
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             Tuple<string, List<string>> hasgs = null;
@@ -268,7 +270,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (hasgs != null)
                             {
                                 sb.Append(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
+                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}");
                                 foreach (var ofc in hasgs.Item2)
                                 {
                                     sb.Append(ofc);
@@ -283,7 +285,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             else
                             {
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = (max_tar_to({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
+                                    $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                             }
                         }
                         sb.AppendLine();
@@ -328,7 +330,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     tnl = _tnlcv;
                                 }
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && ((max_tar_to({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
+                                    $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (({maxtartotig}({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                             }
                             sb.AppendLine();
                         }
