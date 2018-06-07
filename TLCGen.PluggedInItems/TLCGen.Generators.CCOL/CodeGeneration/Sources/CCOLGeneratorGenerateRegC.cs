@@ -125,10 +125,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}#include \"detectie.c\"");
             sb.AppendLine($"{ts}#include \"ccolfunc.c\"");
-            if (controller.InterSignaalGroep.Gelijkstarten.Any() ||
-                controller.InterSignaalGroep.Voorstarten.Any())
+            if (controller.InterSignaalGroep.Voorstarten.Any() || controller.InterSignaalGroep.Gelijkstarten.Any())
             {
                 sb.AppendLine($"{ts}#include \"syncvar.c\"  /* synchronisatie functies           */");
+                sb.AppendLine($"{ts}#include \"syncfunc.c\"");
             }
 
 	        if (controller.HalfstarData.IsHalfstar)
@@ -153,6 +153,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("mulv TDH_old[DPMAX];");
             sb.AppendLine("mulv DB_old[DPMAX];");
             sb.AppendLine();
+
+
             if (controller.Data.CCOLMulti)
             {
                 sb.AppendLine($"int CCOL_SLAVE = {controller.Data.CCOLMultiSlave};");

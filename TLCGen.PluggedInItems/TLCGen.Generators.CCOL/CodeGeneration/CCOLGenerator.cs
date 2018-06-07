@@ -210,7 +210,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
                 {
-                    CopySourceIfNeeded("syncfunc.c", sourcefilepath);
                     CopySourceIfNeeded("syncvar.c", sourcefilepath);
                     CopySourceIfNeeded("syncvar.h", sourcefilepath);
                 }

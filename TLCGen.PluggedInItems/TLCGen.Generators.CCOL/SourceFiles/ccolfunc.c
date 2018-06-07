@@ -311,7 +311,7 @@ void WachtStand(bool *prml[], count ml, count ml_max)
 #include "fcvar.h"
 #include "kfvar.h"
 
-#ifdef NO_TIGMAX
+#if !defined CCOLTIG || defined NO_TIGMAX
 
 mulv max_tar_to(count i)
 {
@@ -339,7 +339,11 @@ mulv max_tar_to(count i)
         }
         for (n = 0; n < FKFC_MAX[i]; n++)
         {
-            k = TO_pointer[i][n];
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+#else
+			k = TO_pointer[i][n];
+#endif
             if (TO[k][i])               /* zoek grootste ontruimingstijd      */
             {
                 to_tmp = TGL_max[k] + TO_max[k][i] - TGL_timer[k] - TO_timer[k];
@@ -356,7 +360,11 @@ mulv max_tar_to(count i)
 #endif
                 for (nn = 0; nn < GKFC_MAX[k]; nn++)
                 {
-                    kk = TO_pointer[k][nn];
+#ifdef CCOLTIG
+					kk = KF_pointer[k][nn];
+#else
+					kk = TO_pointer[k][nn];
+#endif
                     if ((kk != i) && PR[kk])/* test alleen de primaire richtingen */
                     {
                         if (G[kk] && !MG[kk] && !FM[kk] && !Z[kk])
@@ -616,7 +624,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
             if (vb >= 0)
             {
                 h = va_arg(argpt, va_count); /* lees waarde h */
-#ifndef NO_TIGMAX
+#if defined CCOLTIG && !defined NO_TIGMAX
                 if (h >= 0 && IH[h] && (TIG_max[ov][i] == NG) && T[vb])
 #else
                 if (h >= 0 && IH[h] && (TO_max[ov][i] == NG) && T[vb])
@@ -636,13 +644,16 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                         }
                         for (n = 0; n < FKFC_MAX[i]; ++n)
                         {
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
                             k = KF_pointer[i][n];
+#else
+                            k = TO_pointer[i][n];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
                             if (TIG[k][i])               /* zoek grootste ontruimingstijd      */
                             {
                                 to_tmp = TGL_max[k] + TIG_max[k][i] - TGL_timer[k] - TIG_timer[k];
 #else
-                            k = TO_pointer[i][n];
                             if (TO[k][i])               /* zoek grootste ontruimingstijd      */
                             {
                                 to_tmp = TGL_max[k] + TO_max[k][i] - TGL_timer[k] - TO_timer[k];
@@ -656,7 +667,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 totxb_tmp = 0;
                                 if (G[ov])
                                 {
-#ifndef NO_TIGMAX
+#if defined CCOLTIG && !defined NO_TIGMAX
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TIG_max[ov][k] - T_timer[vb] - TGL_max[i] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - T_timer[vb] - TGL_max[i] - TO_max[i][k];
@@ -668,7 +679,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 }
                                 else if (RA[ov] && !RR[ov] && !BL[ov])
                                 {
-#ifndef NO_TIGMAX
+#if defined CCOLTIG && !defined NO_TIGMAX
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TIG_max[ov][k] - TGL_max[i] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - TGL_max[i] - TO_max[i][k];

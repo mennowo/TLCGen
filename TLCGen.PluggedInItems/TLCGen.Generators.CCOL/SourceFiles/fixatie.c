@@ -11,7 +11,7 @@ bool konf_groen(count fc)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
         j = KF_pointer[fc][i];
 #else
         j = TO_pointer[fc][i];

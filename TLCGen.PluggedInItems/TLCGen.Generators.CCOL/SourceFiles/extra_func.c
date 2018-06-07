@@ -33,7 +33,7 @@ bool ym_maxV1(count i, mulv to_verschil)
 		for (n = 0; n<KFC_MAX[i]; ++n)
 #endif
 		{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -42,7 +42,7 @@ bool ym_maxV1(count i, mulv to_verschil)
 			{
 				ym = FALSE;
 #ifndef NO_GGCONFLICT
-#ifndef NO_TIGMAX
+#if defined CCOLTIG && !defined NO_TIGMAX
 				if (TIG_max[i][k]<GK)  break;
 #else
 				if (TO_max[i][k]<GK)  break;
@@ -50,11 +50,14 @@ bool ym_maxV1(count i, mulv to_verschil)
 #endif
 				for (j = 0; j<KFC_MAX[k]; ++j)
 				{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
 					m = KF_pointer[k][j];
-						if (CV[m] && (((TIG_max[i][k] - to_verschil) <= TIG_max[m][k])
 #else
 					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+				    if (CV[m] && (((TIG_max[i][k] - to_verschil) <= TIG_max[m][k])
+#else
 					if (CV[m] && (((TO_max[i][k] - to_verschil) <= TO_max[m][k])
 #endif
 						|| (to_verschil<0)))
@@ -66,11 +69,15 @@ bool ym_maxV1(count i, mulv to_verschil)
 #ifndef NO_GGCONFLICT
 				for (j = KFC_MAX[k]; j<GKFC_MAX[k]; ++j)
 				{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
+				
 					m = KF_pointer[k][j];
-					if (CV[m] && (TIG_max[i][k] <= GK))
 #else
 					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (TIG_max[i][k] <= GK))
+#else
 					if (CV[m] && (TO_max[i][k] <= GK))
 #endif
 					{
@@ -122,7 +129,7 @@ bool ym_max_vtgV1(count i)
 		for (n = 0; n < KFC_MAX[i]; ++n)
 #endif
 		{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -135,7 +142,7 @@ bool ym_max_vtgV1(count i)
 #endif
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
@@ -146,7 +153,7 @@ bool ym_max_vtgV1(count i)
 						ontruiming */
 						if (CV[m] && PR[m] && !(VG[m] &&
 							((TVG_max[m] - TVG_timer[m]) <
-#ifndef NO_TIGMAX
+#if defined CCOLTIG && !defined NO_TIGMAX
 							(TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
 #else
 								(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))))
@@ -168,11 +175,14 @@ bool ym_max_vtgV1(count i)
 #ifndef NO_GGCONFLICT
 				for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
 				{
-#ifndef NO_TIGMAX
+#ifdef CCOLTIG
 					m = KF_pointer[k][j];
-					if (CV[m] && (TIG_max[i][k] <= GK))
 #else
 					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (TIG_max[i][k] <= GK))
+#else
 					if (CV[m] && (TO_max[i][k] <= GK))
 #endif
 					{
