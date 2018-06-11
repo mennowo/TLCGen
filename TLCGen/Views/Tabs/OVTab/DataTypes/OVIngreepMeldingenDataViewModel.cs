@@ -281,7 +281,11 @@ namespace TLCGen.ViewModels
             if(SelectedInmelding != null)
             {
                 Inmeldingen.Remove(SelectedInmelding);
-                SelectedInmelding = null;
+				var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+				MessengerInstance.Send(msg);
+				if (msg.FaseCyclus == null) return;
+				MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				SelectedInmelding = null;
             }
         }
 
@@ -290,7 +294,11 @@ namespace TLCGen.ViewModels
             if (SelectedUitmelding != null)
             {
                 Uitmeldingen.Remove(SelectedUitmelding);
-                SelectedUitmelding = null;
+				var msg = new OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage(this);
+				MessengerInstance.Send(msg);
+				if (msg.FaseCyclus == null) return;
+				MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+				SelectedUitmelding = null;
             }
         }
 

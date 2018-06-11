@@ -43,13 +43,14 @@ namespace TLCGen.Importers.TabC
                 throw new NullReferenceException("TabC importer: Controller parsed is not null, which it should be for importing into new.");
             }
 
+			OpenFileDialog openFileDialog = new OpenFileDialog
+			{
+				CheckFileExists = true,
+				Title = "Selecteer tab.c file voor importeren",
+				Filter = "Import files|*tab.c;*.ccol|Alle files|*.*"
+			};
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.CheckFileExists = true;
-            openFileDialog.Title = "Selecteer tab.c file voor importeren";
-            openFileDialog.Filter = "Import files|*tab.c;*.ccol|Alle files|*.*";
-
-            ControllerModel newc = new ControllerModel();
+			ControllerModel newc = new ControllerModel();
 
             if (openFileDialog.ShowDialog() == true)
             {

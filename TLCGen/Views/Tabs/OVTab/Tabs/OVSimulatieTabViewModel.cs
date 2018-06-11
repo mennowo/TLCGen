@@ -164,12 +164,12 @@ namespace TLCGen.ViewModels
             {
                 if (ov.HasOVIngreepKAR())
                 {
-                    var m = ov.MeldingenData.Inmeldingen.First(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                     if (m != null)
                     {
                         DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARInmelding) { FaseCyclus = ov.FaseCyclus });
                     }
-                    m = ov.MeldingenData.Uitmeldingen.First(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
+                    m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == Models.Enumerations.OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                     if (m != null)
                     {
                         DummyDetectoren.Add(new DetectorViewModel(ov.DummyKARUitmelding) { FaseCyclus = ov.FaseCyclus });
@@ -204,6 +204,11 @@ namespace TLCGen.ViewModels
             RebuildDetectorenList();
         }
 
+		private void OnOVIngreepMeldingChangedMessage(OVIngreepMeldingChangedMessage message)
+		{
+			RebuildDetectorenList();
+		}
+
         #endregion TLCGen events
 
         #region Constructor
@@ -212,8 +217,9 @@ namespace TLCGen.ViewModels
         {
             MessengerInstance.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChangedMessage));
             MessengerInstance.Register(this, new Action<HDIngrepenChangedMessage>(OnHDIngrepenChangedMessage));
+			MessengerInstance.Register(this, new Action<OVIngreepMeldingChangedMessage>(OnOVIngreepMeldingChangedMessage));
         }
 
-        #endregion // Constructor
-    }
+		#endregion // Constructor
+	}
 }

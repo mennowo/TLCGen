@@ -94,7 +94,20 @@ namespace TLCGen.ViewModels
                         var ov = new OVIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
-                        _Controller.OVData.OVIngrepen.Add(ov);
+						ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
+						{
+							AntiJutterTijdToepassen = true,
+							AntiJutterTijd = 15,
+							InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+							Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+						});
+						ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel()
+						{
+							AntiJutterTijdToepassen = false,
+							InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+							Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+						});
+						_Controller.OVData.OVIngrepen.Add(ov);
                         _Controller.OVData.OVIngrepen.BubbleSort();
                         SelectedOVIngreep = new OVIngreepViewModel(ov);
                         MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
