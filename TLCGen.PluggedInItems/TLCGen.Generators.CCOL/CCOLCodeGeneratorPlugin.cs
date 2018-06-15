@@ -115,11 +115,12 @@ namespace TLCGen.Generators.CCOL
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLIncludesPaden = userSettings.VisualSettingsCCOL95.CCOLIncludesPaden;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibs = userSettings.VisualSettingsCCOL95.CCOLLibs;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibsPath = userSettings.VisualSettingsCCOL95.CCOLLibsPath;
+                CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibsPathNoTig = userSettings.VisualSettingsCCOL95.CCOLLibsPathNoTig;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions = userSettings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions;
                 CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLResPath = userSettings.VisualSettingsCCOL95.CCOLResPath;
-
-                // always overwrite visual tabspace and others
-                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
+				
+				// always overwrite visual tabspace and others
+				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources = userSettings.AlwaysOverwriteSources;
                 CCOLGeneratorSettingsProvider.Default.Settings.TabSpace = userSettings.TabSpace;
 
@@ -213,6 +214,7 @@ namespace TLCGen.Generators.CCOL
             settings.VisualSettingsCCOL95.CCOLIncludesPaden = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLIncludesPaden;
             settings.VisualSettingsCCOL95.CCOLLibs = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibs;
             settings.VisualSettingsCCOL95.CCOLLibsPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibsPath;
+            settings.VisualSettingsCCOL95.CCOLLibsPathNoTig = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLLibsPathNoTig;
             settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLPreprocessorDefinitions;
             settings.VisualSettingsCCOL95.CCOLResPath = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95.CCOLResPath;
 

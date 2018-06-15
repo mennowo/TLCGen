@@ -39,6 +39,19 @@ namespace TLCGen.ViewModels
 					var ov = new OVIngreepModel();
 					Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
 					ov.FaseCyclus = _faseCyclus.Naam;
+					ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
+					{
+						AntiJutterTijdToepassen = true,
+						AntiJutterTijd = 15,
+						InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+						Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+					});
+					ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel()
+					{
+						AntiJutterTijdToepassen = false,
+						InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+						Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+					});
 					_controller.OVData.OVIngrepen.Add(ov);
 					_controller.OVData.OVIngrepen.BubbleSort();
 					OVIngreep = new OVIngreepViewModel(ov);
@@ -52,6 +65,14 @@ namespace TLCGen.ViewModels
 					{
 						_controller.OVData.OVIngrepen.Remove(OVIngreep.OVIngreep);
 						OVIngreep = null;
+					}
+					else
+					{
+						var ovi = _controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
+						if(ovi != null)
+						{
+							_controller.OVData.OVIngrepen.Remove(ovi);
+						}
 					}
 				}
 				MessengerInstance.Send(new OVIngrepenChangedMessage());
@@ -90,6 +111,14 @@ namespace TLCGen.ViewModels
 					{
 						_controller.OVData.HDIngrepen.Remove(HDIngreep.HDIngreep);
 						HDIngreep = null;
+					}
+					else
+					{
+						var hdi = _controller.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
+						if (hdi != null)
+						{
+							_controller.OVData.HDIngrepen.Remove(hdi);
+						}
 					}
 				}
 				MessengerInstance.Send(new OVIngrepenChangedMessage());

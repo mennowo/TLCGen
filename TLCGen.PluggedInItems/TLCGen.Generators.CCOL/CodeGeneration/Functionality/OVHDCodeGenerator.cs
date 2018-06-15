@@ -658,7 +658,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"DSIMeldingOV_V1({(_dpf + melding.RelatedInput1).ToUpper()}, " +
                                                     $"{vtgType}, " +
                                                     "FALSE, " + 
-                                                    $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                    "NG, " +
                                                     $"SCH[{_schpf}{_schcheckdstype}], " +
                                                     "CIF_DSIN, " +
                                                     (ov.CheckLijnNummer ? "TRUE, " : "FALSE, ") +
@@ -706,7 +706,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
                         sb.AppendLine();
                     }
-                    if(c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+                    if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
                     {
                         sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usmaxwt}] = iMaximumWachtTijdOverschreden;");

@@ -24,7 +24,16 @@
                     <TabItem Header="CCOL 9.5">
                         <xctk:PropertyGrid Margin="2" 
                                          ShowDescriptionByTooltip="True" ShowTitle="True" ShowSummary="True" IsCategorized="False"
-                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL95}" AutoGenerateProperties="True" ShowSearchBox="False" ShowSortOptions="False" />
+                                         Grid.Row="1" SelectedObject="{Binding Path=VisualSettingsCCOL95}" AutoGenerateProperties="False" ShowSearchBox="False" ShowSortOptions="False">
+                            <xctk:PropertyGrid.PropertyDefinitions>
+                                <xctk:PropertyDefinition TargetProperties="CCOLIncludesPaden" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibs" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPath" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLLibsPathNoTig" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLPreprocessorDefinitions" />
+                                <xctk:PropertyDefinition TargetProperties="CCOLResPath" />
+                            </xctk:PropertyGrid.PropertyDefinitions>
+                        </xctk:PropertyGrid>
                     </TabItem>
                 </TabControl>
             </TabItem>

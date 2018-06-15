@@ -46,7 +46,26 @@ namespace TLCGen.Generators.CCOL.Settings
             }
         }
 
-        private string _CCOLLibs;
+		private string _CCOLLibsPathNoTig;
+		[DisplayName("CCOL library pad NO_TIGMAX")]
+		[Description("CCOL library pad NO_TIGMAX")]
+		[Category("Visual project settings")]
+		[TLCGenCustomSetting(TLCGenCustomSettingAttribute.SettingTypeEnum.Application)]
+		[Editor(typeof(FolderEditor), typeof(FolderEditor))]
+		[Browsable(false)]
+		public string CCOLLibsPathNoTig
+		{
+			get { return _CCOLLibsPathNoTig; }
+			set
+			{
+				if (!string.IsNullOrWhiteSpace(value) && !value.EndsWith(";"))
+					_CCOLLibsPathNoTig = value + ";";
+				else
+					_CCOLLibsPathNoTig = value;
+			}
+		}
+
+		private string _CCOLLibs;
         [DisplayName("CCOL libraries")]
         [Description("CCOL libraries (indien van toepassing)")]
         [Category("Visual project settings")]

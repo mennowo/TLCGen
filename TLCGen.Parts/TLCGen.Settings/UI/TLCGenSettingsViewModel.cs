@@ -72,6 +72,7 @@ namespace TLCGen.Settings
                     TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.DefaultsFileLocation, new TLCGenDefaultsModel());
                 }
                 DefaultsProvider.Default.LoadSettings();
+				_DefaultsTabVM = null;
                 RaisePropertyChanged("");
             }
         }
@@ -129,7 +130,6 @@ namespace TLCGen.Settings
         }
 
         #endregion // Properties
-
 
         #region Commands
 

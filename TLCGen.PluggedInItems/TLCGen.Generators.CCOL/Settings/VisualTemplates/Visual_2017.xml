@@ -68,7 +68,9 @@ __IF;!HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencie
 __IF;HS;!MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmain.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
 __IF;HS;MS;CCOL9ORHIGHER__      <AdditionalDependencies>%(AdditionalDependencies);htmlhelp.lib;comctl32.lib;ccolmainms.lib;ccolreg.lib;ccolsim.lib;ccolvlog.lib;lwmlfunc.lib;stdfunc.lib;dsifunc.lib;ccolks.lib;plefunc.lib;plfunc.lib;tigfunc.lib;tx_synch.lib;legacy_stdio_definitions.lib;</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBC;LIBCD</IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
+__IF;!CCOL95ORHIGHER__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
+__ELIF;IGT__      <AdditionalLibraryDirectories>__CCOLLIBSDIR__</AdditionalLibraryDirectories>
+__ELSE__      <AdditionalLibraryDirectories>__CCOLLIBSDIRNOTIG__</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

@@ -13,6 +13,8 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 {
     public class CCOLVisualProjectGenerator
     {
+		private bool _prevCondition = false;
+
         private string HandleFileLine(string line, CCOLCodeGeneratorPlugin plugin)
         {
             string writeline = line;
@@ -31,11 +33,12 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     break;
             }
 
-            string _ccolinclpaths = settings.CCOLIncludesPaden;
-            string _ccollibs = settings.CCOLLibs;
-            string _ccollibspath = settings.CCOLLibsPath;
-            string _ccolppdefs = settings.CCOLPreprocessorDefinitions;
-            string _ccolrespath = settings.CCOLResPath;
+            var _ccolinclpaths = settings.CCOLIncludesPaden;
+            var _ccollibs = settings.CCOLLibs;
+			var _ccollibsnotig = settings.CCOLLibsPathNoTig;
+			var _ccollibspath = settings.CCOLLibsPath;
+            var _ccolppdefs = settings.CCOLPreprocessorDefinitions;
+            var _ccolrespath = settings.CCOLResPath;
 
             // Replace all
             if (writeline.Contains("__"))
@@ -52,6 +55,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 }
                 writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath == null ? "" : ccollibspath);
                 writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs == null ? "" : _ccollibs);
+                writeline = writeline.Replace("__CCOLLLIBSNOTIG__", _ccollibsnotig == null ? "" : _ccollibsnotig);
                 string ccolrespath = _ccolrespath == null ? "" : _ccolrespath.Remove(_ccolrespath == null ? 0 : _ccolrespath.Length - 1);
                 if (!ccolrespath.EndsWith("\\"))
                 {
@@ -63,61 +67,92 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
             }
 
             // If conditions
-            if (!string.IsNullOrWhiteSpace(line) && Regex.IsMatch(line, @"^\s*__IF;.*"))
-            {
-                var conditionsString = Regex.Replace(line, @"^\s*__IF;([A-Z;!]+)__.*", "$1");
-                var conditions = conditionsString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-                foreach(var condition in conditions)
-                {
-                    bool result;
-                    var invert = condition.StartsWith("!");
-                    var actualCondition = condition.Replace("!", "");
-                    switch (actualCondition)
-                    {
-                        case "CCOL9ORHIGHER":
-                            result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9;
-                            break;
-                        case "OV":
-                            result = plugin.Controller.OVData.OVIngrepen != null &&
-                                     plugin.Controller.OVData.OVIngrepen.Count > 0 ||
-                                     plugin.Controller.OVData.HDIngrepen != null &&
-                                     plugin.Controller.OVData.HDIngrepen.Count > 0;
-                            break;
-                        case "MV":
-                            result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
-                            break;
-                        case "MVVIALIS":
-                            result = plugin.Controller.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis;
-                            break;
-                        case "MVOVERIG":
-                            result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Vialis &&
-                                     plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
-                            break;
-                        case "PTP":
-                        case "KS":
-                            result = plugin.Controller.PTPData.PTPKoppelingen != null &&
-                                     plugin.Controller.PTPData.PTPKoppelingen.Count > 0;
-                            break;
-                        case "MS":
-                            result = plugin.Controller.Data.CCOLMulti;
-                            break;
-                        case "SYNC":
-                            result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() ||
-                                     plugin.Controller.InterSignaalGroep.Voorstarten.Any();
-                            break;
-                        case "HS":
-                            result = plugin.Controller.HalfstarData.IsHalfstar;
-                            break;
-                        default:
-                            result = false;
-                            break;
-                    }
-                    if (invert) result = !result;
-                    if (!result) return null;
-                }
-                writeline = Regex.Replace(writeline, @"^(\s*)__IF[A-Z;!]+__", "$1");
-            }
-            return writeline;
+            if (!string.IsNullOrWhiteSpace(line))
+			{
+				var lineif = Regex.IsMatch(line, @"^\s*__IF;.*");
+				var lineelif = Regex.IsMatch(line, @"^\s*__ELIF;.*");
+				var lineelse = Regex.IsMatch(line, @"^\s*__ELSE__*");
+
+				bool result = false;
+
+				if (lineif || lineelif && !_prevCondition)
+				{
+					#region Conditions
+					var conditionsString = Regex.Replace(line, @"^\s*__(IF|ELIF);([A-Z0-9;!]+)__.*", "$2");
+					var conditions = conditionsString.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+					foreach (var condition in conditions)
+					{
+						var invert = condition.StartsWith("!");
+						var actualCondition = condition.Replace("!", "");
+						switch (actualCondition)
+						{
+							case "IGT":
+								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95 &&
+										 plugin.Controller.Data.Intergroen;
+								break;
+							case "CCOL9ORHIGHER":
+								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9;
+								break;
+							case "CCOL95ORHIGHER":
+								result = plugin.Controller.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL95;
+								break;
+							case "OV":
+								result = plugin.Controller.OVData.OVIngrepen != null &&
+										 plugin.Controller.OVData.OVIngrepen.Any() ||
+										 plugin.Controller.OVData.HDIngrepen != null &&
+										 plugin.Controller.OVData.HDIngrepen.Any();
+								break;
+							case "MV":
+								result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
+								break;
+							case "MVVIALIS":
+								result = plugin.Controller.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis;
+								break;
+							case "MVOVERIG":
+								result = plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Vialis &&
+										 plugin.Controller.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen;
+								break;
+							case "PTP":
+							case "KS":
+								result = plugin.Controller.PTPData.PTPKoppelingen != null &&
+										 plugin.Controller.PTPData.PTPKoppelingen.Any();
+								break;
+							case "MS":
+								result = plugin.Controller.Data.CCOLMulti;
+								break;
+							case "SYNC":
+								result = plugin.Controller.InterSignaalGroep.Gelijkstarten.Any() ||
+										 plugin.Controller.InterSignaalGroep.Voorstarten.Any();
+								break;
+							case "HS":
+								result = plugin.Controller.HalfstarData.IsHalfstar;
+								break;
+							default:
+								result = false;
+								break;
+						}
+						if (invert) result = !result;
+						if (!result) break;
+						#endregion // Conditions
+					}
+				}
+				else if (lineelse && !_prevCondition)
+				{
+					result = true;
+				}
+				if ((lineif || lineelif || lineelse) &&
+					!result)
+				{
+					writeline = null;
+					if(lineif) _prevCondition = false;
+				}
+				else if (lineif || lineelif || lineelse)
+				{
+					writeline = Regex.Replace(writeline, @"^(\s*)__(IF|ELIF|ELSE)[A-Z0-9;!]*__", "$1");
+					_prevCondition = true;
+				}
+			}
+			return writeline;
         }
 
         public string GenerateVisualStudioProjectFiles(CCOLCodeGeneratorPlugin plugin, string templateName)

@@ -154,7 +154,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($" && !C[{_ctpf}{_cvchd}{mfc.FaseCyclus}]");
                             }
                         }
-                        if(ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd) sb.Append($" && SCH[{_schpf}{_schovstipt}{ov.FaseCyclus}]");
+						if (ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
+						{
+							if (hd != null) sb.Append(" && ");
+							sb.Append($"SCH[{_schpf}{_schovstipt}{ov.FaseCyclus}]");
+						}
                         sb.AppendLine($";");
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))

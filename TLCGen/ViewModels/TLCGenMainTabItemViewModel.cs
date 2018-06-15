@@ -77,6 +77,10 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+			if(SelectedTab == null && TabItems.Any())
+			{
+				SelectedTab = TabItems.First();
+			}
             SelectedTab?.OnSelected();
         }
 

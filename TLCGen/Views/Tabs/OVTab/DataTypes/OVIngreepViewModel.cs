@@ -273,6 +273,10 @@ namespace TLCGen.ViewModels
             set
             {
                 _OVIngreep.CheckLijnNummer = value;
+				if(value && !LijnNummers.Any())
+				{
+					Add10LijnNummersCommand.Execute(null);
+				}
                 RaisePropertyChanged<object>(nameof(CheckLijnNummer), broadcast: true);
             }
         }

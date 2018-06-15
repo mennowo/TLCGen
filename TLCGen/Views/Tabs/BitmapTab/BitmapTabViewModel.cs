@@ -691,7 +691,14 @@ namespace TLCGen.ViewModels
             RefreshMyBitmapImage();
         }
 
-        private void OnDetectorenChanged(DetectorenChangedMessage message)
+
+		private void OnNameChanged(NameChangedMessage message)
+		{
+			CollectAllIO();
+			RefreshMyBitmapImage();
+		}
+
+		private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
             CollectAllIO();
             RefreshMyBitmapImage();
@@ -716,6 +723,7 @@ namespace TLCGen.ViewModels
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChanged));
             Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
+            Messenger.Default.Register(this, new Action<NameChangedMessage>(OnNameChanged));
         }
 
         #endregion // Constructor

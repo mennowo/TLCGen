@@ -186,7 +186,7 @@ namespace TLCGen.Settings
         public void LoadSettings()
         {
             Defaults = null;
-                if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
+            if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
                 File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
             {
                 try
@@ -200,7 +200,8 @@ namespace TLCGen.Settings
                     MessageBox.Show("Het ingestelde defaults bestand heeft een onjuist formaat:\n\n" +
                                     SettingsProvider.Default.Settings.DefaultsFileLocation +
                                     "\n\nDe meegeleverde defaults worden geladen", "Onjuist formaat defaults bestand");
-                }
+					SettingsProvider.Default.Settings.DefaultsFileLocation = null;
+				}
             }
             else
             {
@@ -237,7 +238,12 @@ namespace TLCGen.Settings
                         if (!found)
                         {
                             message += d.DefaultName + "; ";
-                            Defaults.Defaults.Add(d);
+							if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.DefaultsFileLocation) &&
+								File.Exists(SettingsProvider.Default.Settings.DefaultsFileLocation))
+							{
+								d.Editable = true;
+							}
+							Defaults.Defaults.Add(d);
                         }
                     }
                     var remDs = new List<TLCGenDefaultModel>();
