@@ -17,6 +17,7 @@ namespace TLCGen.Integrity
         /// <returns></returns>
         public static string IsControllerDataOK(ControllerModel c)
         {
+            if (c == null) return "Geen controller gevonden om op te slaan!";
             var s = IsConflictMatrixOK(c);
             if (!string.IsNullOrEmpty(s))
             {

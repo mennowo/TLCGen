@@ -330,17 +330,6 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public int UitmeldFilterTijd
-        {
-            get => _OVIngreep.UitmeldFilterTijd;
-            set
-            {
-                _OVIngreep.UitmeldFilterTijd = value;
-                RaisePropertyChanged<object>(nameof(UitmeldFilterTijd), broadcast: true);
-            }
-        }
-
-        [Browsable(false)]
         public bool HasKAR => OVIngreep.HasOVIngreepKAR();
 
         [Browsable(false)]

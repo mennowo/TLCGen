@@ -19,8 +19,6 @@ namespace TLCGen.Models
         public bool KAR { get; set; }
         //[Obsolete("This property has been deprecated: use Meldingen instead.")]
         public bool Vecom { get; set; }
-
-        public int UitmeldFilterTijd { get; set; }
         
         public OVIngreepVoertuigTypeEnum Type { get; set; }
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
