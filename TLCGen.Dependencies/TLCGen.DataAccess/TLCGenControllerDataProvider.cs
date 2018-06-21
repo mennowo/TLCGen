@@ -305,6 +305,10 @@ namespace TLCGen.DataAccess
             };
             if (!string.IsNullOrWhiteSpace(ControllerFileName))
                 saveFileDialog.FileName = ControllerFileName;
+            else
+            {
+                saveFileDialog.FileName = Controller.Data.Naam;
+            }
             if (saveFileDialog.ShowDialog() == true)
             {
                 string lastfilename = ControllerFileName;

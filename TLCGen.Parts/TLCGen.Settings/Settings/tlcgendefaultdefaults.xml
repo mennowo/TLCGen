@@ -623,9 +623,11 @@
       <DataType>TLCGen.Models.OVIngreepModel,TLCGen.Dependencies</DataType>
       <Data>
         <FaseCyclus />
-        <KAR>true</KAR>
-        <Vecom>false</Vecom>
         <Type>Bus</Type>
+        <VersneldeInmeldingKoplus>Nooit</VersneldeInmeldingKoplus>
+        <NoodaanvraagKoplus>false</NoodaanvraagKoplus>
+        <KoplusKijkNaarWisselstand>false</KoplusKijkNaarWisselstand>
+        <Koplus />
         <RijTijdOngehinderd>140</RijTijdOngehinderd>
         <RijTijdBeperktgehinderd>100</RijTijdBeperktgehinderd>
         <RijTijdGehinderd>60</RijTijdGehinderd>
@@ -641,11 +643,12 @@
         <GeconditioneerdePrioOpTijd>12</GeconditioneerdePrioOpTijd>
         <GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
         <OVInmeldingBitmapData />
+        <GeconditioneerdePrioTeVroegBitmapData />
+        <GeconditioneerdePrioOpTijdBitmapData />
+        <GeconditioneerdePrioTeLaatBitmapData />
+        <DummyKARInmelding />
+        <DummyKARUitmelding />
         <MeldingenData />
-        <OVKARDummyInmeldingBitmapData />
-        <OVKARDummyUitmeldingBitmapData />
-        <OVVecomDummyInmeldingBitmapData />
-        <OVVecomDummyUitmeldingBitmapData />
         <LijnNummers>
           <LijnNummer>
             <Nummer>0</Nummer>

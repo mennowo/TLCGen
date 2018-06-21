@@ -5,7 +5,21 @@
     <CCOLLibsPath>C:\Personal Applications\CCOL80\WIN32\LIB;</CCOLLibsPath>
     <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
     <CCOLResPath>C:\Personal Applications\CCOL80\WIN32\RES;</CCOLResPath>
-    <CCOLPreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;</CCOLPreprocessorDefinitions>
+    <CCOLPreprocessorDefinitions></CCOLPreprocessorDefinitions>
+  </VisualSettings>
+  <VisualSettings>
+    <CCOLIncludesPaden>C:\Personal Applications\CCOL90\WIN32\INCLUDE;C:\Personal Applications\CCOL90\INCLUDE;</CCOLIncludesPaden>
+    <CCOLLibsPath>C:\Personal Applications\CCOL90\WIN32\LIB;</CCOLLibsPath>
+    <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
+    <CCOLResPath>C:\Personal Applications\CCOL90\WIN32\RES;</CCOLResPath>
+    <CCOLPreprocessorDefinitions></CCOLPreprocessorDefinitions>
+  </VisualSettings>
+  <VisualSettings>
+    <CCOLIncludesPaden>C:\Personal Applications\CCOL95\WIN32\INCLUDE;C:\Personal Applications\CCOL95\INCLUDE;</CCOLIncludesPaden>
+    <CCOLLibsPath>C:\Personal Applications\CCOL95\WIN32\LIB;</CCOLLibsPath>
+    <CCOLLibs>CCOLMAIN.LIB;CCOLREG.LIB;CCOLSIM.LIB;CCOLVLOG.LIB;LWMLFUNC.LIB;STDFUNC.LIB;</CCOLLibs>
+    <CCOLResPath>C:\Personal Applications\CCOL95\WIN32\RES;</CCOLResPath>
+    <CCOLPreprocessorDefinitions>CCOLTIG;</CCOLPreprocessorDefinitions>
   </VisualSettings>
   <Prefixes>
     <Prefix>
