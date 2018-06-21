@@ -83,9 +83,12 @@ namespace TLCGen.Settings
             foreach (PropertyInfo property in props)
             {
                 var att = (HasDefaultAttribute)property.GetCustomAttribute(typeof(HasDefaultAttribute));
-                if (att == null || att.HasDefault == true)
+                var attMn = (ModelNameAttribute)property.GetCustomAttribute(typeof(ModelNameAttribute));
+                var attVn = (VissimNameAttribute)property.GetCustomAttribute(typeof(VissimNameAttribute));
+                if ((att == null || att.HasDefault == true) && 
+                    attMn == null && attVn == null)
                 {
-                    if (property.PropertyType.IsValueType ||
+                    if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) ||
                         !onlyvalues)
                     {
                         object propValue = property.GetValue(from);

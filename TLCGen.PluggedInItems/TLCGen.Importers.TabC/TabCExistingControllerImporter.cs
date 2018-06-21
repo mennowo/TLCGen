@@ -31,7 +31,7 @@ namespace TLCGen.Importers.TabC
 
         public bool ImportsIntoExisting => true;
 
-	    public string Name => "Importeer tab.c (in bestaande regeling)";
+	    public string Name => "Importeer tab.c (in geopende regeling)";
 
 	    public string GetPluginName()
         {

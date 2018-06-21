@@ -596,7 +596,8 @@
 
                         <Label Content="Wissel 1 voorwaarde" Grid.Row="5" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
                         <CheckBox IsChecked="{Binding Path=Wissel1Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                              Grid.Column="1" Grid.Row="5" Margin="5" />
+                                  Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}"
+                                  Grid.Column="1" Grid.Row="5" Margin="5" />
 
                         <Label Content="Wissel 2 aanwezig" Grid.Row="6" />
                         <CheckBox IsChecked="{Binding Path=Wissel2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
@@ -621,7 +622,8 @@
 
                         <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />
                         <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                              Grid.Column="1" Grid.Row="9" Margin="5" />
+                                  Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}"
+                                  Grid.Column="1" Grid.Row="9" Margin="5" />
                     </Grid>
                 </TabItem>
             </TabControl>

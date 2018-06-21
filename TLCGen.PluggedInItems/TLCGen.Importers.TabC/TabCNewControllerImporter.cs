@@ -29,7 +29,7 @@ namespace TLCGen.Importers.TabC
         }
 
         public bool ImportsIntoExisting { get { return false; } }
-        public string Name { get { return "Importeer tab.c (nieuwe regeling)"; } }
+        public string Name { get { return "Importeer tab.c (nieuwe regeling starten)"; } }
 
         public string GetPluginName()
         {

@@ -144,22 +144,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* Geconditioneerde prioriteit instellen */");
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.Append($"{ts}IH[{_hpf}{_hstp}{ov.FaseCyclus}] = ");
+                        var hasconditions = false;
+                        var sbc = new StringBuilder();
+                        sbc.Append($"{ts}IH[{_hpf}{_hstp}{ov.FaseCyclus}] = ");
                         var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == ov.FaseCyclus);
                         if (hd != null)
                         {
-                            sb.Append($"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
+                            sbc.Append($"!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
                             foreach (var mfc in hd.MeerealiserendeFaseCycli)
                             {
-                                sb.Append($" && !C[{_ctpf}{_cvchd}{mfc.FaseCyclus}]");
+                                sbc.Append($" && !C[{_ctpf}{_cvchd}{mfc.FaseCyclus}]");
                             }
+                            hasconditions = true;
                         }
 						if (ov.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Altijd)
 						{
-							if (hd != null) sb.Append(" && ");
-							sb.Append($"SCH[{_schpf}{_schovstipt}{ov.FaseCyclus}]");
-						}
-                        sb.AppendLine($";");
+							if (hd != null) sbc.Append(" && ");
+							sbc.Append($"SCH[{_schpf}{_schovstipt}{ov.FaseCyclus}]");
+                            hasconditions = true;
+                        }
+                        if (hasconditions)
+                        {
+                            sbc.AppendLine($";");
+                            sb.Append(sbc.ToString());
+                        }
                     }
                     foreach (var ov in c.OVData.OVIngrepen.Where(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
                     {

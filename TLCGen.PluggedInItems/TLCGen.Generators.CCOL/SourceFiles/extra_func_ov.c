@@ -12,7 +12,9 @@ bool DSIMeldingOV_V1(
 	count lijnmax,
 	bool extra)
 {
+#if !defined (VISSIM) && DSMAX
 	if (!DS_MSG || !extra) return FALSE;
+#endif
 
 	if (dslus != NG && dslus != CIF_DSI[CIF_DSI_LUS]) return FALSE;
 	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;

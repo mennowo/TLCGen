@@ -533,6 +533,7 @@
         <LOGTYPE_MLX>1</LOGTYPE_MLX>
         <LOGTYPE_OMG>1</LOGTYPE_OMG>
         <LOGTYPE_CRC>1</LOGTYPE_CRC>
+        <LOGTYPE_CFG>1</LOGTYPE_CFG>
         <MONTYPE_DATI>1</MONTYPE_DATI>
         <MONTYPE_DP>1</MONTYPE_DP>
         <MONTYPE_IS>1</MONTYPE_IS>
@@ -585,17 +586,26 @@
         <Straat1 />
         <Straat2 />
         <BitmapNaam />
+        <VissimNaam />
         <Fasebewaking>240</Fasebewaking>
         <CCOLVersie>CCOL8</CCOLVersie>
         <KWCType>Geen</KWCType>
+        <KWCUitgebreid>false</KWCUitgebreid>
         <VLOGType>Filebased</VLOGType>
+        <VLOGSettings />
         <VLOGInTestOmgeving>false</VLOGInTestOmgeving>
-        <GarantieOntruimingsTijden>true</GarantieOntruimingsTijden>
+        <GarantieOntruimingsTijden>false</GarantieOntruimingsTijden>
         <ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
         <TypeGroentijden>MaxGroentijden</TypeGroentijden>
         <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
         <NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
-        <TLCGenVersie>V0_1</TLCGenVersie>
+        <Intergroen>false</Intergroen>
+        <CCOLMulti>false</CCOLMulti>
+        <CCOLMultiSlave>0</CCOLMultiSlave>
+        <HuidigeVersieMajor>0</HuidigeVersieMajor>
+        <HuidigeVersieMinor>0</HuidigeVersieMinor>
+        <HuidigeVersieRevision>0</HuidigeVersieRevision>
+        <TLCGenVersie />
         <SegmentenDisplayBitmapData />
         <SegmentDisplayType>EnkelDisplay</SegmentDisplayType>
         <ModulenDisplayBitmapData />
@@ -605,7 +615,6 @@
           <BijkomenTijdensFixatie>false</BijkomenTijdensFixatie>
           <FixatieBitmapData />
         </FixatieData>
-        <Versies />
       </Data>
     </Default>
     <Default>
@@ -627,6 +636,10 @@
         <VasthoudenGroen>true</VasthoudenGroen>
         <TussendoorRealiseren>true</TussendoorRealiseren>
         <AlleLijnen>false</AlleLijnen>
+        <GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
+        <GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
+        <GeconditioneerdePrioOpTijd>12</GeconditioneerdePrioOpTijd>
+        <GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
         <OVInmeldingBitmapData />
         <MeldingenData />
         <OVKARDummyInmeldingBitmapData />
@@ -824,13 +837,15 @@
       <DataType>TLCGen.Models.OVDataModel,TLCGen.Dependencies</DataType>
       <Data>
         <OVIngreepType>Uitgebreid</OVIngreepType>
-        <DSI>true</DSI>
         <CheckOpDSIN>false</CheckOpDSIN>
         <MaxWachttijdAuto>120</MaxWachttijdAuto>
         <MaxWachttijdFiets>90</MaxWachttijdFiets>
         <MaxWachttijdVoetganger>90</MaxWachttijdVoetganger>
+        <GeconditioneerdePrioGrensTeVroeg>60</GeconditioneerdePrioGrensTeVroeg>
+        <GeconditioneerdePrioGrensTeLaat>120</GeconditioneerdePrioGrensTeLaat>
         <KARMeldingBitmapData />
         <KAROnderGedragBitmapData />
+        <MaximaleWachttijdOverschredenBitmapData />
         <OVIngrepen />
         <HDIngrepen />
         <OVIngreepSignaalGroepParameters />
