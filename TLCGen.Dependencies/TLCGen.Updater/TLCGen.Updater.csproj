@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppMonitor.cs" />
     <Compile Include="ISwitchable.cs" />
     <Compile Include="UpdaterDownload.xaml.cs">
       <DependentUpon>UpdaterDownload.xaml</DependentUpon>

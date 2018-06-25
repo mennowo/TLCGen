@@ -19,7 +19,7 @@ namespace TLCGen.Updater
 
 		private readonly Process _parentProcess;
 		private readonly string _parentProcessPath;
-		private IEnumerable<Process> _runningProcesses;
+		private List<string> _runningProcesses = new List<string>();
 		private readonly Timer _checkRunningTimer;
 		private bool _tlcGenInstanceRunning;
 		private bool _tlcGenDownloaded;
@@ -93,13 +93,16 @@ namespace TLCGen.Updater
 
 		public void CleanUp()
 		{
-			var key = Registry.CurrentUser.OpenSubKey("Software", true);
-			var sk1 = key?.OpenSubKey("CodingConnected e.U.", true) ?? key.CreateSubKey("CodingConnected e.U.");
-			if (sk1 != null)
-			{
-				var sk2 = sk1.OpenSubKey("TLCGen", true) ?? key.CreateSubKey("TLCGen");
-				sk2?.SetValue("TempInstallFile", _tempfile, RegistryValueKind.String);
-			}
+            if (!string.IsNullOrWhiteSpace(_tempfile))
+            {
+                var key = Registry.CurrentUser.OpenSubKey("Software", true);
+                var sk1 = key?.OpenSubKey("CodingConnected e.U.", true) ?? key.CreateSubKey("CodingConnected e.U.");
+                if (sk1 != null)
+                {
+                    var sk2 = sk1.OpenSubKey("TLCGen", true) ?? key.CreateSubKey("TLCGen");
+                    sk2?.SetValue("TempInstallFile", _tempfile, RegistryValueKind.String);
+                }
+            }
 			_client?.Dispose();
 		}
 
@@ -118,13 +121,16 @@ namespace TLCGen.Updater
 		#region Private methods
 
 		private void CheckRunningTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
-		{
-			_runningProcesses = Process.GetProcessesByName("TLCGen").Where(x => x.MainModule.FileName == _parentProcessPath);
-			if (!_runningProcesses.Any())
-			{
-				TLCGenInstanceRunning = false;
-				_checkRunningTimer.Enabled = false;
-			}
+        {
+            if (!string.IsNullOrWhiteSpace(_parentProcessPath))
+            {
+                _runningProcesses = AppMonitor.GetProcesses(_parentProcessPath);
+                if (!_runningProcesses.Any())
+                {
+                    TLCGenInstanceRunning = false;
+                    _checkRunningTimer.Enabled = false;
+                }
+            }
 		}
 		
 		#endregion // Private methods
@@ -133,14 +139,29 @@ namespace TLCGen.Updater
 
 		public UpdaterViewModel()
 		{
-			var args = Environment.GetCommandLineArgs();
+#if !DEBUG
+            Application.Current.DispatcherUnhandledException += (o, e) =>
+            {
+                MessageBox.Show("Gelieve dit probleem inclusief onderstaande details doorgeven aan de ontwikkelaar:\n\n" + e.Exception.ToString(), "Er is een onverwachte fout opgetreden.", MessageBoxButton.OK);
+            };
+#endif
+
+            var args = Environment.GetCommandLineArgs();
 
 			if (args.Length > 1 && int.TryParse(args[1], out var id))
 			{
-				_parentProcess = Process.GetProcessById(id);
-				_parentProcessPath = _parentProcess.MainModule.FileName;
-				_runningProcesses = Process.GetProcessesByName("TLCGen").Where(x => x.MainModule.FileName == _parentProcessPath);
-				if (!_runningProcesses.Any())
+                try
+                {
+				    _parentProcess = Process.GetProcessById(id);
+				    _parentProcessPath = _parentProcess.MainModule.FileName;
+				    _runningProcesses = AppMonitor.GetProcesses(_parentProcessPath);
+                }
+                catch (ArgumentException e)
+                {
+                    // ignored: process already closed
+                }
+
+                if (!_runningProcesses.Any())
 				{
 					TLCGenInstanceRunning = false;
 					return;
