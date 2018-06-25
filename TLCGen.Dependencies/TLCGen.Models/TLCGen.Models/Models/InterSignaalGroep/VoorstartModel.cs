@@ -12,7 +12,9 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [HasDefault(false)]
         public string FaseVan { get; set; }
+        [HasDefault(false)]
         public string FaseNaar { get; set; }
         public int VoorstartTijd { get; set; }
         public int VoorstartOntruimingstijd { get; set; }

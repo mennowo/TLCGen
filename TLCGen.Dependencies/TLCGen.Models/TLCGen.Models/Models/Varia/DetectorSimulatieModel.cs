@@ -14,6 +14,7 @@ namespace TLCGen.Models
         public int Q3 { get; set; }
         public int Q4 { get; set; }
         public int Stopline { get; set; }
+        [HasDefault(false)]
         public string FCNr { get; set; }
     }
 }

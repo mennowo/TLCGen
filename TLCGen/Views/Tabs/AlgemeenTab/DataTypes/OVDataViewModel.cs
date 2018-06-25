@@ -114,6 +114,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Blokkeren niet-conflicten tijdens HD ingreep")]
+        public bool BlokkeerNietConflictenBijHDIngreep
+        {
+            get { return _Controller == null ? false : _Controller.OVData.BlokkeerNietConflictenBijHDIngreep; }
+            set
+            {
+                _Controller.OVData.BlokkeerNietConflictenBijHDIngreep = value;
+                RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenBijHDIngreep), broadcast: true);
+            }
+        }
+
         #endregion // Properties
     }
 }

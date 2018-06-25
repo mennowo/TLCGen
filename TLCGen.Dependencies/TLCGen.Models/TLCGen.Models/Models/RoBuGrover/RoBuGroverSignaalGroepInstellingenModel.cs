@@ -15,6 +15,7 @@ namespace TLCGen.Models
         #region Properties
 
         [Browsable(false)]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int MinGroenTijd { get; set; }
         public int MaxGroenTijd { get; set; }

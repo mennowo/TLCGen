@@ -11,6 +11,7 @@ namespace TLCGen.Models
     [RefersTo("Detector")]
     public class NaloopDetectorModel
     {
+        [HasDefault(false)]
         public string Detector { get; set; }
         public NaloopDetectorTypeEnum Type { get; set; }
     }

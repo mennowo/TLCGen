@@ -9,9 +9,11 @@ namespace TLCGen.Models
 	{
 		public override string Naam { get; set; }
 		
+        [HasDefault(false)]
 		public string Plan { get; set; }
-		public string Kruising { get; set; }
-		public HalfstarGekoppeldTypeEnum Type { get; set; }
+        [HasDefault(false)]
+        public string Kruising { get; set; }
+        public HalfstarGekoppeldTypeEnum Type { get; set; }
 		
 		public bool IsMaster => Type == HalfstarGekoppeldTypeEnum.Master;
 

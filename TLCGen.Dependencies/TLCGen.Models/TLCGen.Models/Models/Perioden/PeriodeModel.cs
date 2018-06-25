@@ -15,6 +15,7 @@ namespace TLCGen.Models
     {
         #region Properties
 
+        [HasDefault(false)]
         [ModelName(TLCGenObjectTypeEnum.Periode)]
         public string Naam { get; set; }
         public PeriodeTypeEnum Type { get; set; }
@@ -23,7 +24,9 @@ namespace TLCGen.Models
         public TimeSpan StartTijd { get; set; }
         [XmlIgnore]
         public TimeSpan EindTijd { get; set; }
+        [HasDefault(false)]
         public string GroentijdenSet { get; set; }
+        [HasDefault(false)]
         public string Commentaar { get; set; }
 
         [Browsable(false)]
@@ -35,6 +38,7 @@ namespace TLCGen.Models
         public bool BitmapDataRelevant { get; set; }
         [XmlIgnore]
         [Browsable(false)]
+        [HasDefault(false)]
         public string BitmapNaam { get; set; }
 
         #endregion // Properties

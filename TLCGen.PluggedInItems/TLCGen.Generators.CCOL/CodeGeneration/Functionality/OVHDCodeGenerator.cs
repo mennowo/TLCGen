@@ -443,8 +443,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 40;
+//                case CCOLCodeTypeEnum.OvCTop:
+//                    return 20;
                 case CCOLCodeTypeEnum.OvCInUitMelden:
                     return 10;
+//                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+//                    return 10;
                 default:
                     return 0;
             }
@@ -685,6 +689,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
+            var first = false;
 
             switch (type)
             {
@@ -734,6 +739,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             case OVIngreepVoertuigTypeEnum.Bus:
                                 vtgType = "CIF_BUS";
                                 break;
+                            case OVIngreepVoertuigTypeEnum.NG:
+                                vtgType = "NG";
+                                break;
                             default:
                                 throw new IndexOutOfRangeException();
                         }
@@ -761,7 +769,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append($"RT[{_tpf}{_tovin}{ov.FaseCyclus}] = ");
                             }
-                            var first = true;
+                            first = true;
                             foreach (var i in inmHelems)
                             {
                                 if (!first) sb.Append(" || ");
@@ -796,7 +804,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.Append($"RT[{_tpf}{_tovuit}{ov.FaseCyclus}] = ");
                             }
-                            var first = true;
+                            first = true;
                             foreach (var i in uitmHelems)
                             {
                                 if (!first) sb.Append(" || ");
@@ -827,7 +835,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 inmHelems.Add($"{_hpf}{_hhdin}{hd.FaseCyclus}opt");
                             }
                             sb.Append($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = ");
-                            var first = true;
+                            first = true;
                             foreach (var i in inmHelems)
                             {
                                 if (!first) sb.Append(" || ");
@@ -857,7 +865,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 inmHelems.Add($"{_hpf}{_hhduit}{hd.FaseCyclus}opt");
                             }
                             sb.Append($"{ts}IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = ");
-                            var first = true;
+                            first = true;
                             foreach (var i in inmHelems)
                             {
                                 if (!first) sb.Append(" || ");
@@ -870,6 +878,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
 
                     return sb.ToString();
+
+//                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+//                    if (!c.OVData.BlokkeerNietConflictenBijHDIngreep) return "";
+//                    sb.AppendLine($"{ts}bool isHD = FALSE;");
+//                    sb.AppendLine($"{ts}int fc;");
+//                    sb.AppendLine();
+//                    sb.Append($"{ts}isHD = ");
+//                    first = true;
+//                    foreach(var hd in c.OVData.HDIngrepen)
+//                    {
+//                        if (!first)
+//                        {
+//                            sb.Append(" || ");
+//                        }
+//                        sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
+//                        first = false;
+//                    }
+//                    sb.AppendLine(";");
+//                    sb.AppendLine();
+//                    sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
+//                    sb.AppendLine($"{ts}if (isHD)");
+//                    sb.AppendLine($"{ts}{{");
+//                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+//                    sb.AppendLine($"{ts}{ts}{{");
+//                    sb.AppendLine($"{ts}{ts}{ts}if (!YV[fc] & BIT6) BL[fc] |= BIT6;");
+//                    sb.AppendLine($"{ts}{ts}{ts}else BL[fc] &= ~BIT6;");
+//                    sb.AppendLine($"{ts}{ts}}}");
+//                    sb.AppendLine($"{ts}}}");
+//                    sb.AppendLine($"{ts}else");
+//                    sb.AppendLine($"{ts}{{");
+//                    sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
+//                    sb.AppendLine($"{ts}{ts}{{");
+//                    sb.AppendLine($"{ts}{ts}{ts}BL[fc] &= ~BIT6;");
+//                    sb.AppendLine($"{ts}{ts}}}");
+//                    sb.AppendLine($"{ts}}}");
+//                    sb.AppendLine();
+//                    return sb.ToString();
+
                 default:
                     return null;
             }

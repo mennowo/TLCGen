@@ -7,6 +7,7 @@ namespace TLCGen.Models.Enumerations
     public enum OVIngreepVoertuigTypeEnum
     {
         Tram,
-        Bus
+        Bus,
+        NG
     }
 }

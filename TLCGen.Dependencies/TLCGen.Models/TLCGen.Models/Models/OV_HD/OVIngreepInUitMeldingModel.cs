@@ -14,11 +14,13 @@ namespace TLCGen.Models
         public OVIngreepInUitMeldingVoorwaardeTypeEnum Type { get; set; }
 
         [RefersTo]
+        [HasDefault(false)]
         public string RelatedInput1 { get; set; }
         public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type { get; set; }
 
         public bool TweedeInput { get; set; }
         [RefersTo]
+        [HasDefault(false)]
         public string RelatedInput2 { get; set; }
         public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type { get; set; }
 

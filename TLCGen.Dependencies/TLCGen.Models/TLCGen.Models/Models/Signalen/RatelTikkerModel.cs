@@ -13,6 +13,7 @@ namespace TLCGen.Models
     {
         public RateltikkerTypeEnum Type { get; set; }
         public int NaloopTijd { get; set; }
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public List<RatelTikkerDetectorModel> Detectoren { get; set; }
 

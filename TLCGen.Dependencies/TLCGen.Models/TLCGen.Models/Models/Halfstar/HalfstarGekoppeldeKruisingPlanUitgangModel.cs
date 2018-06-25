@@ -9,15 +9,17 @@ namespace TLCGen.Models
 	{
 		public override string Naam { get; set; }
 		
+        [HasDefault(false)]
 		public string Plan { get; set; }
-		public string Kruising { get; set; }
-		public HalfstarGekoppeldTypeEnum Type { get; set; }
+        [HasDefault(false)]
+        public string Kruising { get; set; }
+        public HalfstarGekoppeldTypeEnum Type { get; set; }
 		
 		public bool IsSlave => Type == HalfstarGekoppeldTypeEnum.Slave;
 
-		public string IOName => Kruising + Plan;
+        public string IOName => Kruising + Plan;
 
-		public int CompareTo(object obj)
+        public int CompareTo(object obj)
 		{
 			return string.Compare(Plan, ((HalfstarGekoppeldeKruisingPlanUitgangModel) obj).Plan, StringComparison.Ordinal);
 		}

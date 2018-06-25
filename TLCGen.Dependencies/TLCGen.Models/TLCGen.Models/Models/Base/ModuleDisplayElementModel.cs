@@ -15,6 +15,7 @@ namespace TLCGen.Models
 
         private string _Naam;
         [RefersTo]
+        [HasDefault(false)]
         public string Naam
         {
             get

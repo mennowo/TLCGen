@@ -14,6 +14,7 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "ConflictendeFase")]
         public List<VAOntruimenNaarFaseModel> ConflicterendeFasen { get; set; }
 
+        [HasDefault(false)]
         public string Detector { get; set; }
 
         public VAOntruimenDetectorModel()

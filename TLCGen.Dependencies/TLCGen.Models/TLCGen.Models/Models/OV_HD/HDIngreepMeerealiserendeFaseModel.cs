@@ -8,6 +8,7 @@ namespace TLCGen.Models
     public class HDIngreepMeerealiserendeFaseCyclusModel : IComparable
     {
         [XmlText]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
 
         public int CompareTo(object obj)

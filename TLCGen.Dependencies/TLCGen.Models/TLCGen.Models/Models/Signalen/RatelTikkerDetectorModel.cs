@@ -10,6 +10,7 @@ namespace TLCGen.Models
     [RefersTo("Detector")]
     public class RatelTikkerDetectorModel
     {
+        [HasDefault(false)]
         public string Detector { get; set; }
     }
 }

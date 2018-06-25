@@ -13,6 +13,7 @@ namespace TLCGen.Models
         #region Properties
 
         [Browsable(false)]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
 
         //[Obsolete("This property has been deprecated: use Meldingen instead.")]
@@ -25,6 +26,7 @@ namespace TLCGen.Models
         public bool NoodaanvraagKoplus { get; set; }
         public bool KoplusKijkNaarWisselstand { get; set; }
         [RefersTo]
+        [HasDefault(false)]
         public string Koplus { get; set; }
 
         public int RijTijdOngehinderd { get; set; }

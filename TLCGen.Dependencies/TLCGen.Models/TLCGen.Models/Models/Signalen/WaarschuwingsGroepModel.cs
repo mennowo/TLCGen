@@ -12,9 +12,11 @@ namespace TLCGen.Models
     public class WaarschuwingsGroepModel
     {
         [ModelName(TLCGenObjectTypeEnum.WaarschuwingsGroep)]
+        [HasDefault(false)]
         public string Naam { get; set; }
         public bool Lichten { get; set; }
         public bool Bellen { get; set; }
+        [HasDefault(false)]
         public string FaseCyclusVoorAansturing { get; set; }
 
         [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam")]

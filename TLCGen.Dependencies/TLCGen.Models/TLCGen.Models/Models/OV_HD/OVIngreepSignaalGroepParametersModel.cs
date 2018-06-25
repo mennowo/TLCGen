@@ -14,6 +14,7 @@ namespace TLCGen.Models
         #region Properties
 
         [Browsable(false)]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int AantalKerenNietAfkappen { get; set; }
         public int MinimumGroentijdConflictOVRealisatie { get; set; }

@@ -13,6 +13,8 @@ namespace TLCGen.Models
         [IOElement("segm", BitmappedItemTypeEnum.Uitgang, "Naam")]
         public BitmapCoordinatenDataModel BitmapData { get; set; }
         private string _Naam;
+
+        [HasDefault(false)]
         public string Naam
         {
             get

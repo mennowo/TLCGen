@@ -7,6 +7,7 @@ namespace TLCGen.Models
     [RefersTo("FaseCyclus")]
     public class HardMeeverlengenFaseCyclusModel
     {
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public HardMeevelengenTypeEnum Type { get; set; }
     }

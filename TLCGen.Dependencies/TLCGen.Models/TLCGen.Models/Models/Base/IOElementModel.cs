@@ -11,6 +11,7 @@ namespace TLCGen.Models
     [Serializable]
     public abstract class IOElementModel
     {
+        [HasDefault(false)]
         public abstract string Naam { get; set; }
 
         [Browsable(false)]

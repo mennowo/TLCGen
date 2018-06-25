@@ -16,16 +16,20 @@ namespace TLCGen.Models
         public List<OVIngreepInUitMeldingModel> Uitmeldingen { get; set; }
 
         [RefersTo]
+        [HasDefault(false)]
         public string Wissel1Input { get; set; }
         [RefersTo]
+        [HasDefault(false)]
         public string Wissel2Detector { get; set; }
         public bool Wissel1 { get; set; }
         public OVIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
         public bool Wissel1InputVoorwaarde { get; set; }
 
         [RefersTo]
+        [HasDefault(false)]
         public string Wissel2Input { get; set; }
         [RefersTo]
+        [HasDefault(false)]
         public string Wissel1Detector { get; set; }
         public bool Wissel2 { get; set; }
         public OVIngreepInUitDataWisselTypeEnum Wissel2Type { get; set; }

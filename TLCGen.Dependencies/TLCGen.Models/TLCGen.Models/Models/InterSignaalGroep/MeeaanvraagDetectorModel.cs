@@ -10,6 +10,7 @@ namespace TLCGen.Models
     [RefersTo("MeeaanvraagDetector")]
     public class MeeaanvraagDetectorModel
     {
+        [HasDefault(false)]
         public string MeeaanvraagDetector { get; set; }
     }
 }

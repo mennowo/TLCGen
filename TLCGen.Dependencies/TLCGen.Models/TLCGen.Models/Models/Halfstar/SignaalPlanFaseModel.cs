@@ -8,6 +8,7 @@ namespace TLCGen.Models
 	{
 		#region Properties
 
+        [HasDefault(false)]
 		public string FaseCyclus { get; set; }
 		public int? A1 { get; set; }
 		public int B1 { get; set; }

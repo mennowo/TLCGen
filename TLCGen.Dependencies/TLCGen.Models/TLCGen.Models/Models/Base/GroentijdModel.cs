@@ -10,6 +10,7 @@ namespace TLCGen.Models
         #region Properties
         
         [Browsable(false)]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int? Waarde { get; set; }
 

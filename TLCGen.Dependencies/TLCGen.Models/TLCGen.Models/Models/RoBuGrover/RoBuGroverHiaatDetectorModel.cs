@@ -12,6 +12,7 @@ namespace TLCGen.Models
     public class RoBuGroverHiaatDetectorModel
     {
         [Browsable(false)]
+        [HasDefault(false)]
         public string Detector { get; set; }
         public int HiaatTijd { get; set; }
     }

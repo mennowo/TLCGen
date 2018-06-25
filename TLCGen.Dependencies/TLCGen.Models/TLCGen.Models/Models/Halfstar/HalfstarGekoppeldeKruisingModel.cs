@@ -16,9 +16,10 @@ namespace TLCGen.Models
 
 		#region Properties
 
+        [HasDefault(false)]
 		public string KruisingNaam { get; set; }
 
-		public HalfstarGekoppeldTypeEnum Type
+        public HalfstarGekoppeldTypeEnum Type
 		{
 			get => _type;
 			set
@@ -36,9 +37,10 @@ namespace TLCGen.Models
 		}
 
 		public HalfstarGekoppeldWijzeEnum KoppelWijze { get; set; }
+        [HasDefault(false)]
 		public string PTPKruising { get; set; }
 
-		[Browsable(false)]
+        [Browsable(false)]
 		public bool IsSlave => Type == HalfstarGekoppeldTypeEnum.Slave;
 
 		[Browsable(false)]

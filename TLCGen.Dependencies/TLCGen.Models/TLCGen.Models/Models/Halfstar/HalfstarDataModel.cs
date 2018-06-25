@@ -12,8 +12,9 @@ namespace TLCGen.Models
 
 		public bool IsHalfstar { get; set; }
 		public HalfstarTypeEnum Type { get; set; }
+        [HasDefault(false)]
 		public string DefaultPeriodeSignaalplan { get; set; }
-		public HalfstarVARegelenTypeEnum TypeVARegelen { get; set; }
+        public HalfstarVARegelenTypeEnum TypeVARegelen { get; set; }
 		public bool DefaultPeriodeVARegelen { get; set; }
 		public bool DefaultPeriodeAlternatievenVoorHoofdrichtingen { get; set; }
 		public bool OVPrioriteitPL { get; set; }

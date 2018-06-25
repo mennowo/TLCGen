@@ -7,6 +7,7 @@ namespace TLCGen.Models
     public class PTPKoppelingModel
     {
 		[ModelName(TLCGenObjectTypeEnum.PTPKruising)]
+        [HasDefault(false)]
         public string TeKoppelenKruispunt { get; set; }
         public int AantalsignalenIn { get; set; }
         public int AantalsignalenUit { get; set; }

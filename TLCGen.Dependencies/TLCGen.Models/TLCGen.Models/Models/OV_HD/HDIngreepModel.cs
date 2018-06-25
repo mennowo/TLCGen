@@ -13,6 +13,7 @@ namespace TLCGen.Models
         #region Properties
 
         [Browsable(false)]
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
 
         public bool KAR { get; set; }
@@ -21,6 +22,7 @@ namespace TLCGen.Models
         public int? KARUitmeldingFilterTijd { get; set; }
         public int? OpticomInmeldingFilterTijd { get; set; }
         [Browsable(false)]
+        [HasDefault(false)]
         public string OpticomRelatedInput { get; set; }
         public bool Sirene { get; set; }
 

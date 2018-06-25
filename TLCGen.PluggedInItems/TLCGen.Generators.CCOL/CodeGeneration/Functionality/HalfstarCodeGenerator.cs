@@ -400,7 +400,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCPrioriteitsToekenning:
                     return 10;
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
-                    return 10;
+                    return 20;
                 case CCOLCodeTypeEnum.HstCOVSettingsHalfstar:
                     return 10;
                 default:

@@ -10,6 +10,7 @@ namespace TLCGen.Models
     [RefersTo("FaseCyclus")]
     public class FileIngreepTeDoserenSignaalGroepModel
     {
+        [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int DoseerPercentage { get; set; }
     }

@@ -21,6 +21,7 @@ namespace TLCGen.Models
         public int MaxWachttijdVoetganger { get; set; }
         public int GeconditioneerdePrioGrensTeVroeg { get; set; }
         public int GeconditioneerdePrioGrensTeLaat { get; set; }
+        public bool BlokkeerNietConflictenBijHDIngreep { get; set; }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]

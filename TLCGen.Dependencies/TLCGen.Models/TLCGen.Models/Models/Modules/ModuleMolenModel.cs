@@ -16,6 +16,7 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "FaseCyclusModuleData")]
         public List<FaseCyclusModuleDataModel> FasenModuleData { get; set; } 
 
+        [HasDefault(false)]
         public string WachtModule { get; set; }
 
         public bool LangstWachtendeAlternatief { get; set; }

@@ -10,6 +10,7 @@ namespace TLCGen.Models
     {
         [ModelName(TLCGenObjectTypeEnum.Input)]
         public override string Naam { get; set; }
+        [HasDefault(false)]
         public string Omschrijving { get; set; }
         public IngangTypeEnum Type { get; set; }
 
