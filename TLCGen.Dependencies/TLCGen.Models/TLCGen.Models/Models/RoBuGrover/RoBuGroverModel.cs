@@ -13,6 +13,7 @@ namespace TLCGen.Models
     public class RoBuGroverModel
     {
         public bool RoBuGrover { get; set; }
+        public bool RoBuGroverVenster { get; set; }
         public int MinimaleCyclustijd { get; set; }
         public int MaximaleCyclustijd { get; set; }
         public int GroentijdVerschil { get; set; }

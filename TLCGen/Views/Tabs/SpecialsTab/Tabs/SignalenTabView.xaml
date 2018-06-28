@@ -54,6 +54,7 @@
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -62,7 +63,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Label Content="Rateltikkers" Grid.ColumnSpan="2" />
-            <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1"
+            <CheckBox Content="Dimming uitgang per rateltikker" IsChecked="{Binding DimUitgangPerTikker}" VerticalAlignment="Center" Margin="2" Grid.Row="1" Grid.ColumnSpan="2" />
+            <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="2"
                   ItemsSource="{Binding Path=RatelTikkers}" SelectedItem="{Binding Path=SelectedRatelTikker}">
                 <DataGrid.RowHeaderTemplate>
                     <DataTemplate>
@@ -91,7 +93,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="1" Grid.Column="1">
+            <Grid Grid.Row="2" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -114,7 +116,7 @@
                     <Button Content="-" Command="{Binding RemoveRatelTikkerDetectorCommand}" Margin="2" Padding="4,0" DockPanel.Dock="Bottom" HorizontalContentAlignment="Center" />
                 </StackPanel>-->
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2">
                 <Label Content="Fase" />
                 <ComboBox ItemsSource="{Binding Path=SelectableRatelTikkerFasen}" 
                           SelectedValue="{Binding Path=SelectedRatelTikkerFaseToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" MinWidth="50" />

@@ -292,15 +292,6 @@ namespace TLCGen.SpecialsRotterdam
             }
         }
 
-        public override List<string> GetSourcesToCopy()
-        {
-            return new List<string>
-            {
-                "afmroutines.c",
-                "afmroutines.h"
-            };
-        }
-
         #endregion // CCOLCodePieceGenerator
 
         #region Constructor

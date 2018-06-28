@@ -165,7 +165,7 @@ namespace TLCGen.ViewModels
             dm.AanvraagDirect = false; // Not possible / allowed on loose detector
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
-            Messenger.Default.Send(new DetectorenChangedMessage());
+            Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { dm }, null));
         }
 
         bool AddDetectorCommand_CanExecute(object prm)
@@ -176,17 +176,20 @@ namespace TLCGen.ViewModels
         void RemoveDetectorCommand_Executed(object prm)
         {
             bool changed = false;
+            var remDets = new List<DetectorModel>();
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
                 changed = true;
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
+                    remDets.Add(dvm.Detector);
                     Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(dvm.Naam);
                 }
             }
             else if (SelectedDetector != null)
             {
                 changed = true;
+                remDets.Add(SelectedDetector.Detector);
                 Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(SelectedDetector.Naam);
             }
             RebuildDetectorenList();
@@ -194,7 +197,7 @@ namespace TLCGen.ViewModels
 
             if (changed)
             {
-                Messenger.Default.Send(new DetectorenChangedMessage());
+                Messenger.Default.Send(new DetectorenChangedMessage(null, remDets));
             }
         }
 
@@ -296,7 +299,7 @@ namespace TLCGen.ViewModels
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage());
+			Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates

@@ -1086,19 +1086,25 @@
             <Default>rt</Default>
             <Setting>rt</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement rateltikker actief</Description>
+            <Description>Hulpelement rateltikker actief fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rt</Default>
             <Setting>rt</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang rateltikker actief</Description>
+            <Description>Uitgang rateltikker actief fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>rtdim</Default>
+            <Setting>rtdim</Setting>
+            <Type>Uitgang</Type>
+            <Description>Uitgang rateltikker gedimd fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>nlrt</Default>
             <Setting>nlrt</Setting>
             <Type>Timer</Type>
-            <Description>Timer nalooptijd rateltikker</Description>
+            <Description>Timer nalooptijd rateltikker fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

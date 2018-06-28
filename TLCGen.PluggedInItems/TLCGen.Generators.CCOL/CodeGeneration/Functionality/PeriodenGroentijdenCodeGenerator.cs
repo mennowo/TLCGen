@@ -51,11 +51,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 switch(per.Type)
                 {
                     case PeriodeTypeEnum.Groentijden:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{iper}", _usper));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{iper}", _usper, per.Commentaar));
                         _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{iper++}"));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{ipero}", _usper));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{ipero}", _usper, per.Commentaar));
                         _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{_prmpero}{ipero++}"));
                         break;
                 }

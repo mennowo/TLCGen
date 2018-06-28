@@ -29,9 +29,10 @@
         RegCSystemApplication2,
         RegCPostSystemApplication,
         RegCDumpApplication,
+        RegCSpecialSignals,
 
-		// OV
-	    OvCIncludes,
+        // OV
+        OvCIncludes,
 		OvCTop,
 		OvCInstellingen,
 		OvCRijTijdScenario,
@@ -45,7 +46,8 @@
 		OvCBottom,
 
 		// TAB
-	    TabCControlDefaults,
+	    TabCControlIncludes,
+        TabCControlDefaults,
 	    TabCControlParameters,
 
         // HST

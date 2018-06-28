@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace TLCGen.Plugins
 
         private static readonly object _Locker = new object();
         private static ITLCGenPluginManager _Default;
+        private static List<string> _lookupDepsPaths;
         private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _ApplicationParts;
         private List<Tuple<TLCGenPluginElems, ITLCGenPlugin>> _Plugins;
 
@@ -165,38 +167,38 @@ namespace TLCGen.Plugins
 
         public void LoadPlugins(string pluginpath)
         {
+            // load local plugins
             try
             {
                 if (Directory.Exists(pluginpath))
                 {
-                    // Find all Generator DLL's
-                    foreach (String file in Directory.GetFiles(pluginpath))
+                    LoadPluginsFromPath(pluginpath);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            // load remote plugins
+            try
+            {
+                var key = Registry.CurrentUser.OpenSubKey("Software\\CodingConnected e.U.\\TLCGen\\Plugins");
+                if (key != null)
+                {
+                    foreach (var v in key.GetValueNames())
                     {
-                        string _file = file;
-                        if (Path.GetExtension(_file).ToLower() == ".dll")
+                        var paths = (string[])key.GetValue(v);
+                        if (paths.Length == 1)
                         {
-                            // Find and loop all types from the assembly
-                            Assembly assemblyInstance = null;
-                            assemblyInstance = Assembly.LoadFrom(Path.GetFileName(Path.GetDirectoryName(_file)) + "\\" + Path.GetFileName(_file));
-                            var types = assemblyInstance.GetTypes();
-                            var bFound = false;
-                            foreach (Type type in types)
+                            LoadPluginsFromPath(paths[0]);
+                        }
+                        else if (paths.Length == 2)
+                        {
+                            if (!_lookupDepsPaths.Contains(paths[1]))
                             {
-                                // Find TLCGenPluginAttribute attribute, and if found, continue
-                                var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));
-                                if (attr != null)
-                                {
-                                    ApplicationPlugins.Add(
-                                        new Tuple<TLCGenPluginElems, ITLCGenPlugin>(
-                                            attr.PluginElements,
-                                            (ITLCGenPlugin)Activator.CreateInstance(type)));
-                                    bFound = true;
-                                }
+                                _lookupDepsPaths.Add(paths[1]);
                             }
-                            if (!bFound)
-                            {
-                                System.Windows.MessageBox.Show($"Library {_file} wordt niet herkend als TLCGen addin.");
-                            }
+                            LoadPluginsFromPath(paths[0]);
                         }
                     }
                 }
@@ -209,11 +211,65 @@ namespace TLCGen.Plugins
 
         #endregion // Public methods
 
+        #region Private Methods
+
+        private void LoadPluginsFromPath(string pluginpath)
+        {
+            // Find all plugin DLL's
+            foreach (String file in Directory.GetFiles(pluginpath))
+            {
+                string _file = file;
+                if (Path.GetExtension(_file).ToLower() == ".dll")
+                {
+                    // Find and loop all types from the assembly
+                    Assembly assemblyInstance = null;
+                    assemblyInstance = Assembly.LoadFrom(_file);
+                    var types = assemblyInstance.GetTypes();
+                    var bFound = false;
+                    foreach (Type type in types)
+                    {
+                        // Find TLCGenPluginAttribute attribute, and if found, continue
+                        var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));
+                        if (attr != null)
+                        {
+                            ApplicationPlugins.Add(
+                                new Tuple<TLCGenPluginElems, ITLCGenPlugin>(
+                                    attr.PluginElements,
+                                    (ITLCGenPlugin)Activator.CreateInstance(type)));
+                            bFound = true;
+                        }
+                    }
+                    if (!bFound)
+                    {
+                        System.Windows.MessageBox.Show($"Library {_file} wordt niet herkend als TLCGen addin.");
+                    }
+                }
+            }
+        }
+
+        private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var assemblyname = new AssemblyName(args.Name).Name;
+            foreach(var p in _lookupDepsPaths)
+            {
+                var assemblyFileName = Path.Combine(p, assemblyname + ".dll");
+                if(File.Exists(assemblyFileName))
+                {
+                    var assembly = Assembly.LoadFrom(assemblyFileName);
+                    return assembly;
+                }
+            }
+            return null;
+        }
+
+        #endregion // Private Methods
+
         #region Constructor
 
         public TLCGenPluginManager()
         {
-
+            _lookupDepsPaths = new List<string>();
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
         }
 
         #endregion // Constructor

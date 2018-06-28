@@ -225,7 +225,7 @@ namespace TLCGen.ViewModels
 	        _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
 	        Detectoren.BubbleSort();
-			Messenger.Default.Send(new DetectorenChangedMessage());
+			Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { _dm }, null));
         }
 
         bool AddDetectorCommand_CanExecute(object prm)
@@ -236,24 +236,27 @@ namespace TLCGen.ViewModels
         void RemoveDetectorCommand_Executed(object prm)
         {
             var changed = false;
+            var remDets = new List<DetectorModel>();
             if (SelectedDetectoren != null && SelectedDetectoren.Count > 0)
             {
                 changed = true;
                 foreach (DetectorViewModel dvm in SelectedDetectoren)
                 {
+                    remDets.Add(dvm.Detector);
                     Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(dvm.Naam);
                 }
             }
             else if (SelectedDetector != null)
             {
                 changed = true;
+                remDets.Add(SelectedDetector.Detector);
                 Integrity.TLCGenControllerModifier.Default.RemoveDetectorFromController(SelectedDetector.Naam);
             }
 
             if (changed)
             {
                 SelectedFaseNaam = SelectedFaseNaam;
-                Messenger.Default.Send(new DetectorenChangedMessage());
+                Messenger.Default.Send(new DetectorenChangedMessage(null, remDets));
             }
         }
 
@@ -363,7 +366,7 @@ namespace TLCGen.ViewModels
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage());
+			Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates

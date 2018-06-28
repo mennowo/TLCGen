@@ -789,7 +789,7 @@ namespace TLCGen.ViewModels
 	            TLCGenSplashScreenHelper.ShowText("Laden applicatie onderdelen...");
                 TLCGenPluginManager.Default.LoadApplicationParts(types.ToList());
 	            TLCGenSplashScreenHelper.ShowText("Laden plugins...");
-                TLCGenPluginManager.Default.LoadPlugins(System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
+                TLCGenPluginManager.Default.LoadPlugins(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins\\"));
 
                 // Instantiate all parts
                 _ApplicationParts = new List<Tuple<TLCGenPluginElems, ITLCGenPlugin>>();

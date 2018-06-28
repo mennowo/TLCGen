@@ -315,8 +315,6 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-
-
         private List<string> _PeriodeTypeOpties;
         public List<string> PeriodeTypeOpties
         {
@@ -333,8 +331,6 @@ namespace TLCGen.ViewModels
         public PeriodenOverigTabViewModel() : base()
         {
             Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
-
-
 
             PeriodeTypeOpties.Clear();
             var descs = Enum.GetValues(typeof(PeriodeTypeEnum));

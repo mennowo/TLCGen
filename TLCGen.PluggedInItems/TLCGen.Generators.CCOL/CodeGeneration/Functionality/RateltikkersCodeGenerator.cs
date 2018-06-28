@@ -21,6 +21,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _MyBitmapOutputs;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usrt;
+        private CCOLGeneratorCodeStringSettingModel _usrtdim;
         private CCOLGeneratorCodeStringSettingModel _hrt;
         private CCOLGeneratorCodeStringSettingModel _tnlrt;
 #pragma warning restore 0649
@@ -38,23 +39,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var rt in c.Signalen.Rateltikkers)
             {
-                _MyElements.Add(
-                        new CCOLElement(
-                            $"{_usrt}{rt.FaseCyclus}",
-                            CCOLElementTypeEnum.Uitgang));
-                _MyElements.Add(
-                    new CCOLElement(
-                        $"{_hrt}{rt.FaseCyclus}",
-                        CCOLElementTypeEnum.HulpElement));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrt}{rt.FaseCyclus}", _usrt, rt.FaseCyclus));
+                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hrt}{rt.FaseCyclus}", _hrt, rt.FaseCyclus));
+                
+                if (c.Signalen.DimUitgangPerTikker)
+                {
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrtdim}{rt.FaseCyclus}", _usrtdim, rt.FaseCyclus));
+                }
 
                 if (rt.Type == RateltikkerTypeEnum.Hoeflake)
                 {
-                    _MyElements.Add(
-                    new CCOLElement(
-                        $"{_tnlrt}{rt.FaseCyclus}",
-                        rt.NaloopTijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", _tnlrt, rt.FaseCyclus));
                 }
 
                 _MyBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
@@ -126,6 +121,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 break;
                         }
                     }
+
+                    if (c.Signalen.DimUitgangPerTikker)
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* uitsturing dimming signaal per rateltikker */");
+                        foreach (var rt in c.Signalen.Rateltikkers)
+                        {
+                            sb.AppendLine($"{ts}GUS[{_uspf}{_usrtdim}{rt.FaseCyclus}] = H[{_hpf}{_hperiod}{_prmperrtdim}];");
+                        }
+                    }
+
                     sb.AppendLine();
                     return sb.ToString();
 

@@ -59,9 +59,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#include \"rgvfunc.c\"");
             sb.AppendLine("#include \"rgv_overslag.c\"");
             sb.AppendLine("");
-            sb.AppendLine("#if (!defined AUTOMAAT) || (defined VISSIM)");
-            sb.AppendLine($"{ts}#include \"winmg.c\"");
-            sb.AppendLine("#endif");
+            if (c.RoBuGrover.RoBuGroverVenster)
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT) || (defined VISSIM)");
+                sb.AppendLine($"{ts}#include \"winmg.c\"");
+                sb.AppendLine("#endif");
+            }
             sb.AppendLine();
             sb.AppendLine("void rgv_add(void)");
             sb.AppendLine("{");
@@ -377,16 +380,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}xyprintf (30, teller+2, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
             }
             sb.AppendLine($"{ts}{ts}");
-            sb.AppendLine($"{ts}{ts}#ifndef DUURTEST");
-            sb.AppendLine($"{ts}{ts}{ts}MG_Bars_init(TVG_basis, TVG_rgv, 10, 750, 0, 0);");
-            sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(SYSTEM, ");
-            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
+            if (c.RoBuGrover.RoBuGroverVenster)
             {
-                sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
+                sb.AppendLine($"{ts}{ts}#ifndef DUURTEST");
+                sb.AppendLine($"{ts}{ts}{ts}MG_Bars_init(TVG_basis, TVG_rgv, 10, 750, 0, 0);");
+                sb.Append($"{ts}{ts}{ts}MG_Fasen_Venster_init(SYSTEM, ");
+                foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
+                {
+                    sb.Append($"{_fcpf}{fc.FaseCyclus}, ");
+                }
+                sb.AppendLine("END);");
+                sb.AppendLine($"{ts}{ts}{ts}MG_Bars();");
+                sb.AppendLine($"{ts}{ts}#endif");
             }
-            sb.AppendLine("END);");
-            sb.AppendLine($"{ts}{ts}{ts}MG_Bars();");
-            sb.AppendLine($"{ts}{ts}#endif");
             sb.AppendLine($"{ts}#endif ");
             sb.AppendLine("}");
             sb.AppendLine();

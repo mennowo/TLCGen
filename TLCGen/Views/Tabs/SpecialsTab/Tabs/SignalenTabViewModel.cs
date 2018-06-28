@@ -85,6 +85,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool DimUitgangPerTikker
+        {
+            get => _Controller.Signalen.DimUitgangPerTikker;
+            set
+            {
+                _Controller.Signalen.DimUitgangPerTikker = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -120,6 +130,15 @@ namespace TLCGen.ViewModels
             SelectedWaarschuwingsGroep = grvm;
             Messenger.Default.Send(new ControllerDataChangedMessage());
             UpdateSelectables();
+
+            if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.BellenActief))
+            {
+                AddPeriodToModel(PeriodeTypeEnum.BellenActief, "bel");
+            }
+            if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.BellenDimmen))
+            {
+                AddPeriodToModel(PeriodeTypeEnum.BellenDimmen, "beldim");
+            }
         }
 
         bool AddWaarschuwingsGroepCommand_CanExecute(object prm)
@@ -181,15 +200,15 @@ namespace TLCGen.ViewModels
 
 	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAanvraag))
 	        {
-		       AddPeriodToModel(PeriodeTypeEnum.RateltikkersAanvraag);
+		       AddPeriodToModel(PeriodeTypeEnum.RateltikkersAanvraag, "rtaanvr");
 			}
 	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersAltijd))
 	        {
-		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersAltijd);
+		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersAltijd, "rtaltijd");
 	        }
 	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersDimmen))
 	        {
-		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen);
+		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen, "rtdimmen");
 	        }
 		}
 
@@ -229,13 +248,11 @@ namespace TLCGen.ViewModels
 
         #region Private methods
 
-	    private void AddPeriodToModel(PeriodeTypeEnum type)
+	    private void AddPeriodToModel(PeriodeTypeEnum type, string name)
 	    {
 			var p = new PeriodeModel { Type = type };
 		    DefaultsProvider.Default.SetDefaultsOnModel(p, p.Type.ToString(), null, false);
-		    var name = p.Naam;
-		    var newname = p.Naam;
-		    p.Naam = "";
+            var newname = name;
 		    var i = 0;
             while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, newname))
             {

@@ -122,6 +122,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("RoBuGrover venster in testomgeving")]
+        public bool RoBuGroverVenster
+        {
+            get { return _RoBuGrover.RoBuGroverVenster; }
+            set
+            {
+                _RoBuGrover.RoBuGroverVenster = value;
+                RaisePropertyChanged<object>("RoBuGroverVenster", broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands

@@ -763,7 +763,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void OVSpecialSignals();");
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
-			if (controller.OVData.OVIngrepen.Any() ||
+            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSpecialSignals])
+            {
+                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSpecialSignals, ts));
+            }
+            if (controller.OVData.OVIngrepen.Any() ||
 				controller.OVData.HDIngrepen.Any())
 		    {
 				sb.AppendLine($"{ts}OVSpecialSignals();");

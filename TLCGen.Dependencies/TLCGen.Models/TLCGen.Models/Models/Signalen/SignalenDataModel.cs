@@ -17,6 +17,8 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "Rateltikker")]
         public List<RatelTikkerModel> Rateltikkers { get; set; }
 
+        public bool DimUitgangPerTikker { get; set; }
+
         [IOElement("rtact", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevant")]
         public BitmapCoordinatenDataModel RatelTikkerActiefBitmapData { get; set; }
         [IOElement("rtaltijd", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevant")]

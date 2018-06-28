@@ -1082,7 +1082,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void OVSpecialSignals(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}/* reset oude set_DSI_message */");
-            sb.AppendLine($"{ts}#ifndef VISSIM");
+            sb.AppendLine($"{ts}#if !defined VISSIM || defined SUMO");
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();

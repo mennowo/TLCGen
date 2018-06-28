@@ -97,6 +97,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
             sb.AppendLine();
 
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true);
+
             return sb.ToString();
         }
 
