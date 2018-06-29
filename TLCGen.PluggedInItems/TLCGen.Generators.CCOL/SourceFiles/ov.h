@@ -97,7 +97,7 @@ void RealisatieTijden_Add(void);
 void OVTegenhouden_Add(void);
 void OVAfkappen_Add(void);
 void OVAlternatieven_Add(void);
-void post_AfhandelingOV(void);
+void PostAfhandelingOV_Add(void);
 #if !defined AUTOMAAT || defined VISSIM
 void OVDebug_Add(void);
 #endif

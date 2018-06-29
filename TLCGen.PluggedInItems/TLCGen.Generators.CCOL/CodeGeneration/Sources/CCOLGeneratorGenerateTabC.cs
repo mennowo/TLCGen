@@ -920,10 +920,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_OMG] = {c.Data.VLOGSettings.LOGTYPE_OMG};");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CRC] = {c.Data.VLOGSettings.LOGTYPE_CRC};");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_CFG] = {c.Data.VLOGSettings.LOGTYPE_CFG};");
+                sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
                 sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE.ToString()};");
-                sb.AppendLine($"{ts}LOGPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - monitoring */");
                 sb.AppendLine($"{ts}/* ----------------- */");
@@ -939,9 +939,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONTYPE[LOGTYPE_OMG] = {c.Data.VLOGSettings.MONTYPE_OMG};");
                 sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CRC] = {c.Data.VLOGSettings.MONTYPE_CRC};");
                 sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
+                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}MONPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE};");
-                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
                 sb.AppendLine();
             }
 

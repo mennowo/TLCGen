@@ -88,6 +88,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schwisselpol;
 #pragma warning restore 0649
 
+        private string _tnlfg;
+        private string _tnlfgd;
+        private string _tnlsg;
+        private string _tnlsgd;
+        private string _tnlcv;
+        private string _tnlcvd;
+        private string _tnleg;
+        private string _tnlegd;
+
         #endregion // Fields
 
         #region Properties
@@ -880,49 +889,107 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
-                    if (!c.OVData.BlokkeerNietConflictenBijHDIngreep) return "";
-                    sb.AppendLine($"{ts}bool isHD = FALSE;");
-                    sb.AppendLine($"{ts}int fc;");
-                    sb.AppendLine();
-                    sb.Append($"{ts}isHD = ");
-                    first = true;
-                    foreach(var hd in c.OVData.HDIngrepen)
+                    if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        if (!first)
+                        sb.AppendLine($"{ts}bool isHD = FALSE;");
+                        sb.AppendLine($"{ts}int fc;");
+                        sb.AppendLine();
+                        sb.Append($"{ts}/* Bepalen of een HD ingreep actief is */");
+                        sb.Append($"{ts}isHD = ");
+                        first = true;
+                        foreach (var hd in c.OVData.HDIngrepen)
                         {
-                            sb.Append(" || ");
+                            if (!first)
+                            {
+                                sb.Append(" || ");
+                            }
+                            sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
+                            first = false;
                         }
-                        sb.Append($"C[{_ctpf}{_cvchd}{hd.FaseCyclus}]");
-                        first = false;
+                        sb.AppendLine(";");
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT6;");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
+                        sb.AppendLine($"{ts}if (isHD)");
+                        sb.AppendLine($"{ts}{{");
+                        foreach (var fc in c.Fasen)
+                        {
+                            if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                            {
+                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                            }
+                        }
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
                     }
-                    sb.AppendLine(";");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT6;");
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
-                    sb.AppendLine($"{ts}if (isHD)");
-                    sb.AppendLine($"{ts}{{");
-                    foreach (var fc in c.Fasen)
+
+                    if (c.InterSignaalGroep.Nalopen.Any())
                     {
-                        if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                        sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer een naloop tijd nog loopt */");
+                        foreach (var fc in c.Fasen)
                         {
-                            sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                            var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.Naam);
+                            if (nl != null)
+                            {
+                                sb.Append($"{ts}if (");
+                                first = true;
+                                foreach (var nlt in nl.Tijden)
+                                {
+                                    if (!first) sb.Append(" || ");
+                                    first = false;
+                                    var _tnl = "";
+                                    switch (nlt.Type)
+                                    {
+                                        case NaloopTijdTypeEnum.StartGroen: _tnl = _tnlsg; break;
+                                        case NaloopTijdTypeEnum.StartGroenDetectie: _tnl = _tnlsgd; break;
+                                        case NaloopTijdTypeEnum.VastGroen: _tnl = _tnlfg; break;
+                                        case NaloopTijdTypeEnum.VastGroenDetectie: _tnl = _tnlfgd; break;
+                                        case NaloopTijdTypeEnum.EindeGroen: _tnl = _tnleg; break;
+                                        case NaloopTijdTypeEnum.EindeGroenDetectie: _tnl = _tnlegd; break;
+                                        case NaloopTijdTypeEnum.EindeVerlengGroen: _tnl = _tnlcv; break;
+                                        case NaloopTijdTypeEnum.EindeVerlengGroenDetectie: _tnl = _tnlcvd; break;
+                                        default: throw new ArgumentOutOfRangeException();
+                                    }
+                                    sb.Append($"RT[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}] || T[{_tpf}{_tnl}{nl.FaseVan}{nl.FaseNaar}]");
+                                }
+                                sb.AppendLine(")");
+                                sb.AppendLine($"{ts}{{");
+                                if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
+                                {
+                                    sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
+                                }
+                                sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~OV_FM_BIT;");
+                                sb.AppendLine($"{ts}}}");
+                            }
                         }
                     }
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:
                     return null;
             }
+        }
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
+            _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
+            _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+            _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+
+            return base.SetSettings(settings);
         }
     }
 }

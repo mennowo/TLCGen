@@ -74,9 +74,9 @@
                     <CheckBox Grid.Row="4" Margin="4" Content="Autom. selectie" 
                       IsChecked="{Binding Path=AutomaticallySetSelectableSignalGroups,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     <ListView 
-                Name="ConflictGroepsLB" Grid.Row="1"
-                Grid.Column="1" Grid.RowSpan="2" Margin="2" 
-                ItemsSource="{Binding Path=ConflictGroepen}" SelectedItem="{Binding Path=SelectedConflictGroep}" >
+                        Name="ConflictGroepsLB" Grid.Row="1"
+                        Grid.Column="1" Grid.RowSpan="2" Margin="2" 
+                        ItemsSource="{Binding Path=ConflictGroepen}" SelectedItem="{Binding Path=SelectedConflictGroep}" >
                         <ListView.Resources>
                             <!--SelectedItem with focus-->
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="LightBlue" Opacity=".4"/>
@@ -96,11 +96,12 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <ListView Grid.Column="1" 
-                                      dd:DragDrop.IsDragSource="True"
-                                      dd:DragDrop.IsDropTarget="True"
-                                      Name="ConflictGroepLB"
-                                  SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                  ItemsSource="{Binding Path=Fasen}" MinHeight="20" Background="Transparent">
+                                        dd:DragDrop.IsDragSource="True"
+                                        dd:DragDrop.IsDropTarget="True"
+                                        dd:DragDrop.UseDefaultDragAdorner="True"
+                                        Name="ConflictGroepLB"
+                                        SelectedItem="{Binding Path=SelectedFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        ItemsSource="{Binding Path=Fasen}" MinHeight="20" Background="White">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>

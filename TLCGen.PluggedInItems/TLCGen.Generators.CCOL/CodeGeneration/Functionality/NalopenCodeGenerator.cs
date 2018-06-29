@@ -272,6 +272,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 #warning Need to also change code for RW in Wachtgroen()? ie !fka() for naloop phase...
+                    
                 default:
                     return null;
             }

@@ -2235,6 +2235,9 @@ void AfhandelingOV(void)
     OVAlternatieven();
 
     PostAfhandelingOV();
+#ifdef OV_ADDFILE
+	PostAfhandelingOV_Add();
+#endif
 
 #if !defined(AUTOMAAT) || defined(VISSIM)
 #ifdef OV_ADDFILE

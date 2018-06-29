@@ -964,6 +964,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsOpties, true, true);
 
             sb.AppendLine($"{ts}PrioriteitsOpties_Add();");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, true, true);
+
             sb.AppendLine($"{ts}PrioriteitsNiveau_Add();");
             sb.AppendLine("}");
 

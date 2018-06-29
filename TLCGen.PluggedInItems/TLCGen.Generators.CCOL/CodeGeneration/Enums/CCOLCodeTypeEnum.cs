@@ -38,6 +38,7 @@
 		OvCRijTijdScenario,
 		OvCInUitMelden,
 	    OvCPrioriteitsOpties,
+        OvCPrioriteitsNiveau,
 	    OvCPrioriteitsToekenning,
         OvCPostAfhandelingOV,
 	    OvCPARCorrecties,

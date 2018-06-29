@@ -538,3 +538,15 @@ void UpdateKnipperSignalen()
 {
     Knipper_1Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 10) > 4); /* 1 Hz */
 }
+
+bool hf_wsg_nl(void)
+{
+	register count i;
+
+	for (i = 0; i<FC_MAX; i++) {
+		if (G[i] && !MG[i] && !WS[i] && !(WG[i] && (RW[i] & BIT2)) || G[i] && MK[i] || GL[i] || TRG[i]
+			|| R[i] && A[i] && !BL[i])
+			return (TRUE);
+	}
+	return (FALSE);
+}

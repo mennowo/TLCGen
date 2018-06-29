@@ -34,6 +34,7 @@ void FileMeldingV2(count det,     /* filelus                                */
     count hfile);   /* hulpelement filemelding                */
 void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
+bool hf_wsg_nl(void);
 
 extern mulv FC_type[];
 extern int Knipper_1Hz;

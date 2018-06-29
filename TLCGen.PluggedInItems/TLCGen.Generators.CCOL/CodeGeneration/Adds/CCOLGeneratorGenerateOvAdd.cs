@@ -179,7 +179,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("    ----------------------------------------------------- */");
             sb.AppendLine("}");
             sb.AppendLine("");
-            sb.AppendLine("void post_AfhandelingOV(void) {");
+            sb.AppendLine("void PostAfhandelingOV_Add(void) {");
+            sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine("");
             sb.AppendLine("#ifndef AUTOMAAT");

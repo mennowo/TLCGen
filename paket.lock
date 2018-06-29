@@ -4,6 +4,7 @@ NUGET
     Castle.Core (4.2.1)
     CommonServiceLocator (2.0.2)
     Extended.Wpf.Toolkit (3.2)
+    gong-wpf-dragdrop (1.1)
     Gu.Wpf.DataGrid2D (0.2.1.4)
     Microsoft.WindowsAPICodePack.Core (1.1)
     Microsoft.WindowsAPICodePack.Shell (1.1)
