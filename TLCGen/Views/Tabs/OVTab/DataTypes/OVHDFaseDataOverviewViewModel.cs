@@ -38,6 +38,7 @@ namespace TLCGen.ViewModels
 				{
 					var ov = new OVIngreepModel();
 					Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
+					Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov.MeldingenData);
 					ov.FaseCyclus = _faseCyclus.Naam;
 					ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
 					{

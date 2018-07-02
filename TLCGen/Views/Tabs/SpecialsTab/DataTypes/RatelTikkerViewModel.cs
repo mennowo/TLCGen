@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -124,12 +125,28 @@ namespace TLCGen.ViewModels
 
         #endregion // IViewModelWithItem
 
+        #region TLCGen messaging
+
+        private void OnDetectorenChanged(DetectorenChangedMessage msg)
+        {
+            _DetectorManager = null;
+        }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            _DetectorManager = null;
+        }
+
+        #endregion // TLCGen messaging
+
         #region Constructor
 
         public RatelTikkerViewModel(RatelTikkerModel rateltikker)
         {
             _RatelTikker = rateltikker;
             Detectoren = new ObservableCollectionAroundList<RatelTikkerDetectorViewModel, RatelTikkerDetectorModel>(_RatelTikker.Detectoren);
+            MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

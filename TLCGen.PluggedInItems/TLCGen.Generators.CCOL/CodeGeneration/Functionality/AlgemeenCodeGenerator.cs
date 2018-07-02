@@ -19,6 +19,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schtoon7s;
         private CCOLGeneratorCodeStringSettingModel _ussegm;
+        private CCOLGeneratorCodeStringSettingModel _prmxx;
+        private CCOLGeneratorCodeStringSettingModel _prmyy;
+        private CCOLGeneratorCodeStringSettingModel _prmzz;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -55,6 +58,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtoon7s}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtoon7s));
             }
+
+            // Versie beheer
+            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmxx}", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, _prmxx));
+            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmyy}", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, _prmyy));
+            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
         }
 
         public override bool HasCCOLElements()

@@ -293,6 +293,8 @@ namespace TLCGen.ViewModels
 
             if (MeerealiserendeFasen.Count > 0)
                 SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
+
+            RaisePropertyChanged<object>(broadcast: true);
         }
 
         bool AddNewMeerealiserendeFaseCommand_CanExecute(object prm)
@@ -313,6 +315,8 @@ namespace TLCGen.ViewModels
                 SelectedMeerealiserendeFase = MeerealiserendeFasen[MeerealiserendeFasen.Count - 1];
             else
                 SelectedMeerealiserendeFase = null;
+
+            RaisePropertyChanged<object>(broadcast: true);
         }
 
         bool RemoveMeerealiserendeFaseCommand_CanExecute(object prm)

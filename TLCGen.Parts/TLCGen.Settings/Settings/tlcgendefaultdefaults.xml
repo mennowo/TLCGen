@@ -266,7 +266,7 @@
         <BitmapCoordinaten />
         <VissimNaam />
         <TDB>0</TDB>
-        <TDH>0</TDH>
+        <TDH>30</TDH>
         <TOG>360</TOG>
         <TBG>60</TBG>
         <TFL>60</TFL>
@@ -328,6 +328,31 @@
         <Type>Kop</Type>
         <Aanvraag>RnietTRG</Aanvraag>
         <Verlengen>Kopmax</Verlengen>
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>Verweg lus fiets</DefaultName>
+      <Category>Detector</Category>
+      <Selector1>Verweg</Selector1>
+      <Selector2>Fiets</Selector2>
+      <DataType>TLCGen.Models.DetectorModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <Naam />
+        <BitmapCoordinaten />
+        <VissimNaam />
+        <TDB>0</TDB>
+        <TDH>30</TDH>
+        <TOG>360</TOG>
+        <TBG>60</TBG>
+        <TFL>60</TFL>
+        <CFL>45</CFL>
+        <AanvraagDirect>false</AanvraagDirect>
+        <Wachtlicht>false</Wachtlicht>
+        <WachtlichtBitmapData />
+        <Simulatie />
+        <Type>Verweg</Type>
+        <Aanvraag>Uit</Aanvraag>
+        <Verlengen>MK2</Verlengen>
       </Data>
     </Default>
     <Default>
@@ -852,6 +877,29 @@
         <OVIngrepen />
         <HDIngrepen />
         <OVIngreepSignaalGroepParameters />
+      </Data>
+    </Default>
+    <Default>
+      <DefaultName>OV meldingen instellingen</DefaultName>
+      <Category>Other</Category>
+      <DataType>TLCGen.Models.OVIngreepMeldingenDataModel,TLCGen.Dependencies</DataType>
+      <Data>
+        <AntiJutterVoorAlleUitmeldingen>true</AntiJutterVoorAlleUitmeldingen>
+        <AntiJutterTijdVoorAlleUitmeldingen>15</AntiJutterTijdVoorAlleUitmeldingen>
+        <AntiJutterVoorAlleInmeldingen>false</AntiJutterVoorAlleInmeldingen>
+        <AntiJutterTijdVoorAlleInmeldingen>15</AntiJutterTijdVoorAlleInmeldingen>
+        <Wissel1>false</Wissel1>
+        <Wissel1Type>Ingang</Wissel1Type>
+        <Wissel1Input />
+        <Wissel1Detector />
+        <Wissel1InputVoorwaarde>false</Wissel1InputVoorwaarde>
+        <Wissel2>false</Wissel2>
+        <Wissel2Type>Ingang</Wissel2Type>
+        <Wissel2Input />
+        <Wissel2Detector />
+        <Wissel2InputVoorwaarde>false</Wissel2InputVoorwaarde>
+        <Inmeldingen />
+        <Uitmeldingen />
       </Data>
     </Default>
     <Default>

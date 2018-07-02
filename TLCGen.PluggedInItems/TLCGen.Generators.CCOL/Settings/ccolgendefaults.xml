@@ -101,6 +101,24 @@
             <Type>Schakelaar</Type>
             <Description>Actueel houden 7 segemten display</Description>
           </Setting>
+          <Setting>
+            <Default>xx</Default>
+            <Setting>xx</Setting>
+            <Type>Parameter</Type>
+            <Description>Versiebeheer xx</Description>
+          </Setting>
+          <Setting>
+            <Default>yy</Default>
+            <Setting>yy</Setting>
+            <Type>Parameter</Type>
+            <Description>Versiebeheer yy</Description>
+          </Setting>
+          <Setting>
+            <Default>zz</Default>
+            <Setting>zz</Setting>
+            <Type>Parameter</Type>
+            <Description>Versiebeheer zz</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

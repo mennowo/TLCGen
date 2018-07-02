@@ -93,6 +93,7 @@ namespace TLCGen.ViewModels
                     {
                         var ov = new OVIngreepModel();
                         Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov.MeldingenData);
                         ov.FaseCyclus = SelectedFaseCyclus.Naam;
 						ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
 						{
