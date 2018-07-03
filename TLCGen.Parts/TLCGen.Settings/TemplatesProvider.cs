@@ -196,7 +196,11 @@ namespace TLCGen.Settings
                     foreach (var t in _LoadedTemplates)
                     {
                         var fn = Path.Combine(SettingsProvider.Default.Settings.TemplatesLocation, t.Location + ".xml");
-                        TLCGenSerialization.Serialize<TLCGenTemplatesModel>(fn, t.Templates);
+                        if (File.Exists(fn))
+                        {
+                            File.Delete(fn);
+                        }
+                        TLCGenSerialization.Serialize(fn, t.Templates);
                     }
                 }
             }
@@ -207,7 +211,7 @@ namespace TLCGen.Settings
                 {
                     File.Delete(SettingsProvider.Default.Settings.TemplatesLocation);
                 }
-                TLCGenSerialization.Serialize<TLCGenTemplatesModel>(SettingsProvider.Default.Settings.TemplatesLocation, _LoadedTemplates.First(x => x.Editable).Templates);
+                TLCGenSerialization.Serialize(SettingsProvider.Default.Settings.TemplatesLocation, _LoadedTemplates.First(x => x.Editable).Templates);
             }
         }
 

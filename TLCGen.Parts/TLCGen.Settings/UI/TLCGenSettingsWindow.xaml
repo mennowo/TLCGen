@@ -41,7 +41,7 @@
                     <ct:FolderTextBox 
                         Visibility="{Binding Path=UseFolderForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
                         Folder="{Binding Path=TemplatesLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" />
-                    <CheckBox IsChecked="{Binding Path=UseFolderForTemplates}" Content="Gebruik map" Margin="5" VerticalAlignment="Center" Grid.Row="5" />
+                    <CheckBox IsChecked="{Binding Path=UseFolderForTemplates,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Content="Gebruik map" Margin="5" VerticalAlignment="Center" Grid.Row="5" />
                     <Button 
                         Visibility="{Binding Path=UseFolderForTemplates,Mode=OneWay,Converter={StaticResource bool2vis}}"
                         Content="Nieuwe template file aanmaken in map" Command="{Binding Path=CreateTemplateFileCommand}" Grid.Row="6" Margin="2" />

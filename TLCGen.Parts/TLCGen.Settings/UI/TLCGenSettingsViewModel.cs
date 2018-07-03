@@ -47,7 +47,14 @@ namespace TLCGen.Settings
             get => SettingsProvider.Default.Settings.TemplatesLocation;
             set
             {
-                SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
+                if(!UseFolderForTemplates)
+                {
+                    SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? (value.ToLower().EndsWith(".xml") ? value : value + ".xml") : "");
+                }
+                else
+                {
+                    SettingsProvider.Default.Settings.TemplatesLocation = (!string.IsNullOrWhiteSpace(value) ? value : "");
+                }
                 if (!string.IsNullOrWhiteSpace(SettingsProvider.Default.Settings.TemplatesLocation) &&
                     !UseFolderForTemplates && !File.Exists(SettingsProvider.Default.Settings.TemplatesLocation))
                 {
