@@ -116,6 +116,9 @@
       <DependentUpon>VLOGSettingsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab\DataTypes\HardMeeverlengenFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\InterSignaalGroepTabViewModel.cs">
+      <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepMeldingenDataViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\DataTypes\OVIngreepInUitMeldingViewModel.cs" />
     <Compile Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml.cs">
@@ -169,9 +172,6 @@
     </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopViewModel.cs">
       <DependentUpon>NaloopView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Tabs\InterSignaalGroepTab\SynchronisatiesTabViewModel.cs">
-      <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\ModulesTab\Controls\ModulesTabFasenLijstViewModel.cs">
       <DependentUpon>ModulesTabFasenLijstView.xaml</DependentUpon>

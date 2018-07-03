@@ -84,6 +84,10 @@ namespace TLCGen.ViewModels
                     _SelectedFase = _Controller.Fasen.First(x => x.Naam == value);
                 }
 
+                foreach(var d in Detectoren)
+                {
+                    d.PropertyChanged -= Detector_PropertyChanged;
+                }
                 Detectoren.Clear();
                 if (_SelectedFase != null)
                 {
@@ -224,8 +228,9 @@ namespace TLCGen.ViewModels
 	        };
 	        _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
+            dvm1.PropertyChanged += Detector_PropertyChanged;
 	        Detectoren.BubbleSort();
-			Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { _dm }, null));
+            Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { _dm }, null));
         }
 
         bool AddDetectorCommand_CanExecute(object prm)

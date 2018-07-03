@@ -287,17 +287,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        [Description("Type synchronisatie nalopen")]
-        public SynchronisatieTypeEnum NaloopSynchronisatieType
-        {
-            get { return _Controller?.Data?.NaloopSynchronisatieType ?? SynchronisatieTypeEnum.FictiefConflict; }
-            set
-            {
-                _Controller.Data.NaloopSynchronisatieType = value;
-                RaisePropertyChanged<object>(nameof(NaloopSynchronisatieType), broadcast: true);
-            }
-        }
-
         [Category("CCOL specifieke opties")]
         [Description("Gekoppelde regeling (CCOLMS)")]
         public bool CCOLMulti

@@ -81,7 +81,6 @@
     <Compile Include="RichtingGevoeligVerlengenTypeEnum.cs" />
     <Compile Include="RoBuGroverMethodeEnum.cs" />
     <Compile Include="SegmentDisplayTypeEnum.cs" />
-    <Compile Include="SynchronisatieTypeEnum.cs" />
     <Compile Include="TLCGenObjectTypeEnum.cs" />
     <Compile Include="VLOGMonModeEnum.cs" />
     <Compile Include="VLOGLogModeEnum.cs" />

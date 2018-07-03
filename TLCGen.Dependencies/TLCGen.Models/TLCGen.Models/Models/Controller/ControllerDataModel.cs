@@ -39,7 +39,6 @@ namespace TLCGen.Models
         public bool ExtraMeeverlengenInWG { get; set; }
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
-        public SynchronisatieTypeEnum NaloopSynchronisatieType { get; set; }
 
         public bool Intergroen { get; set; }
 

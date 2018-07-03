@@ -7,6 +7,7 @@
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -28,8 +29,19 @@
                         Text="{Binding Path=MaximaleVoorstart,TargetNullValue={x:Static sys:String.Empty},FallbackValue=NG}" Margin="2" />
             <CheckBox Content="Vaste naloop" 
                       IsChecked="{Binding Path=VasteNaloop}" Margin="5" />
-            <CheckBox Content="Inrijden/lopen tijdens groen" 
-                      IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Content="Inrijden/lopen tijdens groen" 
+                          IsChecked="{Binding Path=InrijdenTijdensGroen}" Margin="5" />
+                    <ct:InfoElement>
+                        <ct:InfoElement.InfoPopup>
+                            <TextBlock>
+                                Dit zorgt ervoor dat:<LineBreak />
+                                - Bij naloop op SG gewerkt wordt met FK i.p.v. GK<LineBreak />
+                                - Bij naloop op EG gewerkt wordt met GKL/FK i.p.v. GKL/GK
+                            </TextBlock>
+                        </ct:InfoElement.InfoPopup>
+                    </ct:InfoElement>
+            </StackPanel>
             <CheckBox Content="Detectie afhankelijk" 
                       IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
                       IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />
