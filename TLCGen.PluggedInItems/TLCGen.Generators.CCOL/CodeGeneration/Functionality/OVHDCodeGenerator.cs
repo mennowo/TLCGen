@@ -907,7 +907,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
-                        sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT6;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
