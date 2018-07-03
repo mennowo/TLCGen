@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -138,6 +136,7 @@ namespace TLCGen.Importers.TabC
                             }
                         }
 
+                        var conflictsChanged = false;
                         foreach(var cm in newData.Conflicten)
                         {
                             var _cm = new ConflictModel
@@ -151,12 +150,96 @@ namespace TLCGen.Importers.TabC
                             {
                                 c.InterSignaalGroep.Conflicten.Remove(old);
                             }
+                            else
+                            {
+                                // Corrigeren VA ontruimen
+                                var vaont = c.VAOntruimenFasen.FirstOrDefault(x => x.FaseCyclus == _cm.FaseVan);
+                                if (vaont != null)
+                                {
+                                    foreach (var d in vaont.VADetectoren)
+                                    {
+                                        d.ConflicterendeFasen.Add(new VAOntruimenNaarFaseModel
+                                        {
+                                            FaseCyclus = _cm.FaseNaar,
+                                            VAOntruimingsTijd = 0
+                                        });
+                                    }
+                                }
+                                conflictsChanged = true;
+                            }
 
                             c.InterSignaalGroep.Conflicten.Add(_cm);
-                            
-                            // Check for new conflicts
-#warning TODO - At this point: check if new conflicts have been added, and act accordingly
                         }
+                        if (conflictsChanged)
+                        {
+                            // Corrigeren modules
+                            foreach (var m in c.ModuleMolen.Modules)
+                            {
+                                var rmfcs = new List<ModuleFaseCyclusModel>();
+                                var br = false;
+                                foreach (var mfc1 in m.Fasen)
+                                {
+                                    foreach (var mfc2 in m.Fasen)
+                                    {
+                                        if(Integrity.TLCGenControllerChecker.IsFasenConflicting(c, mfc1.FaseCyclus, mfc2.FaseCyclus))
+                                        {
+                                            rmfcs.Add(mfc1);
+                                            rmfcs.Add(mfc2);
+                                            br = true;
+                                            break;
+                                        }
+                                    }
+                                    if (br) break;
+                                }
+                                foreach(var rmfc in rmfcs)
+                                {
+                                    m.Fasen.Remove(rmfc);
+                                }
+                            }
+
+                            // Corrigeren synchronisaties
+                            var remgs = new List<GelijkstartModel>();
+                            var remvs = new List<VoorstartModel>();
+                            var remnl = new List<NaloopModel>();
+                            var remma = new List<MeeaanvraagModel>();
+                            foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                            {
+                                if (Integrity.TLCGenControllerChecker.IsFasenConflicting(c, gs.FaseVan, gs.FaseNaar))
+                                {
+                                    remgs.Add(gs);
+                                }
+                            }
+                            foreach (var vs in c.InterSignaalGroep.Voorstarten)
+                            {
+                                if (Integrity.TLCGenControllerChecker.IsFasenConflicting(c, vs.FaseVan, vs.FaseNaar))
+                                {
+                                    remvs.Add(vs);
+                                }
+                            }
+                            foreach (var nl in c.InterSignaalGroep.Nalopen)
+                            {
+                                if (Integrity.TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseVan, nl.FaseNaar))
+                                {
+                                    remnl.Add(nl);
+                                }
+                            }
+                            foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
+                            {
+                                if (Integrity.TLCGenControllerChecker.IsFasenConflicting(c, ma.FaseVan, ma.FaseNaar))
+                                {
+                                    remma.Add(ma);
+                                }
+                            }
+                            foreach (var r in remgs) c.InterSignaalGroep.Gelijkstarten.Remove(r);
+                            foreach (var r in remvs) c.InterSignaalGroep.Voorstarten.Remove(r);
+                            foreach (var r in remnl) c.InterSignaalGroep.Nalopen.Remove(r);
+                            foreach (var r in remma) c.InterSignaalGroep.Meeaanvragen.Remove(r);
+
+                            MessageBox.Show(
+                                "Er zijn nieuwe conflicten gevonden in de regeling:\n\nLoop de module molen na, en evt. synchronisaties, RoBuGrover en VA ontruimen",
+                                "Nieuwe conflicten gevonden", MessageBoxButton.OK);
+                        }
+
                         if (!string.IsNullOrEmpty(NewPhasesMessage))
                         {
                             MessageBox.Show("De volgende fasen uit de tab.c file zijn nieuw toegevoegd in de regeling:\n\n" +

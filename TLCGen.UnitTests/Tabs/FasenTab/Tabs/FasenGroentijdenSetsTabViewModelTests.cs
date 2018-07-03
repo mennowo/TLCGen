@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using TLCGen.ViewModels;
 using GalaSoft.MvvmLight.Messaging;
-using NSubstitute;
 using TLCGen.Models;
 using TLCGen.Settings;
-using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
-using TLCGen.ModelManagement;
 using TLCGen.Models.Enumerations;
-using TLCGen.Messaging;
 
 namespace TLCGen.UnitTests
 {

@@ -1,7 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using TLCGen.Messaging.Messages;
-using TLCGen.Models;
+﻿using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels

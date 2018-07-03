@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -7,11 +6,8 @@ using GalaSoft.MvvmLight;
 using TLCGen.Controls;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
-using System;
-using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels
 {

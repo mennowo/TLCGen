@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -20,8 +19,6 @@ namespace TLCGen.ViewModels
         private RelayCommand _removeInmeldingCommand;
         private RelayCommand _addUitmeldingCommand;
         private RelayCommand _removeUitmeldingCommand;
-        //private RelayCommand _addVoorwaardeCommand;
-        private object _selectedObject;
         private OVIngreepInUitMeldingViewModel _selectedInmelding;
         private OVIngreepInUitMeldingViewModel _selectedUitmelding;
 

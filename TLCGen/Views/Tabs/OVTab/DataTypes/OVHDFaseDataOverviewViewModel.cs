@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using GalaSoft.MvvmLight;
 using TLCGen.Extensions;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
-using TLCGen.Extensions;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-	public class OVHDFaseDataOverviewViewModel : ViewModelBase
+    public class OVHDFaseDataOverviewViewModel : ViewModelBase
 	{
 		#region Fields
 

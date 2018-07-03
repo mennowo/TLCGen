@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Threading;
 using System.Windows.Threading;
 
 namespace TLCGen
 {
-	internal static class TLCGenSplashScreenHelper
+    internal static class TLCGenSplashScreenHelper
 	{
 		public static TLCGenSplashScreenView SplashScreen { get; set; }
 

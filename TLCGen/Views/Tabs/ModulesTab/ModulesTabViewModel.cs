@@ -1,12 +1,6 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Windows;
 using System.Windows.Media;
-using TLCGen.Messaging;
-using TLCGen.Messaging.Messages;
-using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels

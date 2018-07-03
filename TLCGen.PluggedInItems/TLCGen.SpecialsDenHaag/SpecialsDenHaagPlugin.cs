@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using TLCGen.Extensions;
 using TLCGen.Generators.CCOL.CodeGeneration;
-using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -47,7 +43,6 @@ namespace TLCGen.SpecialsRotterdam
             set
             {
                 _Controller = value;
-#warning Is this ok in case of a new controller? Ie will old data not remain?
 				if (_Controller == null)
                 {
                     _MyModel = new SpecialsDenHaagModel();

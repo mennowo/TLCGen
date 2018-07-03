@@ -4,7 +4,6 @@ using NSubstitute;
 using NUnit.Framework;
 using TLCGen.Integrity;
 using TLCGen.ViewModels;
-using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
 

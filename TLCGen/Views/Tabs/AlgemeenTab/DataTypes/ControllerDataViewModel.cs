@@ -1,11 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;

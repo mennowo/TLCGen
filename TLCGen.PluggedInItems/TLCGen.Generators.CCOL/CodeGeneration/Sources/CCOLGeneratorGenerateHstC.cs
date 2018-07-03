@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Text;
-using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-	public partial class CCOLGenerator
+    public partial class CCOLGenerator
     {
         private string GenerateHstC(ControllerModel c)
         {

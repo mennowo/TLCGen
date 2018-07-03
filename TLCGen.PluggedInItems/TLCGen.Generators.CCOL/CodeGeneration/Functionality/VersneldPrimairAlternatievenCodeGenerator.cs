@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -294,8 +291,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
-#warning Is this correct and desired? Need to look (also?) at other timers?
-#warning This would be better moved to the naloop generator; for that though, we need to be able to specify order in generated code elems. TODO!
                                 var tnl = "";
                                 if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
                                 {

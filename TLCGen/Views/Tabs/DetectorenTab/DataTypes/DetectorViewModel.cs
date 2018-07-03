@@ -6,11 +6,9 @@ using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 using TLCGen.DataAccess;
 using TLCGen.Settings;
-using TLCGen.Messaging.Requests;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
-using TLCGen.Messaging;
 using TLCGen.ModelManagement;
 
 namespace TLCGen.ViewModels

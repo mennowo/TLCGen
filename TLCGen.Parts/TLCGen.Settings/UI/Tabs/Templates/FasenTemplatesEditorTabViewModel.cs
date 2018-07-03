@@ -1,5 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
 using System.Linq;
 using System.Windows.Input;
 using TLCGen.Helpers;

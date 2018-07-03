@@ -3,16 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Controls;
-using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.Dialogs
 {
-	/// <summary>
-	/// Interaction logic for ImportDplCWindow.xaml
-	/// </summary>
-	public partial class ImportDplCWindow : Window
+    /// <summary>
+    /// Interaction logic for ImportDplCWindow.xaml
+    /// </summary>
+    public partial class ImportDplCWindow : Window
 	{
 		public ImportDplCWindow(ControllerModel controller)
 		{
@@ -33,7 +31,6 @@ namespace TLCGen.Dialogs
 				{
 					case ".c":
 						var lines = File.ReadAllLines(FileTextBox.File);
-						var iState = 0;
 						foreach (var line in lines)
 						{
 							if (Regex.IsMatch(line, @"^\s*X_us"))

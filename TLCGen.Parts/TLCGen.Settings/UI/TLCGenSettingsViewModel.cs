@@ -1,19 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using TLCGen.Dialogs;
 using TLCGen.Helpers;
-using TLCGen.Models;
-using TLCGen.Models.Enumerations;
-using TLCGen.Settings;
 
 namespace TLCGen.Settings
 {

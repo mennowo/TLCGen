@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Messaging;
-using TLCGen.Messaging.Messages;
+﻿using GalaSoft.MvvmLight;
 using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
-	public class GelijkstartViewModel : ViewModelBase
+    public class GelijkstartViewModel : ViewModelBase
 	{
         #region Fields
 

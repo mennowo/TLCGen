@@ -12,7 +12,6 @@ using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
-using TLCGen.Settings;
 
 namespace TLCGen.ViewModels
 {

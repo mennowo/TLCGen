@@ -313,7 +313,7 @@ namespace TLCGen.Settings
 		    {
 			    var x = def.SelectSingleNode("DataType");
 			    var t = x.InnerText;
-				#warning this corrects old files; should be removed at a point in the future (@24-1-2018)
+                // correct old files
 			    if (t.EndsWith(",TLCGen.Model"))
 			    {
 				    t = t.Replace(",TLCGen.Model", ",TLCGen.Dependencies");

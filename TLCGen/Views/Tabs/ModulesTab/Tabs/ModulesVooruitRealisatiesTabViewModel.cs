@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Models;
 using TLCGen.Helpers;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Plugins;
-using TLCGen.Settings;
 using TLCGen.Extensions;
 
 namespace TLCGen.ViewModels

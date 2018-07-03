@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
-using TLCGen.Models.Enumerations;
 using TLCGen.Models;
 using TLCGen.Extensions;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 

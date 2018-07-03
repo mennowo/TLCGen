@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.SpecialsDenHaag.OVMModule
 {
-	public class DVMModuleDenHaag
+    public class DVMModuleDenHaag
 	{
 		#region Fields
 		#endregion // Fields

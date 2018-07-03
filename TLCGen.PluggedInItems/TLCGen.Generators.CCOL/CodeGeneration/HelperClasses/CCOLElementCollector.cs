@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration

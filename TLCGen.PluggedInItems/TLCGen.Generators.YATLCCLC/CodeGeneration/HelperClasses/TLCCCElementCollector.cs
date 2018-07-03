@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TLCGen.Models;
+﻿using TLCGen.Models;
 
 namespace TLCGen.Generators.TLCCC.CodeGeneration.HelperClasses
 {

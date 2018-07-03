@@ -1,15 +1,6 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using System;
-using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
-using TLCGen.Helpers;
-using TLCGen.Messaging;
-using TLCGen.Messaging.Messages;
-using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels

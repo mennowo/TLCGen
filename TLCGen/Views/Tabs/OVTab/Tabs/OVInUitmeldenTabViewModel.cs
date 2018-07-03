@@ -12,7 +12,6 @@ namespace TLCGen.ViewModels
 
         private ObservableCollection<FaseCyclusViewModel> _Fasen;
         private FaseCyclusViewModel _SelectedFaseCyclus;
-        private bool _isMassaDetectieDisabled;
 
         #endregion // Fields
 

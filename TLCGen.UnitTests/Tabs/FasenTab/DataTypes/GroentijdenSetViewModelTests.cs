@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using GalaSoft.MvvmLight.Messaging;
-using NSubstitute;
 using NUnit.Framework;
-using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.ViewModels;

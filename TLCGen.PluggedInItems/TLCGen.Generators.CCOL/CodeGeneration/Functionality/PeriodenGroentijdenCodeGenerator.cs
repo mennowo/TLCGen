@@ -238,7 +238,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var iperrtdim = 1;
                     var iperbel = 1;
                     var iperbeldim = 1;
-                    var ipertwl = 1;
                     ipero = 1;
                     foreach (var kpm in c.PeriodenData.Perioden)
                     {

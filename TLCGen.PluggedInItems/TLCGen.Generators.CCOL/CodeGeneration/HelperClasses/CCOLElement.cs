@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TLCGen.Generators.CCOL.Settings;
-using TLCGen.Models;
+﻿using TLCGen.Generators.CCOL.Settings;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Web.UI.WebControls;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 {
-	public class HalfstarGekoppeldeKruisingViewModel : ViewModelBase, IViewModelWithItem
+    public class HalfstarGekoppeldeKruisingViewModel : ViewModelBase, IViewModelWithItem
 	{
 		#region Fields
 

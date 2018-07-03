@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -51,7 +49,6 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
             sb.AppendLine($"{ts}                 PHASE-pointer        code    index tgg tgf tge  tye trg thm */");
             foreach (var sg in controller.Fasen)
             {
-#warning This code generates a fixed maxgreen time of 300 TE cause TLCCC does not yet support periods
                 sb.AppendLine($"{ts}SignalGroup_init(&signalgroups[{_sgpf}{sg.Naam}], \"{_sgpf}{sg.Naam}\", {_sgpf}{sg.Naam}, {sg.TGG}," +
                               $" {sg.TFG}, 300, {sg.TGL}, {sg.TRG}, {sg.Kopmax});");
             }

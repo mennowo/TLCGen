@@ -2,16 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.Dialogs
 {
-	/// <summary>
-	/// Interaction logic for ImportSignalPlanWindow.xaml
-	/// </summary>
-	public partial class ImportSignalPlanWindow : Window
+    /// <summary>
+    /// Interaction logic for ImportSignalPlanWindow.xaml
+    /// </summary>
+    public partial class ImportSignalPlanWindow : Window
 	{
 		public ImportSignalPlanWindow(SignaalPlanModel plan)
 		{
@@ -26,7 +25,6 @@ namespace TLCGen.Dialogs
 			if (SignaalPlan == null || !File.Exists(FileTextBox.File)) this.Close();
 
 			var plcopy = DeepCloner.DeepClone(SignaalPlan);
-			var error = false;
 
 			try
 			{

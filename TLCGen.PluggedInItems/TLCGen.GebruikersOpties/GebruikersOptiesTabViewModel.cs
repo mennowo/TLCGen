@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using TLCGen.Models;
 using TLCGen.Helpers;
@@ -10,7 +7,6 @@ using TLCGen.Plugins;
 using System.Windows.Input;
 using System.Xml;
 using System.Windows.Media;
-using TLCGen.DataAccess;
 using TLCGen.Integrity;
 using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
