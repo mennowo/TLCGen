@@ -39,7 +39,7 @@ namespace TLCGen.Importers.TabC
             foreach (var _line in lines)
             {
                 var line = Regex.Replace(_line, @"/\*.*\*/", "");
-                if (Regex.IsMatch(line, @"^\s+TO_max\["))
+                if (Regex.IsMatch(line, @"^\s*TO_max\["))
                 {
                     string fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");
                     string fc2 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*fc[0-9]+\s*\]\s*\[\s*(fc[0-9]+).*", "$1");
@@ -91,7 +91,7 @@ namespace TLCGen.Importers.TabC
                 }
 
 	            if (dz != MessageBoxResult.No &&
-	                (Regex.IsMatch(line, @"^\s+D_code\[") || Regex.IsMatch(line, @"^\s+TBG_max\[")))
+	                (Regex.IsMatch(line, @"^\s*D_code\[") || Regex.IsMatch(line, @"^\s*TBG_max\[")))
 	            {
 		            if (dz != MessageBoxResult.Yes)
 		            {

@@ -249,7 +249,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.Append($"{ts}if (");
                     for (var str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.Where(x => !x.IsDrukKnop()).All(x => x.Rijstrook != str)) continue;
+                        if (fc.Detectoren.Where(x => !x.IsDrukKnop()).All(x => x.Rijstrook != str || x.Verlengen == DetectorVerlengenTypeEnum.Geen)) continue;
 
                         var det = 0;
                         if (str > 1)

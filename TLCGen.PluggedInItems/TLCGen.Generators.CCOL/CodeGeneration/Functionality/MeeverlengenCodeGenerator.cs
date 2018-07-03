@@ -157,7 +157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         sb.Append($"(CV[{_fcpf}{mvfc.FaseCyclus}] || G[{_fcpf}{mvfc.FaseCyclus}])");
                                         break;
                                 }
-                                sb.AppendLine($" && !kcv({_fcpf}{mvfc.FaseCyclus})) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
+                                sb.AppendLine($" && !kcv({_fcpf}{fcm.Naam})) YM[{_fcpf}{fcm.Naam}] |= BIT1;");
                             }
                         }
                     }

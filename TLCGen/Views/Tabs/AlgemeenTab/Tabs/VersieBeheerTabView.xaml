@@ -33,7 +33,7 @@
                                       CanUserDeleteRows="False"
                                       AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Versie" Binding="{Binding Path=Versie}" />
+                <DataGridTextColumn Header="Versie" Binding="{Binding Path=Versie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
                 <ct:SingleClickDataGridTemplateColumn Header="Datum">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -42,12 +42,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Datum}" />
+                            <DatePicker SelectedDate="{Binding Datum,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </ct:SingleClickDataGridTemplateColumn>
-                <DataGridTextColumn Header="Ontwerper" Binding="{Binding Path=Ontwerper}" />
-                <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar}" />
+                <DataGridTextColumn Header="Ontwerper" Binding="{Binding Path=Ontwerper,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+                <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </DataGrid.Columns>
         </DataGrid>
         <WrapPanel Grid.Row="2">

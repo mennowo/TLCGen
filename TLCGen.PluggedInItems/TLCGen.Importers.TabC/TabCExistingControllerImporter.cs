@@ -60,7 +60,7 @@ namespace TLCGen.Importers.TabC
                     var _Fasen = new List<string>();
                     foreach (var line in lines)
                     {
-                        if (Regex.IsMatch(line, @"^\s+TO_max\["))
+                        if (Regex.IsMatch(line, @"^\s*TO_max\["))
                         {
                             var fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");
                             if (!_Fasen.Contains(fc1.Replace("fc", "")))
