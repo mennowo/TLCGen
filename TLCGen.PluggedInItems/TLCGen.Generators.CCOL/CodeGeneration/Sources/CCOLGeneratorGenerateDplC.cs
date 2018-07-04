@@ -101,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLOutputElements)
             {
-                if (item.Element.BitmapCoordinaten?.Count > 1)
+                if (item.Element?.BitmapCoordinaten?.Count > 1)
                 {
                     for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
                     {
@@ -142,7 +142,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLInputElements)
             {
-                if (item.Element.BitmapCoordinaten?.Count > 1)
+                if (item.Element?.BitmapCoordinaten?.Count > 1)
                 {
                     for (int i = 1; i < item.Element.BitmapCoordinaten.Count; ++i)
                     {
@@ -253,7 +253,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (var item in AllCCOLOutputElements)
             {
-                sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                if(item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
             }
 
             foreach (var item in AllOutputModelElements)
@@ -268,7 +268,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             foreach (var item in AllCCOLInputElements)
             {
-                sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
             }
 
             foreach (var item in AllInputModelElements)

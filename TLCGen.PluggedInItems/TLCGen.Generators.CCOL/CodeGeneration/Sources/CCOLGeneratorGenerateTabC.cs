@@ -1094,7 +1094,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#if !defined NO_VLOG_300");
                 foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent))
                 {
-                    sb.AppendLine($"{ts}IS_type[{_ispf}{i.Naam}] = ISM_type;");
+                    sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
                 }
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }
@@ -1106,7 +1106,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"#if !defined NO_VLOG_300");
                 foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
                 {
-                    sb.AppendLine($"{ts}US_type[{_uspf}{i.Naam}] = USM_type;");
+                    sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
                 }
                 sb.AppendLine("#endif /* NO_VLOG_300 */");
             }

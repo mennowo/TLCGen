@@ -4,15 +4,9 @@ using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
-    public partial class CCOLGenerator
+    public static class CCOLHeaderGenerator
     {
-        /// <summary>
-        /// Generates a file header
-        /// </summary>
-        /// <param name="data">The ControllerDataModel instance that holds the info for generation</param>
-        /// <param name="fileappend">The string to append to the Controller name to get the file name.</param>
-        /// <returns>A string holding the file header</returns>
-        private string GenerateFileHeader(ControllerDataModel data, string fileappend)
+        public static string GenerateFileHeader(ControllerDataModel data, string fileappend)
         {
             var sb = new StringBuilder();
 
@@ -34,12 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        /// <summary>
-        /// Generates a string with version info
-        /// </summary>
-        /// <param name="data">The ControllerDataModel instance that hold the version info</param>
-        /// <returns>A string with version information</returns>
-        private string GenerateVersionHeader(ControllerDataModel data)
+        public static string GenerateVersionHeader(ControllerDataModel data)
         {
             // Set up: variables
             var sb = new StringBuilder();
@@ -88,6 +77,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine(" ************************************************************************************/");
 
             return sb.ToString();
+        }
+    }
+
+    public partial class CCOLGenerator
+    {
+        /// <summary>
+        /// Generates a file header
+        /// </summary>
+        /// <param name="data">The ControllerDataModel instance that holds the info for generation</param>
+        /// <param name="fileappend">The string to append to the Controller name to get the file name.</param>
+        /// <returns>A string holding the file header</returns>
+        private string GenerateFileHeader(ControllerDataModel data, string fileappend)
+        {
+            return CCOLHeaderGenerator.GenerateFileHeader(data, fileappend);
+        }
+
+        /// <summary>
+        /// Generates a string with version info
+        /// </summary>
+        /// <param name="data">The ControllerDataModel instance that hold the version info</param>
+        /// <returns>A string with version information</returns>
+        private string GenerateVersionHeader(ControllerDataModel data)
+        {
+            return CCOLHeaderGenerator.GenerateVersionHeader(data);
         }   
     }
 }
