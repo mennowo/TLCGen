@@ -11,7 +11,7 @@ namespace TLCGen.ModelManagement
         bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false);
         void InjectDefaultAction(Action<object, string> setDefaultsAction);
         bool CheckVersionOrder(ControllerModel controller);
-        void CorrectModelByVersion(ControllerModel controller);
+        void CorrectModelByVersion(ControllerModel controller, string filename);
         void ChangeNameOnObject(object obj, string oldName, string newName);
     }
 }

@@ -2,8 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using TLCGen.Extensions;
 using TLCGen.Integrity;
@@ -86,13 +88,30 @@ namespace TLCGen.ModelManagement
             return true;
         }
 
-        public void CorrectModelByVersion(ControllerModel controller)
+        public void CorrectModelByVersion(ControllerModel controller, string filename)
         {
+            // correct segment items
             foreach(var s in controller.Data.SegmentenDisplayBitmapData)
             {
                 if (s.Naam.StartsWith("segm"))
                 {
                     s.Naam = s.Naam.Replace("segm", "");
+                }
+            }
+
+            // check PostAfhandelingOV_Add in ov.add
+            var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
+            if (File.Exists(ovAddFile))
+            {
+                var ovaddtext = File.ReadAllLines(ovAddFile);
+                if(ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingOV_Add.*")))
+                {
+                    MessageBox.Show($"Let op! Deze versie van TLCGen maakt een functie\n" +
+                                $"'PostAfhandelingOV' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
+                                $"de functie 'PostAfhandelingOV_Add' aangeroepen, die echter\n" +
+                                $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingOV_Add ontbreekt.\n\n" +
+                                "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingOV'," +
+                                "want die wordt niet aangeroepen.");
                 }
             }
 

@@ -20,6 +20,7 @@ namespace TLCGen.ViewModels
         private ObservableCollection<ModuleViewModel> _Modules;
         private ModuleViewModel _SelectedModule;
         private ModuleFaseCyclusViewModel _SelectedModuleFase;
+        private volatile bool _reloading;
 
         #endregion // Fields
 
@@ -34,14 +35,7 @@ namespace TLCGen.ViewModels
                 if (_Controller != null)
                 {
                     _ModuleMolen = _Controller.ModuleMolen;
-                    Modules.CollectionChanged -= Modules_CollectionChanged;
-                    Modules.Clear();
-                    foreach (ModuleModel mm in _ModuleMolen.Modules)
-                    {
-                        ModuleViewModel mvm = new ModuleViewModel(mm);
-                        Modules.Add(mvm);
-                    }
-                    Modules.CollectionChanged += Modules_CollectionChanged;
+                    ReloadModules();
                 }
                 else
                 {
@@ -128,9 +122,15 @@ namespace TLCGen.ViewModels
             get { return _ModuleMolen?.WachtModule; }
             set
             {
-                if (_ModuleMolen != null)
+                if (_reloading) return;
+                if (_ModuleMolen != null && value != null)
                 {
                     _ModuleMolen.WachtModule = value;
+                    RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
+                }
+                else if (!_Modules.Any())
+                {
+                    _ModuleMolen.WachtModule = null;
                     RaisePropertyChanged<object>(nameof(WachtModule), broadcast: true);
                 }
             }
@@ -283,6 +283,7 @@ namespace TLCGen.ViewModels
 
         private void ReloadModules()
         {
+            _reloading = true;
             Modules.CollectionChanged -= Modules_CollectionChanged;
             Modules.Clear();
             foreach (ModuleModel mm in _ModuleMolen.Modules)
@@ -291,6 +292,7 @@ namespace TLCGen.ViewModels
                 Modules.Add(mvm);
             }
             Modules.CollectionChanged += Modules_CollectionChanged;
+            _reloading = false;
         }
 
         #endregion // Private Methods

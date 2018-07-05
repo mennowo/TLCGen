@@ -208,7 +208,7 @@ namespace TLCGen.DataAccess
                             return false;
                         }
                         Controller = c;
-                        TLCGenModelManager.Default.CorrectModelByVersion(Controller);
+                        TLCGenModelManager.Default.CorrectModelByVersion(Controller, ControllerFileName);
                     }
                     return true;
                 }
