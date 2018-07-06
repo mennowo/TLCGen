@@ -695,6 +695,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSystemApplication2, ts));
             }
 
+            sb.AppendLine();
+            sb.AppendLine($"{ts}post_system_application2();");
+
             sb.AppendLine("}");
             sb.AppendLine();
 

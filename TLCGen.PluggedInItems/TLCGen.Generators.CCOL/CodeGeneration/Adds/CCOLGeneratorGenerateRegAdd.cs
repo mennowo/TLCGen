@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
@@ -124,6 +125,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL9)
+            {
+                sb.AppendLine("void post_system_application2()");
+                sb.AppendLine("{");
+                sb.AppendLine("");
+                sb.AppendLine("}");
+                sb.AppendLine();
+            }
             sb.AppendLine("void post_dump_application()");
             sb.AppendLine("{");
             sb.AppendLine("");
