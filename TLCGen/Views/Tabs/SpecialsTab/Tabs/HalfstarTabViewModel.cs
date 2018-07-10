@@ -374,6 +374,7 @@ namespace TLCGen.ViewModels
 				});
 				gk.GekoppeldeKruising.PlanIngangen.BubbleSort();
 			}
+            if (SelectedSignaalPlan == null) SelectedSignaalPlan = SignaalPlannen[0];
 		}
 
 		private bool RemoveSignaalPlanCommand_CanExecute(object obj)
@@ -841,6 +842,11 @@ namespace TLCGen.ViewModels
 			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
 			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
 			Messenger.Default.Register(this, new Action<PTPKoppelingenChangedMessage>(OnPTPKoppelingenChanged));
+
+            if (SignaalPlannen?.Any() == true)
+            {
+                SelectedSignaalPlan = SignaalPlannen[0];
+            }
 		}
 
 		#endregion // Constructor

@@ -382,7 +382,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCSynchronisaties:
 					return 10;
 				case CCOLCodeTypeEnum.HstCAlternatief:
-					return 10;
+					return 20;
 				case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
 					return 10;
 				case CCOLCodeTypeEnum.HstCPostApplication:
@@ -903,8 +903,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				case CCOLCodeTypeEnum.HstCAlternatief:
 					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
 					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_ALTCOR_HALFSTAR;");
-					sb.AppendLine();
-					sb.AppendLine($"{ts}/* PAR wordt geregeld in reg.c */");
 					sb.AppendLine();
 					
 					if (c.HalfstarData.Hoofdrichtingen.Any())

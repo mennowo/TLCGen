@@ -35,8 +35,19 @@ namespace TLCGen.ViewModels
 			get => SignaalPlan.Cyclustijd;
 			set
 			{
-				SignaalPlan.Cyclustijd = value;
-				RaisePropertyChanged();
+                if (value > 0)
+                {
+                    SignaalPlan.Cyclustijd = value;
+                    if (StartMoment > value)
+                    {
+                        StartMoment = value;
+                    }
+                    if (SwitchMoment > value)
+                    {
+                        SwitchMoment = value;
+                    }
+                }
+                RaisePropertyChanged();
 			}
 		}
 
@@ -45,7 +56,10 @@ namespace TLCGen.ViewModels
 			get => SignaalPlan.StartMoment;
 			set
 			{
-				SignaalPlan.StartMoment = value;
+                if (value > 0 && value <= Cyclustijd)
+                {
+				    SignaalPlan.StartMoment = value;
+                }
 				RaisePropertyChanged();
 			}
 		}
@@ -55,7 +69,10 @@ namespace TLCGen.ViewModels
 			get => SignaalPlan.SwitchMoment;
 			set
 			{
-				SignaalPlan.SwitchMoment = value;
+                if (value > 0 && value <= Cyclustijd)
+                {
+                    SignaalPlan.SwitchMoment = value;
+                }
 				RaisePropertyChanged();
 			}
 		}

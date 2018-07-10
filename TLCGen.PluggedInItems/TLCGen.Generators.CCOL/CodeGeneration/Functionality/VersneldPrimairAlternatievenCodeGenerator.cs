@@ -169,7 +169,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
                     return 10;
                 case CCOLCodeTypeEnum.HstCAlternatief:
-                    return 20;
+                    return 10;
                 default:
                     return 0;
             }
@@ -575,6 +575,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
+                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;
