@@ -5,6 +5,7 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using TLCGen.Controls;
 
 namespace TLCGen.ViewModels
 {
@@ -122,6 +123,18 @@ namespace TLCGen.ViewModels
             {
                 _Controller.OVData.BlokkeerNietConflictenBijHDIngreep = value;
                 RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenBijHDIngreep), broadcast: true);
+            }
+        }
+
+        [Description("Blokkeren niet-conflicten geldt alleen voor langzaam verkeer")]
+        [EnabledCondition(nameof(BlokkeerNietConflictenBijHDIngreep))]
+        public bool BlokkeerNietConflictenAlleenLangzaamVerkeer
+        {
+            get { return _Controller == null ? false : _Controller.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer; }
+            set
+            {
+                _Controller.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer = value;
+                RaisePropertyChanged<object>(nameof(BlokkeerNietConflictenAlleenLangzaamVerkeer), broadcast: true);
             }
         }
 

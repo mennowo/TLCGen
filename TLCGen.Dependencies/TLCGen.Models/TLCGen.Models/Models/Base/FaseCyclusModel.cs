@@ -50,9 +50,13 @@ namespace TLCGen.Models
         public int? PercentageGroen { get; set; }
         public int VeiligheidsGroenMinMG { get; set; }
         public int VeiligheidsGroenTijdsduur { get; set; }
+        public bool WachttijdVoorspeller { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
+
+        [IOElement("wtv", BitmappedItemTypeEnum.Uitgang, "Naam", "WachttijdVoorspeller")]
+        public BitmapCoordinatenDataModel WachttijdVoorspellerBitmapData { get; set; }
 
         [XmlArrayItem(ElementName = "HardMeeverlengFaseCyclus")]
         public List<HardMeeverlengenFaseCyclusModel> HardMeeverlengenFaseCycli { get; set; }
@@ -83,6 +87,7 @@ namespace TLCGen.Models
         {
             Detectoren = new List<DetectorModel>();
             HardMeeverlengenFaseCycli = new List<HardMeeverlengenFaseCyclusModel>();
+            WachttijdVoorspellerBitmapData = new BitmapCoordinatenDataModel();
             AantalRijstroken = 1;
         }
 

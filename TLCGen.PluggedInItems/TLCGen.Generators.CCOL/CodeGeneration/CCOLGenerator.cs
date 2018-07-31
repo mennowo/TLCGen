@@ -239,6 +239,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 					CopySourceIfNeeded("halfstar_help.h", sourcefilepath);
 	            }
 
+                if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+                {
+                    CopySourceIfNeeded("wtv_testwin.c", sourcefilepath);
+                }
+
                 foreach (var pl in PieceGenerators)
                 {
                     var fs = pl.GetSourcesToCopy();

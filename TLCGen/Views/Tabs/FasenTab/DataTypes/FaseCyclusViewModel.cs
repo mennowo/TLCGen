@@ -411,6 +411,7 @@ namespace TLCGen.ViewModels
             }
         }
 
+#warning This seems obsolete?
         public bool OVIngreep
         {
             get => _faseCyclus.OVIngreep;
@@ -428,6 +429,16 @@ namespace TLCGen.ViewModels
             {
                 _faseCyclus.HDIngreep = value;
                 RaisePropertyChanged<object>(nameof(HDIngreep), broadcast: true);
+            }
+        }
+
+        public bool WachttijdVoorspeller
+        {
+            get => _faseCyclus.WachttijdVoorspeller;
+            set
+            {
+                _faseCyclus.WachttijdVoorspeller = value;
+                RaisePropertyChanged<object>(nameof(WachttijdVoorspeller), broadcast: true);
             }
         }
 

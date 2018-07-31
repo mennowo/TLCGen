@@ -75,6 +75,7 @@
     <Compile Include="CodeGeneration\Functionality\KWCCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\VLOGCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\AlgemeenCodeGenerator.cs" />
+    <Compile Include="CodeGeneration\Functionality\WachttijdVoorspellerCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
@@ -142,6 +143,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SourceFiles\halfstar_ov.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\wtv_testwin.c">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

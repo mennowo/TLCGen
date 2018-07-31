@@ -891,7 +891,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}bool isHD = FALSE;");
                         sb.AppendLine($"{ts}int fc;");
                         sb.AppendLine();
-                        sb.Append($"{ts}/* Bepalen of een HD ingreep actief is */");
+                        sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");
                         sb.Append($"{ts}isHD = ");
                         first = true;
                         foreach (var hd in c.OVData.HDIngrepen)
@@ -904,23 +904,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             first = false;
                         }
                         sb.AppendLine(";");
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
-                        sb.AppendLine($"{ts}if (isHD)");
-                        sb.AppendLine($"{ts}{{");
-                        foreach (var fc in c.Fasen)
+                        if (!c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
                         {
-                            if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                            sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
+                            sb.AppendLine($"{ts}if (isHD)");
+                            sb.AppendLine($"{ts}{{");
+                            foreach (var fc in c.Fasen)
                             {
-                                sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                                if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                                {
+                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                                }
                             }
-                            else
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}/* Blokkeren alle langzaam verkeer (tevens niet-conflicten) */");
+                            sb.AppendLine($"{ts}if (isHD)");
+                            sb.AppendLine($"{ts}{{");
+                            foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
                             {
-                                sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                                if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
+                                {
+                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                                }
                             }
                         }
                         sb.AppendLine($"{ts}}}");

@@ -63,6 +63,7 @@
                 <DataGridComboBoxColumn Header="Meev." 
                                         SelectedItemBinding="{Binding Path=Meeverlengen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" />
+                <DataGridCheckBoxColumn Header="Wachttijdvoorspeller" Binding="{Binding Path=WachttijdVoorspeller,UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="# detectors" IsReadOnly="True" Binding="{Binding Path=DetectorCount}" Foreground="Gray" />
             </DataGrid.Columns>
         </re:SpecialDataGrid>

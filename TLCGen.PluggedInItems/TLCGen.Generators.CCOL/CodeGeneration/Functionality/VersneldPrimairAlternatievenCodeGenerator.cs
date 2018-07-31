@@ -209,9 +209,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* zet richtingen die alternatief gaan realiseren         */");
                         sb.AppendLine($"{ts}/* terug naar RV als er geen alternatieve ruimte meer is. */");
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}/* Dit gebeurt niet voor fasen met een wachttijd voorspeller, */");
+                            sb.AppendLine($"{ts}/* of fasen waarvan de voedende richting die heeft. */");
+                        }
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
+                        {
+                            var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
+                            if (ffc != null && !ffc.WachttijdVoorspeller)
+                            {
+                                var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
+                                if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
+                            }
+                            if (ffc != null && ffc.WachttijdVoorspeller) continue;
                             sb.AppendLine(
                                 $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");
+                        }
                         sb.AppendLine();
 
                         var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);

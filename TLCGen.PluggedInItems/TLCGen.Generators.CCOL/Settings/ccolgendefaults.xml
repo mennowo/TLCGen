@@ -1808,6 +1808,38 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="WachttijdVoorspellerCodeGenerator">
+      <CodePieceData>
+        <ClassName>WachttijdVoorspellerCodeGenerator</ClassName>
+        <Description>WachttijdVoorspeller</Description>
+        <Settings>
+          <Setting>
+            <Default>wtv</Default>
+            <Setting>wtv</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken aansturing wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtv</Default>
+            <Setting>wtv</Setting>
+            <Type>Timer</Type>
+            <Description>T.b.v. aansturing wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtv</Default>
+            <Setting>wtv</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden aantal actieve LEDs wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>minwtv</Default>
+            <Setting>minwtv</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimaal aantal LEDs dat moet gaan branden bij starten wachttijdvoorspeller</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>
