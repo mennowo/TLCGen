@@ -1,7 +1,6 @@
-framework: net45
 source https://api.nuget.org/v3/index.json
 
-nuget MvvmLightLibs
-nuget Extended.Wpf.Toolkit
-nuget ILMerge.MSBuild.Task
-nuget ilmerge
+nuget MvvmLightLibs framework: >= 4.5
+nuget Extended.Wpf.Toolkit framework: >= 4.5
+nuget ILMerge.MSBuild.Task framework: >= 4.5
+nuget ilmerge framework: >= 4.5

@@ -24,10 +24,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements = new List<CCOLElement>();
             _myBitmapOutputs = new List<CCOLIOElement>();
 
-            if(c.Fasen.Any(x => x.WachttijdVoorspeller))
-            {
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmminwtv}", 2, CCOLElementTimeTypeEnum.None, _prmminwtv));
-            }
+            if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return;
+
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmminwtv}", 2, CCOLElementTimeTypeEnum.None, _prmminwtv));
 
             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
             {
@@ -82,6 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCIncludes:
+                    if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("/* Include files wachttijdvoorspeller*/");
                     sb.AppendLine("#include \"wtvfunc.c\" /* berekening van de wachttijden voorspelling */");
                     sb.AppendLine("#include \"wtlleds.c\" /* aansturing van de wachttijdlantaarn met leds */");
@@ -91,12 +91,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCTop:
+                    if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("/* tijden t.b.v. wachttijdvoorspellers */");
                     sb.AppendLine("/* ----------------------------------- */");
                     sb.AppendLine("mulv t_wacht[FCMAX];	/* wachttijd'*/");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
+                    if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("#if !defined AUTOMAAT && !defined NO_WTV_WIN");
                     sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
@@ -107,6 +109,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
+                    if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine($"{ts}/* Wachttijdvoorspellers */");
                     sb.AppendLine($"{ts}/* bereken de primaire wachttijd van alle richtingen */");
                     sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PRML, ML, ML_MAX, t_wacht);");

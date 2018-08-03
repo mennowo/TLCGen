@@ -1,12 +1,13 @@
-framework: net45
 source https://api.nuget.org/v3/index.json
 
-nuget CommonServiceLocator
-nuget Extended.Wpf.Toolkit framework: >= net45
-nuget Microsoft.WindowsAPICodePack.Core framework: >= net45
-nuget Microsoft.WindowsAPICodePack.Shell framework: >= net45
-nuget MvvmLightLibs
-nuget NSubstitute framework: >= net45
-nuget NUnit framework: >= net45
-nuget Gu.Wpf.DataGrid2D
-nuget gong-wpf-dragdrop
+nuget Extended.Wpf.Toolkit framework: >= 4.5
+nuget Microsoft.WindowsAPICodePack.Core framework: >= 4.5
+nuget Microsoft.WindowsAPICodePack.Shell framework: >= 4.5
+nuget MvvmLightLibs framework: >= 4.5
+nuget NSubstitute framework: >= 4.5
+nuget NUnit framework: >= 4.5
+nuget Gu.Wpf.DataGrid2D framework: >= 4.5
+nuget gong-wpf-dragdrop framework: >= 4.5
+nuget DocX framework: >= 4.5
+nuget DocumentFormat.OpenXml framework: >= 4.5
+nuget OpenXmlPowerTools framework: >= 4.5

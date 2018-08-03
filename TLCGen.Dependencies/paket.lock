@@ -1,9 +1,8 @@
-RESTRICTION: == net45
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    CommonServiceLocator (2.0.2)
-    Extended.Wpf.Toolkit (3.2)
-    ilmerge (2.14.1208)
-    ILMerge.MSBuild.Task (1.0.2)
-    MvvmLightLibs (5.4.1)
-      CommonServiceLocator (>= 2.0.2)
+    CommonServiceLocator (2.0.2) - restriction: >= net45
+    Extended.Wpf.Toolkit (3.4) - restriction: >= net45
+    ilmerge (2.14.1208) - restriction: >= net45
+    ILMerge.MSBuild.Task (1.0.3) - restriction: >= net45
+    MvvmLightLibs (5.4.1) - restriction: >= net45
+      CommonServiceLocator (>= 2.0.2) - restriction: || (>= monoandroid) (&& (< net35) (>= portable-net45+uap10.0+monoandroid+xamarinios+win8+wp81+wpa81) (< win81) (< wpa81)) (&& (>= net40) (< portable-net45+uap10.0+monoandroid+xamarinios+win8+wp81+wpa81)) (>= net45) (>= uap10.0) (&& (>= win81) (< wpa81)) (&& (< win81) (>= wpa81)) (>= wp81) (>= xamarinios)
