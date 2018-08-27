@@ -12,9 +12,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
-        <DataGridTextColumn x:Key="NaamColumn" Binding="{Binding Path=Naam}" Header="Naam" 
+        <DataGridTextColumn x:Key="NaamColumn" Binding="{Binding Path=Naam,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Naam" 
                             Visibility="{Binding Path=ShowNaam, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        <DataGridTextColumn x:Key="InstellingColumn" Binding="{Binding Path=Instelling}" Header="Instelling" 
+        <DataGridTextColumn x:Key="InstellingColumn" Binding="{Binding Path=Instelling,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Instelling" 
                             Visibility="{Binding Path=ShowInstelling, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         <DataGridComboBoxColumn x:Key="TypeColumn" Header="Type" 
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

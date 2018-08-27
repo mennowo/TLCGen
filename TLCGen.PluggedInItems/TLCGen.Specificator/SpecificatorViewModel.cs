@@ -128,7 +128,7 @@ namespace TLCGen.Specificator
                 {
                     File.Delete(filename);
                 }
-                using (var stream = assembly.GetManifestResourceStream("TLCGen.Specificator.Settings.specification_template.docx"))
+                using (var stream = assembly.GetManifestResourceStream("TLCGen.Specificator.Resources.specification_template.docx"))
                 using (var fileStream = File.Create(filename))
                 {
                     stream.CopyTo(fileStream);

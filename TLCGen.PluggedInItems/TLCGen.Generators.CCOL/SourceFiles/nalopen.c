@@ -71,7 +71,7 @@ void NaloopCV(count fc1, count fc2, count tnl)
 }
 
 /**************************************************************************
- *  Functie  : NaloopEGDet
+ *  Functie  : NaloopCVDet
  *
  *  Functionele omschrijving :
  *    Verzorgt een naloop van fc1 naar fc2 afhankelijk van detectie dp
@@ -81,7 +81,7 @@ void NaloopCV(count fc1, count fc2, count tnl)
 void NaloopCVDet(count fc1, count fc2, count dp, count tnl)
 {
    RT[tnl] = D[dp] && CV[fc1] && !RA[fc1];
-   if (RT[tnl] || T[tnl] || G[fc1] || GL[fc1]) RW[fc2] |= BIT2;
+   if ((RT[tnl] || T[tnl]) && (G[fc1] || GL[fc1])) RW[fc2] |= BIT2;
 }
 
 /**************************************************************************

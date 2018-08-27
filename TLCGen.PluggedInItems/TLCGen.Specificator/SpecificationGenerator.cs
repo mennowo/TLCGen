@@ -4,140 +4,153 @@ using OpenXmlPowerTools;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Windows;
 using System.Xml.Linq;
 using TLCGen.Extensions;
 using TLCGen.Models;
+using Style = DocumentFormat.OpenXml.Wordprocessing.Style;
 
 namespace TLCGen.Specificator
 {
-    public static class SpecificationGenerator
+    public static partial class SpecificationGenerator
     {
-
-
-        // Return styleid that matches the styleName, or null when there's no match.
-        public static string GetStyleIdFromStyleName(WordprocessingDocument doc, string styleName)
+        private static ResourceDictionary _texts;
+        public static ResourceDictionary Texts
         {
-            StyleDefinitionsPart stylePart = doc.MainDocumentPart.StyleDefinitionsPart;
-            string styleId = stylePart.Styles.Descendants<StyleName>()
-                .Where(s => s.Val.Value.Equals(styleName) &&
-                    (((Style)s.Parent).Type == StyleValues.Paragraph))
-                .Select(n => ((Style)n.Parent).StyleId).FirstOrDefault();
-            return styleId;
+            get
+            {
+                if(_texts == null)
+                {
+                    var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                    using (var stream = assembly.GetManifestResourceStream("TLCGen.Specificator.Resources.SpecificatorTexts.xaml"))
+                    {
+                        _texts = (ResourceDictionary)System.Windows.Markup.XamlReader.Load(stream);
+                    }
+                }
+                return _texts;
+            }
         }
 
-        // Apply a style to a paragraph.
-        public static void ApplyStyleToParagraph(WordprocessingDocument doc, Paragraph p, string stylename)
+        public static void AddFirstPage(WordprocessingDocument doc, ControllerDataModel data)
         {
-            // If the paragraph has no ParagraphProperties object, create one.
-            if (p.Elements<ParagraphProperties>().Count() == 0)
+            var par = (Paragraph)doc.MainDocumentPart.Document.Body.ChildElements.First(x => x.InnerText.StartsWith("Title"));
+            par.RemoveAllChildren();
+            var run = par.AppendChild(new Run());
+
+            run.AppendChild(new Text($"{Texts["Title"]} {data.Naam}"));
+            ApplyStyleToParagraph(doc, par, "Title");
+
+            par = (Paragraph)doc.MainDocumentPart.Document.Body.ChildElements.First(x => x.InnerText.StartsWith("Subtitle"));
+            par.RemoveAllChildren();
+            run = par.AppendChild(new Run());
+            run.AppendChild(new Text($"{data.Straat1}{(!string.IsNullOrWhiteSpace(data.Straat2) ? " - " + data.Straat2 : "")}"));
+            ApplyStyleToParagraph(doc, par, "Subtitle");
+
+            var par2 = par.InsertAfterSelf(new Paragraph());
+            run = par2.AppendChild(new Run());
+            run.AppendChild(new Text($"{data.Stad})"));
+            ApplyStyleToParagraph(doc, par2, "Subtitle");
+        }
+
+        public static void AddHeaderTexts(WordprocessingDocument doc, SpecificatorDataModel model, ControllerDataModel data)
+        {
+            foreach (var h in doc.MainDocumentPart.HeaderParts)
             {
-                p.PrependChild<ParagraphProperties>(new ParagraphProperties());
+                foreach (var t in h.RootElement.Descendants<Paragraph>().SelectMany(x => x.Descendants<Run>()).SelectMany(x => x.Descendants<Text>()))
+                {
+                    if (t.Text.Contains("FIRSTPAGEHEADER")) t.Text = "";
+                    if (t.Text.Contains("HEADER")) t.Text = $"Functionele specificatie {data.Naam} ({data.Straat1}{(!string.IsNullOrWhiteSpace(data.Straat2) ? " - " + data.Straat2 : "")}, {data.Stad})";
+                }
             }
+            foreach (var f in doc.MainDocumentPart.FooterParts)
+            {
+                foreach (var r in f.RootElement.Descendants<Run>())
+                {
+                    var fp = false;
+                    foreach (var t in r.Descendants<Text>())
+                    {
+                        if (t.Text.Contains("FIRSTPAGEFOOTER"))
+                        {
+                            t.Text = "";
+                            fp = true;
+                        }
+                    }
+                    if (fp)
+                    {
+                        if (!string.IsNullOrWhiteSpace(model.Organisatie))
+                        {
+                            r.AppendChild(new Text(model.Organisatie));
+                            r.AppendChild(new Break());
+                        }
+                        if (!string.IsNullOrWhiteSpace(model.Straat))
+                        {
+                            r.AppendChild(new Text(model.Straat));
+                            r.AppendChild(new Break());
+                        }
+                        if (!string.IsNullOrWhiteSpace(model.Postcode))
+                        {
+                            r.AppendChild(new Text($"{model.Postcode} "));
+                        }
+                        if (!string.IsNullOrWhiteSpace(model.Stad))
+                        {
+                            r.AppendChild(new Text(model.Stad));
+                            r.AppendChild(new Break());
+                        }
+                        if (!string.IsNullOrWhiteSpace(model.TelefoonNummer))
+                        {
+                            r.AppendChild(new Text($"Telefoon: {model.TelefoonNummer}"));
+                            r.AppendChild(new Break());
+                        }
+                        if (!string.IsNullOrWhiteSpace(model.EMail))
+                        {
+                            r.AppendChild(new Text($"E-mail: {model.EMail}"));
+                        }
+                    }
+                }
+            }
+        }
 
-            // Get the paragraph properties element of the paragraph.
-            ParagraphProperties pPr = p.Elements<ParagraphProperties>().First();
-
-            // Set the style of the paragraph.
-            pPr.ParagraphStyleId = new ParagraphStyleId() { Val = GetStyleIdFromStyleName(doc, stylename) };
+        public static void AddChapterTitle(WordprocessingDocument doc, string title, int headingLevel)
+        {
+            Paragraph par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
+            Run run = par.AppendChild(new Run());
+            run.AppendChild(new Text(title));
+            ApplyStyleToParagraph(doc, par, $"Heading {headingLevel}");
         }
 
         public static void GenerateSpecification(string filename, ControllerModel c, SpecificatorDataModel model)
         {
-            // Open a WordprocessingDocument for editing using the filepath.
             using (var doc = WordprocessingDocument.Open(filename, true))
             {
-                // Assign a reference to the existing document body.
                 Body body = doc.MainDocumentPart.Document.Body;
-                body.RemoveAllChildren<Paragraph>();
 
-                // Front page
-                Paragraph par = body.AppendChild(new Paragraph());
-                Run run = par.AppendChild(new Run());
-                run.AppendChild(new Text($"Functionele specificatie {c.Data.Naam}"));
-                ApplyStyleToParagraph(doc, par, "Title");
-
-                par = body.AppendChild(new Paragraph());
-                run = par.AppendChild(new Run());
-                run.AppendChild(new Text($"{c.Data.Straat1}{(!string.IsNullOrWhiteSpace(c.Data.Straat2) ? " - " + c.Data.Straat2 : "")}"));
-                ApplyStyleToParagraph(doc, par, "Subtitle");
-
-                par = body.AppendChild(new Paragraph());
-                run = par.AppendChild(new Run());
-                run.AppendChild(new Text($"{c.Data.Stad})"));
-                ApplyStyleToParagraph(doc, par, "Subtitle");
-
-                foreach (var h in doc.MainDocumentPart.HeaderParts)
+                var remPars = new List<Paragraph>();
+                foreach(var ch in body.ChildElements)
                 {
-                    foreach (var t in h.RootElement.Descendants<Paragraph>().SelectMany(x => x.Descendants<Run>()).SelectMany(x => x.Descendants<Text>()))
+                    if(ch is Paragraph p)
                     {
-                        if (t.Text.Contains("FIRSTPAGEHEADER")) t.Text = "";
-                        if (t.Text.Contains("HEADER")) t.Text = $"Functionele specificatie {c.Data.Naam} ({c.Data.Straat1}{(!string.IsNullOrWhiteSpace(c.Data.Straat2) ? " - " + c.Data.Straat2 : "")}, {c.Data.Stad})";
-                    }
-                }
-                foreach (var f in doc.MainDocumentPart.FooterParts)
-                {
-                    foreach (var r in f.RootElement.Descendants<Run>())
-                    {
-                        var fp = false;
-                        foreach (var t in r.Descendants<Text>())
-                        {
-                            if (t.Text.Contains("FIRSTPAGEFOOTER"))
-                            {
-                                t.Text = "";
-                                fp = true;
-                            }
-                        }
-                        if (fp)
-                        {
-                            if (!string.IsNullOrWhiteSpace(model.Organisatie))
-                            {
-                                r.AppendChild(new Text(model.Organisatie));
-                                r.AppendChild(new Break());
-                            }
-                            if (!string.IsNullOrWhiteSpace(model.Straat))
-                            {
-                                r.AppendChild(new Text(model.Straat));
-                                r.AppendChild(new Break());
-                            }
-                            if (!string.IsNullOrWhiteSpace(model.Postcode))
-                            {
-                                r.AppendChild(new Text($"{model.Postcode} "));
-                            }
-                            if (!string.IsNullOrWhiteSpace(model.Stad))
-                            {
-                                r.AppendChild(new Text(model.Stad));
-                                r.AppendChild(new Break());
-                            }
-                            if (!string.IsNullOrWhiteSpace(model.TelefoonNummer))
-                            {
-                                r.AppendChild(new Text($"Telefoon: {model.TelefoonNummer}"));
-                                r.AppendChild(new Break());
-                            }
-                            if (!string.IsNullOrWhiteSpace(model.EMail))
-                            {
-                                r.AppendChild(new Text($"E-mail: {model.EMail}"));
-                            }
-                        }
+                        if (p.InnerText.StartsWith("__")) remPars.Add(p);
                     }
                 }
 
-                Paragraph parToc2 = body.AppendChild(new Paragraph());
-                Run runTco2 = parToc2.AppendChild(new Run());
-                runTco2.AppendChild(new Text($"Hoofdstuk 1"));
-                ApplyStyleToParagraph(doc, parToc2, "Heading 1");
+                foreach(var p in remPars)
+                {
+                    body.RemoveChild(p);
+                }
 
-                Paragraph parToc = body.AppendChild(new Paragraph());
-                Run runTco = parToc.AppendChild(new Run());
-                runTco.AppendChild(new Text($"Hoofdstuk 2"));
-                ApplyStyleToParagraph(doc, parToc, "Heading 1");
+                AddHeaderTexts(doc, model, c.Data);
+                AddFirstPage(doc, c.Data);
 
-                // DOES NOT WORK!!!
-                XElement firstPara = doc
-                    .MainDocumentPart
-                    .GetXDocument()
-                    .Descendants(W.p)
-                    .FirstOrDefault();
-                TocAdder.AddToc(doc, firstPara, @"TOC \o '1-3' \h \z \u", "Test", null);
+                AddChapterTitle(doc, $"{Texts["Ch1Title"]}", 1);
+                AddChapterTitle(doc, $"{Texts["Ch2Functionality"]}", 1);
+                AddChapterTitle(doc, $"{Texts["Ch2P1Intergreen"]}", 2);
+
+                DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
+                UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
+                updateFields.Val = new DocumentFormat.OpenXml.OnOffValue(true);
+                settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
+                settingsPart.Settings.Save();
             }
 
             // Create a new document.
