@@ -72,15 +72,12 @@ namespace TLCGen.Models
 
         public int CompareTo(object obj)
         {
-            if (obj is DetectorModel)
-            {
-                DetectorModel comp = obj as DetectorModel;
-                return this.Naam.CompareTo(comp.Naam);
-            }
-            else
-            {
-                return 0;
-            }
+            if (!(obj is DetectorModel dm)) throw new InvalidCastException();
+            var myName = Naam;
+            var hisName = dm.Naam;
+            if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+            else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+            return string.Compare(myName, hisName, StringComparison.Ordinal);
         }
 
         #endregion // ITemplatable

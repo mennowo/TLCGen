@@ -216,12 +216,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
+                            // find signalgroup instance
                             var ffc = c.Fasen.FirstOrDefault(x => x.Naam == fc.FaseCyclus);
+                            // if the sg has no predictor
                             if (ffc != null && !ffc.WachttijdVoorspeller)
                             {
+                                // find a potential feeding sg
                                 var fcnl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseNaar == fc.FaseCyclus);
+                                // if there is a feeding sg, set the sg instance to that sg
                                 if (fcnl != null) ffc = c.Fasen.FirstOrDefault(x => x.Naam == fcnl.FaseVan);
                             }
+                            // if the instance is not null, and it has a predictor, skip setting RR
                             if (ffc != null && ffc.WachttijdVoorspeller) continue;
                             sb.AppendLine(
                                 $"{ts}RR[{_fcpf}{fc.FaseCyclus}] |= R[{_fcpf}{fc.FaseCyclus}] && AR[{_fcpf}{fc.FaseCyclus}] && (!PAR[{_fcpf}{fc.FaseCyclus}] || ERA[{_fcpf}{fc.FaseCyclus}]) ? BIT5 : 0;");

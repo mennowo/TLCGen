@@ -195,6 +195,11 @@ namespace TLCGen.ViewModels
                 {
                     var m = Regex.Match(dm.Naam, @"[0-9]$");
                     var next = m.Value;
+                    if(next == "0")
+                    {
+                        m = Regex.Match(dm.Naam, @"[0-9][0-9]$");
+                        next = m.Value;
+                    }
 	                if (int.TryParse(next, out var inewname))
                     {
                         newname = inewname.ToString();

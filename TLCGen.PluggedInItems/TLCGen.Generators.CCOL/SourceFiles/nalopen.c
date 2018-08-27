@@ -80,8 +80,8 @@ void NaloopCV(count fc1, count fc2, count tnl)
  **************************************************************************/
 void NaloopCVDet(count fc1, count fc2, count dp, count tnl)
 {
-   RT[tnl] = D[dp] && CV[fc1] && !RA[fc1];
-   if ((RT[tnl] || T[tnl]) && (G[fc1] || GL[fc1])) RW[fc2] |= BIT2;
+	RT[tnl] = D[dp] && CV[fc1] && !RA[fc1];
+	if (RT[tnl] || T[tnl]) RW[fc2] |= BIT2;
 }
 
 /**************************************************************************
