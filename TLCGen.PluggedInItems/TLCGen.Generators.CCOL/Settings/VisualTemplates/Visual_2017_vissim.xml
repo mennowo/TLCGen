@@ -77,7 +77,7 @@
       <SDLCheck>
       </SDLCheck>
       <AdditionalIncludeDirectories>__ADDITIONALINCLUDEDIRS__%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>VISSIM;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>CCOL_IS_SPECIAL;VISSIM;WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;__PREPROCESSORDEFS__%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
