@@ -35,6 +35,7 @@ void FileMeldingV2(count det,     /* filelus                                */
 void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
 bool hf_wsg_nl(void);
+void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht);
 
 extern mulv FC_type[];
 extern int Knipper_1Hz;

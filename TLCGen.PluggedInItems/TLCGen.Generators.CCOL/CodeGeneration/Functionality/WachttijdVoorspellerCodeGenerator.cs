@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Integrity;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
@@ -13,11 +15,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private List<CCOLIOElement> _myBitmapOutputs;
 
 #pragma warning disable 0649
+        private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmax;
+        private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmin;
         private CCOLGeneratorCodeStringSettingModel _uswtv;
+        private CCOLGeneratorCodeStringSettingModel _schwtv;
+        private CCOLGeneratorCodeStringSettingModel _hwtv;
         private CCOLGeneratorCodeStringSettingModel _twtv;
         private CCOLGeneratorCodeStringSettingModel _mwtv;
+        private CCOLGeneratorCodeStringSettingModel _mwtvm;
         private CCOLGeneratorCodeStringSettingModel _prmminwtv;
 #pragma warning restore 0649
+        private string _isfix;
+        private string _tnlsg;
+        private string _tnlfg;
+        private string _tnlcv;
+        private string _tnleg;
+        private string _tnlsgd;
+        private string _tnlfgd;
+        private string _tnlcvd;
+        private string _tnlegd;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -27,12 +43,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return;
 
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmminwtv}", 2, CCOLElementTimeTypeEnum.None, _prmminwtv));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmwtvnhaltmax}", c.Data.WachttijdvoorspellerNietHalterenMax, CCOLElementTimeTypeEnum.None, _prmwtvnhaltmax));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmwtvnhaltmin}", c.Data.WachttijdvoorspellerNietHalterenMin, CCOLElementTimeTypeEnum.None, _prmwtvnhaltmin));
 
             foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
             {
                 _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData, $"{_uspf}{_uswtv}{fc.Naam}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}3", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}4", _uswtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwtv}{fc.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schwtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwtv}{fc.Naam}", _hwtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwtv}{fc.Naam}", _mwtv, fc.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mwtvm}{fc.Naam}", _mwtvm, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_twtv}{fc.Naam}", 999, CCOLElementTimeTypeEnum.TE_type, _twtv, fc.Naam));
             }
         }
@@ -69,6 +95,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 30;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
+                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                    return 10;
                 default:
                     return 0;
             }
@@ -94,7 +122,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("/* tijden t.b.v. wachttijdvoorspellers */");
                     sb.AppendLine("/* ----------------------------------- */");
-                    sb.AppendLine("mulv t_wacht[FCMAX];	/* wachttijd'*/");
+                    sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
+                    sb.AppendLine("mulv rr_twacht[FCMAX]; /* halteren wachttijd */");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
@@ -111,46 +140,192 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine($"{ts}/* Wachttijdvoorspellers */");
+
+                    #region verlenggroentijd gekoppelde richtingen
+                    sb.AppendLine($"{ts}/* verlenggroentijd gekoppelde richtingen */");
+                    foreach(var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        #region Get naloop type timer
+                        var tnl = "";
+                        if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
+                        {
+                            tnl = _tnlfgd;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie))
+                        {
+                            tnl = _tnlsgd;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie))
+                        {
+                            tnl = _tnlegd;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie))
+                        {
+                            tnl = _tnlcvd;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+                        {
+                            tnl = _tnlfg;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroen))
+                        {
+                            tnl = _tnlsg;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroen))
+                        {
+                            tnl = _tnleg;
+                        }
+                        else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen))
+                        {
+                            tnl = _tnlcv;
+                        }
+                        #endregion
+                        sb.AppendLine($"{ts}TVG_max[{_fcpf}{nl.FaseNaar}] = T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] > TVG_max[{_fcpf}{nl.FaseNaar}] ? T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] : TVG_max[{_fcpf}{nl.FaseNaar}];");
+                    }
+                    #endregion
+
+                    #region bereken de primaire wachttijd van alle richtingen
                     sb.AppendLine($"{ts}/* bereken de primaire wachttijd van alle richtingen */");
                     sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PRML, ML, ML_MAX, t_wacht);");
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}/* bereken de alternatieve wachttijd van de fietsrichtingen */");
+                    sb.AppendLine();
+                    #endregion
+
+                    #region bereken de alternatieve wachttijd van de richtingen met wachttijdvoorspeller
+                    sb.AppendLine($"{ts}/* bereken de alternatieve wachttijd van de richtingen met wachttijdvoorspeller */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         sb.AppendLine($"{ts}max_wachttijd_alternatief({_fcpf}{fc.Naam}, t_wacht);");
                     }
-                    sb.AppendLine($"{ts}");
-                    sb.AppendLine($"{ts}/* aansturing wachttijd lantaarns */");
-                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
-                    {
-                        sb.AppendLine($"{ts}wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
-                    }
-                    sb.AppendLine($"{ts}");
-                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
-                    {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtv}{fc.Naam}];");
-                    }
-                    sb.AppendLine($"{ts}");
+                    sb.AppendLine();
+                    #endregion
 
+                    #region corrigeer waarde i.v.m. gelijkstart fietsers
+                    sb.AppendLine($"{ts}/* corrigeer waarde i.v.m. gelijkstart fietsers */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam);
-                        if(gss.Any())
+                        if (gss.Any())
                         {
-                            foreach(var gs in gss)
+                            foreach (var gs in gss)
                             {
                                 sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht);");
                             }
                         }
                     }
-                    sb.AppendLine($"{ts}");
+                    sb.AppendLine();
+                    #endregion
 
+                    #region Eventuele correctie op berekende wachttijd door gebruiker
+                    sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
+                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
+                    sb.AppendLine();
+                    #endregion
+
+                    #region check of richting wordt tegengehouden door OV/HD
+                    sb.AppendLine($"{ts}/* check of richting wordt tegengehouden door OV/HD */");
+                    sb.AppendLine($"{ts}rr_modulen_primair(PRML, ML, ML_MAX, rr_twacht);");
+                    sb.AppendLine();
+                    #endregion
+
+                    #region aansturing wachttijd lantaarns
+                    sb.AppendLine($"{ts}/* aansturing wachttijd lantaarns (niet tijdens fixatie of prio ingreep) */");
+                    var tts = ts;
+                    if (c.Data.FixatieMogelijk)
+                    {
+                        sb.AppendLine($"{ts}if (!CIF_IS[{_ispf}{_isfix}])");
+                        sb.AppendLine($"{ts}{{");
+                        tts = ts + ts;
+                    }
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht[{_fcpf}{fc.Naam}] = 0;");
+                    }
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{tts}if (rr_twacht[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                    }
+                    if (c.Data.FixatieMogelijk)
+                    {
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    sb.AppendLine();
+
+                    sb.AppendLine($"{ts}/* laatste ledje laten knipperen bij ov/hd-ingreep of fixatie */");
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht[{_fcpf}{fc.Naam}]);");
+                    }
+                    sb.AppendLine();
+
+                    sb.AppendLine($"{ts}/* beveiliging op afzetten tijdens bedrijf */");
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                        sb.AppendLine($"{ts}if (G[{_fcpf}{fc.Naam}])  IH[{_hpf}{_hwtv}{fc.Naam}] = SCH[{_schpf}{_schwtv}{fc.Naam}];");
+                    }
+                    sb.AppendLine();
+
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}1]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT1) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}2]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT2) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}3]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT3) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}4]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT4) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
+                        sb.AppendLine();
+                    }
+
+                    #endregion
+
+                    #region aansturen test window
                     sb.AppendLine("#if !defined AUTOMAAT && !defined NO_WTV_WIN");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}extrawin_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam});");
+                        sb.AppendLine($"{ts}extrawin_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam});");
                     }
                     sb.AppendLine("#endif");
+                    #endregion
+
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                    foreach(var ov in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}iXPrio[ovFC{ov.FaseCyclus}] = FALSE;");
+                    }
+                    foreach (var ov in c.OVData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}iXPrio[hdFC{ov.FaseCyclus}] = FALSE;");
+                    }
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] < PRM[{_prmpf}{_prmwtvnhaltmin}])");
+                        sb.AppendLine($"{ts}{{");
+                        foreach(var ov in c.OVData.OVIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, fc.Naam, x.FaseCyclus) || c.InterSignaalGroep.Nalopen.Any(x2 => x2.FaseVan == fc.Naam && TLCGenControllerChecker.IsFasenConflicting(c, x.FaseCyclus, x2.FaseNaar))))
+                        {
+                            sb.AppendLine($"{ts}{ts}iXPrio[ovFC{ov.FaseCyclus}] |= TRUE;");
+                        }
+                        foreach (var ov in c.OVData.HDIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, fc.Naam, x.FaseCyclus) || c.InterSignaalGroep.Nalopen.Any(x2 => x2.FaseVan == fc.Naam && TLCGenControllerChecker.IsFasenConflicting(c, x.FaseCyclus, x2.FaseNaar))))
+                        {
+                            sb.AppendLine($"{ts}{ts}iXPrio[hdFC{ov.FaseCyclus}] |= TRUE;");
+                        }
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Tegenhouden OV prio met conflict met nalooprichting indien die nog moet komen */");
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        foreach (var ov in c.OVData.OVIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseNaar, x.FaseCyclus)))
+                        {
+                            sb.AppendLine($"{ts}iXPrio[ovFC{ov.FaseCyclus}] |= G[{_fcpf}{nl.FaseVan}] && CV[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}];");
+                        }
+                        foreach (var ov in c.OVData.HDIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseNaar, x.FaseCyclus)))
+                        {
+                            sb.AppendLine($"{ts}iXPrio[hdFC{ov.FaseCyclus}] |= G[{_fcpf}{nl.FaseVan}] && CV[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}];");
+                        }
+                    }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 default:
@@ -160,7 +335,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            //_mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
+            _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
+            _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
+            _tnlfg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfg");
+            _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+            _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
+            _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
 
             return base.SetSettings(settings);
         }

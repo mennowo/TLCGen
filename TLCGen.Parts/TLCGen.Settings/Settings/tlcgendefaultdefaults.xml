@@ -623,6 +623,8 @@
         <ExtraMeeverlengenInWG>false</ExtraMeeverlengenInWG>
         <TypeGroentijden>MaxGroentijden</TypeGroentijden>
         <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
+        <WachttijdvoorspellerNietHalterenMax>21</WachttijdvoorspellerNietHalterenMax>
+        <WachttijdvoorspellerNietHalterenMin>5</WachttijdvoorspellerNietHalterenMin>
         <NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
         <Intergroen>false</Intergroen>
         <CCOLMulti>false</CCOLMulti>

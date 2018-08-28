@@ -1814,10 +1814,34 @@
         <Description>WachttijdVoorspeller</Description>
         <Settings>
           <Setting>
+            <Default>wtvnhaltmax</Default>
+            <Setting>wtvnhaltmax</Setting>
+            <Type>Parameter</Type>
+            <Description>Niet halteren wachttijdvoorspellers indien meer dan of zoveel leds branden</Description>
+          </Setting>
+          <Setting>
+            <Default>wtvnhaltmin</Default>
+            <Setting>wtvnhaltmin</Setting>
+            <Type>Parameter</Type>
+            <Description>Niet halteren wachttijdvoorspellers indien minder dan of zoveel leds branden</Description>
+          </Setting>
+          <Setting>
             <Default>wtv</Default>
             <Setting>wtv</Setting>
             <Type>Uitgang</Type>
             <Description>Verklikken aansturing wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtv</Default>
+            <Setting>wtv</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Aansturing wachttijdvoorspeller fase _E1_ aan/uit</Description>
+          </Setting>
+          <Setting>
+            <Default>wtv</Default>
+            <Setting>wtv</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden aansturing wachttijdvoorspeller fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>wtv</Default>
@@ -1830,6 +1854,12 @@
             <Setting>wtv</Setting>
             <Type>GeheugenElement</Type>
             <Description>Onthouden aantal actieve LEDs wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>wtvm</Default>
+            <Setting>wtvm</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Aansturing aantal actieve LEDs wachttijdvoorspeller fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>minwtv</Default>

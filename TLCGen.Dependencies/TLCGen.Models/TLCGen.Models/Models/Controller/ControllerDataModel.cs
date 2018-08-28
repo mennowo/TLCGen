@@ -40,6 +40,9 @@ namespace TLCGen.Models
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
 
+        public int WachttijdvoorspellerNietHalterenMax { get; set; }
+        public int WachttijdvoorspellerNietHalterenMin { get; set; }
+
         public bool Intergroen { get; set; }
 
         public bool CCOLMulti { get; set; }

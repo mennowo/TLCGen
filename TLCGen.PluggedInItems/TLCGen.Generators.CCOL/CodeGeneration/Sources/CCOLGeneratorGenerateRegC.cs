@@ -204,7 +204,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	        }
 	        sb.AppendLine();
 
-	        if (controller.HalfstarData.IsHalfstar)
+	        if (controller.HalfstarData.IsHalfstar || controller.Fasen.Any(x => x.WachttijdVoorspeller))
 	        {
 		        sb.AppendLine($"{ts}/* Genereren knippersignalen */");
 		        sb.AppendLine($"{ts}UpdateKnipperSignalen();");

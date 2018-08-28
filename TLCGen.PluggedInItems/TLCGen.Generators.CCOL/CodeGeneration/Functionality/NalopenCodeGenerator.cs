@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
+using TLCGen.Integrity;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -117,6 +118,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 10;
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
+                    return 20;
+                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
                     return 20;
                 default:
                     return 0;
@@ -268,7 +271,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine();
                     }
                     return sb.ToString();
-                    
+
+                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                    //if(!c.InterSignaalGroep.Nalopen.Any()) return "";
+                    //sb.AppendLine($"{ts}/* Tegenhouden OV prio met conflict met nalooprichting indien die nog moet komen */");
+                    //foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    //{
+                    //    foreach (var ov in c.OVData.OVIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseNaar, x.FaseCyclus)))
+                    //    {
+                    //        sb.AppendLine($"{ts}iXPrio[ovFC{ov.FaseCyclus}] |= G[{_fcpf}{nl.FaseVan}] && CV[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}] &&;");
+                    //    }
+                    //}
+                    //sb.AppendLine();
+                    return sb.ToString();
+
                 default:
                     return null;
             }

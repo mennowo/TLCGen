@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -115,6 +116,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
+            if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+            {
+                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
+                sb.AppendLine("{");
+                sb.AppendLine("");
+                sb.AppendLine("}");
+                sb.AppendLine();
+            }
             sb.AppendLine("void pre_system_application()");
             sb.AppendLine("{");
             sb.AppendLine("");

@@ -306,6 +306,28 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Wtv niet halteren als meer dan # leds")]
+        public int WachttijdvoorspellerNietHalterenMax
+        {
+            get => _Controller?.Data?.WachttijdvoorspellerNietHalterenMax ?? 0;
+            set
+            {
+                _Controller.Data.WachttijdvoorspellerNietHalterenMax = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerNietHalterenMax), broadcast: true);
+            }
+        }
+
+        [Description("Wtv niet halteren als minder dan # leds")]
+        public int WachttijdvoorspellerNietHalterenMin
+        {
+            get => _Controller?.Data?.WachttijdvoorspellerNietHalterenMin ?? 0;
+            set
+            {
+                _Controller.Data.WachttijdvoorspellerNietHalterenMin = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerNietHalterenMin), broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Constructor

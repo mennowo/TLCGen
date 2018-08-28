@@ -310,6 +310,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
+                                #region Get naloop type timer
                                 var tnl = "";
                                 if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
                                 {
@@ -343,6 +344,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     tnl = _tnlcv;
                                 }
+                                #endregion
                                 sb.AppendLine(
                                     $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (({maxtartotig}({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                             }

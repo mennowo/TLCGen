@@ -550,3 +550,17 @@ bool hf_wsg_nl(void)
 	}
 	return (FALSE);
 }
+
+void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht)
+{
+	/* fc    - fasecyclusnummer                            */
+	/* mmwtv - berekende  aantal leds wachttijdlantaarn    */
+	/* mmwtm - uitsturing aantal leds wachttijdlantaarn    */
+
+	if ((CIF_IS[isfix] || (RR_T_wacht > 0)) && MM[mmwtm])         /* fixatie of prio-ingreep terwijl wachttijdlantaarn aan staat  */
+	{
+		if (MM[mmwtm] > 1)       MM[mmwtm] = MM[mmwtv] - Knipper_1Hz;     /* bij aantal leds groter dan 1 = actuele ledje laten knipperen */
+		else                     MM[mmwtm] = MM[mmwtv] + Knipper_1Hz;     /* bij één leds de voorgaande led, zodat de wtv niet uitgaat    */
+	}
+	else                        MM[mmwtm] = MM[mmwtv];            /* anders berekende aantal leds gewoon overnemen                */
+}
