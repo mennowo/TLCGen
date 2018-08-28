@@ -277,7 +277,7 @@ namespace OpenXmlPowerTools
         {
             UpdateFontTablePart(doc);
             UpdateStylesPartForToc(doc);
-            UpdateStylesWithEffectsPartForToc(doc);
+            //UpdateStylesWithEffectsPartForToc(doc);
  
             if (title == null)
                 title = "Contents";

@@ -140,6 +140,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine($"{ts}/* Wachttijdvoorspellers */");
+                    sb.AppendLine();
 
                     #region verlenggroentijd gekoppelde richtingen
                     sb.AppendLine($"{ts}/* verlenggroentijd gekoppelde richtingen */");
@@ -182,6 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         #endregion
                         sb.AppendLine($"{ts}TVG_max[{_fcpf}{nl.FaseNaar}] = T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] > TVG_max[{_fcpf}{nl.FaseNaar}] ? T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}] : TVG_max[{_fcpf}{nl.FaseNaar}];");
                     }
+                    sb.AppendLine();
                     #endregion
 
                     #region bereken de primaire wachttijd van alle richtingen

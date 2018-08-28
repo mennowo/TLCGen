@@ -19,7 +19,7 @@ namespace TLCGen.Specificator
         }
 
         // Apply a style to a paragraph.
-        public static void ApplyStyleToParagraph(WordprocessingDocument doc, Paragraph p, string stylename)
+        public static void ApplyStyleToParagraph(WordprocessingDocument doc, Paragraph p, string stylename = "", string styleid = "")
         {
             // If the paragraph has no ParagraphProperties object, create one.
             if (p.Elements<ParagraphProperties>().Count() == 0)
@@ -31,7 +31,14 @@ namespace TLCGen.Specificator
             ParagraphProperties pPr = p.Elements<ParagraphProperties>().First();
 
             // Set the style of the paragraph.
-            pPr.ParagraphStyleId = new ParagraphStyleId() { Val = GetStyleIdFromStyleName(doc, stylename) };
+            if(stylename == "")
+            {
+                pPr.ParagraphStyleId = new ParagraphStyleId() { Val = styleid };
+            }
+            else
+            {
+                pPr.ParagraphStyleId = new ParagraphStyleId() { Val = GetStyleIdFromStyleName(doc, stylename) };
+            }
         }
 
     }
