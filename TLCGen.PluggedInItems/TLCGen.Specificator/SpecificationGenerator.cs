@@ -147,13 +147,18 @@ namespace TLCGen.Specificator
                             r.AppendChild(new Text(model.Straat));
                             r.AppendChild(new Break());
                         }
+                        var t = "";
                         if (!string.IsNullOrWhiteSpace(model.Postcode))
                         {
-                            r.AppendChild(new Text($"{model.Postcode} "));
+                            t = model.Postcode;
                         }
                         if (!string.IsNullOrWhiteSpace(model.Stad))
                         {
-                            r.AppendChild(new Text(model.Stad));
+                            t = t + " " + model.Stad;
+                        }
+                        if (t != "")
+                        {
+                            r.AppendChild(new Text(t));
                             r.AppendChild(new Break());
                         }
                         if (!string.IsNullOrWhiteSpace(model.TelefoonNummer))
@@ -187,13 +192,32 @@ namespace TLCGen.Specificator
             return par;
         }
 
+        public static string ReplaceHolders(string text, ControllerModel c, SpecificatorDataModel model)
+        {
+            var t = text;
+            t = Regex.Replace(t, "__KR__", c.Data.Naam);
+            t = Regex.Replace(t, "__STAD__", c.Data.Stad);
+            t = Regex.Replace(t, "__STRAAT1__", c.Data.Straat1);
+            t = Regex.Replace(t, "__STRAAT2__", c.Data.Straat2);
+            return t;
+        }
+
+        public static void SetDirtyFlag(WordprocessingDocument doc)
+        {
+            DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
+            UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
+            updateFields.Val = new OnOffValue(true);
+            settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
+            settingsPart.Settings.Save();
+        }
+
         public static void GenerateSpecification(string filename, ControllerModel c, SpecificatorDataModel model)
         {
             using (var doc = WordprocessingDocument.Open(filename, true))
             {
                 // Add a main document part. 
                 Body body = doc.MainDocumentPart.Document.Body;
-                body.RemoveAllChildren();
+                body.RemoveAllChildren<Paragraph>();
 
                 //AddStylesToDocument(doc);
                 AddHeaderTexts(doc, model, c.Data);
@@ -201,16 +225,10 @@ namespace TLCGen.Specificator
                 AddVersionControl(doc, c.Data);
 
                 AddChapterTitle(doc, $"{Texts["Ch1Intro"]}", 1);
-                var ch1t = Regex.Replace((string)Texts["Ch1_Text"], "__KR__", c.Data.Naam);
-                AddText(doc, $"{ch1t}", stylename: "Body");
+                AddText(doc, ReplaceHolders((string)Texts["Ch1_Text"], c, model), stylename: "Body");
+
                 AddChapterTitle(doc, $"{Texts["Ch2Functionality"]}", 1);
                 AddChapterTitle(doc, $"{Texts["Ch2P1Intergreen"]}", 2);
-
-                //DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
-                //UpdateFieldsOnOpen updateFields = new UpdateFieldsOnOpen();
-                //updateFields.Val = new DocumentFormat.OpenXml.OnOffValue(true);
-                //settingsPart.Settings.PrependChild<UpdateFieldsOnOpen>(updateFields);
-                //settingsPart.Settings.Save();
             }
         }
     }
