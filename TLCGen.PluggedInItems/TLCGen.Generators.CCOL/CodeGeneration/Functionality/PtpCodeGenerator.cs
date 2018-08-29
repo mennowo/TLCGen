@@ -9,9 +9,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class PtpCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hptp;
         private CCOLGeneratorCodeStringSettingModel _prmptp;
@@ -39,25 +36,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var k in c.PTPData.PTPKoppelingen)
             {
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"),
                             CCOLElementTypeEnum.HulpElement));
                 }
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"),
                             CCOLElementTypeEnum.HulpElement));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"),
                             2,
@@ -66,18 +63,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 for (int i = 1; i <= k.AantalsignalenUit; ++i)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
                             CCOLElementTypeEnum.HulpElement));
                 }
                 for (int i = 1; i <= k.AantalsignalenUit; ++i)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
                             CCOLElementTypeEnum.HulpElement));
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{k.TeKoppelenKruispunt}{_prmuks}" + i.ToString("00"),
                             2,
@@ -85,70 +82,70 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTypeEnum.Parameter));
                 }
 
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_hoke}",
                             CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr}",
                             CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr0}",
                             CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr1}",
                             CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr2}",
                             CCOLElementTypeEnum.HulpElement));
 
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_usoke}",
                             CCOLElementTypeEnum.Uitgang));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_userr}",
                             CCOLElementTypeEnum.Uitgang));
 
-                _MyBitmapOutputs.Add(
+                _myBitmapOutputs.Add(
                         new CCOLIOElement(
                             k.OkBitmapData as IOElementModel,
                             $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_usoke}"));
-                _MyBitmapOutputs.Add(
+                _myBitmapOutputs.Add(
                         new CCOLIOElement(
                             k.ErrorBitmapData as IOElementModel,
                             $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_userr}"));
 
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmoke}",
                             0,
                             CCOLElementTimeTypeEnum.None,
                             CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr}",
                             0,
                             CCOLElementTimeTypeEnum.None,
                             CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr0}",
                             0,
                             CCOLElementTimeTypeEnum.None,
                             CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr1}",
                             0,
                             CCOLElementTimeTypeEnum.None,
                             CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(
+                _myElements.Add(
                         new CCOLElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr2}",
                             0,
@@ -164,7 +161,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapOutputs()
@@ -174,7 +171,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

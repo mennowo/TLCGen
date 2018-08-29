@@ -10,9 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class FileIngrepenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _myElements;
-        private List<CCOLIOElement> _myBitmapOutputs;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hfile;
         private CCOLGeneratorCodeStringSettingModel _schfile;

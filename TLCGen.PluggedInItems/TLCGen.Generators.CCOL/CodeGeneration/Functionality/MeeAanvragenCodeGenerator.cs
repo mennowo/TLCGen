@@ -11,8 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class MeeAanvragenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schma; // help element meeaanvraag detector name
         private CCOLGeneratorCodeStringSettingModel _hmad; // help element meeaanvraag detector name
@@ -22,7 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
             {
@@ -34,16 +32,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_hmad}{dm.MeeaanvraagDetector}",
                                 _hmad, dm.MeeaanvraagDetector);
-                        if (_MyElements.Count == 0 || _MyElements.All(x => x.Naam != elem.Naam))
+                        if (_myElements.Count == 0 || _myElements.All(x => x.Naam != elem.Naam))
                         {
-                            _MyElements.Add(elem);
+                            _myElements.Add(elem);
                         }
                     }
                 }
 
                 if (ma.AanUit != AltijdAanUitEnum.Altijd)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_schma}{ma.FaseVan}{ma.FaseNaar}",
                             ma.AanUit == AltijdAanUitEnum.SchAan ? 1 : 0,
@@ -55,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     ma.Uitgesteld)
                 {
 
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}",
                             ma.UitgesteldTijdsduur,
@@ -83,7 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmtypema}{ma.FaseVan}{ma.FaseNaar}",
                             inst,
@@ -100,7 +98,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

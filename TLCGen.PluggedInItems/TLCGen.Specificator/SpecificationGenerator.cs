@@ -1,17 +1,12 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using OpenXmlPowerTools;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Xml.Linq;
-using TLCGen.Extensions;
+using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Models;
-using Style = DocumentFormat.OpenXml.Wordprocessing.Style;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
 
 namespace TLCGen.Specificator
@@ -35,162 +30,42 @@ namespace TLCGen.Specificator
             }
         }
 
-        public static void AddFirstPage(WordprocessingDocument doc, ControllerDataModel data)
-        {
-            var par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
-            var run = par.AppendChild(new Run());
+        //public static void AddSettingsTable(WordprocessingDocument doc, List<CCOLElement> elements)
+        //{
+        //    Table table = new Table();
+        //
+        //    TableProperties props = new TableProperties(
+        //        new TableBorders(
+        //        new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
+        //        new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
+        //        new LeftBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
+        //        new RightBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
+        //        new InsideHorizontalBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
+        //        new InsideVerticalBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 }),
+        //        new TableWidth() { Type = TableWidthUnitValues.Pct, Width = $"{100 * 50}" });
+        //
+        //    table.AppendChild(props);
+        //
+        //    AddRowToTable(
+        //            table,
+        //            new[] { "Type", "Naam", "Instelling", "Commentaar" },
+        //            new[] { 14, 14, 14, 58 });
+        //
+        //    foreach (var e in elements)
+        //    {
+        //        AddRowToTable(
+        //            table,
+        //            new[] { e.Type.ToString(), e.Naam, e.Instelling.ToString(), e.Commentaar },
+        //            new[] { 14, 14, 14, 58 });
+        //    }
+        //
+        //    doc.MainDocumentPart.Document.Body.Append(new Paragraph(new Run(table)));
+        //}
 
-            run.AppendChild(new Text($"{Texts["Title"]} {data.Naam}"));
-            ApplyStyleToParagraph(doc, par, "Title");
+        
+        
 
-            par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
-            run = par.AppendChild(new Run());
-
-            run.AppendChild(new Text($"{data.Straat1}{(!string.IsNullOrWhiteSpace(data.Straat2) ? " - " + data.Straat2 : "")}"));
-            ApplyStyleToParagraph(doc, par, "Subtitle");
-
-            par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
-            run = par.AppendChild(new Run());
-
-            run.AppendChild(new Text($"{data.Stad}"));
-            ApplyStyleToParagraph(doc, par, "Subtitle");
-        }
-
-        public static void AddRowToTable(WordprocessingDocument doc, Table table, string[] data, int[] widths = null)
-        {
-            var tr = new DocumentFormat.OpenXml.Wordprocessing.TableRow();
-            for (int i = 0; i < data.Length; i++)
-            {
-                string d = data[i];
-                var tc = new DocumentFormat.OpenXml.Wordprocessing.TableCell();
-                var par = new Paragraph(new Run(new Text(d)));
-                ApplyStyleToParagraph(doc, par, "TableContents");
-                tc.Append(par);
-                if(widths != null && widths.Length == data.Length)
-                {
-                    tc.Append(
-                        new TableCellProperties(
-                            new TableCellWidth { Type = TableWidthUnitValues.Pct, Width = $"{widths[i] * 50 }" },
-                            new TableCellVerticalAlignment { Val = TableVerticalAlignmentValues.Center } ));
-                }
-                else
-                {
-                    tc.Append(new TableCellProperties(new TableCellWidth { Type = TableWidthUnitValues.Auto }));
-                }
-                tr.Append(tc);
-            }
-            table.Append(tr);
-        }
-
-        public static void AddVersionControl(WordprocessingDocument doc, ControllerDataModel data)
-        {
-            AddText(doc, $"{Texts["Ch0Versioning"]}", "Subtitle");
-
-            Table table = new Table();
-
-            TableProperties props = new TableProperties(
-                new TableBorders(
-                new TopBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
-                new BottomBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
-                new LeftBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
-                new RightBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
-                new InsideHorizontalBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 },
-                new InsideVerticalBorder { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 1 }), 
-                new TableWidth() { Type = TableWidthUnitValues.Pct, Width = $"{100 * 50}" } );
-
-            table.AppendChild(props);
-
-            foreach(var v in data.Versies)
-            {
-                AddRowToTable(
-                    doc,
-                    table, 
-                    new[]{ v.Datum.ToShortDateString(), v.Versie, v.Ontwerper, v.Commentaar },
-                    new[]{ 14, 14, 14, 58 });
-            }
-
-            doc.MainDocumentPart.Document.Body.Append(new Paragraph(new Run(table)));
-        }
-
-        public static void AddHeaderTexts(WordprocessingDocument doc, SpecificatorDataModel model, ControllerDataModel data)
-        {
-            foreach (var h in doc.MainDocumentPart.HeaderParts)
-            {
-                foreach (var t in h.RootElement.Descendants<Paragraph>().SelectMany(x => x.Descendants<Run>()).SelectMany(x => x.Descendants<Text>()))
-                {
-                    if (t.Text.Contains("FIRSTPAGEHEADER")) t.Text = "";
-                    if (t.Text.Contains("HEADER")) t.Text = $"Functionele specificatie {data.Naam} ({data.Straat1}{(!string.IsNullOrWhiteSpace(data.Straat2) ? " - " + data.Straat2 : "")}, {data.Stad})";
-                }
-            }
-            foreach (var f in doc.MainDocumentPart.FooterParts)
-            {
-                foreach (var r in f.RootElement.Descendants<Run>())
-                {
-                    var fp = false;
-                    foreach (var t in r.Descendants<Text>())
-                    {
-                        if (t.Text.Contains("FIRSTPAGEFOOTER"))
-                        {
-                            t.Text = "";
-                            fp = true;
-                        }
-                    }
-                    if (fp)
-                    {
-                        if (!string.IsNullOrWhiteSpace(model.Organisatie))
-                        {
-                            r.AppendChild(new Text(model.Organisatie));
-                            r.AppendChild(new Break());
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.Straat))
-                        {
-                            r.AppendChild(new Text(model.Straat));
-                            r.AppendChild(new Break());
-                        }
-                        var t = "";
-                        if (!string.IsNullOrWhiteSpace(model.Postcode))
-                        {
-                            t = model.Postcode;
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.Stad))
-                        {
-                            t = t + " " + model.Stad;
-                        }
-                        if (t != "")
-                        {
-                            r.AppendChild(new Text(t));
-                            r.AppendChild(new Break());
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.TelefoonNummer))
-                        {
-                            r.AppendChild(new Text($"Telefoon: {model.TelefoonNummer}"));
-                            r.AppendChild(new Break());
-                        }
-                        if (!string.IsNullOrWhiteSpace(model.EMail))
-                        {
-                            r.AppendChild(new Text($"E-mail: {model.EMail}"));
-                        }
-                    }
-                }
-            }
-        }
-
-        public static void AddChapterTitle(WordprocessingDocument doc, string title, int headingLevel)
-        {
-            Paragraph par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
-            Run run = par.AppendChild(new Run());
-            run.AppendChild(new Text(title));
-            ApplyStyleToParagraph(doc, par, styleid: $"Heading{headingLevel}");
-        }
-
-        public static Paragraph AddText(WordprocessingDocument doc, string text, string stylename)
-        {
-            Paragraph par = doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph());
-            Run run = par.AppendChild(new Run());
-            run.AppendChild(new Text(text));
-            ApplyStyleToParagraph(doc, par, stylename: stylename);
-            return par;
-        }
+        
 
         public static string ReplaceHolders(string text, ControllerModel c, SpecificatorDataModel model)
         {
@@ -219,16 +94,33 @@ namespace TLCGen.Specificator
                 Body body = doc.MainDocumentPart.Document.Body;
                 body.RemoveAllChildren<Paragraph>();
 
-                //AddStylesToDocument(doc);
-                AddHeaderTexts(doc, model, c.Data);
-                AddFirstPage(doc, c.Data);
-                AddVersionControl(doc, c.Data);
+                //var gensWithElems = CCOLGenerator.GetAllGeneratorsWithElements(c);
 
-                AddChapterTitle(doc, $"{Texts["Ch1Intro"]}", 1);
-                AddText(doc, ReplaceHolders((string)Texts["Ch1_Text"], c, model), stylename: "Body");
+                // Headers, title page, versioning
+                FunctionalityGenerator.AddHeaderTextsToDocument(doc, model, c.Data);
+                body.Append(FunctionalityGenerator.GetFirstPage(c.Data));
+                body.Append(FunctionalityGenerator.GetVersionControl(c.Data));
 
-                AddChapterTitle(doc, $"{Texts["Ch2Functionality"]}", 1);
-                AddChapterTitle(doc, $"{Texts["Ch2P1Intergreen"]}", 2);
+                // Introduction
+                body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Intro"]}", 1));
+                body.Append(OpenXmlHelper.GetTextParagraph(ReplaceHolders((string)Texts["Ch1_Text"], c, model), "Normal"));
+
+                // Content
+                body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Functionality"]}", 1));
+
+                body.Append(FunctionalityGenerator.GetFasenChapter(c));
+                body.Append(FunctionalityGenerator.GetPeriodenChapter(c));
+                body.Append(FunctionalityGenerator.GetGroentijdenChapter(c));
+                
+                
+                //foreach (var g in gensWithElems)
+                //{
+                //    if (g.Item2.Any())
+                //    {
+                //        AddChapterTitle(doc, $"{g.Item1.GetType().Name.ToString()}", 2);
+                //        AddSettingsTable(doc, g.Item2);
+                //    }
+                //}
             }
         }
     }

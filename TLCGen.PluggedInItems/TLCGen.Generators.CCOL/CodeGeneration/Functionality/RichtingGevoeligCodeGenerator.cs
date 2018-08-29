@@ -9,8 +9,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     [CCOLCodePieceGenerator]
     public class RichtingGevoeligCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _trgr;
         private CCOLGeneratorCodeStringSettingModel _trga;
@@ -24,17 +22,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
             {
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_trga}{_dpf}{rga.VanDetector}", 
                         rga.MaxTijdsVerschil, 
                         CCOLElementTimeTypeEnum.TE_type, 
                         CCOLElementTypeEnum.Timer));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_schrgad}{_dpf}{rga.VanDetector}", 
                         1, 
@@ -42,7 +40,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         CCOLElementTypeEnum.Schakelaar));
                 if (rga.ResetAanvraag)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_trgav}{_dpf}{rga.VanDetector}",
                             rga.ResetAanvraagTijdsduur,
@@ -53,23 +51,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
             {
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_trgr}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", 
                         rgv.MaxTijdsVerschil, 
                         CCOLElementTimeTypeEnum.TE_type, 
                         CCOLElementTypeEnum.Timer));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_trgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}",
                         rgv.VerlengTijd,
                         CCOLElementTimeTypeEnum.TE_type,
                         CCOLElementTypeEnum.Timer));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}",
                         CCOLElementTypeEnum.HulpElement));
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_prmmkrg}{_dpf}{rgv.VanDetector}",
                         (int)rgv.TypeVerlengen,
@@ -85,7 +83,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

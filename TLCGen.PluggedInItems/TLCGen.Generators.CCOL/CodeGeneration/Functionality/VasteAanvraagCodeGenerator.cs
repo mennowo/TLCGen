@@ -10,8 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VasteAanvraagCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schca;
         private CCOLGeneratorCodeStringSettingModel _tuitgestca;
@@ -19,14 +17,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (FaseCyclusModel fcm in c.Fasen)
             {
                 if (fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                     fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_schca}{fcm.Naam}",
                             fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
@@ -36,7 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                     fcm.UitgesteldeVasteAanvraag)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_tuitgestca}{fcm.Naam}",
                             fcm.UitgesteldeVasteAanvraagTijdsduur,
@@ -52,7 +50,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

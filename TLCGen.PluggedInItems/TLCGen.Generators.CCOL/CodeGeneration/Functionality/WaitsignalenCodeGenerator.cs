@@ -11,17 +11,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     [CCOLCodePieceGenerator]
     public class WaitsignalenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _uswt;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             // outputs
             var alldets = c.Fasen.SelectMany(x => x.Detectoren).Concat(c.Detectoren);
@@ -29,8 +26,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if(d.Wachtlicht)
                 {
-                    _MyElements.Add(new CCOLElement(_uswt + d.Naam, CCOLElementTypeEnum.Uitgang));
-                    _MyBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uspf + _uswt + d.Naam));
+                    _myElements.Add(new CCOLElement(_uswt + d.Naam, CCOLElementTypeEnum.Uitgang));
+                    _myBitmapOutputs.Add(new CCOLIOElement(d.WachtlichtBitmapData as IOElementModel, _uspf + _uswt + d.Naam));
                 }
             }
         }
@@ -42,7 +39,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapOutputs()
@@ -52,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

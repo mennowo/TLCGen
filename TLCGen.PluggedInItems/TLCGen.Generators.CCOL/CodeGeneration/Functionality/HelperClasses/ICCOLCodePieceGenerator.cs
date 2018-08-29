@@ -9,6 +9,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         void CollectCCOLElements(ControllerModel c);
         bool HasCCOLElements();
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
+        IEnumerable<CCOLElement> GetCCOLElements();
         bool HasCCOLBitmapOutputs();
         IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs();
         bool HasCCOLBitmapInputs();

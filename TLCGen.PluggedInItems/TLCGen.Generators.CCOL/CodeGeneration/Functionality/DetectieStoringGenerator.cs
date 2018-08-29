@@ -9,9 +9,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
     [CCOLCodePieceGenerator]
     public class DetectieStoringGenerator : CCOLCodePieceGeneratorBase
-    {
-        private List<CCOLElement> _MyElements;
-        
+    {        
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schdvak;
         private CCOLGeneratorCodeStringSettingModel _thdv;
@@ -22,7 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (var fc in c.Fasen)
             {
@@ -31,7 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ||
                         d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchUit)
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schdvak}{_dpf}{d.Naam}",
                                 d.AanvraagBijStoring == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
@@ -40,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if(d.Type == DetectorTypeEnum.Kop && fc.HiaatKoplusBijDetectieStoring && fc.VervangendHiaatKoplus.HasValue)
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_thdv}{_dpf}{d.Naam}",
                                 fc.VervangendHiaatKoplus.Value,
@@ -50,7 +48,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 if(fc.PercentageGroenBijDetectieStoring && fc.PercentageGroen.HasValue)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmperc}{fc.Naam}",
                             fc.PercentageGroen.Value,
@@ -67,7 +65,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

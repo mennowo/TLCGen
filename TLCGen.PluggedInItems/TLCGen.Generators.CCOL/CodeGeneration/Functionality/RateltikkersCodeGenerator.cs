@@ -11,11 +11,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class RateltikkersCodeGenerator : CCOLCodePieceGeneratorBase
     {
-
         #region Fields
-
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
+        
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usrt;
         private CCOLGeneratorCodeStringSettingModel _usrtdim;
@@ -31,25 +28,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             foreach (var rt in c.Signalen.Rateltikkers)
             {
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrt}{rt.FaseCyclus}", _usrt, rt.FaseCyclus));
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hrt}{rt.FaseCyclus}", _hrt, rt.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrt}{rt.FaseCyclus}", _usrt, rt.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hrt}{rt.FaseCyclus}", _hrt, rt.FaseCyclus));
                 
                 if (c.Signalen.DimUitgangPerTikker)
                 {
-                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrtdim}{rt.FaseCyclus}", _usrtdim, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usrtdim}{rt.FaseCyclus}", _usrtdim, rt.FaseCyclus));
                 }
 
                 if (rt.Type == RateltikkerTypeEnum.Hoeflake)
                 {
-                    _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", _tnlrt, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", _tnlrt, rt.FaseCyclus));
                 }
 
-                _MyBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
             }
         }
 
@@ -60,7 +57,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapOutputs()
@@ -70,7 +67,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

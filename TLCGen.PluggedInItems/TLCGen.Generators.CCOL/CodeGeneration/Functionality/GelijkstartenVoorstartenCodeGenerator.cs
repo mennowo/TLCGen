@@ -11,7 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         #region Fields
 
-        private List<CCOLElement> _MyElements;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tgsot;
         private CCOLGeneratorCodeStringSettingModel _tvs;
@@ -22,19 +21,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
                 if(gs.DeelConflict)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tgsot.Setting}{gs.FaseVan}{gs.FaseNaar}",
                             gs.GelijkstartOntruimingstijdFaseVan,
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseVan, gs.FaseNaar));
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tgsot.Setting}{gs.FaseNaar}{gs.FaseVan}",
                             gs.GelijkstartOntruimingstijdFaseNaar,
@@ -45,13 +44,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach(var vs in c.InterSignaalGroep.Voorstarten)
             {
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_tvs.Setting}{vs.FaseVan}{vs.FaseNaar}",
                         vs.VoorstartTijd,
                         CCOLElementTimeTypeEnum.TE_type,
                         _tvs, vs.FaseVan, vs.FaseNaar));
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_tvsot.Setting}{vs.FaseNaar}{vs.FaseVan}",
                         vs.VoorstartOntruimingstijd,
@@ -67,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

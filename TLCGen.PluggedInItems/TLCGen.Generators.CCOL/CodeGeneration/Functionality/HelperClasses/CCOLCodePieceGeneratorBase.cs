@@ -22,6 +22,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         protected string _BITxnl = "BIT8";
 
+        protected List<CCOLElement> _myElements = null;
+        protected List<CCOLIOElement> _myBitmapOutputs;
+        protected List<CCOLIOElement> _myBitmapInputs;
+
         private Regex __fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
         public virtual void CollectCCOLElements(ControllerModel c)
@@ -37,6 +41,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public virtual IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             throw new NotSupportedException();
+        }
+
+        public virtual IEnumerable<CCOLElement> GetCCOLElements()
+        {
+            return _myElements;
         }
 
         public virtual bool HasDetectors()

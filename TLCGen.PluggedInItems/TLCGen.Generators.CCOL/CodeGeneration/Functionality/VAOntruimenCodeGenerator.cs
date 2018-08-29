@@ -10,8 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VAOntruimenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tva;
         private CCOLGeneratorCodeStringSettingModel _tvamax;
@@ -21,11 +19,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach(var va in c.VAOntruimenFasen)
             {
-                _MyElements.Add(
+                _myElements.Add(
                             new CCOLElement(
                                 $"{_tvamax}{va.FaseCyclus}",
                                 va.VAOntrMax,
@@ -35,7 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach(var cf in d.ConflicterendeFasen)
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}",
                                 cf.VAOntruimingsTijd,
@@ -53,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

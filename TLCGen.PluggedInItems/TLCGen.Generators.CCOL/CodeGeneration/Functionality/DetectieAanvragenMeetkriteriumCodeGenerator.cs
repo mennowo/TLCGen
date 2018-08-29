@@ -11,8 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class DetectieAanvragenMeetkriteriumCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
 #pragma warning disable 0169
         private CCOLGeneratorCodeStringSettingModel _prmda;
@@ -23,7 +21,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             List<DetectorModel> dets = new List<DetectorModel>();
             dets.AddRange(c.Fasen.SelectMany(x => x.Detectoren));
@@ -51,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         set = 3;
                         break;
                 }
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
             }
@@ -61,7 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
                     continue;
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmmk}{dm.Naam}", (int)dm.Verlengen, CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
             }
@@ -80,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
                 if (HasKopmax)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tkm}{fcm.Naam}",
                             fcm.Kopmax,
@@ -97,7 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

@@ -10,8 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VLOGCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _prmmaxtvgvlog;
         private CCOLGeneratorCodeStringSettingModel _prmmaxtfbvlog;
@@ -19,12 +17,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
-                _MyElements.Add(new CCOLElement(_prmmaxtvgvlog.Setting, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement(_prmmaxtfbvlog.Setting, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement(_prmmaxtvgvlog.Setting, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement(_prmmaxtfbvlog.Setting, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
             }
         }
 
@@ -35,7 +33,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

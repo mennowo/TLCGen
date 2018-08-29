@@ -11,9 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     [CCOLCodePieceGenerator]
     public class PeriodenGroentijdenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _myElements;
-        private List<CCOLIOElement> _myBitmapOutputs;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _usperdef;
         private CCOLGeneratorCodeStringSettingModel _usper;

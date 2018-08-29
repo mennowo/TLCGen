@@ -12,9 +12,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         #region Fields
 
-        private List<CCOLElement> _myElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
-
         private string _hov;
         private string _hovin;
         private string _hovuit;
@@ -42,7 +39,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
 
             if(c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
             {
@@ -67,9 +64,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovoptijd}{ov.FaseCyclus}", _usovoptijd, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usovtelaat}{ov.FaseCyclus}", _usovtelaat, ov.FaseCyclus));
 
-                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_uspf}{_usovtevroeg}{ov.FaseCyclus}"));
-                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_uspf}{_usovoptijd}{ov.FaseCyclus}"));
-                _MyBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_uspf}{_usovtelaat}{ov.FaseCyclus}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeVroegBitmapData, $"{_uspf}{_usovtevroeg}{ov.FaseCyclus}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioOpTijdBitmapData, $"{_uspf}{_usovoptijd}{ov.FaseCyclus}"));
+                _myBitmapOutputs.Add(new CCOLIOElement(ov.GeconditioneerdePrioTeLaatBitmapData, $"{_uspf}{_usovtelaat}{ov.FaseCyclus}"));
             }
         }
 
@@ -90,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

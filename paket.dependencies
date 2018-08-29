@@ -8,6 +8,4 @@ nuget NSubstitute framework: >= 4.5
 nuget NUnit framework: >= 4.5
 nuget Gu.Wpf.DataGrid2D framework: >= 4.5
 nuget gong-wpf-dragdrop framework: >= 4.5
-nuget DocX framework: >= 4.5
 nuget DocumentFormat.OpenXml framework: >= 4.5
-nuget OpenXmlPowerTools framework: >= 4.5

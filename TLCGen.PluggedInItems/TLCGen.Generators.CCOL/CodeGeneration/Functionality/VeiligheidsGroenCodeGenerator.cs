@@ -10,8 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VeiligheidsGroenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schvg;
         private CCOLGeneratorCodeStringSettingModel _tvga; 
@@ -20,7 +18,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (var fcm in c.Fasen)
             {
@@ -28,20 +26,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Altijd))
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_schvg}{dm.Naam}",
                                 dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                                 CCOLElementTimeTypeEnum.SCH_type,
                                 CCOLElementTypeEnum.Schakelaar));
                     }
-                    _MyElements.Add(
+                    _myElements.Add(
                             new CCOLElement(
                                 $"{_tvga}{fcm.Naam}",
                                 fcm.VeiligheidsGroenMinMG,
                                 CCOLElementTimeTypeEnum.TE_type,
                                 CCOLElementTypeEnum.Timer));
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_tvgb}{fcm.Naam}",
                                 fcm.VeiligheidsGroenTijdsduur,
@@ -58,7 +56,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

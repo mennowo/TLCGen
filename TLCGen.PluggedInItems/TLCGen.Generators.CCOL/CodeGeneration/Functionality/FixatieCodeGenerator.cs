@@ -8,9 +8,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class FixatieCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapInputs;
-
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _isfix;
         private CCOLGeneratorCodeStringSettingModel _schbmfix;
@@ -18,22 +15,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapInputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapInputs = new List<CCOLIOElement>();
 
             if (c.Data.FixatieData.FixatieMogelijk)
             {
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_schbmfix}",
                         c.Data.FixatieData.BijkomenTijdensFixatie ? 1 : 0,
                         CCOLElementTimeTypeEnum.SCH_type,
                         _schbmfix));
-                _MyElements.Add(
+                _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_isfix}",
                         _isfix));
-                _MyBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData as IOElementModel, $"{_ispf}{_isfix}"));
+                _myBitmapInputs.Add(new CCOLIOElement(c.Data.FixatieData.FixatieBitmapData as IOElementModel, $"{_ispf}{_isfix}"));
             }
         }
 
@@ -44,7 +41,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapInputs()
@@ -54,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
         {
-            return _MyBitmapInputs;
+            return _myBitmapInputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

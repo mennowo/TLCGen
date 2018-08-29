@@ -13,7 +13,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
         #region Fields
 
-        private List<CCOLElement> _MyElements;
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _hnla;
         private CCOLGeneratorCodeStringSettingModel _tnlfg;
@@ -47,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             foreach (var nl in c.InterSignaalGroep.Nalopen)
             {
@@ -65,7 +64,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         case NaloopTijdTypeEnum.EindeVerlengGroen: _tnl = _tnlcv; break;
                         case NaloopTijdTypeEnum.EindeVerlengGroenDetectie: _tnl = _tnlcvd; break;
                     }
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tnl}{nl.FaseVan}{nl.FaseNaar}",
                             nlt.Waarde,
@@ -77,15 +76,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var nld in nl.Detectoren)
                     {
                         var elem = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hnla}{nld.Detector}", _hnla, nld.Detector, nl.FaseVan, nl.FaseNaar);
-                        if (_MyElements.Count == 0 || _MyElements.All(x => x.Naam != elem.Naam))
+                        if (_myElements.Count == 0 || _myElements.All(x => x.Naam != elem.Naam))
                         {
-                            _MyElements.Add(elem);
+                            _myElements.Add(elem);
                         }
                     }
                 }
                 if(nl.MaximaleVoorstart.HasValue)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmxnl}{nl.FaseVan}{nl.FaseNaar}",
                             nl.MaximaleVoorstart.Value,
@@ -102,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -133,11 +132,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
 				case CCOLCodeTypeEnum.RegCPreApplication:
-					if (c.HalfstarData.IsHalfstar && _MyElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
+					if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
 						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
 						var k = 0;
-						foreach (var t in _MyElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
+						foreach (var t in _myElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
 						{
 							if (k != 0)
 							{

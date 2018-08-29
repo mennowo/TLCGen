@@ -10,10 +10,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class AlgemeenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        private List<CCOLIOElement> _MyBitmapOutputs;
-        private List<CCOLIOElement> _MyBitmapInputs;
-
         private string _hplact;
 
 #pragma warning disable 0649
@@ -26,15 +22,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
-            _MyBitmapOutputs = new List<CCOLIOElement>();
-            _MyBitmapInputs = new List<CCOLIOElement>();
+            _myElements = new List<CCOLElement>();
+            _myBitmapOutputs = new List<CCOLIOElement>();
+            _myBitmapInputs = new List<CCOLIOElement>();
 
             // Segment display elements
             foreach (var item in c.Data.SegmentenDisplayBitmapData)
             {
-                _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{_ussegm}{item.Naam}"));
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm));
+                _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{_ussegm}{item.Naam}"));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ussegm}{item.Naam}", _ussegm));
             }
 
             // Module display elements
@@ -42,27 +38,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var item in c.Data.ModulenDisplayBitmapData)
                 {
-                    _MyBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam}"));
-                    _MyElements.Add(new CCOLElement($"{item.Naam}", CCOLElementTypeEnum.Uitgang, item.Naam));
+                    _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam}"));
+                    _myElements.Add(new CCOLElement($"{item.Naam}", CCOLElementTypeEnum.Uitgang, item.Naam));
                 }
             }
 
             // Inputs
             foreach (var i in c.Ingangen)
             {
-                _MyElements.Add(new CCOLElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
-                _MyBitmapInputs.Add(new CCOLIOElement(i, $"{_ispf}{i.Naam}"));
+                _myElements.Add(new CCOLElement(i.Naam, CCOLElementTypeEnum.Ingang, i.Omschrijving));
+                _myBitmapInputs.Add(new CCOLIOElement(i, $"{_ispf}{i.Naam}"));
             }
 
             if (c.Data.SegmentDisplayType == Models.Enumerations.SegmentDisplayTypeEnum.DrieCijferDisplay)
             {
-                _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtoon7s}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtoon7s));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtoon7s}", 1, CCOLElementTimeTypeEnum.SCH_type, _schtoon7s));
             }
 
             // Versie beheer
-            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmxx}", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, _prmxx));
-            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmyy}", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, _prmyy));
-            _MyElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmxx}", c.Data.HuidigeVersieMajor, CCOLElementTimeTypeEnum.None, _prmxx));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmyy}", c.Data.HuidigeVersieMinor, CCOLElementTimeTypeEnum.None, _prmyy));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
         }
 
         public override bool HasCCOLElements()
@@ -72,7 +68,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override bool HasCCOLBitmapOutputs()
@@ -82,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            return _MyBitmapOutputs;
+            return _myBitmapOutputs;
         }
 
         public override bool HasCCOLBitmapInputs()
@@ -92,7 +88,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
         {
-            return _MyBitmapInputs;
+            return _myBitmapInputs;
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

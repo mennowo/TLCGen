@@ -11,8 +11,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class VersneldPrimairAlternatievenCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private List<CCOLElement> _MyElements;
-        
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _prmmlfpr;
         private CCOLGeneratorCodeStringSettingModel _prmaltg;
@@ -34,13 +32,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override void CollectCCOLElements(ControllerModel c)
         {
-            _MyElements = new List<CCOLElement>();
+            _myElements = new List<CCOLElement>();
 
             var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
             foreach (var fc in c.ModuleMolen.FasenModuleData)
             {
                 // Vooruit realisaties
-                _MyElements.Add(
+                _myElements.Add(
                     new CCOLElement(
                         $"{_prmmlfpr}{fc.FaseCyclus}",
                         fc.ModulenVooruit,
@@ -55,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
-                    _MyElements.Add(
+                    _myElements.Add(
                         new CCOLElement(
                             $"{_prmaltg}{fc.FaseCyclus}",
                             fc.AlternatieveGroenTijd,
@@ -69,11 +67,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         var namealtp = _prmaltp + string.Join(string.Empty, gs.Item2);
                         var namealtg = _schaltg + string.Join(string.Empty, gs.Item2);
-                        var containsaltp = _MyElements.Any(i => i.Naam == namealtp);
-                        var containsaltg = _MyElements.Any(i => i.Naam == namealtg);
+                        var containsaltp = _myElements.Any(i => i.Naam == namealtp);
+                        var containsaltg = _myElements.Any(i => i.Naam == namealtg);
                         if (!containsaltp)
                         {
-                            _MyElements.Add(
+                            _myElements.Add(
                                 new CCOLElement(
                                     namealtp,
                                     fc.AlternatieveRuimte,
@@ -82,7 +80,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         if (!containsaltg)
                         {
-                            _MyElements.Add(
+                            _myElements.Add(
                                 new CCOLElement(
                                     namealtg,
                                     fc.AlternatiefToestaan ? 1 : 0,
@@ -92,13 +90,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_prmaltp}{fc.FaseCyclus}",
                                 fc.AlternatieveRuimte,
                                 CCOLElementTimeTypeEnum.TE_type,
                                 CCOLElementTypeEnum.Parameter));
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_schaltg}{fc.FaseCyclus}",
                                 fc.AlternatiefToestaan ? 1 : 0,
@@ -140,7 +138,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     foreach (var altg in alts)
                     {
-                        _MyElements.Add(
+                        _myElements.Add(
                             new CCOLElement(
                                 $"{_prmaltg}{mlidx}{altg.Key}",
                                 altg.Value.First().Item1.AlternatieveGroenTijd,
@@ -159,7 +157,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            return _MyElements.Where(x => x.Type == type);
+            return _myElements.Where(x => x.Type == type);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
