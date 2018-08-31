@@ -167,18 +167,18 @@ namespace TLCGen.Specificator
             return new List<OpenXmlCompositeElement> { title, table };
         }
 
-        public static List<OpenXmlCompositeElement> GetIntroChapter(WordprocessingDocument doc, ControllerModel c, SpecificatorDataModel model)
+        public static void GetIntroChapter(WordprocessingDocument doc, ControllerModel c, SpecificatorDataModel model)
         {
-            var items = new List<OpenXmlCompositeElement>();
+            var body = doc.MainDocumentPart.Document.Body;
 
-            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Intro"]}", 1));
+            body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Intro"]}", 1));
 
             var text = 
                 $"Dit document beschrijft de functionele eisen aangaande de verkeersregelinstallatie (VRI) op het " +
                 $"kruispunt " +
                 GetKruisingNaam(c) +
                 (Regex.IsMatch(c.Data.Stad, @"^(g|G)emeente") ? $"in de {c.Data.Stad}" : $"te {c.Data.Stad} ({c.Data.Naam}).");
-            items.Add(OpenXmlHelper.GetTextParagraph(text));
+            body.Append(OpenXmlHelper.GetTextParagraph(text));
 
             if (!string.IsNullOrEmpty(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
             {
@@ -186,18 +186,13 @@ namespace TLCGen.Specificator
                 var file = Path.Combine(path, (Regex.IsMatch(c.Data.BitmapNaam, @"\.(bmp|BMP)$") ? c.Data.BitmapNaam : c.Data.BitmapNaam + ".bmp"));
                 if (File.Exists(file))
                 {
-                    var imagePart = doc.MainDocumentPart.AddImagePart(ImagePartType.Png);
+                    var imagePart = doc.MainDocumentPart.AddImagePart(ImagePartType.Bmp);
                     using (FileStream stream = new FileStream(file, FileMode.Open))
                     {
-                        var bmp = Image.FromStream(stream);
-                        using (MemoryStream mstream = new MemoryStream())
-                        {
-                            bmp.Save(mstream, ImageFormat.Png);
-                            imagePart.FeedData(mstream);
-                        }
+                        imagePart.FeedData(stream);
+                        // TODO: set width and height of the image!
                     }
                     OpenXmlHelper.AddImageToBody(doc, doc.MainDocumentPart.GetIdOfPart(imagePart));
-                    //items.Add(new Drawing(imagePart.RootElement));
                 }
             }
 
@@ -206,9 +201,7 @@ namespace TLCGen.Specificator
             text = $"Het kruispunt {GetKruisingNaam(c)} wordt schematisch weergegeven in de bovenstaande figuur.";
             //    $"Alle bewegingen worden conflictvrij afgehandeld. De maximumsnelheid op alle naderrichtingen bedraagt 50 km / h. De verkeersregeling dient aan de volgende eisen te voldoen: • Veilige situatie op het kruispunt. • Goede en efficiënte verkeersafwikkeling. • Logische en acceptabele situatie voor weggebruikers. In het regelprogramma dienen in het commentaar alle functionele beschrijvingen van alle parameters, tijden, schakelaars en dergelijke opgenomen te worden.";
 
-            items.Add(OpenXmlHelper.GetTextParagraph(text));
-
-            return items;
+            body.Append(OpenXmlHelper.GetTextParagraph(text));
         }
 
         public static List<OpenXmlCompositeElement> GetFasenChapter(ControllerModel c)
