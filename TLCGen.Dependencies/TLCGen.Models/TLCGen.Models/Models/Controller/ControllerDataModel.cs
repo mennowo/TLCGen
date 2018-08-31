@@ -28,21 +28,30 @@ namespace TLCGen.Models
 	    [HasDefault(false)]
 	    public string VissimNaam { get; set; }
 
+        [IsDocumented]
 		public int Fasebewaking { get; set; }
+        [IsDocumented]
         public CCOLVersieEnum CCOLVersie { get; set; }
+        [IsDocumented(valueMustBe: "Geen")]
         public KWCTypeEnum KWCType { get; set; }
         public bool KWCUitgebreid { get; set; } // Note: this is not used yet, only meant for potential future functionality
+        [IsDocumented(conditionProperty: "CCOLVersie", conditionPropertyValue: "CCOL8")]
         public VLOGTypeEnum VLOGType { get; set; }
         public VLOGSettingsDataModel VLOGSettings { get; set; }
         public bool VLOGInTestOmgeving { get; set; }
+        [IsDocumented]
         public bool GarantieOntruimingsTijden { get; set; }
+        [IsDocumented]
         public bool ExtraMeeverlengenInWG { get; set; }
+        [IsDocumented]
         public GroentijdenTypeEnum TypeGroentijden { get; set; }
+        [IsDocumented]
         public AansturingWaitsignalenEnum AansturingWaitsignalen { get; set; }
 
         public int WachttijdvoorspellerNietHalterenMax { get; set; }
         public int WachttijdvoorspellerNietHalterenMin { get; set; }
 
+        [IsDocumented(conditionProperty: "CCOLVersie", conditionPropertyValue: "CCOL8")]
         public bool Intergroen { get; set; }
 
         public bool CCOLMulti { get; set; }

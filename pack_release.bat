@@ -1,6 +1,11 @@
 cd TLCGen
 cd bin
-cd Release
+cd Release`
+del /q Xceed.Wpf.AvalonDock.dll
+del /q Xceed.Wpf.AvalonDock.Themes.Aero.dll
+del /q Xceed.Wpf.AvalonDock.Themes.Metro.dll
+del /q Xceed.Wpf.AvalonDock.Themes.VS2010.dll
+del /q Xceed.Wpf.DataGrid.dll
 rmdir /s /q Deps
 rmdir /s /q Libs
 rmdir /s /q de

@@ -1,8 +1,14 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using TLCGen.Extensions;
 using TLCGen.Models;
@@ -12,6 +18,17 @@ namespace TLCGen.Specificator
 {
     public static class FunctionalityGenerator
     {
+        public static string ToCustomString(this bool value)
+        {
+            return value ? (string)Texts["Generic_True"] : (string)Texts["Generic_False"];
+        }
+
+        public static string GetKruisingNaam(ControllerModel c)
+        {
+            return $"{c.Data.Straat1}" +
+                (string.IsNullOrWhiteSpace(c.Data.Straat2) ? "" : $" - {c.Data.Straat2} ");
+        }
+
         private static ResourceDictionary _texts;
         public static ResourceDictionary Texts
         {
@@ -92,6 +109,16 @@ namespace TLCGen.Specificator
             }
         }
 
+        public static string ReplaceHolders(string text, ControllerModel c, SpecificatorDataModel model)
+        {
+            var t = text;
+            t = Regex.Replace(t, "__KR__", c.Data.Naam);
+            t = Regex.Replace(t, "__STAD__", c.Data.Stad);
+            t = Regex.Replace(t, "__STRAAT1__", c.Data.Straat1);
+            t = Regex.Replace(t, "__STRAAT2__", c.Data.Straat2);
+            return t;
+        }
+
         public static List<OpenXmlCompositeElement> GetFirstPage(ControllerDataModel data)
         {
             var par1 = new Paragraph();
@@ -140,12 +167,56 @@ namespace TLCGen.Specificator
             return new List<OpenXmlCompositeElement> { title, table };
         }
 
+        public static List<OpenXmlCompositeElement> GetIntroChapter(WordprocessingDocument doc, ControllerModel c, SpecificatorDataModel model)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Intro"]}", 1));
+
+            var text = 
+                $"Dit document beschrijft de functionele eisen aangaande de verkeersregelinstallatie (VRI) op het " +
+                $"kruispunt " +
+                GetKruisingNaam(c) +
+                (Regex.IsMatch(c.Data.Stad, @"^(g|G)emeente") ? $"in de {c.Data.Stad}" : $"te {c.Data.Stad} ({c.Data.Naam}).");
+            items.Add(OpenXmlHelper.GetTextParagraph(text));
+
+            if (!string.IsNullOrEmpty(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
+            {
+                var path = Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);
+                var file = Path.Combine(path, (Regex.IsMatch(c.Data.BitmapNaam, @"\.(bmp|BMP)$") ? c.Data.BitmapNaam : c.Data.BitmapNaam + ".bmp"));
+                if (File.Exists(file))
+                {
+                    var imagePart = doc.MainDocumentPart.AddImagePart(ImagePartType.Png);
+                    using (FileStream stream = new FileStream(file, FileMode.Open))
+                    {
+                        var bmp = Image.FromStream(stream);
+                        using (MemoryStream mstream = new MemoryStream())
+                        {
+                            bmp.Save(mstream, ImageFormat.Png);
+                            imagePart.FeedData(mstream);
+                        }
+                    }
+                    OpenXmlHelper.AddImageToBody(doc, doc.MainDocumentPart.GetIdOfPart(imagePart));
+                    //items.Add(new Drawing(imagePart.RootElement));
+                }
+            }
+
+            var sb = new StringBuilder();
+
+            text = $"Het kruispunt {GetKruisingNaam(c)} wordt schematisch weergegeven in de bovenstaande figuur.";
+            //    $"Alle bewegingen worden conflictvrij afgehandeld. De maximumsnelheid op alle naderrichtingen bedraagt 50 km / h. De verkeersregeling dient aan de volgende eisen te voldoen: • Veilige situatie op het kruispunt. • Goede en efficiënte verkeersafwikkeling. • Logische en acceptabele situatie voor weggebruikers. In het regelprogramma dienen in het commentaar alle functionele beschrijvingen van alle parameters, tijden, schakelaars en dergelijke opgenomen te worden.";
+
+            items.Add(OpenXmlHelper.GetTextParagraph(text));
+
+            return items;
+        }
+
         public static List<OpenXmlCompositeElement> GetFasenChapter(ControllerModel c)
         {
-            var title = OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Fasen"]}", 2);
-            var tableTitleFunties = OpenXmlHelper.GetTextParagraph((string)Texts["Table_Fasen_Functies"], styleid: "Caption");
+            var items = new List<OpenXmlCompositeElement>();
 
-            var tableTitleTijden = OpenXmlHelper.GetTextParagraph((string)Texts["Table_Fasen_Tijden"], styleid: "Caption");
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Fasen"]}", 2));
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Fasen_Functies"], styleid: "Caption"));
 
             var l = new List<List<string>>
             {
@@ -175,8 +246,9 @@ namespace TLCGen.Specificator
                     fc.Detectoren.Count.ToString()
                 });
             }
-            var tableFuncties = OpenXmlHelper.GetTable(l, firstRowVerticalText: true);
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
 
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Fasen_Tijden"], styleid: "Caption"));
             l = new List<List<string>>
             {
                 new List<string>
@@ -207,10 +279,185 @@ namespace TLCGen.Specificator
                     fc.TGL_min.ToString(),
                     fc.Detectoren.Any(x => (x.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Kopmax)) ? fc.Kopmax.ToString() : "-" });
             }
-            var tableTijden = OpenXmlHelper.GetTable(l, firstRowVerticalText: true);
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
 
-            return new List<OpenXmlCompositeElement> { title, tableTitleFunties, tableFuncties, tableTitleTijden, tableTijden };
+            return items;
         }
+
+        public static List<OpenXmlCompositeElement> GetDetectorenChapter(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Detectoren_Functies"], styleid: "Caption"));
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    (string)Texts["Generic_Detector"],
+                    "Fase",
+                    "Type",
+                    "Aanvraag",
+                    "Verlengen",
+                    "Aanvraag direct",
+                    "Wachtlicht",
+                    "Rijstrook",
+                    "Aanvraag bij storing",
+                    "Veiligheidsgroen"
+                }
+            };
+            foreach (var fc in c.Fasen)
+            foreach (var d in fc.Detectoren)
+            {
+                l.Add(new List<string>
+                {
+                    d.Naam,
+                    fc.Naam,
+                    d.Type.GetDescription(),
+                    d.Aanvraag.GetDescription(),
+                    d.Verlengen.GetDescription(),
+                    d.AanvraagDirect.ToString(),
+                    d.Wachtlicht.ToCustomString(),
+                    d.Rijstrook.ToString(),
+                    d.AanvraagBijStoring.GetDescription(),
+                    d.VeiligheidsGroen.GetDescription(),
+                });
+            }
+            foreach (var d in c.Detectoren)
+            {
+                l.Add(new List<string>
+                {
+                    d.Naam,
+                    "-",
+                    d.Type.GetDescription(),
+                    d.Aanvraag.GetDescription(),
+                    d.Verlengen.GetDescription(),
+                    d.AanvraagDirect.ToCustomString(),
+                    d.Wachtlicht.ToCustomString(),
+                    d.Rijstrook.ToString(),
+                    d.AanvraagBijStoring.GetDescription(),
+                    d.VeiligheidsGroen.GetDescription()
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Detectoren_Tijden"], styleid: "Caption"));
+            l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    (string)Texts["Generic_Detector"],
+                    "Fase",
+                    "Bezettijd",
+                    "Hiaattijd",
+                    "Ondergedrag",
+                    "Bovengedrag",
+                    "Flutter tijd",
+                    "Flutter counter"
+                }
+            };
+            foreach (var fc in c.Fasen)
+            foreach (var d in fc.Detectoren)
+            {
+                l.Add(new List<string>
+                {
+                    d.Naam,
+                    fc.Naam,
+                    d.TDB.ToString(),
+                    d.TDH.ToString(),
+                    d.TOG.ToString(),
+                    d.TBG.ToString(),
+                    d.TFL.ToString(),
+                    d.CFL.ToString(),
+                });
+            }
+            foreach (var d in c.Detectoren)
+            {
+                l.Add(new List<string>
+                {
+                    d.Naam,
+                    "-",
+                    d.TDB.ToString(),
+                    d.TDH.ToString(),
+                    d.TOG.ToString(),
+                    d.TBG.ToString(),
+                    d.TFL.ToString(),
+                    d.CFL.ToString(),
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetRichtingGevoeligChapter(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren"]}", 2));
+
+            if (c.RichtingGevoeligeAanvragen.Any())
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Aanvragen"], styleid: "Caption"));
+                var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase",
+                    "Van",
+                    "Naar",
+                    "Maximaal tijdsverschil",
+                    "Reset aanvraag",
+                    "Reset tijd"
+                }
+            };
+                foreach (var rga in c.RichtingGevoeligeAanvragen)
+                {
+                    l.Add(new List<string>
+                {
+                    rga.FaseCyclus,
+                    rga.VanDetector,
+                    rga.NaarDetector,
+                    rga.MaxTijdsVerschil.ToString(),
+                    rga.ResetAanvraag.ToCustomString(),
+                    rga.ResetAanvraag ? rga.ResetAanvraagTijdsduur.ToString() : "-"
+                });
+                }
+                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            }
+
+            if (c.RichtingGevoeligVerlengen.Any())
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Verlengen"], styleid: "Caption"));
+                var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase",
+                    "Van",
+                    "Naar",
+                    "Type verlengen",
+                    "Maximaal tijdsverschil",
+                    "Verleng tijd"
+                }
+            };
+                foreach (var rgv in c.RichtingGevoeligVerlengen)
+                {
+                    l.Add(new List<string>
+                {
+                    rgv.FaseCyclus,
+                    rgv.VanDetector,
+                    rgv.NaarDetector,
+                    rgv.TypeVerlengen.ToString(),
+                    rgv.MaxTijdsVerschil.ToString(),
+                    rgv.VerlengTijd.ToString(),
+                });
+                }
+                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            }
+
+            return items;
+        }
+
 
         public static List<OpenXmlCompositeElement> GetPeriodenChapter(ControllerModel c)
         {

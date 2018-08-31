@@ -3,13 +3,16 @@
                     xmlns:local="clr-namespace:TLCGen.Specificator"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
     
+    <system:String x:Key="Generic_True">X</system:String>
+    <system:String x:Key="Generic_False">-</system:String>
+    
     <system:String x:Key="Generic_fase">fase</system:String>
     <system:String x:Key="Generic_Fase">Fase</system:String>
     
+    <system:String x:Key="Generic_detector">detector</system:String>
+    <system:String x:Key="Generic_Detector">Detector</system:String>
     
     <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
-    
-    <system:String x:Key="Ch1_Text">Dit document omschrijft de werking en instellingen voor kruising __KR__. Deze functionele specificatie omschrijft in hoofdzaak voor kruising __KR__ specifieke zaken. Voor de algemene werking van de regeling, zoals de werking van de module structuur, detectie functies en de werking van de OV module, wordt verwezen naar het doucment "Functionele specificatie TLCGen CCOL generator". in dat document wordt omschreven hoe de door de TLCGen gegenereerde CCOL code functioneert.</system:String>
     
     <system:String x:Key="Title_Document">Functionele specificatie</system:String>
     <system:String x:Key="Title_Intro">Inleiding</system:String>
@@ -22,7 +25,11 @@
     
     <!-- Detectoren -->
     <system:String x:Key="Title_Detectoren">Detectoren</system:String>
-    <system:String x:Key="Table_Detectoren">Tabel met instellingen voor detectoren</system:String>
+    <system:String x:Key="Table_Detectoren_Functies">Tabel met functie instellingen voor detectoren</system:String>
+    <system:String x:Key="Table_Detectoren_Tijden">Tabel met tijdsinstellingen voor detectoren</system:String>
+    
+    <system:String x:Key="Table_Richtinggevoelig_Aanvragen">Tabel met instellingen voor richtinggevoelige aanvragen</system:String>
+    <system:String x:Key="Table_Richtinggevoelig_Verlengen">Tabel met instellingen voor richtinggevoelig verlengen</system:String>
     
     <!-- Perioden -->
     <system:String x:Key="Title_Perioden">Perioden</system:String>

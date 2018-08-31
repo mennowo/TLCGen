@@ -67,16 +67,6 @@ namespace TLCGen.Specificator
 
         
 
-        public static string ReplaceHolders(string text, ControllerModel c, SpecificatorDataModel model)
-        {
-            var t = text;
-            t = Regex.Replace(t, "__KR__", c.Data.Naam);
-            t = Regex.Replace(t, "__STAD__", c.Data.Stad);
-            t = Regex.Replace(t, "__STRAAT1__", c.Data.Straat1);
-            t = Regex.Replace(t, "__STRAAT2__", c.Data.Straat2);
-            return t;
-        }
-
         public static void SetDirtyFlag(WordprocessingDocument doc)
         {
             DocumentSettingsPart settingsPart = doc.MainDocumentPart.GetPartsOfType<DocumentSettingsPart>().First();
@@ -102,13 +92,15 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetVersionControl(c.Data));
 
                 // Introduction
-                body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Intro"]}", 1));
-                body.Append(OpenXmlHelper.GetTextParagraph(ReplaceHolders((string)Texts["Ch1_Text"], c, model), "Normal"));
-
+                
                 // Content
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Functionality"]}", 1));
 
+                body.Append(FunctionalityGenerator.GetIntroChapter(doc, c, model));
+
                 body.Append(FunctionalityGenerator.GetFasenChapter(c));
+                body.Append(FunctionalityGenerator.GetDetectorenChapter(c));
+                body.Append(FunctionalityGenerator.GetRichtingGevoeligChapter(c));
                 body.Append(FunctionalityGenerator.GetPeriodenChapter(c));
                 body.Append(FunctionalityGenerator.GetGroentijdenChapter(c));
                 
