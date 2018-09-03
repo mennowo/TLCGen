@@ -89,6 +89,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlcvd;
         private string _tnleg;
         private string _tnlegd;
+        private string _mwtvm;
+        private string _prmwtvnhaltmin;
 
         #endregion // Fields
 
@@ -885,6 +887,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
                         sb.AppendLine($"{ts}bool isHD = FALSE;");
+                        sb.AppendLine($"{ts}bool isWTV = FALSE;");
                         sb.AppendLine($"{ts}int fc;");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");
@@ -901,11 +904,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine(";");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
-                        sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
+                        //sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        //sb.AppendLine($"{ts}{{");
+                        //sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
+                        //sb.AppendLine($"{ts}}}");
+                        //sb.AppendLine();
                         if (!c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
                         {
                             sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
@@ -919,24 +922,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
                                 }
                             }
                         }
                         else
                         {
                             sb.AppendLine($"{ts}/* Blokkeren alle langzaam verkeer (tevens niet-conflicten) */");
-                            sb.AppendLine($"{ts}if (isHD)");
+                            if(c.Fasen.Any(x => x.WachttijdVoorspeller))
+                            {
+                                sb.AppendLine($"{ts}/* Blokkeren uitstellen indien een wachttijdvoorspeller onder het minimum is */");
+                                foreach(var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                                {
+                                    sb.AppendLine($"{ts}isWTV |= (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]);");
+                                }
+                            }
+                            sb.AppendLine($"{ts}if (isHD && !isWTV)");
                             sb.AppendLine($"{ts}{{");
                             foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
                             {
                                 if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
                                 {
-                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
+                                    sb.AppendLine($"{ts}{ts}if (!C[{_ctpf}{_cvchd}{fc.Naam}]) {{ RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6; }}");
                                 }
                             }
                         }
@@ -979,6 +990,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{ts}{ts}Z[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 }
+                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
                                 sb.AppendLine($"{ts}{ts}FM[{_fcpf}{fc.Naam}] &= ~OV_FM_BIT;");
                                 sb.AppendLine($"{ts}}}");
                             }
@@ -1001,6 +1013,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
             _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
+            _mwtvm = CCOLGeneratorSettingsProvider.Default.GetElementName("mwtvm");
+            _prmwtvnhaltmin = CCOLGeneratorSettingsProvider.Default.GetElementName("prmwtvnhaltmin");
 
             return base.SetSettings(settings);
         }

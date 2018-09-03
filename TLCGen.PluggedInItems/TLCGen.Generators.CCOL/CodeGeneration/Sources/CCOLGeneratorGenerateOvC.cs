@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateOvCInUitMelden(controller));
             sb.Append(GenerateOvCPrioriteitsOpties(controller));
             sb.Append(GenerateOvCPrioriteitsToekenning(controller));
+            sb.Append(GenerateOvCTegenhoudenConflicten(controller));
             sb.Append(GenerateOvCPostAfhandelingOV(controller));
             sb.Append(GenerateOvCPARCorrecties(controller));
             sb.Append(GenerateOvCPARCcol(controller));
@@ -988,6 +989,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsToekenning, true, true);
             
             sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCTegenhoudenConflicten(ControllerModel c)
+        {
+            var _hplhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hplhd");
+            var _schovpriople = CCOLGeneratorSettingsProvider.Default.GetElementName("schovpriople");
+            var _homschtegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("homschtegenh");
+
+            var sb = new StringBuilder();
+            sb.AppendLine("/* ------------------------------------");
+            sb.AppendLine("   Extra code tegenhouden conflicten OV");
+            sb.AppendLine("   ------------------------------------ */");
+            sb.AppendLine("void TegenhoudenConflictenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTegenhoudenConflicten, true, true);
+
+            sb.AppendLine("}");
+            sb.AppendLine();
 
             return sb.ToString();
         }

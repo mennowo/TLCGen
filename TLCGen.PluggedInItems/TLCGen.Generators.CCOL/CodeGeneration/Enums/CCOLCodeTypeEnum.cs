@@ -40,6 +40,7 @@
 	    OvCPrioriteitsOpties,
         OvCPrioriteitsNiveau,
 	    OvCPrioriteitsToekenning,
+        OvCTegenhoudenConflicten,
         OvCPostAfhandelingOV,
 	    OvCPARCorrecties,
 	    OvCPARCcol,

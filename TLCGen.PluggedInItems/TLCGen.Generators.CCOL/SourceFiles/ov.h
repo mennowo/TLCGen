@@ -30,6 +30,7 @@ void RijTijdScenario(void);
 void InUitMelden(void);
 void PrioriteitsOpties(void);
 void PrioriteitsToekenningExtra(void);
+void TegenhoudenConflictenExtra(void);
 void PostAfhandelingOV(void);
 void OVPARCorrecties(void);
 

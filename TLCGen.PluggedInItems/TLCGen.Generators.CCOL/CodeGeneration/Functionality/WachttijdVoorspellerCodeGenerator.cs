@@ -92,7 +92,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 30;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
-                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
+                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
                     return 10;
                 default:
                     return 0;
@@ -288,43 +288,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
-                    foreach(var ov in c.OVData.OVIngrepen)
-                    {
-                        sb.AppendLine($"{ts}iXPrio[ovFC{ov.FaseCyclus}] = FALSE;");
-                    }
-                    foreach (var ov in c.OVData.HDIngrepen)
-                    {
-                        sb.AppendLine($"{ts}iXPrio[hdFC{ov.FaseCyclus}] = FALSE;");
-                    }
+                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] < PRM[{_prmpf}{_prmwtvnhaltmin}])");
+                        sb.AppendLine($"{ts}if (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}])");
                         sb.AppendLine($"{ts}{{");
-                        foreach(var ov in c.OVData.OVIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, fc.Naam, x.FaseCyclus) || c.InterSignaalGroep.Nalopen.Any(x2 => x2.FaseVan == fc.Naam && TLCGenControllerChecker.IsFasenConflicting(c, x.FaseCyclus, x2.FaseNaar))))
+                        sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] &= ~BIT6;");
+                        foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.FaseVan == fc.Naam))
                         {
-                            sb.AppendLine($"{ts}{ts}iXPrio[ovFC{ov.FaseCyclus}] |= TRUE;");
+                            var nlfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            if (nlfc != null)
+                            {
+                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{nlfc.Naam}] &= ~BIT6;");
+                            }
                         }
-                        foreach (var ov in c.OVData.HDIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, fc.Naam, x.FaseCyclus) || c.InterSignaalGroep.Nalopen.Any(x2 => x2.FaseVan == fc.Naam && TLCGenControllerChecker.IsFasenConflicting(c, x.FaseCyclus, x2.FaseNaar))))
+                        foreach (var nl in c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam))
                         {
-                            sb.AppendLine($"{ts}{ts}iXPrio[hdFC{ov.FaseCyclus}] |= TRUE;");
+                            var gsfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                            if (gsfc != null)
+                            {
+                                sb.AppendLine($"{ts}{ts}RR[{_fcpf}{gsfc.Naam}] &= ~BIT6;");
+                            }
                         }
                         sb.AppendLine($"{ts}}}");
                     }
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Tegenhouden OV prio met conflict met nalooprichting indien die nog moet komen */");
-                    foreach (var nl in c.InterSignaalGroep.Nalopen)
-                    {
-                        foreach (var ov in c.OVData.OVIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseNaar, x.FaseCyclus)))
-                        {
-                            sb.AppendLine($"{ts}iXPrio[ovFC{ov.FaseCyclus}] |= G[{_fcpf}{nl.FaseVan}] && CV[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}];");
-                        }
-                        foreach (var ov in c.OVData.HDIngrepen.Where(x => TLCGenControllerChecker.IsFasenConflicting(c, nl.FaseNaar, x.FaseCyclus)))
-                        {
-                            sb.AppendLine($"{ts}iXPrio[hdFC{ov.FaseCyclus}] |= G[{_fcpf}{nl.FaseVan}] && CV[{_fcpf}{nl.FaseVan}] && !G[{_fcpf}{nl.FaseNaar}];");
-                        }
-                    }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

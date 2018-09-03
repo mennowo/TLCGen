@@ -306,44 +306,46 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         if (c.InterSignaalGroep.Nalopen.Count > 0)
                         {
-                            #region Get naloop type timer
                             var tnl = "";
-                            if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
-                            {
-                                tnl = _tnlfgd;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie))
-                            {
-                                tnl = _tnlsgd;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie))
-                            {
-                                tnl = _tnlegd;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie))
-                            {
-                                tnl = _tnlcvd;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
-                            {
-                                tnl = _tnlfg;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroen))
-                            {
-                                tnl = _tnlsg;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroen))
-                            {
-                                tnl = _tnleg;
-                            }
-                            else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen))
-                            {
-                                tnl = _tnlcv;
-                            }
-                            #endregion
+
                             sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
+                                #region Get naloop type timer
+                                tnl = "";
+                                if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroenDetectie))
+                                {
+                                    tnl = _tnlfgd;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroenDetectie))
+                                {
+                                    tnl = _tnlsgd;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroenDetectie))
+                                {
+                                    tnl = _tnlegd;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroenDetectie))
+                                {
+                                    tnl = _tnlcvd;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.VastGroen))
+                                {
+                                    tnl = _tnlfg;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.StartGroen))
+                                {
+                                    tnl = _tnlsg;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeGroen))
+                                {
+                                    tnl = _tnleg;
+                                }
+                                else if (nl.Tijden.Any(x => x.Type == NaloopTijdTypeEnum.EindeVerlengGroen))
+                                {
+                                    tnl = _tnlcv;
+                                }
+                                #endregion
                                 sb.AppendLine(
                                     $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (({maxtartotig}({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                             }
@@ -352,7 +354,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseNaar}] || FG[{_fcpf}{nl.FaseNaar}]);");
+                                    $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseNaar}] || FG[{_fcpf}{nl.FaseNaar}];");
                             }
                             sb.AppendLine();
                         }

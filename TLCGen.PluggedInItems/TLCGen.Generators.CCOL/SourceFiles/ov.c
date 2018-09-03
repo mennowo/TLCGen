@@ -1382,6 +1382,7 @@ void OVTegenhouden(void)
             }
         }
     }
+	TegenhoudenConflictenExtra();
 }
 
 void AfkappenStartGroen(int fc, int iStartGr)
