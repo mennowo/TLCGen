@@ -96,15 +96,15 @@ namespace TLCGen.Specificator
                 // Content
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Functionality"]}", 1));
 
-                body.Append(FunctionalityGenerator.GetIntroChapter(doc, c, model));
+                FunctionalityGenerator.GetIntroChapter(doc, c, model);
 
                 body.Append(FunctionalityGenerator.GetFasenChapter(c));
                 body.Append(FunctionalityGenerator.GetDetectorenChapter(c));
                 body.Append(FunctionalityGenerator.GetRichtingGevoeligChapter(c));
                 body.Append(FunctionalityGenerator.GetPeriodenChapter(c));
                 body.Append(FunctionalityGenerator.GetGroentijdenChapter(c));
-                
-                
+
+                doc.Close();
                 //foreach (var g in gensWithElems)
                 //{
                 //    if (g.Item2.Any())
