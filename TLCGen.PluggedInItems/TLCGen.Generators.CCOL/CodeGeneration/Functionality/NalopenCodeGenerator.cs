@@ -116,7 +116,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 20;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                     return 10;
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 20;
                 case CCOLCodeTypeEnum.OvCPrioriteitsNiveau:
                     return 20;
@@ -236,10 +236,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     break;
                             }
                         }
-                        sb.AppendLine();
                     }
                     return sb.ToString();
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
                     if(c.InterSignaalGroep.Nalopen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");
@@ -267,7 +266,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, (bool) (SG[{_fcpf}{nl.FaseVan}]));");
 							}
                         }
-                        sb.AppendLine();
                     }
                     return sb.ToString();
 

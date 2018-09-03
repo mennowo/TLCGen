@@ -75,8 +75,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 10;
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
-                    return 10;
+                case CCOLCodeTypeEnum.RegCAlternatieven:
+                    return 30;
 	            case CCOLCodeTypeEnum.OvCIncludes:
 		            return 10;
 				default:
@@ -178,7 +178,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules:
+                case CCOLCodeTypeEnum.RegCAlternatieven:
 	                // return if no synch
 	                if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
 		                return null;
