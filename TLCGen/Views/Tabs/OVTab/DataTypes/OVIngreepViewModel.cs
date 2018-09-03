@@ -17,8 +17,11 @@ namespace TLCGen.ViewModels
 
         private OVIngreepModel _OVIngreep;
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
+        private OVIngreepRitCategorieViewModel _SelectedRitCategorie;
         private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
+        private ObservableCollection<OVIngreepRitCategorieViewModel> _RitCategorien;
         private string _NewLijnNummer;
+        private string _NewRitCategorie;
 
         #endregion // Fields
 
@@ -325,6 +328,71 @@ namespace TLCGen.ViewModels
             }
         }
 
+
+        [Browsable(false)]
+        [Description("Check op ritcategorie")]
+        public bool CheckRitCategorie
+        {
+            get { return _OVIngreep.CheckRitCategorie; }
+            set
+            {
+                _OVIngreep.CheckRitCategorie = value;
+                if (value && !RitCategorien.Any())
+                {
+                    Add4RitCategoriesCommand.Execute(null);
+                }
+                RaisePropertyChanged<object>(nameof(CheckRitCategorie), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        [EnabledCondition(nameof(CheckRitCategorie))]
+        [Description("Prioriteit voor alle ritcategoriën")]
+        public bool AlleRitCategorien
+        {
+            get { return _OVIngreep.AlleRitCategorien; }
+            set
+            {
+                _OVIngreep.AlleRitCategorien = value;
+                RaisePropertyChanged<object>(nameof(AlleRitCategorien), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
+        public OVIngreepRitCategorieViewModel SelectedRitCategorie
+        {
+            get { return _SelectedRitCategorie; }
+            set
+            {
+                _SelectedRitCategorie = value;
+                RaisePropertyChanged(nameof(SelectedRitCategorie));
+            }
+        }
+
+        [Browsable(false)]
+        public string NewRitCategorie
+        {
+            get { return _NewRitCategorie; }
+            set
+            {
+                _NewRitCategorie = value;
+                RaisePropertyChanged(nameof(NewRitCategorie));
+            }
+        }
+
+        [Browsable(false)]
+        public ObservableCollection<OVIngreepRitCategorieViewModel> RitCategorien
+        {
+            get
+            {
+                if (_RitCategorien == null)
+                {
+                    _RitCategorien = new ObservableCollection<OVIngreepRitCategorieViewModel>();
+                }
+                return _RitCategorien;
+            }
+        }
+
         [Browsable(false)]
         public bool HasKAR => OVIngreep.HasOVIngreepKAR();
 
@@ -378,6 +446,45 @@ namespace TLCGen.ViewModels
             }
         }
 
+        RelayCommand _AddRitCategorieCommand;
+        public ICommand AddRitCategorieCommand
+        {
+            get
+            {
+                if (_AddRitCategorieCommand == null)
+                {
+                    _AddRitCategorieCommand = new RelayCommand(AddRitCategorieCommand_Executed, AddRitCategorieCommand_CanExecute);
+                }
+                return _AddRitCategorieCommand;
+            }
+        }
+
+        RelayCommand _Add4RitCategoriesCommand;
+        public ICommand Add4RitCategoriesCommand
+        {
+            get
+            {
+                if (_Add4RitCategoriesCommand == null)
+                {
+                    _Add4RitCategoriesCommand = new RelayCommand(Add4RitCategorienCommand_Executed, Add4RitCategorienCommand_CanExecute);
+                }
+                return _Add4RitCategoriesCommand;
+            }
+        }
+
+
+        RelayCommand _RemoveRitCategorieCommand;
+        public ICommand RemoveRitCategorieCommand
+        {
+            get
+            {
+                if (_RemoveRitCategorieCommand == null)
+                {
+                    _RemoveRitCategorieCommand = new RelayCommand(RemoveRitCategorieCommand_Executed, RemoveRitCategorieCommand_CanExecute);
+                }
+                return _RemoveRitCategorieCommand;
+            }
+        }
         #endregion // Commands
 
         #region Command functionality
@@ -439,6 +546,65 @@ namespace TLCGen.ViewModels
         bool RemoveLijnNummerCommand_CanExecute(object prm)
         {
             return LijnNummers != null && LijnNummers.Count > 0;
+        }
+
+        void AddRitCategorieCommand_Executed(object prm)
+        {
+            if (!string.IsNullOrWhiteSpace(NewRitCategorie))
+            {
+                OVIngreepRitCategorieModel nummer = new OVIngreepRitCategorieModel()
+                {
+                    Nummer = NewRitCategorie
+                };
+                RitCategorien.Add(new OVIngreepRitCategorieViewModel(nummer));
+            }
+            else
+            {
+                OVIngreepRitCategorieModel nummer = new OVIngreepRitCategorieModel()
+                {
+                    Nummer = "0"
+                };
+                RitCategorien.Add(new OVIngreepRitCategorieViewModel(nummer));
+            }
+            NewRitCategorie = "";
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+        }
+
+        bool AddRitCategorieCommand_CanExecute(object prm)
+        {
+            return RitCategorien != null;
+        }
+
+        void Add4RitCategorienCommand_Executed(object prm)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                AddRitCategorieCommand.Execute(prm);
+            }
+        }
+
+        bool Add4RitCategorienCommand_CanExecute(object prm)
+        {
+            return RitCategorien != null;
+        }
+
+        void RemoveRitCategorieCommand_Executed(object prm)
+        {
+            if (SelectedRitCategorie != null)
+            {
+                RitCategorien.Remove(SelectedRitCategorie);
+                SelectedRitCategorie = null;
+            }
+            else
+            {
+                RitCategorien.RemoveAt(RitCategorien.Count - 1);
+            }
+            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
+        }
+
+        bool RemoveRitCategorieCommand_CanExecute(object prm)
+        {
+            return RitCategorien != null && RitCategorien.Count > 0;
         }
 
         #endregion // Command functionality

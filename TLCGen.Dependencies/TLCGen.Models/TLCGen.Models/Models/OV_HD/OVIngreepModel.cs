@@ -40,7 +40,9 @@ namespace TLCGen.Models
         public bool VasthoudenGroen { get; set; }
         public bool TussendoorRealiseren { get; set; }
         public bool CheckLijnNummer { get; set; }
+        public bool CheckRitCategorie { get; set; }
         public bool AlleLijnen { get; set; }
+        public bool AlleRitCategorien { get; set; }
 
         public NooitAltijdAanUitEnum GeconditioneerdePrioriteit { get; set; }
         public int GeconditioneerdePrioTeVroeg { get; set; }
@@ -75,6 +77,9 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "LijnNummer")]
         public List<OVIngreepLijnNummerModel> LijnNummers { get; set; }
 
+        [XmlArrayItem(ElementName = "RitCategorie")]
+        public List<OVIngreepRitCategorieModel> RitCategorien { get; set; }
+
         public OVIngreepMeldingenDataModel MeldingenData { get; set; }
 
         #endregion // Properties
@@ -97,6 +102,7 @@ namespace TLCGen.Models
         public OVIngreepModel()
         {
             LijnNummers = new List<OVIngreepLijnNummerModel>();
+            RitCategorien = new List<OVIngreepRitCategorieModel>();
             OVInmeldingBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeVroegBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
