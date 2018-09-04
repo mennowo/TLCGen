@@ -7,9 +7,6 @@ bool DSIMeldingOV_V1(
 	count fcnmr,
 	bool checktype,
 	count meldingtype,
-	bool checklijn,
-	count lijnparm,
-	count lijnmax,
 	bool extra)
 {
 #if !defined (VISSIM) && DSMAX
@@ -20,19 +17,32 @@ bool DSIMeldingOV_V1(
 	if (vtgtype != NG && vtgtype != CIF_DSI[CIF_DSI_VTG]) return FALSE;
 	if (checkfcnmr && fcnmr != NG && fcnmr != CIF_DSI[CIF_DSI_DIR]) return FALSE;
 	if (checktype && meldingtype != NG && meldingtype != CIF_DSI[CIF_DSI_TYPE]) return FALSE;
-	if (checklijn)
-	{
-		int index = 0;
-		if (PRM[lijnparm]) return TRUE;
-		if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
-		for (index = 0; index < lijnmax; ++index)
-		{
-			if (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) return TRUE;
-		}
-		return FALSE;
-	}
 
 	return TRUE;
+}
+
+bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
+{
+	int index = 0;
+	if (PRM[lijnparm]) return TRUE;
+	if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
+	for (index = 0; index < lijnmax; ++index)
+	{
+		if (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) return TRUE;
+	}
+	return FALSE;
+}
+
+bool DSIMeldingOV_RitCategorie_V1(count ritcatparm, count ritmax)
+{
+	int index = 0;
+	if (PRM[ritcatparm]) return TRUE;
+	if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
+	for (index = 0; index < ritmax; ++index)
+	{
+		if (CIF_DSI[CIF_DSI_RITC] == PRM[ritcatparm + 1 + index]) return TRUE;
+	}
+	return FALSE;
 }
 
 bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201, 202, 203)  */

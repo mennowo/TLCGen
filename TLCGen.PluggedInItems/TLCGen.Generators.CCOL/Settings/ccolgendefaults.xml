@@ -1397,6 +1397,18 @@
             <Description>Parameter lijnnummer prioriteit OV</Description>
           </Setting>
           <Setting>
+            <Default>alleritcat</Default>
+            <Setting>alleritcat</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter prioriteit geven aan alle rit categorien</Description>
+          </Setting>
+          <Setting>
+            <Default>ritcat</Default>
+            <Setting>ritcat</Setting>
+            <Type>Parameter</Type>
+            <Description>Categorie prioriteit OV</Description>
+          </Setting>
+          <Setting>
             <Default>cprio</Default>
             <Setting>cprio</Setting>
             <Type>Schakelaar</Type>

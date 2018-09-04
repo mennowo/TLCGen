@@ -165,7 +165,19 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Content="Check op rit categorie" />
+                <DockPanel>
+                    <ct:InfoElement DockPanel.Dock="Right">
+                        <ct:InfoElement.InfoPopup>
+                            <TextBlock>
+                                Indien aangevinkt wordt gecheckt op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
+                                Daarbij geldt volgens de CVN-C interface:<LineBreak />
+                                10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
+                                12 = inrukrit naar remise, 13 = uitrukrit var remise
+                            </TextBlock>
+                        </ct:InfoElement.InfoPopup>
+                    </ct:InfoElement>
+                    <Label Content="Check op rit categorie" />
+                </DockPanel>
                 <CheckBox Grid.Column="1" IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Prioriteit voor alle categoriën" Grid.Row="1" />
                 <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=AlleCategorien,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckRitCategorie}"/>

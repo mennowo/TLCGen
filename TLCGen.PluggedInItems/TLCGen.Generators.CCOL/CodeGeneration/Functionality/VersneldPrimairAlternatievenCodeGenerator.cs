@@ -354,7 +354,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (var nl in c.InterSignaalGroep.Nalopen)
                             {
                                 sb.AppendLine(
-                                    $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseNaar}] || FG[{_fcpf}{nl.FaseNaar}];");
+                                    $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseVan}] || FG[{_fcpf}{nl.FaseVan}];");
                             }
                             sb.AppendLine();
                         }

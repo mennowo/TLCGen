@@ -43,6 +43,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmpriohd;
         private CCOLGeneratorCodeStringSettingModel _prmallelijnen;
         private CCOLGeneratorCodeStringSettingModel _prmlijn;
+        private CCOLGeneratorCodeStringSettingModel _prmalleritcat;
+        private CCOLGeneratorCodeStringSettingModel _prmritcat;
         private CCOLGeneratorCodeStringSettingModel _prmmwta;
         private CCOLGeneratorCodeStringSettingModel _prmmwtfts;
         private CCOLGeneratorCodeStringSettingModel _prmmwtvtg;
@@ -342,6 +344,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (!int.TryParse(l.Nummer, out var num)) continue;
                         _myElements.Add(
                             new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                        ++n;
+                    }
+                }
+
+                if (ov.CheckRitCategorie)
+                {
+                    // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
+                    _myElements.Add(new CCOLElement($"{_prmalleritcat}{ov.FaseCyclus}", ov.AlleRitCategorien == true ? 1 : 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    var n = 1;
+                    foreach (var l in ov.RitCategorien)
+                    {
+                        if (!int.TryParse(l.Nummer, out var num)) continue;
+                        _myElements.Add(
+                            new CCOLElement($"{_prmritcat}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                         ++n;
                     }
                 }
@@ -649,6 +665,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 }
             }
 
+            var extra = "";
+            if (ov.CheckLijnNummer && ov.LijnNummers.Any())
+            {
+                extra += "DSIMeldingOV_LijnNummer_V1(" +
+                         $"{_prmpf + _prmallelijnen + ov.FaseCyclus}, " +
+                         $"{ov.LijnNummers.Count})";
+            }
+            if (ov.CheckRitCategorie && ov.RitCategorien.Any())
+            {
+                extra += "DSIMeldingOV_RitCategorie_V1(" +
+                         $"{_prmpf + _prmalleritcat + ov.FaseCyclus}, " +
+                         $"{ov.RitCategorien.Count})";
+            }
+            if (extra == "") extra = "TRUE";
+
             switch (melding.Type)
             {
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
@@ -658,10 +689,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
                                                     "TRUE, " +
                                                     (melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"CIF_DSIN, " : $"CIF_DSUIT, ") +
-                                                    (ov.CheckLijnNummer ? "TRUE, " : "FALSE, ") +
-                                                    $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
-                                                    $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
-                                                    "TRUE);");
+                                                    $"{extra});");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                     sb.AppendLine($"DSIMeldingOV_V1({(_dpf + melding.RelatedInput1).ToUpper()}, " +
@@ -670,10 +698,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     "NG, " +
                                                     $"SCH[{_schpf}{_schcheckdstype}], " +
                                                     "CIF_DSIN, " +
-                                                    (ov.CheckLijnNummer ? "TRUE, " : "FALSE, ") +
-                                                    $"{(ov.CheckLijnNummer ? _prmpf + _prmallelijnen + ov.FaseCyclus : "NG")}, " +
-                                                    $"{(ov.CheckLijnNummer ? ov.LijnNummers.Count : 0)}, " +
-                                                    "TRUE);");
+                                                    $"{extra});");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector:
                     sb.AppendLine(GetMeldingDetectieCode(melding) + ";");
