@@ -120,6 +120,23 @@ namespace TLCGen.Specificator
 
         private void GenerateCommand_Executed()
         {
+            GenerateSpecification();
+        }
+
+        private bool GenerateCommand_CanExecute()
+        {
+            return _plugin.Controller != null &&
+                   _plugin.Controller.Fasen != null &&
+                   _plugin.Controller.Fasen.Count > 0 &&
+                   !string.IsNullOrWhiteSpace(_plugin.ControllerFileName);
+        }
+
+        #endregion // Command Functionality
+
+        #region Public Methods
+
+        public void GenerateSpecification()
+        {
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var filename = Path.Combine(Path.GetDirectoryName(_plugin.ControllerFileName), _plugin.Controller.Data.Naam + ".docx");
             try
@@ -141,15 +158,7 @@ namespace TLCGen.Specificator
             }
         }
 
-        private bool GenerateCommand_CanExecute()
-        {
-            return _plugin.Controller != null &&
-                   _plugin.Controller.Fasen != null &&
-                   _plugin.Controller.Fasen.Count > 0 &&
-                   !string.IsNullOrWhiteSpace(_plugin.ControllerFileName);
-        }
-
-        #endregion // Command Functionality
+        #endregion // Public Methods
 
         #region Constructor
 

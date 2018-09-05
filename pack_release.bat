@@ -1,6 +1,6 @@
 cd TLCGen
 cd bin
-cd Release`
+cd Release
 del /q Xceed.Wpf.AvalonDock.dll
 del /q Xceed.Wpf.AvalonDock.Themes.Aero.dll
 del /q Xceed.Wpf.AvalonDock.Themes.Metro.dll

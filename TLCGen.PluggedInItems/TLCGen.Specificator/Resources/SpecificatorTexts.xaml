@@ -9,8 +9,32 @@
     <system:String x:Key="Generic_fase">fase</system:String>
     <system:String x:Key="Generic_Fase">Fase</system:String>
     
+    <system:String x:Key="Generic_fasen">fasen</system:String>
+    <system:String x:Key="Generic_Fasen">Fasen</system:String>
+    
+    <system:String x:Key="Generic_Module">Module</system:String>
+    <system:String x:Key="Generic_module">module</system:String>
+    
     <system:String x:Key="Generic_detector">detector</system:String>
     <system:String x:Key="Generic_Detector">Detector</system:String>
+    
+    <system:String x:Key="Generic_Optie">Optie</system:String>
+    <system:String x:Key="Generic_Instelling">Instelling</system:String>
+    <system:String x:Key="Generic_Fasebewaking">Fasebewaking</system:String>
+    <system:String x:Key="Generic_CCOLVersie">CCOL versie</system:String>
+    <system:String x:Key="Generic_TypeVLOG">Type VLOG</system:String>
+    <system:String x:Key="Generic_VLOGToepassen">VLOG toepassen</system:String>
+    <system:String x:Key="Generic_VLOGVersie">VLOG versie</system:String>
+    <system:String x:Key="Generic_VLOGLoggingMode">VLOG logging mode</system:String>
+    <system:String x:Key="Generic_VLOGMonitoringMode">VLOG monitoring mode</system:String>
+    <system:String x:Key="Generic_TypeKWC">Type KWC</system:String>
+    <system:String x:Key="Generic_ExtraMeevInWG">Extra meeverlengen in WG</system:String>
+    <system:String x:Key="Generic_AanstWaitsig">Aansturing waitsignalen</system:String>
+    <system:String x:Key="Generic_SegmDisplay">Segmenten display</system:String>
+    <system:String x:Key="Generic_UsPerML">Uitgang per module</system:String>
+    <system:String x:Key="Generic_FixatieMogelijk">Fixatie mogelijk</system:String>
+    <system:String x:Key="Generic_BijkomenFixatie">Bijkomen tijdens fixatie</system:String>
+    <system:String x:Key="Generic_TypeGroentijden">Type groentijden</system:String>
     
     <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
     
@@ -39,5 +63,11 @@
     <system:String x:Key="Title_Groentijden">Groentijden</system:String>
     <system:String x:Key="Table_MaxGroentijden">Tabel met maximum groentijden</system:String>
     <system:String x:Key="Table_VerlGroentijden">Tabel met verlenggroentijden</system:String>
+    
+    <!-- Modulen -->
+    <system:String x:Key="Title_Modulen">Modulen</system:String>
+    <system:String x:Key="Table_Modulen">Tabel met fasen per module</system:String>
+    <system:String x:Key="Table_VooruitAltInst">Tabel met instellingen voor alternatieven en vooruit realisaties</system:String>
+    <system:String x:Key="Table_Vooruit">Tabel met instellingen voor vooruit realisaties</system:String>
     
 </ResourceDictionary>

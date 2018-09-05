@@ -8,6 +8,8 @@ using Style = DocumentFormat.OpenXml.Wordprocessing.Style;
 using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
+using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace TLCGen.Specificator
 {
@@ -37,13 +39,117 @@ namespace TLCGen.Specificator
             pPr.ParagraphStyleId = new ParagraphStyleId() { Val = styleid };
         }
 
-        public static void AddImageToBody(WordprocessingDocument wordDoc, string relationshipId)
+        public static List<Paragraph> GetBulletList(WordprocessingDocument doc, List<string> list)
         {
+            var items = new List<Paragraph>();
+
+            // Introduce bulleted numbering in case it will be needed at some point
+            NumberingDefinitionsPart numberingPart = doc.MainDocumentPart.NumberingDefinitionsPart;
+            if (numberingPart == null)
+            {
+                numberingPart = doc.MainDocumentPart.AddNewPart<NumberingDefinitionsPart>("numbDef001");
+                Numbering element = new Numbering();
+                element.Save(numberingPart);
+            }
+
+            // Insert an AbstractNum into the numbering part numbering list.  The order seems to matter or it will not pass the 
+            // Open XML SDK Productity Tools validation test.  AbstractNum comes first and then NumberingInstance and we want to
+            // insert this AFTER the last AbstractNum and BEFORE the first NumberingInstance or we will get a validation error.
+            var abstractNumberId = numberingPart.Numbering.Elements<AbstractNum>().Count() + 1;
+            var abstractLevel = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "·" }) { LevelIndex = 0 };
+            var abstractNum1 = new AbstractNum(abstractLevel) { AbstractNumberId = abstractNumberId };
+
+            if (abstractNumberId == 1)
+            {
+                numberingPart.Numbering.Append(abstractNum1);
+            }
+            else
+            {
+                AbstractNum lastAbstractNum = numberingPart.Numbering.Elements<AbstractNum>().Last();
+                numberingPart.Numbering.InsertAfter(abstractNum1, lastAbstractNum);
+            }
+
+            // Insert an NumberingInstance into the numbering part numbering list.  The order seems to matter or it will not pass the 
+            // Open XML SDK Productity Tools validation test.  AbstractNum comes first and then NumberingInstance and we want to
+            // insert this AFTER the last NumberingInstance and AFTER all the AbstractNum entries or we will get a validation error.
+            var numberId = numberingPart.Numbering.Elements<NumberingInstance>().Count() + 1;
+            NumberingInstance numberingInstance1 = new NumberingInstance() { NumberID = numberId };
+            AbstractNumId abstractNumId1 = new AbstractNumId() { Val = abstractNumberId };
+            numberingInstance1.Append(abstractNumId1);
+
+            if (numberId == 1)
+            {
+                numberingPart.Numbering.Append(numberingInstance1);
+            }
+            else
+            {
+                var lastNumberingInstance = numberingPart.Numbering.Elements<NumberingInstance>().Last();
+                numberingPart.Numbering.InsertAfter(numberingInstance1, lastNumberingInstance);
+            }
+
+            Body body = doc.MainDocumentPart.Document.Body;
+
+            foreach (var item in list)
+            {
+                // Create items for paragraph properties
+                var numberingProperties = new NumberingProperties(new NumberingLevelReference() { Val = 0 }, new NumberingId() { Val = numberId });
+                var spacingBetweenLines1 = new SpacingBetweenLines() { After = "0" };  // Get rid of space between bullets
+                var indentation = new Indentation() { Left = "720", Hanging = "360" };  // correct indentation 
+
+                ParagraphMarkRunProperties paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
+                RunFonts runFonts1 = new RunFonts() { Ascii = "Symbol", HighAnsi = "Symbol" };
+                paragraphMarkRunProperties1.Append(runFonts1);
+
+                // create paragraph properties
+                var paragraphProperties = new ParagraphProperties(numberingProperties, spacingBetweenLines1, indentation, paragraphMarkRunProperties1);
+
+                // Create paragraph 
+                var newPara = new Paragraph(paragraphProperties);
+                
+                // Add run to the paragraph
+                newPara.AppendChild(new Run(new Text(item)));
+
+                // Add one bullet item to the body
+                items.Add(newPara);
+            }
+
+            return items;
+        }
+
+
+        public static void AddImageToBody(WordprocessingDocument doc, string file)
+        {
+            var imagePart = doc.MainDocumentPart.AddImagePart(ImagePartType.Bmp);
+
+            var img = new BitmapImage();
+            using (var fs = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                img.BeginInit();
+                img.StreamSource = fs;
+                img.EndInit();
+            }
+            var widthPx = img.PixelWidth;
+            var heightPx = img.PixelHeight;
+            var horzRezDpi = img.DpiX;
+            var vertRezDpi = img.DpiY;
+            const int emusPerInch = 914400;
+            const int emusPerCm = 360000;
+
+            var widthEmus = (long)(widthPx / horzRezDpi * emusPerInch);
+            var heightEmus = (long)(heightPx / vertRezDpi * emusPerInch);
+            var maxWidthEmus = (long)(15.75 * emusPerCm);
+            if (widthEmus > maxWidthEmus)
+            {
+                var ratio = (heightEmus * 1.0m) / widthEmus;
+                widthEmus = maxWidthEmus;
+                heightEmus = (long)(widthEmus * ratio);
+            }
+
             // Define the reference of the image.
             var element =
                  new Drawing(
                      new DW.Inline(
-                         new DW.Extent() { Cx = 990000L, Cy = 792000L },
+                         new DW.Extent() { Cx = widthEmus, Cy = heightEmus },
                          new DW.EffectExtent()
                          {
                              LeftEdge = 0L,
@@ -65,7 +171,7 @@ namespace TLCGen.Specificator
                                          new PIC.NonVisualDrawingProperties()
                                          {
                                              Id = (UInt32Value)0U,
-                                             Name = "New Bitmap Image.jpg"
+                                             Name = Path.GetFileName(file)
                                          },
                                          new PIC.NonVisualPictureDrawingProperties()),
                                      new PIC.BlipFill(
@@ -74,20 +180,19 @@ namespace TLCGen.Specificator
                                                  new A.BlipExtension()
                                                  {
                                                      Uri =
-                                                        "{28A0092B-C50C-407E-A947-70E740481C1C}"
+                                                       Guid.NewGuid().ToString()
                                                  })
                                          )
                                          {
-                                             Embed = relationshipId,
-                                             CompressionState =
-                                             A.BlipCompressionValues.Print
+                                             Embed = doc.MainDocumentPart.GetIdOfPart(imagePart),
+                                             CompressionState = A.BlipCompressionValues.Print
                                          },
                                          new A.Stretch(
                                              new A.FillRectangle())),
                                      new PIC.ShapeProperties(
                                          new A.Transform2D(
                                              new A.Offset() { X = 0L, Y = 0L },
-                                             new A.Extents() { Cx = 990000L, Cy = 792000L }),
+                                             new A.Extents() { Cx = widthEmus, Cy = heightEmus }),
                                          new A.PresetGeometry(
                                              new A.AdjustValueList()
                                          )
@@ -103,8 +208,13 @@ namespace TLCGen.Specificator
                          EditId = "50D07946"
                      });
 
-            // Append the reference to body, the element should be in a Run.
-            wordDoc.MainDocumentPart.Document.Body.AppendChild(new Paragraph(new Run(element)));
+
+            using (FileStream stream = new FileStream(file, FileMode.Open))
+            {
+                imagePart.FeedData(stream);
+            }
+
+            doc.MainDocumentPart.Document.Body.AppendChild(new Paragraph(new Run(element)));
         }
 
         public static TableRow GetTableRow(string[] data, int[] widths = null, bool header = false, bool verticalText = false)

@@ -169,6 +169,10 @@ namespace TLCGen.ViewModels
                 {
                     ModuleFaseCyclusAlternatiefModel afcm = new ModuleFaseCyclusAlternatiefModel();
                     afcm.FaseCyclus = fcmvm.Naam;
+                    if (SelectedModuleFase.Alternatieven.Any())
+                    {
+                        afcm.AlternatieveGroenTijd = SelectedModuleFase.Alternatieven.First().AlternatieveGroenTijd;
+                    }
                     SelectedModuleFase.Alternatieven.Add(new ModuleFaseCyclusAlternatiefViewModel(afcm));
                     SelectedModuleFase.Alternatieven.BubbleSort();
                 }
