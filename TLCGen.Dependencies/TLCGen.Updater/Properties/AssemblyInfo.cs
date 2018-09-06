@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("TLCGen.Updater")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("CodingConnected e.U.")]
 [assembly: AssemblyProduct("TLCGen.Updater")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © CodingConnected e.U. 2016-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
