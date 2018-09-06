@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="0.3.2" 
+    Version="0.3.4" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -100,6 +100,7 @@
     <ComponentGroup Id="TLCGenDependencies" Directory="DEPSFOLDER">
       <Component Id='AllDependencies' Guid='4C9EE2EC-0333-4AEC-8A7C-C006F052558E'>
         <File Id='CommonServiceLocator' Name='CommonServiceLocator.dll' Source='$(var.ReleaseDir)/CommonServiceLocator.dll' KeyPath='no' />
+        <File Id='DocumentFormat.OpenXml' Name='DocumentFormat.OpenXml.dll' Source='$(var.ReleaseDir)/DocumentFormat.OpenXml.dll' KeyPath='no' />
         <File Id='GalaSoft.MvvmLight' Name='GalaSoft.MvvmLight.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.dll' KeyPath='no' />
         <File Id='GalaSoft.MvvmLight.Platform' Name='GalaSoft.MvvmLight.Platform.dll' Source='$(var.ReleaseDir)/GalaSoft.MvvmLight.Platform.dll' KeyPath='no' />
         <File Id='GongSolutions.WPF.DragDrop' Name='GongSolutions.WPF.DragDrop.dll' Source='$(var.ReleaseDir)/GongSolutions.WPF.DragDrop.dll' KeyPath='no' />
@@ -125,6 +126,7 @@
         <File Id='TLCGen.Generators.CCOL' Name='TLCGen.Generators.CCOL.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.CCOL.dll' KeyPath='no' />
         <File Id='TLCGen.Generators.TLCCC' Name='TLCGen.Generators.TLCCC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll' KeyPath='no' />
         <File Id='TLCGen.Importers.TabC' Name='TLCGen.Importers.TabC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll' KeyPath='no' />
+        <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
@@ -175,10 +177,10 @@
         <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
         <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
-        <!--<File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
+        <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.c" />
-        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />-->
+        <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />
       </Component>
     </ComponentGroup>
 

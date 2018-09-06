@@ -244,7 +244,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var prmtest3 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsicat}", 10, CCOLElementTimeTypeEnum.None, _prmtestdsicat);
                     prmtest1.Dummy = true;
                     prmtest2.Dummy = true;
-                    prmtest2.Dummy = true;
+                    prmtest3.Dummy = true;
                     _myElements.Add(prmtest1);
                     _myElements.Add(prmtest2);
                     _myElements.Add(prmtest3);
