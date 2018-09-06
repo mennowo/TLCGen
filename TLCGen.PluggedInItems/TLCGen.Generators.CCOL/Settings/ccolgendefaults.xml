@@ -1456,6 +1456,13 @@
             <Type>Parameter</Type>
             <Description>Parameter testen lijnnummer DSI bericht in testomgeving</Description>
           </Setting>
+
+          <Setting>
+            <Default>testdsicat</Default>
+            <Setting>testdsicat</Setting>
+            <Type>Parameter</Type>
+            <Description>Parameter testen ritcategorie DSI bericht in testomgeving</Description>
+          </Setting>
           <Setting>
             <Default>prio</Default>
             <Setting>prio</Setting>

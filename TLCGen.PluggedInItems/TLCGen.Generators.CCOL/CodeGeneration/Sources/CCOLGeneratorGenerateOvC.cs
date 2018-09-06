@@ -1090,6 +1090,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var _prmtestdsivert = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsivert");
             var _prmtestdsilyn = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsilyn");
+            var _prmtestdsicat = CCOLGeneratorSettingsProvider.Default.GetElementName("prmtestdsicat");
             var _ddummykarin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarin");
             var _ddummykaruit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykaruit");
             var _ddummykarhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummykarhdin");
@@ -1121,33 +1122,36 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
                         if (m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARInmelding.Naam}]) set_DSI_message(NG, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                         m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding);
                         if(m != null)
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], 0);");
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{ov.DummyKARUitmelding.Naam}]) set_DSI_message(NG, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], 0);");
                         }
                     }
                 }
                 var done = new List<string>();
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.HasOVIngreepVecom()))
                 {
-                    var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
-                    if (done.Any(x => x == m.RelatedInput1)) continue;
-                    var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                    if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                    if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, CIF_DSIN, PRM[{_prmpf}{_prmtestdsilyn}], NG);");
-                    }
-                    m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
-                    if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
-                    {
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, CIF_DSUIT, PRM[{_prmpf}{_prmtestdsilyn}], NG);");
-                    }
-                    if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
-                    {
-                        done.Add(m.RelatedInput1);
+                        var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
+                        if (done.Any(x => x == m.RelatedInput1)) continue;
+                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                        {
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                        }
+                        m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
+                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                        {
+                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                        }
+                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                        {
+                            done.Add(m.RelatedInput1);
+                        }
                     }
                 }
                 sb.AppendLine();
@@ -1161,8 +1165,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	                const string type = "CIF_POL";
 	                if (int.TryParse(hd.FaseCyclus, out var ifc))
                     {
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSIN, 1, 0, 0, CIF_SIR);");
-                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message_KAR({type}, {ifc}, CIF_DSUIT, 1, 0, 0, CIF_SIR);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARInmelding.Naam}]) set_DSI_message(0, {type}, {ifc}, CIF_DSIN, 1, 0, 0, 0, CIF_SIR);");
+                        sb.AppendLine($"{ts}if (SD[{_dpf}{hd.DummyKARUitmelding.Naam}]) set_DSI_message(0, {type}, {ifc}, CIF_DSUIT, 1, 0, 0, 0, CIF_SIR);");
                     }
                 }
             }

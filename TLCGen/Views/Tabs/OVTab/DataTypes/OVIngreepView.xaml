@@ -130,9 +130,9 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Label Content="Check op lijnnummer" />
-                <CheckBox Grid.Column="1" IsChecked="{Binding Path=CheckLijnNummer,UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding Path=CheckLijnNummer,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
                 <Label Content="Prioriteit voor alle lijnen" Grid.Row="1" />
-                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=AlleLijnen,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckLijnNummer}"/>
+                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=AlleLijnen,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckLijnNummer}" Margin="5" />
                 <ListView Height="Auto" ItemsSource="{Binding LijnNummers}" IsEnabled="{Binding Path=CheckLijnNummer}"
                       SelectedItem="{Binding SelectedLijnNummer}" Margin="2" MinHeight="24" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                     <ListView.ItemsPanel>
@@ -172,15 +172,15 @@
                                 Indien aangevinkt wordt gecheckt op ritcategorie (CIF_DSI[CIF_DSI_RITC]).<LineBreak />
                                 Daarbij geldt volgens de CVN-C interface:<LineBreak />
                                 10 = dienstregelingsrit, 11 = materieelrit, <LineBreak />
-                                12 = inrukrit naar remise, 13 = uitrukrit var remise
+                                12 = inrukrit naar remise, 13 = uitrukrit van remise
                             </TextBlock>
                         </ct:InfoElement.InfoPopup>
                     </ct:InfoElement>
                     <Label Content="Check op rit categorie" />
                 </DockPanel>
-                <CheckBox Grid.Column="1" IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox Grid.Column="1" IsChecked="{Binding Path=CheckRitCategorie,UpdateSourceTrigger=PropertyChanged}" Margin="5" />
                 <Label Content="Prioriteit voor alle categoriën" Grid.Row="1" />
-                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=AlleCategorien,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckRitCategorie}"/>
+                <CheckBox Grid.Column="1" Grid.Row="1" IsChecked="{Binding Path=AlleCategorien,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CheckRitCategorie}" Margin="5" />
                 <ListView Height="Auto" ItemsSource="{Binding Path=RitCategorien}" IsEnabled="{Binding Path=CheckRitCategorie}"
                       SelectedItem="{Binding Path=SelectedRitCategorie}" Margin="2" MinHeight="24" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
                     <ListView.ItemsPanel>

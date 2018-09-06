@@ -37,7 +37,7 @@ bool DSIMeldingOV_RitCategorie_V1(count ritcatparm, count ritmax)
 {
 	int index = 0;
 	if (PRM[ritcatparm]) return TRUE;
-	if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
+	if (CIF_DSI[CIF_DSI_RITC] == 0) return FALSE;
 	for (index = 0; index < ritmax; ++index)
 	{
 		if (CIF_DSI[CIF_DSI_RITC] == PRM[ritcatparm + 1 + index]) return TRUE;
@@ -147,12 +147,14 @@ void reset_DSI_message(void)
 -  geeft alle variabelen de juiste waarde en zet de wijzigvlag CIF_DSIWIJZ op.
 -  dient in de testomgeving te worden aangeroepen vanuit de is_special_signals().
 */
-void set_DSI_message_KAR(s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 prio)
+void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio)
 {
+	CIF_DSI[CIF_DSI_LUS] = (s_int16)(ds < 0 ? 0 : ds);
 	CIF_DSI[CIF_DSI_VTG] = (vtg < 0 ? 0 : vtg);
 	CIF_DSI[CIF_DSI_DIR] = (dir < 0 ? 0 : dir);
 	CIF_DSI[CIF_DSI_TYPE] = (type < 0 ? 0 : type);
 	CIF_DSI[CIF_DSI_LYN] = (PRM_lijnnr < 0 ? 0 : PRM_lijnnr);
+	CIF_DSI[CIF_DSI_RITC] = (PRM_ritcat < 0 ? 0 : PRM_ritcat);
 	CIF_DSI[CIF_DSI_STP] = (stiptheid < 0 ? 0 : stiptheid);
 	CIF_DSI[CIF_DSI_TSTP] = aantalsecvertr;
 	CIF_DSI[CIF_DSI_PRI] = (prio < 0 ? 0 : prio);
@@ -161,21 +163,4 @@ void set_DSI_message_KAR(s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid
 	CIF_DSIWIJZ = 1;
 }
 
-/*  de functie set_DSI-message()
--   voor het plaatsen van een selectief detectiebericht in de DSI-buffer.
--   geeft alle variabelen de juiste waarde en zet de wijzigvlag CIF_DSIWIJZ op.
--   dient in de testomgeving te worden aangeroepen vanuit de is_special_signals().
-*/
-void set_DSI_message(mulv ds, mulv vtg, mulv melding, mulv PRM_lijnnr, mulv stiptheid)
-{
-	CIF_DSI[CIF_DSI_LUS] = (s_int16)(ds < 0 ? 0 : ds);
-	CIF_DSI[CIF_DSI_VTG] = (s_int16)(vtg < 0 ? 0 : vtg);
-	CIF_DSI[CIF_DSI_TYPE] = (s_int16)(melding < 0 ? 0 : melding);
-	CIF_DSI[CIF_DSI_LYN] = (s_int16)(PRM_lijnnr < 0 ? 0 : PRM_lijnnr);
-	CIF_DSI[CIF_DSI_STP] = (s_int16)(stiptheid < 0 ? 0 : stiptheid);
-
-	/* zet wijzig vlag
-	*/
-	CIF_DSIWIJZ = 1;
-}
 #endif

@@ -23,8 +23,7 @@ void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], c
 
 #ifdef CCOL_IS_SPECIAL
 void reset_DSI_message(void);
-void set_DSI_message_KAR(s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 prio);
-void set_DSI_message(mulv ds, mulv vtg, mulv melding, mulv PRM_lijnnr, mulv stiptheid);
+void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio);
 #endif
 
 #endif

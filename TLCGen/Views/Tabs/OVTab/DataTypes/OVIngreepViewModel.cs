@@ -18,8 +18,6 @@ namespace TLCGen.ViewModels
         private OVIngreepModel _OVIngreep;
         private OVIngreepLijnNummerViewModel _SelectedLijnNummer;
         private OVIngreepRitCategorieViewModel _SelectedRitCategorie;
-        private ObservableCollection<OVIngreepLijnNummerViewModel> _LijnNummers;
-        private ObservableCollection<OVIngreepRitCategorieViewModel> _RitCategorien;
         private string _NewLijnNummer;
         private string _NewRitCategorie;
 
@@ -316,17 +314,9 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public ObservableCollection<OVIngreepLijnNummerViewModel> LijnNummers
-        {
-            get
-            {
-                if(_LijnNummers == null)
-                {
-                    _LijnNummers = new ObservableCollection<OVIngreepLijnNummerViewModel>();
-                }
-                return _LijnNummers;
-            }
-        }
+        private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
+        public ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> LijnNummers =>
+            _lijnNummers ?? (_lijnNummers = new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(OVIngreep.LijnNummers));
 
 
         [Browsable(false)]
@@ -339,7 +329,7 @@ namespace TLCGen.ViewModels
                 _OVIngreep.CheckRitCategorie = value;
                 if (value && !RitCategorien.Any())
                 {
-                    Add4RitCategoriesCommand.Execute(null);
+                    Add4RitCategorienCommand.Execute(null);
                 }
                 RaisePropertyChanged<object>(nameof(CheckRitCategorie), broadcast: true);
             }
@@ -381,17 +371,10 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public ObservableCollection<OVIngreepRitCategorieViewModel> RitCategorien
-        {
-            get
-            {
-                if (_RitCategorien == null)
-                {
-                    _RitCategorien = new ObservableCollection<OVIngreepRitCategorieViewModel>();
-                }
-                return _RitCategorien;
-            }
-        }
+        private ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel> _ritCategorien;
+        public ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel> RitCategorien =>
+            _ritCategorien ?? (_ritCategorien = new ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel>(OVIngreep.RitCategorien));
+
 
         [Browsable(false)]
         public bool HasKAR => OVIngreep.HasOVIngreepKAR();
@@ -459,16 +442,16 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _Add4RitCategoriesCommand;
-        public ICommand Add4RitCategoriesCommand
+        RelayCommand _Add4RitCategorienCommand;
+        public ICommand Add4RitCategorienCommand
         {
             get
             {
-                if (_Add4RitCategoriesCommand == null)
+                if (_Add4RitCategorienCommand == null)
                 {
-                    _Add4RitCategoriesCommand = new RelayCommand(Add4RitCategorienCommand_Executed, Add4RitCategorienCommand_CanExecute);
+                    _Add4RitCategorienCommand = new RelayCommand(Add4RitCategorienCommand_Executed, Add4RitCategorienCommand_CanExecute);
                 }
-                return _Add4RitCategoriesCommand;
+                return _Add4RitCategorienCommand;
             }
         }
 
@@ -579,6 +562,7 @@ namespace TLCGen.ViewModels
         {
             for (int i = 0; i < 4; ++i)
             {
+                _NewRitCategorie = (10 + i).ToString();
                 AddRitCategorieCommand.Execute(prm);
             }
         }
@@ -608,28 +592,6 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Command functionality
-
-        #region Collection changed
-
-        private void LijnNummers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (OVIngreepLijnNummerViewModel num in e.NewItems)
-                {
-                    _OVIngreep.LijnNummers.Add(num.LijnNummer);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (OVIngreepLijnNummerViewModel num in e.OldItems)
-                {
-                    _OVIngreep.LijnNummers.Remove(num.LijnNummer);
-                }
-            }
-        }
-
-        #endregion // Collection changed
 
         #region Private Methods
 
@@ -667,13 +629,6 @@ namespace TLCGen.ViewModels
         {
             _OVIngreep = ovingreep;
             
-            foreach(OVIngreepLijnNummerModel num in _OVIngreep.LijnNummers)
-            {
-                LijnNummers.Add(new OVIngreepLijnNummerViewModel(num));
-            }
-           
-            LijnNummers.CollectionChanged += LijnNummers_CollectionChanged;
-
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
             Detectoren = new ObservableCollection<string>();
             OnDetectorenChanged(null);

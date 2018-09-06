@@ -51,6 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmovstp;
         private CCOLGeneratorCodeStringSettingModel _prmtestdsivert;
         private CCOLGeneratorCodeStringSettingModel _prmtestdsilyn;
+        private CCOLGeneratorCodeStringSettingModel _prmtestdsicat;
         private CCOLGeneratorCodeStringSettingModel _schupinagb;
         private CCOLGeneratorCodeStringSettingModel _schupinagbhd;
         private CCOLGeneratorCodeStringSettingModel _schvi;
@@ -236,14 +237,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 /* Variables independent of signal groups */
 
-                if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepKAR()))
+                if (c.HasDSI())
                 {
                     var prmtest1 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsivert}", 120, CCOLElementTimeTypeEnum.None, _prmtestdsivert);
                     var prmtest2 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsilyn}", 0, CCOLElementTimeTypeEnum.None, _prmtestdsilyn);
+                    var prmtest3 = CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmtestdsicat}", 10, CCOLElementTimeTypeEnum.None, _prmtestdsicat);
                     prmtest1.Dummy = true;
+                    prmtest2.Dummy = true;
                     prmtest2.Dummy = true;
                     _myElements.Add(prmtest1);
                     _myElements.Add(prmtest2);
+                    _myElements.Add(prmtest3);
                 }
 
                 foreach (var d in c.GetAllDetectors(x => x.Type == DetectorTypeEnum.WisselDetector))
@@ -350,7 +354,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (ov.CheckRitCategorie)
                 {
-                    // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
+                    // Note!!! "alleritcat" must alway be DIRECTLY above the cat prms, cause of the way these prms are used in code
                     _myElements.Add(new CCOLElement($"{_prmalleritcat}{ov.FaseCyclus}", ov.AlleRitCategorien == true ? 1 : 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     var n = 1;
                     foreach (var l in ov.RitCategorien)
@@ -674,6 +678,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
             if (ov.CheckRitCategorie && ov.RitCategorien.Any())
             {
+                if (extra != "") extra += " && ";
                 extra += "DSIMeldingOV_RitCategorie_V1(" +
                          $"{_prmpf + _prmalleritcat + ov.FaseCyclus}, " +
                          $"{ov.RitCategorien.Count})";

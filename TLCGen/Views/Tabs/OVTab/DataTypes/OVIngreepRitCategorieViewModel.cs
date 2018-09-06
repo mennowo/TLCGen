@@ -1,9 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
+using TLCGen.Helpers;
 using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class OVIngreepRitCategorieViewModel : ViewModelBase
+    public class OVIngreepRitCategorieViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
@@ -34,6 +35,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Properties
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return _RitCategorie;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 

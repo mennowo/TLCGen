@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Models;
 
 namespace TLCGen.Specificator.Tester
@@ -11,7 +6,7 @@ namespace TLCGen.Specificator.Tester
     {
         static void Main(string[] args)
         {
-            var sp = new SpecificatorPlugin(true)
+            var sp = new SpecificatorPlugin()
             {
                 Controller = Helpers.TLCGenSerialization.DeSerialize<ControllerModel>(@"C:\Users\menno\Documents\temp\SP16\SP16.tlc")
             };
