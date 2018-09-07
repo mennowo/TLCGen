@@ -18,6 +18,7 @@
     <system:String x:Key="Generic_detector">detector</system:String>
     <system:String x:Key="Generic_Detector">Detector</system:String>
     
+    <!-- Algemene instellingen -->
     <system:String x:Key="Generic_Optie">Optie</system:String>
     <system:String x:Key="Generic_Instelling">Instelling</system:String>
     <system:String x:Key="Generic_Fasebewaking">Fasebewaking</system:String>
@@ -36,14 +37,17 @@
     <system:String x:Key="Generic_BijkomenFixatie">Bijkomen tijdens fixatie</system:String>
     <system:String x:Key="Generic_TypeGroentijden">Type groentijden</system:String>
     
+    <!-- Intro etc. -->
     <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
-    
     <system:String x:Key="Title_Document">Functionele specificatie</system:String>
     <system:String x:Key="Title_Intro">Inleiding</system:String>
-    <system:String x:Key="Title_Functionality">Functionaliteiten</system:String>
+    <system:String x:Key="Title_Functionality">Structuur en afwikkeling van de verkeersregeling</system:String>
     
     <!-- Fasen -->
-    <system:String x:Key="Title_Fasen">Fasen</system:String>
+    <system:String x:Key="Title_StructuurEnAfwikkeling">Structuur en afhandeling</system:String>
+    <system:String x:Key="Title_SignaalgroepAfhandeling">Signaalgroepafhandeling</system:String>
+    <system:String x:Key="Title_SignaalgroepInstellingen">Signaalgroep instellingen</system:String>
+    <system:String x:Key="Title_Modulestructuur">Modulestructuur</system:String>
     <system:String x:Key="Table_Fasen_Functies">Tabel met functie instellingen voor fasen</system:String>
     <system:String x:Key="Table_Fasen_Tijden">Tabel met tijdsinstellingen voor fasen</system:String>
     
@@ -56,7 +60,7 @@
     <system:String x:Key="Table_Richtinggevoelig_Verlengen">Tabel met instellingen voor richtinggevoelig verlengen</system:String>
     
     <!-- Perioden -->
-    <system:String x:Key="Title_Perioden">Perioden</system:String>
+    <system:String x:Key="Title_Perioden">Klokperioden</system:String>
     <system:String x:Key="Table_Perioden">Tabel met perioden</system:String>
     
     <!-- Groentijden -->

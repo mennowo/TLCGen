@@ -257,10 +257,16 @@ namespace TLCGen.Specificator
             return tr;
         }
 
-        public static Paragraph GetTextParagraph(string text, string styleid = "Normal")
+        public static Paragraph GetTextParagraph(string text, string styleid = "Normal", bool bold = false)
         {
             var par = new Paragraph();
             var run = par.AppendChild(new Run());
+            if (bold)
+            {
+                var runProperties = run.AppendChild(new RunProperties());
+                var b = new Bold();
+                runProperties.AppendChild(b);
+            }
             run.AppendChild(new Text(text));
             ApplyStyleToParagraph(par, styleid: styleid);
             return par;

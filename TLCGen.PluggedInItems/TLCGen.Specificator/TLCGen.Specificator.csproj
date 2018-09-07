@@ -59,6 +59,7 @@
       <DependentUpon>SpecificatorTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SpecificatorViewModel.cs" />
+    <Compile Include="TableGenerator.cs" />
     <Page Include="SpecificatorTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

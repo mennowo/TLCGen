@@ -91,15 +91,32 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetFirstPage(c.Data));
                 body.Append(FunctionalityGenerator.GetVersionControl(c.Data));
 
-                // Introduction
                 
-                // Content
+                // Introduction
                 FunctionalityGenerator.GetIntroChapter(doc, c, model);
 
-                body.Append(FunctionalityGenerator.GetFasenChapter(c));
+                // Chap 1: Structuur en afwikkeling
+                body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_StructuurEnAfwikkeling"]}", 1));
+                // TODO: introduction (depending on halfstar or not)
+                body.Append(FunctionalityGenerator.GetChapter_Perioden(c));
+                body.Append(FunctionalityGenerator.GetChapter_SignaalGroepAfhandeling(doc, c));
+                body.Append(FunctionalityGenerator.GetChapter_SignaalGroepInstellingen(doc, c));
+                body.Append(FunctionalityGenerator.GetChapter_Modulestructuur(doc, c));
+                // TODO: signaalplannen
+
+                // next: conflicten/ot/got
+
+                // dan: detectie (configuratie, storing)
+
+                // dan: afhandeling signaalgroepen (nalopen, gelijkstarten, etc)
+                // tabel functies hiernaartoe verplaatsen
+
+                // dan: OV, HD
+
+                // dan: overig: fixatie -> onderbrengen in H1 (intro) bij algemene instellingen
+
                 body.Append(FunctionalityGenerator.GetDetectorenChapter(c));
                 body.Append(FunctionalityGenerator.GetRichtingGevoeligChapter(c));
-                body.Append(FunctionalityGenerator.GetPeriodenChapter(c));
                 body.Append(FunctionalityGenerator.GetGroentijdenChapter(c));
                 body.Append(FunctionalityGenerator.GetModulenChapter(doc, c));
 
