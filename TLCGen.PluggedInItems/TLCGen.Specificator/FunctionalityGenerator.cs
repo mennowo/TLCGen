@@ -3,20 +3,14 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Media.Imaging;
 using TLCGen.Extensions;
 using TLCGen.Models;
 using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
-using A = DocumentFormat.OpenXml.Drawing;
-using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
-using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Specificator
@@ -121,6 +115,209 @@ namespace TLCGen.Specificator
             }
         }
 
+        internal static List<OpenXmlCompositeElement> GetChapter_DetectieConfiguratie(WordprocessingDocument doc, ControllerModel c)
+        {
+            var body = doc.MainDocumentPart.Document.Body;
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren_Configuratie"]}", 2));
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De belangrijkste doelen van het detectieveld zijn:"));
+
+            var sl = new List<Tuple<string, int>>();
+
+            sl.Add(new Tuple<string, int>($"Het aanvragen van signaalgroepen (bij lussen pas na het verstrijken " +
+                $"van de bezettijd). Per lus of drukknop dient met een parameter instelbaar te zijn of en wanneer " +
+                $"de aanvraag gezet mag worden:", 0));
+            sl.Add(new Tuple<string, int>($"0 = Aanvraagfunctie uitgeschakeld;", 1));
+            sl.Add(new Tuple<string, int>($"1 = Aanvragen na garantierood;", 1));
+            sl.Add(new Tuple<string, int>($"2 = Aanvragen tijdens de gehele roodfase;", 1));
+            sl.Add(new Tuple<string, int>($"3 = Aanvragen tijdens geel en rood.", 1));
+            sl.Add(new Tuple<string, int>($"Het op een veilige manier verlengen en beëindigen van signaalgroepen " +
+                $"(bij lussen pas na het verstrijken van de hiaattijd). Per lus dient met een parameter instelbaar " +
+                $"te zijn of en volgens welk principe er verlengd mag worden: ", 0));
+            sl.Add(new Tuple<string, int>($"0 = Verlengfunctie uitgeschakeld;", 1));
+            sl.Add(new Tuple<string, int>($"1 = Koplusmaximum: beperkt gedeelte van maximum groentijd. Bedoeld " +
+                $"voor koplussen, om te voorkomen dat, wanneer het eerste voertuig niet oplet, de groenfase na " +
+                $"de vastgroentijd wordt beëindigd.Op deze manier kunnen de voertuigen tussen de koplus en de " +
+                $"lange lus toch worden weggewerkt.Op koplussen wordt in principe niet doorverlengd: voertuigen " +
+                $"die bij de koplus arriveren, zijn de dilemmazone al gepasseerd en rijden altijd door;", 1));
+            sl.Add(new Tuple<string, int>($"2 = Eerste meetkriterium: zolang de hiaattijd van een lus met het " +
+                $"eerste meetkriterium loopt, wordt er verlengd mits het primaire groengebied nog niet is " +
+                $"verstreken. Na het verstrijken van de hiaattijd van een lus met het eerste meetkriterium, " +
+                $"wordt er op deze lus niet meer verlengd als er ook een lus met het tweede meetkriterium is. " +
+                $"Als er alleen lussen zijn met het eerste meetkriterium mogen ze elkaar opdrempelen;", 1));
+            sl.Add(new Tuple<string, int>($"3 - Tweede meetkriterium: zolang de hiaattijd van een lus met het " +
+                $"tweede meetkriterium loopt, wordt er verlengd mits het primaire groengebied nog niet is " +
+                $"verstreken. Ook al is de hiaattijd van een lus een keer verstreken, deze lus mag altijd " +
+                $"opnieuw meedoen bij het bepalen van het meetkriterium als er verlengd is op een andere " +
+                $"lus. Lussen met het tweede meetkriterium mogen elkaar opdrempelen.", 1));
+
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlElement> GetChapter_Ontruimingstijden(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Ontruimingstijden"]}", 2));
+
+            var otTable = TableGenerator.GetTable_Ontruimingstijden(c);
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De ontruimingstijden zijn opgenomen in tabel {TableGenerator.Tables["Table_Ontruimingstijden"]}. Deze tijden " +
+                $"zijn weergegeven in seconden van eindgeel tot begin groen van signaalgroepen welke worden beveiligd volgens " +
+                $"NEN 3384 en de veiligheidseisen.Daar waar geen waarde is ingevuld zijn signaalgroepen onderling niet beveiligd."));
+
+            items.AddRange(otTable);
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlElement> GetChapter_OntruimingstijdenGarantie(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            if (!c.Data.GarantieOntruimingsTijden) return items;
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OntruimingstijdenGarantie"]}", 2));
+
+            var otTable = TableGenerator.GetTable_OntruimingstijdenGarantie(c);
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De garantie ontruimingstijden zijn opgenomen in tabel {TableGenerator.Tables["Table_OntruimingstijdenGarantie"]}. De " +
+                $"ontruimingstijden kunnen niet lager worden ingesteld dan de garantie ontruimingstijden. De garantie " +
+                $"ontruimingstijden zelf zijn allen-lezen."));
+
+            items.AddRange(otTable);
+
+            return items;
+        }
+
+        internal static List<OpenXmlCompositeElement> GetChapter_DetectieInstellingen(WordprocessingDocument doc, ControllerModel c)
+        {
+            var body = doc.MainDocumentPart.Document.Body;
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren_Instellingen"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Hieronder worden eerst de functionele instellingen voor de detectoren op de kruising weergegeven. Vervolgens worden " +
+                $"de tijdsinstellingen voor de detectoren weergegeven."));
+
+            items.AddRange(TableGenerator.GetTable_Detectie_Functies(c));
+            items.AddRange(TableGenerator.GetTable_Detectie_Tijden(c));
+
+            return items;
+        }
+
+        internal static List<OpenXmlCompositeElement> GetChapter_DetectieStoring(WordprocessingDocument doc, ControllerModel c)
+        {
+            var body = doc.MainDocumentPart.Document.Body;
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren_Storing"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De detectie dient bewaakt te worden op boven- en ondergedrag. De tijden die hierbij gelden zijn weergegeven in de tabel " +
+                $"met tijdsinstellingen voor detectoren (tabel {TableGenerator.Tables["Table_Detectoren_Tijden"]})."));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Het is mogelijk maatregelen te nemen wanneer een of meer detectoren voor een richting in storing komen. Sowieso geldt: " +
+                $"van een lus in storing worden in de regelapplicatie alle functies uitgeschakeld. Daarnaast zijn de volgende maatregelen mogelijk:"));
+
+            var sl = new List<Tuple<string, int>>();
+            sl.Add(new Tuple<string, int>($"Per lus (of knop) is instelbaar dat een storing zorgt voor een vaste aanvraag. Deze instelling is opgenomen in de tabel met detectie functies (tabel {TableGenerator.Tables["Table_Detectoren_Functies"]}).", 0));
+            sl.Add(new Tuple<string, int>($"Bij storing van de lange lus kan de koplus de verlengfunctie van de lange lus overnemen met een extra per koplus instelbare hiaattijd.", 0));
+            sl.Add(new Tuple<string, int>($"Als van een {Texts["Generic_fase"]} alle aanvraag detectie in storing is, kan worden ingesteld dat een (schakelbaar) een vaste aanvraag wordt gezet.", 0));
+            sl.Add(new Tuple<string, int>($"Als van een {Texts["Generic_fase"]} alle verlengdetectie in storing is, kan worden ingesteld dat een instelbaar percentage van de actuele maximum of verlenggroentijd wordt gemaakt.", 0));
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Hieronder worden de instellingen voor detectiestoring per {Texts["Generic_fase"]} weergegeven."));
+
+            items.AddRange(TableGenerator.GetTable_Detectie_StoringMaatregelen(c));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetChapter_DetectieRichtingGevoelig(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            if (!c.RichtingGevoeligeAanvragen.Any() && !c.RichtingGevoeligVerlengen.Any()) return items;
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren_Richtinggevoelig"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Detectoren kunnen in paren benut worden voor het richtinggevoelig aanvragen en/of verlengen van {Texts["Generic_fasen"]}. " +
+                $"Hieronder wordt een overzicht gegeven van deze functionaliteit."));
+
+            if (c.RichtingGevoeligeAanvragen.Any())
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Aanvragen"], styleid: "Caption"));
+                var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase",
+                    "Van",
+                    "Naar",
+                    "Maximaal tijdsverschil",
+                    "Reset aanvraag",
+                    "Reset tijd"
+                }
+            };
+                foreach (var rga in c.RichtingGevoeligeAanvragen)
+                {
+                    l.Add(new List<string>
+                {
+                    rga.FaseCyclus,
+                    rga.VanDetector,
+                    rga.NaarDetector,
+                    rga.MaxTijdsVerschil.ToString(),
+                    rga.ResetAanvraag.ToCustomString(),
+                    rga.ResetAanvraag ? rga.ResetAanvraagTijdsduur.ToString() : "-"
+                });
+                }
+                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            }
+
+            if (c.RichtingGevoeligVerlengen.Any())
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Verlengen"], styleid: "Caption"));
+                var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Fase",
+                    "Van",
+                    "Naar",
+                    "Type verlengen",
+                    "Maximaal tijdsverschil",
+                    "Verleng tijd"
+                }
+            };
+                foreach (var rgv in c.RichtingGevoeligVerlengen)
+                {
+                    l.Add(new List<string>
+                {
+                    rgv.FaseCyclus,
+                    rgv.VanDetector,
+                    rgv.NaarDetector,
+                    rgv.TypeVerlengen.ToString(),
+                    rgv.MaxTijdsVerschil.ToString(),
+                    rgv.VerlengTijd.ToString(),
+                });
+                }
+                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+            }
+
+            return items;
+        }
+
         public static string ReplaceHolders(string text, ControllerModel c, SpecificatorDataModel model)
         {
             var t = text;
@@ -206,7 +403,7 @@ namespace TLCGen.Specificator
 
             sb.Append($"Het kruispunt {GetKruisingNaam(c)} wordt schematisch weergegeven in de bovenstaande figuur. ");
 
-            var sl = new List<string>();
+            var sl = new List<Tuple<string, int>>();
             if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.DeelConflict) ||
                 c.InterSignaalGroep.Voorstarten.Any())
             {
@@ -216,11 +413,11 @@ namespace TLCGen.Specificator
 
                 foreach(var gs in c.InterSignaalGroep.Gelijkstarten.Where(x => x.DeelConflict))
                 {
-                    sl.Add($"{(string)Texts["Generic_Fase"]} {gs.FaseVan} (gelijkstart met {(string)Texts["Generic_fase"]} {gs.FaseNaar})");
+                    sl.Add(new Tuple<string, int>($"{(string)Texts["Generic_Fase"]} {gs.FaseVan} (gelijkstart met {(string)Texts["Generic_fase"]} {gs.FaseNaar})", 0));
                 }
                 foreach (var vs in c.InterSignaalGroep.Voorstarten)
                 {
-                    sl.Add($"{(string)Texts["Generic_Fase"]} {vs.FaseVan} (voorstart op {(string)Texts["Generic_fase"]} {vs.FaseNaar})");
+                    sl.Add(new Tuple<string, int>($"{(string)Texts["Generic_Fase"]} {vs.FaseVan} (voorstart op {(string)Texts["Generic_fase"]} {vs.FaseNaar})", 0));
                 }
                 body.Append(OpenXmlHelper.GetBulletList(doc, sl));
             }
@@ -233,9 +430,9 @@ namespace TLCGen.Specificator
 
             body.Append(OpenXmlHelper.GetTextParagraph("De verkeersregeling dient aan de volgende eisen te voldoen: "));
             sl.Clear();
-            sl.Add("Veilige situatie op het kruispunt.");
-            sl.Add("Goede en efficiënte verkeersafwikkeling.");
-            sl.Add("Logische en acceptabele situatie voor weggebruikers.");
+            sl.Add(new Tuple<string, int>("Veilige situatie op het kruispunt.", 0));
+            sl.Add(new Tuple<string, int>("Goede en efficiënte verkeersafwikkeling.", 0));
+            sl.Add(new Tuple<string, int>("Logische en acceptabele situatie voor weggebruikers.", 0));
             body.Append(OpenXmlHelper.GetBulletList(doc, sl));
 
             body.Append(OpenXmlHelper.GetTextParagraph(
@@ -279,184 +476,8 @@ namespace TLCGen.Specificator
             body.Append(OpenXmlHelper.GetTable(l));
         }
 
-        
-        public static List<OpenXmlCompositeElement> GetDetectorenChapter(ControllerModel c)
-        {
-            var items = new List<OpenXmlCompositeElement>();
-            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren"]}", 2));
-
-            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Detectoren_Functies"], styleid: "Caption"));
-            var l = new List<List<string>>
-            {
-                new List<string>
-                {
-                    (string)Texts["Generic_Detector"],
-                    "Fase",
-                    "Type",
-                    "Aanvraag",
-                    "Verlengen",
-                    "Aanvraag direct",
-                    "Wachtlicht",
-                    "Rijstrook",
-                    "Aanvraag bij storing",
-                    "Veiligheidsgroen"
-                }
-            };
-            foreach (var fc in c.Fasen)
-            foreach (var d in fc.Detectoren)
-            {
-                l.Add(new List<string>
-                {
-                    d.Naam,
-                    fc.Naam,
-                    d.Type.GetDescription(),
-                    d.Aanvraag.GetDescription(),
-                    d.Verlengen.GetDescription(),
-                    d.AanvraagDirect.ToString(),
-                    d.Wachtlicht.ToCustomString(),
-                    d.Rijstrook.ToString(),
-                    d.AanvraagBijStoring.GetDescription(),
-                    d.VeiligheidsGroen.GetDescription(),
-                });
-            }
-            foreach (var d in c.Detectoren)
-            {
-                l.Add(new List<string>
-                {
-                    d.Naam,
-                    "-",
-                    d.Type.GetDescription(),
-                    d.Aanvraag.GetDescription(),
-                    d.Verlengen.GetDescription(),
-                    d.AanvraagDirect.ToCustomString(),
-                    d.Wachtlicht.ToCustomString(),
-                    d.Rijstrook.ToString(),
-                    d.AanvraagBijStoring.GetDescription(),
-                    d.VeiligheidsGroen.GetDescription()
-                });
-            }
-            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-
-            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Detectoren_Tijden"], styleid: "Caption"));
-            l = new List<List<string>>
-            {
-                new List<string>
-                {
-                    (string)Texts["Generic_Detector"],
-                    "Fase",
-                    "Bezettijd",
-                    "Hiaattijd",
-                    "Ondergedrag",
-                    "Bovengedrag",
-                    "Flutter tijd",
-                    "Flutter counter"
-                }
-            };
-            foreach (var fc in c.Fasen)
-            foreach (var d in fc.Detectoren)
-            {
-                l.Add(new List<string>
-                {
-                    d.Naam,
-                    fc.Naam,
-                    d.TDB.ToString(),
-                    d.TDH.ToString(),
-                    d.TOG.ToString(),
-                    d.TBG.ToString(),
-                    d.TFL.ToString(),
-                    d.CFL.ToString(),
-                });
-            }
-            foreach (var d in c.Detectoren)
-            {
-                l.Add(new List<string>
-                {
-                    d.Naam,
-                    "-",
-                    d.TDB.ToString(),
-                    d.TDH.ToString(),
-                    d.TOG.ToString(),
-                    d.TBG.ToString(),
-                    d.TFL.ToString(),
-                    d.CFL.ToString(),
-                });
-            }
-            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-
-            return items;
-        }
-
         // TODO: tabel met ingangen (indien aanwezig)
         // TODO: tabel met selectieve detectie (indien aanwezig)
-        // TODO: hoofdstuk met omgang met detectiestoring (opm: de optie 'aanvraag bij storing' per detector zit in tabel met detectoren) 
-
-        public static List<OpenXmlCompositeElement> GetRichtingGevoeligChapter(ControllerModel c)
-        {
-            var items = new List<OpenXmlCompositeElement>();
-            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Detectoren"]}", 2));
-
-            if (c.RichtingGevoeligeAanvragen.Any())
-            {
-                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Aanvragen"], styleid: "Caption"));
-                var l = new List<List<string>>
-            {
-                new List<string>
-                {
-                    "Fase",
-                    "Van",
-                    "Naar",
-                    "Maximaal tijdsverschil",
-                    "Reset aanvraag",
-                    "Reset tijd"
-                }
-            };
-                foreach (var rga in c.RichtingGevoeligeAanvragen)
-                {
-                    l.Add(new List<string>
-                {
-                    rga.FaseCyclus,
-                    rga.VanDetector,
-                    rga.NaarDetector,
-                    rga.MaxTijdsVerschil.ToString(),
-                    rga.ResetAanvraag.ToCustomString(),
-                    rga.ResetAanvraag ? rga.ResetAanvraagTijdsduur.ToString() : "-"
-                });
-                }
-                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-            }
-
-            if (c.RichtingGevoeligVerlengen.Any())
-            {
-                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Richtinggevoelig_Verlengen"], styleid: "Caption"));
-                var l = new List<List<string>>
-            {
-                new List<string>
-                {
-                    "Fase",
-                    "Van",
-                    "Naar",
-                    "Type verlengen",
-                    "Maximaal tijdsverschil",
-                    "Verleng tijd"
-                }
-            };
-                foreach (var rgv in c.RichtingGevoeligVerlengen)
-                {
-                    l.Add(new List<string>
-                {
-                    rgv.FaseCyclus,
-                    rgv.VanDetector,
-                    rgv.NaarDetector,
-                    rgv.TypeVerlengen.ToString(),
-                    rgv.MaxTijdsVerschil.ToString(),
-                    rgv.VerlengTijd.ToString(),
-                });
-                }
-                items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
-            }
-
-            return items;
-        }
 
         public static List<OpenXmlCompositeElement> GetChapter_Perioden(ControllerModel c)
         {
@@ -477,17 +498,10 @@ namespace TLCGen.Specificator
                     $"klokperiodes ten behoeve van de {(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "maximum" : "verleng")} groentijden"));
             }
 
-            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Perioden"], styleid: "Caption"));
+            items.Add(OpenXmlHelper.GetTextParagraph("TODO: hieronder moeten alleen MG perioden worden weergegeven. De perioden voor " +
+                "specials zoals rateltikkers moeten bij die special worden weergegeven (?)", "TODO"));
 
-            var l = new List<List<string>>
-            {
-                new List<string> { "Periode", "Start", "Einde", "Dagtype" }
-            };
-            foreach (var p in c.PeriodenData.Perioden)
-            {
-                l.Add(new List<string> { p.Naam, p.StartTijd.ToString(@"hh\:mm"), p.EindTijd.ToString(@"hh\:mm"), p.DagCode.ToString() });
-            }
-            items.Add(OpenXmlHelper.GetTable(l));
+            items.AddRange(TableGenerator.GetTable_Perioden(c));
 
             items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Wanneer geen van bovenstaande perioden actief is geldt de dalperiode."));
@@ -567,11 +581,15 @@ namespace TLCGen.Specificator
             return items;
         }
 
-
         public static List<OpenXmlCompositeElement> GetChapter_Modulestructuur(WordprocessingDocument doc, ControllerModel c)
         {
             var items = new List<OpenXmlCompositeElement>();
+
+            var tableModulen = TableGenerator.GetTable_Modulen(c);
+
             items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Modulestructuur"]}", 2));
+            items.Add(OpenXmlHelper.GetTextParagraph("TODO: de tekst hieronder moet worden herzien. Daarbij geldt: het moet afhankelijk" +
+                " zijn van al dan niet actief zijn van langstwachtende alternatief. Is dat niet actief dan geldt de mogelijkheid voor alternatief onder dekking van...", "TODO"));
             items.Add(OpenXmlHelper.GetTextParagraph(
                 "Tijdens voertuigafhankelijk bedrijf wordt gebruik gemaakt van de modulestructuur. De " +
                 "modulestructuur is opgebouwd uit primaire, bijzondere en alternatieve realisaties."));
@@ -579,15 +597,16 @@ namespace TLCGen.Specificator
             items.Add(OpenXmlHelper.GetTextParagraph(
                 "De modulestructuur bepaalt in welke vaste volgorde de verschillende signaalgroepen met een aanvraag " +
                 "groen worden (primaire realisaties). Als geen enkele signaalgroep een aanvraag heeft dan wacht de " +
-                "modulestructuur in module 1. Een moduleovergang vindt plaats op het moment dat alle primair " +
+                $"modulestructuur in module {c.ModuleMolen.WachtModule}. Een moduleovergang vindt plaats op het moment dat alle primair " +
                 "toegedeelde signaalgroepen met een aanvraag van het actieve blok cyclisch verlenggroen hebben " +
                 "verlaten."));
             items.Add(OpenXmlHelper.GetTextParagraph(
-                "Alle signaalgroepen zijn toegedeeld aan minimaal één module (zie tabel 3). Een signaalgroep die " +
+                $"Alle signaalgroepen zijn toegedeeld aan minimaal één module (zie tabel {TableGenerator.Tables["Table_Modulen"]}). Een signaalgroep die " +
                 "een aanvraag heeft gekregen (in het aanvraaggebied) wordt tijdens het actief zijn van de module " +
                 "waaraan deze is toegedeeld, eenmalig primair gerealiseerd. De groenduur van een primaire " +
-                "realisatie wordt beperkt volgens de ingestelde maximumgroentijd (zie tabel 2) per klokperiode " +
-                "(zie tabel 1)."));
+                "realisatie wordt beperkt volgens de ingestelde maximumgroentijd (zie tabel " +
+                $"{(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? TableGenerator.Tables["Table_MaxGroentijden"] : TableGenerator.Tables["Table_VerlGroentijden"])}) per klokperiode " +
+                $"(zie tabel {TableGenerator.Tables["Table_Perioden"]})."));
             items.Add(OpenXmlHelper.GetTextParagraph(
                  "Het aanvraaggebied voor primair toegedeelde richtingen van een module wordt afgesloten nadat " +
                  "de desbetreffende module actief is geworden en er een aanvraag is gezet door een signaalgroep " +
@@ -597,11 +616,11 @@ namespace TLCGen.Specificator
                   "Door het gebruik van versnelde primaire realisaties worden richtingen onder voorwaarden (bijvoorbeeld afwezigheid aanvragen van eerder in de regelstructuur te realiseren conflictrichtingen) eerder groen. Versnelde realisaties geven, met name in rustige perioden, een grote flexibiliteit aan de verkeersregeling waardoor de acceptatie en geloofwaardigheid van de verkeersregeling hoger wordt. Met behulp van een parameter is per richting in te stellen hoeveel module er vooruit mag worden gerealiseerd. Default mogen alle richtingen één module vooruit realiseren."));
             
             items.Add(OpenXmlHelper.GetTextParagraph("Bijzondere realisaties", bold: true));
+            items.Add(OpenXmlHelper.GetTextParagraph("TODO: de tekst hieronder moet later verwijzen naar de betreffende hoofdstukken OV en HD.", "TODO"));
             items.Add(OpenXmlHelper.GetTextParagraph(
                 "Naast de primaire realisaties kunnen signaalgroepen ook bijzonder realiseren. Bij een bijzondere " +
                 "realisatie wordt een signaalgroep buiten de modulestructuur om naar groen gestuurd. Bijzondere " +
-                "realisaties worden gebruikt om prioriteit te geven aan bussen of hulpdiensten (zie hoofdstuk 6 " +
-                "en hoofdstuk 7)."));
+                "realisaties worden gebruikt om prioriteit te geven aan bussen of hulpdiensten."));
 
             items.Add(OpenXmlHelper.GetTextParagraph("Alternatieve realisaties", bold: true));
             items.Add(OpenXmlHelper.GetTextParagraph(
@@ -615,20 +634,21 @@ namespace TLCGen.Specificator
             items.Add(OpenXmlHelper.GetTextParagraph(
                 "Per richting is een schakelaar opgenomen om alternatieve realisaties toe te staan (default voor " +
                 "alle richtingen aan). Daarnaast is per richting een referentie opgeven hoeveel ruimte er in de " +
-                "regeling beschikbaar moet zijn om alternatief te realiseren (voor alle autorichtingen 8,0 sec, " +
-                "voor fietsers 5,0 sec. en voor voetgangers gelijk aan de vastgroentijd eventueel rekening houdend " +
-                "met de naloop). Deze ruimte wordt berekend op basis van de vigerende maximum groentijd van een " +
+                "regeling beschikbaar moet zijn om alternatief te realiseren. Deze ruimte wordt berekend op basis van " +
+                "de vigerende maximum groentijd van een " +
                 "niet conflict dat op dat moment in cyclisch verlenggroen staat, of op het punt staat om primair " +
-                "dan wel bijzonder te realiseren. Voor ieder richting is opgegeven wat de maximale groentijd voor " +
-                "alternatief realiseren is, als de voorwaarde voor alternatief realiseren is vervallen (voor alle " +
-                "autorichtingen 8,0 voor fietsrichtingen 5,0 en voor voetgangers de vastgroentijd)."));
+                "dan wel bijzonder te realiseren. Hierbij wordt voor richtingen met een naloop rekening mee gehouden " +
+                "dat ook die moet passen. Voor ieder richting is opgegeven wat de maximale groentijd voor " +
+                "alternatief realiseren is, als de voorwaarde voor alternatief realiseren is vervallen."));
 
-            items.AddRange(TableGenerator.GetTable_Modulen(c));
+            items.AddRange(tableModulen);
+
+            items.Add(OpenXmlHelper.GetTextParagraph("De instellingen voor vooruit realiseren en alternatieve realisaties worden hieronder weergegeven."));
+
+            items.AddRange(TableGenerator.GetTable_ModuleStructuurInstellingen(doc, c));
 
             return items;
         }
-
-
 
         public static List<OpenXmlCompositeElement> GetModulenChapter(WordprocessingDocument doc, ControllerModel c)
         {
@@ -658,142 +678,45 @@ namespace TLCGen.Specificator
                 $"Het aantal {Texts["Generic_modulen"]} dat vooruit gerealiseerd kan worden is instelbaar." +
                 $"Vooruit realiseren gaat voor op alternatief realiseren: wanneer beide mogelijk zijn zal een richting vooruit komen."));
 
-            if (c.ModuleMolen.LangstWachtendeAlternatief)
-            {
-                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_VooruitAltInst"], styleid: "Caption"));
-                l = new List<List<string>>
-                {
-                    new List<string>
-                    {
-                        (string)Texts["Generic_Fase"],
-                        "Aantal modulen vooruit",
-                        "Alternatief toegestaan",
-                        "Alternatieve ruimte",
-                        "Alternatieve groentijd"
-                    }
-                };
-                c.ModuleMolen.FasenModuleData.ForEach(x => l.Add(new List<string>
-                {
-                    x.FaseCyclus,
-                    x.ModulenVooruit.ToString(),
-                    x.AlternatiefToestaan.ToCustomString(),
-                    x.AlternatieveRuimte.ToString(),
-                    x.AlternatieveGroenTijd.ToString()
-                }));
-                items.Add(OpenXmlHelper.GetTable(l));
-            }
-            else if (c.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.Alternatieven.Any())))
-            {
-                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Vooruit"], styleid: "Caption"));
-                var lt = new List<string>
-                {
-                    (string)Texts["Generic_Fase"],
-                    "Aantal modulen vooruit"
-                };
-                //foreach(var m in c.ModuleMolen.Modules)
-                //{
-                //    lt.Add("Alt. groentijd onder " + m.Naam);
-                //}
-                l = new List<List<string>>
-                {
-                    lt
-                };
-                c.ModuleMolen.FasenModuleData.ForEach(x =>
-                {
-                    var nl = new List<string>
-                    {
-                        x.FaseCyclus,
-                        x.ModulenVooruit.ToString()
-                    };
-                    //foreach (var m in c.ModuleMolen.Modules)
-                    //{
-                    //    var t = "-";
-                    //    var mfc = m.Fasen.FirstOrDefault(x2 => x2.Alternatieven.Any(x3 => x3.FaseCyclus == x.FaseCyclus));
-                    //    if(mfc != null)
-                    //    {
-                    //        var afc = mfc.Alternatieven.First(x2 => x2.FaseCyclus == x.FaseCyclus);
-                    //        t = afc.AlternatieveGroenTijd.ToString();
-                    //    }
-                    //    nl.Add(t);
-                    //}
-                    l.Add(nl);
-                });
-                items.Add(OpenXmlHelper.GetTable(l));
-
-                items.Add(OpenXmlHelper.GetTextParagraph($"De volgende {(string)Texts["Generic_fasen"]} kunnen alternatief realiseren onder dekking van een andere {(string)Texts["Generic_fase"]} in cyclisch verlenggroen (CV)."));
-
-                var il = new List<string>();
-                foreach (var m in c.ModuleMolen.Modules)
-                { foreach (var f in m.Fasen.Where(x2 => x2.Alternatieven.Any()))
-                    {
-                        foreach (var a in f.Alternatieven)
-                        {
-                            il.Add($"In module {m.Naam}: {a.FaseCyclus} onder dekking van {f.FaseCyclus} (groentijd: {a.AlternatieveGroenTijd})");
-                        }
-                    }
-                }
-                items.AddRange(OpenXmlHelper.GetBulletList(doc, il));
-            }
-            else
-            {
-                items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_VooruitAltInst"], styleid: "Caption"));
-                l = new List<List<string>>
-                {
-                    new List<string>
-                    {
-                        (string)Texts["Generic_Fase"],
-                        "Aantal modulen vooruit"
-                    }
-                };
-                c.ModuleMolen.FasenModuleData.ForEach(x => l.Add(new List<string>{ x.ModulenVooruit.ToString() }));
-                items.Add(OpenXmlHelper.GetTable(l));
-            }
+            
 
             return items;
         }
 
-        public static List<OpenXmlCompositeElement> GetGroentijdenChapter(ControllerModel c)
+        public static List<OpenXmlCompositeElement> GetChapter_Groentijden(ControllerModel c)
         {
-            var title = OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Groentijden"]}", 2);
+            var items = new List<OpenXmlCompositeElement>();
 
-            OpenXmlCompositeElement tableTitle = null;
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Groentijden"]}", 2));
+
+            var gtijd = "";
             switch (c.Data.TypeGroentijden)
             {
                 case Models.Enumerations.GroentijdenTypeEnum.MaxGroentijden:
-                    tableTitle = OpenXmlHelper.GetTextParagraph((string)Texts["Table_MaxGroentijden"], styleid: "Caption");
+                    gtijd = "maximum groentijd";
                     break;
                 case Models.Enumerations.GroentijdenTypeEnum.VerlengGroentijden:
-                    tableTitle = OpenXmlHelper.GetTextParagraph((string)Texts["Table_VerlGroentijden"], styleid: "Caption");
+                    gtijd = "verlenggroentijd";
                     break;
             }
 
-            var l = new List<List<string>>();
-            var l1 = new List<string> { (string)Texts["Fase"] };
-            foreach (var set in c.GroentijdenSets)
+            var t = $"Voor {Texts["Generic_fasen"]} kan per klokperiode de {gtijd} worden ingesteld. ";
+            switch (c.Data.TypeGroentijden)
             {
-                l1.Add(set.Naam);
+                case GroentijdenTypeEnum.MaxGroentijden:
+                    t += $"De {gtijd} is de tijd dat een {Texts["Generic_fasen"]} maximaal kan groen kan krijgen op basis van de " +
+                        $"aanwezigheid van verkeer. Hierbij wordt gekeken naar de totale tijd van vastgroen en verlenggroen.";
+                    break;
+                case GroentijdenTypeEnum.VerlengGroentijden:
+                    t += $"De {gtijd} is de tijd dat het groen voor een {Texts["Generic_fasen"]} maximaal verlengen op basis van de " +
+                        $"aanwezigheid van verkeer.";
+                    break;
             }
-            l.Add(l1);
-            foreach (var fc in c.Fasen)
-            {
-                var l2 = new List<string> { fc.Naam };
-                foreach (var set in c.GroentijdenSets)
-                {
-                    var f = set.Groentijden.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
-                    if (f != null)
-                    {
-                        l2.Add(f.Waarde.HasValue ? f.Waarde.Value.ToString() : "-");
-                    }
-                    else
-                    {
-                        l2.Add("-");
-                    }
-                }
-                l.Add(l2);
-            }
-            var table = OpenXmlHelper.GetTable(l);
+            items.Add(OpenXmlHelper.GetTextParagraph(t));
 
-            return new List<OpenXmlCompositeElement> { title, tableTitle, table };
+            items.AddRange(TableGenerator.GetTable_Fasen_Groentijden(c));
+
+            return items;
         }
 
 

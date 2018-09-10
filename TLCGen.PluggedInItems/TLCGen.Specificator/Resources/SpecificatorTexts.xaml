@@ -53,8 +53,13 @@
     
     <!-- Detectoren -->
     <system:String x:Key="Title_Detectoren">Detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Configuratie">Configuratie detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Instellingen">Instellingen detectoren</system:String>
+    <system:String x:Key="Title_Detectoren_Richtinggevoelig">Richtinggevoelige detectie</system:String>
+    <system:String x:Key="Title_Detectoren_Storing">Omgang met detectiestoring</system:String>
     <system:String x:Key="Table_Detectoren_Functies">Tabel met functie instellingen voor detectoren</system:String>
     <system:String x:Key="Table_Detectoren_Tijden">Tabel met tijdsinstellingen voor detectoren</system:String>
+    <system:String x:Key="Table_Detectoren_StoringMaatregelen">Tabel met instellingen voor detectievervangende maatregelen</system:String>
     
     <system:String x:Key="Table_Richtinggevoelig_Aanvragen">Tabel met instellingen voor richtinggevoelige aanvragen</system:String>
     <system:String x:Key="Table_Richtinggevoelig_Verlengen">Tabel met instellingen voor richtinggevoelig verlengen</system:String>
@@ -62,6 +67,12 @@
     <!-- Perioden -->
     <system:String x:Key="Title_Perioden">Klokperioden</system:String>
     <system:String x:Key="Table_Perioden">Tabel met perioden</system:String>
+    
+    <system:String x:Key="Title_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
+    <system:String x:Key="Table_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
+    <system:String x:Key="Title_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
+    <system:String x:Key="Table_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
+    <system:String x:Key="Title_Conflicten">Conflicten en ontruimingstijden</system:String>
     
     <!-- Groentijden -->
     <system:String x:Key="Title_Groentijden">Groentijden</system:String>

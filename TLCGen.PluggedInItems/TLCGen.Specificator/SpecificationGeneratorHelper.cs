@@ -39,25 +39,42 @@ namespace TLCGen.Specificator
             pPr.ParagraphStyleId = new ParagraphStyleId() { Val = styleid };
         }
 
-        public static List<Paragraph> GetBulletList(WordprocessingDocument doc, List<string> list)
+        public static NumberingDefinitionsPart GetOrCreateNumberingDefinitionsPart(WordprocessingDocument doc)
         {
-            var items = new List<Paragraph>();
-
             // Introduce bulleted numbering in case it will be needed at some point
-            NumberingDefinitionsPart numberingPart = doc.MainDocumentPart.NumberingDefinitionsPart;
+            var numberingPart = doc.MainDocumentPart.NumberingDefinitionsPart;
             if (numberingPart == null)
             {
                 numberingPart = doc.MainDocumentPart.AddNewPart<NumberingDefinitionsPart>("numbDef001");
                 Numbering element = new Numbering();
                 element.Save(numberingPart);
             }
+            return numberingPart;
+        }
+
+        public static List<Paragraph> GetBulletList(WordprocessingDocument doc, List<Tuple<string, int>> list)
+        {
+            var items = new List<Paragraph>();
+
+            var numberingPart = GetOrCreateNumberingDefinitionsPart(doc);
 
             // Insert an AbstractNum into the numbering part numbering list.  The order seems to matter or it will not pass the 
             // Open XML SDK Productity Tools validation test.  AbstractNum comes first and then NumberingInstance and we want to
             // insert this AFTER the last AbstractNum and BEFORE the first NumberingInstance or we will get a validation error.
             var abstractNumberId = numberingPart.Numbering.Elements<AbstractNum>().Count() + 1;
-            var abstractLevel = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "·" }) { LevelIndex = 0 };
-            var abstractNum1 = new AbstractNum(abstractLevel) { AbstractNumberId = abstractNumberId };
+            var abstractLevel1 = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "·" }) { LevelIndex = 0 };
+            var abstractLevel2 = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "o" }) { LevelIndex = 1 };
+            var abstractLevel3 = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "·" }) { LevelIndex = 2 };
+            var abstractLevel4 = new Level(new NumberingFormat() { Val = NumberFormatValues.Bullet }, new LevelText() { Val = "o" }) { LevelIndex = 3 };
+            var ml = new MultiLevelType() { Val = MultiLevelValues.HybridMultilevel };
+            var abstractNum1 = new AbstractNum(ml)
+            {
+                AbstractNumberId = abstractNumberId
+            };
+            abstractNum1.Append(abstractLevel1);
+            abstractNum1.Append(abstractLevel2);
+            abstractNum1.Append(abstractLevel3);
+            abstractNum1.Append(abstractLevel4);
 
             if (abstractNumberId == 1)
             {
@@ -92,13 +109,25 @@ namespace TLCGen.Specificator
             foreach (var item in list)
             {
                 // Create items for paragraph properties
-                var numberingProperties = new NumberingProperties(new NumberingLevelReference() { Val = 0 }, new NumberingId() { Val = numberId });
+                var numberingProperties = new NumberingProperties(new NumberingLevelReference() { Val = item.Item2 }, new NumberingId() { Val = numberId });
                 var spacingBetweenLines1 = new SpacingBetweenLines() { After = "0" };  // Get rid of space between bullets
-                var indentation = new Indentation() { Left = "720", Hanging = "360" };  // correct indentation 
+                var indentation = new Indentation()
+                {
+                    Left = (720 + 360 * item.Item2).ToString(),
+                    Hanging = (360).ToString(),
+                };  // correct indentation 
 
                 ParagraphMarkRunProperties paragraphMarkRunProperties1 = new ParagraphMarkRunProperties();
-                RunFonts runFonts1 = new RunFonts() { Ascii = "Symbol", HighAnsi = "Symbol" };
-                paragraphMarkRunProperties1.Append(runFonts1);
+                if (item.Item2 % 2 == 0)
+                {
+                    RunFonts runFonts1 = new RunFonts() { Ascii = "Symbol", HighAnsi = "Symbol" };
+                    paragraphMarkRunProperties1.Append(runFonts1);
+                }
+                else
+                {
+                    RunFonts runFonts1 = new RunFonts() { Ascii = "Courier New", HighAnsi = "Courier New" };
+                    paragraphMarkRunProperties1.Append(runFonts1);
+                }
 
                 // create paragraph properties
                 var paragraphProperties = new ParagraphProperties(numberingProperties, spacingBetweenLines1, indentation, paragraphMarkRunProperties1);
@@ -107,7 +136,7 @@ namespace TLCGen.Specificator
                 var newPara = new Paragraph(paragraphProperties);
                 
                 // Add run to the paragraph
-                newPara.AppendChild(new Run(new Text(item)));
+                newPara.AppendChild(new Run(new Text(item.Item1)));
 
                 // Add one bullet item to the body
                 items.Add(newPara);
