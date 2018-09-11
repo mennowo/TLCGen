@@ -201,6 +201,32 @@ namespace TLCGen.Plugins
                             LoadPluginsFromPath(paths[0]);
                         }
                     }
+                    foreach (var k in key.GetSubKeyNames())
+                    {
+                        var keypl = key.OpenSubKey(k);
+                        if (keypl != null)
+                        {
+                            foreach (var v in keypl.GetValueNames())
+                            {
+                                if (v == "Folders")
+                                {
+                                    var paths = (string[])keypl.GetValue(v);
+                                    if (paths.Length == 1)
+                                    {
+                                        LoadPluginsFromPath(paths[0]);
+                                    }
+                                    else if (paths.Length == 2)
+                                    {
+                                        if (!_lookupDepsPaths.Contains(paths[1]))
+                                        {
+                                            _lookupDepsPaths.Add(paths[1]);
+                                        }
+                                        LoadPluginsFromPath(paths[0]);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception e)
