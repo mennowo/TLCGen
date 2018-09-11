@@ -137,6 +137,8 @@ namespace TLCGen.Specificator
 
         public void GenerateSpecification()
         {
+            _plugin.UpdateCCOLGenData();
+
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
             var filename = Path.Combine(Path.GetDirectoryName(_plugin.ControllerFileName), _plugin.Controller.Data.Naam + ".docx");
             try
@@ -150,6 +152,7 @@ namespace TLCGen.Specificator
                 {
                     stream.CopyTo(fileStream);
                 }
+                TableGenerator.ClearTables();
                 SpecificationGenerator.GenerateSpecification(filename, _plugin.Controller, Data);
             }
             catch

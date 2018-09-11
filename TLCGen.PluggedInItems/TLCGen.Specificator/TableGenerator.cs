@@ -31,6 +31,11 @@ namespace TLCGen.Specificator
         public static int NumberOfTables = 0;
         public static Dictionary<string, int> Tables { get; } = new Dictionary<string, int>();
 
+        public static void ClearTables()
+        {
+            Tables.Clear();
+        }
+
         private static void UpdateTables(string table)
         {
             NumberOfTables++;
@@ -64,7 +69,7 @@ namespace TLCGen.Specificator
                 {
                     l.Add(new List<string>
                     {
-                        d.Naam,
+                        CCOLGenHelper.Dpf + d.Naam,
                         fc.Naam,
                         d.TDB.ToString(),
                         d.TDH.ToString(),
@@ -79,7 +84,7 @@ namespace TLCGen.Specificator
             {
                 l.Add(new List<string>
                 {
-                    d.Naam,
+                    CCOLGenHelper.Dpf + d.Naam,
                     "-",
                     d.TDB.ToString(),
                     d.TDH.ToString(),
@@ -393,7 +398,7 @@ namespace TLCGen.Specificator
                 {
                     l.Add(new List<string>
                 {
-                    d.Naam,
+                    CCOLGenHelper.Dpf + d.Naam,
                     fc.Naam,
                     d.Type.GetDescription(),
                     d.Aanvraag.GetDescription(),
@@ -409,7 +414,7 @@ namespace TLCGen.Specificator
             {
                 l.Add(new List<string>
                 {
-                    d.Naam,
+                    CCOLGenHelper.Dpf + d.Naam,
                     "-",
                     d.Type.GetDescription(),
                     d.Aanvraag.GetDescription(),

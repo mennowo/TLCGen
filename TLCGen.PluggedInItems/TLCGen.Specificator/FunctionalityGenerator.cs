@@ -17,13 +17,6 @@ namespace TLCGen.Specificator
 {
     public static class FunctionalityGenerator
     {
-        public static int TableCount;
-
-        public static void ResetCounters()
-        {
-            TableCount = 0;
-        }
-
         public static string ToCustomString(this bool value)
         {
             return value ? (string)Texts["Generic_True"] : (string)Texts["Generic_False"];
@@ -275,8 +268,8 @@ namespace TLCGen.Specificator
                     l.Add(new List<string>
                 {
                     rga.FaseCyclus,
-                    rga.VanDetector,
-                    rga.NaarDetector,
+                    CCOLGenHelper.Dpf + rga.VanDetector,
+                    CCOLGenHelper.Dpf + rga.NaarDetector,
                     rga.MaxTijdsVerschil.ToString(),
                     rga.ResetAanvraag.ToCustomString(),
                     rga.ResetAanvraag ? rga.ResetAanvraagTijdsduur.ToString() : "-"

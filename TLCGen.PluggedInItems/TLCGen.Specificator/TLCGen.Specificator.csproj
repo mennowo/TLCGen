@@ -52,6 +52,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCOLGenHelper.cs" />
     <Compile Include="FunctionalityGenerator.cs" />
     <Compile Include="SpecificationGeneratorHelper.cs" />
     <Compile Include="SpecificatorDataModel.cs" />

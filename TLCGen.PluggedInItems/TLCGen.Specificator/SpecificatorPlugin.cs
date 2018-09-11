@@ -9,19 +9,21 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
+using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.Specificator
 {
+    [CCOLCodePieceGenerator]
     [TLCGenTabItem(-1, TabItemTypeEnum.AlgemeenTab)]
     [TLCGenPlugin(
         TLCGenPluginElems.Generator |
         TLCGenPluginElems.PlugMessaging |
         TLCGenPluginElems.TabControl |
         TLCGenPluginElems.XMLNodeWriter)]
-    public class SpecificatorPlugin : ViewModelBase, ITLCGenGenerator, ITLCGenPlugMessaging, ITLCGenXMLNodeWriter, ITLCGenTabItem
+    public class SpecificatorPlugin : CCOLCodePieceGeneratorBase, ITLCGenGenerator, ITLCGenPlugMessaging, ITLCGenXMLNodeWriter, ITLCGenTabItem
     {
         #region Fields
 
@@ -72,7 +74,6 @@ namespace TLCGen.Specificator
                     _data = _myVm.Data = null;
                 }
                 _controller = value;
-                RaisePropertyChanged("");
             }
         }
 
@@ -125,7 +126,6 @@ namespace TLCGen.Specificator
             set
             {
                 _IsEnabled = value;
-                RaisePropertyChanged("IsEnabled");
             }
         }
 
@@ -194,7 +194,6 @@ namespace TLCGen.Specificator
                 _data = new SpecificatorDataModel();
             }
             _myVm.Data = Data;
-            RaisePropertyChanged("");
         }
 
         public void SetXmlInDocument(XmlDocument document)
@@ -225,6 +224,11 @@ namespace TLCGen.Specificator
 
         #endregion // TLCGen Events
 
+        public void UpdateCCOLGenData()
+        {
+            CCOLGenHelper.Dpf = _dpf;
+        }
+
         #region Constructor
 
         public SpecificatorPlugin()
@@ -232,7 +236,7 @@ namespace TLCGen.Specificator
             _myVm = new SpecificatorViewModel(this);
 
             //_generatorView = new SpecificatorView();
-            //_generatorView.DataContext = _myVm
+            //_generatorView.DataContext = _myVm;
         }
 
         #endregion // Constructor
