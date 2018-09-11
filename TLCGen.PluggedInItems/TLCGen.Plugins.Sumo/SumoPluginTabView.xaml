@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="TLCGen.Plugins.Sumo.SumoPluginTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             xmlns:local="clr-namespace:TLCGen.Plugins.Sumo"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Genereren SUMO code" />
+        <Label Content="SUMO port" Grid.Row="1" />
+        <Label Content="SUMO volgorde" Grid.Row="2" />
+        <Label Content="Start tijd uur" Grid.Row="3" />
+        <Label Content="Start tijd minuut" Grid.Row="4" />
+        <Label Content="SUMO tl ID" Grid.Row="5" />
+        <Label Content="SUMO tl link max" Grid.Row="6" />
+        <Label Content="SUMO auto start" Grid.Row="7" />
+        <Label Content="SUMO pad" Grid.Row="8" />
+        <Label Content="SUMO config" Grid.Row="9" />
+        <CheckBox IsChecked="{Binding GenererenSumoCode,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="5" />
+        <TextBox Text="{Binding SumoPort,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="1" />
+        <TextBox Text="{Binding SumoOrder,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="2" />
+        <TextBox Text="{Binding StartTijdUur,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="3" />
+        <TextBox Text="{Binding StartTijdMinuut,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="4" />
+        <TextBox Text="{Binding SumoKruispuntNaam,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="5" />
+        <TextBox Text="{Binding SumoKruispuntLinkMax,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="6" />
+        <CheckBox IsChecked="{Binding AutoStartSumo,UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Margin="5" Grid.Row="7" />
+        <ct:FolderTextBox Folder="{Binding Path=SumoHomePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO pad" Grid.Column="1" Grid.Row="8" />
+        <ct:FileTextBox File="{Binding Path=SumoConfigPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ChooseDialogTitle="Kies SUMO config" Grid.Column="1" Grid.Row="9" />
+        <Grid Grid.Row="10" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <DataGrid Grid.Column="0" Margin="2" ItemsSource="{Binding Path=FaseCycli}" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Naam}"/>
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding SumoIds,UpdateSourceTrigger=PropertyChanged}" Header="Sumo id's" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
+            <DataGrid Grid.Column="2" Margin="2" ItemsSource="{Binding Path=Detectoren}" 
+                      AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                <DataGrid.RowHeaderTemplate>
+                    <DataTemplate>
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                      AncestorType={x:Type DataGridRow}}, 
+                                      Path=Item.Naam}"/>
+                    </DataTemplate>
+                </DataGrid.RowHeaderTemplate>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding SumoNaam1,UpdateSourceTrigger=PropertyChanged}" Header="Sumo naam 1" />
+                    <DataGridTextColumn Binding="{Binding SumoNaam2,UpdateSourceTrigger=PropertyChanged}" Header="Sumo naam 2" />
+                    <DataGridTextColumn Binding="{Binding SumoNaam3,UpdateSourceTrigger=PropertyChanged}" Header="Sumo naam 3" />
+                    <DataGridCheckBoxColumn Binding="{Binding Selectief,UpdateSourceTrigger=PropertyChanged}" Header="Selectief" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

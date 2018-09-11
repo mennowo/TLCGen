@@ -1,11 +1,11 @@
 source https://api.nuget.org/v3/index.json
 
-nuget Extended.Wpf.Toolkit framework: >= 4.5
-nuget Microsoft.WindowsAPICodePack.Core framework: >= 4.5
-nuget Microsoft.WindowsAPICodePack.Shell framework: >= 4.5
-nuget MvvmLightLibs framework: >= 4.5
-nuget NSubstitute framework: >= 4.5
-nuget NUnit framework: >= 4.5
-nuget Gu.Wpf.DataGrid2D framework: >= 4.5
-nuget gong-wpf-dragdrop framework: >= 4.5
-nuget DocumentFormat.OpenXml framework: >= 4.5
+nuget Extended.Wpf.Toolkit framework: >= net45
+nuget Microsoft.WindowsAPICodePack.Core framework: >= net45
+nuget Microsoft.WindowsAPICodePack.Shell framework: >= net45
+nuget MvvmLightLibs framework: >= net45
+nuget NSubstitute framework: >= net45
+nuget NUnit framework: >= net45
+nuget Gu.Wpf.DataGrid2D framework: >= net45
+nuget gong-wpf-dragdrop framework: >= net45
+nuget DocumentFormat.OpenXml framework: >= net45

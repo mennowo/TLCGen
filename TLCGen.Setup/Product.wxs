@@ -127,6 +127,7 @@
         <File Id='TLCGen.Generators.TLCCC' Name='TLCGen.Generators.TLCCC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll' KeyPath='no' />
         <File Id='TLCGen.Importers.TabC' Name='TLCGen.Importers.TabC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll' KeyPath='no' />
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
