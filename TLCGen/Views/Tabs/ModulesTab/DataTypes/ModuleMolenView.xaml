@@ -96,7 +96,7 @@
         </WrapPanel>
         <Grid Grid.Row="3">
             <WrapPanel Orientation="Horizontal">
-                <CheckBox Margin="5" Content="Langstwachtende alternatief" IsChecked="{Binding LangstWachtendeAlternatief}" />
+                <CheckBox Margin="5" Content="Langstwachtende alternatief" IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
             </WrapPanel>
         </Grid>
     </Grid>

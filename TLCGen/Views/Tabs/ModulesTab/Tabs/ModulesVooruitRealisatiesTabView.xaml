@@ -23,7 +23,7 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding ModulenVooruit}" Header="# vooruit" />
+                <DataGridTextColumn Binding="{Binding ModulenVooruit,UpdateSourceTrigger=PropertyChanged}" Header="# vooruit" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

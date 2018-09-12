@@ -16,7 +16,7 @@
                 Margin="0"
                 Padding="2"
                 TextAlignment="Center"
-                Text="{Binding Path=AlternatieveGroenTijd}" >
+                Text="{Binding Path=AlternatieveGroenTijd,UpdateSourceTrigger=PropertyChanged}" >
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
