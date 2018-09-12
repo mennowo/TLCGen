@@ -15,6 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmax;
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmin;
         private CCOLGeneratorCodeStringSettingModel _uswtv;
+        private CCOLGeneratorCodeStringSettingModel _uswtvbus;
         private CCOLGeneratorCodeStringSettingModel _schwtv;
         private CCOLGeneratorCodeStringSettingModel _hwtv;
         private CCOLGeneratorCodeStringSettingModel _twtv;
@@ -47,6 +48,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myBitmapOutputs.Add(new CCOLIOElement(fc.WachttijdVoorspellerBitmapData, $"{_uspf}{_uswtv}{fc.Naam}"));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}", _uswtv, fc.Naam));
+                if (c.Data.WachttijdvoorspellerAansturenBus)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtvbus}{fc.Naam}", _uswtvbus, fc.Naam));
+                }
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}0", _uswtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}1", _uswtv, fc.Naam));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswtv}{fc.Naam}2", _uswtv, fc.Naam));
@@ -129,7 +134,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, NG, TYPE_LEDS);");
+                        if (c.Data.WachttijdvoorspellerAansturenBus)
+                        {
+                            sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, {_uspf}{_uswtvbus}{fc.Naam}, TYPE_LEDS);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, NG, TYPE_LEDS);");
+                        }
                     }
                     sb.AppendLine("#endif");
                     return sb.ToString();
@@ -267,6 +279,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
+                        if (c.Data.WachttijdvoorspellerAansturenBus)
+                        {
+                            if (!c.Data.WachttijdvoorspellerAansturenBusHD)
+                            {
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}];");
+                            }
+                        }
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}1]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT1) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}2]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT2) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");

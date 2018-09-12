@@ -1851,6 +1851,12 @@
             <Description>Verklikken aansturing wachttijdvoorspeller fase _E1_</Description>
           </Setting>
           <Setting>
+            <Default>wtvbus</Default>
+            <Setting>wtvbus</Setting>
+            <Type>Uitgang</Type>
+            <Description>Aansturing BUS melding wachttijdvoorspeller fase _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>wtv</Default>
             <Setting>wtv</Setting>
             <Type>Schakelaar</Type>

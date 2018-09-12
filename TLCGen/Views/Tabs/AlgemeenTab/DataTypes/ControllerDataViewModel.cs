@@ -328,6 +328,29 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Aansturing BUS tijdens OV ingreep")]
+        public bool WachttijdvoorspellerAansturenBus
+        {
+            get => _Controller?.Data?.WachttijdvoorspellerAansturenBus ?? false;
+            set
+            {
+                _Controller.Data.WachttijdvoorspellerAansturenBus = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBus), broadcast: true);
+            }
+        }
+
+        [Description("Ook aansturing BUS tijdens HD ingreep")]
+        [BrowsableCondition("WachttijdvoorspellerAansturenBus")]
+        public bool WachttijdvoorspellerAansturenBusHD
+        {
+            get => _Controller?.Data?.WachttijdvoorspellerAansturenBusHD ?? false;
+            set
+            {
+                _Controller.Data.WachttijdvoorspellerAansturenBusHD = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBusHD), broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Constructor

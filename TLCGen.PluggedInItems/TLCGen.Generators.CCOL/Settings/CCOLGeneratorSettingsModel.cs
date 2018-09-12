@@ -21,6 +21,7 @@ namespace TLCGen.Generators.CCOL.Settings
         public List<CodePieceSettingsTuple<string, CCOLGeneratorClassWithSettingsModel>> CodePieceGeneratorSettings { get; set; }
 
         public bool AlwaysOverwriteSources { get; set; }
+        public bool AlterAddFunctionsWhileGenerating { get; set; }
         public bool AlterAddHeadersWhileGenerating { get; set; }
 
         [XmlIgnore]

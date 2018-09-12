@@ -61,8 +61,8 @@ namespace TLCGen.WikiConverter
                             text = Regex.Replace(text, @"\<h1\>", "<h3>");
                             text = Regex.Replace(text, @"\</h4\>", "</h6>");
                             text = Regex.Replace(text, @"\</h2\>", "</h5>");
-                            text = Regex.Replace(text, @"\</h3\>", "</h3>");
-                            text = Regex.Replace(text, @"\</h1\>", "</h2>");
+                            text = Regex.Replace(text, @"\</h3\>", "</h4>");
+                            text = Regex.Replace(text, @"\</h1\>", "</h3>");
                         }
                     }
                     if (title != "")

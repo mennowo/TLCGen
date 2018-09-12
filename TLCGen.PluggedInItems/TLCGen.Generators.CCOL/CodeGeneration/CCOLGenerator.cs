@@ -363,6 +363,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 try
                 {
                     var addlines = File.ReadAllLines(filename);
+
+                    var wtvAdd = c.Fasen.Any(x => x.WachttijdVoorspeller) && addlines.All(x => !x.Contains("WachtijdvoorspellersWachttijd_Add"));
+                    var postSys2 = c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && addlines.All(x => !x.Contains("post_system_application2"));
+
                     var sb = new StringBuilder();
                     
                     var header = false;
@@ -379,6 +383,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                         else if(!header)
                         {
+                            if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating && 
+                                wtvAdd && l.Contains("pre_system_application"))
+                            {
+                                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine($"{ts}");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
+                            if (CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating &&
+                                postSys2 && l.Contains("post_dump_application"))
+                            {
+                                sb.AppendLine("void WachtijdvoorspellersWachttijd_Add()");
+                                sb.AppendLine("{");
+                                sb.AppendLine("");
+                                sb.AppendLine("}");
+                                sb.AppendLine();
+                            }
                             sb.AppendLine(l);
                         }
                     }

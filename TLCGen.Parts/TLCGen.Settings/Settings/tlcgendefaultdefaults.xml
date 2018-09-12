@@ -625,6 +625,8 @@
         <AansturingWaitsignalen>DrukknopGebruik</AansturingWaitsignalen>
         <WachttijdvoorspellerNietHalterenMax>21</WachttijdvoorspellerNietHalterenMax>
         <WachttijdvoorspellerNietHalterenMin>5</WachttijdvoorspellerNietHalterenMin>
+        <WachttijdvoorspellerAansturenBus>false</WachttijdvoorspellerAansturenBus>
+        <WachttijdvoorspellerAansturenBusHD>false</WachttijdvoorspellerAansturenBusHD>
         <NaloopSynchronisatieType>GroenGeelConflict</NaloopSynchronisatieType>
         <Intergroen>false</Intergroen>
         <CCOLMulti>false</CCOLMulti>

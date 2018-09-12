@@ -50,6 +50,8 @@ namespace TLCGen.Models
 
         public int WachttijdvoorspellerNietHalterenMax { get; set; }
         public int WachttijdvoorspellerNietHalterenMin { get; set; }
+        public bool WachttijdvoorspellerAansturenBus { get; set; }
+        public bool WachttijdvoorspellerAansturenBusHD { get; set; }
 
         [IsDocumented(conditionProperty: "CCOLVersie", conditionPropertyValue: "CCOL8")]
         public bool Intergroen { get; set; }

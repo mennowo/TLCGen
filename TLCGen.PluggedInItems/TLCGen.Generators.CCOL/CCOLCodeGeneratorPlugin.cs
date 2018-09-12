@@ -121,6 +121,7 @@ namespace TLCGen.Generators.CCOL
 				
 				// always overwrite visual tabspace and others
 				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating = userSettings.AlterAddHeadersWhileGenerating;
+				CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating = userSettings.AlterAddFunctionsWhileGenerating;
                 CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources = userSettings.AlwaysOverwriteSources;
                 CCOLGeneratorSettingsProvider.Default.Settings.TabSpace = userSettings.TabSpace;
 
@@ -186,6 +187,16 @@ namespace TLCGen.Generators.CCOL
             }
             _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
                 CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+
+            if (_alterAddFunctionsWhileGeneratingMenuItem == null)
+            {
+                _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
+                {
+                    Header = "Bijwerken functies in add files tijdens genereren"
+                };
+            }
+            _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
+                CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
         }
 
         public void SaveSettings()
@@ -220,6 +231,7 @@ namespace TLCGen.Generators.CCOL
 
             // always save visual tabspace and others
             settings.AlterAddHeadersWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
+            settings.AlterAddFunctionsWhileGenerating = CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
             settings.AlwaysOverwriteSources = CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources;
             settings.TabSpace = CCOLGeneratorSettingsProvider.Default.Settings.TabSpace;
 
@@ -278,6 +290,7 @@ namespace TLCGen.Generators.CCOL
 
         private MenuItem _alwaysOverwriteSourcesMenuItem;
         private MenuItem _alterAddHeadersWhileGeneratingMenuItem;
+        private MenuItem _alterAddFunctionsWhileGeneratingMenuItem;
         private MenuItem _resetSettingsMenuItem;
         private MenuItem _pluginMenuItem;
 
@@ -310,7 +323,14 @@ namespace TLCGen.Generators.CCOL
                             Header = "Bijwerken add headers tijdens genereren"
                         };
                     }
-	                if (_resetSettingsMenuItem == null)
+                    if (_alterAddFunctionsWhileGeneratingMenuItem == null)
+                    {
+                        _alterAddFunctionsWhileGeneratingMenuItem = new MenuItem
+                        {
+                            Header = "Bijwerken functies in add files tijdens genereren"
+                        };
+                    }
+                    if (_resetSettingsMenuItem == null)
 	                {
 		                _resetSettingsMenuItem = new MenuItem
 		                {
@@ -331,7 +351,14 @@ namespace TLCGen.Generators.CCOL
                         _alterAddHeadersWhileGeneratingMenuItem.IsChecked =
                             CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating;
                     };
-	                _resetSettingsMenuItem.Click += (o, e) =>
+                    _alterAddFunctionsWhileGeneratingMenuItem.Click += (o, e) =>
+                    {
+                        CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating =
+                            !CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
+                        _alterAddFunctionsWhileGeneratingMenuItem.IsChecked =
+                            CCOLGeneratorSettingsProvider.Default.Settings.AlterAddFunctionsWhileGenerating;
+                    };
+                    _resetSettingsMenuItem.Click += (o, e) =>
 	                {
 						CCOLGeneratorSettingsProvider.Default.Settings =
                             TLCGenSerialization.DeSerializeData<CCOLGeneratorSettingsModel>(
@@ -340,6 +367,7 @@ namespace TLCGen.Generators.CCOL
 					_pluginMenuItem.Items.Add(sitem1);
                     _pluginMenuItem.Items.Add(_alwaysOverwriteSourcesMenuItem);
                     _pluginMenuItem.Items.Add(_alterAddHeadersWhileGeneratingMenuItem);
+                    _pluginMenuItem.Items.Add(_alterAddFunctionsWhileGeneratingMenuItem);
                 }
                 return _pluginMenuItem;
             }
