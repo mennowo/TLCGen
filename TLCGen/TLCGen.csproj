@@ -867,6 +867,10 @@
       <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
       <Name>TLCGen.Importers.TabC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.AFM\TLCGen.Plugins.AFM.csproj">
+      <Project>{688e5fbb-f084-4169-b484-5c5947720e38}</Project>
+      <Name>TLCGen.Plugins.AFM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.Sumo\TLCGen.Plugins.Sumo.csproj">
       <Project>{e327cf4f-33b4-4a6f-91ad-17fde5c91d86}</Project>
       <Name>TLCGen.Plugins.Sumo</Name>
@@ -904,7 +908,8 @@ move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.SUMO.dll" "$(TargetDir)Plugins"</PostBuildEvent>
+move "$(TargetDir)TLCGen.Plugins.SUMO.dll" "$(TargetDir)Plugins"
+move "$(TargetDir)TLCGen.Plugins.AFM.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

@@ -235,8 +235,8 @@ namespace TLCGen.Specificator
         {
             _myVm = new SpecificatorViewModel(this);
 
-            //_generatorView = new SpecificatorView();
-            //_generatorView.DataContext = _myVm;
+            _generatorView = new SpecificatorView();
+            _generatorView.DataContext = _myVm;
         }
 
         #endregion // Constructor
