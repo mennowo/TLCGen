@@ -54,6 +54,9 @@
   <ItemGroup>
     <Compile Include="AutoSelectTextBox.cs" />
     <Compile Include="BrowsableConditionAttribute.cs" />
+    <Compile Include="ItemsManagerView.xaml.cs">
+      <DependentUpon>ItemsManagerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EnabledConditionAttribute.cs" />
     <Compile Include="FileTextBox.xaml.cs">
       <DependentUpon>FileTextBox.xaml</DependentUpon>
@@ -77,6 +80,14 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ItemsManagerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="FileTextBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
