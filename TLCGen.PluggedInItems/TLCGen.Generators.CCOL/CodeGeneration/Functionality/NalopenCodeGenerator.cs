@@ -29,21 +29,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         #endregion // Fields
 
-        #region Properties
-        #endregion // Properties
-
-        #region Commands
-        #endregion // Commands
-
-        #region Command Functionality
-        #endregion // Command Functionality
-
-        #region Private Methods
-        #endregion // Private Methods
-
-        #region Public Methods
-        #endregion // Public Methods
-
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();

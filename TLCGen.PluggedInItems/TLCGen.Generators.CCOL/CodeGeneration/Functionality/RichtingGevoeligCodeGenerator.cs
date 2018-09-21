@@ -27,52 +27,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
             {
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_trga}{_dpf}{rga.VanDetector}", 
-                        rga.MaxTijdsVerschil, 
-                        CCOLElementTimeTypeEnum.TE_type, 
-                        CCOLElementTypeEnum.Timer));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_trga}{_dpf}{rga.VanDetector}", rga.MaxTijdsVerschil, CCOLElementTimeTypeEnum.TE_type, _trga, rga.FaseCyclus, rga.VanDetector, rga.NaarDetector));
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_schrgad}{_dpf}{rga.VanDetector}", 
-                        1, 
-                        CCOLElementTimeTypeEnum.SCH_type, 
-                        CCOLElementTypeEnum.Schakelaar));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_schrgad}{_dpf}{rga.VanDetector}", 1, CCOLElementTimeTypeEnum.SCH_type, _schrgad, rga.FaseCyclus, rga.VanDetector, rga.NaarDetector));
                 if (rga.ResetAanvraag)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_trgav}{_dpf}{rga.VanDetector}",
-                            rga.ResetAanvraagTijdsduur,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Timer));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_trgav}{_dpf}{rga.VanDetector}", rga.ResetAanvraagTijdsduur, CCOLElementTimeTypeEnum.TE_type, _trgav, rga.FaseCyclus, rga.VanDetector, rga.NaarDetector));
                 }
             }
 
             foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
             {
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_trgr}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", 
-                        rgv.MaxTijdsVerschil, 
-                        CCOLElementTimeTypeEnum.TE_type, 
-                        CCOLElementTypeEnum.Timer));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_trgr}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", rgv.MaxTijdsVerschil, CCOLElementTimeTypeEnum.TE_type, _trgr, rgv.FaseCyclus, rgv.VanDetector, rgv.NaarDetector));
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_trgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}",
-                        rgv.VerlengTijd,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Timer));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_trgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", rgv.VerlengTijd, CCOLElementTimeTypeEnum.TE_type, _trgv, rgv.FaseCyclus, rgv.VanDetector, rgv.NaarDetector));
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}",
-                        CCOLElementTypeEnum.HulpElement));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}", _hrgv, rgv.FaseCyclus, rgv.VanDetector));
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_prmmkrg}{_dpf}{rgv.VanDetector}",
-                        (int)rgv.TypeVerlengen,
-                        CCOLElementTimeTypeEnum.TE_type,
-                        CCOLElementTypeEnum.Parameter));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_prmmkrg}{_dpf}{rgv.VanDetector}", (int)rgv.TypeVerlengen, CCOLElementTimeTypeEnum.TE_type, _prmmkrg, rgv.FaseCyclus));
             }
         }
 

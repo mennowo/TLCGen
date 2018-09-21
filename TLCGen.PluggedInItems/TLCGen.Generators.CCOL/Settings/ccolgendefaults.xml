@@ -93,7 +93,13 @@
             <Default>segm</Default>
             <Setting>segm</Setting>
             <Type>Uitgang</Type>
-            <Description>Segmenten display</Description>
+            <Description>Aansturing segmenten display</Description>
+          </Setting>
+          <Setting>
+            <Default>ML</Default>
+            <Setting>ML</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken actief zijn _E1_</Description>
           </Setting>
           <Setting>
             <Default>toon7s</Default>
@@ -879,25 +885,25 @@
             <Default>mlfpr</Default>
             <Setting>mlfpr</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter aantal modules vooruit</Description>
+            <Description>Maximaal aantal modules vooruit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>altg</Default>
             <Setting>altg</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar alternatieve realisatie toestaan</Description>
+            <Description>Alternatieve realisatie toestaan _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>altg</Default>
             <Setting>altg</Setting>
             <Type>Parameter</Type>
-            <Description>Min. groentijd bij alternatiev</Description>
+            <Description>Minimale groentijd bij alternatieve realisatie fase _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>altp</Default>
             <Setting>altp</Setting>
             <Type>Parameter</Type>
-            <Description>Ruimte tbv alternatieve realisatie</Description>
+            <Description>Minimale ruimte tbv alternatieve realisatie _E1_ _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -911,43 +917,43 @@
             <Default>rga</Default>
             <Setting>rga</Setting>
             <Type>Timer</Type>
-            <Description>Timer richtinggevoelige aanvraag rijtijd</Description>
+            <Description>Richtinggevoelige aanvraag rijtijd fase _E1_ van _E2_ naar _E3_</Description>
           </Setting>
           <Setting>
             <Default>rgav</Default>
             <Setting>rgav</Setting>
             <Type>Timer</Type>
-            <Description>Timer reset richtinggevoelige aanvraag</Description>
+            <Description>Timer reset richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
           </Setting>
           <Setting>
             <Default>rgad</Default>
             <Setting>rgad</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar type richtinggevoelige aanvraag</Description>
+            <Description>Type richtinggevoelige aanvraag fase _E1_ van _E2_ naar _E3_</Description>
           </Setting>
           <Setting>
             <Default>rgr</Default>
             <Setting>rgr</Setting>
             <Type>Timer</Type>
-            <Description>Timer richtinggevoelig verlengen rijtijd</Description>
+            <Description>Richtinggevoelig verlengen rijtijd fase _E1_ van _E2_ naar _E3_</Description>
           </Setting>
           <Setting>
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Timer</Type>
-            <Description>Timer richtinggevoelig verlengen hiaattijd</Description>
+            <Description>Richtinggevoelig verlengen hiaattijd fase _E1_ van _E2_ naar _E3_</Description>
           </Setting>
           <Setting>
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement detector melding richtinggevoelig verlengen</Description>
+            <Description>Onthouden detector melding _E1_ richtinggevoelig verlengen fase _E2_</Description>
           </Setting>
           <Setting>
             <Default>mkrg</Default>
             <Setting>mkrg</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter type verlengen tbv richtinggevoelig verlengen</Description>
+            <Description>Type verlengen tbv richtinggevoelig verlengen fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -979,97 +985,97 @@
             <Default>iks</Default>
             <Setting>iks</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement inkomende signalen</Description>
+            <Description>Inkomende PTP signalen van kruising _E1_</Description>
           </Setting>
           <Setting>
             <Default>uks</Default>
             <Setting>uks</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement uitgaande signalen</Description>
+            <Description>Uitgaande PTP signalen naar _E1_</Description>
           </Setting>
           <Setting>
             <Default>oke</Default>
             <Setting>oke</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement PTP oke</Description>
+            <Description>Onthouden PTP oke _E1_</Description>
           </Setting>
           <Setting>
             <Default>err</Default>
             <Setting>err</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement PTP error</Description>
+            <Description>Onthouden PTP error _E1_</Description>
           </Setting>
           <Setting>
             <Default>err0</Default>
             <Setting>err0</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement PTP error 0</Description>
+            <Description>Onthouden PTP error 0 _E1_</Description>
           </Setting>
           <Setting>
             <Default>err1</Default>
             <Setting>err1</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement PTP error 1</Description>
+            <Description>Onthouden PTP error 1 _E1_</Description>
           </Setting>
           <Setting>
             <Default>err2</Default>
             <Setting>err2</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement PTP error 2</Description>
+            <Description>Onthouden PTP error 2 _E1_</Description>
           </Setting>
           <Setting>
             <Default>iks</Default>
             <Setting>iks</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter inkomende signalen</Description>
+            <Description>Instelling inkomende signalen van _E1_</Description>
           </Setting>
           <Setting>
             <Default>uks</Default>
             <Setting>uks</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter uitgaande signalen</Description>
+            <Description>Isntelling uitgaande signalen naar _E1_</Description>
           </Setting>
           <Setting>
             <Default>oke</Default>
             <Setting>oke</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter PTP oke</Description>
+            <Description>PTP oke _E1_</Description>
           </Setting>
           <Setting>
             <Default>err</Default>
             <Setting>err</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter PTP error</Description>
+            <Description>PTP error _E1_</Description>
           </Setting>
           <Setting>
             <Default>err0</Default>
             <Setting>err0</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter PTP error 0</Description>
+            <Description>PTP error 0 _E1_</Description>
           </Setting>
           <Setting>
             <Default>err1</Default>
             <Setting>err1</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter PTP error 1</Description>
+            <Description>PTP error 1 _E1_</Description>
           </Setting>
           <Setting>
             <Default>err2</Default>
             <Setting>err2</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter PTP error 2</Description>
+            <Description>PTP error 2 _E1_</Description>
           </Setting>
           <Setting>
             <Default>oke</Default>
             <Setting>oke</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang PTP oke</Description>
+            <Description>Verklikken PTP oke _E1_</Description>
           </Setting>
           <Setting>
             <Default>err</Default>
             <Setting>err</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang PTP error</Description>
+            <Description>Verklikken PTP error _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1083,13 +1089,13 @@
             <Default>va</Default>
             <Setting>va</Setting>
             <Type>Timer</Type>
-            <Description>Timer VA ontruimen</Description>
+            <Description>Tijdsduur VA ontruimen van _E1_ naar _E2_</Description>
           </Setting>
           <Setting>
             <Default>vamax</Default>
             <Setting>vamax</Setting>
             <Type>Timer</Type>
-            <Description>Timer maximale tijd na einde geel VA ontruimen</Description>
+            <Description>Maximale tijd VA ontruimen na einde geel fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1136,25 +1142,25 @@
             <Default>wl</Default>
             <Setting>wl</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang waarschuwingslichten actief</Description>
+            <Description>Aansturing waarschuwingslichten actief _E1_</Description>
           </Setting>
           <Setting>
             <Default>bel</Default>
             <Setting>bel</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang bellen actief</Description>
+            <Description>Aansturing bellen actief _E1_</Description>
           </Setting>
           <Setting>
             <Default>beldim</Default>
             <Setting>beldim</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang dimmen bellen</Description>
+            <Description>Aansturing dimmen bellen _E1_</Description>
           </Setting>
           <Setting>
             <Default>belcontdim</Default>
             <Setting>belcontdim</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar continu dimmen bellen</Description>
+            <Description>Continu dimmen bellen</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1262,175 +1268,175 @@
             <Default>vc</Default>
             <Setting>vc</Setting>
             <Type>Counter</Type>
-            <Description>Counter inmeldingen OV</Description>
+            <Description>Bijhouden inmeldingen OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>vchd</Default>
             <Setting>vchd</Setting>
             <Type>Counter</Type>
-            <Description>Counter inmeldingen HD</Description>
+            <Description>Bijhouden inmeldingen HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rt</Default>
             <Setting>rt</Setting>
             <Type>Timer</Type>
-            <Description>Timer rijtijd OV</Description>
+            <Description>Actuele rijtijd OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rthd</Default>
             <Setting>rthd</Setting>
             <Type>Timer</Type>
-            <Description>Timer rijtijd HD</Description>
+            <Description>Actuele rijtijd HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>gb</Default>
             <Setting>gb</Setting>
             <Type>Timer</Type>
-            <Description>Timer groenbewaking OV</Description>
+            <Description>Groenbewaking OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>gbhd</Default>
             <Setting>gbhd</Setting>
             <Type>Timer</Type>
-            <Description>Timer groenbewaking HD</Description>
+            <Description>Groenbewaking HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rto</Default>
             <Setting>rto</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter ongehinderde rijtijd OV</Description>
+            <Description>Ongehinderde rijtijd OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtbg</Default>
             <Setting>rtbg</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter beperkt gehinderde rijtijd OV</Description>
+            <Description>Beperkt gehinderde rijtijd OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtg</Default>
             <Setting>rtg</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter gehinderde rijtijd OV</Description>
+            <Description>Gehinderde rijtijd OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtohd</Default>
             <Setting>rtohd</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter ongehinderde rijtijd HD</Description>
+            <Description>Ongehinderde rijtijd HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtbghd</Default>
             <Setting>rtbghd</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter beperkt gehinderde rijtijd HD</Description>
+            <Description>Beperkt gehinderde rijtijd HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>rtghd</Default>
             <Setting>rtghd</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter gehinderde rijtijd HD</Description>
+            <Description>Gehinderde rijtijd HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>blk</Default>
             <Setting>blk</Setting>
             <Type>Timer</Type>
-            <Description>Timer belokkertijd na ingreep OV</Description>
+            <Description>Belokkertijd na ingreep OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>btovg</Default>
             <Setting>btovg</Setting>
             <Type>Timer</Type>
-            <Description>Timer bezettijd OV gehinderde rijtijd</Description>
+            <Description>Timer bezettijd OV gehinderde rijtijd fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ov</Default>
             <Setting>ov</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement OV</Description>
+            <Description>Bijhouden aanwezigheid OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>hd</Default>
             <Setting>hd</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement HD</Description>
+            <Description>Bijhouden aanwezigheid HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ovin</Default>
             <Setting>ovin</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement OV inmelding fase _E1_ _E2_</Description>
+            <Description>OV inmelding fase _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>ovuit</Default>
             <Setting>ovuit</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement OV uitmelding _E1_ _E2_</Description>
+            <Description>OV uitmelding _E1_ _E2_</Description>
           </Setting>
           <Setting>
             <Default>hdin</Default>
             <Setting>hdin</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement HD inmelding</Description>
+            <Description>HD inmelding _E1_</Description>
           </Setting>
           <Setting>
             <Default>hduit</Default>
             <Setting>hduit</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement HD uitmelding</Description>
+            <Description>HD uitmelding _E1_</Description>
           </Setting>
           <Setting>
             <Default>laatcrit</Default>
             <Setting>laatcrit</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter criterium OV aanmerking als te laat</Description>
+            <Description>Criterium OV aanmerken als te laat</Description>
           </Setting>
           <Setting>
             <Default>allelijnen</Default>
             <Setting>allelijnen</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter prioriteit geven aan alle lijnen</Description>
+            <Description>Prioriteit geven aan alle lijnen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>lijn</Default>
             <Setting>lijn</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter lijnnummer prioriteit OV</Description>
+            <Description>Lijnnummers prioriteit OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>alleritcat</Default>
             <Setting>alleritcat</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter prioriteit geven aan alle rit categorien</Description>
+            <Description>Prioriteit geven aan alle rit categorien fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ritcat</Default>
             <Setting>ritcat</Setting>
             <Type>Parameter</Type>
-            <Description>Categorie prioriteit OV</Description>
+            <Description>Categorien prioriteit OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>cprio</Default>
             <Setting>cprio</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar toepassen geconditioneerde priorieit</Description>
+            <Description>Toepassen geconditioneerde priorieit fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>upinagb</Default>
             <Setting>upinagb</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking OV</Description>
+            <Description>Selectieve detectie onbetrouwbaar na groenbewaking OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>upinagbhd</Default>
             <Setting>upinagbhd</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar selectieve detectie onbetrouwbaar na groenbewaking HD</Description>
+            <Description>Selectieve detectie onbetrouwbaar na groenbewaking HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>vi</Default>
             <Setting>vi</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar versnelde inmelding</Description>
+            <Description>Versnelde inmelding fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>checkdstype</Default>
@@ -1442,110 +1448,110 @@
             <Default>ovstp</Default>
             <Setting>ovstp</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimale stiptheid voor inmelding OV</Description>
+            <Description>Minimale stiptheid voor inmelding OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>testdsivert</Default>
             <Setting>testdsivert</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter testen vertraging in DSI bericht in testomgeving</Description>
+            <Description>Testen vertraging in DSI bericht in testomgeving</Description>
           </Setting>
           <Setting>
             <Default>testdsilyn</Default>
             <Setting>testdsilyn</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter testen lijnnummer DSI bericht in testomgeving</Description>
+            <Description>Testen lijnnummer DSI bericht in testomgeving</Description>
           </Setting>
 
           <Setting>
             <Default>testdsicat</Default>
             <Setting>testdsicat</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter testen ritcategorie DSI bericht in testomgeving</Description>
+            <Description>Testen ritcategorie DSI bericht in testomgeving</Description>
           </Setting>
           <Setting>
             <Default>prio</Default>
             <Setting>prio</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter prioriteitsinstelling OV</Description>
+            <Description>Prioriteitsinstelling OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>priohd</Default>
             <Setting>priohd</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter prioriteitsinstelling HD</Description>
+            <Description>Prioriteitsinstelling HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>omx</Default>
             <Setting>omx</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter ondermaximum OV</Description>
+            <Description>Ondermaximum OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>mwta</Default>
             <Setting>mwta</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter maximale wachttijd autoverkeer</Description>
+            <Description>Maximale wachttijd autoverkeer</Description>
           </Setting>
           <Setting>
             <Default>mwtfts</Default>
             <Setting>mwtfts</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter maximale wachttijd fiets</Description>
+            <Description>Maximale wachttijd fiets</Description>
           </Setting>
           <Setting>
             <Default>mwtvtg</Default>
             <Setting>mwtvtg</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter maximale wachttijd voetgangers</Description>
+            <Description>Maximale wachttijd voetgangers</Description>
           </Setting>
           <Setting>
             <Default>pmgt</Default>
             <Setting>pmgt</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimale groentijd primair terugkomen</Description>
+            <Description>Minimale groentijd primair terugkomen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ognt</Default>
             <Setting>ognt</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimale groentijd bij terugkomen</Description>
+            <Description>Minimale groentijd bij terugkomen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>ohpmg</Default>
             <Setting>ohpmg</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter percentage ophogen groentijd na afkappen</Description>
+            <Description>Percentage ophogen groentijd na afkappen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>nofm</Default>
             <Setting>nofm</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter aantal malen niet afkappen na OV ingreep</Description>
+            <Description>Aantal malen niet afkappen na OV ingreep fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>mgcov</Default>
             <Setting>mgcov</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimum groentijd voor fase afgkapt mag worden door OV ingreep</Description>
+            <Description>Minimum groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
           </Setting>
           <Setting>
             <Default>pmgcov</Default>
             <Setting>pmgcov</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimum percentage groentijd voor fase afgkapt mag worden door OV ingreep</Description>
+            <Description>Minimum percentage groentijd waarna fase _E1_ afgkapt mag worden door OV ingreep</Description>
           </Setting>
           <Setting>
             <Default>ovinm</Default>
             <Setting>ovinm</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken inmelding OV</Description>
+            <Description>Verklikken inmelding OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>hdinm</Default>
             <Setting>hdinm</Setting>
             <Type>Uitgang</Type>
-            <Description>Verklikken inmelding HD</Description>
+            <Description>Verklikken inmelding HD fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>karmelding</Default>
@@ -1569,13 +1575,13 @@
             <Default>karmelding</Default>
             <Setting>karmelding</Setting>
             <Type>Timer</Type>
-            <Description>Timer duur verklikking ontvangst melding KAR</Description>
+            <Description>Duur verklikking ontvangst melding KAR</Description>
           </Setting>
           <Setting>
             <Default>karog</Default>
             <Setting>karog</Setting>
             <Type>Timer</Type>
-            <Description>Timer ondergedrag KAR</Description>
+            <Description>Ondergedrag KAR</Description>
           </Setting>
           
           <Setting>
@@ -1664,43 +1670,43 @@
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter type RoBuGrover</Description>
+            <Description>Type RoBuGrover</Description>
           </Setting>
           <Setting>
             <Default>min_tcyclus</Default>
             <Setting>min_tcyclus</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter minimale cyclustijd</Description>
+            <Description>Minimale cyclustijd</Description>
           </Setting>
           <Setting>
               <Default>max_tcyclus</Default>
               <Setting>max_tcyclus</Setting>
               <Type>Parameter</Type>
-              <Description>Parameter maximale cyclustijd</Description>
+              <Description>Maximale cyclustijd</Description>
           </Setting>
           <Setting>
               <Default>mintvg</Default>
               <Setting>mintvg</Setting>
               <Type>Parameter</Type>
-              <Description>Parameter minimale verlenggroentijd per fase</Description>
+              <Description>Minimale verlenggroentijd fase _E1_</Description>
           </Setting>
           <Setting>
               <Default>maxtvg</Default>
               <Setting>maxtvg</Setting>
               <Type>Parameter</Type>
-              <Description>Parameter maximale verlenggroentijd per fase</Description>
+              <Description>Maximale verlenggroentijd fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>tvg_omhoog</Default>
             <Setting>tvg_omhoog</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter mate ophogen TVG</Description>
+            <Description>Hoeveelheid ophogen TVG</Description>
           </Setting>
           <Setting>
             <Default>tvg_omlaag</Default>
             <Setting>tvg_omlaag</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter mate verlagen TVG</Description>
+            <Description>Hoeveelheid verlagen TVG</Description>
           </Setting>
           <Setting>
             <Default>tvg_verschil</Default>
@@ -1712,43 +1718,43 @@
             <Default>tvg_npr_omlaag</Default>
             <Setting>tvg_npr_omlaag</Setting>
             <Type>Parameter</Type>
-            <Description>Parameter mate verlagen TVG bij niet primair</Description>
+            <Description>Hoeveelheid verlagen TVG bij niet primair</Description>
           </Setting>
           <Setting>
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar RoBuGrover aan/uit</Description>
+            <Description>RoBuGrover aan/uit</Description>
           </Setting>
           <Setting>
             <Default>rgv_snel</Default>
             <Setting>rgv_snel</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar RoBuGrover versneld ophogen/verlagen</Description>
+            <Description>RoBuGrover versneld ophogen/verlagen</Description>
           </Setting>
           <Setting>
             <Default>fd</Default>
             <Setting>f</Setting>
             <Type>Timer</Type>
-            <Description>Timer file meting RoBuGrover detector</Description>
+            <Description>File meting RoBuGrover fase _E1_ detector _E2_</Description>
           </Setting>
           <Setting>
             <Default>hd</Default>
             <Setting>h</Setting>
             <Type>Timer</Type>
-            <Description>Timer RoBuGrover hiaat meting RoBuGrover detector</Description>
+            <Description>RoBuGrover hiaat meting fase _E1_ detector _E2_</Description>
           </Setting>
           <Setting>
             <Default>rgv</Default>
             <Setting>rgv</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang verklikken werking RoBuGrover</Description>
+            <Description>Verklikken actief zijn RoBuGrover</Description>
           </Setting>
           <Setting>
             <Default>prreal</Default>
             <Setting>prreal</Setting>
             <Type>HulpElement</Type>
-            <Description>Hulpelement bijhouden primaire realisatie fase</Description>
+            <Description>Bijhouden primaire realisatie fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1762,13 +1768,13 @@
             <Default>ca</Default>
             <Setting>ca</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar cyclische aanvraag</Description>
+            <Description>Cyclische aanvraag fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>uitgestca</Default>
             <Setting>uitgestca</Setting>
             <Type>Timer</Type>
-            <Description>Tijdsduur uitgestelde vaste aanvraag</Description>
+            <Description>Uitgestelde cyclische aanvraag fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1782,7 +1788,7 @@
             <Default>wg</Default>
             <Setting>wg</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar wachtstand groen</Description>
+            <Description>Wachtstand groen fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1796,7 +1802,7 @@
             <Default>wt</Default>
             <Setting>wt</Setting>
             <Type>Uitgang</Type>
-            <Description>Uitgang aansturing waitsignaal</Description>
+            <Description>Aansturing waitsignaal detector _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
@@ -1810,19 +1816,19 @@
             <Default>vg</Default>
             <Setting>vg</Setting>
             <Type>Schakelaar</Type>
-            <Description>Schakelaar veiligheidsgroen</Description>
+            <Description>Veiligheidsgroen detector _E1_ fase _E2_</Description>
           </Setting>
           <Setting>
             <Default>vga</Default>
             <Setting>vga</Setting>
             <Type>Timer</Type>
-            <Description>Minimale tijdsduur MG voor veiligheidsgroen</Description>
+            <Description>Minimale tijdsduur MG voor veiligheidsgroen fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>vgb</Default>
             <Setting>vgb</Setting>
             <Type>Timer</Type>
-            <Description>Tijdsduur veiligheidsgroen</Description>
+            <Description>Tijdsduur veiligheidsgroen fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

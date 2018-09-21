@@ -70,15 +70,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     hours = 24;
                 }
                 var inst = hours * 100 + per.StartTijd.Minutes;
-                _myElements.Add(new CCOLElement($"{_prmstkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmstkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, _prmstkp, per.Naam));
                 hours = per.EindTijd.Hours;
                 if (per.EindTijd.Days == 1)
                 {
                     hours = 24;
                 }
                 inst = hours * 100 + per.EindTijd.Minutes;
-                _myElements.Add(new CCOLElement($"{_prmetkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmdckp}{iper}", (int)per.DagCode, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmetkp}{iper}", inst, CCOLElementTimeTypeEnum.TI_type, _prmetkp, per.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmdckp}{iper}", (int)per.DagCode, CCOLElementTimeTypeEnum.None, _prmdckp, per.Naam));
                 ++iper;
             }
 
@@ -113,32 +113,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     hours = 24;
                 }
                 var inst = hours * 100 + per.StartTijd.Minutes;
-                _myElements.Add(new CCOLElement(stkp, inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(stkp, inst, CCOLElementTimeTypeEnum.TI_type, _prmstkp, per.Naam));
                 hours = per.EindTijd.Hours;
                 if (per.EindTijd.Days == 1)
                 {
                     hours = 24;
                 }
                 inst = hours * 100 + per.EindTijd.Minutes;
-                _myElements.Add(new CCOLElement(etkp, inst, CCOLElementTimeTypeEnum.TI_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement(dckp, (int)per.DagCode, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(etkp, inst, CCOLElementTimeTypeEnum.TI_type, _prmetkp, per.Naam));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(dckp, (int)per.DagCode, CCOLElementTimeTypeEnum.None, _prmdckp, per.Naam));
 
                 // free period helpelem
                 if(per.Type == PeriodeTypeEnum.Overig)
                 {
-                    _myElements.Add(new CCOLElement($"{_hperiod}{ipero++}", CCOLElementTypeEnum.HulpElement));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{ipero++}", _hperiod, per.Naam));
                 }
             }
-            if (iperrt > 1)     _myElements.Add(new CCOLElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement));
-            if (iperrta > 1)    _myElements.Add(new CCOLElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement));
-            if (iperrtdim > 1)  _myElements.Add(new CCOLElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement));
-            if (iperbel > 1)    _myElements.Add(new CCOLElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement));
-            if (iperbeldim > 1) _myElements.Add(new CCOLElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement));
-            if (iperrt > 1)     _myElements.Add(new CCOLElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang));
-            if (iperrta > 1)    _myElements.Add(new CCOLElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang));
-            if (iperrtdim > 1)  _myElements.Add(new CCOLElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang));
-            if (iperbel > 1)    _myElements.Add(new CCOLElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang));
-            if (iperbeldim > 1) _myElements.Add(new CCOLElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang));
+            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrt.Description, CCOLElementTypeEnum.HulpElement)));
+            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrta.Description, CCOLElementTypeEnum.HulpElement)));
+            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrtdim.Description, CCOLElementTypeEnum.HulpElement)));
+            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbel.Description, CCOLElementTypeEnum.HulpElement)));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbeldim.Description, CCOLElementTypeEnum.HulpElement)));
+            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrt.Description, CCOLElementTypeEnum.Uitgang)));
+            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrta.Description, CCOLElementTypeEnum.Uitgang)));
+            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrtdim.Description, CCOLElementTypeEnum.Uitgang)));
+            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbel.Description, CCOLElementTypeEnum.Uitgang)));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbeldim.Description, CCOLElementTypeEnum.Uitgang)));
             if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_uspf}{_usper}{_prmperrt}"));
             if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_uspf}{_usper}{_prmperrta}"));
             if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));
@@ -146,6 +146,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (iperbeldim > 1) _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.BellenDimmenBitmapData, $"{_uspf}{_usper}{_prmperbeldim}"));
 
             // groentijden
+            var mg = c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "Maximale groentijd" : "Verlenggroentijd";
             foreach (var mgset in c.GroentijdenSets)
             {
                 foreach (var mgm in mgset.Groentijden)
@@ -158,11 +159,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (thisfcm == null)
                         throw new NullReferenceException($"Maxgroentijd voor niet bestaande fase {mgm.FaseCyclus} opgegeven.");
 
-                    _myElements.Add(new CCOLElement(
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{mgset.Naam.ToLower()}_{thisfcm.Naam}",
                         mgm.Waarde.Value,
-                        CCOLElementTimeTypeEnum.TE_type, 
-                        CCOLElementTypeEnum.Parameter));
+                        CCOLElementTimeTypeEnum.TE_type,
+                        CCOLElementTypeEnum.Parameter,
+                        $"{mg} {mgset.Naam} {thisfcm.Naam}"));
                 }
             }
         }

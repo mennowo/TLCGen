@@ -27,24 +27,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Altijd))
                     {
                         _myElements.Add(
-                            new CCOLElement(
-                                $"{_schvg}{dm.Naam}",
-                                dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
-                                CCOLElementTimeTypeEnum.SCH_type,
-                                CCOLElementTypeEnum.Schakelaar));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_schvg}{dm.Naam}", dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvg, dm.Naam, fcm.Naam));
                     }
                     _myElements.Add(
-                            new CCOLElement(
-                                $"{_tvga}{fcm.Naam}",
-                                fcm.VeiligheidsGroenMinMG,
-                                CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Timer));
-                        _myElements.Add(
-                            new CCOLElement(
-                                $"{_tvgb}{fcm.Naam}",
-                                fcm.VeiligheidsGroenTijdsduur,
-                                CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Timer));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tvga}{fcm.Naam}", fcm.VeiligheidsGroenMinMG, CCOLElementTimeTypeEnum.TE_type, _tvga, fcm.Naam));
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvgb}{fcm.Naam}", fcm.VeiligheidsGroenTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tvgb, fcm.Naam));
                 }
             }
         }

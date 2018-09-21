@@ -19,10 +19,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            if (c.Data.VLOGType != VLOGTypeEnum.Geen)
             {
-                _myElements.Add(new CCOLElement(_prmmaxtvgvlog.Setting, 5, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement(_prmmaxtfbvlog.Setting, 90, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmmaxtvgvlog.Setting, 5, CCOLElementTimeTypeEnum.CT_type, _prmmaxtvgvlog));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmmaxtfbvlog.Setting, 90, CCOLElementTimeTypeEnum.TS_type, _prmmaxtfbvlog));
             }
         }
 

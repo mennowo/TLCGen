@@ -24,21 +24,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             foreach(var va in c.VAOntruimenFasen)
             {
                 _myElements.Add(
-                            new CCOLElement(
-                                $"{_tvamax}{va.FaseCyclus}",
-                                va.VAOntrMax,
-                                CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Timer));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tvamax}{va.FaseCyclus}", va.VAOntrMax, CCOLElementTimeTypeEnum.TE_type, _tvamax, va.FaseCyclus));
                 foreach (var d in va.VADetectoren)
                 {
                     foreach(var cf in d.ConflicterendeFasen)
                     {
                         _myElements.Add(
-                            new CCOLElement(
-                                $"{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}",
-                                cf.VAOntruimingsTijd,
-                                CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Timer));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tva}{va.FaseCyclus}{cf.FaseCyclus}_{_dpf}{d.Detector}", cf.VAOntruimingsTijd, CCOLElementTimeTypeEnum.TE_type, _tva, va.FaseCyclus));
                     }
                 }
             }

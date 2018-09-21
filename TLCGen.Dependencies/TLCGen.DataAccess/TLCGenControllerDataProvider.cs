@@ -317,7 +317,7 @@ namespace TLCGen.DataAccess
                 SaveController();
                 
                 ControllerHasChanged = false;
-                Messenger.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename));
+                Messenger.Default.Send(new ControllerFileNameChangedMessage(ControllerFileName, lastfilename ?? ""));
 
                 return true;
             }

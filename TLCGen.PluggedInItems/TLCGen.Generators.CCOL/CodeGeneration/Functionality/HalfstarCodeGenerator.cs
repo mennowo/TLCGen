@@ -161,7 +161,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     times[i] ?? 0,
                                     CCOLElementTimeTypeEnum.None,
                                     CCOLElementTypeEnum.Parameter,
-                                    CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmtx.Description, realisation == 1 ? "Eerste" : "Tweede", pl.Naam, fcpl.FaseCyclus, moments[i])));
+                                    CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmtx.Description, CCOLElementTypeEnum.Parameter, realisation == 1 ? "Eerste" : "Tweede", pl.Naam, fcpl.FaseCyclus, moments[i])));
                             }
                         }
                     }
