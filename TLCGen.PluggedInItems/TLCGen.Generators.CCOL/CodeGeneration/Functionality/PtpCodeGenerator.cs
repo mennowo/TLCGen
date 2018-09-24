@@ -44,73 +44,68 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_hptp}_{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"),
-                            CCOLElementTypeEnum.HulpElement));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_hptp}_{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                 }
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"),
-                            CCOLElementTypeEnum.HulpElement));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"),
-                            2,
-                            CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"), 2, CCOLElementTimeTypeEnum.None, _prmiks, k.TeKoppelenKruispunt));
                 }
                 for (int i = 1; i <= k.AantalsignalenUit; ++i)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
-                            CCOLElementTypeEnum.HulpElement));
+                            _huks, k.TeKoppelenKruispunt));
                 }
                 for (int i = 1; i <= k.AantalsignalenUit; ++i)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
-                            CCOLElementTypeEnum.HulpElement));
+                            _huks, k.TeKoppelenKruispunt));
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_prmuks}" + i.ToString("00"),
                             2,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmuks, k.TeKoppelenKruispunt));
                 }
 
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_hoke}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _hoke, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _herr, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr0}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _herr0, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr1}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _herr1, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hptp}_{k.TeKoppelenKruispunt}{_herr2}",
-                            CCOLElementTypeEnum.HulpElement));
+                            _herr2, k.TeKoppelenKruispunt));
 
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_usoke}",
-                            CCOLElementTypeEnum.Uitgang));
+                            _usoke, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_usptp}_{k.TeKoppelenKruispunt}{_userr}",
-                            CCOLElementTypeEnum.Uitgang));
+                            _userr, k.TeKoppelenKruispunt));
 
                 _myBitmapOutputs.Add(
                         new CCOLIOElement(
@@ -122,35 +117,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             $"{_uspf}{_usptp}_{k.TeKoppelenKruispunt}{_userr}"));
 
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmoke}",
                             0,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmoke, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr}",
                             0,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmerr, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr0}",
                             0,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmerr0, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr1}",
                             0,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmerr1, k.TeKoppelenKruispunt));
                 _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmptp}_{k.TeKoppelenKruispunt}{_prmerr2}",
                             0,
                             CCOLElementTimeTypeEnum.None,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmerr2, k.TeKoppelenKruispunt));
             }
         }
 

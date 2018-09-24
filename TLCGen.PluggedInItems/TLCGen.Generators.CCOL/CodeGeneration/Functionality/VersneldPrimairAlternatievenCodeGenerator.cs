@@ -39,11 +39,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 // Vooruit realisaties
                 _myElements.Add(
-                    new CCOLElement(
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmmlfpr}{fc.FaseCyclus}",
                         fc.ModulenVooruit,
                         CCOLElementTimeTypeEnum.None,
-                        CCOLElementTypeEnum.Parameter));
+                        _prmmlfpr,
+                        fc.FaseCyclus));
             }
 
 
@@ -54,11 +55,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
                     _myElements.Add(
-                        new CCOLElement(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_prmaltg}{fc.FaseCyclus}",
                             fc.AlternatieveGroenTijd,
                             CCOLElementTimeTypeEnum.TE_type,
-                            CCOLElementTypeEnum.Parameter));
+                            _prmaltg, fc.FaseCyclus));
 
                     // For prmaltp and schaltg: combine if the signal group is part of a simultaneous synchronisation
                     var gs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus);
@@ -72,36 +73,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (!containsaltp)
                         {
                             _myElements.Add(
-                                new CCOLElement(
-                                    namealtp,
-                                    fc.AlternatieveRuimte,
-                                    CCOLElementTimeTypeEnum.TE_type,
-                                    CCOLElementTypeEnum.Parameter));
+                                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                    namealtp, fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltp, "fasen", string.Join(", ", gs.Item2)));
                         }
                         if (!containsaltg)
                         {
                             _myElements.Add(
-                                new CCOLElement(
-                                    namealtg,
-                                    fc.AlternatiefToestaan ? 1 : 0,
-                                    CCOLElementTimeTypeEnum.SCH_type,
-                                    CCOLElementTypeEnum.Schakelaar));
+                                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                    namealtg, fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltg, "fasen", string.Join(", ", gs.Item2)));
                         }
                     }
                     else
                     {
                         _myElements.Add(
-                            new CCOLElement(
-                                $"{_prmaltp}{fc.FaseCyclus}",
-                                fc.AlternatieveRuimte,
-                                CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Parameter));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmaltp}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltp, "fase", fc.FaseCyclus));
                         _myElements.Add(
-                            new CCOLElement(
-                                $"{_schaltg}{fc.FaseCyclus}",
-                                fc.AlternatiefToestaan ? 1 : 0,
-                                CCOLElementTimeTypeEnum.SCH_type,
-                                CCOLElementTypeEnum.Schakelaar));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_schaltg}{fc.FaseCyclus}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltg, "fase", fc.FaseCyclus));
                     }
                 }
             }
@@ -139,11 +128,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     foreach (var altg in alts)
                     {
                         _myElements.Add(
-                            new CCOLElement(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_prmaltg}{mlidx}{altg.Key}",
                                 altg.Value.First().Item1.AlternatieveGroenTijd,
                                 CCOLElementTimeTypeEnum.TE_type,
-                                CCOLElementTypeEnum.Parameter));
+                                _prmaltg, altg.Key, "ML" + mlidx));
                     }
                     ++mlidx;
                 }

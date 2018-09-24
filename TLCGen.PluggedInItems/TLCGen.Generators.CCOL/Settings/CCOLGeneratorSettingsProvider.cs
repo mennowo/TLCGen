@@ -11,6 +11,8 @@ namespace TLCGen.Generators.CCOL.Settings
         private static CCOLGeneratorSettingsProvider _default;
         public static CCOLGeneratorSettingsProvider Default => _default ?? (_default = new CCOLGeneratorSettingsProvider());
 
+        private Dictionary<CCOLElementTypeEnum, string> _lastItemDescription = new Dictionary<CCOLElementTypeEnum, string>();
+
 	    public CCOLGeneratorSettingsProvider()
         {
             CCOLElementNames = new Dictionary<string, string>();
@@ -38,7 +40,7 @@ namespace TLCGen.Generators.CCOL.Settings
             }
         }
 
-		public string GetElementDescription(string description, params string [] elementnames)
+		public string GetElementDescription(string description, CCOLElementTypeEnum type, params string [] elementnames)
 		{
 			if (description == null) return null;
             var descr = description;
@@ -50,20 +52,76 @@ namespace TLCGen.Generators.CCOL.Settings
 				++i;
 			}
             // Remove empty tags
-            descr = Regex.Replace(descr, $"_E[0-9]_", "");
+            descr = Regex.Replace(descr, @"\s_E[0-9]_", "");
+            var finalDescr = descr;
+
+            // Check last line
+            if (_lastItemDescription.ContainsKey(type))
+            {
+                var re = new Regex("[0-9]+");
+                var re2 = new Regex(@"[a-zA-Z0-9\(\)]");
+                var words = descr.Split(' ');
+                var lastWords = _lastItemDescription[type].Split(' ');
+                bool isSame = true;
+                if (words.Length == lastWords.Length)
+                {
+                    for (int j = 0; j < words.Length; j++)
+                    {
+                        if (!(words[j] == lastWords[j] || /*words[j].Length == lastWords[j].Length &&*/ re.IsMatch(words[j])))
+                        {
+                            isSame = false;
+                            break;
+                        }
+                    }
+                    if (isSame)
+                    {
+                        descr = "";
+                        for (int j = 0; j < words.Length; j++)
+                        {
+                            if (descr != "") descr += ".";
+                            if (words[j] == lastWords[j])
+                            {
+                                descr += re2.Replace(words[j], ".");
+                            }
+                            else
+                            {
+                                descr += words[j];
+                            }
+                        }
+                    }
+                }
+                _lastItemDescription[type] = finalDescr;
+            }
+            else
+            {
+                _lastItemDescription.Add(type, finalDescr);
+            }
+
             return descr;	
 		}
 
         public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLGeneratorCodeStringSettingModel element, params string [] elementnames)
         {
-            return new CCOLElement(name, setting, timeType, TranslateType(element.Type),
-                    GetElementDescription(element.Description, elementnames));
+            var t = TranslateType(element.Type);
+            return new CCOLElement(name, setting, timeType, t,
+                    GetElementDescription(element.Description, t, elementnames));
         }
 
         public CCOLElement CreateElement(string name, CCOLGeneratorCodeStringSettingModel element, params string[] elementnames)
         {
-            return new CCOLElement(name, TranslateType(element.Type),
-                    GetElementDescription(element.Description, elementnames));
+            var t = TranslateType(element.Type);
+            return new CCOLElement(name, t,
+                    GetElementDescription(element.Description, t, elementnames));
+        }
+
+        public CCOLElement CreateElement(string name, CCOLElementTypeEnum type, string description)
+        {
+            return new CCOLElement(name, type, GetElementDescription(description, type));
+        }
+
+        public CCOLElement CreateElement(string name, int setting, CCOLElementTimeTypeEnum timeType, CCOLElementTypeEnum type, string description)
+        {
+            return new CCOLElement(name, setting, timeType, type, GetElementDescription(description, type));
         }
 
         public string GetElementName(string defaultwithprefix)

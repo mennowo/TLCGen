@@ -25,10 +25,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     fcm.Wachtgroen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_schwg}{fcm.Naam}", 
-                            fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, 
-                            CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schwg}{fcm.Naam}", fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schwg, fcm.Naam));
                 }
             }
         }

@@ -12,10 +12,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class MeeAanvragenCodeGenerator : CCOLCodePieceGeneratorBase
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _schma; // help element meeaanvraag detector name
-        private CCOLGeneratorCodeStringSettingModel _hmad; // help element meeaanvraag detector name
-        private CCOLGeneratorCodeStringSettingModel _prmtypema; // help element meeaanvraag detector name
-        private CCOLGeneratorCodeStringSettingModel _tuitgestma; // help element meeaanvraag detector name
+        private CCOLGeneratorCodeStringSettingModel _schma;
+        private CCOLGeneratorCodeStringSettingModel _hmad;
+        private CCOLGeneratorCodeStringSettingModel _prmtypema;
+        private CCOLGeneratorCodeStringSettingModel _tuitgestma;
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)

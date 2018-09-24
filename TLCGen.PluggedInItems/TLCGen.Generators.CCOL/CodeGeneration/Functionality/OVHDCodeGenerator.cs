@@ -313,22 +313,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovuit}{ov.FaseCyclus}", ov.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tovuit, ov.FaseCyclus));
                 }
 
-                _myElements.Add(new CCOLElement($"{_tbtovg}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_trt}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_cvc}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Counter));
-                _myElements.Add(new CCOLElement($"{_tgb}{ov.FaseCyclus}", ov.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_prmrto}{ov.FaseCyclus}", ov.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmrtbg}{ov.FaseCyclus}", ov.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmrtg}{ov.FaseCyclus}", ov.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmomx}{ov.FaseCyclus}", ov.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_tblk}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_schupinagb}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-                _myElements.Add(new CCOLElement($"{_prmovstp}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tbtovg, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trt}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _trt, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvc}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvc, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgb}{ov.FaseCyclus}", ov.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgb, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrto}{ov.FaseCyclus}", ov.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrto, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbg}{ov.FaseCyclus}", ov.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbg, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtg}{ov.FaseCyclus}", ov.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtg, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{ov.FaseCyclus}", ov.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tblk, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagb}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagb, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstp}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, _prmovstp, ov.FaseCyclus));
                 if ((ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
                      ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit) &&
                      !string.IsNullOrWhiteSpace(ov.Koplus) && ov.Koplus != "NG")
                 {
-                    _myElements.Add(new CCOLElement($"{_schvi}{ov.FaseCyclus}", ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schvi}{ov.FaseCyclus}", ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvi, ov.FaseCyclus));
                 }
                 var opties = 0;
                 if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
@@ -336,18 +336,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (ov.TussendoorRealiseren) opties += 3;
                 if (ov.VasthoudenGroen) opties += 20;
                 var sopties = opties.ToString().Replace("0", "");
-                _myElements.Add(new CCOLElement($"{_prmprio}{ov.FaseCyclus}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{ov.FaseCyclus}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, ov.FaseCyclus));
 
                 if (ov.CheckLijnNummer)
                 {
                     // Note!!! "allelijnen" must alway be DIRECTLY above the line prms, cause of the way these prms are used in code
-                    _myElements.Add(new CCOLElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmallelijnen}{ov.FaseCyclus}", ov.AlleLijnen == true ? 1 : 0, CCOLElementTimeTypeEnum.None, _prmallelijnen, ov.FaseCyclus));
                     var n = 1;
                     foreach (var l in ov.LijnNummers)
                     {
                         if (!int.TryParse(l.Nummer, out var num)) continue;
                         _myElements.Add(
-                            new CCOLElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmlijn, ov.FaseCyclus));
                         ++n;
                     }
                 }
@@ -355,13 +355,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (ov.CheckRitCategorie)
                 {
                     // Note!!! "alleritcat" must alway be DIRECTLY above the cat prms, cause of the way these prms are used in code
-                    _myElements.Add(new CCOLElement($"{_prmalleritcat}{ov.FaseCyclus}", ov.AlleRitCategorien == true ? 1 : 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmalleritcat}{ov.FaseCyclus}", ov.AlleRitCategorien == true ? 1 : 0, CCOLElementTimeTypeEnum.None, _prmalleritcat, ov.FaseCyclus));
                     var n = 1;
                     foreach (var l in ov.RitCategorien)
                     {
                         if (!int.TryParse(l.Nummer, out var num)) continue;
                         _myElements.Add(
-                            new CCOLElement($"{_prmritcat}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmritcat}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmritcat, ov.FaseCyclus));
                         ++n;
                     }
                 }
@@ -378,24 +378,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myBitmapOutputs.Add(new CCOLIOElement(hd.HDInmeldingBitmapData, $"{_uspf}{_ushdinm}{hd.FaseCyclus}"));
 
-                _myElements.Add(new CCOLElement($"{_ushdinm}{hd.FaseCyclus}", CCOLElementTypeEnum.Uitgang));
-                _myElements.Add(new CCOLElement($"{_hhd}{hd.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
-                _myElements.Add(new CCOLElement($"{_hhdin}{hd.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
-                _myElements.Add(new CCOLElement($"{_hhduit}{hd.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushdinm}{hd.FaseCyclus}", _ushdinm, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhd}{hd.FaseCyclus}", _hhd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhdin}{hd.FaseCyclus}", _hhdin, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hhduit}{hd.FaseCyclus}", _hhduit, hd.FaseCyclus));
 
-                _myElements.Add(new CCOLElement($"{_tgbhd}{hd.FaseCyclus}", hd.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_trthd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
-                _myElements.Add(new CCOLElement($"{_cvchd}{hd.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, CCOLElementTypeEnum.Counter));
-                _myElements.Add(new CCOLElement($"{_prmpriohd}{hd.FaseCyclus}", 9005, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmrtohd}{hd.FaseCyclus}", hd.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmrtbghd}{hd.FaseCyclus}", hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmrtghd}{hd.FaseCyclus}", hd.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_schupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhd}{hd.FaseCyclus}", hd.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgbhd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _trthd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchd}{hd.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohd}{hd.FaseCyclus}", 9005, CCOLElementTimeTypeEnum.None, _prmpriohd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtohd}{hd.FaseCyclus}", hd.RijTijdOngehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtohd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbghd}{hd.FaseCyclus}", hd.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbghd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtghd}{hd.FaseCyclus}", hd.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtghd, hd.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagbhd}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagbhd, hd.FaseCyclus));
 
                 // For signal groups that have HD but not OV
                 if (c.OVData.OVIngrepen.All(x => x.FaseCyclus != hd.FaseCyclus))
                 {
-                    _myElements.Add(new CCOLElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{hd.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tbtovg, hd.FaseCyclus));
                 }
 
                 if (hd.KAR)

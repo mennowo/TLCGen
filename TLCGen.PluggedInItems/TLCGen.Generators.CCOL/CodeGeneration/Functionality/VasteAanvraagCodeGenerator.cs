@@ -25,20 +25,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_schca}{fcm.Naam}",
-                            fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
-                            CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schca}{fcm.Naam}", fcm.VasteAanvraag == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schca, fcm.Naam));
                 }
 
                 if (fcm.VasteAanvraag != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
                     fcm.UitgesteldeVasteAanvraag)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_tuitgestca}{fcm.Naam}",
-                            fcm.UitgesteldeVasteAanvraagTijdsduur,
-                            CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tuitgestca}{fcm.Naam}", fcm.UitgesteldeVasteAanvraagTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tuitgestca, fcm.Naam));
                 }
             }
         }

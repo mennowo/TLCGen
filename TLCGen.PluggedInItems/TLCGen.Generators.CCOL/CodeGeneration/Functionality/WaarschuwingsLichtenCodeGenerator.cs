@@ -33,17 +33,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (c.Signalen.WaarschuwingsGroepen.Any(x => x.Bellen))
             {
                 _myElements.Add(
-                    new CCOLElement(
-                        $"{_schbelcontdim}",
-                        0,
-                        CCOLElementTimeTypeEnum.SCH_type, 
-                        CCOLElementTypeEnum.Schakelaar));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schbelcontdim}", 0, CCOLElementTimeTypeEnum.SCH_type, _schbelcontdim));
                 if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen))
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_usbeldim}",
-                            CCOLElementTypeEnum.Uitgang));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbeldim}", _usbeldim));
                 }
             }
 
@@ -52,17 +46,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (wlg.Bellen)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_usbel}{wlg.Naam}",
-                            CCOLElementTypeEnum.Uitgang));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usbel}{wlg.Naam}", _usbel, wlg.Naam));
                     _myBitmapOutputs.Add(new CCOLIOElement(wlg.BellenBitmapData as IOElementModel, $"{_uspf}{_usbel}{wlg.Naam}"));
                 }
                 if (wlg.Lichten)
                 {
                     _myElements.Add(
-                        new CCOLElement(
-                            $"{_uswl}{wlg.Naam}",
-                            CCOLElementTypeEnum.Uitgang));
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uswl}{wlg.Naam}", _uswl, wlg.Naam));
                     _myBitmapOutputs.Add(new CCOLIOElement(wlg.LichtenBitmapData as IOElementModel, $"{_uspf}{_uswl}{wlg.Naam}"));
                 }
             }

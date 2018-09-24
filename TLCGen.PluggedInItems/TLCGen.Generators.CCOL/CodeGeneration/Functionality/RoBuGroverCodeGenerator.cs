@@ -35,32 +35,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.RoBuGrover.ConflictGroepen?.Count == 0)
                 return;
 
-            _myElements.Add(new CCOLElement(_prmrgv.Setting, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmmin_tcyclus.Setting, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmmax_tcyclus.Setting, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmtvg_omhoog.Setting, c.RoBuGrover.GroenOphoogFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmtvg_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmtvg_verschil.Setting, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_prmtvg_npr_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-            _myElements.Add(new CCOLElement(_schrgv.Setting, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _myElements.Add(new CCOLElement(_schrgv_snel.Setting, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            _myElements.Add(new CCOLElement(_usrgv.Setting, CCOLElementTypeEnum.Uitgang));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmrgv.Setting, (int)c.RoBuGrover.MethodeRoBuGrover, CCOLElementTimeTypeEnum.None, _prmrgv));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmmin_tcyclus.Setting, c.RoBuGrover.MinimaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, _prmmin_tcyclus));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmmax_tcyclus.Setting, c.RoBuGrover.MaximaleCyclustijd, CCOLElementTimeTypeEnum.TE_type, _prmmax_tcyclus));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_omhoog.Setting, c.RoBuGrover.GroenOphoogFactor, CCOLElementTimeTypeEnum.TE_type, _prmtvg_omhoog));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, _prmtvg_omlaag));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_verschil.Setting, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, _prmtvg_verschil));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_npr_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, _prmtvg_npr_omlaag));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv.Setting, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv_snel.Setting, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv_snel));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usrgv.Setting, _usrgv));
 
             foreach(var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if (fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
                     continue;
 
-                _myElements.Add(new CCOLElement($"{_prmmintvg}_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_prmmaxtvg}_{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement($"{_hprreal}{fc.FaseCyclus}", CCOLElementTypeEnum.HulpElement));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmintvg}_{fc.FaseCyclus}", fc.MinGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmmintvg, fc.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmaxtvg}_{fc.FaseCyclus}", fc.MaxGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmmaxtvg, fc.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hprreal}{fc.FaseCyclus}", _hprreal, fc.FaseCyclus));
                 foreach(var d in fc.FileDetectoren)
                 {
-                    _myElements.Add(new CCOLElement($"{_tfd}{_dpf}{d.Detector}", d.FileTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tfd}{_dpf}{d.Detector}", d.FileTijd, CCOLElementTimeTypeEnum.TE_type, _tfd, fc.FaseCyclus, d.Detector));
                 }
                 foreach (var d in fc.HiaatDetectoren)
                 {
-                    _myElements.Add(new CCOLElement($"{_thd}{_dpf}{d.Detector}", d.HiaatTijd, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_thd}{_dpf}{d.Detector}", d.HiaatTijd, CCOLElementTimeTypeEnum.TE_type, _thd, fc.FaseCyclus, d.Detector));
                 }
             }
 

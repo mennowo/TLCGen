@@ -390,7 +390,7 @@ namespace TLCGen.ViewModels
                 Messenger.Default.Send(new UpdateTabsEnabledMessage());
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
-                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
+                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
                 FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
             }
         }
@@ -411,7 +411,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged("ProgramTitle");
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
-                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " opgeslagen");
+                    " - Regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam ?? "" + " opgeslagen");
                 FileSaved?.Invoke(this, TLCGenControllerDataProvider.Default.ControllerFileName);
             }
         }
