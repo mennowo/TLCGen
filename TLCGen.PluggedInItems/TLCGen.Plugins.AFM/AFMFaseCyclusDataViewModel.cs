@@ -5,7 +5,7 @@ using TLCGen.Plugins.AFM.Models;
 
 namespace TLCGen.Plugins.AFM
 {
-    public class AFMFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem
+    public class AFMFaseCyclusDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         private AFMFaseCyclusDataModel _faseCyclus;
 
@@ -54,6 +54,11 @@ namespace TLCGen.Plugins.AFM
         public object GetItem()
         {
             return _faseCyclus;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return string.CompareOrdinal(FaseCyclus, ((AFMFaseCyclusDataViewModel)obj).FaseCyclus);
         }
 
         public AFMFaseCyclusDataViewModel(AFMFaseCyclusDataModel faseCyclus)

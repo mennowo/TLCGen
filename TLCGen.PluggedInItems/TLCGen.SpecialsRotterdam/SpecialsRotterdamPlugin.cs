@@ -202,89 +202,7 @@ namespace TLCGen.SpecialsRotterdam
             }
 
             #endregion // OVM
-
-            #region AFM
-
-            if (_MyModel.ToepassenAFM)
-            {
-                // Search fasen with dummies
-                bool error = false;
-                foreach (var fc in c.Fasen)
-                {
-                    foreach (var fc2 in c.Fasen)
-                    {
-                        if(fc2.Naam.Length == 3 && fc2.Naam.StartsWith("9") && fc.Naam == fc2.Naam.Substring(1))
-                        {
-                            _FasenWithDummies.Add(fc.Naam);
-                            if (!error &&
-                                (fc2.Meeverlengen != NooitAltijdAanUitEnum.Nooit ||
-                                 fc2.Wachtgroen != NooitAltijdAanUitEnum.Nooit ||
-                                 fc2.VasteAanvraag != NooitAltijdAanUitEnum.Nooit ||
-                                 ((c.ModuleMolen.FasenModuleData.Any() &&
-                                   c.ModuleMolen.FasenModuleData.Any(x => x.FaseCyclus == fc2.Naam) &&
-                                   c.ModuleMolen.FasenModuleData.First(x => x.FaseCyclus == fc2.Naam).AlternatiefToestaan))))
-                            {
-                                error = true;
-                                MessageBox.Show($"Dummy fase {fc2.Naam} is niet juist als dummy geconfigureerd.\nControleer: nooit meeverlengen/wachtgroen/vaste aanvraag, en niet alternatief",
-                                                "AFM: Foutieve instellingen dummy fase");
-                                break;
-                            }
-                        }
-                    }
-                }
-                if(!_FasenWithDummies.Any() || error)
-                {
-                    if (!_FasenWithDummies.Any())
-                    {
-                        MessageBox.Show($"Er zijn geen dummy fasen gevonden in de regeling.\nControleer: TLCGen verwacht voor auto fasen te relateren 9## fasen.",
-                                                "AFM: Foutieve instellingen dummy fasen");
-                    }
-                    return;
-                }
-
-                foreach (var fc in c.Fasen)
-                {
-                    if (fc.Type == FaseTypeEnum.Auto || fc.Type == FaseTypeEnum.OV)
-                    {
-                        int i = 0;
-                        if (Int32.TryParse(fc.Naam, out i))
-                        {
-                            if (i < 900)
-                            {
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_FC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxMin", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxMax", 80, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Gmaxact", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Gmaxgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_GmaxAFM", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Sturing", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_Qlenght", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_AbsBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_RelBufferRuimte", 100, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                                _MyElements.Add(new CCOLElement($"AFM{fc.Naam}_RelBufferVulling", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                            }
-                        }
-                    }
-                }
-                _MyElements.Add(new CCOLElement("AFM_Strikt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_TC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _MyElements.Add(new CCOLElement("AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-
-                _MyElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang));
-
-                _MyElements.Add(new CCOLElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
-                _MyElements.Add(new CCOLElement("AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
-            }
-
-            #endregion // AFM
-
+            
             #region Logging TFB max
 
             if(_MyModel.PrmLoggingTfbMax)
@@ -313,14 +231,6 @@ namespace TLCGen.SpecialsRotterdam
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    return 100;
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    return 100;
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     return 100;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
@@ -337,80 +247,7 @@ namespace TLCGen.SpecialsRotterdam
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCTop:
-                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
-                        return "";
-                    sb.AppendLine("/* Ten behoeve van AFM */");
-                    int index = 0;
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"#define AFM_{_fcpf}{fc} {index++}");
-                    }
-                    sb.AppendLine($"#define AFM_{_fcpf}max {index}");
-                    sb.AppendLine("#include \"AFMroutines.c\"");
-                    sb.AppendLine("static AFM_FC_STRUCT verwerken_fcs[AFM_fcmax] = { 0 };");
-                    sb.AppendLine($"int prmAFM_watchdog_return_old;");
-                    sb.AppendLine($"int TVG_temp[FCMAX];");
-                    sb.AppendLine();
-                    return sb.ToString();
-
-                case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
-                        return "";
-                    sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
-                    sb.AppendLine($"{ts}AFMinit();");
-                    sb.AppendLine();
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}AFM_fc_initfc(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}{fc}, prmAFM{fc}_FC);");
-                    }
-                    sb.AppendLine();
-                    return sb.ToString();
-
-                case CCOLCodeTypeEnum.RegCPreApplication:
-                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
-                        return "";
-                    sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
-                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old);");
-                    sb.AppendLine("#else");
-                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
-                    sb.AppendLine("#endif");
-                    sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_Watchdog];");
-                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}AFMLeven] = RT[{_tpf}AFMLeven];");
-                    sb.AppendLine($"{ts}RT[tVRILeven] = !T[tVRILeven];");
-                    sb.AppendLine($"{ts}if (ET[{_tpf}VRILeven])");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Watchdog] < 9999) PRM[{_prmpf}AFM_Watchdog]++;");
-                    sb.AppendLine($"{ts}{ts}else                            PRM[{_prmpf}AFM_Watchdog] = 0;");
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}AFMResetBits();");
-                    sb.AppendLine();
-                    sb.AppendLine($"{ts}/* Niet bewaken schaduw fasen AFM */");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}TFB_timer[{_fcpf}9{fc}] = 0;");
-                    }
-                    sb.AppendLine();
-                    return sb.ToString();
-
-                case CCOLCodeTypeEnum.RegCAlternatieven:
-                    if (!_MyModel.ToepassenAFM || !_FasenWithDummies.Any())
-                        return "";
-                    sb.AppendLine($"{ts}/* AFM */");
-                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && PRM[{_prmpf}AFM_Beschikbaar])");
-                    sb.AppendLine($"{ts}{{");
-                    foreach (var fc in _FasenWithDummies)
-                    {
-                        sb.AppendLine($"{ts}{ts}AFMacties_alternatieven(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
-                    }
-                    sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
-                    return sb.ToString();
-
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if (!_MyModel.ToepassenAFM && !_MyModel.ToevoegenOVM)
-                        return "";
                     if (_MyModel.ToevoegenOVM)
                     {
                         sb.AppendLine($"{ts}/* OVM Rotterdam: extra/minder groen */");
@@ -419,53 +256,6 @@ namespace TLCGen.SpecialsRotterdam
                             sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] += PRM[{_prmpf}ovmextragroen_{fc.Naam}];");
                             sb.AppendLine($"{ts}if (TVG_max[{_fcpf}{fc.Naam}] > -1) TVG_max[{_fcpf}{fc.Naam}] -= PRM[{_prmpf}ovmmindergroen_{fc.Naam}];");
                         }
-                        sb.AppendLine();
-                    }
-                    if (_MyModel.ToepassenAFM && _FasenWithDummies.Any())
-                    {
-                        sb.AppendLine($"{ts}/* AFM */");
-                        foreach (var fc in _FasenWithDummies)
-                        {
-                            sb.AppendLine($"{ts}TVG_temp[{_fcpf}{fc}] = TVG_max[{_fcpf}{fc}];");
-                        }
-                        sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven])");
-                        sb.AppendLine($"{ts}{{");
-                        foreach (var fc in _FasenWithDummies)
-                        {
-                            sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
-                        }
-                        sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
-                        sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Beschikbaar])");
-                        sb.AppendLine($"{ts}{ts}{{");
-                        foreach (var fc in _FasenWithDummies)
-                        {
-                            sb.AppendLine(
-                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc}], {_fcpf}9{fc}, verwerken_fcs);");
-                        }
-                        sb.AppendLine($"{ts}{ts}}}");
-                        sb.AppendLine();
-
-                        string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
-                        foreach (var fc in _FasenWithDummies)
-                        {
-                            foreach (var fi in c.FileIngrepen)
-                            {
-                                foreach (var _fc in fi.TeDoserenSignaalGroepen)
-                                {
-                                    if (fc == _fc.FaseCyclus)
-                                    {
-                                        sb.AppendLine(
-                                            $"{ts}{ts}if ((TVG_max[{_fcpf}{fc}] > TVG_temp[{_fcpf}{fc}]) && !SCH[{_schpf}AFMExtraGroenBijFile] && IH[{_hpf}{_hfile}{fi.Naam}]) TVG_max[{_fcpf}{fc}] = TVG_temp[{_fcpf}{fc}];");
-                                    }
-                                }
-                            }
-                        }
-                        foreach (var fc in _FasenWithDummies)
-                        {
-                            sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{fc}]);");
-                        }
-
-                        sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }
                     return sb.ToString();
@@ -509,17 +299,7 @@ namespace TLCGen.SpecialsRotterdam
                     return null;
             }
         }
-
-        public override List<string> GetSourcesToCopy()
-        {
-            if (!_MyModel.ToepassenAFM) return null;
-            return new List<string>
-            {
-                "afmroutines.c",
-                "afmroutines.h"
-            };
-        }
-
+        
         #endregion // CCOLCodePieceGenerator
 
         #region Constructor

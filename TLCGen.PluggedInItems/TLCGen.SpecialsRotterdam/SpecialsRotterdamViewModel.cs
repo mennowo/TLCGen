@@ -36,17 +36,6 @@ namespace TLCGen.SpecialsRotterdam
             }
         }
 
-        public bool ToepassenAFM
-        {
-            get { return _Specials.ToepassenAFM; }
-            set
-            {
-                _Specials.ToepassenAFM = value;
-                MessengerInstance.Send(new ControllerDataChangedMessage());
-                RaisePropertyChanged<object>("ToepassenAFM", null, null, true);
-            }
-        }
-
         public bool PrmLoggingTfbMax
         {
             get { return _Specials.PrmLoggingTfbMax; }
@@ -72,7 +61,7 @@ namespace TLCGen.SpecialsRotterdam
 
         public void UpdateTLCGenMessaging()
         {
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
+            Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
         }
 
         #endregion // Public Methods

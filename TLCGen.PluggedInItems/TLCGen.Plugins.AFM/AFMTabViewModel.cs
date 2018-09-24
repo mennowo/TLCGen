@@ -7,6 +7,9 @@ using TLCGen.Plugins.AFM.Models;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 using System;
 using TLCGen.Messaging.Messages;
+using System.Linq;
+using TLCGen.Extensions;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.Plugins.AFM
 {
@@ -20,7 +23,10 @@ namespace TLCGen.Plugins.AFM
 
         #region Properties
 
+        public List<string> AllFasen { get; } = new List<string>();
         public ObservableCollection<string> SelectableFasen { get; } = new ObservableCollection<string>();
+        private ObservableCollection<string> _SelectableDummyFasen = new ObservableCollection<string>();
+        public ObservableCollection<string> SelectableDummyFasen => _SelectableDummyFasen;
 
         private string _selectedFaseToAdd;
         public string SelectedFaseToAdd
@@ -81,10 +87,25 @@ namespace TLCGen.Plugins.AFM
 
         private void AddFaseCommand_executed()
         {
+            var i = SelectableFasen.IndexOf(SelectedFaseToAdd);
             AFMFasen.Add(new AFMFaseCyclusDataViewModel(new AFMFaseCyclusDataModel
             {
-                FaseCyclus = SelectedFaseToAdd
+                FaseCyclus = SelectedFaseToAdd,
+                DummyFaseCyclus = "NG",
+                MinimaleGroentijd = 6,
+                MaximaleGroentijd = 80
             }));
+            UpdateSelectableFasen(null);
+            if (SelectableFasen.Any())
+            {
+                if (i >= 0 && SelectableFasen.Count > i) SelectedFaseToAdd = SelectableFasen[i];
+                else SelectedFaseToAdd = SelectableFasen.Last();
+            }
+            else
+            {
+                SelectedFaseToAdd = null;
+            }
+            AFMFasen.BubbleSort();
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
@@ -98,25 +119,97 @@ namespace TLCGen.Plugins.AFM
 
         private void RemoveFaseCommand_executed()
         {
+            var i = AFMFasen.IndexOf(SelectedAFMFase);
+            var iA = SelectableFasen.IndexOf(SelectedFaseToAdd);
             AFMFasen.Remove(SelectedAFMFase);
-            SelectedAFMFase = null;
+            if (AFMFasen.Count > 0)
+            {
+                if (i >= 0 && AFMFasen.Count > i) SelectedAFMFase = AFMFasen[i];
+                else SelectedAFMFase = AFMFasen.Last();
+            }
+            else
+            {
+                SelectedAFMFase = null;
+            }
+            UpdateSelectableFasen(null);
+            if (SelectableFasen.Any())
+            {
+                if (iA >= 0 && SelectableFasen.Count > iA) SelectedFaseToAdd = SelectableFasen[iA];
+                else SelectedFaseToAdd = SelectableFasen.Last();
+            }
+            else
+            {
+                SelectedFaseToAdd = null;
+            }
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Commands
 
         #region TLCGen messaging
+
+        private void OnFasenChanged(FasenChangedMessage msg)
+        {
+            if(msg.RemovedFasen != null && msg.RemovedFasen.Any())
+            {
+                foreach(var fc in msg.RemovedFasen)
+                {
+                    var afmFc = AFMFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
+                    if(afmFc != null)
+                    {
+                        AFMFasen.Remove(afmFc);
+                    }
+                    var afmFcDummy = AFMFasen.FirstOrDefault(x => x.DummyFaseCyclus == fc.Naam);
+                    if (afmFcDummy != null)
+                    {
+                        afmFcDummy.DummyFaseCyclus = "NG";
+                    }
+                }
+            }
+        }
+
+        private void OnNameChanged(NameChangedMessage msg)
+        {
+            if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
+            {
+                TLCGenModelManager.Default.ChangeNameOnObject(AfmModel, msg.OldName, msg.NewName);
+                AFMFasen.Rebuild();
+                AFMFasen.BubbleSort();
+            }
+        }
+
         #endregion // TLCGen messaging
 
         #region Public Methods
 
-        public void UpdateSelectableFasen(IEnumerable<string> fasen)
+        public void UpdateMessaging()
         {
-            SelectableFasen.Clear();
-            foreach(var f in fasen)
+            MessengerInstance.Register<FasenChangedMessage>(this, OnFasenChanged);
+            MessengerInstance.Register<NameChangedMessage>(this, OnNameChanged);
+        }
+
+        public void UpdateSelectableFasen(IEnumerable<string> allFasen)
+        {
+            if(allFasen != null)
             {
-                SelectableFasen.Add(f);
+                AllFasen.Clear();
+                _SelectableDummyFasen.Clear();
+                foreach (var f in allFasen)
+                {
+                    AllFasen.Add(f);
+                    _SelectableDummyFasen.Add(f);
+                }
+                _SelectableDummyFasen.Add("NG");
             }
+            SelectableFasen.Clear();
+            foreach(var f in AllFasen)
+            {
+                if(!AFMFasen.Any(x => x.FaseCyclus == f))
+                {
+                    SelectableFasen.Add(f);
+                }
+            }
+            if(SelectableFasen.Any()) SelectedFaseToAdd = SelectableFasen[0];
         }
 
         #endregion // Public Methods

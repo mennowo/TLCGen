@@ -12,8 +12,7 @@ namespace TLCGen.SpecialsRotterdam
         #endregion // Fields
 
         #region Properties
-
-        public bool ToepassenAFM { get; set; }
+        
         public bool ToevoegenOVM { get; set; }
         public bool PrmLoggingTfbMax { get; set; }
 

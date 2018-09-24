@@ -72,6 +72,18 @@
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Generators.CCOL\TLCGen.Generators.CCOL.csproj">
+      <Project>{3D0FCFC8-2C31-492C-BAA2-3AF8214ED6DF}</Project>
+      <Name>TLCGen.Generators.CCOL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SourceFiles\afmroutines.c">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SourceFiles\afmroutines.h">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Choose>

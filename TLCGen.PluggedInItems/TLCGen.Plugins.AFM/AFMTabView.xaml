@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <CheckBox IsChecked="{Binding Path=AFMToepassen,UpdateSourceTrigger=PropertyChanged}" Content="AFM toepassen" Margin="5" />
         <Label Grid.Row="1" Content="AFM fasen" />
-        <DataGrid 
+        <ct:SpecialDataGrid 
             ItemsSource="{Binding Path=AFMFasen}" Margin="2"
             IsEnabled="{Binding Path=AFMToepassen}" Grid.Row="2"
             SelectedItem="{Binding Path=SelectedAFMFase}"
@@ -29,9 +29,6 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
             <DataGrid.Columns>
-                <!--<DataGridComboBoxColumn 
-                    ItemsSource="{Binding ElementName=root,Path=DataContext.SelectableFasen}"
-                    SelectedValueBinding="{Binding Path=DummyFaseCyclus,UpdateSourceTrigger=PropertyChanged}" Header="Dummy" />-->
                 <DataGridTemplateColumn Header="Dummy" Width="Auto" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -41,7 +38,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox 
-                                ItemsSource="{Binding Path=DataContext.SelectableFasen,ElementName=root}" 
+                                ItemsSource="{Binding Path=DataContext.SelectableDummyFasen,RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                 FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                                 SelectedItem="{Binding Path=DummyFaseCyclus,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         </DataTemplate>
@@ -50,8 +47,8 @@
                 <DataGridTextColumn Binding="{Binding Path=MinimaleGroentijd,UpdateSourceTrigger=PropertyChanged}" Header="Min. groen" />
                 <DataGridTextColumn Binding="{Binding Path=MaximaleGroentijd,UpdateSourceTrigger=PropertyChanged}" Header="Max. groen" />
             </DataGrid.Columns>
-        </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
+        </ct:SpecialDataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" IsEnabled="{Binding Path=AFMToepassen}">
             <ComboBox Margin="2"
                 ItemsSource="{Binding Path=SelectableFasen}" SelectedValue="{Binding SelectedFaseToAdd}" />
             <Button Content="Toevoegen" Command="{Binding Path=AddFaseCommand}" Margin="2" />
