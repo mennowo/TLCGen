@@ -454,7 +454,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (genPlugin == null) continue;
 
                 PieceGenerators.Add(genPlugin);
-                if(genPlugin.HasSettings()) genPlugin.SetSettings(null);
+                var set = CCOLGeneratorSettingsProvider.Default.Settings.CodePieceGeneratorSettings.Find(x => x.Item1 == type.Name);
+                if (genPlugin.HasSettings()) genPlugin.SetSettings(set?.Item2);
 
                 var codetypes = Enum.GetValues(typeof(CCOLCodeTypeEnum));
                 foreach (var codetype in codetypes)

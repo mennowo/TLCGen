@@ -123,7 +123,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             foreach (var field in fields)
             {
-                if(__fieldregex.IsMatch(field.Name) && field.GetValue(this) == null)
+                if(field.FieldType == typeof(CCOLGeneratorCodeStringSettingModel) &&
+                    __fieldregex.IsMatch(field.Name) && field.GetValue(this) == null)
                 {
 #if DEBUG
                         System.Windows.MessageBox.Show("Setting not found: [" + this.GetType().Name + "] " + field.Name);

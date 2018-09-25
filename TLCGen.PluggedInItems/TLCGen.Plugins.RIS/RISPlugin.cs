@@ -162,6 +162,16 @@ namespace TLCGen.Plugins.RIS
 
         #region CCOLCodePieceGenerator
 
+        public override bool HasSettings()
+        {
+            return true;
+        }
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            return base.SetSettings(settings);
+        }
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
