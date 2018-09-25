@@ -93,8 +93,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    return 30;
                 case CCOLCodeTypeEnum.RegCPreApplication:
-					return 30;
+                    return 30;
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 20;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
@@ -116,8 +118,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-				case CCOLCodeTypeEnum.RegCPreApplication:
-					if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
+				case CCOLCodeTypeEnum.RegCInitApplication:
+                    // TODO: eerst controleren
+                    //if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen && x.InrijdenTijdensGroen))
+                    //{
+                    //    sb.AppendLine($"{ts}/* Corrigeren FK<>GKL tbv nalopen met inrijden tijdens groen */");
+                    //    sb.AppendLine($"{ts}/* Dit gebeurt hier i.p.v. in de tab.c om waarschuwingen door CCOL te voorkomen */");
+                    //    foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == NaloopTypeEnum.EindeGroen))
+                    //    {
+                    //        foreach(var kfc in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nl.FaseVan))
+                    //        {
+                    //            sb.AppendLine($"{ts}TO_max[{_fcpf}{nl.FaseVan}][{_fcpf}{kfc.FaseNaar}] = GKL;");
+                    //        }
+                    //    }
+                    //}
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
 						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
 						var k = 0;

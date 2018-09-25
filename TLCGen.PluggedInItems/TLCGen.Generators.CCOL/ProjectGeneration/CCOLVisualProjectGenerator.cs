@@ -51,8 +51,8 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                     ccollibspath = ccollibspath + "\\";
                 }
                 writeline = writeline.Replace("__CCOLLIBSDIR__", ccollibspath == null ? "" : ccollibspath);
+                writeline = writeline.Replace("__CCOLLIBSDIRNOTIG__", _ccollibsnotig == null ? "" : _ccollibsnotig);
                 writeline = writeline.Replace("__CCOLLLIBS__", _ccollibs == null ? "" : _ccollibs);
-                writeline = writeline.Replace("__CCOLLLIBSNOTIG__", _ccollibsnotig == null ? "" : _ccollibsnotig);
                 string ccolrespath = _ccolrespath == null ? "" : _ccolrespath.Remove(_ccolrespath == null ? 0 : _ccolrespath.Length - 1);
                 if (!ccolrespath.EndsWith("\\"))
                 {

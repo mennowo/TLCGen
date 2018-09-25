@@ -233,6 +233,7 @@ namespace TLCGen.ViewModels
                     }
                 }
                 RaisePropertyChanged<object>(nameof(AantalRijstroken), broadcast: true);
+                MessengerInstance.Send(new FaseAantalRijstrokenChangedMessage(_faseCyclus, _faseCyclus.AantalRijstroken));
             }
         }
 

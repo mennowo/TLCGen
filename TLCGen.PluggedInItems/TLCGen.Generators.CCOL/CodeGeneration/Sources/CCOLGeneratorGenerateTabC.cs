@@ -357,7 +357,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 case Models.Enumerations.NaloopTypeEnum.EindeGroen:
                                     if (nl.InrijdenTijdensGroen)
                                     {
+                                        // TODO: eerst controleren
+                                        // Dit wordt gecorrigeerd in RegCInitApplication door NalopenCodeGenerator
                                         if (matrix[i, k] > -4) matrix[i, k] = -4;
+                                        //if (matrix[i, k] > -4) matrix[i, k] = -2; // wordt gecorrigeerd naar -4
                                         if (matrix[k, i] > -2) matrix[k, i] = -2;
                                     }
                                     else

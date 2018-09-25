@@ -151,7 +151,6 @@ namespace TLCGen.Plugins.AFM
 
         #endregion // ITLCGenPlugMessaging
 
-
         #region CCOLCodePieceGenerator
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -231,7 +230,7 @@ namespace TLCGen.Plugins.AFM
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCTop:
-                    if (!_afmModel.AFMToepassen && _afmModel.AFMFasen.Any())
+                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     int index = 0;
@@ -248,7 +247,7 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (!_afmModel.AFMToepassen && _afmModel.AFMFasen.Any())
+                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
                     sb.AppendLine($"{ts}AFMinit();");
@@ -261,7 +260,7 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    if (!_afmModel.AFMToepassen && _afmModel.AFMFasen.Any())
+                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old);");
@@ -288,7 +287,7 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-                    if (!_afmModel.AFMToepassen && _afmModel.AFMFasen.Any())
+                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     sb.AppendLine($"{ts}/* AFM */");
                     sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && PRM[{_prmpf}AFM_Beschikbaar])");
@@ -302,7 +301,7 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if (!_afmModel.AFMToepassen && _afmModel.AFMFasen.Any())
+                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     
                     sb.AppendLine($"{ts}/* AFM */");
@@ -368,7 +367,6 @@ namespace TLCGen.Plugins.AFM
         }
 
         #endregion // CCOLCodePieceGenerator
-
 
         #region Constructor
 

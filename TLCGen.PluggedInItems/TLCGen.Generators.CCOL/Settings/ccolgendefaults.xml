@@ -1901,6 +1901,38 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="RISPlugin">
+      <CodePieceData>
+        <ClassName>RISPlugin</ClassName>
+        <Description>RIS data</Description>
+        <Settings>
+          <Setting>
+            <Default>risastart</Default>
+            <Setting>risastart</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start aanvraag gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risaend</Default>
+            <Setting>risaend</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde aanvraag gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvstart</Default>
+            <Setting>risvstart</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot start verleng gebied RIS fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>risvend</Default>
+            <Setting>risvend</Setting>
+            <Type>Parameter</Type>
+            <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>
