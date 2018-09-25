@@ -165,7 +165,7 @@ namespace TLCGen.Plugins.AFM
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMin", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMax", 80, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Gmaxact", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxAct", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Gmaxgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxAFM", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
@@ -181,6 +181,7 @@ namespace TLCGen.Plugins.AFM
                 _myElements.Add(new CCOLElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("AFM_Test", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 _myElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang));
@@ -214,6 +215,8 @@ namespace TLCGen.Plugins.AFM
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     return 105;
                 case CCOLCodeTypeEnum.RegCPostApplication:
+                    return 105;
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 105;
                 default:
                     return 0;
@@ -254,7 +257,7 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine();
                     foreach (var fc in _afmModel.AFMFasen)
                     {
-                        sb.AppendLine($"{ts}AFM_fc_initfc(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.DummyFaseCyclus}, prmAFM{fc.FaseCyclus}_FC);");
+                        sb.AppendLine($"{ts}AFM_fc_initfc(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.FaseCyclus}, prmAFM{fc.FaseCyclus}_FC);");
                     }
                     sb.AppendLine();
                     return sb.ToString();
@@ -262,18 +265,20 @@ namespace TLCGen.Plugins.AFM
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
-                    sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM ");
-                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old);");
+                    sb.AppendLine($"{ts}AFM_CIF_changed = FALSE;");
+                    sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM || !defined AUTOMAAT");
+                    sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old) || SCH[schAFM_overbrugging];");
                     sb.AppendLine("#else");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
                     sb.AppendLine("#endif");
-                    sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_Watchdog];");
-                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}AFMLeven] = RT[{_tpf}AFMLeven];");
-                    sb.AppendLine($"{ts}RT[tVRILeven] = !T[tVRILeven];");
+                    sb.AppendLine($"{ts}prmAFM_watchdog_return_old = PRM[{_prmpf}AFM_WatchdogReturn];");
+                    sb.AppendLine($"{ts}CIF_GUS[{_uspf}AFMLeven] = T[{_tpf}AFMLeven];");
+                    sb.AppendLine($"{ts}RT[{_tpf}VRILeven] = !T[{_tpf}VRILeven];");
                     sb.AppendLine($"{ts}if (ET[{_tpf}VRILeven])");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Watchdog] < 9999) PRM[{_prmpf}AFM_Watchdog]++;");
                     sb.AppendLine($"{ts}{ts}else                            PRM[{_prmpf}AFM_Watchdog] = 0;");
+                    sb.AppendLine($"{ts}AFM_CIF_changed = TRUE;");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}AFMResetBits();");
@@ -290,7 +295,7 @@ namespace TLCGen.Plugins.AFM
                     if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
                         return "";
                     sb.AppendLine($"{ts}/* AFM */");
-                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && PRM[{_prmpf}AFM_Beschikbaar])");
+                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && !PRM[{_prmpf}AFM_Test])");
                     sb.AppendLine($"{ts}{{");
                     foreach (var fc in _afmModel.AFMFasen)
                     {
@@ -311,17 +316,27 @@ namespace TLCGen.Plugins.AFM
                     }
                     sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven])");
                     sb.AppendLine($"{ts}{{");
-                    foreach (var dummyFc in dFcs)
+                    foreach (var fc in _afmModel.AFMFasen)
                     {
-                        sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{dummyFc}]);");
+                        sb.AppendLine($"{ts}{ts}AFMdata(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}]);");
                     }
-                    sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC,prmAFM_TCgem);");
-                    sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}AFM_Beschikbaar])");
+                    sb.AppendLine($"{ts}{ts}AFM_tc({_prmpf}AFM_TC, {_prmpf}AFM_TCgem);");
+                    sb.AppendLine($"{ts}{ts}if (!PRM[{_prmpf}AFM_Test] && !IS[{_ispf}fix])");
                     sb.AppendLine($"{ts}{ts}{{");
-                    foreach (var dummyFc in dFcs)
+                    string _cvchd = CCOLGeneratorSettingsProvider.Default.GetElementName("cvchd");
+                    foreach (var fc in _afmModel.AFMFasen)
                     {
-                        sb.AppendLine(
-                            $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{dummyFc}], {_fcpf}9{dummyFc}, verwerken_fcs);");
+                        var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
+                        if(hd == null)
+                        {
+                            sb.AppendLine(
+                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.DummyFaseCyclus}, verwerken_fcs);");
+                        }
+                        else
+                        {
+                            sb.AppendLine(
+                                $"{ts}{ts}if (!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]) AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.DummyFaseCyclus}, verwerken_fcs);");
+                        }
                     }
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine();
@@ -341,14 +356,31 @@ namespace TLCGen.Plugins.AFM
                             }
                         }
                     }
-                    foreach (var dummyFc in dFcs)
+                    foreach (var fc in _afmModel.AFMFasen)
                     {
-                        sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{dummyFc}]);");
+                        sb.AppendLine($"{ts}{ts}AFMinterface(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}]);");
                     }
+
+                    sb.AppendLine($"{ts}{ts}if (AFM_CIF_changed && SCH[{_schpf}AFMCIFParmWijz])");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}CIF_PARM1WIJZAP = CIF_MEER_PARMWIJZ;");
+                    sb.AppendLine($"{ts}{ts}}}");
 
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
                     
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    string _isfix = CCOLGeneratorSettingsProvider.Default.GetElementName("isfix");
+                    sb.AppendLine($"{ts}if ((CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) && !CIF_IS[{_ispf}{_isfix}] && T[{_tpf}AFMLeven])");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}PRM[{_prmpf}AFM_Beinvloedbaar] = 1;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts}else");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}PRM[{_prmpf}AFM_Beinvloedbaar] = 0;");
+                    sb.AppendLine($"{ts}}}");
                     return sb.ToString();
                     
                 default:
