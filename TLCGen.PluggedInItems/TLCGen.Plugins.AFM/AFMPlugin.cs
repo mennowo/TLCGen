@@ -180,15 +180,18 @@ namespace TLCGen.Plugins.AFM
                 _myElements.Add(new CCOLElement("AFM_TCgem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_Watchdog", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_WatchdogReturn", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Versie", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("AFM_Versie", 7, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                 _myElements.Add(new CCOLElement("AFM_Test", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                _myElements.Add(new CCOLElement("AFM_Beschikbaar", 5, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                _myElements.Add(new CCOLElement("AFM_Beinvloedbaar", 1, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
 
                 _myElements.Add(new CCOLElement("AFMLeven", CCOLElementTypeEnum.Uitgang));
 
                 _myElements.Add(new CCOLElement("AFMLeven", 120, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _myElements.Add(new CCOLElement("VRILeven", 60, CCOLElementTimeTypeEnum.TS_type, CCOLElementTypeEnum.Timer));
                 _myElements.Add(new CCOLElement("AFMExtraGroenBijFile", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+
+                _myElements.Add(new CCOLElement("AFMCIFParmWijz", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
+                _myElements.Add(new CCOLElement("AFM_overbrugging", 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar));
             }
         }
 
@@ -225,6 +228,7 @@ namespace TLCGen.Plugins.AFM
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
+            if (!_afmModel.AFMToepassen || !_afmModel.AFMFasen.Any()) return "";
 
             StringBuilder sb = new StringBuilder();
 
@@ -233,8 +237,6 @@ namespace TLCGen.Plugins.AFM
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCTop:
-                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
-                        return "";
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     int index = 0;
                     foreach (var fc in _afmModel.AFMFasen)
@@ -250,8 +252,6 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
-                        return "";
                     sb.AppendLine($"{ts}/* Initialiseer AFM routines */");
                     sb.AppendLine($"{ts}AFMinit();");
                     sb.AppendLine();
@@ -263,8 +263,6 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
-                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
-                        return "";
                     sb.AppendLine($"{ts}AFM_CIF_changed = FALSE;");
                     sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM || !defined AUTOMAAT");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old) || SCH[schAFM_overbrugging];");
@@ -292,8 +290,6 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
-                        return "";
                     sb.AppendLine($"{ts}/* AFM */");
                     sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && !PRM[{_prmpf}AFM_Test])");
                     sb.AppendLine($"{ts}{{");
@@ -306,9 +302,6 @@ namespace TLCGen.Plugins.AFM
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    if (!_afmModel.AFMToepassen || _afmModel.AFMFasen.Any())
-                        return "";
-                    
                     sb.AppendLine($"{ts}/* AFM */");
                     foreach (var dummyFc in dFcs)
                     {
@@ -327,15 +320,16 @@ namespace TLCGen.Plugins.AFM
                     foreach (var fc in _afmModel.AFMFasen)
                     {
                         var hd = c.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == fc.FaseCyclus);
-                        if(hd == null)
+                        var dummy = (fc.DummyFaseCyclus == "NG" ? "NG" : _fcpf + fc.DummyFaseCyclus);
+                        if (hd == null)
                         {
                             sb.AppendLine(
-                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.DummyFaseCyclus}, verwerken_fcs);");
+                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}), verwerken_fcs);");
                         }
                         else
                         {
                             sb.AppendLine(
-                                $"{ts}{ts}if (!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]) AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {_fcpf}{fc.DummyFaseCyclus}, verwerken_fcs);");
+                                $"{ts}{ts}if (!C[{_ctpf}{_cvchd}{hd.FaseCyclus}]) AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}, verwerken_fcs);");
                         }
                     }
                     sb.AppendLine($"{ts}{ts}}}");
@@ -390,7 +384,7 @@ namespace TLCGen.Plugins.AFM
 
         public override List<string> GetSourcesToCopy()
         {
-            if (!_afmModel.AFMToepassen) return null;
+            if (!_afmModel.AFMToepassen || !_afmModel.AFMFasen.Any()) return null;
             return new List<string>
             {
                 "afmroutines.c",

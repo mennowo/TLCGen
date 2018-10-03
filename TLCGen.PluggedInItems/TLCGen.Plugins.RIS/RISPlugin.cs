@@ -257,6 +257,8 @@ namespace TLCGen.Plugins.RIS
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
 
+            if (!_RISModel.RISToepassen) return "";
+
             StringBuilder sb = new StringBuilder();
 
             switch (type)
