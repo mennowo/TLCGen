@@ -47,7 +47,7 @@ namespace TLCGen.Helpers
 
         private bool AddItemCommand_canExecute()
         {
-            return SelectedItemToAdd != null;
+            return SelectedItemToAdd != null || !AllSelectableItems.Any();
         }
 
         private void AddItemCommand_executed()

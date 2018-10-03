@@ -83,7 +83,12 @@ namespace TLCGen.ViewModels
                     _faseCyclus.Type = value;
 
                     // Apply new defaults
+                    var iL = FaseCyclus.AantalRijstroken;
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
+                    if(iL != FaseCyclus.AantalRijstroken)
+                    {
+                        MessengerInstance.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
+                    }
 
                     if (value != FaseTypeEnum.Voetganger && MeeverlengenType == MeeVerlengenTypeEnum.Voetganger)
                     {

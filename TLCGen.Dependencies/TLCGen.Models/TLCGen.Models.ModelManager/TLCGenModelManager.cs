@@ -167,6 +167,27 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
+
+            // In version 0.3.5.0, voetgangers got lanes.
+            checkVer = Version.Parse("0.3.5.0");
+            if (v < checkVer)
+            {
+                foreach (var s in controller.Fasen)
+                {
+                    if (!s.AantalRijstroken.HasValue || s.Type == FaseTypeEnum.Voetganger && s.AantalRijstroken.Value == 1)
+                    {
+                        switch (s.Type)
+                        {
+                            case FaseTypeEnum.Voetganger:
+                                s.AantalRijstroken = 2;
+                                break;
+                            default:
+                                s.AantalRijstroken = 1;
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)

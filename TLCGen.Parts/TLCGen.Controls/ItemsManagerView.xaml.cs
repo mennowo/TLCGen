@@ -17,6 +17,17 @@ namespace TLCGen.Controls
             InitializeComponent();
         }
 
+        public Visibility SelectableItemsVisibility
+        {
+            get { return (Visibility)GetValue(SelectableItemsVisibilityProperty); }
+            set { SetValue(SelectableItemsVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectableDetectorsVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectableItemsVisibilityProperty =
+            DependencyProperty.Register("SelectableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+
+
         public Visibility RemovableItemsVisibility
         {
             get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }

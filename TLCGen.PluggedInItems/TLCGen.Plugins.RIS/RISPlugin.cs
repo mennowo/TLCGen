@@ -363,6 +363,38 @@ namespace TLCGen.Plugins.RIS
 
         #region Private Methods
 
+        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg)
+        {
+            var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel());
+            if (sg != null)
+            {
+                switch (sg.Type)
+                {
+                    case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
+                        st.Type = RISStationTypeEnum.PASSENGERCAR;
+                        st.Flow = 200;
+                        st.Snelheid = 50;
+                        break;
+                    case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
+                        st.Type = RISStationTypeEnum.CYCLIST;
+                        st.Flow = 20;
+                        st.Snelheid = 15;
+                        break;
+                    case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
+                        st.Type = RISStationTypeEnum.PEDESTRIAN;
+                        st.Flow = 20;
+                        st.Snelheid = 5;
+                        break;
+                    case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
+                        st.Type = RISStationTypeEnum.BUS;
+                        st.Flow = 10;
+                        st.Snelheid = 45;
+                        break;
+                }
+            }
+            return st;
+        }
+
         internal void UpdateModel()
         {
             if (_controller != null && _RISModel != null)
@@ -375,7 +407,7 @@ namespace TLCGen.Plugins.RIS
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
                         for (int i = 0; i < fc.AantalRijstroken; i++)
                         {
-                            risfc.SimulatieVM.Lanes.Add(new RISFaseCyclusLaneSimulatieViewModel(new RISFaseCyclusLaneSimulatieModel()));
+                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i }));
                         }
                         _RISVM.RISFasen.Add(risfc);
                     }
@@ -384,21 +416,21 @@ namespace TLCGen.Plugins.RIS
                         var risfc = _RISVM.RISFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
                         if (risfc != null)
                         {
-                            if (fc.AantalRijstroken > risfc.SimulatieVM.Lanes.Count)
+                            if (fc.AantalRijstroken > risfc.Lanes.Count)
                             {
-                                var i = fc.AantalRijstroken - risfc.SimulatieVM.Lanes.Count;
-                                for (int j = 0; j < i; j++)
+                                var i = risfc.Lanes.Count;
+                                for (; i < fc.AantalRijstroken; i++)
                                 {
-                                    risfc.SimulatieVM.Lanes.Add(new RISFaseCyclusLaneSimulatieViewModel(new RISFaseCyclusLaneSimulatieModel()));
+                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i }));
                                 }
                             }
-                            else if (fc.AantalRijstroken < risfc.SimulatieVM.Lanes.Count)
+                            else if (fc.AantalRijstroken < risfc.Lanes.Count)
                             {
-                                var i = risfc.SimulatieVM.Lanes.Count - fc.AantalRijstroken;
+                                var i = risfc.Lanes.Count - fc.AantalRijstroken;
                                 for (int j = 0; j < i; j++)
                                 {
-                                    if (risfc.SimulatieVM.Lanes.Any())
-                                        risfc.SimulatieVM.Lanes.Remove(risfc.SimulatieVM.Lanes.Last());
+                                    if (risfc.Lanes.Any())
+                                        risfc.Lanes.Remove(risfc.Lanes.Last());
                                 }
                             }
                         }
@@ -417,6 +449,7 @@ namespace TLCGen.Plugins.RIS
                     _RISVM.RISFasen.Remove(sg);
                 }
                 _RISVM.RISFasen.BubbleSort();
+                _RISVM.UpdateRISLanes();
                 _RISVM.RaisePropertyChanged("");
             }
         }

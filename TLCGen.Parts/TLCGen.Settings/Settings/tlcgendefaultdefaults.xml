@@ -26,6 +26,7 @@
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
+        <AantalRijstroken>1</AantalRijstroken>
         <Detectoren />
       </Data>
     </Default>
@@ -53,6 +54,7 @@
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
+        <AantalRijstroken>1</AantalRijstroken>
         <Detectoren />
       </Data>
     </Default>
@@ -80,6 +82,7 @@
         <Meeverlengen>SchAan</Meeverlengen>
         <MeeverlengenType>Voetganger</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
+        <AantalRijstroken>2</AantalRijstroken>
         <Detectoren />
       </Data>
     </Default>

@@ -19,6 +19,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="{Binding ElementName=root,Path=Caption}" Visibility="{Binding ElementName=root,Path=ShowCaption,Converter={StaticResource Bool2VisConv}}" />
             <ComboBox ItemsSource="{Binding ElementName=root,Path=SelectableItems}" 
+                      Visibility="{Binding ElementName=root,Path=SelectableItemsVisibility}"
                       SelectedItem="{Binding ElementName=root,Path=SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                       Margin="2" MinWidth="50" />
             <Button Margin="2" Command="{Binding ElementName=root,Path=AddItemCommand}" CommandParameter="Add" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0">

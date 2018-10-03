@@ -9,9 +9,19 @@ namespace TLCGen.Plugins.RIS
     {
         private RISFaseCyclusDataModel _faseCyclus;
 
-        private RISFaseCyclusSimulatieViewModel _simulatieVM;
+        private RISFaseCyclusLaneDataViewModel _selectedLane;
 
-        public RISFaseCyclusSimulatieViewModel SimulatieVM => _simulatieVM ?? (_simulatieVM = new RISFaseCyclusSimulatieViewModel(_faseCyclus.SimulatieData));
+        public ObservableCollectionAroundList<RISFaseCyclusLaneDataViewModel, RISFaseCyclusLaneDataModel> Lanes { get; }
+
+        public RISFaseCyclusLaneDataViewModel SelectedLane
+        {
+            get => _selectedLane;
+            set
+            {
+                _selectedLane = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string FaseCyclus
         {
@@ -99,6 +109,7 @@ namespace TLCGen.Plugins.RIS
         public RISFaseCyclusDataViewModel(RISFaseCyclusDataModel faseCyclus)
         {
             _faseCyclus = faseCyclus;
+            Lanes = new ObservableCollectionAroundList<RISFaseCyclusLaneDataViewModel, RISFaseCyclusLaneDataModel>(faseCyclus.LaneData);
         }
     }
 }

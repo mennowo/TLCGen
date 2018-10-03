@@ -1,6 +1,6 @@
 ﻿namespace TLCGen.Plugins.RIS.Models
 {
-    public class RISFaseCyclusLaneStationTypeSimulatieModel
+    public class RISFaseCyclusLaneSimulatedStationModel
     {
         public RISStationTypeEnum Type { get; set; }
         public bool Prioriteit { get; set; }

@@ -47,12 +47,63 @@ namespace TLCGen.Plugins.RIS
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
 
+        public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
+
         public bool RISToepassen
         {
             get => _RISModel.RISToepassen;
             set
             {
                 _RISModel.RISToepassen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                if (string.IsNullOrWhiteSpace(SystemITF)) SystemITF = _plugin.Controller.Data.Naam;
+                foreach (var fc in RISFasen)
+                {
+                    var sg = _plugin.Controller.Fasen.First(x => x.Naam == fc.FaseCyclus);
+                    if (sg != null && fc.Lanes.Any())
+                    {
+                        foreach (var l in fc.Lanes)
+                        {
+                            if (l.SimulatedStations.Any())
+                            {
+
+                                switch (sg.Type)
+                                {
+                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
+                                        if (l.SimulatedStations[0].Type != RISStationTypeEnum.PASSENGERCAR) l.SimulatedStations[0].Type = RISStationTypeEnum.PASSENGERCAR;
+                                        break;
+                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
+                                        if (l.SimulatedStations[0].Type != RISStationTypeEnum.CYCLIST) l.SimulatedStations[0].Type = RISStationTypeEnum.CYCLIST;
+                                        break;
+                                    case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
+                                        if (l.SimulatedStations[0].Type != RISStationTypeEnum.PEDESTRIAN) l.SimulatedStations[0].Type = RISStationTypeEnum.PEDESTRIAN;
+                                        break;
+                                    case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
+                                        if (l.SimulatedStations[0].Type != RISStationTypeEnum.BUS) l.SimulatedStations[0].Type = RISStationTypeEnum.BUS;
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(sg));
+                            }
+                        }
+                    }
+                }
+                UpdateRISLanes();
+                for (int l = 0; l < RISLanes.Count; l++)
+                {
+                    RISLanes[l].LaneID = l;
+                }
+            }
+        }
+
+        public string SystemITF
+        {
+            get => _RISModel.SystemITF;
+            set
+            {
+                _RISModel.SystemITF = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -86,12 +137,15 @@ namespace TLCGen.Plugins.RIS
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
                     for (int i = 0; i < fc.AantalRijstroken; i++)
                     {
-                        risfc.SimulatieVM.Lanes.Add(new RISFaseCyclusLaneSimulatieViewModel(new RISFaseCyclusLaneSimulatieModel()));
+                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i });
+                        l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(fc));
+                        risfc.Lanes.Add(l);
                     }
                     RISFasen.Add(risfc);
                 }
             }
             RISFasen.BubbleSort();
+            UpdateRISLanes();
         }
 
         private void OnNameChanged(NameChangedMessage msg)
@@ -109,27 +163,48 @@ namespace TLCGen.Plugins.RIS
             var risfc = RISFasen.FirstOrDefault(x => x.FaseCyclus == obj.Fase.Naam);
             if (risfc != null)
             {
-                if(obj.AantalRijstroken > risfc.SimulatieVM.Lanes.Count)
+                if(obj.AantalRijstroken > risfc.Lanes.Count)
                 {
-                    var i = obj.AantalRijstroken - risfc.SimulatieVM.Lanes.Count;
-                    for (int j = 0; j < i; j++)
+                    var i = risfc.Lanes.Count;
+                    for (; i < obj.AantalRijstroken; i++)
                     {
-                        risfc.SimulatieVM.Lanes.Add(new RISFaseCyclusLaneSimulatieViewModel(new RISFaseCyclusLaneSimulatieModel()));
+                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = obj.Fase.Naam, RijstrookIndex = i });
+                        l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(obj.Fase));
+                        risfc.Lanes.Add(l);
                     }
                 }
-                else if (obj.AantalRijstroken < risfc.SimulatieVM.Lanes.Count)
+                else if (obj.AantalRijstroken < risfc.Lanes.Count)
                 {
-                    var i = risfc.SimulatieVM.Lanes.Count - obj.AantalRijstroken;
+                    var i = risfc.Lanes.Count - obj.AantalRijstroken;
                     for (int j = 0; j < i; j++)
                     {
-                        if(risfc.SimulatieVM.Lanes.Any())
-                            risfc.SimulatieVM.Lanes.Remove(risfc.SimulatieVM.Lanes.Last());
+                        if (risfc.Lanes.Any())
+                        {
+                            risfc.Lanes.Remove(risfc.Lanes.Last());
+                        }
                     }
+                }
+            }
+            UpdateRISLanes();
+        }
+
+        #endregion // TLCGen messaging
+
+        #region Private Methods 
+
+        internal void UpdateRISLanes()
+        {
+            RISLanes.Clear();
+            foreach (var fc in RISFasen)
+            {
+                foreach (var l in fc.Lanes)
+                {
+                    RISLanes.Add(l);
                 }
             }
         }
 
-        #endregion // TLCGen messaging
+        #endregion // Private Methods 
 
         #region Public Methods
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.RIS.Models
@@ -14,11 +15,12 @@ namespace TLCGen.Plugins.RIS.Models
         public bool RISVerlengen { get; set; }
         public int VerlengenStart { get; set; }
         public int VerlengenEnd { get; set; }
-        public RISFaseCyclusSimulatieModel SimulatieData { get; set; }
+
+        public List<RISFaseCyclusLaneDataModel> LaneData { get; set; }
 
         public RISFaseCyclusDataModel()
         {
-            SimulatieData = new RISFaseCyclusSimulatieModel();
+            LaneData = new List<RISFaseCyclusLaneDataModel>();
         }
     }
 }

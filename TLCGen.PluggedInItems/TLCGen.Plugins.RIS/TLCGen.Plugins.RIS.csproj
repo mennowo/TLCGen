@@ -48,23 +48,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\RISFaseCyclusLaneSimulatieModel.cs" />
-    <Compile Include="Models\RISFaseCyclusLaneStationTypeSimulatieModel.cs" />
-    <Compile Include="Models\RISFaseCyclusSimulatieModel.cs" />
+    <Compile Include="Models\RISFaseCyclusLaneDataModel.cs" />
+    <Compile Include="Models\RISFaseCyclusLaneSimulatedStationModel.cs" />
     <Compile Include="Models\RISStationTypeEnum.cs" />
-    <Compile Include="RISFaseCyclusDataViewModel.cs" />
-    <Compile Include="RISFaseCyclusLaneSimulatieView.xaml.cs">
+    <Compile Include="ViewModels\RISFaseCyclusLaneDataViewModel.cs" />
+    <Compile Include="ViewModels\RISFaseCyclusDataViewModel.cs" />
+    <Compile Include="Views\RISFaseCyclusLaneSimulatieView.xaml.cs">
       <DependentUpon>RISFaseCyclusLaneSimulatieView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RISFaseCyclusLaneSimulatieViewModel.cs" />
-    <Compile Include="RISFaseCyclusLaneStationTypeSimulatieViewModel.cs" />
-    <Compile Include="RISFaseCyclusSimulatieViewModel.cs" />
+    <Compile Include="ViewModels\RISFaseCyclusLaneSimulatedStationViewModel.cs" />
     <Compile Include="RISPlugin.cs" />
-    <Compile Include="RISTabViewModel.cs" />
+    <Compile Include="ViewModels\RISTabViewModel.cs" />
     <Compile Include="Models\RISDataModel.cs" />
     <Compile Include="Models\RISFaseCyclusDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RISTabView.xaml.cs">
+    <Compile Include="Views\RISTabView.xaml.cs">
       <DependentUpon>RISTabView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -72,11 +70,11 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="RISFaseCyclusLaneSimulatieView.xaml">
+    <Page Include="Views\RISFaseCyclusLaneSimulatieView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RISTabView.xaml">
+    <Page Include="Views\RISTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

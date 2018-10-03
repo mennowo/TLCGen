@@ -10,6 +10,7 @@ namespace TLCGen.Plugins.RIS.Models
     public class RISDataModel
     {
         public bool RISToepassen { get; set; }
+        public string SystemITF { get; set; }
 
         [XmlArray(ElementName = "RISFaseCyclusData")]
         public List<RISFaseCyclusDataModel> RISFasen { get; set; }

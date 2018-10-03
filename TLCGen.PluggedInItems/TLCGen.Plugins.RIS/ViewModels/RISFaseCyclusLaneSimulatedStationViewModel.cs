@@ -1,12 +1,13 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 using TLCGen.Helpers;
 using TLCGen.Plugins.RIS.Models;
 
 namespace TLCGen.Plugins.RIS
 {
-    public class RISFaseCyclusLaneStationTypeSimulatieViewModel : ViewModelBase, IViewModelWithItem
+    public class RISFaseCyclusLaneSimulatedStationViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        private RISFaseCyclusLaneStationTypeSimulatieModel _stationData;
+        private RISFaseCyclusLaneSimulatedStationModel _stationData;
         
         public RISStationTypeEnum Type
         {
@@ -63,7 +64,12 @@ namespace TLCGen.Plugins.RIS
             return _stationData;
         }
 
-        public RISFaseCyclusLaneStationTypeSimulatieViewModel(RISFaseCyclusLaneStationTypeSimulatieModel stationData)
+        public int CompareTo(object obj)
+        {
+            return 0;
+        }
+
+        public RISFaseCyclusLaneSimulatedStationViewModel(RISFaseCyclusLaneSimulatedStationModel stationData)
         {
             _stationData = stationData;
         }
