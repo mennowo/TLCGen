@@ -46,6 +46,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddRemoveItemsManager.cs" />
     <Compile Include="BindableSelectedItemBehaviour.cs" />
     <Compile Include="DeepCloner.cs" />
     <Compile Include="DesignMode.cs" />

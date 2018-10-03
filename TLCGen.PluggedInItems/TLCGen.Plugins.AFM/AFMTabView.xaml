@@ -19,7 +19,7 @@
         <ct:SpecialDataGrid 
             ItemsSource="{Binding Path=AFMFasen}" Margin="2"
             IsEnabled="{Binding Path=AFMToepassen}" Grid.Row="2"
-            SelectedItem="{Binding Path=SelectedAFMFase}"
+            SelectedItem="{Binding Path=AFMFasenManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
@@ -48,11 +48,20 @@
                 <DataGridTextColumn Binding="{Binding Path=MaximaleGroentijd,UpdateSourceTrigger=PropertyChanged}" Header="Max. groen" />
             </DataGrid.Columns>
         </ct:SpecialDataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" IsEnabled="{Binding Path=AFMToepassen}">
+        <!--<StackPanel Orientation="Horizontal" Grid.Row="3" IsEnabled="{Binding Path=AFMToepassen}">
             <ComboBox Margin="2"
                 ItemsSource="{Binding Path=SelectableFasen}" SelectedValue="{Binding SelectedFaseToAdd}" />
             <Button Content="Toevoegen" Command="{Binding Path=AddFaseCommand}" Margin="2" />
             <Button Content="Verwijderen" Command="{Binding Path=RemoveFaseCommand}" Margin="2" />
-        </StackPanel>
+        </StackPanel>-->
+        <ct:ItemsManagerView
+            SelectableItems="{Binding Path=AFMFasenManager.SelectableItems}" 
+            SelectedItemToAdd="{Binding Path=AFMFasenManager.SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+            AddItemCommand="{Binding Path=AFMFasenManager.AddItemCommand}"
+            RemoveItemCommand="{Binding Path=AFMFasenManager.RemoveItemCommand}"
+            Caption="Selecteer fase"
+            RemovableItemsVisibility="Hidden"
+            Grid.Row="3"
+            />
     </Grid>
 </UserControl>

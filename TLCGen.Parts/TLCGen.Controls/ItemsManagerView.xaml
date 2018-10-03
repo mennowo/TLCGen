@@ -8,7 +8,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/TLCGen.Controls;component/Resources/Icons.xaml" />
+                <ResourceDictionary Source="/TLCGen.Controls;component/Resources/Icons.xaml" />
                 <ResourceDictionary>
                     <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
                 </ResourceDictionary>
