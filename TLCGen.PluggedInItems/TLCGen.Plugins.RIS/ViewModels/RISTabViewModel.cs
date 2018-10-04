@@ -66,7 +66,6 @@ namespace TLCGen.Plugins.RIS
                         {
                             if (l.SimulatedStations.Any())
                             {
-
                                 switch (sg.Type)
                                 {
                                     case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
@@ -82,10 +81,6 @@ namespace TLCGen.Plugins.RIS
                                         if (l.SimulatedStations[0].Type != RISStationTypeEnum.BUS) l.SimulatedStations[0].Type = RISStationTypeEnum.BUS;
                                         break;
                                 }
-                            }
-                            else
-                            {
-                                l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(sg));
                             }
                         }
                     }
@@ -138,7 +133,6 @@ namespace TLCGen.Plugins.RIS
                     for (int i = 0; i < fc.AantalRijstroken; i++)
                     {
                         var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i });
-                        l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(fc));
                         risfc.Lanes.Add(l);
                     }
                     RISFasen.Add(risfc);
@@ -169,7 +163,6 @@ namespace TLCGen.Plugins.RIS
                     for (; i < obj.AantalRijstroken; i++)
                     {
                         var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = obj.Fase.Naam, RijstrookIndex = i });
-                        l.SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(obj.Fase));
                         risfc.Lanes.Add(l);
                     }
                 }

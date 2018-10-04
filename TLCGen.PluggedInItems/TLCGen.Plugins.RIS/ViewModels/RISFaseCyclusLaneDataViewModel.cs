@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.Linq;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Plugins.RIS.Models;
 
@@ -30,6 +31,72 @@ namespace TLCGen.Plugins.RIS
             {
                 _laneData.LaneID = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                foreach (var s in SimulatedStations)
+                {
+                    s.StationData.LaneID = value;
+                }
+            }
+        }
+
+        public bool RISAanvraag
+        {
+            get => _laneData.RISAanvraag;
+            set
+            {
+                _laneData.RISAanvraag = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateStations();
+            }
+        }
+
+        public int AanvraagStart
+        {
+            get => _laneData.AanvraagStart;
+            set
+            {
+                _laneData.AanvraagStart = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int AanvraagEnd
+        {
+            get => _laneData.AanvraagEnd;
+            set
+            {
+                _laneData.AanvraagEnd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool RISVerlengen
+        {
+            get => _laneData.RISVerlengen;
+            set
+            {
+                _laneData.RISVerlengen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                UpdateStations();
+            }
+        }
+
+        public int VerlengenStart
+        {
+            get => _laneData.VerlengenStart;
+            set
+            {
+                _laneData.VerlengenStart = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int VerlengenEnd
+        {
+            get => _laneData.VerlengenEnd;
+            set
+            {
+                _laneData.VerlengenEnd = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -47,7 +114,7 @@ namespace TLCGen.Plugins.RIS
                 x => 
                 {
                     var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x2 => x2.Naam == _laneData.SignalGroupName);
-                    return RISPlugin.GetNewStationForSignalGroup(sg);
+                    return RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex);
                 },
                 (x, y) => false
                 ));
@@ -67,6 +134,19 @@ namespace TLCGen.Plugins.RIS
             else
             {
                 return string.CompareOrdinal(_laneData.SignalGroupName, other.SignalGroupName);
+            }
+        }
+
+        private void UpdateStations()
+        {
+            if((RISAanvraag || RISVerlengen) && !SimulatedStations.Any())
+            {
+                var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == _laneData.SignalGroupName);
+                SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex));
+            }
+            else if(!RISAanvraag && !RISVerlengen)
+            {
+                SimulatedStations.RemoveAll();
             }
         }
 

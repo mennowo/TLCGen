@@ -8,7 +8,9 @@ namespace TLCGen.Plugins.RIS
     public class RISFaseCyclusLaneSimulatedStationViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
         private RISFaseCyclusLaneSimulatedStationModel _stationData;
-        
+
+        public RISFaseCyclusLaneSimulatedStationModel StationData => _stationData;
+
         public RISStationTypeEnum Type
         {
             get => _stationData.Type;

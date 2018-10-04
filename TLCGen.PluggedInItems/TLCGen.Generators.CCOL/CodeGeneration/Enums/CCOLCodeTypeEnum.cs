@@ -52,6 +52,9 @@
         TabCControlDefaults,
 	    TabCControlParameters,
 
+        // SYS
+        SysHBeforeUserDefines,
+
         // HST
         HstCTop,
         HstCPostInitApplication,

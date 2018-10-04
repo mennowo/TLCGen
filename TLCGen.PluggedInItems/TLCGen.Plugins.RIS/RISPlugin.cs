@@ -18,9 +18,10 @@ namespace TLCGen.Plugins.RIS
     [TLCGenPlugin(
         TLCGenPluginElems.TabControl | 
         TLCGenPluginElems.XMLNodeWriter |
-        TLCGenPluginElems.PlugMessaging)]
+        TLCGenPluginElems.PlugMessaging | 
+        TLCGenPluginElems.IOElementProvider)]
     [CCOLCodePieceGenerator]
-    public class RISPlugin : CCOLCodePieceGeneratorBase, ITLCGenTabItem, ITLCGenXMLNodeWriter, ITLCGenPlugMessaging
+    public partial class RISPlugin : CCOLCodePieceGeneratorBase, ITLCGenTabItem, ITLCGenXMLNodeWriter, ITLCGenPlugMessaging, ITLCGenElementProvider
     {
         #region Fields
 
@@ -160,6 +161,36 @@ namespace TLCGen.Plugins.RIS
 
         #endregion // ITLCGenPlugMessaging
 
+        #region ITLCGenElementProvider
+
+        public List<IOElementModel> GetOutputItems()
+        {
+            return new List<IOElementModel>();
+        }
+
+        public List<IOElementModel> GetInputItems()
+        {
+            List<IOElementModel> items = new List<IOElementModel>();
+            foreach (var station in _RISModel.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations))
+            {
+                station.StationBitmapData.Naam = station.Naam;
+                items.Add(station.StationBitmapData);
+            }
+            return items;
+        }
+
+        public bool IsElementNameUnique(string name)
+        {
+            return true;
+        }
+
+        public List<object> GetAllItems()
+        {
+            return new List<object>();
+        }
+
+        #endregion // ITLCGenElementProvider
+
         #region CCOLCodePieceGenerator
 
         public override bool HasSettings()
@@ -175,52 +206,62 @@ namespace TLCGen.Plugins.RIS
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
+            _myBitmapInputs = new List<CCOLIOElement>();
 
             if (_RISModel.RISToepassen)
             {
-                foreach (var fc in _RISModel.RISFasen)
+                var lanes = _RISModel.RISFasen.SelectMany(x => x.LaneData);
+                foreach (var l in lanes)
                 {
-                    if (fc.RISAanvraag)
+                    if (l.RISAanvraag)
                     {
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisastart}{fc.FaseCyclus}",
-                            fc.AanvraagStart,
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}",
+                            l.AanvraagStart,
                             CCOLElementTimeTypeEnum.None,
-                            _prmrisastart, fc.FaseCyclus);
+                            _prmrisastart, l.SignalGroupName));
                     }
                 }
-                foreach (var fc in _RISModel.RISFasen)
+                foreach (var l in lanes)
                 {
-                    if (fc.RISAanvraag)
+                    if (l.RISAanvraag)
                     {
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisaend}{fc.FaseCyclus}",
-                            fc.AanvraagEnd,
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}",
+                            l.AanvraagEnd,
                             CCOLElementTimeTypeEnum.None,
-                            _prmrisaend, fc.FaseCyclus);
+                            _prmrisaend, l.SignalGroupName));
                     }
                 }
-                foreach (var fc in _RISModel.RISFasen)
+                foreach (var l in lanes)
                 {
-                    if (fc.RISVerlengen)
+                    if (l.RISVerlengen)
                     {
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisvstart}{fc.FaseCyclus}",
-                            fc.VerlengenStart,
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}",
+                            l.VerlengenStart,
                             CCOLElementTimeTypeEnum.None,
-                            _prmrisvstart, fc.FaseCyclus);
+                            _prmrisvstart, l.SignalGroupName));
                     }
                 }
-                foreach (var fc in _RISModel.RISFasen)
+                foreach (var l in lanes)
                 {
-                    if (fc.RISVerlengen)
+                    if (l.RISVerlengen)
                     {
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisvend}{fc.FaseCyclus}",
-                            fc.VerlengenEnd,
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}",
+                            l.VerlengenEnd,
                             CCOLElementTimeTypeEnum.None,
-                            _prmrisvend, fc.FaseCyclus);
+                            _prmrisvend, l.SignalGroupName));
                     }
+                }
+
+                foreach(var s in lanes.SelectMany(x => x.SimulatedStations))
+                {
+                    s.StationBitmapData.Naam = s.Naam;
+                    var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
+                    e.Dummy = true;
+                    _myElements.Add(e);
                 }
             }
         }
@@ -249,6 +290,8 @@ namespace TLCGen.Plugins.RIS
                     return 110;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 110;
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    return 110;
                 default:
                     return 0;
             }
@@ -261,14 +304,34 @@ namespace TLCGen.Plugins.RIS
 
             StringBuilder sb = new StringBuilder();
 
+            var lanes = _RISModel.RISFasen.SelectMany(x => x.LaneData);
+
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    sb.AppendLine($"/* Systeem naam in het topologiebestand */");
+                    sb.AppendLine($"/* ------------------------------------ */");
+                    sb.AppendLine($"#define SYSTEM_ITF \"{_RISModel.SystemITF}\"");
+                    sb.AppendLine();
+                    sb.AppendLine($"/* Definitie lane id in het topologiebestand */");
+                    sb.AppendLine($"/* ----------------------------------------- */");
+                    foreach (var l in lanes)
+                    {
+                        sb.AppendLine($"#define ris_lane{l.SignalGroupName}{l.RijstrookIndex} {l.LaneID} /* lane ID van richting {l.SignalGroupName} van strook {l.RijstrookIndex + 1} */");
+                    }
+                    sb.AppendLine();
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCIncludes:
+
+                    // Generate rissim.c now
+                    GenerateRisSimC(c, _RISModel, ts);
+
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
                     sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
                     sb.AppendLine($"{ts}{ts}#ifndef AUTOMAAT");
-                    sb.AppendLine($"{ts}{ts}{ts}#include \"ris_simvar.h\" /* ccol ris simulatie functie */");
+                    sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
                     sb.AppendLine($"{ts}{ts}#endif");
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -283,10 +346,10 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach(var fc in _RISModel.RISFasen.Where(x => x.RISAanvraag))
+                    foreach(var l in lanes.Where(x => x.RISAanvraag))
                     {
                         var vtype = "RIS_VEHICLES";
-                        var rfc = c.Fasen.First(x => x.Naam == fc.FaseCyclus);
+                        var rfc = c.Fasen.First(x => x.Naam == l.SignalGroupName);
                         if(rfc != null)
                         {
                             switch (rfc.Type)
@@ -303,16 +366,16 @@ namespace TLCGen.Plugins.RIS
                                     break;
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}ris_aanvraag({_fcpf}{fc.FaseCyclus}, {vtype}, {_prmpf}{_prmrisastart}{fc.AanvraagStart}, {_prmpf}{_prmrisaend}{fc.AanvraagEnd}, BIT8);");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {vtype}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT8;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach (var fc in _RISModel.RISFasen.Where(x => x.RISVerlengen))
+                    foreach (var l in lanes.Where(x => x.RISVerlengen))
                     {
                         var vtype = "RIS_VEHICLES";
-                        var rfc = c.Fasen.First(x => x.Naam == fc.FaseCyclus);
+                        var rfc = c.Fasen.First(x => x.Naam == l.SignalGroupName);
                         if (rfc != null)
                         {
                             switch (rfc.Type)
@@ -329,7 +392,7 @@ namespace TLCGen.Plugins.RIS
                                     break;
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}ris_verlengen({_fcpf}{fc.FaseCyclus}, {vtype}, {_prmpf}{_prmrisvstart}{fc.VerlengenStart}, {_prmpf}{_prmrisvend}{fc.VerlengenEnd}, BIT8);");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {vtype}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT8; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT8; ");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -363,9 +426,12 @@ namespace TLCGen.Plugins.RIS
 
         #region Private Methods
 
-        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg)
+        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg, int LaneID, int RijstrookIndex)
         {
             var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel());
+            st.StationData.SignalGroupName = sg.Naam;
+            st.StationData.RijstrookIndex = RijstrookIndex;
+            st.StationData.LaneID = LaneID;
             if (sg != null)
             {
                 switch (sg.Type)

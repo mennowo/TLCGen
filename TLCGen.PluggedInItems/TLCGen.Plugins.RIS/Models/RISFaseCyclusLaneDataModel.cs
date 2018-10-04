@@ -9,6 +9,13 @@ namespace TLCGen.Plugins.RIS.Models
     {
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }
+        public bool RISAanvraag { get; set; }
+        public int AanvraagStart { get; set; }
+        public int AanvraagEnd { get; set; }
+        public bool RISVerlengen { get; set; }
+        public int VerlengenStart { get; set; }
+        public int VerlengenEnd { get; set; }
+
         [RefersTo]
         public string SignalGroupName { get; set; }
 

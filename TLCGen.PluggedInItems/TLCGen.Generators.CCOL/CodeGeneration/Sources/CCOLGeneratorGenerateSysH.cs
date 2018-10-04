@@ -62,6 +62,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			// Here: +1 to allow room for default period in arrays made with this value
             sb.AppendLine($"{ts}#define MPERIODMAX {controller.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
+
+            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.SysHBeforeUserDefines])
+            {
+                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts));
+            }
+
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.add\"");
