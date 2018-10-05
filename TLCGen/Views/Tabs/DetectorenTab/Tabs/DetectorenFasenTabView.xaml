@@ -35,8 +35,17 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="Detectoren" />
-            <local:DetectorenLijstView Grid.Row="1" Margin="2" ShowFaseCyclus="False" ShowRijstrook="True" ShowStoring="True" ShowVeiligheidsGroen="True" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Detectoren" />
+                <RadioButton IsChecked="{Binding Path=ShowAlles,UpdateSourceTrigger=PropertyChanged}" Content="Alles" VerticalAlignment="Center" Margin="2" />
+                <RadioButton IsChecked="{Binding Path=ShowFuncties,UpdateSourceTrigger=PropertyChanged}" Content="Functies" VerticalAlignment="Center" Margin="2" />
+                <RadioButton IsChecked="{Binding Path=ShowTijden,UpdateSourceTrigger=PropertyChanged}" Content="Tijden" VerticalAlignment="Center" Margin="2" />
+            </StackPanel>
+            <local:DetectorenLijstView 
+                Grid.Row="1" Margin="2"
+                ShowAanvraagVerlengen="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowFuncties="{Binding Path=ShowFunctiesActual,Mode=OneWay}"
+                ShowTijden="{Binding Path=ShowTijdenActual}" ShowReset="{Binding Path=ShowFunctiesActual}"
+                ShowFaseCyclus="False" ShowRijstrook="{Binding Path=ShowFunctiesActual}" ShowStoring="{Binding Path=ShowFunctiesActual}" ShowVeiligheidsGroen="{Binding Path=ShowFunctiesActual}" />
         </Grid>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <WrapPanel >

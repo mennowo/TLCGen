@@ -10,6 +10,39 @@ namespace TLCGen.Views
     /// </summary>
     public partial class DetectorenLijstView : UserControl
     {
+
+        public bool ShowFuncties
+        {
+            get { return (bool)GetValue(ShowFunctiesProperty); }
+            set { SetValue(ShowFunctiesProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowFunctiesProperty =
+            DependencyProperty.Register("ShowFuncties", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
+
+
+        public bool ShowTijden
+        {
+            get { return (bool)GetValue(ShowTijdenProperty); }
+            set { SetValue(ShowTijdenProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowTijdenProperty =
+            DependencyProperty.Register("ShowTijden", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
+
+
+        public bool ShowReset
+        {
+            get { return (bool)GetValue(ShowResetProperty); }
+            set { SetValue(ShowResetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ShowResetProperty =
+            DependencyProperty.Register("ShowReset", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
+
         public bool ShowVeiligheidsGroen
         {
             get { return (bool)GetValue(ShowVeiligheidsGroenProperty); }

@@ -248,6 +248,26 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(nameof(VeiligheidsGroen), broadcast: true);
             }
         }
+        
+        public bool ResetAanvraag
+        {
+            get => _detector.ResetAanvraag;
+            set
+            {
+                _detector.ResetAanvraag = value;
+                RaisePropertyChanged<object>(nameof(ResetAanvraag), broadcast: true);
+            }
+        }
+
+        public int ResetAanvraagTijdsduur
+        {
+            get => _detector.ResetAanvraagTijdsduur;
+            set
+            {
+                _detector.ResetAanvraagTijdsduur = value;
+                RaisePropertyChanged<object>(nameof(ResetAanvraagTijdsduur), broadcast: true);
+            }
+        }
 
         public int Q1
         {

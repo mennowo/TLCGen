@@ -31,6 +31,8 @@ namespace TLCGen.Models
         public int? TBG { get; set; }
         public int? TFL { get; set; }
         public int? CFL { get; set; }
+        public bool ResetAanvraag { get; set; }
+        public int ResetAanvraagTijdsduur { get; set; }
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
         public bool Dummy { get; set; }

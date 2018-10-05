@@ -10,6 +10,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <local:DetectorenLijstView Grid.Row="1" ShowFaseCyclus="True" ShowVeiligheidsGroen="True" />
+        <local:DetectorenLijstView Grid.Row="1" ShowFaseCyclus="True" ShowVeiligheidsGroen="True" ShowReset="True" />
     </Grid>
 </UserControl>

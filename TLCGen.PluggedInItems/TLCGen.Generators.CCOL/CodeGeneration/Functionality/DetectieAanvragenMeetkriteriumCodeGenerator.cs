@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmda;
 		private CCOLGeneratorCodeStringSettingModel _prmmk;
         private CCOLGeneratorCodeStringSettingModel _tkm;
+        private CCOLGeneratorCodeStringSettingModel _tav;
 #pragma warning restore 0169
 #pragma warning restore 0649
 
@@ -30,34 +31,40 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             // Detectie aanvraag functie
             foreach (DetectorModel dm in dets)
             {
-                if (dm.Aanvraag == Models.Enumerations.DetectorAanvraagTypeEnum.Geen)
+                if (dm.Aanvraag == DetectorAanvraagTypeEnum.Geen)
                     continue;
 
                 int set = 0;
                 switch (dm.Aanvraag)
                 {
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.Uit:
+                    case DetectorAanvraagTypeEnum.Uit:
                         set = 0;
                         break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.RnietTRG:
+                    case DetectorAanvraagTypeEnum.RnietTRG:
                         set = 1;
                         break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.Rood:
+                    case DetectorAanvraagTypeEnum.Rood:
                         set = 2;
                         break;
-                    case Models.Enumerations.DetectorAanvraagTypeEnum.RoodGeel:
+                    case DetectorAanvraagTypeEnum.RoodGeel:
                         set = 3;
                         break;
                 }
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
                         $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
+                if (dm.ResetAanvraag)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tav}{dm.Naam}", dm.ResetAanvraagTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tav, dm.Naam));
+                }
             }
 
             // Detectie verlengkriterium
             foreach (DetectorModel dm in dets)
             {
-                if (dm.Verlengen == Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
+                if (dm.Verlengen == DetectorVerlengenTypeEnum.Geen)
                     continue;
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -70,7 +77,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 bool HasKopmax = false;
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    if (dm.Verlengen != Models.Enumerations.DetectorVerlengenTypeEnum.Geen)
+                    if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                     {
                         HasKopmax = true;
                         break;
@@ -122,13 +129,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ------------------ */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
-                        if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen).Any())
+                        if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Any(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen && !x.ResetAanvraag))
                         {
                             sb.AppendLine($"{ts}aanvraag_detectie_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
-                                if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen)
+                                if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
                                     sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                            }
+                            sb.AppendLine($"{ts}{ts}(va_count) END);");
+                        }
+                        if (fcm.Detectoren?.Count > 0 && fcm.Detectoren.Any(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen && x.ResetAanvraag))
+                        {
+                            sb.AppendLine($"{ts}aanvraag_detectie_reset_prm_va_arg((count) {_fcpf}{fcm.Naam}, ");
+                            foreach (DetectorModel dm in fcm.Detectoren)
+                            {
+                                if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.ResetAanvraag)
+                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
                             }
                             sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }

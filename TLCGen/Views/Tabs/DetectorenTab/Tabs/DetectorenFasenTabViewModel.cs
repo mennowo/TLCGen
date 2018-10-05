@@ -31,6 +31,10 @@ namespace TLCGen.ViewModels
         private IList _SelectedDetectoren = new ArrayList();
         private List<string> _Fasen;
         private FaseCyclusModel _SelectedFase;
+        private bool _SettingMultiple = false;
+        private bool _showAlles;
+        private bool _showFuncties;
+        private bool _showTijden;
 
         #endregion // Fields
 
@@ -41,7 +45,7 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if(_Fasen == null)
+                if (_Fasen == null)
                 {
                     _Fasen = new List<string>();
                 }
@@ -76,15 +80,15 @@ namespace TLCGen.ViewModels
         public string SelectedFaseNaam
         {
             get => _SelectedFaseNaam;
-	        set
+            set
             {
                 _SelectedFaseNaam = value;
-                if(_Controller != null && _Controller.Fasen.Any(x => x.Naam == value))
+                if (_Controller != null && _Controller.Fasen.Any(x => x.Naam == value))
                 {
                     _SelectedFase = _Controller.Fasen.First(x => x.Naam == value);
                 }
 
-                foreach(var d in Detectoren)
+                foreach (var d in Detectoren)
                 {
                     d.PropertyChanged -= Detector_PropertyChanged;
                 }
@@ -93,13 +97,13 @@ namespace TLCGen.ViewModels
                 {
                     foreach (var dm in _SelectedFase.Detectoren)
                     {
-	                    var dvm = new DetectorViewModel(dm) {FaseCyclus = value};
-	                    dvm.PropertyChanged += Detector_PropertyChanged;
+                        var dvm = new DetectorViewModel(dm) { FaseCyclus = value };
+                        dvm.PropertyChanged += Detector_PropertyChanged;
                         Detectoren.Add(dvm);
                     }
-					Detectoren.BubbleSort();
+                    Detectoren.BubbleSort();
                 }
-                if(Detectoren.Count > 0)
+                if (Detectoren.Count > 0)
                     SelectedDetector = Detectoren[0];
 
                 RaisePropertyChanged();
@@ -114,7 +118,7 @@ namespace TLCGen.ViewModels
             {
                 _SelectedDetector = value;
                 RaisePropertyChanged();
-                if(value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
+                if (value != null) TemplatesProviderVM.SetSelectedApplyToItem(value.Detector);
             }
         }
 
@@ -147,6 +151,53 @@ namespace TLCGen.ViewModels
                     _TemplatesProviderVM = new TemplateProviderViewModel<TLCGenTemplateModel<DetectorModel>, DetectorModel>(this);
                 }
                 return _TemplatesProviderVM;
+            }
+        }
+
+        public bool ShowAlles
+        {
+            get => _showAlles;
+            set
+            {
+                _showAlles = value;
+                _showFuncties = _showTijden = !value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ShowFuncties));
+                RaisePropertyChanged(nameof(ShowTijden));
+                RaisePropertyChanged(nameof(ShowFunctiesActual));
+                RaisePropertyChanged(nameof(ShowTijdenActual));
+            }
+        }
+
+        public bool ShowFunctiesActual => _showFuncties || _showAlles;
+        public bool ShowFuncties
+        {
+            get => _showFuncties;
+            set
+            {
+                _showFuncties = value;
+                _showAlles = _showTijden = !value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ShowAlles));
+                RaisePropertyChanged(nameof(ShowFunctiesActual));
+                RaisePropertyChanged(nameof(ShowTijden));
+                RaisePropertyChanged(nameof(ShowTijdenActual));
+            }
+        }
+
+        public bool ShowTijdenActual => _showTijden || _showAlles;
+        public bool ShowTijden
+        {
+            get => _showTijden;
+            set
+            {
+                _showTijden = value;
+                _showAlles = _showFuncties = !value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ShowAlles));
+                RaisePropertyChanged(nameof(ShowTijdenActual));
+                RaisePropertyChanged(nameof(ShowFuncties));
+                RaisePropertyChanged(nameof(ShowFunctiesActual));
             }
         }
 
@@ -189,18 +240,18 @@ namespace TLCGen.ViewModels
         {
             var _dm = new DetectorModel();
             var newname = "1";
-	        foreach (var dm in _SelectedFase.Detectoren)
+            foreach (var dm in _SelectedFase.Detectoren)
             {
                 if (Regex.IsMatch(dm.Naam, @"[0-9]$"))
                 {
                     var m = Regex.Match(dm.Naam, @"[0-9]$");
                     var next = m.Value;
-                    if(next == "0")
+                    if (next == "0")
                     {
                         m = Regex.Match(dm.Naam, @"[0-9][0-9]$");
                         next = m.Value;
                     }
-	                if (int.TryParse(next, out var inewname))
+                    if (int.TryParse(next, out var inewname))
                     {
                         newname = inewname.ToString();
                         while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, _SelectedFase.Naam + newname))
@@ -213,7 +264,7 @@ namespace TLCGen.ViewModels
             }
             _dm.Naam = _SelectedFase.Naam + newname;
             _dm.VissimNaam = _dm.Naam;
-            if(_SelectedFase.Detectoren.Count == 0)
+            if (_SelectedFase.Detectoren.Count == 0)
             {
                 if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
                 if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Kop;
@@ -221,20 +272,20 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
-                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Knop;
-                if(_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Auto) _dm.Type = Models.Enumerations.DetectorTypeEnum.Lang;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Fiets) _dm.Type = Models.Enumerations.DetectorTypeEnum.Knop;
+                if (_SelectedFase.Type == Models.Enumerations.FaseTypeEnum.Voetganger) _dm.Type = Models.Enumerations.DetectorTypeEnum.KnopBinnen;
             }
             DefaultsProvider.Default.SetDefaultsOnModel(_dm, _dm.Type.ToString(), _SelectedFase.Type.ToString());
-	        var dvm1 = new DetectorViewModel(_dm)
-	        {
-		        FaseCyclus = _SelectedFase.Naam,
-		        Rijstrook = 1
-	        };
-	        _SelectedFase.Detectoren.Add(_dm);
+            var dvm1 = new DetectorViewModel(_dm)
+            {
+                FaseCyclus = _SelectedFase.Naam,
+                Rijstrook = 1
+            };
+            _SelectedFase.Detectoren.Add(_dm);
             _Detectoren.Add(dvm1);
             dvm1.PropertyChanged += Detector_PropertyChanged;
-	        Detectoren.BubbleSort();
+            Detectoren.BubbleSort();
             Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { _dm }, null));
         }
 
@@ -282,7 +333,7 @@ namespace TLCGen.ViewModels
 
         public override string DisplayName => "Detectie fasen";
 
-	    public override bool IsEnabled
+        public override bool IsEnabled
         {
             get { return true; }
             set { }
@@ -292,7 +343,7 @@ namespace TLCGen.ViewModels
         {
             get => base.Controller;
 
-	        set
+            set
             {
                 base.Controller = value;
                 Detectoren.Clear();
@@ -308,7 +359,7 @@ namespace TLCGen.ViewModels
             {
                 Fasen.Add(fcm.Naam);
             }
-            if(tfc == null || !Fasen.Contains(tfc))
+            if (tfc == null || !Fasen.Contains(tfc))
             {
                 if (Fasen.Count > 0)
                 {
@@ -324,11 +375,11 @@ namespace TLCGen.ViewModels
                     SelectedDetector = null;
                 }
             }
-            else if(Fasen.Contains(tfc))
+            else if (Fasen.Contains(tfc))
             {
                 SelectedFaseNaam = tfc;
             }
-            if(SelectedDetector == null && Detectoren?.Count > 0)
+            if (SelectedDetector == null && Detectoren?.Count > 0)
             {
                 SelectedDetector = Detectoren[0];
             }
@@ -336,7 +387,7 @@ namespace TLCGen.ViewModels
 
         public override void OnDeselected()
         {
-	        if (_Controller == null) return;
+            if (_Controller == null) return;
 
             foreach (var fcm in _Controller.Fasen)
             {
@@ -353,7 +404,7 @@ namespace TLCGen.ViewModels
             if (_SelectedFase == null || _Controller == null)
                 return;
 
-            foreach(var d in items)
+            foreach (var d in items)
             {
                 if (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
                 {
@@ -361,7 +412,7 @@ namespace TLCGen.ViewModels
                     return;
                 }
             }
-            foreach(var d in items)
+            foreach (var d in items)
             {
                 _SelectedFase.Detectoren.Add(d);
                 var dvm = new DetectorViewModel(d);
@@ -376,14 +427,13 @@ namespace TLCGen.ViewModels
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { item }, null));
+            Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates
 
         #region Event handling
 
-        private bool _SettingMultiple = false;
         private void Detector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
@@ -407,6 +457,7 @@ namespace TLCGen.ViewModels
 
         public DetectorenFasenTabViewModel() : base()
         {
+            _showAlles = true;
         }
 
         #endregion // Constructor

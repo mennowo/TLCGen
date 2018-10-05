@@ -151,6 +151,12 @@
             <Type>Timer</Type>
             <Description>Kop maximum voor detector _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>av</Default>
+            <Setting>av</Setting>
+            <Type>Timer</Type>
+            <Description>Tijd na afvallen detector _E1_ tbv verwijderen aanvraag</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
