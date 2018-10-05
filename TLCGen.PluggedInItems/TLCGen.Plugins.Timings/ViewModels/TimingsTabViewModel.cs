@@ -54,8 +54,13 @@ namespace TLCGen.Plugins.Timings
             {
                 _TimingsModel.TimingsToepassen = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged("TimingsToepassenOK");
             }
         }
+
+        public bool TimingsToepassenAllowed => _plugin.Controller.Data.CCOLVersie >= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL9;
+
+        public bool TimingsToepassenOK => TimingsToepassenAllowed && TimingsToepassen;
 
         #endregion // Properties
 

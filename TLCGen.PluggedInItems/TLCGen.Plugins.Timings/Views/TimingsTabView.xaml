@@ -18,10 +18,13 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <CheckBox IsChecked="{Binding Path=TimingsToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Timings toepassen" Margin="5" />
+        <CheckBox 
+            IsEnabled="{Binding Path=TimingsToepassenAllowed,Mode=OneWay}"
+            IsChecked="{Binding Path=TimingsToepassen,UpdateSourceTrigger=PropertyChanged}" Content="Timings toepassen" Margin="5" />
         <Label Content="Instellingen timings per fase" Grid.Row="1" />
         <ct:SpecialDataGrid
             CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
+            IsEnabled="{Binding Path=TimingsToepassenOK,Mode=OneWay}"
             ItemsSource="{Binding Path=TimingsFasen}" Margin="2" Grid.Row="2">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
