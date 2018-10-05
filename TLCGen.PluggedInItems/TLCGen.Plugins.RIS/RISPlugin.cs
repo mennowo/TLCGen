@@ -171,6 +171,7 @@ namespace TLCGen.Plugins.RIS
         public List<IOElementModel> GetInputItems()
         {
             List<IOElementModel> items = new List<IOElementModel>();
+            if (!_RISModel.RISToepassen) return items;
             foreach (var station in _RISModel.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations))
             {
                 station.StationBitmapData.Naam = station.Naam;
