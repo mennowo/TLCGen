@@ -702,7 +702,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                     "FALSE, " + 
                                                     "NG, " +
                                                     $"SCH[{_schpf}{_schcheckdstype}], " +
-                                                    "CIF_DSIN, " +
+                                                    $"{(melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? "CIF_DSIN" : "CIF_DSUIT")}, " +
                                                     $"{extra});");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector:

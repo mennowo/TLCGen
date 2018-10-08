@@ -10,19 +10,19 @@ namespace TLCGen.Models.Enumerations
     public enum PeriodeDagCodeEnum
     {
         [XmlEnum("1")]
-        Zondag = 1,
+        Maandag = 1,
         [XmlEnum("2")]
-        Maandag = 2,
+        Dinsdag = 2,
         [XmlEnum("3")]
-        Dinsdag = 3,
+        Woensdag = 3,
         [XmlEnum("4")]
-        Woensdag = 4,
+        Donderdag = 4,
         [XmlEnum("5")]
-        Donderdag = 5,
+        Vrijdag = 5,
         [XmlEnum("6")]
-        Vrijdag = 6,
+        Zaterdag = 6,
         [XmlEnum("7")]
-        Zaterdag = 7,
+        Zondag = 7,
         [XmlEnum("8")]
         Werkdagen = 8,
         [XmlEnum("9")]
