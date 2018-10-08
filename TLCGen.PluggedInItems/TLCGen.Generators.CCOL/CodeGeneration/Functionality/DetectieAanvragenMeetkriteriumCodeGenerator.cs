@@ -110,7 +110,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
-                    return 20;
+                    return 10;
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     return 10;
                 default:
@@ -125,6 +125,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (c.Fasen.Any(x => x.Detectoren?.Count > 0 && x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen && x2.ResetAanvraag)))
+                    {
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}RR[fc] &= ~BIT8;  /* reset BIT-sturing t.b.v. reset A */");
+                    }
                     sb.AppendLine($"{ts}/* Detectie aanvragen */");
                     sb.AppendLine($"{ts}/* ------------------ */");
                     foreach (FaseCyclusModel fcm in c.Fasen)
