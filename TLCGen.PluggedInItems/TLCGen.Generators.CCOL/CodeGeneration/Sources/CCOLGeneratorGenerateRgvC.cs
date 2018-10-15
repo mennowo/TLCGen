@@ -370,9 +370,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (30, teller + 1, \"%10s\",TC_string$[teller]);");
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (41, teller + 1, \":%4d\", TC_rgv[teller]);");
             sb.AppendLine($"{ts}{ts}}}");
+            var teller = 2;
             foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
-                sb.AppendLine($"{ts}{ts}xyprintf (30, teller+2, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
+                sb.AppendLine($"{ts}{ts}xyprintf (30, teller + {teller}, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
+                ++teller;
             }
             sb.AppendLine($"{ts}{ts}");
             if (c.RoBuGrover.RoBuGroverVenster)

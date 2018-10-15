@@ -160,10 +160,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _showAlles = value;
-                _showFuncties = _showTijden = !value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowFuncties));
-                RaisePropertyChanged(nameof(ShowTijden));
                 RaisePropertyChanged(nameof(ShowFunctiesActual));
                 RaisePropertyChanged(nameof(ShowTijdenActual));
             }
@@ -176,11 +173,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _showFuncties = value;
-                _showAlles = _showTijden = !value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowAlles));
                 RaisePropertyChanged(nameof(ShowFunctiesActual));
-                RaisePropertyChanged(nameof(ShowTijden));
                 RaisePropertyChanged(nameof(ShowTijdenActual));
             }
         }
@@ -192,11 +186,8 @@ namespace TLCGen.ViewModels
             set
             {
                 _showTijden = value;
-                _showAlles = _showFuncties = !value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(nameof(ShowAlles));
                 RaisePropertyChanged(nameof(ShowTijdenActual));
-                RaisePropertyChanged(nameof(ShowFuncties));
                 RaisePropertyChanged(nameof(ShowFunctiesActual));
             }
         }

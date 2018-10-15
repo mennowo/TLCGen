@@ -44,8 +44,8 @@
             <local:DetectorenLijstView 
                 Grid.Row="1" Margin="2"
                 ShowAanvraagVerlengen="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowFuncties="{Binding Path=ShowFunctiesActual,Mode=OneWay}"
-                ShowTijden="{Binding Path=ShowTijdenActual}" ShowReset="{Binding Path=ShowFunctiesActual}"
-                ShowFaseCyclus="False" ShowRijstrook="{Binding Path=ShowFunctiesActual}" ShowStoring="{Binding Path=ShowFunctiesActual}" ShowVeiligheidsGroen="{Binding Path=ShowFunctiesActual}" />
+                ShowTijden="{Binding Path=ShowTijdenActual,Mode=OneWay}" ShowReset="{Binding Path=ShowFunctiesActual,Mode=OneWay}"
+                ShowFaseCyclus="False" ShowRijstrook="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowStoring="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowVeiligheidsGroen="{Binding Path=ShowFunctiesActual,Mode=OneWay}" />
         </Grid>
         <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <WrapPanel >

@@ -264,7 +264,7 @@ namespace TLCGen.Plugins.AFM
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     sb.AppendLine($"{ts}AFM_CIF_changed = FALSE;");
-                    sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM || !defined AUTOMAAT");
+                    sb.AppendLine("#if defined AUTOMAAT && !defined VISSIM");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = (PRM[{_prmpf}AFM_WatchdogReturn] != prmAFM_watchdog_return_old) || SCH[schAFM_overbrugging];");
                     sb.AppendLine("#else");
                     sb.AppendLine($"{ts}RT[{_tpf}AFMLeven] = TRUE;");
