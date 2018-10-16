@@ -324,7 +324,7 @@ namespace TLCGen.Plugins.AFM
                         if (hd == null)
                         {
                             sb.AppendLine(
-                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}), verwerken_fcs);");
+                                $"{ts}{ts}AFMacties(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}], {dummy}, verwerken_fcs);");
                         }
                         else
                         {
