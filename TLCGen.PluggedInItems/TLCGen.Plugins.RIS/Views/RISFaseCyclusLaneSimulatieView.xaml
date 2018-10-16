@@ -32,6 +32,7 @@
                 <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit}" Header="Prioriteit" />
                 <DataGridTextColumn Binding="{Binding Path=Flow}" Header="Flow" />
                 <DataGridTextColumn Binding="{Binding Path=Snelheid}" Header="Snelheid" />
+                <DataGridTextColumn Binding="{Binding Path=Afstand}" Header="Afstand" />
             </DataGrid.Columns>
         </DataGrid>
         <!--<StackPanel Grid.Row="3" Orientation="Horizontal">
