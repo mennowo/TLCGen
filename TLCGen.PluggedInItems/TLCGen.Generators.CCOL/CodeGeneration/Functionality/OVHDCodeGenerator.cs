@@ -73,6 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schovin;
         private CCOLGeneratorCodeStringSettingModel _schovuit;
         private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
+        //private CCOLGeneratorCodeStringSettingModel _hwissel;
 
         private CCOLGeneratorCodeStringSettingModel _thdin;
         private CCOLGeneratorCodeStringSettingModel _thduit;

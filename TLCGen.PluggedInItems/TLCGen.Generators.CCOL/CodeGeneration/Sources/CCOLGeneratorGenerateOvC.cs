@@ -660,6 +660,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tbtovg = CCOLGeneratorSettingsProvider.Default.GetElementName("tbtovg");
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
             var _schvi = CCOLGeneratorSettingsProvider.Default.GetElementName("schvi");
+            var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
+            var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
 
             sb.AppendLine("/* -----------------------------------------------------------");
             sb.AppendLine("   RijTijdScenario bepaalt het actieve rijtijdscenario");
@@ -781,10 +783,45 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             foreach (var ov in c.OVData.OVIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
             {
-                sb.AppendLine(
-		            ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
-			            ? $"{ts}if (DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;"
-			            : $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])) iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
+                sb.Append(ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.Altijd
+                        ? $"{ts}if (DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])"
+			            : $"{ts}if (SCH[{_schpf}{_schvi}{ov.FaseCyclus}] && DB[{_dpf}{ov.Koplus}] && C[{_cpf}{_cvc}{ov.FaseCyclus}] && (iRijTimer[ovFC{ov.FaseCyclus}] < iRijTijd[ovFC{ov.FaseCyclus}])");
+                if (ov.KoplusKijkNaarWisselstand &&
+                        ((ov.MeldingenData.Wissel1 &&
+                          ((ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
+                           (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
+                         (ov.MeldingenData.Wissel2 &&
+                          ((ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
+                           (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector))))))
+                {
+                    if (ov.MeldingenData.Wissel1)
+                    {
+                        if (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                        {
+                            sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
+                                $" && ((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])" :
+                                $" && ((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])");
+                        }
+                        else
+                        {
+                            sb.Append($" && (D[{_dpf}{ov.MeldingenData.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])");
+                        }
+                    }
+                    if (ov.MeldingenData.Wissel2)
+                    {
+                        if (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                        {
+                            sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
+                                $" && ((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])" :
+                                $" && ((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])");
+                        }
+                        else
+                        {
+                            sb.Append($" && (D[{_dpf}{ov.MeldingenData.Wissel2Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])");
+                        }
+                    }
+                }
+                sb.AppendLine($") iRijTijd[ovFC{ov.FaseCyclus}] = 0;");
             }
 
 			if (OrderedPieceGenerators[CCOLCodeTypeEnum.OvCRijTijdScenario].Any())

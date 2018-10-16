@@ -1620,6 +1620,12 @@
             <Type>Schakelaar</Type>
             <Description>Wisselstand van _E1_ negeren</Description>
           </Setting>
+          <!--<Setting>
+            <Default>wissel</Default>
+            <Setting>wissel</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden wisselstand van _E1_</Description>
+          </Setting>-->
           
           <Setting>
             <Default>hdin</Default>
