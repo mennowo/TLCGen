@@ -382,9 +382,16 @@ namespace TLCGen.Settings
                         }
                     }
 
-                    var serializer = new XmlSerializer(typeof(TLCGenDefaultsModel), et.ToArray());
-                    serializer.Serialize(fs, Defaults);
-                    fs.Close();
+                    try
+                    {
+                        var serializer = new XmlSerializer(typeof(TLCGenDefaultsModel), et.ToArray());
+                        serializer.Serialize(fs, Defaults);
+                        fs.Close();
+                    }
+                    catch(Exception e)
+                    {
+                        MessageBox.Show("Fout bij het opslaan van de TLCGen defaults:\n" + e.ToString(), "Fout bij opslaan defaults");
+                    }
                 }
             }
         }
