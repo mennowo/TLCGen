@@ -717,6 +717,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                             }
                         }
+                        else
+                        {
+                            sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, NG, NG, NG);");
+                        }
                         break;
                     }
                 }
@@ -765,6 +769,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            sb.Append($"{ts}OVRijTijdScenario(hdFC{fc.Naam}, NG, NG, NG);");
                         }
                         break;
                     }
