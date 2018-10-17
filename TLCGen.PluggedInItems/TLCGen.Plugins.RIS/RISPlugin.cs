@@ -211,7 +211,7 @@ namespace TLCGen.Plugins.RIS
 
             if (_RISModel.RISToepassen)
             {
-                var lanes = _RISModel.RISFasen.SelectMany(x => x.LaneData);
+                var lanes = _RISModel.RISRequestExtendLanes;
                 foreach (var l in lanes)
                 {
                     if (l.RISAanvraag)
@@ -256,14 +256,14 @@ namespace TLCGen.Plugins.RIS
                             _prmrisvend, l.SignalGroupName));
                     }
                 }
-
-                foreach(var s in lanes.SelectMany(x => x.SimulatedStations))
-                {
-                    s.StationBitmapData.Naam = s.Naam;
-                    var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
-                    e.Dummy = true;
-                    _myElements.Add(e);
-                }
+            }
+            var lanesSim = _RISModel.RISFasen.SelectMany(x => x.LaneData);
+            foreach (var s in lanesSim.SelectMany(x => x.SimulatedStations))
+            {
+                s.StationBitmapData.Naam = s.Naam;
+                var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
+                e.Dummy = true;
+                _myElements.Add(e);
             }
         }
 
@@ -306,6 +306,7 @@ namespace TLCGen.Plugins.RIS
             StringBuilder sb = new StringBuilder();
 
             var lanes = _RISModel.RISFasen.SelectMany(x => x.LaneData);
+            var lanesReqExt = _RISModel.RISRequestExtendLanes;
 
             switch (type)
             {
@@ -347,53 +348,17 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach(var l in lanes.Where(x => x.RISAanvraag))
+                    foreach(var l in lanesReqExt.Where(x => x.RISAanvraag))
                     {
-                        var vtype = "RIS_VEHICLES";
-                        var rfc = c.Fasen.First(x => x.Naam == l.SignalGroupName);
-                        if(rfc != null)
-                        {
-                            switch (rfc.Type)
-                            {
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
-                                    vtype = "RIS_CYCLIST";
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
-                                    vtype = "RIS_PEDESTRIAN";
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
-                                    break;
-                            }
-                        }
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {vtype}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT8;");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT8;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach (var l in lanes.Where(x => x.RISVerlengen))
+                    foreach (var l in lanesReqExt.Where(x => x.RISVerlengen))
                     {
-                        var vtype = "RIS_VEHICLES";
-                        var rfc = c.Fasen.First(x => x.Naam == l.SignalGroupName);
-                        if (rfc != null)
-                        {
-                            switch (rfc.Type)
-                            {
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
-                                    vtype = "RIS_CYCLIST";
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
-                                    vtype = "RIS_PEDESTRIAN";
-                                    break;
-                                case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
-                                    break;
-                            }
-                        }
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {vtype}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT8; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT8; ");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT8; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT8; ");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -438,22 +403,22 @@ namespace TLCGen.Plugins.RIS
                 switch (sg.Type)
                 {
                     case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
-                        st.Type = RISStationTypeEnum.PASSENGERCAR;
+                        st.Type = RISStationTypeSimEnum.PASSENGERCAR;
                         st.Flow = 200;
                         st.Snelheid = 50;
                         break;
                     case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
-                        st.Type = RISStationTypeEnum.CYCLIST;
+                        st.Type = RISStationTypeSimEnum.CYCLIST;
                         st.Flow = 20;
                         st.Snelheid = 15;
                         break;
                     case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
-                        st.Type = RISStationTypeEnum.PEDESTRIAN;
+                        st.Type = RISStationTypeSimEnum.PEDESTRIAN;
                         st.Flow = 20;
                         st.Snelheid = 5;
                         break;
                     case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
-                        st.Type = RISStationTypeEnum.BUS;
+                        st.Type = RISStationTypeSimEnum.BUS;
                         st.Flow = 10;
                         st.Snelheid = 45;
                         break;
@@ -474,7 +439,7 @@ namespace TLCGen.Plugins.RIS
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
                         for (int i = 0; i < fc.AantalRijstroken; i++)
                         {
-                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i }));
+                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1 }));
                         }
                         _RISVM.RISFasen.Add(risfc);
                     }
@@ -488,7 +453,7 @@ namespace TLCGen.Plugins.RIS
                                 var i = risfc.Lanes.Count;
                                 for (; i < fc.AantalRijstroken; i++)
                                 {
-                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i }));
+                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1}));
                                 }
                             }
                             else if (fc.AantalRijstroken < risfc.Lanes.Count)
@@ -499,23 +464,20 @@ namespace TLCGen.Plugins.RIS
                                     if (risfc.Lanes.Any())
                                         risfc.Lanes.Remove(risfc.Lanes.Last());
                                 }
+                                var rem = _RISModel.RISRequestExtendLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem) _RISModel.RISRequestExtendLanes.Remove(r);
                             }
                         }
                     }
                 }
-                var rems = new List<RISFaseCyclusDataViewModel>();
-                foreach (var fc in _RISVM.RISFasen)
-                {
-                    if (Controller.Fasen.All(x => x.Naam != fc.FaseCyclus))
-                    {
-                        rems.Add(fc);
-                    }
-                }
+                var rems = _RISVM.RISFasen.Where(x => Controller.Fasen.All(x2 => x2.Naam != x.FaseCyclus)).ToList(); new List<RISFaseCyclusDataViewModel>();
                 foreach (var sg in rems)
                 {
                     _RISVM.RISFasen.Remove(sg);
                 }
                 _RISVM.RISFasen.BubbleSort();
+                foreach (var lre in _RISVM.RISRequestExtendLanes) lre.UpdateRijstroken();
+                _RISVM.RISRequestExtendLanes.BubbleSort();
                 _RISVM.UpdateRISLanes();
                 _RISVM.RaisePropertyChanged("");
             }

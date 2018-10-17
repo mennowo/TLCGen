@@ -35,7 +35,7 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        public bool HasRIS => Lanes.Any(x => x.RISAanvraag || x.RISVerlengen);
+        //public bool HasRIS => Lanes.Any(x => x.RISAanvraag || x.RISVerlengen);
 
         public object GetItem()
         {

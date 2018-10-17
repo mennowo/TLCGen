@@ -28,7 +28,7 @@
             <DataGrid.Columns>
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}"/>
+                                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeSimEnum}}}"/>
                 <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit}" Header="Prioriteit" />
                 <DataGridTextColumn Binding="{Binding Path=Flow}" Header="Flow" />
                 <DataGridTextColumn Binding="{Binding Path=Snelheid}" Header="Snelheid" />

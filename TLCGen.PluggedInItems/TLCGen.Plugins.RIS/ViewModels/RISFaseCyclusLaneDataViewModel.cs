@@ -38,73 +38,73 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        public bool RISAanvraag
-        {
-            get => _laneData.RISAanvraag;
-            set
-            {
-                _laneData.RISAanvraag = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                UpdateStations();
-            }
-        }
-
-        public int AanvraagStart
-        {
-            get => _laneData.AanvraagStart;
-            set
-            {
-                _laneData.AanvraagStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int AanvraagEnd
-        {
-            get => _laneData.AanvraagEnd;
-            set
-            {
-                _laneData.AanvraagEnd = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public bool RISVerlengen
-        {
-            get => _laneData.RISVerlengen;
-            set
-            {
-                _laneData.RISVerlengen = value;
-                RaisePropertyChanged<object>(broadcast: true);
-                UpdateStations();
-            }
-        }
-
-        public int VerlengenStart
-        {
-            get => _laneData.VerlengenStart;
-            set
-            {
-                _laneData.VerlengenStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int VerlengenEnd
-        {
-            get => _laneData.VerlengenEnd;
-            set
-            {
-                _laneData.VerlengenEnd = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
+        //public bool RISAanvraag
+        //{
+        //    get => _laneData.RISAanvraag;
+        //    set
+        //    {
+        //        _laneData.RISAanvraag = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //        UpdateStations();
+        //    }
+        //}
+        //
+        //public int AanvraagStart
+        //{
+        //    get => _laneData.AanvraagStart;
+        //    set
+        //    {
+        //        _laneData.AanvraagStart = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //    }
+        //}
+        //
+        //public int AanvraagEnd
+        //{
+        //    get => _laneData.AanvraagEnd;
+        //    set
+        //    {
+        //        _laneData.AanvraagEnd = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //    }
+        //}
+        //
+        //public bool RISVerlengen
+        //{
+        //    get => _laneData.RISVerlengen;
+        //    set
+        //    {
+        //        _laneData.RISVerlengen = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //        UpdateStations();
+        //    }
+        //}
+        //
+        //public int VerlengenStart
+        //{
+        //    get => _laneData.VerlengenStart;
+        //    set
+        //    {
+        //        _laneData.VerlengenStart = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //    }
+        //}
+        //
+        //public int VerlengenEnd
+        //{
+        //    get => _laneData.VerlengenEnd;
+        //    set
+        //    {
+        //        _laneData.VerlengenEnd = value;
+        //        RaisePropertyChanged<object>(broadcast: true);
+        //    }
+        //}
 
         public string SignalGroupName => _laneData.SignalGroupName;
 
         public int RijstrookIndex => _laneData.RijstrookIndex;
 
-        public string LaneIDDescription => "Fase " + SignalGroupName + " - Lane " + LaneID;
+        public string LaneIDDescription => "Fase " + SignalGroupName + " - Rijstrook " + RijstrookIndex;
 
         private AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string> _stationsManager;
         public AddRemoveItemsManager<RISFaseCyclusLaneSimulatedStationViewModel, RISFaseCyclusLaneSimulatedStationModel, string> StationsManager =>
@@ -137,18 +137,18 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        private void UpdateStations()
-        {
-            if((RISAanvraag || RISVerlengen) && !SimulatedStations.Any())
-            {
-                var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == _laneData.SignalGroupName);
-                SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex));
-            }
-            else if(!RISAanvraag && !RISVerlengen)
-            {
-                SimulatedStations.RemoveAll();
-            }
-        }
+        //private void UpdateStations()
+        //{
+        //    if((RISAanvraag || RISVerlengen) && !SimulatedStations.Any())
+        //    {
+        //        var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x => x.Naam == _laneData.SignalGroupName);
+        //        SimulatedStations.Add(RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex));
+        //    }
+        //    else if(!RISAanvraag && !RISVerlengen)
+        //    {
+        //        SimulatedStations.RemoveAll();
+        //    }
+        //}
 
         public RISFaseCyclusLaneDataViewModel(RISFaseCyclusLaneDataModel laneData)
         {

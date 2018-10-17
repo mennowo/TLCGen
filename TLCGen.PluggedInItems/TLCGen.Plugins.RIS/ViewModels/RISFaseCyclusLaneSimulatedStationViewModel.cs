@@ -11,7 +11,7 @@ namespace TLCGen.Plugins.RIS
 
         public RISFaseCyclusLaneSimulatedStationModel StationData => _stationData;
 
-        public RISStationTypeEnum Type
+        public RISStationTypeSimEnum Type
         {
             get => _stationData.Type;
             set

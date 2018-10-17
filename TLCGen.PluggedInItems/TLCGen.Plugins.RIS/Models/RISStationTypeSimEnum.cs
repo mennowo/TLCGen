@@ -1,6 +1,6 @@
 ﻿namespace TLCGen.Plugins.RIS.Models
 {
-    public enum RISStationTypeEnum
+    public enum RISStationTypeSimEnum
     {
         UNKNOWN = 0x0001,
         PEDESTRIAN = 0x0002,
@@ -14,9 +14,6 @@
         TRAILER = 0x0200,
         SPECIALVEHICLES = 0x0400,
         TRAM = 0x0800,
-        ROADSIDEUNIT = 0x8000,
-        TRUCKS = 0x0380,
-        MOTORVEHICLES = 0x7FF0,
-        VEHICLES = 0x7FFC
+        ROADSIDEUNIT = 0x8000
     }
 }

@@ -6,7 +6,7 @@ namespace TLCGen.Plugins.RIS.Models
 {
     public class RISFaseCyclusLaneSimulatedStationModel
     {
-        public RISStationTypeEnum Type { get; set; }
+        public RISStationTypeSimEnum Type { get; set; }
         public bool Prioriteit { get; set; }
         public int Flow { get; set; }
         public int Snelheid { get; set; }
@@ -26,31 +26,31 @@ namespace TLCGen.Plugins.RIS.Models
             {
                 switch (Type)
                 {
-                    case RISStationTypeEnum.UNKNOWN:
+                    case RISStationTypeSimEnum.UNKNOWN:
                         return "ris" + SignalGroupName + RijstrookIndex + "unknown";
-                    case RISStationTypeEnum.PEDESTRIAN:
+                    case RISStationTypeSimEnum.PEDESTRIAN:
                         return "ris" + SignalGroupName + RijstrookIndex + "pedestrian";
-                    case RISStationTypeEnum.CYCLIST:
+                    case RISStationTypeSimEnum.CYCLIST:
                         return "ris" + SignalGroupName + RijstrookIndex + "cyclist";
-                    case RISStationTypeEnum.MOPED:
+                    case RISStationTypeSimEnum.MOPED:
                         return "ris" + SignalGroupName + RijstrookIndex + "modep";
-                    case RISStationTypeEnum.MOTORCYCLE:
+                    case RISStationTypeSimEnum.MOTORCYCLE:
                         return "ris" + SignalGroupName + RijstrookIndex + "motorcycle";
-                    case RISStationTypeEnum.PASSENGERCAR:
+                    case RISStationTypeSimEnum.PASSENGERCAR:
                         return "ris" + SignalGroupName + RijstrookIndex + "car";
-                    case RISStationTypeEnum.BUS:
+                    case RISStationTypeSimEnum.BUS:
                         return "ris" + SignalGroupName + RijstrookIndex + "bus";
-                    case RISStationTypeEnum.LIGHTTRUCK:
+                    case RISStationTypeSimEnum.LIGHTTRUCK:
                         return "ris" + SignalGroupName + RijstrookIndex + "lighttruck";
-                    case RISStationTypeEnum.HEAVYTRUCK:
+                    case RISStationTypeSimEnum.HEAVYTRUCK:
                         return "ris" + SignalGroupName + RijstrookIndex + "heavytruck";
-                    case RISStationTypeEnum.TRAILER:
+                    case RISStationTypeSimEnum.TRAILER:
                         return "ris" + SignalGroupName + RijstrookIndex + "trailer";
-                    case RISStationTypeEnum.SPECIALVEHICLES:
+                    case RISStationTypeSimEnum.SPECIALVEHICLES:
                         return "ris" + SignalGroupName + RijstrookIndex + "special";
-                    case RISStationTypeEnum.TRAM:
+                    case RISStationTypeSimEnum.TRAM:
                         return "ris" + SignalGroupName + RijstrookIndex + "tram";
-                    case RISStationTypeEnum.ROADSIDEUNIT:
+                    case RISStationTypeSimEnum.ROADSIDEUNIT:
                         return "ris" + SignalGroupName + RijstrookIndex + "roadsideunit";
                 }
                 return "";

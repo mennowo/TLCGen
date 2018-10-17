@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Plugins.RIS"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:models="clr-namespace:TLCGen.Plugins.RIS.Models"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -89,6 +91,35 @@
                                     <Setter Property="Foreground" Value="Black" />
                                 </Style.Setters>
                             </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=SignalGroupName,Mode=OneWay}" Header="Signaalgroep" CellStyle="{StaticResource ReadOnlyStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=RijstrookIndex,Mode=OneWay}" Header="Index" CellStyle="{StaticResource ReadOnlyStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=LaneID,UpdateSourceTrigger=PropertyChanged}" Header="Lane ID" />
+                        </DataGrid.Columns>
+                    </ct:SpecialDataGrid>
+                </Grid>         
+            </TabItem>
+            <TabItem Header="Aanvragen &amp; verlengen">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Aanvragen en verlengen voor lanes per type voertuig" />
+                    <ct:SpecialDataGrid 
+                        ItemsSource="{Binding Path=RISRequestExtendLanes}" Margin="2"
+                        SelectedItem="{Binding Path=LanesRequestExtendManager.SelectedItem}"
+                        IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
+                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
+                                <Style.Setters>
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                </Style.Setters>
+                            </Style>
                             <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISRequestStyle">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=RISAanvraag}" Value="false">
@@ -109,9 +140,42 @@
                             </Style>
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Path=SignalGroupName,Mode=OneWay}" Header="Signaalgroep" CellStyle="{StaticResource ReadOnlyStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=RijstrookIndex,Mode=OneWay}" Header="Index" CellStyle="{StaticResource ReadOnlyStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=LaneID,UpdateSourceTrigger=PropertyChanged}" Header="Lane ID" />
+                            <DataGridTemplateColumn Header="Signaalgroep" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=SignalGroupName}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.RISFasen,RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                            DisplayMemberPath="FaseCyclus"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=SignalGroupName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            SelectedValuePath="FaseCyclus"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Rijstrook" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=RijstrookIndex}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=Rijstroken}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=RijstrookIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Type" 
+                                SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
                             <DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
@@ -120,7 +184,15 @@
                             <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
-                </Grid>         
+                    <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+                        <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultRequestExtendLanesCommand}" Margin="2" />
+                        <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
+                                 SelectableItemsVisibility="Hidden"            
+                                 AddItemCommand="{Binding Path=LanesRequestExtendManager.AddItemCommand}"
+                                 RemoveItemCommand="{Binding Path=LanesRequestExtendManager.RemoveItemCommand}"
+                                 SelectedItemToRemove="{Binding Path=LanesRequestExtendManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    </DockPanel>
+                </Grid>
             </TabItem>
             <TabItem Header="Simulatie">
                 <Grid>

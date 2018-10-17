@@ -55,8 +55,8 @@ namespace TLCGen.Plugins.RIS
             {
                 foreach (var s in l.SimulatedStations)
                 {
-                    var tl = s.Type == RISStationTypeEnum.PEDESTRIAN ? 1 : s.Type == RISStationTypeEnum.CYCLIST ? 2 : 6;
-                    var dl = s.Type == RISStationTypeEnum.PEDESTRIAN ? 50 : s.Type == RISStationTypeEnum.CYCLIST ? 100 : 300;
+                    var tl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 1 : s.Type == RISStationTypeSimEnum.CYCLIST ? 2 : 6;
+                    var dl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 50 : s.Type == RISStationTypeSimEnum.CYCLIST ? 100 : 300;
                     sb.AppendLine($"{ts}ris_display_lane_parameters(SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, \"{l.SignalGroupName}-{l.RijstrookIndex}\", {tl}, {dl});");
                 }
             }

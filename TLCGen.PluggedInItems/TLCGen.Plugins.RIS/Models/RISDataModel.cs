@@ -15,9 +15,13 @@ namespace TLCGen.Plugins.RIS.Models
         [XmlArray(ElementName = "RISFaseCyclusData")]
         public List<RISFaseCyclusDataModel> RISFasen { get; set; }
 
+        [XmlArray(ElementName = "RISLaneRequestExtendData")]
+        public List<RISLaneRequestExtendDataModel> RISRequestExtendLanes { get; set; }
+
         public RISDataModel()
         {
             RISFasen = new List<RISFaseCyclusDataModel>();
+            RISRequestExtendLanes = new List<RISLaneRequestExtendDataModel>();
         }
     }
 }
