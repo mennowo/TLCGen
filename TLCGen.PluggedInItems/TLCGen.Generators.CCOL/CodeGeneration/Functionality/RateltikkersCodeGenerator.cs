@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _usrt;
         private CCOLGeneratorCodeStringSettingModel _usrtdim;
         private CCOLGeneratorCodeStringSettingModel _hrt;
+        private CCOLGeneratorCodeStringSettingModel _hdrt;
         private CCOLGeneratorCodeStringSettingModel _tnlrt;
 #pragma warning restore 0649
         private string _hperiod;
@@ -43,10 +44,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (rt.Type == RateltikkerTypeEnum.Hoeflake)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", _tnlrt, rt.FaseCyclus));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnlrt}{rt.FaseCyclus}", rt.NaloopTijd, CCOLElementTimeTypeEnum.TE_type, _tnlrt, rt.FaseCyclus));
                 }
 
+
                 _myBitmapOutputs.Add(new CCOLIOElement(rt.BitmapData as IOElementModel, $"{_uspf}{_usrt}{rt.FaseCyclus}"));
+            }
+            foreach (var d in c.Signalen.Rateltikkers.SelectMany(x => x.Detectoren).Select(x => x.Detector).Distinct())
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hdrt}{d}", _hdrt, d));
             }
         }
 
@@ -92,6 +98,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         return "";
                     }
+                    if (c.Signalen.Rateltikkers.SelectMany(x => x.Detectoren).Any())
+                    {
+                        sb.AppendLine($"{ts}/* Onthouden drukknop meldingen */");
+                        foreach (var d in c.Signalen.Rateltikkers.SelectMany(x => x.Detectoren).Select(x => x.Detector).Distinct())
+                        {
+                            var fc = c.Fasen.Where(x => x.Detectoren.FirstOrDefault(x2 => x2.Naam == d) != null).FirstOrDefault();
+                            if (fc != null)
+                            {
+                                sb.AppendLine($"IH[{_hpf}{_hdrt}{d}] = SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hdrt}{d}] || D[{_dpf}{d}] && !G[{_fcpf}{fc.Naam}] && A[{_fcpf}{fc.Naam}];");
+                            }
+                        }
+                        sb.AppendLine();
+                    }
                     sb.AppendLine($"{ts}/* uitsturing aanvraag rateltikkers */");
                     foreach (var rt in c.Signalen.Rateltikkers)
                     {
@@ -101,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, ");
                                 foreach (var d in rt.Detectoren)
                                 {
-                                    sb.Append($"{_dpf}{d.Detector}, ");
+                                    sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");
                                 }
                                 sb.AppendLine("END);");
                                 break;
@@ -109,7 +128,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
                                 foreach (var d in rt.Detectoren)
                                 {
-                                    sb.Append($"{_dpf}{d.Detector}, ");
+                                    sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");
                                 }
                                 sb.AppendLine("END);");
                                 break;
