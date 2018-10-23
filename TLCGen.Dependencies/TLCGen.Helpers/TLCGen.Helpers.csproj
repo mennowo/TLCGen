@@ -55,6 +55,7 @@
     <Compile Include="ModelStringSetter.cs" />
     <Compile Include="MultiPropertySetter.cs" />
     <Compile Include="NameSyntaxChecker.cs" />
+    <Compile Include="NullToVisibiltyConverter.cs" />
     <Compile Include="ObservableCollectionAroundList.cs" />
     <Compile Include="RecentFileList.cs" />
     <Compile Include="RelayCommand.cs" />

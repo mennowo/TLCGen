@@ -25,7 +25,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for SelectableDetectorsVisibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectableItemsVisibilityProperty =
-            DependencyProperty.Register("SelectableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("SelectableItemsVisibility", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
 
 
         public Visibility RemovableItemsVisibility
@@ -36,7 +36,7 @@ namespace TLCGen.Controls
 
         // Using a DependencyProperty as the backing store for RemovableDetectorsVisibility.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty RemovableItemsVisibilityProperty =
-            DependencyProperty.Register("RemovableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+            DependencyProperty.Register("RemovableItemsVisibility", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
 
         public string Caption
         {
