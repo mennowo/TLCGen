@@ -179,7 +179,10 @@ namespace TLCGen.ViewModels
             get { return _Periode.GroentijdenSet; }
             set
             {
-                _Periode.GroentijdenSet = value;
+                if(value != null)
+                {
+                    _Periode.GroentijdenSet = value;
+                }
                 RaisePropertyChanged<object>(nameof(GroentijdenSet), broadcast: true);
             }
         }

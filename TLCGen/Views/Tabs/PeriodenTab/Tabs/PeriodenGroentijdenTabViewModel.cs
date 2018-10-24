@@ -220,6 +220,8 @@ namespace TLCGen.ViewModels
 	        }
 	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Periode, mm.Naam));
 			var mvm = new PeriodeViewModel(mm);
+            var mgset = _Controller.GroentijdenSets.FirstOrDefault();
+            if (mgset != null) mvm.GroentijdenSet = mgset.Naam;
 
             if (Periodes.Any(x => x.Type == PeriodeTypeEnum.Groentijden))
             {

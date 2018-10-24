@@ -111,13 +111,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
                     }
-                    sb.AppendLine($"{ts}/* uitsturing aanvraag rateltikkers */");
+                    sb.AppendLine($"{ts}/* Uitsturing aanvraag rateltikkers */");
                     foreach (var rt in c.Signalen.Rateltikkers)
                     {
+                        var rta = c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag) ? $"{_hpf}{_hperiod}{_prmperrta}" : "NG";
+                        var rtr = c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd) ? $"{_hpf}{_hperiod}{_prmperrt}" : "NG";
                         switch (rt.Type)
                         {
                             case RateltikkerTypeEnum.Accross:
-                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, ");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers_Accross({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {rta}, {rtr}, ");
                                 foreach (var d in rt.Detectoren)
                                 {
                                     sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");
@@ -125,7 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine("END);");
                                 break;
                             case RateltikkerTypeEnum.Hoeflake:
-                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {_hpf}{_hperiod}{_prmperrta}, {_hpf}{_hperiod}{_prmperrt}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
+                                sb.Append($"{ts}GUS[{_uspf}{_usrt}{rt.FaseCyclus}] = Rateltikkers({_fcpf}{rt.FaseCyclus}, {_hpf}{_hrt}{rt.FaseCyclus}, {rta}, {rtr}, {_tpf}{_tnlrt}{rt.FaseCyclus}, ");
                                 foreach (var d in rt.Detectoren)
                                 {
                                     sb.Append($"{_hpf}{_hdrt}{d.Detector}, ");

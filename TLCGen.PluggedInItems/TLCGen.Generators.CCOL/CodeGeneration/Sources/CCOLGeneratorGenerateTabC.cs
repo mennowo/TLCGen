@@ -954,13 +954,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_PS] = {c.Data.VLOGSettings.MONTYPE_PS};");
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_DS] = {c.Data.VLOGSettings.MONTYPE_DS};");
                 sb.AppendLine($"#if !defined NO_VLOG_300");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_MLX] = {c.Data.VLOGSettings.MONTYPE_MLX};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_OMG] = {c.Data.VLOGSettings.MONTYPE_OMG};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CRC] = {c.Data.VLOGSettings.MONTYPE_CRC};");
-                sb.AppendLine($"{ts}MONTYPE[LOGTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
-                sb.AppendLine($"{ts}MONPRM[LOGPRM_EVENT] = {c.Data.VLOGSettings.LOGPRM_EVENT};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_MLX] = {c.Data.VLOGSettings.MONTYPE_MLX};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_OMG] = {c.Data.VLOGSettings.MONTYPE_OMG};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_CRC] = {c.Data.VLOGSettings.MONTYPE_CRC};");
+                sb.AppendLine($"{ts}MONTYPE[MONTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
+                sb.AppendLine($"{ts}MONPRM[MONPRM_EVENT] = {c.Data.VLOGSettings.MONPRM_EVENT};");
                 sb.AppendLine($"#endif");
-                sb.AppendLine($"{ts}MONPRM[LOGPRM_VLOGMODE] = {c.Data.VLOGSettings.LOGPRM_VLOGMODE};");
+                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = {(c.Data.VLOGSettings.MONPRM_VLOGMODE == VLOGMonModeEnum.ASCII ? "VLOGMODE_MON_BINAIR" : "VLOGMODE_MON_ASCII")};");
                 sb.AppendLine();
             }
 

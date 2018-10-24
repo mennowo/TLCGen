@@ -129,16 +129,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{ipero++}", _hperiod, per.Naam));
                 }
             }
-            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrt.Description, CCOLElementTypeEnum.HulpElement)));
-            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrta.Description, CCOLElementTypeEnum.HulpElement)));
-            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrtdim.Description, CCOLElementTypeEnum.HulpElement)));
-            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbel.Description, CCOLElementTypeEnum.HulpElement)));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbeldim.Description, CCOLElementTypeEnum.HulpElement)));
-            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrt.Description, CCOLElementTypeEnum.Uitgang)));
-            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrta.Description, CCOLElementTypeEnum.Uitgang)));
-            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperrtdim.Description, CCOLElementTypeEnum.Uitgang)));
-            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbel.Description, CCOLElementTypeEnum.Uitgang)));
-            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, CCOLGeneratorSettingsProvider.Default.GetElementDescription(_prmperbeldim.Description, CCOLElementTypeEnum.Uitgang)));
+            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, _prmperrt.Description));
+            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrta}", CCOLElementTypeEnum.HulpElement, _prmperrta.Description));
+            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrtdim}", CCOLElementTypeEnum.HulpElement, _prmperrtdim.Description));
+            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbel}", CCOLElementTypeEnum.HulpElement, _prmperbel.Description));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperbeldim}", CCOLElementTypeEnum.HulpElement, _prmperbeldim.Description));
+            if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrt}", CCOLElementTypeEnum.Uitgang, _prmperrt.Description));
+            if (iperrta > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrta}", CCOLElementTypeEnum.Uitgang, _prmperrta.Description));
+            if (iperrtdim > 1)  _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperrtdim}", CCOLElementTypeEnum.Uitgang, _prmperrtdim.Description));
+            if (iperbel > 1)    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbel}", CCOLElementTypeEnum.Uitgang, _prmperbel.Description));
+            if (iperbeldim > 1) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmperbeldim}", CCOLElementTypeEnum.Uitgang, _prmperbeldim.Description));
             if (iperrt > 1)     _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerAltijdBitmapData, $"{_uspf}{_usper}{_prmperrt}"));
             if (iperrta > 1)    _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerActiefBitmapData, $"{_uspf}{_usper}{_prmperrta}"));
             if (iperrtdim > 1)  _myBitmapOutputs.Add(new CCOLIOElement(c.Signalen.RatelTikkerDimmenBitmapData, $"{_uspf}{_usper}{_prmperrtdim}"));

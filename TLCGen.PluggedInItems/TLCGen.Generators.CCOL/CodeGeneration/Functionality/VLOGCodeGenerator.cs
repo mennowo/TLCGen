@@ -135,7 +135,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}#endif ");
                         }
                         if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType == Models.Enumerations.VLOGTypeEnum.Filebased ||
-                            c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_ASCII)
+                            c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && 
+                            (c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_ASCII ||
+                             c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_BINAIR))
                         {
                             sb.AppendLine($"{ts}#ifndef AUTOMAAT");
                             sb.AppendLine($"{ts}{ts}file_uber_to_file_hour(LOGFILE_NUMBER_MAX, LOGFILE_LENGTH_MAX);");
