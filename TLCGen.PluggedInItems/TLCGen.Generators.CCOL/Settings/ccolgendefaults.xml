@@ -1948,6 +1948,12 @@
             <Type>Parameter</Type>
             <Description>Afstand van stopstreep tot einde verleng gebied RIS fase _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>rissim</Default>
+            <Setting>rissim</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Inschakelen automatische simulatie RIS</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

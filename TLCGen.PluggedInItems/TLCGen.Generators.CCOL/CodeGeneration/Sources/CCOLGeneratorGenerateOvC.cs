@@ -680,49 +680,105 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (ov.FaseCyclus == fc.Naam)
                     {
-                        if (fc.Detectoren.Count > 0)
+                        bool wissel = false;
+                        if (ov.KoplusKijkNaarWisselstand &&
+                            ((ov.MeldingenData.Wissel1 &&
+                              ((ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
+                               (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
+                             (ov.MeldingenData.Wissel2 &&
+                              ((ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
+                               (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector))))))
                         {
-                            var kl = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop).ToList();
-                            var ll = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Lang).ToList();
-                            if (ll.Count <= kl.Count)
+                            wissel = true;
+                            sb.Append($"{ts}if (");
+                            if (ov.MeldingenData.Wissel1)
                             {
-                                var i = 0;
-                                foreach (var d in kl)
+                                if (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
                                 {
-                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
-                                    if (i < ll.Count)
+                                    sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])");
+                                }
+                                else
+                                {
+                                    sb.Append($"{ts}if (D[{_dpf}{ov.MeldingenData.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])");
+                                }
+                            }
+                            if (ov.MeldingenData.Wissel2)
+                            {
+                                if (ov.MeldingenData.Wissel1)
+                                {
+                                    sb.Append(" && ");
+                                }
+                                if (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                {
+                                    sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])");
+                                }
+                                else
+                                {
+                                    sb.Append($"{ts}if (D[{_dpf}{ov.MeldingenData.Wissel2Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])");
+                                }
+                            }
+                            sb.AppendLine(")");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(ovFC{fc.Naam}, {ov.Koplus}, NG, NG);");
+                            sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(ovFC{fc.Naam}, NG, NG, NG);");
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        else
+                        {
+                            var tts = wissel ? ts + ts : ts;
+                            if (fc.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop || x.Type == DetectorTypeEnum.Lang))
+                            {
+                                var kl = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop).ToList();
+                                var ll = fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Lang).ToList();
+                                if (ll.Count <= kl.Count)
+                                {
+                                    var i = 0;
+                                    foreach (var d in kl)
                                     {
-                                        sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
-                                        ++i;
+                                        sb.Append($"{tts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{d.Naam}, ");
+                                        if (i < ll.Count)
+                                        {
+                                            sb.AppendLine($"{_dpf}{ll[i].Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                            ++i;
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine("NG, NG);");
+                                        }
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    var i = 0;
+                                    foreach (var d in ll)
                                     {
-                                        sb.AppendLine("NG, NG);");
+                                        sb.Append($"{tts}OVRijTijdScenario(ovFC{fc.Naam}, ");
+                                        if (i < kl.Count)
+                                        {
+                                            sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam});");
+                                            ++i;
+                                        }
+                                        else
+                                        {
+                                            sb.AppendLine($"NG, {_dpf}{d.Naam}, NG);");
+                                        }
                                     }
                                 }
                             }
                             else
                             {
-                                var i = 0;
-                                foreach (var d in ll)
-                                {
-                                    sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, ");
-                                    if (i < kl.Count)
-                                    {
-                                        sb.AppendLine($"{_dpf}{kl[i].Naam}, {_dpf}{d.Naam}, {_tpf}{_tbtovg}{fc.Naam});");
-                                        ++i;
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine($"NG, {_dpf}{d.Naam}, NG);");
-                                    }
-                                }
+                                sb.Append($"{tts}OVRijTijdScenario(ovFC{fc.Naam}, NG, NG, NG);");
                             }
+                            sb.AppendLine();
                         }
-                        else
-                        {
-                            sb.Append($"{ts}OVRijTijdScenario(ovFC{fc.Naam}, NG, NG, NG);");
-                        }
+
                         break;
                     }
                 }

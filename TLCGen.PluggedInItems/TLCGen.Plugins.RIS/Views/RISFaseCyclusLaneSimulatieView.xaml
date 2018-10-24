@@ -29,10 +29,15 @@
                 <DataGridComboBoxColumn Header="Type" 
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeSimEnum}}}"/>
-                <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit}" Header="Prioriteit" />
-                <DataGridTextColumn Binding="{Binding Path=Flow}" Header="Flow" />
-                <DataGridTextColumn Binding="{Binding Path=Snelheid}" Header="Snelheid" />
-                <DataGridTextColumn Binding="{Binding Path=Afstand}" Header="Afstand" />
+                <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit,UpdateSourceTrigger=PropertyChanged}" Header="Prioriteit" />
+                <DataGridTextColumn Binding="{Binding Path=Flow,UpdateSourceTrigger=PropertyChanged}" Header="Flow" />
+                <DataGridTextColumn Binding="{Binding Path=Snelheid,UpdateSourceTrigger=PropertyChanged}" Header="Snelheid" />
+                <DataGridTextColumn Binding="{Binding Path=Afstand,UpdateSourceTrigger=PropertyChanged}" Header="Afstand" />
+                <DataGridTextColumn Binding="{Binding Path=Q1,UpdateSourceTrigger=PropertyChanged}" Header="Q1" />
+                <DataGridTextColumn Binding="{Binding Path=Q2,UpdateSourceTrigger=PropertyChanged}" Header="Q2" />
+                <DataGridTextColumn Binding="{Binding Path=Q3,UpdateSourceTrigger=PropertyChanged}" Header="Q3" />
+                <DataGridTextColumn Binding="{Binding Path=Q4,UpdateSourceTrigger=PropertyChanged}" Header="Q4" />
+                <DataGridTextColumn Binding="{Binding Path=Stopline,UpdateSourceTrigger=PropertyChanged}" Header="Stopline" />
             </DataGrid.Columns>
         </DataGrid>
         <!--<StackPanel Grid.Row="3" Orientation="Horizontal">

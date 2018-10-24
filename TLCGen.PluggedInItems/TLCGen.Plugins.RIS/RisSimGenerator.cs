@@ -43,6 +43,7 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"");
             sb.AppendLine($"void ris_simulation_parameters(void)");
             sb.AppendLine($"{{");
+            sb.AppendLine($"{ts}#ifdef RISSIMULATIE");
             foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach(var s in l.SimulatedStations)
@@ -50,6 +51,7 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}ris_simulation_itsstation_parameters(SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
                 }
             }
+            sb.AppendLine($"{ts}#endif // RISSIMULATIE");
             sb.AppendLine();
             foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {

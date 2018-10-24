@@ -264,6 +264,7 @@ namespace TLCGen.Plugins.RIS
                 var e = CCOLGeneratorSettingsProvider.Default.CreateElement(s.Naam, CCOLElementTypeEnum.Ingang, "");
                 e.Dummy = true;
                 _myElements.Add(e);
+                _myBitmapInputs.Add(new CCOLIOElement(s.StationBitmapData, $"{_ispf}{s.Naam}"));
             }
         }
 
@@ -275,6 +276,21 @@ namespace TLCGen.Plugins.RIS
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _myElements.Where(x => x.Type == type);
+        }
+
+        public override bool HasCCOLBitmapInputs()
+        {
+            return false; // No need: ITLCGenElementProvider arranges for this
+        }
+
+        public override bool HasSimulationElements()
+        {
+            return true;
+        }
+
+        public override IEnumerable<DetectorSimulatieModel> GetSimulationElements()
+        {
+            return _RISModel.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations).Select(x => x.SimulationData);
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -424,6 +440,7 @@ namespace TLCGen.Plugins.RIS
                         break;
                 }
             }
+            st.StationData.SimulationData.RelatedName = st.StationData.Naam;
             return st;
         }
 

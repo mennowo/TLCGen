@@ -11,6 +11,7 @@ namespace TLCGen.Plugins.RIS.Models
         public int Flow { get; set; }
         public int Snelheid { get; set; }
         public int Afstand { get; set; }
+        public DetectorSimulatieModel SimulationData { get; set; }
         [RefersTo]
         public string SignalGroupName { get; set; }
         public int RijstrookIndex { get; set; }
@@ -64,6 +65,7 @@ namespace TLCGen.Plugins.RIS.Models
         public RISFaseCyclusLaneSimulatedStationModel()
         {
             StationBitmapData = new BitmapCoordinatenDataModel();
+            SimulationData = new DetectorSimulatieModel();
         }
     }
 }

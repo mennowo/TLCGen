@@ -78,6 +78,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             throw new NotSupportedException();
         }
 
+        public virtual bool HasSimulationElements()
+        {
+            return false;
+        }
+
+        public virtual IEnumerable<DetectorSimulatieModel> GetSimulationElements()
+        {
+            throw new NotSupportedException();
+        }
+
         public virtual int HasCode(CCOLCodeTypeEnum type)
         {
             return 0;

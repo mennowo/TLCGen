@@ -51,7 +51,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
             int dpmax = alldets.Count();
 
-            sb.AppendLine($"#define LNKMAX {dpmax} /* aantal links */");
+            var simelems = PieceGenerators.Sum(x => (x.HasSimulationElements() ? x.GetSimulationElements().Count() : 0));
+
+            sb.AppendLine($"#define LNKMAX {dpmax + simelems} /* aantal links */");
 
             return sb.ToString();
         }
@@ -102,11 +104,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
                 sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
                 sb.AppendLine($"{ts}S_generator[{index}] = NG;");
-                sb.AppendLine($"{ts}S_stopline[{index}] = 1800;");
+                sb.AppendLine($"{ts}S_stopline[{index}] = {dm.Simulatie.Stopline};");
                 sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
                 sb.AppendLine($"{ts}Q2[{index}] = {dm.Simulatie.Q2};");
                 sb.AppendLine($"{ts}Q3[{index}] = {dm.Simulatie.Q3};");
                 sb.AppendLine($"{ts}Q4[{index}] = {dm.Simulatie.Q4};");
+                sb.AppendLine();
+                ++index;
+            }
+
+            foreach (var e in PieceGenerators.Where(x => x.HasSimulationElements()).SelectMany(x => x.GetSimulationElements()))
+            {
+                sb.AppendLine($"{ts}LNK_code[{index}] = \"{e.RelatedName}\";");
+                sb.AppendLine($"{ts}IS_nr[{index}] = {_ispf}{e.RelatedName};");
+                sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(e.FCNr) && e.FCNr.ToUpper() != "NG" ? _fcpf + e.FCNr : "NG")};");
+                sb.AppendLine($"{ts}S_generator[{index}] = NG;");
+                sb.AppendLine($"{ts}S_stopline[{index}] = {e.Stopline};");
+                sb.AppendLine($"{ts}Q1[{index}] = {e.Q1};");
+                sb.AppendLine($"{ts}Q2[{index}] = {e.Q2};");
+                sb.AppendLine($"{ts}Q3[{index}] = {e.Q3};");
+                sb.AppendLine($"{ts}Q4[{index}] = {e.Q4};");
                 sb.AppendLine();
                 ++index;
             }

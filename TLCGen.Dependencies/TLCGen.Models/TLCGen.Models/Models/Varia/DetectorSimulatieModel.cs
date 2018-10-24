@@ -9,6 +9,8 @@ namespace TLCGen.Models
     [Serializable]
     public class DetectorSimulatieModel
     {
+        [RefersTo]
+        public string RelatedName { get; set; }
         public int Q1 { get; set; }
         public int Q2 { get; set; }
         public int Q3 { get; set; }
