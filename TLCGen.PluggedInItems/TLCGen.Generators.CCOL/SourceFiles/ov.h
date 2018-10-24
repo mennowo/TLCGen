@@ -24,7 +24,7 @@ typedef struct {
 
 extern VLOG_MON5 VLOG_mon5[FCMAX];
 
-// Functie declaraties voor functies uit de applicatie
+/* Functie declaraties voor functies uit de applicatie */
 void OVInstellingen(void);
 void RijTijdScenario(void);
 void InUitMelden(void);
@@ -34,7 +34,7 @@ void TegenhoudenConflictenExtra(void);
 void PostAfhandelingOV(void);
 void OVPARCorrecties(void);
 
-// Functie declaraties voor functies uit ov.c
+/* Functie declaraties voor functies uit ov.c */
 void AfhandelingOV(void);
 int BepaalPrioriteitsOpties(int prm_prio);
 void OVInit(void);

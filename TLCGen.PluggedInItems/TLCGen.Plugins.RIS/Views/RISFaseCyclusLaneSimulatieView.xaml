@@ -30,7 +30,7 @@
                                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeSimEnum}}}"/>
                 <DataGridCheckBoxColumn Binding="{Binding Path=Prioriteit,UpdateSourceTrigger=PropertyChanged}" Header="Prioriteit" />
-                <DataGridTextColumn Binding="{Binding Path=Flow,UpdateSourceTrigger=PropertyChanged}" Header="Flow" />
+                <!--<DataGridTextColumn Binding="{Binding Path=Flow,UpdateSourceTrigger=PropertyChanged}" Header="Flow" />-->
                 <DataGridTextColumn Binding="{Binding Path=Snelheid,UpdateSourceTrigger=PropertyChanged}" Header="Snelheid" />
                 <DataGridTextColumn Binding="{Binding Path=Afstand,UpdateSourceTrigger=PropertyChanged}" Header="Afstand" />
                 <DataGridTextColumn Binding="{Binding Path=Q1,UpdateSourceTrigger=PropertyChanged}" Header="Q1" />
@@ -45,7 +45,7 @@
             <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveStationCommand}" />
         </StackPanel>-->
         <ct:ItemsManagerView Caption="" Grid.Row="3" Grid.ColumnSpan="2"
-                             SelectableItemsVisibility="Hidden"
+                             SelectableItemsVisibility="Collapsed"
                              AddItemCommand="{Binding Path=StationsManager.AddItemCommand}"
                              RemoveItemCommand="{Binding Path=StationsManager.RemoveItemCommand}"
                              SelectedItemToRemove="{Binding Path=StationsManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />

@@ -561,7 +561,7 @@ mulv max_tar_tig(count i)
     return t_aa_max;
     }
 
-#endif // NO_TIGMAX
+#endif /* NO_TIGMAX */
 
 #endif
 

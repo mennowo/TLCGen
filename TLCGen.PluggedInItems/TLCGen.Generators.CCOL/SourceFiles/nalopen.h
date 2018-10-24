@@ -92,4 +92,4 @@ bool yml_cv_pr_nl(bool *prml[], count ml, count ml_max);
 
 #endif
 
-#endif // #define __NALOPENFUNC__
+#endif /* #define __NALOPENFUNC__ */

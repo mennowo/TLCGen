@@ -84,5 +84,5 @@ void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, coun
   #endif
 #endif
 
-#endif // __HALFSTARH__
+#endif /* __HALFSTARH__ */
 
