@@ -285,7 +285,7 @@ namespace TLCGen.Plugins.RIS
 
         public override bool HasSimulationElements()
         {
-            return true;
+            return _RISModel.RISToepassen;
         }
 
         public override IEnumerable<DetectorSimulatieModel> GetSimulationElements()
