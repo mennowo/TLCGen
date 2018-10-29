@@ -43,12 +43,14 @@ namespace TLCGen.Plugins.RIS
             {
                 _RISModel = value;
                 RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen);
-                RISRequestExtendLanes = new ObservableCollectionAroundList<RISLaneRequestExtendDataViewModel, RISLaneRequestExtendDataModel>(_RISModel.RISRequestExtendLanes);
+                RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes);
+                RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes);
             }
         }
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
-        public ObservableCollectionAroundList<RISLaneRequestExtendDataViewModel, RISLaneRequestExtendDataModel> RISRequestExtendLanes { get; private set; }
+        public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes { get; private set; }
+        public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes { get; private set; }
 
         public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
 
@@ -106,19 +108,38 @@ namespace TLCGen.Plugins.RIS
             }
         }
         
-        private AddRemoveItemsManager<RISLaneRequestExtendDataViewModel, RISLaneRequestExtendDataModel, string> _lanesRequestExtendManager;
-        public AddRemoveItemsManager<RISLaneRequestExtendDataViewModel, RISLaneRequestExtendDataModel, string> LanesRequestExtendManager =>
-            _lanesRequestExtendManager ??
-            (_lanesRequestExtendManager = new AddRemoveItemsManager<RISLaneRequestExtendDataViewModel, RISLaneRequestExtendDataModel, string>(
-                RISRequestExtendLanes,
+        private AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> _lanesRequestManager;
+        public AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> LanesRequestManager =>
+            _lanesRequestManager ??
+            (_lanesRequestManager = new AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string>(
+                RISRequestLanes,
                 x =>
                 {
                     if (!RISFasen.Any()) return null;
-                    var lre = new RISLaneRequestExtendDataViewModel(new RISLaneRequestExtendDataModel()
+                    var lre = new RISLaneRequestDataViewModel(new RISLaneRequestDataModel()
                     {
-                        SignalGroupName = RISRequestExtendLanes.Any() ? RISRequestExtendLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus,
+                        SignalGroupName = RISRequestLanes.Any() ? RISRequestLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus,
                         RijstrookIndex = 1,
-                        Type = GetTypeForFase(null, RISRequestExtendLanes.Any() ? RISRequestExtendLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus)
+                        Type = GetTypeForFase(null, RISRequestLanes.Any() ? RISRequestLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus)
+                    });
+                    return lre;
+                },
+                (x, y) => false
+                ));
+
+        private AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> _lanesExtendManager;
+        public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
+            _lanesExtendManager ??
+            (_lanesExtendManager = new AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string>(
+                RISExtendLanes,
+                x =>
+                {
+                    if (!RISFasen.Any()) return null;
+                    var lre = new RISLaneExtendDataViewModel(new RISLaneExtendDataModel()
+                    {
+                        SignalGroupName = RISExtendLanes.Any() ? RISExtendLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus,
+                        RijstrookIndex = 1,
+                        Type = GetTypeForFase(null, RISExtendLanes.Any() ? RISExtendLanes.Last().SignalGroupName : RISFasen.First().FaseCyclus)
                     });
                     return lre;
                 },
@@ -129,28 +150,54 @@ namespace TLCGen.Plugins.RIS
 
         #region Commands
 
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _addDefaultRequestExtendLanesCommand;
-        public ICommand AddDefaultRequestExtendLanesCommand => _addDefaultRequestExtendLanesCommand ?? (_addDefaultRequestExtendLanesCommand = new RelayCommand(AddDefaultRequestExtendLanesCommand_executed));
+        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _addDefaultRequestLanesCommand;
+        public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ?? (_addDefaultRequestLanesCommand = new RelayCommand(AddDefaultRequestLanesCommand_executed));
 
-        private void AddDefaultRequestExtendLanesCommand_executed()
+        private void AddDefaultRequestLanesCommand_executed()
         {
             foreach(var fc in _plugin.Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
                 for (int i = 0; i < fc.AantalRijstroken; i++)
                 {
-                    if (RISRequestExtendLanes.All(x => x.SignalGroupName != fc.Naam || x.SignalGroupName == fc.Naam && x.RijstrookIndex != i + 1 || x.SignalGroupName == fc.Naam && x.RijstrookIndex == i + 1 && x.Type != t))
+                    if (RISRequestLanes.All(x => x.SignalGroupName != fc.Naam || x.SignalGroupName == fc.Naam && x.RijstrookIndex != i + 1 || x.SignalGroupName == fc.Naam && x.RijstrookIndex == i + 1 && x.Type != t))
                     {
-                        RISRequestExtendLanes.Add(new RISLaneRequestExtendDataViewModel(new RISLaneRequestExtendDataModel
+                        RISRequestLanes.Add(new RISLaneRequestDataViewModel(new RISLaneRequestDataModel
                         {
                             SignalGroupName = fc.Naam,
                             RijstrookIndex = i + 1,
                             Type = t
                         }));
+                        RISRequestLanes.BubbleSort();
                     }
                 }
             }
-            RISRequestExtendLanes.BubbleSort();
+            RISRequestLanes.BubbleSort();
+        }
+
+        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _addDefaultExtendLanesCommand;
+        public ICommand AddDefaultExtendLanesCommand => _addDefaultExtendLanesCommand ?? (_addDefaultExtendLanesCommand = new RelayCommand(AddDefaultExtendLanesCommand_executed));
+
+        private void AddDefaultExtendLanesCommand_executed()
+        {
+            foreach (var fc in _plugin.Controller.Fasen)
+            {
+                var t = GetTypeForFase(fc);
+                for (int i = 0; i < fc.AantalRijstroken; i++)
+                {
+                    if (RISExtendLanes.All(x => x.SignalGroupName != fc.Naam || x.SignalGroupName == fc.Naam && x.RijstrookIndex != i + 1 || x.SignalGroupName == fc.Naam && x.RijstrookIndex == i + 1 && x.Type != t))
+                    {
+                        RISExtendLanes.Add(new RISLaneExtendDataViewModel(new RISLaneExtendDataModel
+                        {
+                            SignalGroupName = fc.Naam,
+                            RijstrookIndex = i + 1,
+                            Type = t
+                        }));
+                        RISExtendLanes.BubbleSort();
+                    }
+                }
+            }
+            RISExtendLanes.BubbleSort();
         }
 
         #endregion // Commands
@@ -208,7 +255,13 @@ namespace TLCGen.Plugins.RIS
                         risfc.Lanes.Add(l);
                     }
                     RISFasen.Add(risfc);
-                    RISRequestExtendLanes.Add(new RISLaneRequestExtendDataViewModel(new RISLaneRequestExtendDataModel
+                    RISRequestLanes.Add(new RISLaneRequestDataViewModel(new RISLaneRequestDataModel
+                    {
+                        SignalGroupName = fc.Naam,
+                        RijstrookIndex = 1,
+                        Type = GetTypeForFase(fc)
+                    }));
+                    RISExtendLanes.Add(new RISLaneExtendDataViewModel(new RISLaneExtendDataModel
                     {
                         SignalGroupName = fc.Naam,
                         RijstrookIndex = 1,
@@ -255,11 +308,14 @@ namespace TLCGen.Plugins.RIS
                             risfc.Lanes.Remove(risfc.Lanes.Last());
                         }
                     }
-                    var rem = RISRequestExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam && x.RijstrookIndex >= obj.AantalRijstroken).ToList();
-                    foreach (var r in rem) RISRequestExtendLanes.Remove(r);
+                    var rem = RISRequestLanes.Where(x => x.SignalGroupName == obj.Fase.Naam && x.RijstrookIndex >= obj.AantalRijstroken).ToList();
+                    foreach (var r in rem) RISRequestLanes.Remove(r);
+                    var rem2 = RISExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam && x.RijstrookIndex >= obj.AantalRijstroken).ToList();
+                    foreach (var r in rem2) RISExtendLanes.Remove(r);
                 }
             }
-            foreach (var lre in RISRequestExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
+            foreach (var lre in RISRequestLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
+            foreach (var lre in RISExtendLanes.Where(x => x.SignalGroupName == obj.Fase.Naam)) lre.UpdateRijstroken();
             UpdateRISLanes();
         }
 

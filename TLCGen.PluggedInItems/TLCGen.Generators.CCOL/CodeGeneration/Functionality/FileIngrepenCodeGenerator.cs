@@ -182,6 +182,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
                     return 10;
+                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                    return 10;
                 default:
                     return 0;
             }
@@ -547,6 +549,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usfile}{f.Naam}] = IH[{_hpf}{_hfile}{f.Naam}];");
                     }
                     sb.AppendLine();
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                    if (!c.FileIngrepen.Any()) return "";
+
+                    var yes = false;
+                    foreach (var fcm in c.Fasen)
+                    {
+                        if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                        {
+                            {
+                                var fm = c.FileIngrepen.FirstOrDefault(
+                                    x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                                if (fm != null)
+                                {
+                                    if (!yes)
+                                    {
+                                        yes = true;
+                                        sb.AppendLine();
+                                        sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
+                                    }
+                                    sb.AppendLine(
+                                        $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                }
+                            }
+                        }
+                    }
+                    if (yes)
+                    {
+                        sb.AppendLine();
+                    }
+
                     return sb.ToString();
 
                 default:

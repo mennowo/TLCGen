@@ -211,8 +211,7 @@ namespace TLCGen.Plugins.RIS
 
             if (_RISModel.RISToepassen)
             {
-                var lanes = _RISModel.RISRequestExtendLanes;
-                foreach (var l in lanes)
+                foreach (var l in _RISModel.RISRequestLanes)
                 {
                     if (l.RISAanvraag)
                     {
@@ -223,7 +222,7 @@ namespace TLCGen.Plugins.RIS
                             _prmrisastart, l.SignalGroupName));
                     }
                 }
-                foreach (var l in lanes)
+                foreach (var l in _RISModel.RISRequestLanes)
                 {
                     if (l.RISAanvraag)
                     {
@@ -234,7 +233,7 @@ namespace TLCGen.Plugins.RIS
                             _prmrisaend, l.SignalGroupName));
                     }
                 }
-                foreach (var l in lanes)
+                foreach (var l in _RISModel.RISExtendLanes)
                 {
                     if (l.RISVerlengen)
                     {
@@ -245,7 +244,7 @@ namespace TLCGen.Plugins.RIS
                             _prmrisvstart, l.SignalGroupName));
                     }
                 }
-                foreach (var l in lanes)
+                foreach (var l in _RISModel.RISExtendLanes)
                 {
                     if (l.RISVerlengen)
                     {
@@ -322,8 +321,7 @@ namespace TLCGen.Plugins.RIS
             StringBuilder sb = new StringBuilder();
 
             var lanes = _RISModel.RISFasen.SelectMany(x => x.LaneData);
-            var lanesReqExt = _RISModel.RISRequestExtendLanes;
-
+            
             switch (type)
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
@@ -364,7 +362,7 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAanvragen:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach(var l in lanesReqExt.Where(x => x.RISAanvraag))
+                    foreach(var l in _RISModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
                         sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT8;");
                     }
@@ -372,7 +370,7 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    foreach (var l in lanesReqExt.Where(x => x.RISVerlengen))
+                    foreach (var l in _RISModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
                         sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT8; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT8; ");
                     }
@@ -481,8 +479,10 @@ namespace TLCGen.Plugins.RIS
                                     if (risfc.Lanes.Any())
                                         risfc.Lanes.Remove(risfc.Lanes.Last());
                                 }
-                                var rem = _RISModel.RISRequestExtendLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
-                                foreach (var r in rem) _RISModel.RISRequestExtendLanes.Remove(r);
+                                var rem = _RISModel.RISRequestLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem) _RISModel.RISRequestLanes.Remove(r);
+                                var rem2 = _RISModel.RISExtendLanes.Where(x => x.SignalGroupName == fc.Naam && x.RijstrookIndex >= fc.AantalRijstroken).ToList();
+                                foreach (var r in rem2) _RISModel.RISExtendLanes.Remove(r);
                             }
                         }
                     }
@@ -493,8 +493,10 @@ namespace TLCGen.Plugins.RIS
                     _RISVM.RISFasen.Remove(sg);
                 }
                 _RISVM.RISFasen.BubbleSort();
-                foreach (var lre in _RISVM.RISRequestExtendLanes) lre.UpdateRijstroken();
-                _RISVM.RISRequestExtendLanes.BubbleSort();
+                foreach (var lre in _RISVM.RISRequestLanes) lre.UpdateRijstroken();
+                foreach (var lre in _RISVM.RISExtendLanes) lre.UpdateRijstroken();
+                _RISVM.RISRequestLanes.BubbleSort();
+                _RISVM.RISExtendLanes.BubbleSort();
                 _RISVM.UpdateRISLanes();
                 _RISVM.RaisePropertyChanged("");
             }

@@ -9,7 +9,7 @@
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -19,10 +19,10 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <CheckBox IsChecked="{Binding Path=RISToepassen,UpdateSourceTrigger=PropertyChanged}" Content="RIS toepassen" Margin="5" />
-        <Label Content="SYSTEM_ITF" Grid.Row="1" />
-        <TextBox Text="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Row="1" Grid.Column="1" />
-        <TabControl Grid.Row="2" Grid.ColumnSpan="2" Margin="2">
+        <CheckBox IsChecked="{Binding Path=RISToepassen,UpdateSourceTrigger=PropertyChanged}" Content="RIS toepassen" Margin="5" Grid.ColumnSpan="2" />
+        <TextBlock Text="SYSTEM_ITF" Grid.Row="1" Margin="5" IsEnabled="{Binding Path=RISToepassen}" />
+        <TextBox Text="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=RISToepassen}" />
+        <TabControl Grid.Row="2" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
             <!--<TabItem Header="Instellingen fasen">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -100,17 +100,17 @@
                     </ct:SpecialDataGrid>
                 </Grid>         
             </TabItem>
-            <TabItem Header="Aanvragen &amp; verlengen">
+            <TabItem Header="Aanvragen">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Content="Aanvragen en verlengen voor lanes per type voertuig" />
+                    <Label Content="Aanvragen voor lanes per type voertuig" />
                     <ct:SpecialDataGrid 
-                        ItemsSource="{Binding Path=RISRequestExtendLanes}" Margin="2"
-                        SelectedItem="{Binding Path=LanesRequestExtendManager.SelectedItem}"
+                        ItemsSource="{Binding Path=RISRequestLanes}" Margin="2"
+                        SelectedItem="{Binding Path=LanesRequestManager.SelectedItem}"
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
                         <DataGrid.Resources>
@@ -128,6 +128,79 @@
                                         <Setter Property="Foreground" Value="LightGray" />
                                     </DataTrigger>
                                 </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Signaalgroep" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=SignalGroupName}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=DataContext.RISFasen,RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                            DisplayMemberPath="FaseCyclus"
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=SignalGroupName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                            SelectedValuePath="FaseCyclus"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Rijstrook" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=RijstrookIndex}" Margin="2" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox 
+                                            ItemsSource="{Binding Path=Rijstroken}" 
+                                            FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                            SelectedValue="{Binding Path=RijstrookIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridComboBoxColumn 
+                                Header="Type" 
+                                SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
+                            <!--<DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />-->
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
+                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
+                        </DataGrid.Columns>
+                    </ct:SpecialDataGrid>
+                    <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
+                        <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultRequestLanesCommand}" Margin="2" />
+                        <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
+                                 SelectableItemsVisibility="Collapsed"            
+                                 AddItemCommand="{Binding Path=LanesRequestManager.AddItemCommand}"
+                                 RemoveItemCommand="{Binding Path=LanesRequestManager.RemoveItemCommand}"
+                                 SelectedItemToRemove="{Binding Path=LanesRequestManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Verlengen">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Verlengen voor lanes per type voertuig" />
+                    <ct:SpecialDataGrid 
+                        ItemsSource="{Binding Path=RISExtendLanes}" Margin="2"
+                        SelectedItem="{Binding Path=LanesExtendManager.SelectedItem}"
+                        IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
+                        CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
+                                <Style.Setters>
+                                    <Setter Property="Background" Value="LightGray" />
+                                    <Setter Property="Foreground" Value="Black" />
+                                </Style.Setters>
                             </Style>
                             <Style TargetType="{x:Type DataGridCell}" x:Key="FaseNoRISExtendStyle">
                                 <Style.Triggers>
@@ -176,21 +249,18 @@
                                 Header="Type" 
                                 SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type models:RISStationTypeEnum}}}" />
-                            <DataGridCheckBoxColumn Header="RIS Aanvraag" Binding="{Binding Path=RISAanvraag,UpdateSourceTrigger=PropertyChanged}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagStart,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. start" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
-                            <DataGridTextColumn Binding="{Binding Path=AanvraagEnd,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. einde" CellStyle="{StaticResource FaseNoRISRequestStyle}" />
-                            <DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISVerlengen,UpdateSourceTrigger=PropertyChanged}" />
+                            <!--<DataGridCheckBoxColumn Header="RIS Verlengen" Binding="{Binding Path=RISVerlengen,UpdateSourceTrigger=PropertyChanged}" />-->
                             <DataGridTextColumn Binding="{Binding Path=VerlengenStart,UpdateSourceTrigger=PropertyChanged}" Header="Verl. start" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=VerlengenEnd,UpdateSourceTrigger=PropertyChanged}" Header="Verl. einde" CellStyle="{StaticResource FaseNoRISExtendStyle}" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                     <DockPanel Grid.Row="3" Grid.ColumnSpan="2">
-                        <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultRequestExtendLanesCommand}" Margin="2" />
+                        <Button DockPanel.Dock="Right" Content="Toevoegen defaults" Command="{Binding Path=AddDefaultExtendLanesCommand}" Margin="2" />
                         <ct:ItemsManagerView Caption="" DockPanel.Dock="Left"
-                                 SelectableItemsVisibility="Hidden"            
-                                 AddItemCommand="{Binding Path=LanesRequestExtendManager.AddItemCommand}"
-                                 RemoveItemCommand="{Binding Path=LanesRequestExtendManager.RemoveItemCommand}"
-                                 SelectedItemToRemove="{Binding Path=LanesRequestExtendManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                 SelectableItemsVisibility="Collapsed"
+                                 AddItemCommand="{Binding Path=LanesExtendManager.AddItemCommand}"
+                                 RemoveItemCommand="{Binding Path=LanesExtendManager.RemoveItemCommand}"
+                                 SelectedItemToRemove="{Binding Path=LanesExtendManager.SelectedItem,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </DockPanel>
                 </Grid>
             </TabItem>

@@ -221,6 +221,10 @@ namespace TLCGen.Plugins.AFM
                     return 105;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 105;
+                case CCOLCodeTypeEnum.OvCTop:
+                    return 105;
+                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                    return 105;
                 default:
                     return 0;
             }
@@ -376,7 +380,24 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine($"{ts}{ts}PRM[{_prmpf}AFM_Beinvloedbaar] = 0;");
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
-                    
+
+                case CCOLCodeTypeEnum.OvCTop:
+                    sb.AppendLine($"#include \"AFMroutines.h\"");
+                    sb.AppendLine($"extern AFM_FC_STRUCT verwerken_fcs[AFM_fcmax];");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.OvCPARCorrecties:
+                    sb.AppendLine($"{ts}/* AFM */");
+                    sb.AppendLine($"{ts}if (T[{_tpf}AFMLeven] && !PRM[{_prmpf}AFM_Test])");
+                    sb.AppendLine($"{ts}{{");
+                    foreach (var fc in _afmModel.AFMFasen)
+                    {
+                        sb.AppendLine($"{ts}{ts}AFMacties_alternatieven(&verwerken_fcs[AFM_{_fcpf}{fc.FaseCyclus}]);");
+                    }
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine();
+                    return sb.ToString();
+
                 default:
                     return null;
             }

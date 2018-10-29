@@ -49,13 +49,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\RISLaneRequestExtendDataModel.cs" />
+    <Compile Include="Models\RISLaneExtendDataModel.cs" />
+    <Compile Include="Models\RISLaneRequestDataModel.cs" />
     <Compile Include="Models\RISFaseCyclusLaneDataModel.cs" />
     <Compile Include="Models\RISFaseCyclusLaneSimulatedStationModel.cs" />
     <Compile Include="Models\RISStationTypeSimEnum.cs" />
     <Compile Include="Models\RISStationTypeEnum.cs" />
     <Compile Include="RisSimGenerator.cs" />
-    <Compile Include="ViewModels\RISLaneRequestExtendDataViewModel.cs" />
+    <Compile Include="ViewModels\RISLaneRequestDataViewModel.cs" />
+    <Compile Include="ViewModels\RISLaneExtendDataViewModel.cs" />
     <Compile Include="ViewModels\RISFaseCyclusLaneDataViewModel.cs" />
     <Compile Include="ViewModels\RISFaseCyclusDataViewModel.cs" />
     <Compile Include="Views\RISFaseCyclusLaneSimulatieView.xaml.cs">

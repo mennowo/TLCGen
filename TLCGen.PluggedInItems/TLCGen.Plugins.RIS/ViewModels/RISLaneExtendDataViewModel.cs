@@ -9,9 +9,9 @@ using TLCGen.Plugins.RIS.Models;
 
 namespace TLCGen.Plugins.RIS
 {
-    public class RISLaneRequestExtendDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
+    public class RISLaneExtendDataViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        private RISLaneRequestExtendDataModel _laneData;
+        private RISLaneExtendDataModel _laneData;
         
         //public int LaneID
         //{
@@ -22,36 +22,6 @@ namespace TLCGen.Plugins.RIS
         //        RaisePropertyChanged<object>(broadcast: true);
         //    }
         //}
-
-        public bool RISAanvraag
-        {
-            get => _laneData.RISAanvraag;
-            set
-            {
-                _laneData.RISAanvraag = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int AanvraagStart
-        {
-            get => _laneData.AanvraagStart;
-            set
-            {
-                _laneData.AanvraagStart = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
-        public int AanvraagEnd
-        {
-            get => _laneData.AanvraagEnd;
-            set
-            {
-                _laneData.AanvraagEnd = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
 
         public bool RISVerlengen
         {
@@ -137,7 +107,7 @@ namespace TLCGen.Plugins.RIS
 
         public int CompareTo(object obj)
         {
-            var other = obj as RISLaneRequestExtendDataViewModel;
+            var other = obj as RISLaneExtendDataViewModel;
             if(_laneData.SignalGroupName == other.SignalGroupName)
             {
                 return RijstrookIndex.CompareTo(other.RijstrookIndex);
@@ -148,7 +118,7 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        public RISLaneRequestExtendDataViewModel(RISLaneRequestExtendDataModel laneData)
+        public RISLaneExtendDataViewModel(RISLaneExtendDataModel laneData)
         {
             _laneData = laneData;
             UpdateRijstroken();
