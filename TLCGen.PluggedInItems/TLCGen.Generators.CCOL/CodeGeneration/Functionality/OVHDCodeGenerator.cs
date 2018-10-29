@@ -949,7 +949,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (c.OVData.HDIngrepen.All(x => x.FaseCyclus != fc.Naam))
                                 {
-                                    sb.AppendLine($"{ts}{ts}BL[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
+                                    sb.AppendLine($"{ts}{ts}RR[{_fcpf}{fc.Naam}] |= BIT6; Z[{_fcpf}{fc.Naam}] |= BIT6;");
                                 }
                                 else
                                 {
