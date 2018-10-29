@@ -191,7 +191,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append(d + " == 0");
                         det++;
                     }
-                    sb.AppendLine(")");
+                    sb.Append(")");
                 }
                 sb.AppendLine(";");
             }

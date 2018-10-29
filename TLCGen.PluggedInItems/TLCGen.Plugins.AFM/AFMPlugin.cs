@@ -249,7 +249,7 @@ namespace TLCGen.Plugins.AFM
                     }
                     sb.AppendLine($"#define AFM_{_fcpf}max {index}");
                     sb.AppendLine("#include \"AFMroutines.c\"");
-                    sb.AppendLine("static AFM_FC_STRUCT verwerken_fcs[AFM_fcmax] = { 0 };");
+                    sb.AppendLine("AFM_FC_STRUCT verwerken_fcs[AFM_fcmax] = { 0 };");
                     sb.AppendLine($"int prmAFM_watchdog_return_old;");
                     sb.AppendLine($"int TVG_temp[FCMAX];");
                     sb.AppendLine();
