@@ -87,6 +87,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (!c.RichtingGevoeligeAanvragen.Any()) return "";
+
                     sb.AppendLine($"{ts}/* Richtinggevoelige aanvragen */");
                     sb.AppendLine($"{ts}/* --------------------------= */");
                     foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
@@ -104,6 +106,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
+                    if (!c.RichtingGevoeligVerlengen.Any()) return "";
+
                     sb.AppendLine($"{ts}/* Richtinggevoelig verlengen */");
                     sb.AppendLine($"{ts}/* -------------------------- */");
                     foreach (RichtingGevoeligVerlengModel rgv in c.RichtingGevoeligVerlengen)
