@@ -28,6 +28,9 @@ namespace TLCGen.Models.Enumerations
         [XmlEnum("9")]
         Weekeind = 9,
         [XmlEnum("10")]
-        AlleDagen = 10
+        AlleDagen = 10,
+        [XmlEnum("0")]
+        Uitgeschakeld = 0
+
     }
 }
