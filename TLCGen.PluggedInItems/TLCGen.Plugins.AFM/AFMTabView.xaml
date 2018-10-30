@@ -60,7 +60,8 @@
             AddItemCommand="{Binding Path=AFMFasenManager.AddItemCommand}"
             RemoveItemCommand="{Binding Path=AFMFasenManager.RemoveItemCommand}"
             Caption="Selecteer fase"
-            RemovableItemsVisibility="Hidden"
+            SelectableItemsVisibility="Visible"
+            RemovableItemsVisibility="Collapsed"
             Grid.Row="3"
             />
     </Grid>
