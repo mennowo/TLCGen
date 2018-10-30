@@ -1,6 +1,0 @@
-source https://api.nuget.org/v3/index.json
-
-nuget MvvmLightLibs framework: >= 4.5
-nuget Extended.Wpf.Toolkit framework: >= 4.5
-nuget ILMerge.MSBuild.Task framework: >= 4.5
-nuget ilmerge framework: >= 4.5
