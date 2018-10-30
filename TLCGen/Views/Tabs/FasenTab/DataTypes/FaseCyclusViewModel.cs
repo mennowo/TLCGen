@@ -45,8 +45,11 @@ namespace TLCGen.ViewModels
                         string oldname = _faseCyclus.Naam;
                         _faseCyclus.Naam = value;
 
+                        // Notify the messenger
+                        Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Fase, oldname, value));
+
                         // set new type
-                        this.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
+                        Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(value);
 
                         foreach (var d in FaseCyclus.Detectoren)
                         {
@@ -63,9 +66,6 @@ namespace TLCGen.ViewModels
                                 d.VissimNaam = nd;
                             }
                         }
-
-                        // Notify the messenger
-                        Messenger.Default.Send(new NameChangingMessage(TLCGenObjectTypeEnum.Fase, oldname, value));
                     }
                 }
                 RaisePropertyChanged(string.Empty); // Update all properties
@@ -80,6 +80,7 @@ namespace TLCGen.ViewModels
             {
                 if (_faseCyclus.Type != value)
                 {
+                    var old = _faseCyclus.Type;
                     _faseCyclus.Type = value;
 
                     // Apply new defaults
@@ -98,6 +99,8 @@ namespace TLCGen.ViewModels
 
                     RaisePropertyChanged(string.Empty); // Update all properties
                     RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+
+                    MessengerInstance.Send(new FaseTypeChangedMessage(FaseCyclus, old, value));
                 }
             }
         }

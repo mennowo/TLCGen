@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="0.3.4" 
+    Version="0.3.5" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -126,8 +126,11 @@
         <File Id='TLCGen.Generators.CCOL' Name='TLCGen.Generators.CCOL.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.CCOL.dll' KeyPath='no' />
         <File Id='TLCGen.Generators.TLCCC' Name='TLCGen.Generators.TLCCC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll' KeyPath='no' />
         <File Id='TLCGen.Importers.TabC' Name='TLCGen.Importers.TabC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll' KeyPath='no' />
-        <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.AFM' Name='TLCGen.Plugins.AFM.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.RIS' Name='TLCGen.Plugins.RIS.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RIS.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.Timings' Name='TLCGen.Plugins.Timings.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Timings.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
+        <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenSettings" Directory="SETTINGSFOLDER">
@@ -153,35 +156,38 @@
     </ComponentGroup>
     <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
       <Component Id='AllCCOLSources' Guid='F49B3B56-5D3E-4279-811B-778E1BE2C91F'>
-        <File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
-        <File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.c" />
-        <File Id="filBE5158919B33076208AF23472800AEF5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.h" />
-        <File Id="fil0B33645B3DCD9F2524A99FF42B3775C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncfunc.c" />
         <File Id="filD3B88A5E78E73E3F80CF84F42E47C65E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.h" />
-        <File Id="filF6CA61EA27285C0D1CDDA9537E62336D" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgv_overslag.c" />
-        <File Id="fil9FD18B3DFE64FB421CA43BC877C5DF1E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.c" />
-        <File Id="fil2E1DB38115F3B820EBC2C980F2B2F729" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.c" />
-        <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
-        <File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />
-        <File Id="filCC84D40C3235DB153D9083B0D02ABFF4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\detectie.c" />
-        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.h" />
         <File Id="fil47361FC1607FC552D1136C75F73C2712" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\afmroutines.c" />
-        <File Id="fil6574194A3387BCCF8502B7EDD51FBF30" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.c" />
-        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.c" />
-        <File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.h" />
+        <File Id="filBE5158919B33076208AF23472800AEF5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.h" />
+        <File Id="fil9FD18B3DFE64FB421CA43BC877C5DF1E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ccolfunc.c" />
+        <File Id="filCC84D40C3235DB153D9083B0D02ABFF4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\detectie.c" />
         <File Id="filADD130ED1545F8B1F2C36BACC6711EB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.c" />
-        <File Id="fil29C62D038F3BAA50853B269B2F63837E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.h" />
-        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
+        <File Id="fil98C19E7BCCDEC93DFF0FD912797D0A48" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func.h" />
+        <File Id="fil32691AA79643F0C1E35E0BBC1CC01A2A" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.c" />
         <File Id="fil2C2767D07BD36C11862CF72D0CF6B567" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\extra_func_ov.h" />
-        <File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />
-        <File Id="filEAB7EBA79349A3C4DDF6069B282EC308" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.h" />
-        <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
-        <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B796" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.c" />
+        <File Id="filF2A9BE1F2099F948F881259715A1B654" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\fixatie.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B766" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B797" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar.h" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B798" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.c" />
         <File Id="fil31A2A11320A71B1412E5BCD2CC77B799" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\halfstar_ov.h" />
+        <File Id="filD0991D131C33EAA95F3AC16FCA0A3B79" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.c" />
+        <File Id="fil29C62D038F3BAA50853B269B2F63837E" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\nalopen.h" />
+        <File Id="filBE4C61C50512CE653B49BCB42CEB90A1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.c" />
+        <File Id="fil4062D682D3AD88060A2AA66A57A67A73" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\ov.h" />
+        <File Id="filF6CA61EA27285C0D1CDDA9537E62336D" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgv_overslag.c" />
+        <File Id="fil9D1303E70818E50EE5EC0A41969604FC" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvfunc.c" />
+        <File Id="fil4C61C8F0056949C4242412BE2772CD65" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\rgvvar.c" />
+        <File Id="fil0B33645B3DCD9F2524A99FF42B3775C7" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncfunc.c" />
+        <File Id="fil6574194A3387BCCF8502B7EDD51FBF30" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.c" />
+        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB1" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\syncvar.h" />
+        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB2" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsfunc.c" />
+        <File Id="fil8EE2579AD404CB1F7A5192E6E6C93CB3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\timingsvar.c" />
+        <File Id="fil2E1DB38115F3B820EBC2C980F2B2F729" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.c" />
+        <File Id="filEAB7EBA79349A3C4DDF6069B282EC308" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\uitstuur.h" />
+        <File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />
+        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.h" />
+        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\wtv_testwin.c" />
       </Component>
     </ComponentGroup>
 

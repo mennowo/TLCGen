@@ -33,6 +33,12 @@ namespace TLCGen.ViewModels
             }
 		}
 
+        public string Comment1 =>
+            $"Voorstart tijd van {_voorstart.FaseVan} naar {_voorstart.FaseNaar}";
+
+        public string Comment2 =>
+            $"Voorstart ontruimingstijd van {_voorstart.FaseNaar} naar {_voorstart.FaseVan}";
+
         #endregion // Properties
 
         #region Private methods
@@ -41,10 +47,10 @@ namespace TLCGen.ViewModels
 
         #region Collection changed
 
-		#endregion // Collection changed
+        #endregion // Collection changed
 
         #region TLCGen Events
-		
+
         #endregion // TLCGen Events
 
         #region Constructor

@@ -13,9 +13,9 @@
         </Grid.RowDefinitions>
         <Label Content="Voorstart opties" FontWeight="Bold" Grid.Row="0" />
         <StackPanel HorizontalAlignment="Stretch" Grid.Row="1">
-            <Label Content="Voorstart tijd" />
+            <Label Content="{Binding Path=Comment1}" />
             <TextBox Text="{Binding Path=VoorstartTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <Label Content="Voorstart ontruimingstijd" />
+            <Label Content="{Binding Path=Comment2}" />
             <TextBox Text="{Binding Path=VoorstartOntruimingstijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         </StackPanel>
     </Grid>
