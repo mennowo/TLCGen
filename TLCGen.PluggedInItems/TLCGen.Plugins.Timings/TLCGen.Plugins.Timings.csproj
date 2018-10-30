@@ -42,9 +42,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="TLCGen.Dependencies">
-      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +67,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
+      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
+      <Name>TLCGen.Dependencies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>

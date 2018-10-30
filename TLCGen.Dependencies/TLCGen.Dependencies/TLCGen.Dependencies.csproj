@@ -189,4 +189,8 @@
     </When>
   </Choose>
   <Import Project="..\packages\ILMerge.MSBuild.Task\build\ILMerge.MSBuild.Task.targets" Condition="Exists('..\packages\ILMerge.MSBuild.Task\build\ILMerge.MSBuild.Task.targets')" Label="Paket" />
+  <PropertyGroup>
+    <PostBuildEvent>del "$(TargetDir)TLCGen.Dependencies.dll"
+move "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

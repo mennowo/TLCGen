@@ -47,10 +47,6 @@
     <Reference Include="TLCGen.Controls">
       <HintPath>..\..\TLCGen.Dependencies\bin\Debug\TLCGen.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Debug\ILMerge\TLCGen.Dependencies.dll</HintPath>
-    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -82,6 +78,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
+      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
+      <Name>TLCGen.Dependencies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2C677528-AD13-4081-A55F-CE70F9A10B84}</Project>
       <Name>TLCGen.Controls</Name>
