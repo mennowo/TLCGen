@@ -9,3 +9,5 @@ nuget NUnit framework: >= net45
 nuget Gu.Wpf.DataGrid2D framework: >= net45
 nuget gong-wpf-dragdrop framework: >= net45
 nuget DocumentFormat.OpenXml framework: >= net45
+nuget ILMerge.MSBuild.Task framework: >= net45
+nuget ilmerge framework: >= net45

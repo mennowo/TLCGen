@@ -7,6 +7,8 @@ NUGET
     Extended.Wpf.Toolkit (3.4) - restriction: >= net45
     gong-wpf-dragdrop (1.1) - restriction: >= net45
     Gu.Wpf.DataGrid2D (0.2.1.5) - restriction: >= net45
+    ilmerge (3.0.18) - restriction: >= net45
+    ILMerge.MSBuild.Task (1.0.3) - restriction: >= net45
     Microsoft.WindowsAPICodePack.Core (1.1) - restriction: >= net45
     Microsoft.WindowsAPICodePack.Shell (1.1) - restriction: >= net45
       Microsoft.WindowsAPICodePack.Core (>= 1.1)
