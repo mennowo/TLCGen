@@ -428,12 +428,12 @@ namespace TLCGen.Importers.TabC
                                 var fc = outcome.Fasen.FirstOrDefault(x => x.Naam == namefc.ToLower());
                                 switch (re.Item1)
                                 {
-                                    case setRegex.tdh: d.TDH = new int?(int.Parse(m.Groups["val"].Value)); break;
-                                    case setRegex.tdb: d.TDB = new int?(int.Parse(m.Groups["val"].Value)); break;
-                                    case setRegex.tog: d.TOG = new int?(int.Parse(m.Groups["val"].Value)); break;
-                                    case setRegex.tbg: d.TBG = new int?(int.Parse(m.Groups["val"].Value)); break;
-                                    case setRegex.tfl: d.TFL = new int?(int.Parse(m.Groups["val"].Value)); break;
-                                    case setRegex.cfl: d.CFL = new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.tdh: d.TDH = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.tdb: d.TDB = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.tog: d.TOG = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.tbg: d.TBG = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.tfl: d.TFL = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
+                                    case setRegex.cfl: d.CFL = m.Groups["val"].Value == "NG" ? null : new int?(int.Parse(m.Groups["val"].Value)); break;
                                     case setRegex.trg: fc.TRG = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tgg: fc.TGG = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tfg: fc.TFG = int.Parse(m.Groups["val"].Value); break;
