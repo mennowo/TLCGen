@@ -209,6 +209,8 @@ namespace TLCGen.Plugins.AFM
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    return 105;
                 case CCOLCodeTypeEnum.RegCTop:
                     return 105;
                 case CCOLCodeTypeEnum.RegCInitApplication:
@@ -240,7 +242,7 @@ namespace TLCGen.Plugins.AFM
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     int index = 0;
                     foreach (var fc in _afmModel.AFMFasen)
@@ -248,6 +250,11 @@ namespace TLCGen.Plugins.AFM
                         sb.AppendLine($"#define AFM_{_fcpf}{fc.FaseCyclus} {index++}");
                     }
                     sb.AppendLine($"#define AFM_{_fcpf}max {index}");
+                    sb.AppendLine();
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCTop:
+                    sb.AppendLine("/* Ten behoeve van AFM */");
                     sb.AppendLine("#include \"AFMroutines.c\"");
                     sb.AppendLine("AFM_FC_STRUCT verwerken_fcs[AFM_fcmax] = { 0 };");
                     sb.AppendLine($"int prmAFM_watchdog_return_old;");

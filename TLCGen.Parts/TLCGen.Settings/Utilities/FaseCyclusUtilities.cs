@@ -10,6 +10,7 @@ namespace TLCGen.Settings.Utilities
             int myfase = -1;
             if (Int32.TryParse(naam, out myfase))
             {
+                myfase %= 100;
                 if (myfase < 1) return FaseTypeEnum.Fiets;
                 else if (myfase < 20) return FaseTypeEnum.Auto;
                 else if (myfase < 30) return FaseTypeEnum.Fiets;

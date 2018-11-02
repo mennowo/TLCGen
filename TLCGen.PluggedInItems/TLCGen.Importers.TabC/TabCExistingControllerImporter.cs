@@ -56,22 +56,13 @@ namespace TLCGen.Importers.TabC
                 {
                     var lines = File.ReadAllLines(openFileDialog.FileName);
 
-                    // Check if at least all Phases in the Controller occur in the tab.c file
-                    var _Fasen = new List<string>();
-                    foreach (var line in lines)
-                    {
-                        if (Regex.IsMatch(line, @"^\s*TO_max\["))
-                        {
-                            var fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");
-                            if (!_Fasen.Contains(fc1.Replace("fc", "")))
-                                _Fasen.Add(fc1.Replace("fc", ""));
-                        }
-                    }
+                    // Build a list of the Phases with conflicts from the tab.c file
+                    var newData = TabCImportHelper.GetNewData(lines, false);
                     var AllPhasesMessage = "";
                     var newfcs = new List<FaseCyclusModel>();
                     foreach (var fcm in c.Fasen)
                     {
-                        if (!_Fasen.Contains(fcm.Naam))
+                        if (!newData.Fasen.Any(x => x.Naam == fcm.Naam))
                         {
                             AllPhasesMessage = AllPhasesMessage + fcm.Naam + "\n";
                             newfcs.Add(fcm);
@@ -100,9 +91,6 @@ namespace TLCGen.Importers.TabC
                         {
                             c.InterSignaalGroep.Conflicten.Remove(tc);
                         }
-
-                        // Build a list of the Phases with conflicts from the tab.c file
-                        var newData = TabCImportHelper.GetNewData(lines);
 
                         // Copy the results into the ControllerVM
                         var NewPhasesMessage = "";

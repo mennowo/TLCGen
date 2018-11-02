@@ -60,12 +60,10 @@ namespace TLCGen.Importers.TabC
                         throw new IndexOutOfRangeException("Het bestand heeft minder dan 2 regels.");
 
                     // Build a list of the Phases with conflicts from the tab.c file
-                    TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines);
+                    TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines, true);
                     NewData.Fasen.BubbleSort();
                     foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
-                        fcm.Type = Settings.Utilities.FaseCyclusUtilities.GetFaseTypeFromNaam(fcm.Naam);
-                        DefaultsProvider.Default.SetDefaultsOnModel(fcm, fcm.Type.ToString());
                         newc.Fasen.Add(fcm);
                         var fcdm = new FaseCyclusModuleDataModel() { FaseCyclus = fcm.Naam };
                         DefaultsProvider.Default.SetDefaultsOnModel(fcdm, fcm.Type.ToString());

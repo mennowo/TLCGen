@@ -34,17 +34,27 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseTabTypeWindow.xaml.cs">
+      <DependentUpon>ChooseTabTypeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TabCExistingControllerImporter.cs" />
     <Compile Include="TabCImportHelper.cs" />
     <Compile Include="TabCNewControllerImporter.cs" />
@@ -54,14 +64,20 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
-      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
-      <Name>TLCGen.Dependencies</Name>
+    <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ChooseTabTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

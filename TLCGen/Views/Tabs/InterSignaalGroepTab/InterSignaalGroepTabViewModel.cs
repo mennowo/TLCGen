@@ -83,9 +83,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public string TijdenLabel => _Controller.Data.Intergroen ? "Intergroen tijden" : "Ontruimingstijden";
+        public string TijdenLabel => _Controller?.Data?.Intergroen == true ? "Intergroen tijden" : "Ontruimingstijden";
 
-        public string GarantieTijdenLabel => _Controller.Data.Intergroen ? "Gar. interg. tijden" : "Gar. ontr. tijden";
+        public string GarantieTijdenLabel => _Controller?.Data?.Intergroen == true ? "Gar. interg. tijden" : "Gar. ontr. tijden";
 
         public ObservableCollection<string> Detectoren
         {
