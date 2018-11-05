@@ -328,7 +328,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         var multiStrook = detectorDict.Count > 1;
-                        var multiLusPerStrook = detectorDict.Any(x => x.Value.Count > 1);
+                        var multiLusPerStrook = detectorDict.Any(x => x.Value.Count > 1) ||
+                                                detectorDict.Count == 0 && fm.FileDetectoren.Count > 1;
                         if (multiStrook)
                         {
                             if (multiLusPerStrook)
@@ -470,9 +471,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else // 1 lus
                         {
                             sb.Append($"{ts}{ts}IH[{_hpf}{_hfile}{fm.Naam}] = ");
+                            i = 0;
                             foreach (var fd in fm.FileDetectoren)
                             {
+                                if (i != 0)
+                                {
+                                    sb.Append(" || ");
+                                }
                                 sb.Append($"IH[{_hpf}{_hfile}{fd.Detector}]");
+                                ++i;
                             }
                             sb.AppendLine($";");
                         }
