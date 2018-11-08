@@ -167,7 +167,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
                 ovdummies.Any())
             {
-                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine("#if !defined AUTOMAAT || defined VISSIM");
                 foreach (var dm in controller.GetAllDetectors(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));

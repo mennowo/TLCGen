@@ -530,7 +530,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine("#if !defined AUTOMAAT || defined VISSIM");
                 foreach (var elem in data.Elements)
                 {
                     if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))
