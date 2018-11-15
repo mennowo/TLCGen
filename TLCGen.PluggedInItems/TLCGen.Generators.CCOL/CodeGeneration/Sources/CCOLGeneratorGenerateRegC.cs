@@ -69,7 +69,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"dpvar.c\"    /* detectie elementen                */");
             if (controller.Data.GarantieOntruimingsTijden)
             {
-                sb.AppendLine($"{ts}#include \"to_min.c\"   /* garantie-ontruimingstijden        */");
+                if(controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                {
+                    sb.AppendLine($"{ts}#include \"tig_min.c\"   /* garantie-ontruimingstijden        */");
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}#include \"to_min.c\"   /* garantie-ontruimingstijden        */");
+                }
             }
             sb.AppendLine($"{ts}#include \"trg_min.c\"  /* garantie-roodtijden               */");
             sb.AppendLine($"{ts}#include \"tgg_min.c\"  /* garantie-groentijden              */");
@@ -655,11 +662,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
 
+
             if (controller.Data.GarantieOntruimingsTijden)
             {
                 sb.AppendLine($"{ts}/* minimumtijden */");
                 sb.AppendLine($"{ts}/* ------------- */");
-                sb.AppendLine($"{ts}check_to_min();");
+                if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                {
+                    sb.AppendLine($"{ts}check_tig_min();");
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}check_to_min();");
+                }
             }
             sb.AppendLine($"{ts}check_tgg_min();");
             sb.AppendLine($"{ts}check_tgl_min();");

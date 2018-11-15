@@ -50,13 +50,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
             sb.AppendLine($"{ts}#include \"dpvar.h\"    /* detectie elementen                */");
-            if(controller.Data.GarantieOntruimingsTijden)
-            {
-                sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
-            }
             if (controller.Data.GarantieOntruimingsTijden)
             {
-                sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+                if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                {
+                    sb.AppendLine($"{ts}#include \"tig_min.h\"   /* garantie-ontruimingstijden        */");
+                }
+                else
+                {
+                    sb.AppendLine($"{ts}#include \"to_min.h\"   /* garantie-ontruimingstijden        */");
+                }
             }
             sb.AppendLine($"{ts}#include \"trg_min.h\"  /* garantie-roodtijden               */");
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
@@ -501,31 +504,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
-                        //var counters = new Dictionary<int, int>();
-                        //foreach (var conflict in controller.InterSignaalGroep.Conflicten)
-                        //{
-                        //    if (conflict.GarantieWaarde.HasValue && !counters.ContainsKey(conflict.Waarde - conflict.GarantieWaarde.Value))
-                        //    {
-                        //        counters.Add(conflict.Waarde - conflict.GarantieWaarde.Value, 1);
-                        //    }
-                        //    else if(conflict.GarantieWaarde.HasValue)
-                        //    {
-                        //        counters[conflict.Waarde - conflict.GarantieWaarde.Value]++;
-                        //    }
-                        //}
-                        //var most = 0;
-                        //var val = 0;
-                        //foreach (var i in counters)
-                        //{
-                        //    if (i.Value > most)
-                        //    {
-                        //        most = i.Value;
-                        //        val = i.Key;
-                        //    }
-                        //}
-                        //sb.AppendLine($"{ts}default_to_min({val});");
-
-                        sb.AppendLine($"{ts}default_to_min(0);");
+                        if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                        {
+                            sb.AppendLine($"{ts}default_tig_min(0);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}default_to_min(0);");
+                        }
                         string prevfasefrom = "";
                         foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                         {
