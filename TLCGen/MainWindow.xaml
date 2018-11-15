@@ -7,7 +7,7 @@
         xmlns:vw="clr-namespace:TLCGen.Views"
         xmlns:vm="clr-namespace:TLCGen.ViewModels"
         xmlns:dd="urn:gong-wpf-dragdrop"
-        xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+        xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies.Merged"
         AllowDrop="True"
         dd:DragDrop.IsDropTarget="True"
         dd:DragDrop.DropHandler="{Binding}"

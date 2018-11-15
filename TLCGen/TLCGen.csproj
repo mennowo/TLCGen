@@ -79,6 +79,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TLCGen.Dependencies.Merged">
+      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.Merged.dll</HintPath>
+    </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -831,10 +834,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
-      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
-      <Name>TLCGen.Dependencies</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
@@ -920,10 +919,6 @@ move "$(TargetDir)TLCGen.Plugins.SUMO.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Plugins.AFM.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Plugins.RIS.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Plugins.Timings.dll" "$(TargetDir)Plugins"</PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies.Merged"
              xmlns:models="clr-namespace:TLCGen.Plugins.RIS.Models"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:local="clr-namespace:TLCGen.Plugins.RIS"

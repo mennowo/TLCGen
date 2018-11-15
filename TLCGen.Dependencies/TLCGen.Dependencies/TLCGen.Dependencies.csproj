@@ -96,8 +96,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del "$(TargetDir)TLCGen.Dependencies.dll"
-move "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>del "$(TargetDir)..\Release\ILMerge\TLCGen.Dependencies.Merged.dll"
+move "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)\..\Release\ILMerge\TLCGen.Dependencies.Merged.dll"</PostBuildEvent>
   </PropertyGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">

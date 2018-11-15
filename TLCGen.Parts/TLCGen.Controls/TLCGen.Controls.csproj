@@ -46,6 +46,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TLCGen.Dependencies.Merged">
+      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.Merged.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -101,12 +104,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
-      <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
-      <Name>TLCGen.Dependencies</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
