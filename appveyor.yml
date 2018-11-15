@@ -62,31 +62,28 @@ configuration: Release
 
 # scripts to run before build
 before_build:
-- cmd: 
-  - %APPVEYOR_BUILD_FOLDER%\.paket\paket.bootstrapper.exe
-  - %APPVEYOR_BUILD_FOLDER%\.paket\paket.exe restore
+- cmd: %APPVEYOR_BUILD_FOLDER%\.paket\paket.bootstrapper.exe
+- cmd: %APPVEYOR_BUILD_FOLDER%\.paket\paket.exe restore
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-- cmd:
-  - msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
-  - msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- cmd: msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+- cmd: msbuild "%APPVEYOR_BUILD_FOLDER%\TLCGen.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 # scripts to run after build (working directory and environment changes are persisted from the previous steps)
 after_build:
-- cmd:
-  - cd %APPVEYOR_BUILD_FOLDER%\TLCGen\bin\Release\
-  - del .\Xceed.Wpf.AvalonDock*.*
-  - del .\Xceed.Wpf.DataGrid*.*
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.exe
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.dll
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.xml
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.config
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Plugins
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings\VisualTemplates
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFiles
-  - 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFilesToCopy
+- cmd: cd %APPVEYOR_BUILD_FOLDER%\TLCGen\bin\Release\
+- cmd: del .\Xceed.Wpf.AvalonDock*.*
+- cmd: del .\Xceed.Wpf.DataGrid*.*
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.exe
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.dll
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.xml
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.config
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Plugins
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings\VisualTemplates
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFiles
+- cmd: 7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFilesToCopy
 
 test: off
 
