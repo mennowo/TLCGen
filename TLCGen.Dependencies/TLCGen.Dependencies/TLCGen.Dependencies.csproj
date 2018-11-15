@@ -96,7 +96,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF $(Configuration) == Debug (move /Y "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)..\Release\ILMerge\TLCGen.Dependencies.dll")</PostBuildEvent>
+    <PostBuildEvent>IF NOT EXIST "$(TargetDir)..\Release\ILMerge\" (mkdir "$(TargetDir)..\Release\ILMerge\")
+IF $(Configuration) == Debug (move /Y "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)..\Release\ILMerge\TLCGen.Dependencies.dll")</PostBuildEvent>
   </PropertyGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
