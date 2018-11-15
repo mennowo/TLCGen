@@ -921,7 +921,8 @@ move "$(TargetDir)TLCGen.Plugins.RIS.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Plugins.Timings.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>msbuild "$(SolutionDir)"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
