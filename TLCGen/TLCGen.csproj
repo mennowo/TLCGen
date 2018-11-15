@@ -79,8 +79,8 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TLCGen.Dependencies.Merged">
-      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.Merged.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies">
+      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />

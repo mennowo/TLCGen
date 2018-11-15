@@ -45,8 +45,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TLCGen.Dependencies.Merged">
-      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.Merged.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies">
+      <HintPath>..\..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
