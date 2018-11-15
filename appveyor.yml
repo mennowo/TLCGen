@@ -58,7 +58,7 @@ configuration: Release
 #   include_nuget_references: true  # add -IncludeReferencedProjects option while packaging NuGet artifacts
 
   # MSBuild verbosity level
-verbosity: detailed
+  # verbosity: detailed
 
 # scripts to run before build
 before_build:
