@@ -1,0 +1,95 @@
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+# version format
+version: '0.3.5.{build}'
+
+branches:
+  # whitelist
+  only:
+    - master
+
+# Skipping commits with particular message or from specific user
+skip_commits:
+  message: /SkipAutoBuild.*/      # Regex for matching commit message
+
+# Maximum number of concurrent jobs for the project
+max_jobs: 1
+
+# Build worker image (VM template)
+image: Visual Studio 2017
+
+# scripts that are called at very beginning, before repo cloning
+init:
+- cmd: ''
+  
+# clone directory
+clone_folder: c:\projects\TLCGen
+
+# scripts that run after cloning repository
+install:
+- cmd: nuget restore
+
+# enable patching of AssemblyInfo.* files
+assembly_info:
+  patch: true
+  file: **\AssemblyInfo.*
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+# build platform, i.e. x86, x64, Any CPU. This setting is optional.
+platform: Any CPU
+
+# build Configuration, i.e. Debug, Release, etc.
+configuration: Release
+
+# Build settings, not to be confused with "before_build" and "after_build".
+# "project" is relative to the original build directory and not influenced by directory changes in "before_build".
+# build:
+#   parallel: true                  # enable MSBuild parallel builds
+#   project: MyTestAzureCS.sln      # path to Visual Studio solution or project
+#   publish_wap: true               # package Web Application Projects (WAP) for Web Deploy
+#   publish_wap_xcopy: true         # package Web Application Projects (WAP) for XCopy deployment
+#   publish_azure: true             # package Azure Cloud Service projects and push to artifacts
+#   publish_nuget: true             # package projects with .nuspec files and push to artifacts
+#   publish_nuget_symbols: true     # generate and publish NuGet symbol packages
+#   include_nuget_references: true  # add -IncludeReferencedProjects option while packaging NuGet artifacts
+
+  # MSBuild verbosity level
+  verbosity: quiet|minimal|normal|detailed
+
+# scripts to run before build
+before_build:
+- cmd: >-
+    $(appveyor_build_folder)\.paket\paket.bootstrapper.exe
+    $(appveyor_build_folder)\.paket\paket.exe restore
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+- cmd: >-
+    msbuild "$(appveyor_build_folder)\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    msbuild "$(appveyor_build_folder)\TLCGen.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+
+# scripts to run after build (working directory and environment changes are persisted from the previous steps)
+after_build:
+- cmd: >-
+    cd %APPVEYOR_BUILD_FOLDER%\TLCGen\bin\Release\
+    del .\Xceed.Wpf.AvalonDock*.*
+    del .\Xceed.Wpf.DataGrid*.*
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.exe
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.dll
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.xml
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\*.config
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Plugins
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\Settings\VisualTemplates
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFiles
+    7z a -tzip tlcgen-v%APPVEYOR_BUILD_VERSION%.zip .\SourceFilesToCopy
+
+test: off
+
+artifacts:
+- path: '**\*.zip'
+  name: TLCGen
