@@ -8,8 +8,8 @@
     <ProjectGuid>{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TLCGen.Dependencies</RootNamespace>
-    <AssemblyName>TLCGen.Dependencies</AssemblyName>
+    <RootNamespace>TLCGen.Dependencies.Merged</RootNamespace>
+    <AssemblyName>TLCGen.Dependencies.Merged</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -97,7 +97,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del "$(TargetDir)..\Release\ILMerge\TLCGen.Dependencies.Merged.dll"
-move "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)\..\Release\ILMerge\TLCGen.Dependencies.Merged.dll"</PostBuildEvent>
+move "$(TargetDir)ILMerge\TLCGen.Dependencies.Merged.dll" "$(TargetDir)\..\Release\ILMerge\TLCGen.Dependencies.Merged.dll"</PostBuildEvent>
   </PropertyGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">

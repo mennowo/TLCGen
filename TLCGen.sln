@@ -66,7 +66,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TLCGen.Dependencies", "TLCG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FloodFill", "TLCGen.Dependencies\FloodFill\FloodFill.csproj", "{9A33318A-1352-43C3-8275-FF20DC9B9202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Dependencies", "TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj", "{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Dependencies.Merged", "TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.Merged.csproj", "{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.DataAccess", "TLCGen.Dependencies\TLCGen.DataAccess\TLCGen.DataAccess.csproj", "{94CA4D36-A404-4E0E-9C39-14613D1C4C39}"
 EndProject

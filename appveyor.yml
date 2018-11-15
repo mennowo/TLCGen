@@ -62,8 +62,8 @@ configuration: Release
 
 # scripts to run before build
 before_build:
-  - $appveyor_build_folder\.paket\paket.bootstrapper.exe
-  - $appveyor_build_folder\.paket\paket.exe restore
+  - "%APPVEYOR_BUILD_FOLDER%\.paket\paket.bootstrapper.exe
+  - "%APPVEYOR_BUILD_FOLDER%\.paket\paket.exe restore
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:

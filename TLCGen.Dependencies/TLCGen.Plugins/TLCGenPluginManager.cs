@@ -247,27 +247,34 @@ namespace TLCGen.Plugins
                 string _file = file;
                 if (Path.GetExtension(_file).ToLower() == ".dll")
                 {
-                    // Find and loop all types from the assembly
-                    Assembly assemblyInstance = null;
-                    assemblyInstance = Assembly.LoadFrom(_file);
-                    var types = assemblyInstance.GetTypes();
-                    var bFound = false;
-                    foreach (Type type in types)
+                    try
                     {
-                        // Find TLCGenPluginAttribute attribute, and if found, continue
-                        var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));
-                        if (attr != null)
+                        // Find and loop all types from the assembly
+                        Assembly assemblyInstance = null;
+                        assemblyInstance = Assembly.LoadFrom(_file);
+                        var types = assemblyInstance.GetTypes();
+                        var bFound = false;
+                        foreach (Type type in types)
                         {
-                            ApplicationPlugins.Add(
-                                new Tuple<TLCGenPluginElems, ITLCGenPlugin>(
-                                    attr.PluginElements,
-                                    (ITLCGenPlugin)Activator.CreateInstance(type)));
-                            bFound = true;
+                            // Find TLCGenPluginAttribute attribute, and if found, continue
+                            var attr = (TLCGenPluginAttribute)type.GetCustomAttribute(typeof(TLCGenPluginAttribute));
+                            if (attr != null)
+                            {
+                                ApplicationPlugins.Add(
+                                    new Tuple<TLCGenPluginElems, ITLCGenPlugin>(
+                                        attr.PluginElements,
+                                        (ITLCGenPlugin)Activator.CreateInstance(type)));
+                                bFound = true;
+                            }
+                        }
+                        if (!bFound)
+                        {
+                            System.Windows.MessageBox.Show($"Library {_file} wordt niet herkend als TLCGen addin.");
                         }
                     }
-                    if (!bFound)
+                    catch
                     {
-                        System.Windows.MessageBox.Show($"Library {_file} wordt niet herkend als TLCGen addin.");
+                        // silently fail
                     }
                 }
             }
