@@ -41,8 +41,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="TLCGen.Dependencies.Merged">
-      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.Merged.dll</HintPath>
+    <Reference Include="TLCGen.Dependencies, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TLCGen.Dependencies\TLCGen.Dependencies\bin\Release\ILMerge\TLCGen.Dependencies.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>
