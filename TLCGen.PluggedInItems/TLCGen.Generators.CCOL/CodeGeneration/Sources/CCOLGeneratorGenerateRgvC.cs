@@ -365,7 +365,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || (defined (VISSIM))");
             sb.AppendLine($"{ts}{ts}/* Toon de waarden in de tesstomgeving */");
             sb.AppendLine($"{ts}{ts}/* ----------------------------------- */ ");
-            sb.AppendLine($"{ts}{ts}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
+            sb.AppendLine($"{ts}{ts}for (teller = 5; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
             sb.AppendLine($"{ts}{ts}{{");
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (30, teller + 1, \"%10s\",TC_string$[teller]);");
             sb.AppendLine($"{ts}{ts}{ts}xyprintf (41, teller + 1, \":%4d\", TC_rgv[teller]);");
