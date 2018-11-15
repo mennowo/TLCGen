@@ -170,10 +170,7 @@ namespace TLCGen.Plugins
             // load local plugins
             try
             {
-                if (Directory.Exists(pluginpath))
-                {
-                    LoadPluginsFromPath(pluginpath);
-                }
+                LoadPluginsFromPath(pluginpath);
             }
             catch (Exception e)
             {
@@ -241,6 +238,8 @@ namespace TLCGen.Plugins
 
         private void LoadPluginsFromPath(string pluginpath)
         {
+            if (!Directory.Exists(pluginpath)) return;
+
             // Find all plugin DLL's
             foreach (String file in Directory.GetFiles(pluginpath))
             {
