@@ -343,8 +343,8 @@ namespace TLCGen.Importers.TabC
                         var m = detectorenRegex.Match(l);
                         if (m.Success)
                         {
-                            var name = m.Groups["name"].Value.Replace("d", "");
-                            if (!outcome.Detectoren.Any(x => x.Naam == name.ToLower()))
+                            var name = m.Groups["name"].Value.ToLower().Replace("d", "");
+                            if (!outcome.Detectoren.Any(x => x.Naam == name))
                             {
                                 outcome.Detectoren.Add(new DetectorModel
                                 {
@@ -354,19 +354,26 @@ namespace TLCGen.Importers.TabC
                         }
                     }
 
-                    // assign detectors to signalgroups
+                    // assign detectors in two round
+                    var assigned = new List<DetectorModel>();
+                    // round 1: assign based on d[a-zA-Z]+## in the sg name
                     foreach (var d in outcome.Detectoren)
                     {
                         foreach (var fc in outcome.Fasen)
                         {
                             if (fc.Naam.Length < d.Naam.Length &&
-                                Regex.IsMatch(d.Naam, $@"^k?{fc.Naam}"))
+                                Regex.IsMatch(d.Naam, $@"^[a-zA-Z]*{fc.Naam}"))
                             {
                                 fc.Detectoren.Add(d);
+                                assigned.Add(d);
+                                break;
                             }
                         }
                     }
-                }
+                    foreach (var d in outcome.Detectoren.Where(x => assigned.All(x2 => x2.Naam != x.Naam)))
+                    {
+                        outcome.Detectoren.Add(d);
+                    }
             }
 
             if (importT)
