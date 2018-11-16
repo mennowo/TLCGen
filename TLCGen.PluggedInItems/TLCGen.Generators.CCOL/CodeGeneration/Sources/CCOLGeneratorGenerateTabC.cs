@@ -946,7 +946,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONTYPE[MONTYPE_CFG] = {c.Data.VLOGSettings.MONTYPE_CFG};");
                 sb.AppendLine($"{ts}MONPRM[MONPRM_EVENT] = {c.Data.VLOGSettings.MONPRM_EVENT};");
                 sb.AppendLine($"#endif");
-                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = {(c.Data.VLOGSettings.MONPRM_VLOGMODE == VLOGMonModeEnum.ASCII ? "VLOGMODE_MON_BINAIR" : "VLOGMODE_MON_ASCII")};");
+                sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = {(c.Data.VLOGSettings.MONPRM_VLOGMODE == VLOGMonModeEnum.Binair ? "VLOGMODE_MON_BINAIR" : "VLOGMODE_MON_ASCII")};");
                 sb.AppendLine();
             }
 
