@@ -52,11 +52,22 @@ void NaloopEG(count fc1, count fc2, count tnl)
  *    Nalooptijd geldt groen en geel van de aanvoerrichting en wordt gedurende
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
-void NaloopEGDet(count fc1, count fc2, count dp, count tnl)
+void NaloopEGDet(count fc1, count fc2, count tnl, ...)
 {
-   RT[tnl] = D[dp] && (G[fc1]||GL[fc1]);
+   va_list argpt;
+   count dp;
+
+   va_start(argpt, tnl);
+   RT[tnl] = FALSE;
+   while ((dp = va_arg(argpt, va_count)) != END)
+   {
+	   RT[tnl] |= D[dp] && (G[fc1] || GL[fc1]);
+   }
+   va_end(argpt);
+   
    if (RT[tnl] || T[tnl] || G[fc1] || GL[fc1]) RW[fc2] |= BIT2;
 }
+
 /**************************************************************************
  *  Functie  : NaloopEG
  *
@@ -78,9 +89,19 @@ void NaloopCV(count fc1, count fc2, count tnl)
  *    Nalooptijd geldt tijdens cyclisch verlenggroen van de aanvoerrichting en wordt gedurende
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
-void NaloopCVDet(count fc1, count fc2, count dp, count tnl)
+void NaloopCVDet(count fc1, count fc2, count tnl, ...)
 {
-	RT[tnl] = D[dp] && CV[fc1] && !RA[fc1];
+	va_list argpt;
+	count dp;
+
+	va_start(argpt, tnl);
+	RT[tnl] = FALSE;
+	while ((dp = va_arg(argpt, va_count)) != END)
+	{
+		RT[tnl] |= D[dp] && CV[fc1] && !RA[fc1];
+	}
+	va_end(argpt);
+
 	if (RT[tnl] || T[tnl]) RW[fc2] |= BIT2;
 }
 
@@ -107,10 +128,19 @@ void NaloopFG(count fc1, count fc2, count tnl)
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
 
-void NaloopFGDet(count fc1, count fc2, count dp, count tnl)
+void NaloopFGDet(count fc1, count fc2, count tnl, ...)
 {
-   RT[tnl] = (VS[fc1] || FG[fc1]) && D[dp] ;
-   if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
+	va_list argpt;
+	count dp;
+
+	va_start(argpt, tnl);
+	RT[tnl] = FALSE;
+	while ((dp = va_arg(argpt, va_count)) != END)
+	{
+		RT[tnl] |= (VS[fc1] || FG[fc1]) && D[dp] ;
+	}
+	va_end(argpt);
+    if (RT[tnl] || T[tnl]) RW[fc2] |= BIT2;
 }
 
 /* YMLX[] - VASTHOUDEN MODULE AFWIKKELING */

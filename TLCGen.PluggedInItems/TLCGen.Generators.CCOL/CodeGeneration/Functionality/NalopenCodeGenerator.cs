@@ -213,11 +213,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0)
                                     {
+                                        sb.Append($"{ts}NaloopFGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlfgd}{vn}");
                                         foreach (var d in nl.Detectoren)
                                         {
-                                            sb.AppendLine($"{ts}NaloopFGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlfgd}{vn});");
-                                            sb.AppendLine($"{ts}NaloopEGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlegd}{vn});");
+                                            sb.Append($", {_dpf}{d.Detector}");
                                         }
+                                        sb.AppendLine(", END);");
+                                        sb.Append($"{ts}NaloopEGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlegd}{vn}");
+                                        foreach (var d in nl.Detectoren)
+                                        {
+                                            sb.Append($", {_dpf}{d.Detector}");
+                                        }
+                                        sb.AppendLine(", END);");
                                     }
                                     break;
 
@@ -229,11 +236,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                     if (nl.DetectieAfhankelijk && nl.Detectoren?.Count > 0)
                                     {
+                                        sb.Append($"{ts}NaloopFGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlfgd}{vn}");
                                         foreach (var d in nl.Detectoren)
                                         {
-                                            sb.AppendLine($"{ts}NaloopFGDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlfgd}{vn});");
-                                            sb.AppendLine($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_dpf}{d.Detector}, {_tpf}{_tnlcvd}{vn});");
-										}
+                                            sb.Append($", {_dpf}{d.Detector}");
+                                        }
+                                        sb.AppendLine(", END);");
+                                        sb.Append($"{ts}NaloopCVDet({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {_tpf}{_tnlcvd}{vn}");
+                                        foreach (var d in nl.Detectoren)
+                                        {
+                                            sb.Append($", {_dpf}{d.Detector}");
+                                        }
+                                        sb.AppendLine(", END);");
                                     }
                                     break;
                             }

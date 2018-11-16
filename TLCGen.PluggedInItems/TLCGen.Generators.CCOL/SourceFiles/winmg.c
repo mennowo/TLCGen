@@ -171,6 +171,7 @@ void MG_Fasen_Venster_init(LPCTSTR lpWindowName, ...)
 					fc = va_arg(argp, va_count);
 				}
 			}
+			va_end(argp);
 
 			/* standaard waarden */
 			win_height = i_char_h + 2 + fc_height + borderheight;

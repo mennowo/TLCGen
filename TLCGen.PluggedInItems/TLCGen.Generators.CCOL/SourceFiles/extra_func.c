@@ -288,6 +288,7 @@ bool Rateltikkers(      count fc,       /* fase */
 			/* opzetten rateltikkers bij detectie drukknoppen */
 			IH[has] |= IH[dkh];
 		}
+		va_end(argpt);
     }
 
     return (IH[has]);
@@ -346,6 +347,7 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 			/* opzetten rateltikkers bij detectie drukknoppen */
 			IH[has] |= D[dkid];
 		}
+		va_end(argpt);
 	}
 
 	/* eenmalige aanvraag afzetten Across */

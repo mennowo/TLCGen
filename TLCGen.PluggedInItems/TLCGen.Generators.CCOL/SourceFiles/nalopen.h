@@ -36,7 +36,7 @@ void NaloopEG(count fc1, count fc2, count tnl);
  *    Nalooptijd geldt groen en geel van de aanvoerrichting en wordt gedurende
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
-void NaloopEGDet(count fc1, count fc2, count dp, count tnl);
+void NaloopEGDet(count fc1, count fc2, count tnl, ...);
 
 /**************************************************************************
  *  Functie  : NaloopEG
@@ -55,7 +55,7 @@ void NaloopCV(count fc1, count fc2, count tnl);
  *    Nalooptijd geldt tijdens cyclisch verlenggroen van de aanvoerrichting en wordt gedurende
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
-void NaloopCVDet(count fc1, count fc2, count dp, count tnl);
+void NaloopCVDet(count fc1, count fc2, count tnl, ...);
 
 /**************************************************************************
  *  Functie  : NaloopFG
@@ -75,7 +75,7 @@ void NaloopFG(count fc1, count fc2, count tnl);
  *    het bezet zijn van detector dp geherstart.
  **************************************************************************/
 
-void NaloopFGDet(count fc1, count fc2, count dp, count tnl);
+void NaloopFGDet(count fc1, count fc2, count tnl, ...);
 
 /* YMLX[] - VASTHOUDEN MODULE AFWIKKELING */
 /* ====================================== */
