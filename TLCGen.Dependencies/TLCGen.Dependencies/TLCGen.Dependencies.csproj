@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\ilmerge\build\ILMerge.props" Condition="Exists('..\..\packages\ilmerge\build\ILMerge.props')" Label="Paket" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -34,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,62 +42,236 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ILMergeConfig.json" />
+    <Compile Include="DataAccess\ITLCGenControllerDataProvider.cs" />
+    <Compile Include="DataAccess\TLCGenControllerDataProvider.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\DataGridExtensions.cs" />
+    <Compile Include="Extensions\EnumerationExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\VisualTreeExtensions.cs" />
+    <Compile Include="FloodFill\AbstractFloodFiller.cs" />
+    <Compile Include="FloodFill\EditableBitmap.cs" />
+    <Compile Include="FloodFill\FloodFillRangeQueue.cs" />
+    <Compile Include="FloodFill\QueueLinearFloodFiller.cs" />
+    <Compile Include="GuiActions\GuiActionsManager.cs" />
+    <Compile Include="Helpers\AddRemoveItemsManager.cs" />
+    <Compile Include="Helpers\BindableSelectedItemBehaviour.cs" />
+    <Compile Include="Helpers\DeepCloner.cs" />
+    <Compile Include="Helpers\DesignMode.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\IViewModelWithItem.cs" />
+    <Compile Include="Helpers\ModelStringSetter.cs" />
+    <Compile Include="Helpers\MultiPropertySetter.cs" />
+    <Compile Include="Helpers\NameSyntaxChecker.cs" />
+    <Compile Include="Helpers\NullToVisibiltyConverter.cs" />
+    <Compile Include="Helpers\ObservableCollectionAroundList.cs" />
+    <Compile Include="Helpers\RecentFileList.cs" />
+    <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Helpers\ResourceReader.cs" />
+    <Compile Include="Helpers\TLCGenSerialization.cs" />
+    <Compile Include="Helpers\TypeSwitch.cs" />
+    <Compile Include="Helpers\XmlNodeConverter.cs" />
+    <Compile Include="Integrity\TLCGenControllerChecker.cs" />
+    <Compile Include="Integrity\TLCGenControllerModifier.cs" />
+    <Compile Include="Integrity\TLCGenIntegrityChecker.cs" />
+    <Compile Include="Messaging\Messages\ConflictsChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerCodeGeneratedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerDataChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerFileNameChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerHasOVChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerIntergreenTimesTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ControllerProjectGeneratedMessage.cs" />
+    <Compile Include="Messaging\Messages\DetectorenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\DetectorenExtraListChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FaseAantalRijstrokenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FaseDetectorTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FaseDetectorVeiligheidsGroenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FasenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FasenChangingMessage.cs" />
+    <Compile Include="Messaging\Messages\FasenSortedMessage.cs" />
+    <Compile Include="Messaging\Messages\FaseTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\FileIngreepTeDoserenSignaalGroepPercentageChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\GroentijdChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\GroentijdenTypeChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\HDIngrepenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\IngangenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\InterSignaalGroepChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ModelManager\ModelManagerMessageBase.cs" />
+    <Compile Include="Messaging\Messages\ModelManager\ModulesChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\ModelManager\OVIngreepMeldingChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\NameChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\NameChangingMessage.cs" />
+    <Compile Include="Messaging\Messages\OVIngreepMassaDetectieObjectActionMessage.cs" />
+    <Compile Include="Messaging\Messages\OVIngreepMassaDetectieObjectNeedsFaseCyclusMessage.cs" />
+    <Compile Include="Messaging\Messages\OVIngreepSignaalGroepParametersChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\OVIngrepenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\PeriodenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\PTPKoppelingenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\SelectedConflictGroepChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\SelectieveDetectorenChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\TemplatesChangedMessage.cs" />
+    <Compile Include="Messaging\Messages\UpdateTabsEnabledMessage.cs" />
+    <Compile Include="Messaging\Requests\IsFasenConflictingRequest.cs" />
+    <Compile Include="Messaging\Requests\PrepareForGenerationRequest.cs" />
+    <Compile Include="Messaging\Requests\ProcessSynchronisationsRequest.cs" />
+    <Compile Include="Messaging\Requests\RefreshBitmapRequest.cs" />
+    <Compile Include="Messaging\Responses\GetDetectorListResponse.cs" />
+    <Compile Include="ModelManager\ITLCGenModelManager.cs" />
+    <Compile Include="ModelManager\TLCGenModelManager.cs" />
+    <Compile Include="Models.Enumerations\AansturingWaitsignalenEnum.cs" />
+    <Compile Include="Models.Enumerations\AltijdAanUitEnum.cs" />
+    <Compile Include="Models.Enumerations\BitmappedItemTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\CCOLVersieEnum.cs" />
+    <Compile Include="Models.Enumerations\DetectorAanvraagTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\DetectorTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\DetectorVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\FaseTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\GroentijdenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\HalfstarGekoppeldTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\HalfstarGekoppeldWijzeEnum.cs" />
+    <Compile Include="Models.Enumerations\HalfstarTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\HalfstarVARegelenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\HardMeevelengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\IngangTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\InUit\OVIngreepInUitDataWisselTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\InUit\OVIngreepInUitMeldingTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\InUit\OVIngreepInUitMeldingVoorwaardeInputOmgangMetStoringTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\InUit\OVIngreepInUitMeldingVoorwaardeInputTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\InUit\OVIngreepMassaDetectieMeldingVoorwaardeTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\KWCTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\MeeaanvraagTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\MeeVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\NaloopDetectorTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\NaloopTijdTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\NaloopTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\NooitAltijdAanUitEnum.cs" />
+    <Compile Include="Models.Enumerations\OVIngreepPrioriteitEnum.cs" />
+    <Compile Include="Models.Enumerations\OVIngreepTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\OVIngreepVoertuigTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\OVIngreepWisselTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\PeriodeDagCodeEnum.cs" />
+    <Compile Include="Models.Enumerations\PeriodeTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\RateltikkerTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\RichtingGevoeligVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\RoBuGroverMethodeEnum.cs" />
+    <Compile Include="Models.Enumerations\SegmentDisplayTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\SelectieveDetectorTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\TLCGenObjectTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\VLOGLogModeEnum.cs" />
+    <Compile Include="Models.Enumerations\VLOGMonModeEnum.cs" />
+    <Compile Include="Models.Enumerations\VLOGTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\VLOGVersieEnum.cs" />
+    <Compile Include="Models\Attributes\HasDefaultAttribute.cs" />
+    <Compile Include="Models\Attributes\IOElementAttribute.cs" />
+    <Compile Include="Models\Attributes\IsDocumentedAttribute.cs" />
+    <Compile Include="Models\Attributes\ModelNameAttribute.cs" />
+    <Compile Include="Models\Attributes\RefersToAttribute.cs" />
+    <Compile Include="Models\Attributes\VissimNameAttribute.cs" />
+    <Compile Include="Models\Extensions.cs" />
+    <Compile Include="Models\Interfaces\IHaveName.cs" />
+    <Compile Include="Models\Interfaces\IInterSignaalGroepElement.cs" />
+    <Compile Include="Models\Models\Base\DetectorModel.cs" />
+    <Compile Include="Models\Models\Base\FaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Base\GroentijdenSetModel.cs" />
+    <Compile Include="Models\Models\Base\GroentijdModel.cs" />
+    <Compile Include="Models\Models\Base\IngangModel.cs" />
+    <Compile Include="Models\Models\Base\IOElementModel.cs" />
+    <Compile Include="Models\Models\Base\ModuleDisplayElementModel.cs" />
+    <Compile Include="Models\Models\Base\SegmentDisplayElementModel.cs" />
+    <Compile Include="Models\Models\Base\SelectieveDetectorModel.cs" />
+    <Compile Include="Models\Models\ControllerModel.cs" />
+    <Compile Include="Models\Models\Controller\ControllerDataModel.cs" />
+    <Compile Include="Models\Models\Controller\FixatieModel.cs" />
+    <Compile Include="Models\Models\Controller\VersieModel.cs" />
+    <Compile Include="Models\Models\Controller\VLOGSettingsDataModel.cs" />
+    <Compile Include="Models\Models\FileIngreep\FileIngreepDetectorModel.cs" />
+    <Compile Include="Models\Models\FileIngreep\FileIngreepModel.cs" />
+    <Compile Include="Models\Models\FileIngreep\FileIngreepTeDoserenSignaalGroepModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanIngangModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarPeriodeDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\SignaalPlanFaseModel.cs" />
+    <Compile Include="Models\Models\Halfstar\SignaalPlanModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\ConflictModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\GelijkstartModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\InterSignaalGroepModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\LateReleaseModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\MeeaanvraagDetectorModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\MeeaanvraagModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\NaloopDetectorModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\NaloopModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\NaloopTijdModel.cs" />
+    <Compile Include="Models\Models\InterSignaalGroep\VoorstartModel.cs" />
+    <Compile Include="Models\Models\Modules\FaseCyclusModuleDataModel.cs" />
+    <Compile Include="Models\Models\Modules\ModuleFaseCyclusAlternatiefModel.cs" />
+    <Compile Include="Models\Models\Modules\ModuleFaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Modules\ModuleModel.cs" />
+    <Compile Include="Models\Models\Modules\ModuleMolenModel.cs" />
+    <Compile Include="Models\Models\NonController\AddinSettingsModel.cs" />
+    <Compile Include="Models\Models\NonController\AddinSettingsPropertyModel.cs" />
+    <Compile Include="Models\Models\NonController\CustomDataModel.cs" />
+    <Compile Include="Models\Models\OV_HD\HDIngreepMeerealiserendeFaseModel.cs" />
+    <Compile Include="Models\Models\OV_HD\HDIngreepModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVDataModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepInUitMeldingModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepLijnNummerModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepMeldingenDataModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepRitCategorieModel.cs" />
+    <Compile Include="Models\Models\OV_HD\OVIngreepSignaalGroepParametersModel.cs" />
+    <Compile Include="Models\Models\Perioden\PeriodeModel.cs" />
+    <Compile Include="Models\Models\Perioden\PeriodenDataModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverConflictGroepFaseModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverConflictGroepModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverFileDetectorModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverHiaatDetectorModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverModel.cs" />
+    <Compile Include="Models\Models\RoBuGrover\RoBuGroverSignaalGroepInstellingenModel.cs" />
+    <Compile Include="Models\Models\Signalen\RatelTikkerDetectorModel.cs" />
+    <Compile Include="Models\Models\Signalen\RatelTikkerModel.cs" />
+    <Compile Include="Models\Models\Signalen\SignalenDataModel.cs" />
+    <Compile Include="Models\Models\Signalen\WaarschuwingsGroepModel.cs" />
+    <Compile Include="Models\Models\Varia\BitmapCoordinaatModel.cs" />
+    <Compile Include="Models\Models\Varia\BitmapCoordinatenDataModel.cs" />
+    <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />
+    <Compile Include="Models\Models\Varia\DetectorVeiligheidsGroenModel.cs" />
+    <Compile Include="Models\Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
+    <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />
+    <Compile Include="Models\Models\Varia\RichtingGevoeligeAanvraagModel.cs" />
+    <Compile Include="Models\Models\Varia\RichtingGevoeligVerlengModel.cs" />
+    <Compile Include="Models\Models\Varia\VAOntruimenDetectorModel.cs" />
+    <Compile Include="Models\Models\Varia\VAOntruimenFaseModel.cs" />
+    <Compile Include="Models\Models\Varia\VAOntruimenNaarFaseModel.cs" />
+    <Compile Include="Plugins\ITLCGenGenerator.cs" />
+    <Compile Include="Plugins\ITLCGenHasSettings.cs" />
+    <Compile Include="Plugins\ITLCGenImporter.cs" />
+    <Compile Include="Plugins\ITLCGenIOElementProvider.cs" />
+    <Compile Include="Plugins\ITLCGenMenuItem.cs" />
+    <Compile Include="Plugins\ITLCGenPlugin.cs" />
+    <Compile Include="Plugins\ITLCGenPluginManager.cs" />
+    <Compile Include="Plugins\ITLCGenPlugMessaging.cs" />
+    <Compile Include="Plugins\ITLCGenSwitcher.cs" />
+    <Compile Include="Plugins\ITLCGenTabItem.cs" />
+    <Compile Include="Plugins\ITLCGenToolBar.cs" />
+    <Compile Include="Plugins\ITLCGenXMLNodeWriter.cs" />
+    <Compile Include="Plugins\TLCGenCustomSettingAttribute.cs" />
+    <Compile Include="Plugins\TLCGenPluginAttribute.cs" />
+    <Compile Include="Plugins\TLCGenPluginManager.cs" />
+    <Compile Include="Plugins\TLCGenTabItemAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FloodFill\FloodFill.csproj">
-      <Project>{9a33318a-1352-43c3-8275-ff20dc9b9202}</Project>
-      <Name>FloodFill</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.DataAccess\TLCGen.DataAccess.csproj">
-      <Project>{94ca4d36-a404-4e0e-9c39-14613d1c4c39}</Project>
-      <Name>TLCGen.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Events\TLCGen.Messaging.csproj">
-      <Project>{2dbc9d19-d683-4f87-b534-dd026b46e763}</Project>
-      <Name>TLCGen.Messaging</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Extensions\TLCGen.Extensions.csproj">
-      <Project>{8e0a63d9-07bf-4440-be4f-a17b3c395fb6}</Project>
-      <Name>TLCGen.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.GuiActions\TLCGen.GuiActions.csproj">
-      <Project>{7922013a-9b43-4813-a354-f1977b5788de}</Project>
-      <Name>TLCGen.GuiActions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Helpers\TLCGen.Helpers.csproj">
-      <Project>{04039111-5cbd-459e-af6e-65f016eeb333}</Project>
-      <Name>TLCGen.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Integrity\TLCGen.Integrity.csproj">
-      <Project>{b3af9767-3f8d-45c9-81bf-4c9bb67e339c}</Project>
-      <Name>TLCGen.Integrity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.Enumerations\TLCGen.Models.Enumerations.csproj">
-      <Project>{69468f6a-d191-4049-ba0f-4e4cd023bbd0}</Project>
-      <Name>TLCGen.Models.Enumerations</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models.ModelManager\TLCGen.ModelManager.csproj">
-      <Project>{ae032ace-62d7-4093-986e-6a436d8d8161}</Project>
-      <Name>TLCGen.ModelManager</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Models\TLCGen.Models\TLCGen.Models.csproj">
-      <Project>{b3a654cf-76a7-4ab9-b99e-870781e5d83b}</Project>
-      <Name>TLCGen.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Plugins\TLCGen.Plugins.csproj">
-      <Project>{355e3027-7851-4eb9-9c91-3b281d01dc02}</Project>
-      <Name>TLCGen.Plugins</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>IF NOT EXIST "$(TargetDir)..\Release\ILMerge\" (mkdir "$(TargetDir)..\Release\ILMerge\")
-IF $(Configuration) == Debug (move /Y "$(TargetDir)ILMerge\TLCGen.Dependencies.dll" "$(TargetDir)..\Release\ILMerge\")</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
@@ -202,5 +376,4 @@ IF $(Configuration) == Debug (move /Y "$(TargetDir)ILMerge\TLCGen.Dependencies.d
       </ItemGroup>
     </When>
   </Choose>
-  <Import Project="..\..\packages\ILMerge.MSBuild.Task\build\ILMerge.MSBuild.Task.targets" Condition="Exists('..\..\packages\ILMerge.MSBuild.Task\build\ILMerge.MSBuild.Task.targets')" Label="Paket" />
 </Project>
