@@ -31,7 +31,7 @@
                 SelectionMode="Single" />
         </DockPanel>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-        <Label Content="Geen instellingen beschikbaar" Grid.Row="0" Grid.Column="2">
+        <!--<Label Content="Geen instellingen beschikbaar" Grid.Row="0" Grid.Column="2">
             <Label.Style>
                 <Style TargetType="Label">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -42,9 +42,9 @@
                     </Style.Triggers>
                 </Style>
             </Label.Style>
-        </Label>
+        </Label>-->
         <Grid Grid.Column="2" DataContext="{Binding Path=SelectedMeldingenData}" Name="meldGrid">
-            <Grid.Style>
+            <!--<Grid.Style>
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Visible" />
                     <Style.Triggers>
@@ -53,7 +53,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Grid.Style>
+            </Grid.Style>-->
             <TabControl>
                 <TabItem Header="Inmeldingen">
                     <Grid>
@@ -594,9 +594,20 @@
                             ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel1Detector,Converter={StaticResource bool2vis}}"
                             SelectedItem="{Binding Path=Wissel1Detector}" Grid.Row="4" Grid.Column="1" />
 
-                        <Label Content="Wissel 1 voorwaarde" Grid.Row="5" Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="5" >
+                            <Label Content="Wissel 1 voorwaarde" />
+                            <ct:InfoElement>
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Indien aangevinkt: de detector/ingang moet op zijn<LineBreak />
+                                        Indien <Underline>niet</Underline> aangevinkt: de detector/ingang moet op zijn
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
+                        
                         <CheckBox IsChecked="{Binding Path=Wissel1Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                  Visibility="{Binding Path=IsWissel1Ingang,Converter={StaticResource bool2vis}}"
+                                  IsEnabled="{Binding Path=Wissel1}"
                                   Grid.Column="1" Grid.Row="5" Margin="5" />
 
                         <Label Content="Wissel 2 aanwezig" Grid.Row="6" />
@@ -620,24 +631,23 @@
                             ItemsSource="{Binding Path=WisselDetectoren}" Visibility="{Binding Path=IsWissel2Detector,Converter={StaticResource bool2vis}}"
                             SelectedItem="{Binding Path=Wissel2Detector}" Grid.Row="8" Grid.Column="1" />
 
-                        <Label Content="Wissel 2 voorwaarde" Grid.Row="9" Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="9" >
+                            <Label Content="Wissel 2 voorwaarde" />
+                            <ct:InfoElement>
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Indien aangevinkt: de detector/ingang moet WAAR zijn<LineBreak />
+                                        Indien <Underline>niet</Underline> aangevinkt: de detector/ingang moet ONWAAR zijn
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
                         <CheckBox IsChecked="{Binding Path=Wissel2Voorwaarde,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                  Visibility="{Binding Path=IsWissel2Ingang,Converter={StaticResource bool2vis}}"
+                                  IsEnabled="{Binding Path=Wissel2}"
                                   Grid.Column="1" Grid.Row="9" Margin="5" />
                     </Grid>
                 </TabItem>
             </TabControl>
-            <!--<Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                
-                <GridSplitter Height="5" HorizontalAlignment="Stretch" Grid.Row="1" />
-                
-            </Grid>-->
         </Grid>
     </Grid>
 </UserControl>

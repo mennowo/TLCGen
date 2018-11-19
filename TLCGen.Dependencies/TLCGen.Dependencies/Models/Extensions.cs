@@ -43,6 +43,16 @@ namespace TLCGen.Models
                    ov.MeldingenData.Uitmeldingen.Any(x => (x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
         }
 
+        public static bool HasOVIngreepWissel(this OVIngreepModel ov)
+        {
+            return ((ov.MeldingenData.Wissel1 &&
+                     ((ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
+                      (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
+                    (ov.MeldingenData.Wissel2 &&
+                     ((ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
+                      (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector)))));
+        }
+
         public static bool HasDSI(this ControllerModel c)
         {
             return c.OVData.OVIngrepen.Any(x => x.HasOVIngreepDSI()) ||

@@ -73,7 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schovin;
         private CCOLGeneratorCodeStringSettingModel _schovuit;
         private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
-        //private CCOLGeneratorCodeStringSettingModel _hwissel;
+        private CCOLGeneratorCodeStringSettingModel _hwissel;
 
         private CCOLGeneratorCodeStringSettingModel _thdin;
         private CCOLGeneratorCodeStringSettingModel _thduit;
@@ -259,7 +259,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schgeenwissel}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schgeenwissel, d.Naam));
                 }
-
+                foreach (var d in c.GetAllDetectors(x => x.Type == DetectorTypeEnum.WisselDetector))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwisselpol}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schwisselpol, d.Naam));
+                }
                 foreach (var d in c.Ingangen.Where(x => x.Type == IngangTypeEnum.WisselContact))
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schwisselpol}{d.Naam}", 0, CCOLElementTimeTypeEnum.SCH_type, _schwisselpol, d.Naam));
@@ -367,6 +370,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
 
+
+                // Help elements to store wissel condition
+                if (ov.HasOVIngreepWissel())
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hwissel}{ov.FaseCyclus}", _hwissel, ov.FaseCyclus));
+                }
+
                 if (ov.HasOVIngreepKAR())
                 {
                     _MyDetectors.Add(ov.DummyKARInmelding);
@@ -466,10 +477,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    return 40;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 40;
-//                case CCOLCodeTypeEnum.OvCTop:
-//                    return 20;
                 case CCOLCodeTypeEnum.OvCInUitMelden:
                     return 10;
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
@@ -634,40 +645,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 sb.Append($"!C[{_ctpf}{_cvc}{ov.FaseCyclus}] && ");
             }
-            if (melding.KijkNaarWisselStand &&
-                ((ov.MeldingenData.Wissel1 &&
-                  ((ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Input)) ||
-                   (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel1Detector)))) ||
-                 (ov.MeldingenData.Wissel2 &&
-                  ((ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Input)) ||
-                   (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Detector && !string.IsNullOrWhiteSpace(ov.MeldingenData.Wissel2Detector))))))
+            if (melding.KijkNaarWisselStand)
             {
-                if (ov.MeldingenData.Wissel1)
-                {
-                    if (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-                    {
-                        sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
-                            $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}]) &&" :
-                            $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}]) &&");
-                    }
-                    else
-                    {
-                        sb.Append($"(D[{_dpf}{ov.MeldingenData.Wissel1Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}]) &&");
-                    }
-                }
-                if (ov.MeldingenData.Wissel2)
-                {
-                    if (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
-                    {
-                        sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
-                            $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}]) &&" :
-                            $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}]) &&");
-                    }
-                    else
-                    {
-                        sb.Append($"(D[{_dpf}{ov.MeldingenData.Wissel2Detector}] || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}]) &&");
-                    }
-                }
+                sb.Append($"IH[{_hpf}{_hwissel}{ov.FaseCyclus}] && ");
             }
 
             var extra = "";
@@ -728,6 +708,54 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (!c.OVData.OVIngrepen.Any(x => x.HasOVIngreepWissel())) return null;
+                    sb.AppendLine($"{ts}/* Onthouden wissel voorwaarden per fasecyclus */");
+                    foreach (var ov in c.OVData.OVIngrepen)
+                    {
+                        if (ov.HasOVIngreepWissel())
+                        {
+                            sb.Append($"{ts}IH[{_hpf}{_hwissel}{ov.FaseCyclus}] = (");
+                            if (ov.MeldingenData.Wissel1)
+                            {
+                                if (ov.MeldingenData.Wissel1Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                {
+                                    sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel1Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel1Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Input}])");
+                                }
+                                else
+                                {
+                                    sb.Append(ov.MeldingenData.Wissel1InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Detector}] ? !D[{_dpf}{ov.MeldingenData.Wissel1Detector}] : D[{_dpf}{ov.MeldingenData.Wissel1Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel1Detector}] ? D[{_dpf}{ov.MeldingenData.Wissel1Detector}] : !D[{_dpf}{ov.MeldingenData.Wissel1Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel1Detector}])");
+                                }
+                            }
+                            if (ov.MeldingenData.Wissel2)
+                            {
+                                if (ov.MeldingenData.Wissel1)
+                                {
+                                    sb.Append(" && ");
+                                }
+                                if (ov.MeldingenData.Wissel2Type == OVIngreepInUitDataWisselTypeEnum.Ingang)
+                                {
+                                    sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? !IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Input}] ? IS[{_ispf}{ov.MeldingenData.Wissel2Input}] : !IS[{_ispf}{ov.MeldingenData.Wissel2Input}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Input}])");
+                                }
+                                else
+                                {
+                                    sb.Append(ov.MeldingenData.Wissel2InputVoorwaarde ?
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Detector}] ? !D[{_dpf}{ov.MeldingenData.Wissel2Detector}] : D[{_dpf}{ov.MeldingenData.Wissel2Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])" :
+                                        $"((SCH[{_schpf}{_schwisselpol}{ov.MeldingenData.Wissel2Detector}] ? D[{_dpf}{ov.MeldingenData.Wissel2Detector}] : !D[{_dpf}{ov.MeldingenData.Wissel2Detector}]) || SCH[{_schpf}{_schgeenwissel}{ov.MeldingenData.Wissel2Detector}])");
+                                }
+                            }
+                            sb.AppendLine(");");
+                        }
+                    }
+                    sb.AppendLine();
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     sb.AppendLine($"{ts}/* OV/HD verklikking */");
                     sb.AppendLine($"{ts}/* ----------------- */");
