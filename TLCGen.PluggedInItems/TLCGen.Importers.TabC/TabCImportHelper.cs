@@ -374,6 +374,7 @@ namespace TLCGen.Importers.TabC
                     {
                         outcome.Detectoren.Add(d);
                     }
+                }
             }
 
             if (importT)

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -106,9 +107,8 @@ namespace TLCGen.Generators.CCOL
 
         private bool GenerateCodeCommand_CanExecute(object prm)
         {
-            return _Plugin.Controller != null &&
-                   _Plugin.Controller.Fasen != null &&
-                   _Plugin.Controller.Fasen.Count > 0 &&
+            return _Plugin?.Controller?.Fasen.Any() == true &&
+                   _Plugin?.Controller.ModuleMolen.Modules.Any() == true &&
                    !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);
         }
 
