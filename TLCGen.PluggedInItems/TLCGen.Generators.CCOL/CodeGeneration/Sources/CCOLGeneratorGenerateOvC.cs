@@ -687,7 +687,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             wissel = true;
                             sb.Append($"{ts}if (IH[{_hpf}{_hwissel}{ov.FaseCyclus}])");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(ovFC{fc.Naam}, {ov.Koplus}, NG, NG);");
+                            sb.AppendLine($"{ts}{ts}OVRijTijdScenario(ovFC{fc.Naam}, {_dpf}{ov.Koplus}, NG, NG);");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine($"{ts}else");
                             sb.AppendLine($"{ts}{{");

@@ -502,7 +502,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
                             var rest = "";
                             var irest = 1;
-                            rest += $", {_prmpf}{c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower()}_{ff.FaseCyclus}";
+                            rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
 
                             foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
                             {
