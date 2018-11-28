@@ -73,6 +73,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		appveyor.yml = appveyor.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TLCGen.Plugins.RangeerElementen", "TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj", "{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -255,6 +257,14 @@ Global
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Release|x86.ActiveCfg = Release|Any CPU
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6}.Release|x86.Build.0 = Release|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Debug|x86.Build.0 = Debug|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Release|x86.ActiveCfg = Release|Any CPU
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -279,6 +289,7 @@ Global
 		{790FF4FD-A251-46F8-A6BE-BD5FDFA44243} = {3B1C2705-8BE6-4ABA-8516-E5B8D67D7846}
 		{8D6F4BB4-41B7-4757-B6CE-AF9737AD3631} = {8918AA2A-5466-4DBA-B19F-F41017B85F1E}
 		{208F78BE-CEC8-45D9-BA1A-FD9443B983E6} = {8918AA2A-5466-4DBA-B19F-F41017B85F1E}
+		{F6CDA01A-F99A-478D-95B6-E9D9E3152DDC} = {3B1C2705-8BE6-4ABA-8516-E5B8D67D7846}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DAA9737D-4A27-4A2A-86BC-F05F9A1B85F1}

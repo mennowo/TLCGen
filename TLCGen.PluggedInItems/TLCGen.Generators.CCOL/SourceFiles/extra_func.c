@@ -263,7 +263,7 @@ bool Rateltikkers(      count fc,       /* fase */
                         ...)            /* hulpelementen drukknoppen */
 {
 	va_list argpt;
-	count dkh;
+	count hdkh;
 
     /* verzorgen naloop rateltikker */
     RT[tnlrt] = EGL[fc] && IH[has] || EH[has_cont_];
@@ -283,10 +283,10 @@ bool Rateltikkers(      count fc,       /* fase */
     if(IH[has_aan_])
     {
 		va_start(argpt, tnlrt);
-		while ((dkh = va_arg(argpt, va_count)) != END)
+		while ((hdkh = va_arg(argpt, va_count)) != END)
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
-			IH[has] |= IH[dkh];
+			IH[has] |= IH[hdkh];
 		}
 		va_end(argpt);
     }

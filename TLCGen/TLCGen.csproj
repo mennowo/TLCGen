@@ -875,6 +875,10 @@
       <Project>{688e5fbb-f084-4169-b484-5c5947720e38}</Project>
       <Name>TLCGen.Plugins.AFM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
+      <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
+      <Name>TLCGen.Plugins.RangeerElementen</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RIS\TLCGen.Plugins.RIS.csproj">
       <Project>{39de55f0-2c7c-4fd0-91ae-005c620aa49a}</Project>
       <Name>TLCGen.Plugins.RIS</Name>
@@ -926,10 +930,7 @@ move "$(TargetDir)TLCGen.GebruikersOpties.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsRotterdam.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.SpecialsDenHaag.dll" "$(TargetDir)Plugins"
 move "$(TargetDir)TLCGen.Specificator.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.SUMO.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.AFM.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.RIS.dll" "$(TargetDir)Plugins"
-move "$(TargetDir)TLCGen.Plugins.Timings.dll" "$(TargetDir)Plugins"</PostBuildEvent>
+move "$(TargetDir)TLCGen.Plugins.*.dll" "$(TargetDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
