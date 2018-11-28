@@ -473,6 +473,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return _myBitmapInputs;
         }
 
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPostAfhandelingOV, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPostAfhandelingOV, "bool", "isHD"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPostAfhandelingOV, "bool", "isWTV")
+            };
+        }
+
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -945,10 +960,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
                     if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        sb.AppendLine($"{ts}bool isHD = FALSE;");
-                        sb.AppendLine($"{ts}bool isWTV = FALSE;");
-                        sb.AppendLine($"{ts}int fc;");
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Bepalen of een HD ingreep actief is */");
                         sb.Append($"{ts}isHD = ");
                         first = true;

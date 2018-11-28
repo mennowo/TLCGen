@@ -151,7 +151,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine($"static int fc;");
             sb.AppendLine("mulv TDH_old[DPMAX];");
             sb.AppendLine("mulv DB_old[DPMAX];");
             sb.AppendLine();
@@ -191,6 +190,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        //private void GetVariables(StringBuilder sb, CCOLCodeTypeEnum type, ControllerModel controller)
+        //{
+        //    if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(type))
+        //    {
+        //        foreach (var i in CCOLElementCollector.FunctionLocalVariables[type])
+        //        {
+        //            sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+        //        }
+        //        sb.AppendLine();
+        //    }
+        //}
+        //
+        //private void GetVariablesAndCode(StringBuilder sb, CCOLCodeTypeEnum type, ControllerModel controller)
+        //{
+        //    if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(type))
+        //    {
+        //        foreach (var i in CCOLElementCollector.FunctionLocalVariables[type])
+        //        {
+        //            sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+        //        }
+        //        sb.AppendLine();
+        //    }
+        //
+        //    foreach (var gen in OrderedPieceGenerators[type])
+        //    {
+        //        sb.Append(gen.Value.GetCode(controller, type, ts));
+        //    }
+        //}
+        //
+        //
+        //private void GetCode(StringBuilder sb, CCOLCodeTypeEnum type, ControllerModel controller)
+        //{
+        //    foreach (var gen in OrderedPieceGenerators[type])
+        //    {
+        //        sb.Append(gen.Value.GetCode(controller, type, ts));
+        //    }
+        //}
+
         private string GenerateRegCPreApplication(ControllerModel controller)
         {
             var sb = new StringBuilder();
@@ -198,10 +235,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PreApplication(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPreApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPreApplication, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreApplication, true, true, false, true);
 
             sb.AppendLine($"{ts}PreApplication_Add();");
 
@@ -230,10 +264,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void KlokPerioden(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCKlokPerioden])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCKlokPerioden, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCKlokPerioden, true, true, false, true);
 
             sb.AppendLine($"{ts}KlokPerioden_Add();");
             
@@ -254,12 +285,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void Aanvragen(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAanvragen])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCAanvragen, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCAanvragen, true, true, false, true);
 
             sb.AppendLine($"{ts}Aanvragen_Add();");
 			
@@ -285,11 +312,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 case GroentijdenTypeEnum.MaxGroentijden:
                     sb.AppendLine("void Maxgroen(void)");
                     sb.AppendLine("{");
-                    
-                    foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMaxgroen])
-                    {
-                        sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMaxgroen, ts));
-                    }
+
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroen, true, true, false, true);
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
@@ -302,10 +326,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine("void Verlenggroen(void)");
                     sb.AppendLine("{");
 
-                    foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCVerlenggroen])
-                    {
-                        sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCVerlenggroen, ts));
-                    }
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCVerlenggroen, true, true, false, true);
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
@@ -327,10 +348,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Wachtgroen(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCWachtgroen])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCWachtgroen, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCWachtgroen, true, true, false, true);
+
             sb.AppendLine($"{ts}Wachtgroen_Add();");
 	        sb.AppendLine("}");
 
@@ -344,10 +363,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meetkriterium(void)");
             sb.AppendLine("{");
             
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMeetkriterium])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMeetkriterium, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeetkriterium, true, true, false, true);
+
             sb.AppendLine($"{ts}Meetkriterium_Add();");
 
             sb.AppendLine("}");
@@ -364,10 +381,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Meeverlengen(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCMeeverlengen])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCMeeverlengen, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMeeverlengen, true, true, false, true);
 
             sb.AppendLine($"{ts}Meeverlengen_Add();");
             sb.AppendLine("}");
@@ -382,10 +396,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void Synchronisaties(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSynchronisaties])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSynchronisaties, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSynchronisaties, true, true, false, true);
 
             sb.AppendLine($"{ts}Synchronisaties_Add();");
 	        sb.AppendLine("}");
@@ -400,20 +411,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void RealisatieAfhandeling(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
-            sb.AppendLine($"{ts}register count fc;");
 
-            sb.AppendLine();
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, ts));
-            }
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, ts));
-            }
-
-            sb.AppendLine();
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
+            
             if(controller.InterSignaalGroep.Nalopen.Any())
             {
                 sb.AppendLine($"{ts}YML[ML] = yml_cv_pr_nl(PRML, ML, ML_MAX);");
@@ -441,11 +445,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
             sb.AppendLine($"{ts}" + "}");
             sb.AppendLine();
-            
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCRealisatieAfhandeling])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, ts));
-            }
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, false, true, false, true);
+
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -459,12 +461,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void FileVerwerking(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCFileVerwerking])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCFileVerwerking, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCFileVerwerking, true, true, false, true);
+
             sb.AppendLine($"{ts}FileVerwerking_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -478,12 +477,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void DetectieStoring(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCDetectieStoring])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCDetectieStoring, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCDetectieStoring, true, true, false, true);
+
             sb.AppendLine($"{ts}DetectieStoring_Add();");
 	        sb.AppendLine("}");
             sb.AppendLine();
@@ -497,6 +493,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void init_application(void)");
             sb.AppendLine("{");
+
+            if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(CCOLCodeTypeEnum.RegCInitApplication))
+            {
+                foreach (var i in CCOLElementCollector.FunctionLocalVariables[CCOLCodeTypeEnum.RegCInitApplication])
+                {
+                    sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                }
+                sb.AppendLine();
+            }
+
             sb.AppendLine("#if !defined AUTOMAAT && !defined VISSIM");
             sb.AppendLine($"{ts}if (!SAPPLPROG)");
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
@@ -615,18 +621,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PostApplication(void)");
             sb.AppendLine("{");
 
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, true, false, false, true);
+            
             sb.AppendLine($"{ts}int i = 0;");
             sb.AppendLine($"{ts}for (; i < DPMAX; ++i)");
             sb.AppendLine($"{ts}{{");
             sb.AppendLine($"{ts}{ts}TDH_old[i] = TDH[i];");
             sb.AppendLine($"{ts}{ts}DB_old[i] = DB[i];");
             sb.AppendLine($"{ts}}}");
+            sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPostApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPostApplication, ts));
-            }
-
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, false, true, false, true);
+            
             sb.AppendLine($"{ts}PostApplication_Add();");
 	        if (controller.HalfstarData.IsHalfstar)
 	        {
@@ -645,23 +651,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
 
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPreSystemApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPreSystemApplication, ts));
-            }
-
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreSystemApplication, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostSystemApplication, true, false, false, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreSystemApplication, false, true, false, true);
+            
             sb.AppendLine($"{ts}pre_system_application();");
 	        if (controller.HalfstarData.IsHalfstar)
 	        {
 		        sb.AppendLine($"{ts}pre_system_application_halfstar();");
 	        }
-
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSystemApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSystemApplication, ts));
-            }
             sb.AppendLine();
 
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSystemApplication, false, true, false, true);
 
             if (controller.Data.GarantieOntruimingsTijden)
             {
@@ -681,10 +683,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}check_trg_min();");
             sb.AppendLine();
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCPostSystemApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCPostSystemApplication, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostSystemApplication, false, true, false, true);
 
             sb.AppendLine($"{ts}post_system_application();");
 	        if (controller.HalfstarData.IsHalfstar)
@@ -705,10 +704,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void system_application2(void)");
             sb.AppendLine("{");
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSystemApplication2])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSystemApplication2, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSystemApplication2, true, true, false, true);
 
             sb.AppendLine();
             sb.AppendLine($"{ts}post_system_application2();");
@@ -777,10 +773,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void OVSpecialSignals();");
             sb.AppendLine("void is_special_signals(void)");
             sb.AppendLine("{");
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCSpecialSignals])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCSpecialSignals, ts));
-            }
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSpecialSignals, true, true, false, true);
+
             if (controller.OVData.OVIngrepen.Any() ||
 				controller.OVData.HDIngrepen.Any())
 		    {

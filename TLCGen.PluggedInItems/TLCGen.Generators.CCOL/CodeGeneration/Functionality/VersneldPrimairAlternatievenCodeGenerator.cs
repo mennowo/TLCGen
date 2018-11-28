@@ -35,6 +35,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements = new List<CCOLElement>();
 
             var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+
             foreach (var fc in c.ModuleMolen.FasenModuleData)
             {
                 // Vooruit realisaties
@@ -147,6 +148,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _myElements.Where(x => x.Type == type);
+        }
+
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, "int", "fc")
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

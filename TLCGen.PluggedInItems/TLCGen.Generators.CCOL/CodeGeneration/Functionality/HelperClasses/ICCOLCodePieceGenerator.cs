@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 
@@ -7,6 +8,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     public interface ICCOLCodePieceGenerator
     {
         void CollectCCOLElements(ControllerModel c);
+        bool HasFunctionLocalVariables();
+        IEnumerable<Tuple<CCOLCodeTypeEnum, string,string>> GetFunctionLocalVariables();
         bool HasCCOLElements();
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
         IEnumerable<CCOLElement> GetCCOLElements();

@@ -28,6 +28,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private Regex __fieldregex = new Regex(@"_[a-z][a-z][a-z0-9]+", RegexOptions.Compiled);
 
+        public virtual bool HasFunctionLocalVariables()
+        {
+            return false;
+        }
+
+        public virtual IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return null;
+        }
+
         public virtual void CollectCCOLElements(ControllerModel c)
         {
             

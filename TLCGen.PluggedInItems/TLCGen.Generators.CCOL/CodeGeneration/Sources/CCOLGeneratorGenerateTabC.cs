@@ -95,9 +95,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
-            sb.AppendLine();
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
 
             return sb.ToString();
         }
@@ -108,6 +107,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void control_defaults(void)");
             sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, true, false, false, true);
+
             sb.AppendLine($"{ts}TDB_defmax = NG;");
             sb.AppendLine($"{ts}TDH_defmax = NG;");
             sb.AppendLine($"{ts}TBG_defmax = NG;");
@@ -123,7 +125,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}TGG_type    |= RO_type; /* Garantiegroentijden read-only */");
             sb.AppendLine($"{ts}TVG_deftype |= RO_type; /* Verlenggroentijden  read-only */");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, true, true);
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlDefaults, false, true, true, false);
             
             sb.AppendLine("}");
 
@@ -136,7 +138,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void control_parameters(void)");
             sb.AppendLine("{");
-            sb.AppendLine();
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, true, false, false, true);
 
             sb.Append(GenerateTabCControlParametersFasen(controller));
             sb.AppendLine();
@@ -174,7 +177,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
 
-	        AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, false, true);
+	        AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, false, true, false, true);
 
 	        if (controller.HalfstarData.IsHalfstar)
 	        {

@@ -70,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
             sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
 
-			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true);
+			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true, true, true);
 
 			return sb.ToString();
         }
@@ -103,7 +103,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}ovOVMAX");
             sb.AppendLine("} TOVRichtingIndex;");
             sb.AppendLine();
-            sb.AppendLine("static int ov;");
             sb.AppendLine("extern mulv DB_old[];");
             sb.AppendLine("extern mulv TDH_old[];");
             sb.AppendLine();
@@ -119,7 +118,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("static char startkarog = FALSE;");
             }
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTop, true, true, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, true, false, false, true);
 
             if (c.Data.CCOLVersie <= CCOLVersieEnum.CCOL8 && c.Data.VLOGType != VLOGTypeEnum.Geen ||
                 c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 && c.Data.VLOGSettings.VLOGToepassen)
@@ -261,6 +261,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* Instellingen OV-richtingen    */");
             sb.AppendLine($"{ts}/* ============================= */");
             sb.AppendLine();
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInstellingen, true, false, true, true);
 
             if (c.HasPTorHD())
             {
@@ -645,7 +647,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
             }
 
-			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInstellingen, true, true);
+			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInstellingen, false, true, false, false);
 
 			sb.AppendLine("}");
             sb.AppendLine();
@@ -865,6 +867,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             if (c.OVData.OVIngrepen.Count > 0)
             {
+                AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, true, false, false, true);
+
                 sb.AppendLine($"{ts}/* OV-inmeldingen */");
                 foreach (var ov in c.OVData.OVIngrepen)
                 {
@@ -898,9 +902,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine($"{ts}IH[{_hpf}{_hhdin}{hd.FaseCyclus}] = IH[{_hpf}{_hhduit}{hd.FaseCyclus}] = FALSE;");
             }
-            sb.AppendLine();
-
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, true, true);
+            
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInUitMelden, false, true, true, true);
 
             if (c.HasKAR())
             {
@@ -965,11 +968,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioriteitsOpties(void)");
             sb.AppendLine("{");
             
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsOpties, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsOpties, true, true, false, true);
 
             sb.AppendLine($"{ts}PrioriteitsOpties_Add();");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, false, true, true, true);
 
             sb.AppendLine($"{ts}PrioriteitsNiveau_Add();");
             sb.AppendLine("}");
@@ -990,7 +994,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PrioriteitsToekenningExtra(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsToekenning, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsToekenning, true, true, false, false);
             
             sb.AppendLine("}");
 
@@ -1010,7 +1014,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void TegenhoudenConflictenExtra(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTegenhoudenConflicten, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTegenhoudenConflicten, true, true, false, false);
 
             sb.AppendLine("}");
             sb.AppendLine();
@@ -1027,7 +1031,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void PostAfhandelingOV(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPostAfhandelingOV, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPostAfhandelingOV, true, true, false, false);
 
             sb.AppendLine("}");
 
@@ -1044,7 +1048,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void OVPARCorrecties(void)");
             sb.AppendLine("{");
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCorrecties, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCorrecties, true, true, false, false);
 
 			sb.AppendLine("}");
             sb.AppendLine();
@@ -1080,7 +1084,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"  OVCcolElementen(hdFC{hd.FaseCyclus}, {_tpf}{_tgbhd}{hd.FaseCyclus}, {_tpf}{_trthd}{hd.FaseCyclus}, {_hpf}{_hhd}{hd.FaseCyclus}, {_cpf}{_cvchd}{hd.FaseCyclus}, -1);");
             }
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCcol, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPARCcol, true, true, false, false);
 
 			sb.AppendLine("}");
             sb.AppendLine();
@@ -1110,6 +1114,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#ifdef CCOL_IS_SPECIAL");
             sb.AppendLine("void OVSpecialSignals(void)");
             sb.AppendLine("{");
+
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, false, true, false, true);
+
             sb.AppendLine($"{ts}/* reset oude set_DSI_message */");
             sb.AppendLine($"{ts}#if !defined VISSIM || defined SUMO");
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
@@ -1175,7 +1182,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, false, true, false, false);
 			
 			sb.AppendLine("}");
             sb.AppendLine("#endif");
@@ -1190,7 +1197,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             sb.AppendLine($"#include \"{c.Data.Naam}ov.add\"");
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, true, true);
+	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, false, true, false, false);
 			
 			return sb.ToString();
         }

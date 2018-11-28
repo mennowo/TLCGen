@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -67,6 +68,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _myElements.Where(x => x.Type == type);
+        }
+
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.RegCSynchronisaties, "int", "fc")
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)

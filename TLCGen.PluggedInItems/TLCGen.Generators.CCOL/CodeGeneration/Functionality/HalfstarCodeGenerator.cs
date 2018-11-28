@@ -324,10 +324,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (c.InterSignaalGroep.Gelijkstarten.Any())
                 {
                     var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                    var added = new List<string>();
                     foreach (var gs in gelijkstarttuples)
                     {
                         var hxpl = _hxpl + string.Join(string.Empty, gs.Item2);
-					    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(hxpl, _hxpl, string.Join(" ", gs.Item2)));
+                        if (!added.Contains(hxpl))
+                        {
+                            added.Add(hxpl);
+					        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(hxpl, _hxpl, string.Join(" ", gs.Item2)));
+                        }
                     }
                 }
 			}
@@ -354,7 +359,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			return _myBitmapOutputs;
 		}
 
-		public override int HasCode(CCOLCodeTypeEnum type)
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCAanvragen, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCVerlenggroen, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMaxgroen, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMeetkriterium, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMeeverlengen, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCSynchronisaties, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCAlternatief, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCRealisatieAfhandeling, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCPreSystemApplication, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPrioriteitsOpties, "int", "ov"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPostAfhandelingOV, "int", "fc")
+            };
+        }
+
+        public override int HasCode(CCOLCodeTypeEnum type)
 		{
 			switch (type)
 			{
@@ -1261,8 +1289,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (c.OVData.HDIngrepen.Any())
                         {
-                            sb.AppendLine($"{ts}int ov;");
-                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* bijhouden of een hulpdienstingreep plaatsvindt */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hplhd}] = FALSE;");
                             sb.AppendLine($"{ts}for (ov = 0; ov < ovOVMAX; ov++)");
@@ -1314,8 +1340,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
                     if (c.HalfstarData.IsHalfstar && c.OVData.OVIngrepen.Any())
                     {
-                        sb.AppendLine($"{ts}int fc;");
-                        sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}BL[fc] &= ~OV_PLE_BIT;");

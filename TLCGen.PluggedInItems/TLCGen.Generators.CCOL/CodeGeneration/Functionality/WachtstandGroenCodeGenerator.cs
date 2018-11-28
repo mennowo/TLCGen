@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Extensions;
@@ -39,6 +40,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
             return _myElements.Where(x => x.Type == type);
+        }
+
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.RegCWachtgroen, "int", "fc")
+            };
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -104,7 +118,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}`{{");
+                    sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine($"{ts}{ts}WS[fc] |= (RW[fc] & BIT4) ? BIT4 : 0;");
                     sb.AppendLine($"{ts}}}");

@@ -469,17 +469,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool addnewlinebefore = false, bool addnewlineatend = false)
+	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool includevars, bool includecode, bool addnewlinebefore, bool addnewlineatend)
 	    {
 			if (OrderedPieceGenerators[type].Any())
 			{
-				if (addnewlinebefore) sb.AppendLine();
-				foreach (var gen in OrderedPieceGenerators[type])
-				{
-					sb.Append(gen.Value.GetCode(c, type, ts));
-				}
+                if ((includevars || includecode) && addnewlinebefore) sb.AppendLine();
+                if (includevars)
+                {
+                    if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(type))
+                    {
+                        foreach (var i in CCOLElementCollector.FunctionLocalVariables[type])
+                        {
+                            sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                        }
+                        sb.AppendLine();
+                    }
+                }
+                if (includecode)
+                {
+                    foreach (var gen in OrderedPieceGenerators[type])
+                    {
+                        sb.Append(gen.Value.GetCode(c, type, ts));
+                    }
+                }
+			    if((includevars || includecode) && addnewlineatend) sb.AppendLine();
 			}
-			if(addnewlineatend) sb.AppendLine();
 		}
 
         #endregion // Public Methods

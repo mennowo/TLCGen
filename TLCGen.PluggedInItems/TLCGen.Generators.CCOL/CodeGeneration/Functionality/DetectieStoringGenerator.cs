@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -332,6 +333,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         }
 
         #endregion
+
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        {
+            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            {
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.RegCDetectieStoring, "int", "fc"),
+                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCDetectieStoring, "int", "fc")
+            };
+        }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
