@@ -103,16 +103,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     sb.AppendLine();
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}`{{");
+                    sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT4;  /* reset BIT-sturing */");
+                    sb.AppendLine($"{ts}{ts}WS[fc] |= (RW[fc] & BIT4) ? BIT4 : 0;");
+                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT1;  /* reset BIT-sturing */");
+                    sb.AppendLine();
+
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                         {
-                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()});");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = (WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()});");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = (WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
                         }
                     }
                     sb.AppendLine();
