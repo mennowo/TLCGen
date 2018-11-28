@@ -494,14 +494,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void init_application(void)");
             sb.AppendLine("{");
 
-            if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(CCOLCodeTypeEnum.RegCInitApplication))
-            {
-                foreach (var i in CCOLElementCollector.FunctionLocalVariables[CCOLCodeTypeEnum.RegCInitApplication])
-                {
-                    sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
-                }
-                sb.AppendLine();
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCInitApplication, true, false, false, true);
 
             sb.AppendLine("#if !defined AUTOMAAT && !defined VISSIM");
             sb.AppendLine($"{ts}if (!SAPPLPROG)");

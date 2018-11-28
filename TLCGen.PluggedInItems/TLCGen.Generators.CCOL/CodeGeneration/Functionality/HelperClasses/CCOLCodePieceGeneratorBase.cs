@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Settings;
@@ -33,9 +34,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return false;
         }
 
-        public virtual IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        public virtual IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
         {
-            return null;
+            return Enumerable.Empty<Tuple<string, string>>();
         }
 
         public virtual void CollectCCOLElements(ControllerModel c)
@@ -101,6 +102,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public virtual int HasCode(CCOLCodeTypeEnum type)
         {
             return 0;
+        }
+
+        public virtual int HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            return HasCode(type);
         }
 
         public virtual string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

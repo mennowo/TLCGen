@@ -474,25 +474,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			if (OrderedPieceGenerators[type].Any())
 			{
                 if ((includevars || includecode) && addnewlinebefore) sb.AppendLine();
+                var hasvars = false;
+                var hascode = false;
                 if (includevars)
                 {
-                    if (CCOLElementCollector.FunctionLocalVariables.ContainsKey(type))
+                    var vars = new List<string>();
+                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type) != 0))
                     {
-                        foreach (var i in CCOLElementCollector.FunctionLocalVariables[type])
+                        foreach (var i in gen.Value.GetFunctionLocalVariables(type))
                         {
-                            sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                            if (!vars.Contains(i.Item2))
+                            {
+                                vars.Add(i.Item2);
+                                sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
+                            }
                         }
-                        sb.AppendLine();
+                        hasvars = true;
                     }
                 }
                 if (includecode)
                 {
-                    foreach (var gen in OrderedPieceGenerators[type])
+                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type) != 0))
                     {
                         sb.Append(gen.Value.GetCode(c, type, ts));
                     }
+                    hascode = true;
                 }
-			    if((includevars || includecode) && addnewlineatend) sb.AppendLine();
+                if ((hasvars || hascode) && addnewlineatend) sb.AppendLine();
 			}
 		}
 

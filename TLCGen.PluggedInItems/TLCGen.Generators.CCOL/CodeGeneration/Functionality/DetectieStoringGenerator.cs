@@ -339,13 +339,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
         {
-            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            switch (type)
             {
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.RegCDetectieStoring, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCDetectieStoring, "int", "fc")
-            };
+                case CCOLCodeTypeEnum.RegCDetectieStoring:
+                case CCOLCodeTypeEnum.HstCDetectieStoring:
+                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                default:
+                    return base.GetFunctionLocalVariables(type);
+            }
         }
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)

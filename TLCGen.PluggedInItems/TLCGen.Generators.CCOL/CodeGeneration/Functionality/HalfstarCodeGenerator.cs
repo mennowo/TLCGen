@@ -364,22 +364,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<CCOLCodeTypeEnum, string, string>> GetFunctionLocalVariables()
+        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
         {
-            return new List<Tuple<CCOLCodeTypeEnum, string, string>>
+            switch (type)
             {
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCAanvragen, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCVerlenggroen, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMaxgroen, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMeetkriterium, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCMeeverlengen, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCSynchronisaties, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCAlternatief, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCRealisatieAfhandeling, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.HstCPreSystemApplication, "int", "fc"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPrioriteitsOpties, "int", "ov"),
-                new Tuple<CCOLCodeTypeEnum, string, string>(CCOLCodeTypeEnum.OvCPostAfhandelingOV, "int", "fc")
-            };
+                case CCOLCodeTypeEnum.HstCAanvragen:
+                case CCOLCodeTypeEnum.HstCVerlenggroen:
+                case CCOLCodeTypeEnum.HstCMaxgroen:
+                case CCOLCodeTypeEnum.HstCMeetkriterium:
+                case CCOLCodeTypeEnum.HstCMeeverlengen:
+                case CCOLCodeTypeEnum.HstCSynchronisaties:
+                case CCOLCodeTypeEnum.HstCAlternatief:
+                case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
+                case CCOLCodeTypeEnum.HstCPreSystemApplication:
+                case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                default:
+                    return base.GetFunctionLocalVariables(type);
+            }
         }
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -1291,9 +1293,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}/* bijhouden of een hulpdienstingreep plaatsvindt */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hplhd}] = FALSE;");
-                            sb.AppendLine($"{ts}for (ov = 0; ov < ovOVMAX; ov++)");
+                            sb.AppendLine($"{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
                             sb.AppendLine($"{ts}{{");
-                            sb.AppendLine($"{ts}{ts}if (iPrioriteitsOpties[ov] & poNoodDienst)");
+                            sb.AppendLine($"{ts}{ts}if (iPrioriteitsOpties[fc] & poNoodDienst)");
                             sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hplhd}] |= TRUE;");
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine();
@@ -1315,8 +1317,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}/* Geen prioriteit indien voorwaarden tegenhouden omschakelen waar zijn */");
                         sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}])");
                         sb.AppendLine($"{ts}{{");
-                        sb.AppendLine($"{ts}{ts}for (ov = 0; ov < ovOVMAX; ov++)");
-                        sb.AppendLine($"{ts}{ts}{ts}iXPrio[ov] |= TRUE;");
+                        sb.AppendLine($"{ts}{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
+                        sb.AppendLine($"{ts}{ts}{ts}iXPrio[fc] |= TRUE;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }

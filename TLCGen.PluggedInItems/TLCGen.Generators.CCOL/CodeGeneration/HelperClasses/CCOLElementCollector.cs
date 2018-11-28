@@ -15,8 +15,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #region Static Public Methods
 
-        public static Dictionary<CCOLCodeTypeEnum, List<Tuple<string, string>>> FunctionLocalVariables { get; private set; }
-
         public static void AddAllMaxElements(CCOLElemListData[] lists)
         {
             lists[0].Elements.Add(new CCOLElement() { Define = "USMAX1", Commentaar = "Totaal aantal uitgangen" });
@@ -31,29 +29,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            FunctionLocalVariables = new Dictionary<CCOLCodeTypeEnum, List<Tuple<string, string>>>();
-            foreach (var pgen in pgens)
-            {
-                if (pgen.HasFunctionLocalVariables())
-                {
-                    foreach (var i in pgen.GetFunctionLocalVariables())
-                    {
-                        if (!FunctionLocalVariables.ContainsKey(i.Item1))
-                        {
-                            FunctionLocalVariables.Add(i.Item1, new List<Tuple<string, string>>());
-                        }
-                        if(!FunctionLocalVariables[i.Item1].Any(x => x.Item2 == i.Item3))
-                        {
-                            FunctionLocalVariables[i.Item1].Add(new Tuple<string, string>(i.Item2, i.Item3));
-                        }
-                        else
-                        {
-                            System.Windows.MessageBox.Show($"Function local variable from {pgen.GetType().Name} already exists with another type!", "Error while generating function local variables");
-                        }
-                    }
-                }
-            }
-
             AlleDetectoren = new List<DetectorModel>();
             foreach (var fcm in controller.Fasen)
             {
