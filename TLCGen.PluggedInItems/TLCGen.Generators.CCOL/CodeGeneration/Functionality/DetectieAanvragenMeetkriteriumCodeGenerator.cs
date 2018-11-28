@@ -122,6 +122,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
+        public override bool HasFunctionLocalVariablesForController(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return (c.Fasen.Any(x => x.Detectoren?.Count > 0 && x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen && x2.ResetAanvraag)));
+            }
+            return base.HasFunctionLocalVariablesForController(c, type);
+        }
+
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -132,6 +142,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 default:
                     return 0;
+            }
+        }
+
+        public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen) == true);
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
+                    return c.Fasen.Any(x => x.Detectoren?.Any(x2 => x2.Verlengen != DetectorVerlengenTypeEnum.Geen) == true);
+                default:
+                    return false;
             }
         }
 

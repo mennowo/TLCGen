@@ -479,7 +479,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (includevars)
                 {
                     var vars = new List<string>();
-                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type) != 0))
+                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasFunctionLocalVariablesForController(c, type)))
                     {
                         foreach (var i in gen.Value.GetFunctionLocalVariables(type))
                         {
@@ -498,7 +498,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 if (includecode)
                 {
-                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type) != 0))
+                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type)))
                     {
                         sb.Append(gen.Value.GetCode(c, type, ts));
                     }

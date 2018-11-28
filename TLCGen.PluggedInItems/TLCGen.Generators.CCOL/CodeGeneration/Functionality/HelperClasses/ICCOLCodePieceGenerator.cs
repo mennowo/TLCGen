@@ -9,6 +9,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         void CollectCCOLElements(ControllerModel c);
         bool HasFunctionLocalVariables();
+        bool HasFunctionLocalVariablesForController(ControllerModel c, CCOLCodeTypeEnum type);
         IEnumerable<Tuple<string,string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type);
         bool HasCCOLElements();
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
@@ -20,7 +21,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         bool HasSimulationElements();
         IEnumerable<DetectorSimulatieModel> GetSimulationElements();
         int HasCode(CCOLCodeTypeEnum type);
-        int HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type);
+        bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type);
         string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts);
         bool HasSettings();
         bool SetSettings(CCOLGeneratorClassWithSettingsModel settings);
