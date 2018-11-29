@@ -155,14 +155,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules:
-                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
-                    return base.GetFunctionLocalVariables(type);
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 

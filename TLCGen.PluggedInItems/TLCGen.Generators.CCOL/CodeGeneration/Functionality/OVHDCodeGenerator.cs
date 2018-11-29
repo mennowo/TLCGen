@@ -478,19 +478,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
-                    return new List<Tuple<string, string>>
+                    var result = new List<Tuple<string, string, string>>();
+                    if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        new Tuple<string, string>("int", "fc"),
-                        new Tuple<string, string>("bool", "isHD"),
-                        new Tuple<string, string>("bool", "isWTV")
-                    };
+                        result.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
+
+                    }
+                    return result;                        
+                    
                 default:
-                    return base.GetFunctionLocalVariables(type);
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 
@@ -980,11 +983,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine(";");
                         sb.AppendLine();
-                        //sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                        //sb.AppendLine($"{ts}{{");
-                        //sb.AppendLine($"{ts}{ts}BL[fc] &= ~BIT6;");
-                        //sb.AppendLine($"{ts}}}");
-                        //sb.AppendLine();
                         if (!c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
                         {
                             sb.AppendLine($"{ts}/* Blokkeren alle richtingen zonder HD ingreep */");
@@ -1012,8 +1010,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{ts}isWTV |= (MM[{_mpf}{_mwtvm}{fc.Naam}] && MM[{_mpf}{_mwtvm}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]);");
                                 }
+                                sb.AppendLine($"{ts}if (isHD && !isWTV)");
                             }
-                            sb.AppendLine($"{ts}if (isHD && !isWTV)");
+                            else
+                            {
+                                sb.AppendLine($"{ts}if (isHD)");
+                            }
                             sb.AppendLine($"{ts}{{");
                             foreach (var fc in c.Fasen.Where(x => x.Type == FaseTypeEnum.Fiets || x.Type == FaseTypeEnum.Voetganger))
                             {

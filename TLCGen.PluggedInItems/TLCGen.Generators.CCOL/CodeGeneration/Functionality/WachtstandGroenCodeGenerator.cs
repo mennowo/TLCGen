@@ -47,14 +47,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCWachtgroen:
-                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
-                    return base.GetFunctionLocalVariables(type);
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 
@@ -92,12 +92,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCWachtgroen:
-                    if(c.Data.ExtraMeeverlengenInWG)
-                    {
-                        sb.AppendLine($"{ts}/* Zet voor alle fasen het WS[] bitje. */");
-                        sb.AppendLine($"{ts}WachtStand(PRML, ML, MLMAX);");
-                        sb.AppendLine();
-                    }
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT4;  /* reset BIT-sturing */");
                     sb.AppendLine();
@@ -126,6 +120,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}WS[fc] |= (RW[fc] & BIT4) ? BIT4 : 0;");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
+                    if (c.Data.ExtraMeeverlengenInWG)
+                    {
+                        sb.AppendLine($"{ts}/* Zet voor alle fasen het WS[] bitje. */");
+                        sb.AppendLine($"{ts}WachtStand(PRML, ML, MLMAX);");
+                        sb.AppendLine();
+                    }
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}WS[fc] &= ~BIT1;  /* reset BIT-sturing */");
                     sb.AppendLine();

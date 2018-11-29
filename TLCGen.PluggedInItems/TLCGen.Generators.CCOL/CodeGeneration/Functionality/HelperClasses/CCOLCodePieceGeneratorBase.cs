@@ -34,14 +34,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return false;
         }
 
-        public virtual bool HasFunctionLocalVariablesForController(ControllerModel c, CCOLCodeTypeEnum type)
+        public virtual IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
-            return HasFunctionLocalVariables();
-        }
-
-        public virtual IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
-        {
-            return Enumerable.Empty<Tuple<string, string>>();
+            return Enumerable.Empty<Tuple<string, string, string>>();
         }
 
         public virtual void CollectCCOLElements(ControllerModel c)

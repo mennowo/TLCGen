@@ -9,8 +9,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         void CollectCCOLElements(ControllerModel c);
         bool HasFunctionLocalVariables();
-        bool HasFunctionLocalVariablesForController(ControllerModel c, CCOLCodeTypeEnum type);
-        IEnumerable<Tuple<string,string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type);
+        IEnumerable<Tuple<string,string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type);
         bool HasCCOLElements();
         IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type);
         IEnumerable<CCOLElement> GetCCOLElements();

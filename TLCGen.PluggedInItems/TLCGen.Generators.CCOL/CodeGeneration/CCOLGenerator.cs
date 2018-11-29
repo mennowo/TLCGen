@@ -479,21 +479,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (includevars)
                 {
                     var vars = new List<string>();
-                    foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasFunctionLocalVariablesForController(c, type)))
+                    foreach (var gen in OrderedPieceGenerators[type])
                     {
-                        foreach (var i in gen.Value.GetFunctionLocalVariables(type))
+                        var lv = gen.Value.GetFunctionLocalVariables(c, type);
+                        if (lv.Any())
                         {
-                            if (!vars.Contains(i.Item2))
+                            foreach (var i in lv)
                             {
-                                vars.Add(i.Item2);
-                                sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                                if (!vars.Contains(i.Item2))
+                                {
+                                    vars.Add(i.Item2);
+                                    if (!string.IsNullOrWhiteSpace(i.Item3))
+                                    {
+                                        sb.AppendLine($"{ts}{i.Item1} {i.Item2} = {i.Item3};");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}{i.Item1} {i.Item2};");
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
+                                }
                             }
-                            else
-                            {
-                                MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
-                            }
+                            hasvars = true;
                         }
-                        hasvars = true;
                     }
                 }
                 if (includecode)

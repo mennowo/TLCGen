@@ -364,8 +364,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
+            if (!c.HalfstarData.IsHalfstar) return base.GetFunctionLocalVariables(c, type);
             switch (type)
             {
                 case CCOLCodeTypeEnum.HstCAanvragen:
@@ -378,9 +379,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
                 case CCOLCodeTypeEnum.HstCPreSystemApplication:
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
-                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
-                    return base.GetFunctionLocalVariables(type);
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 

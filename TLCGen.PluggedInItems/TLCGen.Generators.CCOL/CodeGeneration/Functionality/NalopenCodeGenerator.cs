@@ -95,15 +95,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             return true;
         }
 
-        public override IEnumerable<Tuple<string, string>> GetFunctionLocalVariables(CCOLCodeTypeEnum type)
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
-                    return new List<Tuple<string, string>> { new Tuple<string, string>("int", "fc") };
+                    if(c.InterSignaalGroep?.Nalopen?.Count > 0)
+                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return base.GetFunctionLocalVariables(c, type);
                 default:
-                    return base.GetFunctionLocalVariables(type);
+                    return base.GetFunctionLocalVariables(c, type);
             }
         }
 
