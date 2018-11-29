@@ -117,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}() ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.MKTo:
-                                    sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}() ? BIT4 : 0;");
+                                    sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}() ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.Voetganger:
                                     sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}() ? BIT4 : 0;");
