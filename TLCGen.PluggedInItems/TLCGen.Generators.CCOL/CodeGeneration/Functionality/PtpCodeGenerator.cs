@@ -45,13 +45,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_hptp}_{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
+                            $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                 }
                 for (int i = 1; i <= k.AantalsignalenIn; ++i)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{k.TeKoppelenKruispunt}{_hiks}" + i.ToString("00"), _hiks, k.TeKoppelenKruispunt));
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_prmiks}" + i.ToString("00"), 2, CCOLElementTimeTypeEnum.None, _prmiks, k.TeKoppelenKruispunt));
@@ -60,15 +57,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_hptp}_{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
+                            $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
                             _huks, k.TeKoppelenKruispunt));
                 }
                 for (int i = 1; i <= k.AantalsignalenUit; ++i)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{k.TeKoppelenKruispunt}{_huks}" + i.ToString("00"),
-                            _huks, k.TeKoppelenKruispunt));
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{k.TeKoppelenKruispunt}{_prmuks}" + i.ToString("00"),

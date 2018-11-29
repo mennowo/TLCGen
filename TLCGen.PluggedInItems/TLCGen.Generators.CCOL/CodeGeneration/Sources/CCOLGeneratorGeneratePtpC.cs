@@ -170,22 +170,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}/* ------------------------------------------------- */      ");
                 sb.AppendLine($"{ts}{ts}if (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) /* status regelen - set uitgaande koppelsignalen  */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = IH[{_hpf}{_hptp}_{k.TeKoppelenKruispunt}{_hptpuks}01 + i];");
+                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpuks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] == 1;");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}else /* niet regelen - reset uitgaande koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
                 sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i) PTP_{k.TeKoppelenKruispunt}KS.UKS[i] = FALSE;");
                 sb.AppendLine($"{ts}{ts}}}");
-                sb.AppendLine($"{ts}{ts}");
+                sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* opzetten van ingaande koppelsignalen PTP_{k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"{ts}{ts}/* ---------------------------------------------- */");
                 sb.AppendLine($"{ts}{ts}if (PTP_{k.TeKoppelenKruispunt}KS.OKE) /* goede verbinding - set ingaande koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{_hptp}_{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = PTP_{k.TeKoppelenKruispunt}KS.IKS[i];");
+                sb.AppendLine($"{ts}{ts}{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = PTP_{k.TeKoppelenKruispunt}KS.IKS[i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] >= 2 || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] == 1;");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine($"{ts}{ts}else /* geen goede verbinding - reset ingaande koppelsignalen */");
                 sb.AppendLine($"{ts}{ts}{{");
-                sb.AppendLine($"{ts}{ts}    for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{_hptp}_{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = FALSE;");
+                sb.AppendLine($"{ts}{ts}    for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i) IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = FALSE;");
                 sb.AppendLine($"{ts}{ts}}}");
                 sb.AppendLine();
                 sb.AppendLine($"{ts}{ts}/* aanroep ptp-functies */");
@@ -269,23 +269,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine("void ptp_post_system_app(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}int i;");
             sb.AppendLine();
-            foreach (var k in controller.PTPData.PTPKoppelingen)
-            {
-                sb.AppendLine($"{ts}/* Hulpelementen t.b.v. in- en uitgangen seriele koppeling van {k.TeKoppelenKruispunt} */");
-                sb.AppendLine($"{ts}/* ------------------------------------------------------------------ */");
-                sb.AppendLine($"{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.IKS_MAX; ++i)");
-                sb.AppendLine($"{ts}{{");
-                sb.AppendLine($"{ts}{ts}IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpiks}01 + i] = ((IH[{_hpf}{_hptp}_{k.TeKoppelenKruispunt}{_hptpiks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] >= 2) || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpiks}01 + i] == 1);");
-                sb.AppendLine($"{ts}}}");
-                sb.AppendLine("");
-                sb.AppendLine($"{ts}for(i = 0; i < PTP_{k.TeKoppelenKruispunt}KS.UKS_MAX; ++i)");
-                sb.AppendLine($"{ts}{{");
-                sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hptp}_{k.TeKoppelenKruispunt}{_hptpuks}01 + i] = ((IH[{_hpf}{k.TeKoppelenKruispunt}{_hptpuks}01 + i] && PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] >= 2) || PRM[{_prmpf}{k.TeKoppelenKruispunt}{_prmptpuks}01 + i] == 1);");
-                sb.AppendLine($"{ts}}}");
-                sb.AppendLine();
-            }
             sb.AppendLine("}");
             sb.AppendLine();
             sb.AppendLine("#if !defined (AUTOMAAT) && defined (CCOL_EXIT)");
