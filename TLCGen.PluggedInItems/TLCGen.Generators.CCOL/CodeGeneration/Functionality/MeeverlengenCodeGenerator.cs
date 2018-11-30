@@ -87,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
 
-                    var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_to";
+                    var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_tig" : "ym_max_toV1";
 
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {

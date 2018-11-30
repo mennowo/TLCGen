@@ -200,6 +200,106 @@ bool ym_max_vtgV1(count i)
 	return ym;
 }
 
+/* ym_max_to() wordt gebruikt bij de specificatie van de instructie-
+ * variabele YM[] (vasthouden meeverlenggroen) van de fasecyclus.
+ * ym_max_to() blijft waar (TRUE) zolang de fasecyclus kan meeverlengen
+ * (met in achtname van ontruimingstijdverschillen).
+ * het aanroepen van de functie ym_max_to() dient in de applicatiefunctie
+ * application() te worden gespecificeerd.
+ * ym_max_to() blijft ook meeverlengen met MG[], GL[] en R[]
+ * zolang het ontruimingstijd verschil voordelig is!!
+ * tbv deze functie is in de file fcfunc.c TGL_timer[] al op SG[] op 0 gezet.
+ *
+ *  32  fffffflll
+ *  05  ffffffmmmmmmmmxxx
+ *  08                      ffffffvvvvvxxxxx
+ *
+ *  YM[fc05]= ym_max_to(fc05,0) || CIF_IS[is_fix];
+ *  fc05 blijft meeverlengen met ontruimingstijd van fc32 naar fc08.
+ */
+#if !defined (CCOLFUNC) || defined (STDFUNC32)
+bool ym_max_toV1(count i, mulv to_verschil)
+{
+   register count n, j, k, m;
+   bool ym;
+   if (MG[i]) {     /* let op! i.v.m. snelheid alleen in MG[] behandeld   */
+      ym= TRUE;
+#ifndef NO_GGCONFLICT
+      for (n=0; n<GKFC_MAX[i]; n++) {
+#else
+      for (n=0; n<KFC_MAX[i]; n++) {
+#endif
+#ifdef CCOLTIG
+		  k = KF_pointer[i][n];
+#else
+		  k = TO_pointer[i][n];
+#endif
+		  if (RA[k]||AAPR[k]) {
+           ym= FALSE;
+#ifndef NO_GGCONFLICT
+#if defined CCOLTIG && !defined NO_TIGMAX
+		   if (TIG_max[i][k] < GK)  break;
+#else
+		   if (TO_max[i][k]<GK)  break;
+#endif
+#endif
+           for (j=0; j<KFC_MAX[k]; j++) {
+#ifdef CCOLTIG
+			   m = KF_pointer[k][j];
+#else
+			   m= TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+			   if (CV[m] && (((TGL_max[i]+TIG_max[i][k]-to_verschil)
+                       <= (TGL_max[m]+TIG_max[m][k]))
+                && ( (TGL_max[i]+TIG_max[i][k]) < (TFG_max[m]-TFG_timer[m]
+                    +TVG_max[m]-TVG_timer[m] + TGL_max[m]-TGL_timer[m]
+                    +TIG_max[m][k]-TIG_timer[m]) )
+                || (to_verschil<0))
+                || TIG[m][k]
+                && ((TGL_max[i]+TIG_max[i][k]) < (TGL_max[m]+TO_max[m][k]
+                  -TGL_timer[m]-TIG_timer[m]) ) ) {
+#else
+			   if (CV[m] && (((TGL_max[i] + TO_max[i][k] - to_verschil)
+				   <= (TGL_max[m] + TO_max[m][k]))
+				   && ((TGL_max[i] + TO_max[i][k]) < (TFG_max[m] - TFG_timer[m]
+					   + TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m]
+					   + TO_max[m][k] - TO_timer[m]))
+				   || (to_verschil < 0))
+				   || TO[m][k]
+				   && ((TGL_max[i] + TO_max[i][k]) < (TGL_max[m] + TO_max[m][k]
+					   - TGL_timer[m] - TO_timer[m]))) {
+#endif
+               ym= TRUE;
+               break;
+              }
+           }
+#ifndef NO_GGCONFLICT
+           for (j=KFC_MAX[k]; j<GKFC_MAX[k]; j++) {
+#ifdef CCOLTIG
+			   m = KF_pointer[k][j];
+#else
+			   m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+				   if (CV[m] && (TIG_max[i][k]<=GK)) {
+#else
+			   if (CV[m] && (TO_max[i][k] <= GK)) {
+#endif
+               ym= TRUE;
+               break;
+              }
+           }
+#endif
+       }
+       if (!ym) break;
+      }
+   }
+   else  ym= CV[i];
+   return ym;
+}
+#endif
+
 /** ------------------------------------------------------------------------------
 AANVRAAG SNEL
 ------------------------------------------------------------------------------
