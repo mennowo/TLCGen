@@ -144,7 +144,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         foreach (var mad in mads)
                         {
-                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}]= SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
+                            sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}] = SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
                         }
                         sb.AppendLine();
                     }
@@ -251,7 +251,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append("(");
                                 foreach (var dm in ma.Detectoren)
                                 {
-                                    if (i == 1)
+                                    if (i >= 1)
                                     {
                                         sb.Append(" || ");
                                     }
