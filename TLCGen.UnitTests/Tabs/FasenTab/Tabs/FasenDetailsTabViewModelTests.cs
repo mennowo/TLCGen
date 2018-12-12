@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using TLCGen.ViewModels;
 using TLCGen.Models;
+using TLCGen.DataAccess;
 
 namespace TLCGen.UnitTests
 {
@@ -18,6 +19,7 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenDetailsTabViewModel();
             vm.Controller = model;
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
 
             vm.OnSelected();
 
@@ -35,6 +37,7 @@ namespace TLCGen.UnitTests
             model.Fasen.Add(new FaseCyclusModel() { Naam = "05" });
             var vm = new FasenDetailsTabViewModel();
             vm.Controller = model;
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
 
             vm.OnSelected();
             vm.SelectedFaseCyclus = vm.Fasen[3];

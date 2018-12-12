@@ -20,7 +20,7 @@ namespace TLCGen.DataAccess
         #region Fields
 
         private static readonly object _Locker = new object();
-        private static TLCGenControllerDataProvider _Default;
+        private static ITLCGenControllerDataProvider _Default;
 
         private ControllerModel _Controller;
         private string _ControllerFileName;
@@ -431,6 +431,11 @@ namespace TLCGen.DataAccess
             return true;
         }
 #endif
+
+        public static void OverrideDefault(ITLCGenControllerDataProvider provider)
+        {
+            _Default = provider;
+        }
 
         #endregion // Public methods
 

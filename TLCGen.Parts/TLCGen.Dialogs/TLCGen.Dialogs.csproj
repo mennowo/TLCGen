@@ -69,6 +69,7 @@
     <Compile Include="NewTemplateWindow.xaml.cs">
       <DependentUpon>NewTemplateWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TLCGenDialogProvider.cs" />
     <Compile Include="UnhandledExceptionWindow.xaml.cs">
       <DependentUpon>UnhandledExceptionWindow.xaml</DependentUpon>
     </Compile>

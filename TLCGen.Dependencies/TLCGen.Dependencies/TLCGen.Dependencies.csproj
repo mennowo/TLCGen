@@ -264,6 +264,8 @@
     <Compile Include="Plugins\TLCGenPluginManager.cs" />
     <Compile Include="Plugins\TLCGenTabItemAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\TLCGenDialogProvider.cs" />
+    <Compile Include="Providers\TLCGenFileAccessProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />

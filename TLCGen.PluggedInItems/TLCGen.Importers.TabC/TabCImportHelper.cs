@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
@@ -25,188 +26,12 @@ namespace TLCGen.Importers.TabC
 
     public static class TabCImportHelper
     {
-        public static TabCImportHelperOutcome GetNewData_old(string[] lines)
-        {
-	        var dz = MessageBoxResult.None;
-
-            TabCImportHelperOutcome outcome = new TabCImportHelperOutcome();
-
-            if (lines.Count() <= 1)
-            {
-                return null;
-            }
-
-            // Compile a list of Phases with conflicts from the file
-            foreach (var _line in lines)
-            {
-                var line = Regex.Replace(_line, @"/\*.*\*/", "");
-                if (Regex.IsMatch(line, @"^\s*TO_max\["))
-                {
-                    string fc1 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*(fc[0-9]+).*", "$1");
-                    string fc2 = Regex.Replace(line, @"^\s*TO_max\s*\[\s*fc[0-9]+\s*\]\s*\[\s*(fc[0-9]+).*", "$1");
-                    string _conf = Regex.Replace(line, @"^\s*TO_max\s*\[\s*fc[0-9]+\s*\]\s*\[\s*fc[0-9]+\s*\]\s*=\s*(([0-9]+|FK|GK|GKL)).*", "$1");
-
-                    int conf = 0;
-                    if (_conf == "FK" || _conf == "GK" || _conf == "GKL")
-                    {
-                        continue;
-                    }
-
-                    if (!Int32.TryParse(_conf, out conf))
-                    {
-                        throw new InvalidOperationException($"Conflict van {fc1} naar {fc2} heeft een foutieve waarde: {_conf}");
-                    }
-
-                    FaseCyclusModel _fcm1 = null;
-                    foreach (var fcm in outcome.Fasen)
-                    {
-                        if (fcm.Naam == fc1.Replace("fc", ""))
-                        {
-                            _fcm1 = fcm;
-                            break;
-                        }
-                    }
-                    if (_fcm1 == null)
-                    {
-                        _fcm1 = new FaseCyclusModel();
-                        _fcm1.Naam = fc1.Replace("fc", "");
-                        outcome.Fasen.Add(_fcm1);
-                    }
-
-                    FaseCyclusModel _fcm2 = null;
-                    foreach (FaseCyclusModel fcm in outcome.Fasen)
-                    {
-                        if (fcm.Naam == fc2.Replace("fc", ""))
-                        {
-                            _fcm2 = fcm;
-                            break;
-                        }
-                    }
-                    if (_fcm2 == null)
-                    {
-                        _fcm2 = new FaseCyclusModel();
-                        _fcm2.Naam = fc2.Replace("fc", "");
-                        outcome.Fasen.Add(_fcm2);
-                    }
-                    outcome.Conflicten.Add(new ConflictModel() { FaseVan = _fcm1.Naam, FaseNaar = _fcm2.Naam, Waarde = conf });
-                }
-
-	            if (dz != MessageBoxResult.No &&
-	                (Regex.IsMatch(line, @"^\s*D_code\[") || Regex.IsMatch(line, @"^\s*TBG_max\[")))
-	            {
-		            if (dz != MessageBoxResult.Yes)
-		            {
-			            dz = MessageBox.Show("Detectoren zoeken in tab.c?", "Detectoren zoeken?", MessageBoxButton.YesNo);
-			            if (dz == MessageBoxResult.No)
-			            {
-							continue;
-			            }
-		            }
-		            string d = Regex.Replace(line, @"^\s*D_code\s*\[\s*(d[0-9a-zA-Z_]+).*", "$1");
-		            string dd = Regex.Replace(d, @"^d", "");
-		            if (dd.StartsWith("r"))
-		            {
-			            dd = "k" + dd.Substring(1);
-		            }
-		            var tdb = -1;
-		            var tdh = -1;
-		            var tog = -1;
-		            var tbg = -1;
-		            if (Regex.IsMatch(line, @"TDB_max"))
-		            {
-			            var mtdb = Regex.Match(line, @"TDB_max\[.*?\]\s*=\s*([0-9]+);");
-			            if (mtdb.Groups.Count > 1)
-				            int.TryParse(mtdb.Groups[1].Value, out tdb);
-		            }
-		            if (Regex.IsMatch(line, @"TDH_max"))
-		            {
-			            var mtdb = Regex.Match(line, @"TDH_max\[.*?\]\s*=\s*([0-9]+);");
-			            if (mtdb.Groups.Count > 1)
-				            int.TryParse(mtdb.Groups[1].Value, out tdh);
-		            }
-		            if (Regex.IsMatch(line, @"TBG_max"))
-		            {
-			            var mtdb = Regex.Match(line, @"TBG_max\[.*?\]\s*=\s*([0-9]+);");
-			            if (mtdb.Groups.Count > 1)
-				            int.TryParse(mtdb.Groups[1].Value, out tbg);
-		            }
-		            if (Regex.IsMatch(line, @"TOG_max"))
-		            {
-			            var mtdb = Regex.Match(line, @"TOG_max\[.*?\]\s*=\s*([0-9]+);");
-			            if (mtdb.Groups.Count > 1)
-				            int.TryParse(mtdb.Groups[1].Value, out tog);
-		            }
-                    // Detector: try to find, otherwise add new
-                    DetectorModel nd = null;
-                    foreach (var fc in outcome.Fasen)
-                    {
-                        var bd = fc.Detectoren.FirstOrDefault(x => x.Naam == dd);
-                        if(bd != null)
-                        {
-                            nd = bd;
-                            break;
-                        }
-                    }
-                    if (nd == null)
-                    {
-                        nd = new DetectorModel()
-                        {
-                            Naam = dd,
-                            Rijstrook = 1
-                        };
-                        if (nd.Naam.StartsWith("k"))
-                        {
-                            nd.Type = DetectorTypeEnum.Knop;
-                            nd.Aanvraag = DetectorAanvraagTypeEnum.RoodGeel;
-                            nd.Verlengen = DetectorVerlengenTypeEnum.Geen;
-                        }
-                        else if (Regex.IsMatch(nd.Naam, "1[a-z]?$"))
-                        {
-                            nd.Type = DetectorTypeEnum.Kop;
-                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-                            nd.AanvraagDirect = true;
-                            nd.Verlengen = DetectorVerlengenTypeEnum.Kopmax;
-                        }
-                        else if (Regex.IsMatch(nd.Naam, "2[a-z]?$"))
-                        {
-                            nd.Type = DetectorTypeEnum.Lang;
-                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-                            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
-                        }
-                        else if (Regex.IsMatch(nd.Naam, "3[a-z]?$"))
-                        {
-                            nd.Type = DetectorTypeEnum.Verweg;
-                            nd.Aanvraag = DetectorAanvraagTypeEnum.RnietTRG;
-                            nd.Verlengen = DetectorVerlengenTypeEnum.MK2;
-                        }
-                        else
-                        {
-                            nd.Type = DetectorTypeEnum.Overig;
-                            nd.Aanvraag = DetectorAanvraagTypeEnum.Uit;
-                        }
-                        foreach (var fc in outcome.Fasen)
-                        {
-                            if (fc.Naam.Length < nd.Naam.Length &&
-                                Regex.IsMatch(nd.Naam, $@"^k?{fc.Naam}"))
-                            {
-                                fc.Detectoren.Add(nd);
-                            }
-                        }
-                    }
-		            if (!nd.TDB.HasValue && tdb != -1) nd.TDB = tdb;
-		            if (!nd.TDH.HasValue && tdh != -1) nd.TDH = tdh;
-		            if (!nd.TBG.HasValue && tbg != -1) nd.TBG = tbg;
-		            if (!nd.TOG.HasValue && tog != -1) nd.TOG = tog;
-	            }
-            }
-            return outcome;
-        }
-
         public enum TabCType
         {
             OTTO, TPA, ATB, FICK, HUIJSKES, GC, UNKNOWN
         }
 
+        private static Regex ReComment = new Regex(@"\s*/\*.*", RegexOptions.Compiled);
         private static Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
         private static Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
         private static Regex ReTypeATB = new Regex(@"\s*\*\s+Generator\s*:\s*Advanced\s+Traffic\s+Builder.*", RegexOptions.Compiled);
@@ -216,8 +41,6 @@ namespace TLCGen.Importers.TabC
 
         public static TabCImportHelperOutcome GetNewData(string[] lines, bool newReg)
         {
-            var dz = MessageBoxResult.None;
-
             var outcome = new TabCImportHelperOutcome();
 
             if (lines.Count() <= 1)
@@ -225,26 +48,36 @@ namespace TLCGen.Importers.TabC
                 return null;
             }
 
-            var t = TabCType.UNKNOWN;
-            if (lines.Any(x => ReTypeOTTO.IsMatch(x))) t = TabCType.OTTO;
-            if (t == TabCType.UNKNOWN && lines.Any(x => ReTypeTPA.IsMatch(x))) t = TabCType.TPA;
-            if (t == TabCType.UNKNOWN && lines.Any(x => ReTypeATB.IsMatch(x))) t = TabCType.ATB;
-            if (t == TabCType.UNKNOWN && lines.Any(x => ReTypeFICK.IsMatch(x))) t = TabCType.FICK;
-            if (t == TabCType.UNKNOWN && lines.Any(x => ReTypeHUIJSKES.IsMatch(x))) t = TabCType.HUIJSKES;
-            if (t == TabCType.UNKNOWN && lines.Any(x => ReTypeGC.IsMatch(x))) t = TabCType.GC;
+            TabCType tabCType = TabCType.UNKNOWN;
+            if (lines.Any(x => ReTypeOTTO.IsMatch(x))) tabCType = TabCType.OTTO;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeTPA.IsMatch(x))) tabCType = TabCType.TPA;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeATB.IsMatch(x))) tabCType = TabCType.ATB;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeFICK.IsMatch(x))) tabCType = TabCType.FICK;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeHUIJSKES.IsMatch(x))) tabCType = TabCType.HUIJSKES;
+            if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeGC.IsMatch(x))) tabCType = TabCType.GC;
 
-            var dlg = new ChooseTabTypeWindow();
-            dlg.TabType = t;
-            dlg.ImportInExisting = !newReg;
-            var res = dlg.ShowDialog();
-            t = dlg.TabType;
-            if (res == false || t == TabCType.UNKNOWN) return null;
-            var importD = dlg.ImportDetectoren;
-            var importT = dlg.ImportTijden;
+            var importD = false;
+            var importT = false;
+            if (TLCGenDialogProvider.Default.ShowDialogs)
+            {
+                var dlg = new ChooseTabTypeWindow();
+                dlg.TabType = tabCType;
+                dlg.ImportInExisting = !newReg;
+                var res = dlg.ShowDialog();
+                tabCType = dlg.TabType;
+                if (res == false || tabCType == TabCType.UNKNOWN) return null;
+                importD = dlg.ImportDetectoren;
+                importT = dlg.ImportTijden;
+            }
+            else
+            {
+                importD = true;
+                importT = true;
+            }
 
             // get phases
             Regex fasenRegex = null;
-            switch (t)
+            switch (tabCType)
             {
                 case TabCType.OTTO:
                     fasenRegex = new Regex(@"^\s*TO_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
@@ -281,11 +114,9 @@ namespace TLCGen.Importers.TabC
                 }
             }
 
-            if (!newReg) return outcome;
-
             // import conflicts
             Regex confRegex = null;
-            switch (t)
+            switch (tabCType)
             {
                 case TabCType.OTTO:
                 case TabCType.TPA:
@@ -298,7 +129,7 @@ namespace TLCGen.Importers.TabC
                     confRegex = new Regex(@"^\s*TO\(\s*fc(?<fc1>[0-9]+)\s*,\s*fc(?<fc2>[0-9]+)\s*,\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
                     break;
             }
-            foreach (var l in lines)
+            foreach (var l in lines.Where(x => !ReComment.IsMatch(x)))
             {
                 var m = confRegex.Match(l);
                 if (m.Success)
@@ -318,11 +149,14 @@ namespace TLCGen.Importers.TabC
                 }
             }
 
+            // for importing into existing controllers, do not import detectors and settings
+            if (!newReg) return outcome;
+
             // get detectors
             if (importD)
             {
                 Regex detectorenRegex = null;
-                switch (t)
+                switch (tabCType)
                 {
                     case TabCType.TPA:
                     case TabCType.FICK:
@@ -338,7 +172,7 @@ namespace TLCGen.Importers.TabC
                 }
                 if (detectorenRegex != null)
                 {
-                    foreach (var l in lines)
+                    foreach (var l in lines.Where(x => !ReComment.IsMatch(x)))
                     {
                         var m = detectorenRegex.Match(l);
                         if (m.Success)
@@ -399,7 +233,7 @@ namespace TLCGen.Importers.TabC
                 setREs[(int)setRegex.tggl] = new Tuple<setRegex, Regex>(setRegex.tggl, new Regex(@"\s*TGGL_max\s*\[\s*(?<name>fc[0-9]+)\s*]\s*=\s*(?<val>[0-9NG]+)\s*;", RegexOptions.Compiled));
                 setREs[(int)setRegex.tglmin] = new Tuple<setRegex, Regex>(setRegex.tglmin, new Regex(@"\s*TGL_min\s*\[\s*(?<name>fc[0-9]+)\s*]\s*=\s*(?<val>[0-9NG]+)\s*;", RegexOptions.Compiled));
 
-                switch (t)
+                switch (tabCType)
                 {
                     case TabCType.TPA:
                         dsetRegex2 = new Regex(@"IS_type\s*\[\s*(?<name>d[a-zA-Z0-9_]+)\s*]\s*=\s*(?<type>[a-zA-Z_]+).*", RegexOptions.Compiled);
@@ -421,9 +255,9 @@ namespace TLCGen.Importers.TabC
                         fcsetRegex1 = new Regex(@"^\s*FC\s*\(\s*(?<name>fc[0-9]+)\s*,\s*""[a-zA-Z0-9_]+""\s*,\s*""[a-zA-Z0-9_]+""\s*,\s*(?<tgg>[0-9NG]+)\s*,\s*(?<tfg>[0-9NG]+)\s*,\s*(?<tgl>[0-9NG]+)\s*,\s*(?<trg>[0-9NG]+).*");
                         break;
                 }
-                foreach (var l in lines)
+                foreach (var l in lines.Where(x => !ReComment.IsMatch(x)))
                 {
-                    if(t == TabCType.TPA || t == TabCType.FICK || t == TabCType.HUIJSKES)
+                    if(tabCType == TabCType.TPA || tabCType == TabCType.FICK || tabCType == TabCType.HUIJSKES)
                     {
                         foreach(var re in setREs)
                         {
@@ -467,7 +301,7 @@ namespace TLCGen.Importers.TabC
                                 fc.TFG = int.Parse(m.Groups["tfg"].Value);
                                 fc.TGL = int.Parse(m.Groups["tgl"].Value);
                                 fc.TRG = int.Parse(m.Groups["trg"].Value);
-                                if (t == TabCType.ATB)
+                                if (tabCType == TabCType.ATB)
                                 {
                                     fc.TGL_min = int.Parse(m.Groups["tggl"].Value);
                                 }
@@ -487,7 +321,7 @@ namespace TLCGen.Importers.TabC
                                 d.TDH = m.Groups["tdh"].Value == "NG" ? null : new int?(int.Parse(m.Groups["tdh"].Value));
                                 d.TOG = m.Groups["tog"].Value == "NG" ? null : new int?(int.Parse(m.Groups["tog"].Value));
                                 d.TBG = m.Groups["tbg"].Value == "NG" ? null : new int?(int.Parse(m.Groups["tbg"].Value));
-                                if (t == TabCType.GC)
+                                if (tabCType == TabCType.GC)
                                 {
                                     d.Type = GetDetType(m.Groups["type"].Value);
                                 }
@@ -503,7 +337,7 @@ namespace TLCGen.Importers.TabC
                             var d = outcome.Detectoren.FirstOrDefault(x => x.Naam == name.ToLower());
                             if (d != null)
                             {
-                                switch (t)
+                                switch (tabCType)
                                 {
                                     case TabCType.TPA:
                                     case TabCType.HUIJSKES:

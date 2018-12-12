@@ -5,22 +5,22 @@ NUGET
     DocumentFormat.OpenXml (2.8.1) - restriction: >= net45
       System.IO.Packaging (>= 4.4) - restriction: || (&& (< net35) (>= netstandard1.3)) (>= net46)
     Extended.Wpf.Toolkit (3.4) - restriction: >= net45
-    gong-wpf-dragdrop (1.1) - restriction: >= net45
+    gong-wpf-dragdrop (2.0.0-alpha0106) - restriction: >= net45
     Gu.Wpf.DataGrid2D (0.2.1.5) - restriction: >= net45
-    ilmerge (3.0.18) - restriction: >= net45
-    ILMerge.MSBuild.Task (1.0.3) - restriction: >= net45
+    ilmerge (3.0.21) - restriction: >= net45
+    ILMerge.MSBuild.Task (1.0.4) - restriction: >= net45
     Microsoft.WindowsAPICodePack.Core (1.1) - restriction: >= net45
     Microsoft.WindowsAPICodePack.Shell (1.1) - restriction: >= net45
       Microsoft.WindowsAPICodePack.Core (>= 1.1)
-    MvvmLightLibs (5.4.1) - restriction: >= net45
+    MvvmLightLibs (5.4.1.1) - restriction: >= net45
       CommonServiceLocator (>= 2.0.2) - restriction: || (>= monoandroid) (&& (< net35) (>= portable-net45+uap10.0+monoandroid+xamarinios+win8+wp81+wpa81) (< win81) (< wpa81)) (&& (>= net40) (< portable-net45+uap10.0+monoandroid+xamarinios+win8+wp81+wpa81)) (>= net45) (>= uap10.0) (&& (>= win81) (< wpa81)) (&& (< win81) (>= wpa81)) (>= wp81) (>= xamarinios)
     NSubstitute (3.1) - restriction: >= net45
       Castle.Core (>= 4.2) - restriction: || (&& (>= net45) (< netstandard1.3)) (&& (< net45) (>= netstandard1.3)) (>= net46)
       System.Threading.Tasks.Extensions (>= 4.3) - restriction: || (&& (>= net45) (< netstandard1.3)) (&& (< net45) (>= netstandard1.3)) (>= net46)
-    NUnit (3.10.1) - restriction: >= net45
+    NUnit (3.11) - restriction: >= net45
     System.IO.FileSystem.Primitives (4.3) - restriction: || (&& (< net35) (>= net45) (>= netstandard1.3) (< netstandard2.0)) (>= net46)
     System.IO.Packaging (4.5) - restriction: || (&& (< net35) (>= net45) (>= netstandard1.3)) (>= net46)
       System.IO.FileSystem.Primitives (>= 4.3) - restriction: || (>= net46) (&& (>= netstandard1.3) (< netstandard2.0))
-    System.Runtime.CompilerServices.Unsafe (4.5.1) - restriction: || (&& (>= net45) (< netstandard1.0)) (&& (>= net45) (< netstandard1.3)) (&& (>= net45) (>= wp8)) (>= net46)
+    System.Runtime.CompilerServices.Unsafe (4.5.2) - restriction: || (&& (>= net45) (< netstandard1.0)) (&& (>= net45) (< netstandard1.3)) (&& (>= net45) (>= wp8)) (>= net46)
     System.Threading.Tasks.Extensions (4.5.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (>= net46)
       System.Runtime.CompilerServices.Unsafe (>= 4.5) - restriction: || (&& (< monoandroid) (< monotouch) (>= netstandard1.0) (< netstandard2.0) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< netstandard1.0) (>= portable-net45+win8+wp8+wpa81) (< win8)) (>= net45) (&& (< netcoreapp2.1) (>= netstandard2.0)) (&& (< netstandard1.0) (>= win8)) (&& (< netstandard2.0) (>= wpa81)) (>= wp8)

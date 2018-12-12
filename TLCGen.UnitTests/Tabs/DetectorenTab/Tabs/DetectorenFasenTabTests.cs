@@ -6,6 +6,7 @@ using TLCGen.Integrity;
 using TLCGen.ViewModels;
 using TLCGen.Models.Enumerations;
 using TLCGen.Settings;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.UnitTests
 {
@@ -53,12 +54,11 @@ namespace TLCGen.UnitTests
 	    {
 		    var model = ControllerCreator.GetSmallControllerWithDetection();
 		    var vm = new DetectorenFasenTabViewModel {Controller = model};
-		    var messengermock = FakesCreator.CreateMessenger(model);
-		    Messenger.OverrideDefault(messengermock);
-		    var defaultsprovidermock = FakesCreator.CreateDefaultsProvider();
-		    DefaultsProvider.OverrideDefault(defaultsprovidermock);
+		    Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
+		    DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenModelManager.OverrideDefault(FakesCreator.CreateModelManager(model));
 
-		    vm.OnSelected();
+            vm.OnSelected();
 			vm.AddDetectorCommand.Execute(null);
 
 		    Assert.AreEqual(3, vm.Detectoren.Count);

@@ -40,6 +40,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -57,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Helpers\ControllerCreator.cs" />
     <Compile Include="Helpers\FakesCreator.cs" />
+    <Compile Include="Plugins\TabCImporterTests.cs" />
     <Compile Include="Tabs\DetectorenTab\Tabs\DetectorenFasenTabTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\FaseCyclusViewModelTests.cs" />
     <Compile Include="Tabs\FasenTab\DataTypes\GroentijdenSetViewModelTests.cs" />
@@ -78,13 +80,13 @@
       <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
       <Name>TLCGen.Dependencies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Dialogs\TLCGen.Dialogs.csproj">
-      <Project>{cc7bf1ee-cf32-48fe-8ffd-52bf8f443dc4}</Project>
-      <Name>TLCGen.Dialogs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
       <Project>{3c79b172-b6a4-41fb-9a83-8075a1b4a318}</Project>
       <Name>TLCGen.Settings</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Importers.TabC\TLCGen.Importers.TabC.csproj">
+      <Project>{cd24cd31-98fa-4f63-913e-9d3fbbd998fb}</Project>
+      <Name>TLCGen.Importers.TabC</Name>
     </ProjectReference>
     <ProjectReference Include="..\TLCGen\TLCGen.csproj">
       <Project>{bfc33a68-228a-46b6-9e7d-25f41ac5c02c}</Project>

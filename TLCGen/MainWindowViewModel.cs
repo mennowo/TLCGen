@@ -467,7 +467,7 @@ namespace TLCGen.ViewModels
                 var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(ControllerVM.Controller);
                 if (s1 != null)
                 {
-                    MessageBox.Show("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Kan niet importeren:\n\n" + s1, "Error bij importeren: fout in regeling");
                     return;
                 }
                 // Import to clone of original (so we can discard if wrong)
@@ -476,19 +476,22 @@ namespace TLCGen.ViewModels
 
                 // Do nothing if the importer returned nothing
                 if (c2 == null)
+                {
+                    TLCGenDialogProvider.Default.ShowMessageBox("Importeren is afgebroken door de gebruiker", "Importeren afgebroken");
                     return;
+                }
 
                 // Check data integrity
                 c2.Data.GarantieOntruimingsTijden = false;
                 s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                 if (s1 != null)
                 {
-                    MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                     return;
                 }
                 if(c1.Data.GarantieOntruimingsTijden)
                 {
-                    MessageBox.Show("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
+                    TLCGenDialogProvider.Default.ShowMessageBox("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
                 }
                 SetController(c2);
                 ControllerVM.ReloadController();
@@ -509,7 +512,7 @@ namespace TLCGen.ViewModels
                 var s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c1);
                 if (s1 != null)
                 {
-                    MessageBox.Show("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                     return;
                 }
                 TLCGenControllerDataProvider.Default.CloseController();
@@ -543,7 +546,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
-                System.Windows.MessageBox.Show(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling");
+                TLCGenDialogProvider.Default.ShowMessageBox(s + "\n\nKan regeling niet genereren.", "Error bij genereren: fout in regeling");
             }
         }
 

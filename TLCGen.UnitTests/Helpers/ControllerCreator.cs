@@ -66,5 +66,22 @@ namespace TLCGen.UnitTests
 			});
 			return model;
 		}
+
+        public static ControllerModel GetSmallControllerWithConflicts()
+        {
+            var c = new ControllerModel();
+            c.Fasen.Add(new FaseCyclusModel { Naam = "01" });
+            c.Fasen.Add(new FaseCyclusModel { Naam = "02" });
+            c.Fasen.Add(new FaseCyclusModel { Naam = "03" });
+            c.Fasen.Add(new FaseCyclusModel { Naam = "04" });
+            c.Fasen.Add(new FaseCyclusModel { Naam = "05" });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "01", FaseNaar = "02", Waarde = 10 });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "02", FaseNaar = "01", Waarde = 10 });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "03", FaseNaar = "04", Waarde = 10 });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "04", FaseNaar = "03", Waarde = 10 });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "01", FaseNaar = "05", Waarde = 10 });
+            c.InterSignaalGroep.Conflicten.Add(new ConflictModel { FaseVan = "05", FaseNaar = "01", Waarde = 10 });
+            return c;
+        }
 	}
 }

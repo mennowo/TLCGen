@@ -1,10 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Models;
 using TLCGen.Plugins;
 using TLCGen.Settings;
@@ -43,23 +41,22 @@ namespace TLCGen.Importers.TabC
                 throw new NullReferenceException("TabC importer: Controller to import into cannot be null.");
             }
 
-            var openFileDialog = new OpenFileDialog
-            {
-                CheckFileExists = true,
-                Title = "Selecteer tab.c file voor importeren",
-                Filter = "tab.c files|*tab.c|Alle files|*.*"
-            };
-
-            if (openFileDialog.ShowDialog() == true)
+            if (TLCGenDialogProvider.Default
+                .ShowOpenFileDialog(
+                    "Selecteer tab.c file voor importeren", 
+                    "tab.c files|*tab.c;*.ccol|Alle files|*.*", true, out var filename))
             {
                 try
                 {
-                    var lines = File.ReadAllLines(openFileDialog.FileName);
+                    var lines = TLCGenFileAccessProvider.Default.ReadAllLines(filename);
 
                     // Build a list of the Phases with conflicts from the tab.c file
                     var newData = TabCImportHelper.GetNewData(lines, false);
                     var AllPhasesMessage = "";
+
+                    // Find Phases not present in current data
                     var newfcs = new List<FaseCyclusModel>();
+                    var nnewfcs = c.Fasen.Where(x => newData.Fasen.All(x2 => x.Naam != x2.Naam));
                     foreach (var fcm in c.Fasen)
                     {
                         if (!newData.Fasen.Any(x => x.Naam == fcm.Naam))
@@ -71,7 +68,7 @@ namespace TLCGen.Importers.TabC
                     var result = MessageBoxResult.Yes;
                     if (!string.IsNullOrEmpty(AllPhasesMessage))
                     {
-                        result = MessageBox.Show("Niet alle fasen uit de regeling komen voor in de tab.c file.\nConflicten van de volgende fasen worden verwijderd:\n\n" +
+                        result = TLCGenDialogProvider.Default.ShowMessageBox("Niet alle fasen uit de regeling komen voor in de tab.c file.\nConflicten van de volgende fasen worden verwijderd:\n\n" +
                             AllPhasesMessage + "\nDoorgaan?", "Niet alle fasen gevonden", MessageBoxButton.YesNo);
                     }
 
@@ -122,6 +119,24 @@ namespace TLCGen.Importers.TabC
 		                            }
 	                            }
                             }
+                        }
+
+                        // remove removed conflicts
+                        var remConflicts = new List<ConflictModel>();
+                        foreach(var cm in c.InterSignaalGroep.Conflicten)
+                        {
+                            if(!newData.Conflicten.Any(x => x.FaseVan == cm.FaseVan && x.FaseNaar == cm.FaseNaar))
+                            {
+                                remConflicts.Add(cm);
+                            }
+                        }
+                        if (remConflicts.Any())
+                        {
+                            var ok = TLCGenDialogProvider.Default.ShowMessageBox(
+                                "Er zijn conflicten VERWIJDERD uit de regeling. Controleer of dit klopt:\n\n" + string.Join("\n", remConflicts.Select(x => x.FaseVan + " > " + x.FaseNaar + " [waarde: " + x.SerializedWaarde + "]")) + "\n\nDoorgaan?",
+                                "Conflicten verwijderd", MessageBoxButton.YesNo);
+                            if (ok == MessageBoxResult.No) return null;
+                            foreach (var r in remConflicts) c.InterSignaalGroep.Conflicten.Remove(r);
                         }
 
                         var conflictsChanged = false;
@@ -223,14 +238,14 @@ namespace TLCGen.Importers.TabC
                             foreach (var r in remnl) c.InterSignaalGroep.Nalopen.Remove(r);
                             foreach (var r in remma) c.InterSignaalGroep.Meeaanvragen.Remove(r);
 
-                            MessageBox.Show(
+                            TLCGenDialogProvider.Default.ShowMessageBox(
                                 "Er zijn nieuwe conflicten gevonden in de regeling:\n\nLoop de module molen na, en evt. synchronisaties, RoBuGrover en VA ontruimen",
                                 "Nieuwe conflicten gevonden", MessageBoxButton.OK);
                         }
 
                         if (!string.IsNullOrEmpty(NewPhasesMessage))
                         {
-                            MessageBox.Show("De volgende fasen uit de tab.c file zijn nieuw toegevoegd in de regeling:\n\n" +
+                            TLCGenDialogProvider.Default.ShowMessageBox("De volgende fasen uit de tab.c file zijn nieuw toegevoegd in de regeling:\n\n" +
                                 NewPhasesMessage, "Nieuwe fasen toegevoegd", MessageBoxButton.OK);
                         }
                         return c;
@@ -240,7 +255,7 @@ namespace TLCGen.Importers.TabC
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c");
+                    TLCGenDialogProvider.Default.ShowMessageBox("Fout bij uitlezen tab.c.:\n" + e.Message, "Fout bij importeren tab.c", MessageBoxButton.OK);
                     return null;
                 }
             }

@@ -7,6 +7,8 @@ using TLCGen.Models;
 using TLCGen.Settings;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models.Enumerations;
+using TLCGen.DataAccess;
+using TLCGen.ModelManagement;
 
 namespace TLCGen.UnitTests
 {
@@ -361,6 +363,8 @@ namespace TLCGen.UnitTests
             Messenger.OverrideDefault(FakesCreator.CreateMessenger(model));
             SettingsProvider.OverrideDefault(FakesCreator.CreateSettingsProvider());
             DefaultsProvider.OverrideDefault(FakesCreator.CreateDefaultsProvider());
+            TLCGenControllerDataProvider.OverrideDefault(FakesCreator.CreateControllerDataProvider(model));
+            TLCGenModelManager.OverrideDefault(FakesCreator.CreateModelManager(model));
             model.Fasen.Add(new FaseCyclusModel { Naam = "03" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "04" });
             model.Fasen.Add(new FaseCyclusModel { Naam = "05" });
@@ -370,7 +374,7 @@ namespace TLCGen.UnitTests
             var vmfasen = new FasenLijstTabViewModel {Controller = model};
             vm.AddGroentijdenSetCommand.Execute(null);
             vm.AddGroentijdenSetCommand.Execute(null);
-        
+
             vmfasen.AddFaseCommand.Execute(null);
             vm.OnFasenChanged(new FasenChangedMessage(new List<FaseCyclusModel>{model.Fasen[5]}, null));
 
