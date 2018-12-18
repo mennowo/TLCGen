@@ -372,8 +372,7 @@ bool Rateltikkers(      count fc,       /* fase */
     if (ET[tnlrt])
     {
         /* Check op continue aansturing */
-        if (has_cont_ > NG) if(!IH[has_cont_])      IH[has]  = FALSE;
-        else                                        IH[has]  = FALSE;
+		if (has_cont_ == NG || !IH[has_cont_])      IH[has] = FALSE;
     }
     
     /* continue aansturing rateltikkers */

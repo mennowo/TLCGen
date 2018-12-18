@@ -383,7 +383,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCKlokPerioden:
                     return new List<Tuple<string, string, string>>
                     {
-                        new Tuple<string, string, string>("bool", "omschakelmag", "FALSE"),
+                        //new Tuple<string, string, string>("bool", "omschakelmag", "FALSE"),
                         new Tuple<string, string, string>("char", "volgMaster", "TRUE")
                     };
                 default:
@@ -503,7 +503,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					return sb.ToString();
 				case CCOLCodeTypeEnum.HstCKlokPerioden:
-					sb.AppendLine($"{ts}bool omschakelmag = FALSE;");
 			        sb.AppendLine($"{ts}char volgMaster = TRUE;");
 					sb.AppendLine();
 					sb.AppendLine($"{ts}/* BepaalKoppeling */");
@@ -826,7 +825,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
                     {
-                        sb.AppendLine($"{ts}if (!SCH[{_schpf}{_schovpriople}])");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}/* OV meetkriterium bij PL bedrijf */");
                         foreach (var ov in c.OVData.OVIngrepen)
@@ -965,7 +964,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}PP[fc] &= ~BIT4;");
 					sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
-					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_VS_HALFSTAR;");
 					sb.AppendLine($"{ts}{ts}RS[fc] &= ~RS_HALFSTAR;");
 					sb.AppendLine($"{ts}{ts}PP[fc] |= GL[fc] ? BIT4 : 0; /* i.v.m. overslag door conflicten */");
 					sb.AppendLine($"{ts}}}");
@@ -1314,7 +1312,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{{");
                             foreach (var ov in c.OVData.OVIngrepen)
                             {
-                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = SCH[{_schpf}{_schovpriople}] ? 0 : poAanvraag; ");
+                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = SCH[{_schpf}{_schovpriople}] ? poAanvraag : 0; ");
                             }
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine();
