@@ -158,7 +158,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (controller.Data.CCOLMulti)
             {
-                sb.AppendLine($"int CCOL_SLAVE = {controller.Data.CCOLMultiSlave};");
+                sb.AppendLine($"s_int16 CCOL_SLAVE = {controller.Data.CCOLMultiSlave};");
                 sb.AppendLine();
             }
 
