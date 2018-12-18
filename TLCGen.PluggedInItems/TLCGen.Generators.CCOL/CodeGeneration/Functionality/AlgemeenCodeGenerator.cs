@@ -44,7 +44,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 foreach (var item in c.Data.ModulenDisplayBitmapData)
                 {
                     _myBitmapOutputs.Add(new CCOLIOElement(item.BitmapData, $"{_uspf}{item.Naam.Replace("ML", _usML.Setting)}"));
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{item.Naam.Replace("ML", _usML.Setting)}", _usML, item.Naam.Replace("ML", _usML.Setting)));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{item.Naam.Replace("ML", _usML.Setting)}", _usML, item.Naam.Replace("ML", _usML.Setting)));
                 }
             }
 
