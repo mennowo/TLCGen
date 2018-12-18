@@ -1036,6 +1036,7 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 {
 	int i, j;
 	mulv to_tmp, to_max;
+	/* TODO: de twee variabelen hieronder kunnen vervallen na vaststellen juiste werking functie */
 	bool fasevolgorde_wisselen_mag = ((prio % WISSEL_FASEVOLGORDE) < prio);
 	bool fasevolgorde_wisselen_gewenst = TRUE;
 	bool blokkeren_mag = FALSE;   /* blokkeren van conflicten mag bij absolute prioriteit  */

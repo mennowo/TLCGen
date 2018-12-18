@@ -405,7 +405,7 @@
             <Default>klok</Default>
             <Setting>klok</Setting>
             <Type>GeheugenElement</Type>
-            <Description>Halfstar/va obv klokprioden</Description>
+            <Description>Halfstar/va obv klokperioden</Description>
           </Setting>
           <Setting>
             <Default>hand</Default>
