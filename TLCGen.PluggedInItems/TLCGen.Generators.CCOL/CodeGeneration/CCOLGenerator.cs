@@ -87,6 +87,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             if (Directory.Exists(sourcefilepath))
             {
+                CCOLGeneratorSettingsProvider.Default.Reset();
+
                 _uspf = CCOLGeneratorSettingsProvider.Default.GetPrefix("us");
                 _ispf = CCOLGeneratorSettingsProvider.Default.GetPrefix("is");
                 _fcpf = CCOLGeneratorSettingsProvider.Default.GetPrefix("fc");

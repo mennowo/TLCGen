@@ -11,7 +11,7 @@ namespace TLCGen.Generators.CCOL.Settings
         private static CCOLGeneratorSettingsProvider _default;
         public static CCOLGeneratorSettingsProvider Default => _default ?? (_default = new CCOLGeneratorSettingsProvider());
 
-        private Dictionary<CCOLElementTypeEnum, string> _lastItemDescription = new Dictionary<CCOLElementTypeEnum, string>();
+        private Dictionary<CCOLElementTypeEnum, string> _lastItemDescription;
 
 	    public CCOLGeneratorSettingsProvider()
         {
@@ -38,6 +38,11 @@ namespace TLCGen.Generators.CCOL.Settings
                     }
                 }
             }
+        }
+
+        public void Reset()
+        {
+            _lastItemDescription = new Dictionary<CCOLElementTypeEnum, string>();
         }
 
 		public string GetElementDescription(string description, CCOLElementTypeEnum type, params string [] elementnames)
