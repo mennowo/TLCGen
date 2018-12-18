@@ -71,7 +71,15 @@ namespace TLCGen.Specificator
             {
                 if (value == null)
                 {
-                    _data = _myVm.Data = null;
+                    _data = null;
+                }
+                else
+                {
+                    if(_data == null)
+                    {
+                        _data = new SpecificatorDataModel();
+                    }
+                    _myVm.Data = _data;
                 }
                 _controller = value;
             }
@@ -204,7 +212,6 @@ namespace TLCGen.Specificator
         }
 
         #endregion // ITLCGenXMLNodeWriter
-
 
         #region ITLCGenPlugMessaging
 

@@ -27,7 +27,7 @@ namespace TLCGen.Specificator
 
         public string Organisatie
         {
-            get => Data.Organisatie;
+            get => Data?.Organisatie;
             set
             {
                 Data.Organisatie = value;
@@ -37,7 +37,7 @@ namespace TLCGen.Specificator
 
         public string Straat
         {
-            get => Data.Straat;
+            get => Data?.Straat;
             set
             {
                 Data.Straat = value;
@@ -47,7 +47,7 @@ namespace TLCGen.Specificator
 
         public string Postcode
         {
-            get => Data.Postcode;
+            get => Data?.Postcode;
             set
             {
                 Data.Postcode = value;
@@ -57,7 +57,7 @@ namespace TLCGen.Specificator
 
         public string Stad
         {
-            get => Data.Stad;
+            get => Data?.Stad;
             set
             {
                 Data.Stad = value;
