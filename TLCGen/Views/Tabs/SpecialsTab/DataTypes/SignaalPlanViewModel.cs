@@ -15,9 +15,9 @@ namespace TLCGen.ViewModels
 			get => SignaalPlan.Naam;
 			set
 			{
-				SignaalPlan.Naam = value; 
-				RaisePropertyChanged();
-			}
+				SignaalPlan.Naam = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 
 		public string Commentaar
@@ -26,9 +26,9 @@ namespace TLCGen.ViewModels
 			set
 			{
 				SignaalPlan.Commentaar = value;
-				RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
 		public int Cyclustijd
 		{
@@ -47,9 +47,9 @@ namespace TLCGen.ViewModels
                         SwitchMoment = value;
                     }
                 }
-                RaisePropertyChanged();
-			}
-		}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
 		public int StartMoment
 		{
@@ -60,9 +60,9 @@ namespace TLCGen.ViewModels
                 {
 				    SignaalPlan.StartMoment = value;
                 }
-				RaisePropertyChanged();
-			}
-		}
+			    RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
 		public int SwitchMoment
 		{
@@ -73,8 +73,8 @@ namespace TLCGen.ViewModels
                 {
                     SignaalPlan.SwitchMoment = value;
                 }
-				RaisePropertyChanged();
-			}
+                RaisePropertyChanged<object>(broadcast: true);
+            }
 		}
 		
 		public ObservableCollectionAroundList<SignaalPlanFaseViewModel, SignaalPlanFaseModel> Fasen { get; private set; }
