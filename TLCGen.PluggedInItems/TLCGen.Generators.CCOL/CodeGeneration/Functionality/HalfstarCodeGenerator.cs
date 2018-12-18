@@ -380,6 +380,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCPreSystemApplication:
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                case CCOLCodeTypeEnum.HstCKlokPerioden:
+                    return new List<Tuple<string, string, string>>
+                    {
+                        new Tuple<string, string, string>("bool", "omschakelmag", "FALSE"),
+                        new Tuple<string, string, string>("char", "volgMaster", "TRUE")
+                    };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
             }
@@ -498,6 +504,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 				case CCOLCodeTypeEnum.HstCKlokPerioden:
 					sb.AppendLine($"{ts}bool omschakelmag = FALSE;");
+			        sb.AppendLine($"{ts}char volgMaster = TRUE;");
 					sb.AppendLine();
 					sb.AppendLine($"{ts}/* BepaalKoppeling */");
 					sb.AppendLine($"{ts}/* --------------- */");
@@ -545,7 +552,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine();
 							sb.AppendLine($"{ts}{ts}else APL = PL1;");
 							sb.AppendLine();
-							sb.AppendLine($"{ts}{ts}char volgMaster = TRUE;");
 							sb.AppendLine($"{ts}{ts}if (PRM[{_prmpf}{_prmvolgmasterpl}] > 0)");
 							sb.AppendLine($"{ts}{ts}{{");
 							i = 1;
