@@ -1325,7 +1325,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
                         sb.AppendLine($"{ts}{ts}{ts}iXPrio[fc] |= BIT6;");
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine($"{ts}else (IH[{_hpf}{_homschtegenh}])");
+                        sb.AppendLine($"{ts}else");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
                         sb.AppendLine($"{ts}{ts}{ts}iXPrio[fc] &= ~BIT6;");
