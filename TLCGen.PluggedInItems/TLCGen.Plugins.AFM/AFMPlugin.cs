@@ -211,7 +211,7 @@ namespace TLCGen.Plugins.AFM
             {
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     return 105;
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     return 105;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 105;
@@ -253,7 +253,7 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine();
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     sb.AppendLine("#include \"AFMroutines.c\"");
                     sb.AppendLine("AFM_FC_STRUCT verwerken_fcs[AFM_fcmax] = { 0 };");
