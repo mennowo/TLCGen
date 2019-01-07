@@ -144,6 +144,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     sb.AppendLine("#endif");
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* Aansturing hulpelement aansturing wachttijdvoorspellers */");
+                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    {
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hwtv}{fc.Naam}] = SCH[{_schpf}{_schwtv}{fc.Naam}];");
+                    }
+                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -270,7 +277,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine($"{ts}/* beveiliging op afzetten tijdens bedrijf */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
-                        {
+                    {
                         sb.AppendLine($"{ts}if (G[{_fcpf}{fc.Naam}])  IH[{_hpf}{_hwtv}{fc.Naam}] = SCH[{_schpf}{_schwtv}{fc.Naam}];");
                     }
                     sb.AppendLine();

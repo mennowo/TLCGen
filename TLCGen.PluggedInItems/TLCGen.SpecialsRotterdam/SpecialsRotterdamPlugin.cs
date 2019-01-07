@@ -227,6 +227,24 @@ namespace TLCGen.SpecialsRotterdam
             return _MyElements.Where(x => x.Type == type);
         }
 
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    if (_MyModel.ToevoegenOVM)
+                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return base.GetFunctionLocalVariables(c, type);
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -279,8 +297,8 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,3,     \":%02d\", (CIF_KLOK[CIF_SECONDE]));");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32,4, \"d.d. %02d\", (CIF_KLOK[CIF_DAG]));");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,4,     \" -%02d\", (CIF_KLOK[CIF_MAAND]));");
-                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,4,     \" -%04d\", (CIF_KLOK[CIF_JAAR]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(39,4,     \"-%02d\", (CIF_KLOK[CIF_MAAND]));");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(42,4,     \"-%04d\", (CIF_KLOK[CIF_JAAR]));");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}{ts}#endif");
                     sb.AppendLine();

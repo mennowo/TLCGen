@@ -147,7 +147,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}#if !defined AUTOMAAT");
                     sb.AppendLine($"{ts}{ts}for (teller = 0; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(50, teller + 1, \"%4d\", TC[teller]);");
+                    sb.AppendLine($"{ts}{ts}{ts}xyprintf(52, teller + 6, \"%4d\", TC[teller]);");
                     sb.AppendLine($"{ts}{ts}}}");
                     sb.AppendLine($"{ts}#endif");
                     sb.AppendLine();

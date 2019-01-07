@@ -365,15 +365,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || (defined (VISSIM))");
             sb.AppendLine($"{ts}{ts}/* Toon de waarden in de tesstomgeving */");
             sb.AppendLine($"{ts}{ts}/* ----------------------------------- */ ");
-            sb.AppendLine($"{ts}{ts}for (teller = 5; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
+            sb.AppendLine($"{ts}{ts}for (teller = 10; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");
             sb.AppendLine($"{ts}{ts}{{");
-            sb.AppendLine($"{ts}{ts}{ts}xyprintf (30, teller + 1, \"%10s\",TC_string$[teller]);");
-            sb.AppendLine($"{ts}{ts}{ts}xyprintf (41, teller + 1, \":%4d\", TC_rgv[teller]);");
+            sb.AppendLine($"{ts}{ts}{ts}xyprintf (32, teller + 1, \"%10s\",TC_string$[teller]);");
+            sb.AppendLine($"{ts}{ts}{ts}xyprintf (43, teller + 1, \":%4d\", TC_rgv[teller]);");
             sb.AppendLine($"{ts}{ts}}}");
             var teller = 2;
             foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
-                sb.AppendLine($"{ts}{ts}xyprintf (30, teller + {teller}, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
+                sb.AppendLine($"{ts}{ts}xyprintf (32, teller + {teller}, \"TVG{fc.FaseCyclus}=%4d\", TVG_max[{_fcpf}{fc.FaseCyclus}]);");
                 ++teller;
             }
             sb.AppendLine($"{ts}{ts}");
