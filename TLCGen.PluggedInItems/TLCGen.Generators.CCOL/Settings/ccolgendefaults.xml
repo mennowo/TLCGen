@@ -1839,13 +1839,13 @@
             <Default>vga</Default>
             <Setting>vga</Setting>
             <Type>Timer</Type>
-            <Description>Minimale tijdsduur MG voor veiligheidsgroen fase _E1_</Description>
+            <Description>Minimale tijdsduur MG voor veiligheidsgroen detector _E1_ van fase _E2_</Description>
           </Setting>
           <Setting>
             <Default>vgb</Default>
             <Setting>vgb</Setting>
             <Type>Timer</Type>
-            <Description>Tijdsduur veiligheidsgroen fase _E1_</Description>
+            <Description>Tijdsduur veiligheidsgroen detector _E1_ van fase _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
