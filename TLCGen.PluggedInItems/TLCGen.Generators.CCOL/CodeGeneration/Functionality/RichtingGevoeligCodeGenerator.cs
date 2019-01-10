@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -67,6 +68,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return _myElements.Where(x => x.Type == type);
         }
 
+        public override bool HasFunctionLocalVariables()
+        {
+            return true;
+        }
+
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (c?.RichtingGevoeligeAanvragen.Any(x => x.ResetAanvraag) == true)
+                        return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                    return base.GetFunctionLocalVariables(c, type);
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -91,6 +110,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     sb.AppendLine($"{ts}/* Richtinggevoelige aanvragen */");
                     sb.AppendLine($"{ts}/* --------------------------= */");
+
+                    if (c.RichtingGevoeligeAanvragen.Any(x => x.ResetAanvraag))
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc) RR[fc] &= ~BIT8;  /* reset BIT-sturing t.b.v. reset A */");
+                        sb.AppendLine();
+                    }
+
                     foreach (RichtingGevoeligeAanvraagModel rga in c.RichtingGevoeligeAanvragen)
                     {
                         if (!rga.ResetAanvraag)
