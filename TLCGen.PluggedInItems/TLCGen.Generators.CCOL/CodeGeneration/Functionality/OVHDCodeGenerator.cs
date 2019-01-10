@@ -339,7 +339,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (ov.AfkappenConflictenOV) opties += 300;
                 if (ov.TussendoorRealiseren) opties += 3;
                 if (ov.VasthoudenGroen) opties += 20;
-                var sopties = opties.ToString().Replace("0", "");
+                var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmprio}{ov.FaseCyclus}", int.Parse(sopties), CCOLElementTimeTypeEnum.None, _prmprio, ov.FaseCyclus));
 
                 if (ov.CheckLijnNummer)
