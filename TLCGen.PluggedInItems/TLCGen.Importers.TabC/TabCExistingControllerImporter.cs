@@ -54,6 +54,20 @@ namespace TLCGen.Importers.TabC
                     var newData = TabCImportHelper.GetNewData(lines, false);
                     var AllPhasesMessage = "";
 
+                    var result = MessageBoxResult.Yes;
+                    if(newData.Intergroen && !c.Data.Intergroen)
+                    {
+                        result = TLCGenDialogProvider.Default.ShowMessageBox("De geïmporteerde data bevat intergroentijden, de regeling NIET.\n\nDoorgaan?", "Intergroen tijden", MessageBoxButton.YesNo);
+                        if(result == MessageBoxResult.Yes)
+                        {
+                            c.Data.Intergroen = true;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+
                     // Find Phases not present in current data
                     var newfcs = new List<FaseCyclusModel>();
                     var nnewfcs = c.Fasen.Where(x => newData.Fasen.All(x2 => x.Naam != x2.Naam));
@@ -65,7 +79,6 @@ namespace TLCGen.Importers.TabC
                             newfcs.Add(fcm);
                         }
                     }
-                    var result = MessageBoxResult.Yes;
                     if (!string.IsNullOrEmpty(AllPhasesMessage))
                     {
                         result = TLCGenDialogProvider.Default.ShowMessageBox("Niet alle fasen uit de regeling komen voor in de tab.c file.\nConflicten van de volgende fasen worden verwijderd:\n\n" +

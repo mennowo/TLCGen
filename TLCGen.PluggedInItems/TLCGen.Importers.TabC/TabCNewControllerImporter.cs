@@ -74,6 +74,7 @@ namespace TLCGen.Importers.TabC
                     {
                         newc.InterSignaalGroep.Conflicten.Add(cm);
                     }
+                    newc.Data.Intergroen = newc.Data.Intergroen;
                     return newc;
                 }
                 catch (Exception e)

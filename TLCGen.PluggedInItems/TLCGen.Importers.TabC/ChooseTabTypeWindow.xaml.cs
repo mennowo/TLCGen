@@ -22,6 +22,8 @@ namespace TLCGen.Importers.TabC
     public partial class ChooseTabTypeWindow : Window
     {
         private TabCType _tabType;
+        private bool _intergroen;
+        private bool _hasIntergroen;
 
         public ChooseTabTypeWindow()
         {
@@ -76,6 +78,27 @@ namespace TLCGen.Importers.TabC
                 }
             }
         }
+
+        public bool HasIntergroen
+        {
+            get => _hasIntergroen;
+            set
+            {
+                _hasIntergroen = value;
+                if (!value) IntergroenCheck.IsEnabled = false;
+                else IntergroenCheck.IsEnabled = true;
+            }
+        }
+
+        public bool Intergroen
+        {
+            get => _intergroen;
+            set
+            {
+                _intergroen = value;
+                IntergroenCheck.IsChecked = true;
+            }
+        }
         public bool ImportDetectoren { get; private set; }
         public bool ImportTijden { get; private set; }
 
@@ -96,6 +119,7 @@ namespace TLCGen.Importers.TabC
         {
             ImportDetectoren = ImportDetCheck.IsChecked == true;
             ImportTijden = ImportTijdCheck.IsChecked == true;
+            Intergroen = IntergroenCheck.IsChecked == true;
             this.DialogResult = true;
         }
 

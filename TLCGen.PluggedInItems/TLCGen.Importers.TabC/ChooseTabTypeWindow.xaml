@@ -24,6 +24,7 @@
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="2">
             <Label Content="Òverige opties:" Name="OptiesLabel" />
+            <CheckBox Name="IntergroenCheck" Margin="5" Content="Intergroen" />
             <CheckBox Name="ImportDetCheck" Margin="5" Content="Importeer detectoren" />
             <CheckBox Name="ImportTijdCheck" Margin="5" Content="Importeer instellingen" />
         </StackPanel>

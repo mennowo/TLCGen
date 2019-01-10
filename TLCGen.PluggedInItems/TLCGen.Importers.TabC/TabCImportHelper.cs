@@ -12,12 +12,14 @@ namespace TLCGen.Importers.TabC
 {
     public class TabCImportHelperOutcome
     {
+        public bool Intergroen { get; set; }
         public List<DetectorModel> Detectoren { get; set; }
         public List<FaseCyclusModel> Fasen { get; set; }
         public List<ConflictModel> Conflicten { get; set; }
 
         public TabCImportHelperOutcome()
         {
+            Intergroen = false;
             Fasen = new List<FaseCyclusModel>();
             Conflicten = new List<ConflictModel>();
 	        Detectoren = new List<DetectorModel>();
@@ -32,6 +34,7 @@ namespace TLCGen.Importers.TabC
         }
 
         private static Regex ReComment = new Regex(@"\s*/\*.*", RegexOptions.Compiled);
+        private static Regex ReIntergreen = new Regex(@"\s*TIG_max\s?\[.*", RegexOptions.Compiled);
         private static Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
         private static Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
         private static Regex ReTypeATB = new Regex(@"\s*\*\s+Generator\s*:\s*Advanced\s+Traffic\s+Builder.*", RegexOptions.Compiled);
@@ -55,12 +58,16 @@ namespace TLCGen.Importers.TabC
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeFICK.IsMatch(x))) tabCType = TabCType.FICK;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeHUIJSKES.IsMatch(x))) tabCType = TabCType.HUIJSKES;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeGC.IsMatch(x))) tabCType = TabCType.GC;
+            var intergroen = false;
+            intergroen = lines.Any(x => ReIntergreen.IsMatch(x));
+            outcome.Intergroen = intergroen;
 
             var importD = false;
             var importT = false;
             if (TLCGenDialogProvider.Default.ShowDialogs)
             {
                 var dlg = new ChooseTabTypeWindow();
+                dlg.Intergroen = dlg.HasIntergroen = intergroen;
                 dlg.TabType = tabCType;
                 dlg.ImportInExisting = !newReg;
                 var res = dlg.ShowDialog();
@@ -80,7 +87,9 @@ namespace TLCGen.Importers.TabC
             switch (tabCType)
             {
                 case TabCType.OTTO:
-                    fasenRegex = new Regex(@"^\s*TO_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
+                    if (intergroen) fasenRegex = new Regex(@"^\s*TIG_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
+                    else fasenRegex = new Regex(@"^\s*TO_max\s*\[\s*(?<name>fc[0-9]+).*", RegexOptions.Compiled);
+                    
                     break;
                 case TabCType.TPA:
                 case TabCType.FICK:
@@ -116,13 +125,22 @@ namespace TLCGen.Importers.TabC
 
             // import conflicts
             Regex confRegex = null;
+            Regex geelRegex = null;
             switch (tabCType)
             {
                 case TabCType.OTTO:
                 case TabCType.TPA:
                 case TabCType.FICK:
                 case TabCType.HUIJSKES:
-                    confRegex = new Regex(@"^\s*TO_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
+                    if (intergroen)
+                    {
+                        confRegex = new Regex(@"^\s*TIG_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
+                        geelRegex = new Regex(@"^\s*TGL_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s?=\s?(?<geel>[0-9]+).*");
+                    }
+                    else
+                    {
+                        confRegex = new Regex(@"^\s*TO_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
+                    }
                     break;
                 case TabCType.ATB:
                 case TabCType.GC:
@@ -145,6 +163,20 @@ namespace TLCGen.Importers.TabC
                             FaseNaar =fc2,
                             Waarde = iconf
                         });
+                    }
+                }
+                m = geelRegex.Match(l);
+                if (m.Success)
+                {
+                    var fc1 = m.Groups["fc1"].Value;
+                    var geel = m.Groups["geel"].Value;
+                    if (int.TryParse(geel, out var igeel))
+                    {
+                        var fc = outcome.Fasen.FirstOrDefault(x => x.Naam == fc1);
+                        if(fc != null)
+                        {
+                            fc.TGL = fc.TGL_min = igeel;
+                        }
                     }
                 }
             }
@@ -279,8 +311,16 @@ namespace TLCGen.Importers.TabC
                                     case setRegex.trg: fc.TRG = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tgg: fc.TGG = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tfg: fc.TFG = int.Parse(m.Groups["val"].Value); break;
-                                    case setRegex.tggl: fc.TGL_min = int.Parse(m.Groups["val"].Value); break;
-                                    case setRegex.tgl: fc.TGL = int.Parse(m.Groups["val"].Value); break;
+                                    case setRegex.tggl:
+                                        if(!intergroen)
+                                            fc.TGL_min = int.Parse(m.Groups["val"].Value);
+                                        break;
+                                    case setRegex.tgl:
+                                        if (!intergroen)
+                                            fc.TGL = int.Parse(m.Groups["val"].Value);
+                                        else 
+                                            fc.TGL = int.Parse(m.Groups["val"].Value) > fc.TGL ? int.Parse(m.Groups["val"].Value) : fc.TGL;
+                                        break;
                                     case setRegex.trgmin: fc.TRG_min = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tggmin: fc.TGG_min = int.Parse(m.Groups["val"].Value); break;
                                     case setRegex.tglmin: fc.TGL_min = int.Parse(m.Groups["val"].Value); break;
