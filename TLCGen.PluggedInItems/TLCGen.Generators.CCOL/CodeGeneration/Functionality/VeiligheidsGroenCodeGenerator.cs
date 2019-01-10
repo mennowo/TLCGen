@@ -29,13 +29,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schvg}{dm.Naam}", dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvg, dm.Naam, fcm.Naam));
-                    }
-                    _myElements.Add(
+                        _myElements.Add(
+                                CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_tvga}{dm.Naam}", fcm.VeiligheidsGroenMinMG, CCOLElementTimeTypeEnum.TE_type, _tvga, dm.Naam, fcm.Naam));
+                        _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_tvga}{fcm.Naam}", fcm.VeiligheidsGroenMinMG, CCOLElementTimeTypeEnum.TE_type, _tvga, fcm.Naam));
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tvgb}{fcm.Naam}", fcm.VeiligheidsGroenTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tvgb, fcm.Naam));
+                                $"{_tvgb}{dm.Naam}", fcm.VeiligheidsGroenTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tvgb, dm.Naam, fcm.Naam));
+                    }
                 }
             }
         }
@@ -80,16 +80,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (dm.VeiligheidsGroen == NooitAltijdAanUitEnum.Altijd)
                                     {
-                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{fcm.Naam}, {_tpf}{_tvgb}{fcm.Naam}, (bool)(TDH[{_dpf}{dm.Naam}]));");
+                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{dm.Naam}, {_tpf}{_tvgb}{dm.Naam}, (bool)(TDH[{_dpf}{dm.Naam}]));");
                                     }
                                     else
                                     {
-                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{fcm.Naam}, {_tpf}{_tvgb}{fcm.Naam}, (bool)(SCH[{_schpf}{_schvg}{dm.Naam}] && TDH[{_dpf}{dm.Naam}]));");
+                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{dm.Naam}, {_tpf}{_tvgb}{dm.Naam}, (bool)(SCH[{_schpf}{_schvg}{dm.Naam}] && TDH[{_dpf}{dm.Naam}]));");
                                     }
                                 }
                             }
                         }
-                        sb.AppendLine();
                     }
                     return sb.ToString();
                 default:
