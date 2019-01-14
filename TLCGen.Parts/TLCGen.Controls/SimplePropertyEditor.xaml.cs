@@ -187,6 +187,7 @@ namespace TLCGen.Controls
                         var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
+                        binding.Mode = BindingMode.TwoWay;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                         binding.ValidatesOnDataErrors = true;
                         if (prop.PropertyType == typeof(int?))
@@ -215,6 +216,7 @@ namespace TLCGen.Controls
                         var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
+                        binding.Mode = BindingMode.TwoWay;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                         BindingOperations.SetBinding(editor, CheckBox.IsCheckedProperty, binding);
                     }
@@ -233,6 +235,7 @@ namespace TLCGen.Controls
                         var binding = new Binding();
                         binding.Path = new PropertyPath(prop.Name);
                         binding.Source = o.BoundObject;
+                        binding.Mode = BindingMode.TwoWay;
                         binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                         BindingOperations.SetBinding(editor, ComboBox.SelectedItemProperty, binding);
                     }

@@ -61,6 +61,10 @@ namespace TLCGen.Importers.TabC
                         if(result == MessageBoxResult.Yes)
                         {
                             c.Data.Intergroen = true;
+                            if (c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL95)
+                            {
+                                c.Data.CCOLVersie = Models.Enumerations.CCOLVersieEnum.CCOL95;
+                            }
                         }
                         else
                         {
@@ -131,6 +135,11 @@ namespace TLCGen.Importers.TabC
 										fc.Detectoren.Add(nd);
 		                            }
 	                            }
+                                if (newData.Intergroen)
+                                {
+                                    if (fc.TGL_min < newfcm.TGL_min) fc.TGL_min = newfcm.TGL_min;
+                                    if (fc.TGL < fc.TGL_min) fc.TGL = fc.TGL_min;
+                                }
                             }
                         }
 

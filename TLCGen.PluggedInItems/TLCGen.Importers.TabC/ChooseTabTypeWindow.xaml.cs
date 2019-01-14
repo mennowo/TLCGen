@@ -85,8 +85,7 @@ namespace TLCGen.Importers.TabC
             set
             {
                 _hasIntergroen = value;
-                if (!value) IntergroenCheck.IsEnabled = false;
-                else IntergroenCheck.IsEnabled = true;
+                IntergroenCheck.IsEnabled = value;
             }
         }
 
@@ -96,7 +95,7 @@ namespace TLCGen.Importers.TabC
             set
             {
                 _intergroen = value;
-                IntergroenCheck.IsChecked = true;
+                IntergroenCheck.IsChecked = value;
             }
         }
         public bool ImportDetectoren { get; private set; }

@@ -33,7 +33,7 @@ namespace TLCGen.Importers.TabC
             OTTO, TPA, ATB, FICK, HUIJSKES, GC, UNKNOWN
         }
 
-        private static Regex ReComment = new Regex(@"\s*/\*.*", RegexOptions.Compiled);
+        private static Regex ReComment = new Regex(@"^\s*/\*.*", RegexOptions.Compiled);
         private static Regex ReIntergreen = new Regex(@"\s*TIG_max\s?\[.*", RegexOptions.Compiled);
         private static Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
         private static Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
@@ -67,7 +67,8 @@ namespace TLCGen.Importers.TabC
             if (TLCGenDialogProvider.Default.ShowDialogs)
             {
                 var dlg = new ChooseTabTypeWindow();
-                dlg.Intergroen = dlg.HasIntergroen = intergroen;
+                dlg.Intergroen = intergroen;
+                dlg.HasIntergroen = intergroen;
                 dlg.TabType = tabCType;
                 dlg.ImportInExisting = !newReg;
                 var res = dlg.ShowDialog();
@@ -165,17 +166,21 @@ namespace TLCGen.Importers.TabC
                         });
                     }
                 }
-                m = geelRegex.Match(l);
-                if (m.Success)
+                if (intergroen)
                 {
-                    var fc1 = m.Groups["fc1"].Value;
-                    var geel = m.Groups["geel"].Value;
-                    if (int.TryParse(geel, out var igeel))
+                    m = geelRegex.Match(l);
+                    if (m.Success)
                     {
-                        var fc = outcome.Fasen.FirstOrDefault(x => x.Naam == fc1);
-                        if(fc != null)
+                        var fc1 = m.Groups["fc1"].Value;
+                        var geel = m.Groups["geel"].Value;
+                        if (int.TryParse(geel, out var igeel))
                         {
-                            fc.TGL = fc.TGL_min = igeel;
+                            var fc = outcome.Fasen.FirstOrDefault(x => x.Naam == fc1);
+                            if (fc != null)
+                            {
+                                fc.TGL_min = igeel;
+                                fc.TGL = igeel;
+                            }
                         }
                     }
                 }

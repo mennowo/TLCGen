@@ -61,6 +61,8 @@ namespace TLCGen.Importers.TabC
 
                     // Build a list of the Phases with conflicts from the tab.c file
                     TabCImportHelperOutcome NewData = TabCImportHelper.GetNewData(lines, true);
+                    if (NewData == null) return null;
+
                     NewData.Fasen.BubbleSort();
                     foreach (FaseCyclusModel fcm in NewData.Fasen)
                     {
@@ -75,6 +77,10 @@ namespace TLCGen.Importers.TabC
                         newc.InterSignaalGroep.Conflicten.Add(cm);
                     }
                     newc.Data.Intergroen = newc.Data.Intergroen;
+                    if (newc.Data.Intergroen)
+                    {
+                        newc.Data.CCOLVersie = Models.Enumerations.CCOLVersieEnum.CCOL95;
+                    }
                     return newc;
                 }
                 catch (Exception e)

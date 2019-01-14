@@ -6,6 +6,8 @@ using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using TLCGen.Controls;
+using TLCGen.Dependencies.Providers;
+using System;
 
 namespace TLCGen.ViewModels
 {
@@ -113,20 +115,31 @@ namespace TLCGen.ViewModels
             get { return _Controller?.Data == null ? CCOLVersieEnum.CCOL8 : _Controller.Data.CCOLVersie; }
             set
             {
-                _Controller.Data.CCOLVersie = value;
-                RaisePropertyChanged<object>("CCOLVersie", broadcast: true);
-                if(value > CCOLVersieEnum.CCOL8)
+                if (Intergroen && value < CCOLVersieEnum.CCOL95)
                 {
-                    if(_Controller.Data.VLOGSettings == null)
+                    TLCGenDialogProvider.Default.ShowMessageBox(
+                        "Voor deze regeling is intergroen ingesteld. Voor een intergroen regeling " +
+                        "kan de CCOL versie niet lager dan 9.5 worden ingesteld.", "Intergroen regeling", System.Windows.MessageBoxButton.OK);
+                    // see here https://stackoverflow.com/questions/2585183/wpf-combobox-selecteditem-change-to-previous-value
+                    GalaSoft.MvvmLight.Threading.DispatcherHelper.UIDispatcher.BeginInvoke(new Action(() => RaisePropertyChanged(nameof(CCOLVersie))));
+                }
+                else
+                {
+                    _Controller.Data.CCOLVersie = value;
+                    if(value > CCOLVersieEnum.CCOL8)
                     {
-                        _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
-                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, _Controller.Data.VLOGSettings.VLOGVersie.ToString());
+                        if(_Controller.Data.VLOGSettings == null)
+                        {
+                            _Controller.Data.VLOGSettings = new VLOGSettingsDataModel();
+                            Settings.DefaultsProvider.Default.SetDefaultsOnModel(_Controller.Data.VLOGSettings, _Controller.Data.VLOGSettings.VLOGVersie.ToString());
+                        }
                     }
+                    MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());
+                    RaisePropertyChanged<object>(nameof(CCOLVersie), broadcast: true);
                 }
                 RaisePropertyChanged(nameof(IsVLOGVersieLowerThan9));
                 RaisePropertyChanged(nameof(IsVLOGVersieHigherThan9));
                 MessengerInstance.Send(new UpdateTabsEnabledMessage());
-                MessengerInstance.Send(new ControllerIntergreenTimesTypeChangedMessage());
             }
         }
 
@@ -140,6 +153,10 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.Intergroen = value;
                 RaisePropertyChanged<object>("Intergroen", broadcast: true);
+                if (TLCGenDialogProvider.Default.ShowDialogs)
+                {
+                    TLCGenDialogProvider.Default.ShowMessageBox("Let op! TLCGen voert geen conversies uit tussen ontruimingstijden en intergroen tijden.", "Controle intersignaalgroep tijden", System.Windows.MessageBoxButton.OK);
+                }
             }
         }
 
