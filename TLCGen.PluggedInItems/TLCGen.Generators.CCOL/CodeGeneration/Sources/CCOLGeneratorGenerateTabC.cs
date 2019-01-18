@@ -893,12 +893,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
-                if (c.Data.VLOGType == VLOGTypeEnum.Filebased)
-                {
-                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
-                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
-                }
-
+                
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - monitoring */");
                 sb.AppendLine($"{ts}/* ----------------- */");
