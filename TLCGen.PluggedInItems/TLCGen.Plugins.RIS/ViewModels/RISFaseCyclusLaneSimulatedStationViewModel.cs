@@ -7,113 +7,111 @@ namespace TLCGen.Plugins.RIS
 {
     public class RISFaseCyclusLaneSimulatedStationViewModel : ViewModelBase, IViewModelWithItem, IComparable
     {
-        private RISFaseCyclusLaneSimulatedStationModel _stationData;
-
-        public RISFaseCyclusLaneSimulatedStationModel StationData => _stationData;
+        public RISFaseCyclusLaneSimulatedStationModel StationData { get; }
 
         public RISStationTypeSimEnum Type
         {
-            get => _stationData.Type;
+            get => StationData.Type;
             set
             {
-                _stationData.Type = value;
-                _stationData.SimulationData.RelatedName = _stationData.Naam;
+                StationData.Type = value;
+                StationData.SimulationData.RelatedName = StationData.Naam;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public bool Prioriteit
         {
-            get => _stationData.Prioriteit;
+            get => StationData.Prioriteit;
             set
             {
-                _stationData.Prioriteit = value;
+                StationData.Prioriteit = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Flow
         {
-            get => _stationData.Flow;
+            get => StationData.Flow;
             set
             {
-                _stationData.Flow = value;
+                StationData.Flow = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Snelheid
         {
-            get => _stationData.Snelheid;
+            get => StationData.Snelheid;
             set
             {
-                _stationData.Snelheid = value;
+                StationData.Snelheid = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Afstand
         {
-            get => _stationData.Afstand;
+            get => StationData.Afstand;
             set
             {
-                _stationData.Afstand = value;
+                StationData.Afstand = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Q1
         {
-            get => _stationData.SimulationData.Q1;
+            get => StationData.SimulationData.Q1;
             set
             {
-                _stationData.SimulationData.Q1 = value;
+                StationData.SimulationData.Q1 = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Q2
         {
-            get => _stationData.SimulationData.Q2;
+            get => StationData.SimulationData.Q2;
             set
             {
-                _stationData.SimulationData.Q2 = value;
+                StationData.SimulationData.Q2 = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
         public int Q3
         {
-            get => _stationData.SimulationData.Q3;
+            get => StationData.SimulationData.Q3;
             set
             {
-                _stationData.SimulationData.Q3 = value;
+                StationData.SimulationData.Q3 = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Q4
         {
-            get => _stationData.SimulationData.Q4;
+            get => StationData.SimulationData.Q4;
             set
             {
-                _stationData.SimulationData.Q4 = value;
+                StationData.SimulationData.Q4 = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public int Stopline
         {
-            get => _stationData.SimulationData.Stopline;
+            get => StationData.SimulationData.Stopline;
             set
             {
-                _stationData.SimulationData.Stopline = value;
+                StationData.SimulationData.Stopline = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
         public object GetItem()
         {
-            return _stationData;
+            return StationData;
         }
 
         public int CompareTo(object obj)
@@ -123,7 +121,7 @@ namespace TLCGen.Plugins.RIS
 
         public RISFaseCyclusLaneSimulatedStationViewModel(RISFaseCyclusLaneSimulatedStationModel stationData)
         {
-            _stationData = stationData;
+            StationData = stationData;
         }
     }
 }

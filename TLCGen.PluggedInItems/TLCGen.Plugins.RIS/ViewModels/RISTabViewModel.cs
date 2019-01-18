@@ -150,7 +150,7 @@ namespace TLCGen.Plugins.RIS
 
         #region Commands
 
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _addDefaultRequestLanesCommand;
+        private RelayCommand _addDefaultRequestLanesCommand;
         public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ?? (_addDefaultRequestLanesCommand = new RelayCommand(AddDefaultRequestLanesCommand_executed));
 
         private void AddDefaultRequestLanesCommand_executed()
@@ -168,14 +168,14 @@ namespace TLCGen.Plugins.RIS
                             RijstrookIndex = i + 1,
                             Type = t
                         }));
-                        RISRequestLanes.BubbleSort();
                     }
                 }
             }
             RISRequestLanes.BubbleSort();
+            return;
         }
 
-        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _addDefaultExtendLanesCommand;
+        private RelayCommand _addDefaultExtendLanesCommand;
         public ICommand AddDefaultExtendLanesCommand => _addDefaultExtendLanesCommand ?? (_addDefaultExtendLanesCommand = new RelayCommand(AddDefaultExtendLanesCommand_executed));
 
         private void AddDefaultExtendLanesCommand_executed()
@@ -193,11 +193,11 @@ namespace TLCGen.Plugins.RIS
                             RijstrookIndex = i + 1,
                             Type = t
                         }));
-                        RISExtendLanes.BubbleSort();
                     }
                 }
             }
             RISExtendLanes.BubbleSort();
+            return;
         }
 
         #endregion // Commands
@@ -271,6 +271,8 @@ namespace TLCGen.Plugins.RIS
                 }
             }
             RISFasen.BubbleSort();
+            RISRequestLanes.BubbleSort();
+            RISExtendLanes.BubbleSort();
             UpdateRISLanes();
         }
 

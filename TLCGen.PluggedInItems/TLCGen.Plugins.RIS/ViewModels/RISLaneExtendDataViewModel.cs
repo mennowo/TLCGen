@@ -13,16 +13,6 @@ namespace TLCGen.Plugins.RIS
     {
         private RISLaneExtendDataModel _laneData;
         
-        //public int LaneID
-        //{
-        //    get => _laneData.LaneID;
-        //    set
-        //    {
-        //        _laneData.LaneID = value;
-        //        RaisePropertyChanged<object>(broadcast: true);
-        //    }
-        //}
-
         public bool RISVerlengen
         {
             get => _laneData.RISVerlengen;

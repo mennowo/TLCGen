@@ -110,7 +110,14 @@ namespace TLCGen.Plugins.RIS
 
         public void OnSelected()
         {
-            
+            if (!_RISVM.RISRequestLanes.IsSorted())
+            {
+                _RISVM.RISRequestLanes.BubbleSort();
+            }
+            if (!_RISVM.RISExtendLanes.IsSorted())
+            {
+                _RISVM.RISExtendLanes.BubbleSort();
+            }
         }
 
         public bool OnSelectedPreview()
@@ -216,7 +223,7 @@ namespace TLCGen.Plugins.RIS
                     if (l.RISAanvraag)
                     {
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}",
+                            $"{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
                             l.AanvraagStart,
                             CCOLElementTimeTypeEnum.None,
                             _prmrisastart, l.SignalGroupName));
@@ -227,7 +234,7 @@ namespace TLCGen.Plugins.RIS
                     if (l.RISAanvraag)
                     {
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}",
+                            $"{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
                             l.AanvraagEnd,
                             CCOLElementTimeTypeEnum.None,
                             _prmrisaend, l.SignalGroupName));
@@ -238,7 +245,7 @@ namespace TLCGen.Plugins.RIS
                     if (l.RISVerlengen)
                     {
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}",
+                            $"{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
                             l.VerlengenStart,
                             CCOLElementTimeTypeEnum.None,
                             _prmrisvstart, l.SignalGroupName));
@@ -249,7 +256,7 @@ namespace TLCGen.Plugins.RIS
                     if (l.RISVerlengen)
                     {
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}",
+                            $"{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}",
                             l.VerlengenEnd,
                             CCOLElementTimeTypeEnum.None,
                             _prmrisvend, l.SignalGroupName));
@@ -364,7 +371,7 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach(var l in _RISModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT8;");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -372,7 +379,7 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach (var l in _RISModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT8; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT8; ");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
