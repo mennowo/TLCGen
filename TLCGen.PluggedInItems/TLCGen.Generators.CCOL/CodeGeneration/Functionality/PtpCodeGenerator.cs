@@ -142,25 +142,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -187,7 +171,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.PTPData.PTPKoppelingen.Count > 0)
                     {
                         sb.AppendLine($"{ts}#include \"{c.Data.Naam}ptp.c\" /* PTP seriele koppeling */");
-                    sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreSystemApplication:
@@ -195,7 +178,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_pre_system_app();");
-                        sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
@@ -203,7 +185,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* aanroepen PTP loop tbv seriele koppeling */");
                         sb.AppendLine($"{ts}ptp_post_system_app();");
-                        sb.AppendLine();
                     }
                     return sb.ToString();
                 default:

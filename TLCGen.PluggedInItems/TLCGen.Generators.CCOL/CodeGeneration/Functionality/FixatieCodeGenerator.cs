@@ -34,25 +34,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapInputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
-        {
-            return _myBitmapInputs;
-        }
+        public override bool HasCCOLBitmapInputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

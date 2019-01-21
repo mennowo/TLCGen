@@ -7,7 +7,6 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 {
-
     [CCOLCodePieceGenerator]
     public class RateltikkersCodeGenerator : CCOLCodePieceGeneratorBase
     {
@@ -56,25 +55,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -147,7 +130,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
 
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

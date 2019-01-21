@@ -26,15 +26,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
+        public override bool HasCCOLElements() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -72,30 +64,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                              c.Data.VLOGSettings?.VLOGToepassen == true)
                     {
                         sb.AppendLine($"#ifndef NO_VLOG");
-                        sb.AppendLine($"#if !defined NO_VLOG_300");
-                        sb.AppendLine($"{ts}/* Defaults voor VLOG");
-                        sb.AppendLine($"{ts}   Toelichting instellingen:");
-                        sb.AppendLine($"{ts}   - MONDP   1=DP-status");
-                        sb.AppendLine($"{ts}   - MONIS   1=IS-status, 2=IS-snelheid (ISV_type) 4=IS-lengte (ISL_type), 8=IS-mulv");
-                        sb.AppendLine($"{ts}   - MONFC   1=FCWUS, 2=FCGUS, 4=FCMON2, 8=FCMON3, 32=OVMON5, 64=FCTIMING, 128=FCRWT");
-                        sb.AppendLine($"{ts}   - MONUS   1=WUS-status, 2=GUS-status, 4=WUS-mulv, 8=GUS-mulv");
-                        sb.AppendLine($"{ts}   - MONDS   1=DS-status");
-                        sb.AppendLine($"{ts}*/");
-                        sb.AppendLine($"{ts}MONTYPE_def = {c.Data.VLOGSettings.MONTYPE_def};");
-                        sb.AppendLine($"{ts}MONDP_def   = {c.Data.VLOGSettings.MONDP_def};");
-                        sb.AppendLine($"{ts}MONIS_def   = {c.Data.VLOGSettings.MONIS_def};");
-                        sb.AppendLine($"{ts}MONFC_def   = {c.Data.VLOGSettings.MONFC_def};");
-                        sb.AppendLine($"{ts}MONUS_def   = {c.Data.VLOGSettings.MONUS_def};");
-                        sb.AppendLine($"{ts}MONDS_def   = {c.Data.VLOGSettings.MONDS_def};");
-                        sb.AppendLine($"{ts}LOGTYPE_def = {c.Data.VLOGSettings.LOGTYPE_def};");
-                        sb.AppendLine($"#else /* VLOG 2.0 */");
-                        sb.AppendLine($"{ts}MON_def = 1;");
-                        sb.AppendLine($"{ts}LOG_def = 1;");
+                        sb.AppendLine($"{ts}#if !defined NO_VLOG_300");
+                        sb.AppendLine($"{ts}{ts}/* Defaults voor VLOG");
+                        sb.AppendLine($"{ts}{ts}   Toelichting instellingen:");
+                        sb.AppendLine($"{ts}{ts}   - MONDP   1=DP-status");
+                        sb.AppendLine($"{ts}{ts}   - MONIS   1=IS-status, 2=IS-snelheid (ISV_type) 4=IS-lengte (ISL_type), 8=IS-mulv");
+                        sb.AppendLine($"{ts}{ts}   - MONFC   1=FCWUS, 2=FCGUS, 4=FCMON2, 8=FCMON3, 32=OVMON5, 64=FCTIMING, 128=FCRWT");
+                        sb.AppendLine($"{ts}{ts}   - MONUS   1=WUS-status, 2=GUS-status, 4=WUS-mulv, 8=GUS-mulv");
+                        sb.AppendLine($"{ts}{ts}   - MONDS   1=DS-status");
+                        sb.AppendLine($"{ts}{ts}*/");
+                        sb.AppendLine($"{ts}{ts}MONTYPE_def = {c.Data.VLOGSettings.MONTYPE_def};");
+                        sb.AppendLine($"{ts}{ts}MONDP_def   = {c.Data.VLOGSettings.MONDP_def};");
+                        sb.AppendLine($"{ts}{ts}MONIS_def   = {c.Data.VLOGSettings.MONIS_def};");
+                        sb.AppendLine($"{ts}{ts}MONFC_def   = {c.Data.VLOGSettings.MONFC_def};");
+                        sb.AppendLine($"{ts}{ts}MONUS_def   = {c.Data.VLOGSettings.MONUS_def};");
+                        sb.AppendLine($"{ts}{ts}MONDS_def   = {c.Data.VLOGSettings.MONDS_def};");
+                        sb.AppendLine($"{ts}{ts}LOGTYPE_def = {c.Data.VLOGSettings.LOGTYPE_def};");
+                        sb.AppendLine($"{ts}#else /* VLOG 2.0 */");
+                        sb.AppendLine($"{ts}{ts}MON_def = 1;");
+                        sb.AppendLine($"{ts}{ts}LOG_def = 1;");
+                        sb.AppendLine($"{ts}#endif");
                         sb.AppendLine($"#endif");
-                        sb.AppendLine($"#endif");
-                        sb.AppendLine($"");
-                        sb.AppendLine($"");
-                        sb.AppendLine($"");
                     }
                     return sb.ToString();
 
@@ -114,7 +103,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine("#ifndef AUTOMAAT");
                         sb.AppendLine($"{ts}#define NO_VLOG");
                         sb.AppendLine("#endif");
-                        sb.AppendLine();
                     }
                     return sb.ToString();
                     
@@ -145,7 +133,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine($"#endif");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

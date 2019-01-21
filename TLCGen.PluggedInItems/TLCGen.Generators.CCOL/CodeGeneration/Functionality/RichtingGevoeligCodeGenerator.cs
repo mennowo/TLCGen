@@ -58,20 +58,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
+        public override bool HasFunctionLocalVariables() => true;
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
@@ -129,7 +118,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}aanvraag_richtinggevoelig_reset({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, {_tpf}{_trgav}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
@@ -145,7 +133,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine($"{ts}{ts}                         {_hpf}{_hrgv}{_dpf}{rgv.VanDetector}_{_dpf}{rgv.NaarDetector}), (mulv)PRM[{_prmpf}{_prmmkrg}{_dpf}{rgv.VanDetector}],");
                         sb.AppendLine($"{ts}{ts}                         (count)END);");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

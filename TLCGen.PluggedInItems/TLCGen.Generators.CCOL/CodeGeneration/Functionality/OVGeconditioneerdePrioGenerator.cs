@@ -70,26 +70,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
+        public override bool HasCCOLBitmapOutputs() => true;
+        
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -119,7 +103,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"int iKARInSTP{ov.FaseCyclus}[MAX_AANTAL_INMELDINGEN] = {{ 0 }}; int iAantInm{ov.FaseCyclus} = 0;");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCInUitMelden:
@@ -134,7 +117,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}MM[{_mpf}{_mstp}{ov.FaseCyclus}] = iAantInm{ov.FaseCyclus} > 0 ? iKARInSTP{ov.FaseCyclus}[0] : 0;");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                     if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
@@ -181,7 +163,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append($"{ts}if (IH[{_hpf}{_hstp}{ov.FaseCyclus}] && (MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT || !MM[{_mpf}{_mstp}{ov.FaseCyclus}])) ");
                         sb.AppendLine($"iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = BepaalPrioriteitsOpties({_prmpf}{ov.FaseCyclus}{_prmovstipttelaat});");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     if (!c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit)) return "";
@@ -192,7 +173,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovoptijd}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_OP_TIJD;");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usovtelaat}{ov.FaseCyclus}] = MM[{_mpf}{_mstp}{ov.FaseCyclus}] == CIF_TE_LAAT;");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
             }

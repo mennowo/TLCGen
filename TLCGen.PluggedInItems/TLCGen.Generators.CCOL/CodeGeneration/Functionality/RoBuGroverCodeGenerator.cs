@@ -67,25 +67,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _myBitmapOutputs.Add(new CCOLIOElement(c.RoBuGrover.BitmapData as IOElementModel, _uspf + _usrgv));
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
+        public override bool HasCCOLElements() => true;
+        
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -169,7 +153,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usrgv}] = FALSE;");
                     sb.AppendLine($"{ts}}}");
-                    sb.AppendLine();
 
                     return sb.ToString();
 

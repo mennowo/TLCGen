@@ -505,7 +505,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
                                 }
                             }
-                            hasvars = true;
+                            if (addnewlineatend) sb.AppendLine();
                         }
                     }
                 }
@@ -513,11 +513,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     foreach (var gen in OrderedPieceGenerators[type].Where(x => x.Value.HasCodeForController(c, type)))
                     {
-                        sb.Append(gen.Value.GetCode(c, type, ts));
+                        var code = gen.Value.GetCode(c, type, ts);
+                        if (!string.IsNullOrWhiteSpace(code))
+                        {
+                            sb.Append(code);
+                            if (addnewlineatend) sb.AppendLine();
+                        }
                     }
-                    hascode = true;
                 }
-                if ((hasvars || hascode) && addnewlineatend) sb.AppendLine();
 			}
 		}
 

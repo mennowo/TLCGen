@@ -150,25 +150,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
+        public override bool HasCCOLElements() => true;
+        
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -215,7 +199,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
@@ -281,8 +264,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ---------------- */");
                     sb.AppendLine();
 
+                    var first = true;
                     foreach (var fm in c.FileIngrepen)
                     {
+                        if (!first) sb.AppendLine();
+
                         sb.AppendLine($"{ts}/* File ingreep {fm.Naam} */");
                         sb.AppendLine();
 
@@ -519,13 +505,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{irest}{rest});");
                         }
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
+                        first = false;
                     }
                     if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
-                        sb.AppendLine($"{ts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
+                        sb.Append($"{ts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
                         foreach (var fm in c.FileIngrepen)
                         {
+                            sb.AppendLine();
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
                                 sb.AppendLine($"{ts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
@@ -541,7 +528,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     
                                 sb.AppendLine($"{ts}}}");
                             }
-                            sb.AppendLine();
                         }
                     }
                     return sb.ToString();
@@ -555,7 +541,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usfile}{f.Naam}] = IH[{_hpf}{_hfile}{f.Naam}];");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCPARCorrecties:
@@ -582,10 +567,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                             }
                         }
-                    }
-                    if (yes)
-                    {
-                        sb.AppendLine();
                     }
 
                     return sb.ToString();

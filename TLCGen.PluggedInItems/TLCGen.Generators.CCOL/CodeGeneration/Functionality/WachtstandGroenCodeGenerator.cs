@@ -22,30 +22,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (FaseCyclusModel fcm in c.Fasen)
             {
-                if (fcm.Wachtgroen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
-                    fcm.Wachtgroen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                if (fcm.Wachtgroen != NooitAltijdAanUitEnum.Nooit &&
+                    fcm.Wachtgroen != NooitAltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schwg}{fcm.Naam}", fcm.Wachtgroen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schwg, fcm.Naam));
+                            $"{_schwg}{fcm.Naam}", fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schwg, fcm.Naam));
                 }
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
+        
+        public override bool HasFunctionLocalVariables() => true;
 
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
@@ -88,7 +77,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                             sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCWachtgroen:
@@ -142,7 +130,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = (WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

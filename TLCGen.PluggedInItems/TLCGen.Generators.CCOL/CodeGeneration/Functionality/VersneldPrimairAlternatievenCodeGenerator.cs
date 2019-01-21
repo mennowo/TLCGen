@@ -48,8 +48,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         fc.FaseCyclus));
             }
 
-
-
             // Alternatieven
             if (c.ModuleMolen.LangstWachtendeAlternatief)
             {
@@ -140,21 +138,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
-
+        public override bool HasFunctionLocalVariables() => true;
+        
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -549,8 +536,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		                    sb.AppendLine($"{ts}Alternatief_halfstar();");
 	                    }
                     }
-                    sb.AppendLine();
-
                     return sb.ToString();
                 case CCOLCodeTypeEnum.HstCAlternatief:
                     var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
@@ -610,7 +595,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

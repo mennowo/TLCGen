@@ -51,7 +51,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
         {
-            throw new NotSupportedException();
+            return _myElements.Where(x => x.Type == type);
         }
 
         public virtual IEnumerable<CCOLElement> GetCCOLElements()
@@ -76,7 +76,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
         {
-            throw new NotSupportedException();
+            return _myBitmapOutputs;
         }
 
         public virtual bool HasCCOLBitmapInputs()
@@ -86,7 +86,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public virtual IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
         {
-            throw new NotSupportedException();
+            return _myBitmapInputs;
         }
 
         public virtual bool HasSimulationElements()

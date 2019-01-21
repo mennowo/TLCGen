@@ -433,51 +433,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<DetectorModel> GetDetectors()
-        {
-            return _MyDetectors;
-        }
+        public override IEnumerable<DetectorModel> GetDetectors() => _MyDetectors;
 
-        public override bool HasDetectors()
-        {
-            return true;
-        }
+        public override bool HasDetectors() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
+        public override bool HasCCOLBitmapOutputs() => true;
 
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
+        public override bool HasCCOLBitmapInputs() => true;
 
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
-        public override bool HasCCOLBitmapInputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
-        {
-            return _myBitmapInputs;
-        }
-
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
-
+        public override bool HasFunctionLocalVariables() => true;
+        
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -777,7 +744,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(");");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -791,28 +757,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_ushdinm}{hd.FaseCyclus}] = C[{_ctpf}{_cvchd}{hd.FaseCyclus}];");
                     }
-                    sb.AppendLine();
                     if (c.HasKAR())
                     {
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Verklikken melding en ondergedrag KAR */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarmelding}] = T[{_tpf}{_tkarmelding}];");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uskarog}] = !T[{_tpf}{_tkarog}];");
-                        sb.AppendLine();
                     }
                     if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
                     {
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usmaxwt}] = iMaximumWachtTijdOverschreden;");
-                        sb.AppendLine();
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCInUitMelden:
-                    //sb.AppendLine($"{ts}/* Afzetten hulpelementen voor in- en uitmeldingen */");
-                    //foreach (var ov in c.OVData.OVIngrepen)
-                    //{
-                    //    sb.AppendLine($"{ts}IH[{_hpf}{_hovin}{ov.FaseCyclus}] = IH[{_hpf}{_hovuit}{ov.FaseCyclus}] = FALSE;");
-                    //}
-                    //sb.AppendLine();
                     foreach (var ov in c.OVData.OVIngrepen)
                     {
                         var vtgType = "";
@@ -836,6 +795,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (ov.MeldingenData.Inmeldingen.Any())
                         {
                             var inmHelems = new List<string>();
+                            if(!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Inmelding {_fcpf}{ov.FaseCyclus} */");
 
                             var sb2 = new StringBuilder();
@@ -864,14 +824,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
 
                         if (ov.MeldingenData.Uitmeldingen.Any())
                         {
                             var uitmHelems = new List<string>();
+                            if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Uitmelding {_fcpf}{ov.FaseCyclus} */");
-
 
                             var sb2 = new StringBuilder();
                             foreach (var uitm in ov.MeldingenData.Uitmeldingen)
@@ -899,7 +858,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
                             sb.AppendLine($";");
-                            sb.AppendLine();
                         }
                     }
                     
@@ -909,6 +867,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
                             var inmHelems = new List<string>();
+                            if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Inmelding HD {_fcpf}{hd.FaseCyclus} */");
                             if (hd.KAR)
                             {
@@ -930,7 +889,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                     }
 
@@ -940,6 +898,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (int.TryParse(hd.FaseCyclus, out var ifc))
                         {
                             var inmHelems = new List<string>();
+                            if (!first) sb.AppendLine(); first = false;
                             sb.AppendLine($"{ts}/* Uitmelding HD {_fcpf}{hd.FaseCyclus} */");
                             if (hd.KAR)
                             {
@@ -960,7 +919,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 first = false;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                     }
 
@@ -1030,11 +988,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         sb.AppendLine($"{ts}}}");
-                        sb.AppendLine();
                     }
 
                     if (c.InterSignaalGroep.Nalopen.Any())
                     {
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* Niet afkappen naloop richtingen wanneer een naloop tijd nog loopt */");
                         foreach (var fc in c.Fasen)
                         {

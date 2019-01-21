@@ -91,16 +91,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
+        public override bool HasCCOLElements() => true;
+        
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -119,7 +111,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCAanvragen:
-                    sb.AppendLine();
                     sb.AppendLine($"{ts}/* Meeaanvragen */");
                     sb.AppendLine($"{ts}/* ------------ */");
                     bool hasdetafh = false;
@@ -146,7 +137,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine($"{ts}IH[{_hpf}{_hmad}{mad.Item2}] = SG[{_fcpf}{mad.Item1}] ? FALSE : IH[{_hpf}{_hmad}{mad.Item2}] || D[{_dpf}{mad.Item2}] && !G[{_fcpf}{mad.Item1}] && A[{_fcpf}{mad.Item1}];");
                         }
-                        sb.AppendLine();
                     }
                     foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
                     {
@@ -287,7 +277,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}}}");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

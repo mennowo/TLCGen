@@ -58,25 +58,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
+        public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
@@ -128,7 +112,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.Append($"{ts}CIF_GUS[{_uspf}{_usbeldim}] = H[{_hpf}{_hperiod}{_prmperbeldim}] || SCH[{_schpf}{_schbelcontdim}];");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

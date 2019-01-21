@@ -40,7 +40,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

@@ -169,26 +169,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
+        public override bool HasCCOLElements() => true;
+    
+        public override bool HasCCOLBitmapOutputs() => true;
+    
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -218,18 +202,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}/* default klokperiode voor max.groen */");
                     sb.AppendLine($"{ts}/* ---------------------------------- */");
                     sb.AppendLine($"{ts}MM[{_mpf}{_mperiod}] = 0;");
-                    sb.AppendLine();
                     iper = 1;
                     foreach (var kpm in c.PeriodenData.Perioden)
                     {
                         if (kpm.Type != PeriodeTypeEnum.Groentijden) continue;
                         var comm = kpm.Commentaar ?? "";
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* klokperiode: {comm} */");
                         sb.AppendLine($"{ts}/* -------------{new string('-', comm.Length)} */");
                         sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{iper}], PRM[{_prmpf}{_prmetkp}{iper}]) &&");
                         sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{iper}]))");
                         sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mperiod}] = {iper};");
-                        sb.AppendLine();
                         ++iper;
                     }
                     var iperrt = 1;
@@ -242,18 +225,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (kpm.Type != PeriodeTypeEnum.Overig) continue;
                         var comm = kpm.Commentaar ?? "";
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}/* vrije klokperiode: {comm} */");
                         sb.AppendLine($"{ts}/* -------------------{new string('-', comm.Length)} */");
                         sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpero}{ipero}], PRM[{_prmpf}{_prmetkp}{_prmpero}{ipero}]) &&");
                         sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpero}{ipero}]));");
                         sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperiod}{ipero}] = TRUE;");
-                        sb.AppendLine();
                         ++ipero;
                     }
                     if (c.PeriodenData.Perioden.Count > 0)
                     {
                         if(c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd))
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* klokperiode rateltikkers altijd */");
                             sb.AppendLine($"{ts}/* ------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrt}] = ");
@@ -272,10 +256,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                         if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag))
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* klokperiode rateltikker op aanvraag */");
                             sb.AppendLine($"{ts}/* ----------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrta}] = ");
@@ -294,10 +278,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                         if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen))
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* klokperiode rateltikker dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------------ */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrtdim}] = ");
@@ -314,10 +298,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 iperrtdim++;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                         if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenActief))
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* klokperiode bellen actief */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbel}] = ");
@@ -334,10 +318,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 iperbel++;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                         if (c.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen))
                         {
+                            sb.AppendLine();
                             sb.AppendLine($"{ts}/* klokperiode bellen dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbeldim}] = ");
@@ -354,7 +338,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 iperbeldim++;
                             }
                             sb.AppendLine(";");
-                            sb.AppendLine();
                         }
                     }
                     return sb.ToString();
@@ -421,7 +404,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
 
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -467,7 +449,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{ipero}] = (IH[{_hpf}{_hperiod}{ipero}] == TRUE);");
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 default:

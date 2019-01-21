@@ -32,26 +32,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
+        public override bool HasCCOLElements() => true;
+    
+        public override bool HasCCOLBitmapOutputs() => true;
+    
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -95,7 +79,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             }
                         }
                     }
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

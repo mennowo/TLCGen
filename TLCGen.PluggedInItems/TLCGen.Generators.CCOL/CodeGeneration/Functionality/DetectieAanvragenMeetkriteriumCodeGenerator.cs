@@ -96,21 +96,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
-
-        public override bool HasFunctionLocalVariables()
-        {
-            return true;
-        }
-
+        public override bool HasFunctionLocalVariables() => true;
+        
         public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -163,6 +152,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{ts}RR[fc] &= ~BIT8;  /* reset BIT-sturing t.b.v. reset A */");
+                        sb.AppendLine();
                     }
                     sb.AppendLine($"{ts}/* Detectie aanvragen */");
                     sb.AppendLine($"{ts}/* ------------------ */");

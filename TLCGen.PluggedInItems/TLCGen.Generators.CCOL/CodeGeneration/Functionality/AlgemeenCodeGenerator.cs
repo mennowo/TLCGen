@@ -62,35 +62,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmzz}", c.Data.HuidigeVersieRevision, CCOLElementTimeTypeEnum.None, _prmzz));
         }
 
-        public override bool HasCCOLElements()
-        {
-            return true;
-        }
+        public override bool HasCCOLElements() => true;
 
-        public override IEnumerable<CCOLElement> GetCCOLElements(CCOLElementTypeEnum type)
-        {
-            return _myElements.Where(x => x.Type == type);
-        }
+        public override bool HasCCOLBitmapOutputs() => true;
 
-        public override bool HasCCOLBitmapOutputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapOutputs()
-        {
-            return _myBitmapOutputs;
-        }
-
-        public override bool HasCCOLBitmapInputs()
-        {
-            return true;
-        }
-
-        public override IEnumerable<CCOLIOElement> GetCCOLBitmapInputs()
-        {
-            return _myBitmapInputs;
-        }
+        public override bool HasCCOLBitmapInputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {
