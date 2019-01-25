@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using TLCGen.Helpers;
@@ -70,27 +71,29 @@ namespace TLCGen.ViewModels
         private void GenerateSimulationValuesCommand_Executed(object obj)
         {
             Random rd = new Random();
-            int[] qs = { 25, 50, 100, 200,
-                         5,  25, 50,  200,
-                         5,  25, 100, 200,
-                         5,  50, 100, 200 };
-            int qsmax = 16;
-
+            
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
-                int qthis = rd.Next(qsmax);
+                var max = 3;
+                var n = rd.Next(max);
+                var numbers = new List<int> { 200, 100, 50 };
+                var numbersLow = new List<int> { 25, 10 };
+                var q1 = numbers[n];
+                numbers.Remove(n);
+                --max;
+                n = rd.Next(max);
+                var q2 = numbers[n];
+                numbers.Remove(n);
+                var q3 = numbers[0];
+                n = rd.Next(2);
+                var q4 = numbersLow[n];
+
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    dm.Simulatie.Q1 = qs[qthis];
-                    int next = qthis + 1;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q2 = qs[next];
-                    ++next;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q3 = qs[next];
-                    ++next;
-                    if (next >= qsmax) next -= qsmax;
-                    dm.Simulatie.Q4 = qs[next];
+                    dm.Simulatie.Q1 = q1;
+                    dm.Simulatie.Q2 = q2;
+                    dm.Simulatie.Q3 = q3;
+                    dm.Simulatie.Q4 = q4;
 
                     switch (fcm.Type)
                     {
@@ -109,32 +112,36 @@ namespace TLCGen.ViewModels
             }
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                int qthis = rd.Next(qsmax);
-                dm.Simulatie.Q1 = qs[qthis];
-                int next = qthis + 1;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q2 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q3 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q4 = qs[next];
+                var max = 3;
+                var n = rd.Next(max);
+                var numbers = new List<int> { 200, 100, 50 };
+                var numbersLow = new List<int> { 25, 10 };
+                dm.Simulatie.Q1 = numbers[n];
+                numbers.Remove(n);
+                n = rd.Next(max);
+                dm.Simulatie.Q2 = numbers[n];
+                numbers.Remove(n);
+                n = rd.Next(max);
+                dm.Simulatie.Q3 = numbers[n];
+                n = rd.Next(2);
+                dm.Simulatie.Q4 = numbersLow[n];
                 dm.Simulatie.Stopline = 1800;
             }
             foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
             {
-                int qthis = rd.Next(qsmax);
-                dm.Simulatie.Q1 = qs[qthis];
-                int next = qthis + 1;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q2 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q3 = qs[next];
-                ++next;
-                if (next >= qsmax) next -= qsmax;
-                dm.Simulatie.Q4 = qs[next];
+                var max = 3;
+                var n = rd.Next(max);
+                var numbers = new List<int> { 200, 100, 50 };
+                var numbersLow = new List<int> { 25, 10 };
+                dm.Simulatie.Q1 = numbers[n];
+                numbers.Remove(n);
+                n = rd.Next(max);
+                dm.Simulatie.Q2 = numbers[n];
+                numbers.Remove(n);
+                n = rd.Next(max);
+                dm.Simulatie.Q3 = numbers[n];
+                n = rd.Next(2);
+                dm.Simulatie.Q4 = numbersLow[n];
                 dm.Simulatie.Stopline = 1800;
             }
 

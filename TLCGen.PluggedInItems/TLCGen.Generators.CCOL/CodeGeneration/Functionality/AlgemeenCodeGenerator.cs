@@ -72,6 +72,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    return 20;
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    return 20;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 20;
             }
@@ -84,6 +88,48 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCInitApplication:
+                    sb.AppendLine($"{ts}/* TESTOMGEVING */");
+                    sb.AppendLine($"{ts}/* ============ */");
+                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) && !defined(VISSIM)");
+                    sb.AppendLine($"{ts}{ts}if (!SAPPLPROG)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
+                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F5KEY); ");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(ALTF9KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F2KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(CTRLF3KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F11KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}CFB_max = 0; /* maximum aantal herstarts na fasebewaking */");
+                    sb.AppendLine($"{ts}{ts}{ts}MONTYPE[MONTYPE_DATI] = 0;");
+                    sb.AppendLine($"{ts}{ts}{ts}LOGTYPE[LOGTYPE_DATI] = 0;");
+                    sb.AppendLine($"{ts}{ts}#endif");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    sb.AppendLine($"{ts}/* TESTOMGEVING */");
+                    sb.AppendLine($"{ts}/* ============ */");
+                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) && !defined(VISSIM)");
+                    sb.AppendLine($"{ts}{ts}if (TS &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_JAAR] == 2099) &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MAAND] == 1) &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_DAG] == 1) &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_UUR] == 1) &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MINUUT] == 1) &&");
+                    sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_SECONDE] == 1))");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F3KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F5KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}stuffkey(F4KEY);");
+                    sb.AppendLine($"{ts}{ts}{ts}//stuffkey(F10KEY); ");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}#endif");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.EnkelDisplay)
                     {

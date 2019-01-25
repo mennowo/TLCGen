@@ -1,9 +1,11 @@
 #ifndef EXTRA_FUNC
 #define EXTRA_FUNC
+	#include "gkvar.h"
+	#include "nlvar.h"
 
 bool ym_maxV1(count i, mulv to_verschil);
-bool ym_max_vtgV1(count i);
 bool ym_max_toV1(count i, mulv to_verschil);
+bool ym_max_vtgV1(count i);
 void AanvraagSnelV2(count fc1, count dp);
 bool Rateltikkers(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
@@ -37,6 +39,8 @@ void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
 bool hf_wsg_nl(void);
 void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht);
+bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
+bool kcv_primair_fk_gkl(count i);
 
 extern mulv FC_type[];
 extern int Knipper_1Hz;

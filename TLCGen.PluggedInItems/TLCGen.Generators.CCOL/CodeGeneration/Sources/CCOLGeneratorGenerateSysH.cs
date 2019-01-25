@@ -304,12 +304,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#define dsdummy 0 /* Dummy SD lus 0: tbv KAR & VECOM start op 1 */");
                 ++index;
                 
-                foreach (var d in controller.SelectieveDetectoren)
+                foreach (var d in controller.SelectieveDetectoren.Where(x => !x.Dummy))
                 {
-                    sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}");
+                    sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}{(!string.IsNullOrWhiteSpace(d.Omschrijving) ? " /* " + d.Omschrijving + "*/" : "")}");
                 }
             }
-            sb.AppendLine($"{ts}#define DSMAX    {index}");
+            if (controller.SelectieveDetectoren.Any(x => x.Dummy))
+            {
+                var rindex = index;
+                sb.AppendLine($"{ts}#if !defined AUTOMAAT || defined VISSIM");
+                foreach (var d in controller.SelectieveDetectoren.Where(x => x.Dummy))
+                {
+                    sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}{(!string.IsNullOrWhiteSpace(d.Omschrijving) ? " /* " + d.Omschrijving + "*/" : "")}");
+                }
+                sb.AppendLine($"{ts}#else");
+                sb.AppendLine($"{ts}#define DSMAX    {rindex}");
+                sb.AppendLine($"{ts}#endif");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}#define DSMAX    {index}");
+            }
 
             return sb.ToString();
         }

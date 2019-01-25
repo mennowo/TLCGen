@@ -114,10 +114,10 @@ namespace TLCGen.ViewModels
                     }
                     if (ov.DummyKARUitmelding != null)
                     {
-                        ov.DummyKARUitmelding.Simulatie.Q1 = 30;
-                        ov.DummyKARUitmelding.Simulatie.Q2 = 50;
-                        ov.DummyKARUitmelding.Simulatie.Q3 = 100;
-                        ov.DummyKARUitmelding.Simulatie.Q4 = 150;
+                        ov.DummyKARUitmelding.Simulatie.Q1 = 200;
+                        ov.DummyKARUitmelding.Simulatie.Q2 = 200;
+                        ov.DummyKARUitmelding.Simulatie.Q3 = 200;
+                        ov.DummyKARUitmelding.Simulatie.Q4 = 200;
                         ov.DummyKARUitmelding.Simulatie.Stopline = 1800;
                     }
                 }
@@ -132,10 +132,10 @@ namespace TLCGen.ViewModels
                     hd.DummyKARInmelding.Simulatie.Q3 = 10;
                     hd.DummyKARInmelding.Simulatie.Q4 = 15;
                     hd.DummyKARInmelding.Simulatie.Stopline = 1800;
-                    hd.DummyKARUitmelding.Simulatie.Q1 = 30;
-                    hd.DummyKARUitmelding.Simulatie.Q2 = 50;
-                    hd.DummyKARUitmelding.Simulatie.Q3 = 100;
-                    hd.DummyKARUitmelding.Simulatie.Q4 = 150;
+                    hd.DummyKARUitmelding.Simulatie.Q1 = 200;
+                    hd.DummyKARUitmelding.Simulatie.Q2 = 200;
+                    hd.DummyKARUitmelding.Simulatie.Q3 = 200;
+                    hd.DummyKARUitmelding.Simulatie.Q4 = 200;
                     hd.DummyKARUitmelding.Simulatie.Stopline = 1800;
                 }
             }

@@ -1,8 +1,10 @@
 ﻿#ifndef __CCOLFUNC_H__
 #define __CCOLFUNC_H__
-
+#endif
 #ifdef NALOPEN
    #include "nalopen.h"
+   #include "gkvar.h"    /* groengroenkonflikten              */
+   #include "nlvar.h"    /* nalopen                           */
 #endif
 
 #ifdef NALOOPGK
@@ -34,5 +36,10 @@ void WachtStand(bool *prml[], count ml, count ml_max);
 mulv max_tar_to(count i);
 mulv max_tar_ov(count i, ...);
 bool AlternatieveRuimte(count fcalt, count fcprim, count paltg);
+bool no_conflict(count fc1, count fc2);
+bool testpri_gk_calw(count i);
+bool set_PRIRLW(count i, bool period);
+bool set_ARLW_bit6 (count i);
+void langstwachtende_alternatief_bit6(void);
 
-#endif
+

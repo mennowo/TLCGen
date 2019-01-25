@@ -109,7 +109,7 @@ void OVDebug_Add(void);
 void OVDebug(int ov);
 #endif
 
-extern int iMaximumWachtTijdOverschreden;
+extern int iMaximumWachtTijdOverschreden[];
 extern int iMaximumWachtTijd[];
 extern int iVerstrekenGroenTijd[];
 extern int iAfkapGroen[];

@@ -183,7 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}VersneldPrimair_Add();");
                     sb.AppendLine("");
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{ts}set_FPRML(fc, PRML, ML, MLMAX, (bool)PFPR[fc]);");
+                    sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PRML, ML, MLMAX, (bool)PFPR[fc]);");
                     sb.AppendLine();
                     if (c.ModuleMolen.LangstWachtendeAlternatief)
                     {
