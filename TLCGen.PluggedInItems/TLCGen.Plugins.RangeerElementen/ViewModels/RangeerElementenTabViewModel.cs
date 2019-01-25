@@ -248,6 +248,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
         {
             RangeerElementViewModel sourceItem = dropInfo.Data as RangeerElementViewModel;
             RangeerElementViewModel targetItem = dropInfo.TargetItem as RangeerElementViewModel;
+            if (sourceItem == null || targetItem == null) return;
             var i = RangeerElementen.IndexOf(targetItem);
             var j = RangeerElementen.IndexOf(sourceItem);
             RangeerElementen.Move(j, i);

@@ -992,7 +992,11 @@ namespace TLCGen.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-	        if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList()) return;
+            if (!(dropInfo.Data is DataObject d) || !d.ContainsFileDropList())
+            {
+                dropInfo.NotHandled = true;
+                return;
+            }
             var files = d.GetFileDropList();
             if (files.Count == 1 && files[0].ToLower().EndsWith(".tlc") || files[0].ToLower().EndsWith(".tlcgz"))
             {
