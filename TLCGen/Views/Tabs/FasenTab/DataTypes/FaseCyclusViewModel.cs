@@ -240,6 +240,7 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
+                RaisePropertyChanged(nameof(ToepassenMK2Enabled));
                 RaisePropertyChanged<object>(nameof(AantalRijstroken), broadcast: true);
                 MessengerInstance.Send(new FaseAantalRijstrokenChangedMessage(_faseCyclus, _faseCyclus.AantalRijstroken));
             }
@@ -401,6 +402,20 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool ToepassenMK2Enabled
+        {
+            get => AantalRijstroken > 1;
+        }
+
+        public bool ToepassenMK2
+        {
+            get => _faseCyclus.ToepassenMK2;
+            set
+            {
+                _faseCyclus.ToepassenMK2 = value;
+                RaisePropertyChanged<object>(nameof(ToepassenMK2), broadcast: true);
+            }
+        }
 
         public int DetectorCount => _faseCyclus.Detectoren.Count;
 

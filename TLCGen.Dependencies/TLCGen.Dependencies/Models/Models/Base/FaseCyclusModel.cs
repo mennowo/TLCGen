@@ -51,6 +51,7 @@ namespace TLCGen.Models
         public int VeiligheidsGroenMinMG { get; set; }
         public int VeiligheidsGroenTijdsduur { get; set; }
         public bool WachttijdVoorspeller { get; set; }
+        public bool ToepassenMK2 { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }

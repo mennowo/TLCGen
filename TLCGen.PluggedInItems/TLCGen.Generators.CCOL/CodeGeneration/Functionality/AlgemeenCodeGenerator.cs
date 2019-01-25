@@ -73,9 +73,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    return 20;
+                    return 40;
                 case CCOLCodeTypeEnum.RegCPostApplication:
-                    return 20;
+                    return 30;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     return 20;
             }

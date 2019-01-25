@@ -161,13 +161,30 @@
 
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Vaste aanvraag opties">
-                <StackPanel>
-                    <CheckBox Content="Uitgestelde aanvraag" IsChecked="{Binding Path=UitgesteldeVasteAanvraag,UpdateSourceTrigger=PropertyChanged}"
-                              Margin="5" IsEnabled="{Binding UitgesteldeVasteAanvraagPossible}"/>
-                    <TextBox Margin="2" Text="{Binding UitgesteldeVasteAanvraagTijdsDuur,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UitgesteldeVasteAanvraag}" />
-                </StackPanel>
-            </GroupBox>
+            <StackPanel>
+                <GroupBox Header="Vaste aanvraag opties">
+                    <StackPanel>
+                        <CheckBox Content="Uitgestelde aanvraag" IsChecked="{Binding Path=UitgesteldeVasteAanvraag,UpdateSourceTrigger=PropertyChanged}"
+                                  Margin="5" IsEnabled="{Binding UitgesteldeVasteAanvraagPossible}"/>
+                        <TextBox Margin="2" Text="{Binding UitgesteldeVasteAanvraagTijdsDuur,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding UitgesteldeVasteAanvraag}" />
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Overige opties">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="Toepassen MK2" IsChecked="{Binding Path=ToepassenMK2,UpdateSourceTrigger=PropertyChanged}"
+                                  Margin="5" IsEnabled="{Binding Path=ToepassenMK2Enabled}" />
+                        <ct:InfoElement>
+                            <ct:InfoElement.InfoPopup>
+                                <TextBlock>
+                                    Dit is uitsluitend beschikbaar voor auto en OV, wanneer<LineBreak />
+                                    de betreffende fase meerdere rijstroken heeft. Aanvinken<LineBreak />
+                                    zorgt voor gebruik van meetkriterium2() binnen CCOL
+                                </TextBlock>
+                            </ct:InfoElement.InfoPopup>
+                        </ct:InfoElement>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
         </WrapPanel>
     </Grid>
 </UserControl>

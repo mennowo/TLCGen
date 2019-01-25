@@ -152,6 +152,12 @@
             <Description>Kop maximum voor detector _E1_</Description>
           </Setting>
           <Setting>
+            <Default>mk</Default>
+            <Setting>mk</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Onthouden MK per rijstrook tbv meetkriterium2() voor fase _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>av</Default>
             <Setting>av</Setting>
             <Type>Timer</Type>

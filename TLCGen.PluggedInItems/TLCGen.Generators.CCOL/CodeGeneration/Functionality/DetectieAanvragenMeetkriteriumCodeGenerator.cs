@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmda;
 		private CCOLGeneratorCodeStringSettingModel _prmmk;
         private CCOLGeneratorCodeStringSettingModel _tkm;
+        private CCOLGeneratorCodeStringSettingModel _mmk;
         private CCOLGeneratorCodeStringSettingModel _tav;
 #pragma warning restore 0169
 #pragma warning restore 0649
@@ -25,10 +26,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _myElements = new List<CCOLElement>();
 
-            List<DetectorModel> dets = new List<DetectorModel>();
-            dets.AddRange(c.Fasen.SelectMany(x => x.Detectoren));
-            //dets.AddRange(c.Detectoren); not for loose detectors!
-
+            var dets = c.Fasen.SelectMany(x => x.Detectoren).ToList();
+            
             // Detectie aanvraag functie
             foreach (DetectorModel dm in dets)
             {
@@ -63,36 +62,55 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
 
             // Detectie verlengkriterium
-            foreach (DetectorModel dm in dets)
+            foreach (var fc in c.Fasen)
             {
-                if (dm.Verlengen == DetectorVerlengenTypeEnum.Geen)
-                    continue;
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_prmmk}{dm.Naam}", (int)dm.Verlengen, CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
+                foreach (var dm in fc.Detectoren)
+                {
+                    if (dm.Verlengen == DetectorVerlengenTypeEnum.Geen)
+                        continue;
+                    var dmVerl = (int)dm.Verlengen;
+                    if (fc.ToepassenMK2)
+                    {
+                        switch (dm.Rijstrook)
+                        {
+                            default:
+                            case 1:
+                                // leave as is
+                                break;
+                            case 2:
+                                dmVerl += 4;
+                                break;
+                            case 3:
+                                dmVerl += 8;
+                                break;
+                            case 4:
+                                dmVerl += 12;
+                                break;
+                        }
+                    }
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmmk}{dm.Naam}", dmVerl, CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
+                }
             }
 
             // Collect Kopmax
-            foreach (FaseCyclusModel fcm in c.Fasen)
+            foreach (var fcm in c.Fasen.Where(x => x.Detectoren.Any(x2 => x2.Verlengen != DetectorVerlengenTypeEnum.Geen)))
             {
-                bool HasKopmax = false;
-                foreach (DetectorModel dm in fcm.Detectoren)
-                {
-                    if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
-                    {
-                        HasKopmax = true;
-                        break;
-                    }
-                }
-                if (HasKopmax)
-                {
-                    _myElements.Add(
+                _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tkm}{fcm.Naam}",
                             fcm.Kopmax,
                             CCOLElementTimeTypeEnum.TE_type,
 						    _tkm, fcm.Naam));
-                }
+            }
+
+            // Memory elems for meetkriterium2
+            foreach(var fcm in c.Fasen.Where(x => x.ToepassenMK2))
+            {
+                _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_mmk}{fcm.Naam}", _mmk, fcm.Naam));
             }
         }
 
@@ -194,10 +212,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 break;
                             }
                         }
-                        if (HasKopmax)
-                            sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, (count){_tpf}{_tkm}{fcm.Naam}, ");
+                        if (fcm.ToepassenMK2)
+                        {
+                            if (HasKopmax)
+                                sb.AppendLine($"{ts}meetkriterium2_prm_va_arg((count){_fcpf}{fcm.Naam}, (count){_tpf}{_tkm}{fcm.Naam}, (count){_mpf}{_mmk}{fcm.Naam}, ");
+                            else
+                                sb.AppendLine($"{ts}meetkriterium2_prm_va_arg((count){_fcpf}{fcm.Naam}, NG, (count){_mpf}{_mmk}{fcm.Naam}, ");
+                        }
                         else
-                            sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, NG, ");
+                        {
+                            if (HasKopmax)
+                                sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, (count){_tpf}{_tkm}{fcm.Naam}, ");
+                            else
+                                sb.AppendLine($"{ts}meetkriterium_prm_va_arg((count){_fcpf}{fcm.Naam}, NG, ");
+                        }
                         foreach (DetectorModel dm in fcm.Detectoren)
                         {
                             if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)

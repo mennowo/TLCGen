@@ -200,6 +200,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
+                CopySourceIfNeeded("gkvar.c", sourcefilepath);
+                CopySourceIfNeeded("gkvar.h", sourcefilepath);
+                CopySourceIfNeeded("nlvar.c", sourcefilepath);
+                CopySourceIfNeeded("nlvar.h", sourcefilepath);
                 CopySourceIfNeeded("ccolfunc.c", sourcefilepath);
                 CopySourceIfNeeded("ccolfunc.h", sourcefilepath);
                 CopySourceIfNeeded("detectie.c", sourcefilepath);
