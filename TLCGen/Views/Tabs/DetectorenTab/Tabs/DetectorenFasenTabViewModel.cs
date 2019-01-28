@@ -31,7 +31,7 @@ namespace TLCGen.ViewModels
         private IList _SelectedDetectoren = new ArrayList();
         private List<string> _Fasen;
         private FaseCyclusModel _SelectedFase;
-        private bool _SettingMultiple = false;
+        private volatile bool _SettingMultiple = false;
         private bool _showAlles;
         private bool _showFuncties;
         private bool _showTijden;

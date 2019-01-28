@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ namespace TLCGen.ViewModels
         RelayCommand _GenerateSimulationValuesCommand;
         private DetectorViewModel _SelectedDetector;
         public ObservableCollection<DetectorViewModel> _Detectoren;
+        private volatile bool _SettingMultiple;
 
         #endregion // Fields
 
@@ -42,6 +44,8 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged("SelectedDetector");
             }
         }
+
+        public IList SelectedDetectoren { get; set; } = new ArrayList();
 
         #endregion // Properties
 
@@ -75,15 +79,17 @@ namespace TLCGen.ViewModels
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 var max = 3;
-                var n = rd.Next(max);
                 var numbers = new List<int> { 200, 100, 50 };
-                var numbersLow = new List<int> { 25, 10 };
+                var n = rd.Next(numbers.Count);
+                var numbersLow = new List<int> { 2, 4 };
                 var q1 = numbers[n];
-                numbers.Remove(n);
+                var r = numbers[n];
+                numbers.Remove(r);
                 --max;
-                n = rd.Next(max);
+                n = rd.Next(numbers.Count);
                 var q2 = numbers[n];
-                numbers.Remove(n);
+                r = numbers[n];
+                numbers.Remove(r);
                 var q3 = numbers[0];
                 n = rd.Next(2);
                 var q4 = numbersLow[n];
@@ -113,35 +119,51 @@ namespace TLCGen.ViewModels
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
                 var max = 3;
-                var n = rd.Next(max);
                 var numbers = new List<int> { 200, 100, 50 };
-                var numbersLow = new List<int> { 25, 10 };
-                dm.Simulatie.Q1 = numbers[n];
-                numbers.Remove(n);
-                n = rd.Next(max);
-                dm.Simulatie.Q2 = numbers[n];
-                numbers.Remove(n);
-                n = rd.Next(max);
-                dm.Simulatie.Q3 = numbers[n];
+                var n = rd.Next(numbers.Count);
+                var numbersLow = new List<int> { 2, 4 };
+                var q1 = numbers[n];
+                var r = numbers[n];
+                numbers.Remove(r);
+                --max;
+                n = rd.Next(numbers.Count);
+                var q2 = numbers[n];
+                r = numbers[n];
+                numbers.Remove(r);
+                var q3 = numbers[0];
                 n = rd.Next(2);
-                dm.Simulatie.Q4 = numbersLow[n];
+                var q4 = numbersLow[n];
+
+                dm.Simulatie.Q1 = q1;
+                dm.Simulatie.Q2 = q2;
+                dm.Simulatie.Q3 = q3;
+                dm.Simulatie.Q4 = q4;
+
                 dm.Simulatie.Stopline = 1800;
             }
             foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
             {
                 var max = 3;
-                var n = rd.Next(max);
                 var numbers = new List<int> { 200, 100, 50 };
-                var numbersLow = new List<int> { 25, 10 };
-                dm.Simulatie.Q1 = numbers[n];
-                numbers.Remove(n);
-                n = rd.Next(max);
-                dm.Simulatie.Q2 = numbers[n];
-                numbers.Remove(n);
-                n = rd.Next(max);
-                dm.Simulatie.Q3 = numbers[n];
+                var n = rd.Next(numbers.Count);
+                var numbersLow = new List<int> { 2, 4 };
+                var q1 = numbers[n];
+                var r = numbers[n];
+                numbers.Remove(r);
+                --max;
+                n = rd.Next(numbers.Count);
+                var q2 = numbers[n];
+                r = numbers[n];
+                numbers.Remove(r);
+                var q3 = numbers[0];
                 n = rd.Next(2);
-                dm.Simulatie.Q4 = numbersLow[n];
+                var q4 = numbersLow[n];
+
+                dm.Simulatie.Q1 = q1;
+                dm.Simulatie.Q2 = q2;
+                dm.Simulatie.Q3 = q3;
+                dm.Simulatie.Q4 = q4;
+
                 dm.Simulatie.Stopline = 1800;
             }
 
@@ -159,21 +181,28 @@ namespace TLCGen.ViewModels
 
         private void UpdateDetectoren()
         {
+            foreach (var d in Detectoren) d.PropertyChanged -= Detector_PropertyChanged;
             Detectoren.Clear();
             foreach (FaseCyclusModel fcm in _Controller.Fasen)
             {
                 foreach (DetectorModel dm in fcm.Detectoren)
                 {
-                    Detectoren.Add(new DetectorViewModel(dm));
+                    var dvm = new DetectorViewModel(dm);
+                    dvm.PropertyChanged += Detector_PropertyChanged;
+                    Detectoren.Add(dvm);
                 }
             }
             foreach (DetectorModel dm in _Controller.Detectoren)
             {
-                Detectoren.Add(new DetectorViewModel(dm));
+                var dvm = new DetectorViewModel(dm);
+                dvm.PropertyChanged += Detector_PropertyChanged;
+                Detectoren.Add(dvm);
             }
             foreach (DetectorModel dm in _Controller.SelectieveDetectoren)
             {
-                Detectoren.Add(new DetectorViewModel(dm));
+                var dvm = new DetectorViewModel(dm);
+                dvm.PropertyChanged += Detector_PropertyChanged;
+                Detectoren.Add(dvm);
             }
         }
 
@@ -214,6 +243,23 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TLCGen Events
+
+        #region Event handling
+
+        private void Detector_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedDetectoren != null && SelectedDetectoren.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<DetectorViewModel>(sender, e.PropertyName, SelectedDetectoren);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event Handling
 
         #region Constructor
 

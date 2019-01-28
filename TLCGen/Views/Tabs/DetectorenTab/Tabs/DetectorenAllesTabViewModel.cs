@@ -67,6 +67,7 @@ namespace TLCGen.ViewModels
 
         private void UpdateDetectoren()
         {
+            foreach (var d in Detectoren) d.PropertyChanged -= Detector_PropertyChanged;
             Detectoren.Clear();
             foreach (var fcm in _Controller.Fasen)
             {
