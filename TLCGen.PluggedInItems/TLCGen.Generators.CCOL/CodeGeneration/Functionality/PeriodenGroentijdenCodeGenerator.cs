@@ -33,7 +33,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _myBitmapOutputs = new List<CCOLIOElement>();
 
             var iper = 1;
-            var ipero = 1;
             var iperrt = 1;
             var iperrta = 1;
             var iperrtdim = 1;
@@ -52,18 +51,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{iper++}"));
                         break;
                     case PeriodeTypeEnum.Overig:
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{ipero}", _usper, per.Commentaar));
-                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{_prmpero}{ipero++}"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usper}{_prmpero}{per.Naam}", _usper, per.Commentaar));
+                        _myBitmapOutputs.Add(new CCOLIOElement(per.BitmapData, $"{_uspf}{_usper}{_prmpero}{per.Naam}"));
                         break;
                 }
             }
 
             // parameters
             iper = 1;
-            ipero = 1;
-            foreach (var per in c.PeriodenData.Perioden)
+            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
             {
-                if (per.Type != PeriodeTypeEnum.Groentijden) continue;
                 var hours = per.StartTijd.Hours;
                 if (per.StartTijd.Days == 1)
                 {
@@ -82,11 +79,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 ++iper;
             }
 
-            foreach (var per in c.PeriodenData.Perioden)
+            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type != PeriodeTypeEnum.Groentijden))
             {
-                if (per.Type == PeriodeTypeEnum.Groentijden)
-                    continue;
-
                 // get period params names
                 var pertypeandnum = "";
                 switch (per.Type)
@@ -96,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case PeriodeTypeEnum.RateltikkersDimmen: pertypeandnum = _prmperrtdim + iperrtdim.ToString(); iperrtdim++; break;
                     case PeriodeTypeEnum.BellenActief: pertypeandnum = _prmperbel + iperbel.ToString(); iperbel++; break;
                     case PeriodeTypeEnum.BellenDimmen: pertypeandnum = _prmperbeldim + iperbeldim.ToString(); iperbeldim++; break;
-                    case PeriodeTypeEnum.Overig: pertypeandnum = _prmpero + ipero.ToString(); break;
+                    case PeriodeTypeEnum.Overig: pertypeandnum = _prmpero + per.Naam; break;
                     case PeriodeTypeEnum.Groentijden:
                         break;
                     default:
@@ -126,7 +120,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 // free period helpelem
                 if(per.Type == PeriodeTypeEnum.Overig)
                 {
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{ipero++}", _hperiod, per.Naam));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{per.Naam}", _hperiod, per.Naam));
                 }
             }
             if (iperrt > 1)     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hperiod}{_prmperrt}", CCOLElementTypeEnum.HulpElement, _prmperrt.Description));
@@ -220,7 +214,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     var iperrtdim = 1;
                     var iperbel = 1;
                     var iperbeldim = 1;
-                    ipero = 1;
                     foreach (var kpm in c.PeriodenData.Perioden)
                     {
                         if (kpm.Type != PeriodeTypeEnum.Overig) continue;
@@ -228,10 +221,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* vrije klokperiode: {comm} */");
                         sb.AppendLine($"{ts}/* -------------------{new string('-', comm.Length)} */");
-                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpero}{ipero}], PRM[{_prmpf}{_prmetkp}{_prmpero}{ipero}]) &&");
-                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpero}{ipero}]));");
-                        sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperiod}{ipero}] = TRUE;");
-                        ++ipero;
+                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpero}{kpm.Naam}], PRM[{_prmpf}{_prmetkp}{_prmpero}{kpm.Naam}]) &&");
+                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpero}{kpm.Naam}]));");
+                        sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperiod}{kpm.Naam}] = TRUE;");
                     }
                     if (c.PeriodenData.Perioden.Count > 0)
                     {
@@ -446,7 +438,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (per.Type == PeriodeTypeEnum.Overig)
                         {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{ipero}] = (IH[{_hpf}{_hperiod}{ipero}] == TRUE);");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usper}{_prmpero}{per.Naam}] = (IH[{_hpf}{_hperiod}{per.Naam}] == TRUE);");
                         }
                     }
                     return sb.ToString();

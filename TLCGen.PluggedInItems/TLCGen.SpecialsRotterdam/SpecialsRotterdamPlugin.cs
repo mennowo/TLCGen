@@ -237,7 +237,7 @@ namespace TLCGen.SpecialsRotterdam
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    if (_MyModel.ToevoegenOVM)
+                    if (_MyModel.PrmLoggingTfbMax)
                         return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                     return base.GetFunctionLocalVariables(c, type);
                 default:
