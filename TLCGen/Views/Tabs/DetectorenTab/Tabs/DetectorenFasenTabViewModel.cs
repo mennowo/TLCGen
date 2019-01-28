@@ -449,6 +449,11 @@ namespace TLCGen.ViewModels
         public DetectorenFasenTabViewModel() : base()
         {
             _showAlles = true;
+
+            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
+            {
+                Detectoren.BubbleSort();
+            });
         }
 
         #endregion // Constructor

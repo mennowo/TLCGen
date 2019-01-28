@@ -351,6 +351,10 @@ namespace TLCGen.ViewModels
 
         public DetectorenExtraTabViewModel() : base()
         {
+            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
+            {
+                Detectoren.BubbleSort();
+            });
         }
 
         #endregion // Constructor

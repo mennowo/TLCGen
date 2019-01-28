@@ -277,8 +277,6 @@ namespace TLCGen.ViewModels
                     _Controller.SelectieveDetectoren.Remove(dvm.SelectieveDetector);
                 }
             };
-            //Messenger.Default.Send(new SelectieveDetectorenExtraListChangedMessage(_Controller.SelectieveDetectoren));
-            //Messenger.Default.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Collection Changed
@@ -287,6 +285,10 @@ namespace TLCGen.ViewModels
 
         public SelectieveDetectorenTabViewModel() : base()
         {
+            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
+            {
+                SelectieveDetectoren.BubbleSort();
+            });
         }
 
         #endregion // Constructor
