@@ -31,6 +31,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
 
+            var fasenMetRgv = c.Fasen.Where(x => c.RoBuGrover.SignaalGroepInstellingen.Any(x2 => x2.FaseCyclus == x.Naam));
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* IMPLEMENTATIE ROBUGROVER */");
             sb.AppendLine("/* ------------------------ */");
@@ -65,13 +67,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
             sb.AppendLine($"{ts}static bool DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
             sb.AppendLine($"{ts}static bool MK1[FCMAX];           /* Meetkriterium op rijstrook 1 */");
-            if(c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 1).Any())
+            if(c.RoBuGrover.SignaalGroepInstellingen.Any())
             {
-                sb.AppendLine($"{ts}static bool MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
-            }
-            if (c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Count > 2).Any())
-            {
-                sb.AppendLine($"{ts}static bool MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
+                var rijstrookMax = fasenMetRgv.Max(x => x.AantalRijstroken);
+                if(rijstrookMax > 1)
+                {
+                    sb.AppendLine($"{ts}static bool MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
+                }
+                if (rijstrookMax > 2)
+                {
+                    sb.AppendLine($"{ts}static bool MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
+                }
+                if (rijstrookMax > 3)
+                {
+                    sb.AppendLine($"{ts}static bool MK4[FCMAX];           /* Meetkriterium op rijstrook 4 */");
+                }
             }
             sb.AppendLine($"{ts}static mulv TVG_rgv_old[FCMAX];   /* Opslag 'old' TVG tijden */");
             sb.AppendLine($"{ts}static mulv TVG_rgv_older[FCMAX]; /* Opslag 'older' TVG tijden */");
@@ -215,23 +225,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Meetkriterium MK */");
             sb.AppendLine($"{ts}/* ---------------- */");
-            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Any()))
             {
-                if (fc.HiaatDetectoren.Count == 1)
+                var faseMetRgv = fasenMetRgv.First(x => x.Naam == fc.FaseCyclus);
+                if (faseMetRgv.AantalRijstroken == 1)
                 {
                     sb.AppendLine($"{ts}MK1[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK1[{_fcpf}{fc.FaseCyclus}] && MK[{_fcpf}{fc.FaseCyclus}];");
                 }
-                else if (fc.HiaatDetectoren.Count > 1)
+                else if (faseMetRgv.AantalRijstroken > 1)
                 {
                     foreach(var d in fc.HiaatDetectoren)
                     {
                         sb.AppendLine($"{ts}RT[{_tpf}{_thd}{_dpf}{d.Detector}] = D[{_dpf}{d.Detector}];");
                     }
-                    int i = 1;
-                    foreach (var d in fc.HiaatDetectoren)
+                    for (int i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
-                        sb.AppendLine($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (RT[{_tpf}{_thd}{_dpf}{d.Detector}] || T[{_tpf}{_thd}{_dpf}{d.Detector}]);");
-                        ++i;
+                        sb.Append($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (");
+                        var first = true;
+                        foreach(var d in faseMetRgv.Detectoren.Where(x => x.Rijstrook == i))
+                        {
+                            if (!first) sb.Append(" || ");
+                            var hd = fc.HiaatDetectoren.FirstOrDefault(x => x.Detector == d.Naam);
+                            if(hd != null)
+                            {
+                                sb.Append($"RT[{_tpf}{_thd}{_dpf}{d.Naam}] || T[{_tpf}{_thd}{_dpf}{d.Naam}]");
+                            }
+                            first = false;
+                        }
+                        sb.AppendLine(");");
                     }
                 }
             }
@@ -242,25 +263,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Aanpassen verlenggroentijden op einde verlenggroen */");
             sb.AppendLine($"{ts}/* -------------------------------------------------- */");
-            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
+            foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen.Where(x => x.HiaatDetectoren.Any()))
             {
-                if (fc.HiaatDetectoren.Count == 1)
+                var faseMetRgv = fasenMetRgv.First(x => x.Naam == fc.FaseCyclus);
+                if (faseMetRgv.AantalRijstroken == 1)
                 {
                     sb.AppendLine($"{ts}rgv_verlenggroentijd1({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], (bool)(MK1[{_fcpf}{fc.FaseCyclus}]));");
                 }
-                else if (fc.HiaatDetectoren.Count > 1)
+                else if (faseMetRgv.AantalRijstroken > 1)
                 {
                     sb.Append($"{ts}rgv_verlenggroentijd2({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], ");
-                    int i = 1;
                     sb.Append("(bool)(");
-                    foreach (var d in fc.HiaatDetectoren)
+                    for (var i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
+                        if (i != 1) sb.Append(" && ");
                         sb.Append($"MK{i}[{_fcpf}{fc.FaseCyclus}]");
-                        ++i;
-                        if(i <= fc.HiaatDetectoren.Count)
-                        {
-                            sb.Append(" && ");
-                        }
                     }
                     sb.AppendLine("));");
                 }
