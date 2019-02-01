@@ -71,7 +71,7 @@ void OVRijTijdScenario(int ov,
                        int tbezet);
 void OVCcolElementen(int ov, int tgb, int trt, int hprio, int cvc, int tblk);
 void OVCcol(void);
-void SyncKonfliktTijden(void);
+void KonfliktTijden(void);
 void SKVoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit);
 void SKGelijkStarten(bool period, count fc1, count fc2, bool bit, bool overslag_sg);
 void SKFietsVoetganger(bool period, count fcfts, count fcvtg, bool bit);

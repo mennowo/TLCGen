@@ -766,15 +766,21 @@ bool AlternatieveRuimte(count fcalt, count fcprim, count paltg)
 }
 bool no_conflict(count fc1par, count fc2ov)
 {
-	 count l,c;
-	 if(fc1par==fc2ov) return (FALSE);
-	 else {
-		 for(l=0;l<GKFC_MAX[fc1par];l++) {
-			 c=TO_pointer[fc2ov][l];
-			 if(c==fc1par) return(FALSE);
-		 }
-	 }
-	 return(TRUE);
+	count l, c;
+	if (fc1par == fc2ov) return (FALSE);
+	else
+	{
+		for (l = 0; l < GKFC_MAX[fc1par]; ++l) 
+		{
+#ifdef CCOLTIG
+			c = KF_pointer[fc2ov][l];
+#else
+			c = TO_pointer[fc2ov][l];
+#endif
+			if (c == fc1par) return(FALSE);
+		}
+	}
+	return(TRUE);
 }
 #if !defined (CCOLFUNC) || defined (LWMLFUNC7)
 

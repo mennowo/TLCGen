@@ -535,7 +535,6 @@ void OnderMaximum(void)
         /*    -> reden : de richting kan terug gezet zijn in WG door een RW    */
         iOnderMaximumVerstreken[ov] =  iOnderMaximum[ov] > 0 ? iOnderMaximum[ov]>=iMaxResterendeGroentijd : 0;
         iOnderMaximumVerstreken[ov] |= iOnderMaximum[ov] > 0 ? iVerstrekenGroenTijd2[fc]>=iMaximumGroenTijd-iOnderMaximum[ov] : 0;
-        }
     }
 }
 
@@ -554,7 +553,7 @@ void OVInmeldenID(int ov,
                   int iRT,         /* rijtimer                */
                   int iGBT,        /* groenbewakingstimer     */
                   int iID)         /* identificatie inmelding */
-                  {
+{
     int inm;
     int fc = iFC_OVix[ov];
 
@@ -610,8 +609,7 @@ void OVUitmeldenIndex(int ov,
                       int inm,
                       int iUitmelding,
                       bool bGeforceerd)
-
-                      {
+{
     int i;
     int fc = iFC_OVix[ov];
     if (iUitmelding && iAantalInmeldingen[ov]>0)
@@ -1581,7 +1579,8 @@ void OVAfkappen(void)
         /* OphoogPercentageMG */
         /* ------------------ */
         if (EG[fc] &&
-            (!MK[fc] || iOphoogPercentageMG[fc] >= 100 - iPercGroenTijd[fc])) {
+            (!MK[fc] || iOphoogPercentageMG[fc] >= 100 - iPercGroenTijd[fc]))
+		{
             iPercMGOphogen[fc] = FALSE;
             iOphoogPercentageMG[fc] = 0;
         }
@@ -1624,7 +1623,7 @@ void OVAfkappen(void)
                     }
                 }
             }
-            if (SG[fc] && iTerugKomen[fc]) { /* wijzigen Ane 031011 ikv. niet manipuleren TVG_max[fc] */
+            if (SG[fc] && iTerugKomen[fc]) /* wijzigen Ane 031011 ikv. niet manipuleren TVG_max[fc] */
             {
                 iTerugKomen[fc] = 0;
                 iTerugGekomen[fc]=1;
@@ -1827,7 +1826,7 @@ void OVAlternatieven(void)
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
-        if (iSCH_ALTG[fc] && !PAR[fc] && !RR[fc]) { /* wijz. Ane 8-10-2015: !RR[fc] toegevoegd ivm evt. ander conflicterend ov-richting met fc */
+        if (iSCH_ALTG[fc] && !PAR[fc] && !RR[fc]) /* wijz. Ane 8-10-2015: !RR[fc] toegevoegd ivm evt. ander conflicterend ov-richting met fc */
         {
             for (ov = 0; ov < ovOVMAX; ++ov)
             {
@@ -1852,9 +1851,9 @@ void OVAlternatieven(void)
                     iPrioriteitsOpties[ov] & poBijzonderRealiseren) 
 		        {
 #if defined CCOLTIG && !defined NO_TIGMAX
-                    if (TO_max[fc][iFC_OVix[ov]]==NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
+					if (TIG_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #else
-                    if (TIG_max[fc][iFC_OVix[ov]]==NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
+					if (TO_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #endif
                     {
                         PAR[fc] |= (IH[iH_OVix[ov]] && R[iFC_OVix[ov]] && iSCH_ALTG[fc]) ? OV_PAR_BIT : 0;

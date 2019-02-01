@@ -241,7 +241,11 @@ bool ym_max_vtgV1(count i)
 			{
 				ym = FALSE;
 #ifndef NO_GGCONFLICT
+#if defined CCOLTIG && !defined NO_TIGMAX
+				if (TIG_max[i][k] < GK)  break;
+#else
 				if (TO_max[i][k] < GK)  break;
+#endif
 #endif
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
@@ -256,7 +260,7 @@ bool ym_max_vtgV1(count i)
 						if (CV[m] && PR[m] && !(VG[m] &&
 							((TVG_max[m] - TVG_timer[m]) <
 #if defined CCOLTIG && !defined NO_TIGMAX
-							(TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
+							(TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))) &&
 							 !(WG[m] && (TVG_max[m] < (TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
 #else
 							(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))) &&
