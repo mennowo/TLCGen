@@ -1535,7 +1535,7 @@ void OVAfkappen(void)
                 iTerugKomGroenTijd[fc] == 0 &&
                 !iNietAfkappen[fc] &&
                 ka(fc) &&
-                !iPrioriteit[ov]) /* toevoeging Ane 20100204 ikv. niet afbreken fc wanneer fc prioriteit moet hebben  */)
+                !iPrioriteit[ov]) /* toevoeging Ane 20100204 ikv. niet afbreken fc wanneer fc prioriteit moet hebben  */
             {
                 FM[fc] |= OV_FM_BIT;
             }
