@@ -192,13 +192,14 @@ namespace TLCGen.Plugins.DynamischHiaat
 
         public void SaveSettings()
         {
-            var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var setpath = Path.Combine(appdatpath, @"TLCGen\DynamischHiaat\");
-            if (!Directory.Exists(setpath))
-                Directory.CreateDirectory(setpath);
-            var setfile = Path.Combine(setpath, @"defaults.xml");
-
-            TLCGenSerialization.Serialize(setfile, MyDefaults);
+            // saving not needed: will never change from inside the application
+            //var appdatpath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            //var setpath = Path.Combine(appdatpath, @"TLCGen\DynamischHiaat\");
+            //if (!Directory.Exists(setpath))
+            //    Directory.CreateDirectory(setpath);
+            //var setfile = Path.Combine(setpath, @"defaults.xml");
+            //
+            //TLCGenSerialization.Serialize(setfile, MyDefaults);
         }
 
         #endregion // ITLCGenHasSettings
