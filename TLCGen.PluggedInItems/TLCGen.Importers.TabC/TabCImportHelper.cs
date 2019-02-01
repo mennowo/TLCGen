@@ -219,7 +219,8 @@ namespace TLCGen.Importers.TabC
                             {
                                 outcome.Detectoren.Add(new DetectorModel
                                 {
-                                    Naam = name.ToLower()
+                                    Naam = name.ToLower(),
+                                    Rijstrook = 1
                                 });
                             }
                         }
@@ -449,7 +450,7 @@ namespace TLCGen.Importers.TabC
                     }
                     foreach(var d in fc.Detectoren)
                     {
-                        TLCGen.Settings.DefaultsProvider.Default.SetDefaultsOnModel(d, fc.Type.ToString(), d.Type.ToString());
+                        DefaultsProvider.Default.SetDefaultsOnModel(d, fc.Type.ToString(), d.Type.ToString());
                     }
                 }
             }
