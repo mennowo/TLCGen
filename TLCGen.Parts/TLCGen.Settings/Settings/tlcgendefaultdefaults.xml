@@ -27,7 +27,7 @@
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <AantalRijstroken>1</AantalRijstroken>
-        <VeiligheidsGroenMaximaal>300</VeiligheidsGroenMaximaal>
+        <VeiligheidsGroenMaximaal>80</VeiligheidsGroenMaximaal>
         <Detectoren />
       </Data>
     </Default>
@@ -282,8 +282,8 @@
         <Type>Verweg</Type>
         <Aanvraag>Uit</Aanvraag>
         <Verlengen>MK2</Verlengen>
-        <VeiligheidsGroenHiaat>80</VeiligheidsGroenHiaat>
-        <VeiligheidsGroenVolgtijd>30</VeiligheidsGroenVolgtijd>
+        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
       </Data>
     </Default>
     <Default>

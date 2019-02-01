@@ -94,7 +94,8 @@ namespace TLCGen.Plugins.RIS
 
             sb.AppendLine("}");
 
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), $"{c.Data.Naam}rissim.c"), sb.ToString());
+            Encoding encoding = new ASCIIEncoding();
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), $"{c.Data.Naam}rissim.c"), sb.ToString(), encoding);
         }
     }
 }

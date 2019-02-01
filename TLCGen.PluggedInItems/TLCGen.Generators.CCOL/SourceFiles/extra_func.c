@@ -852,12 +852,6 @@ bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period
  *    Deze variant start meteen met meten op start MG[].
  *    Per fase dienen ALLE (schakelbaar) deelnemende lussen te worden opgegeven.
  *
- *  De code is een afgeleide van de dynamisch hiaat voorbeeldcode van IVER /
- *  Goudappel Coffeng (Willem Kinzel).
- *
- *  De functie maakt gebruik van int BepaalBit(int exp)
- *  Er kunnen maximaal 16 vag4 lussen per fase worden bediend.
- *
  **************************************************************************/
 void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
 {/* tmaxvag4            * maximale tijd dat veiligheidsgroen mag worden toegekend   */

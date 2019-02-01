@@ -188,7 +188,8 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 try
                 {
                     File.Delete(sysFile);
-                    File.WriteAllText(sysFile, sb.ToString());
+                    Encoding encoding = new ASCIIEncoding();
+                    File.WriteAllText(sysFile, sb.ToString(), encoding);
                 }
                 catch
                 {

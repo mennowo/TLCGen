@@ -99,8 +99,9 @@ namespace TLCGen.Plugins.Timings
             }
             sb.AppendLine("}");
 
-            
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), $"{c.Data.Naam}fctimings.c"), sb.ToString());
+
+            Encoding encoding = new ASCIIEncoding();
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName), $"{c.Data.Naam}fctimings.c"), sb.ToString(), encoding);
         }
     }
 }

@@ -161,41 +161,42 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
 
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c));
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c));
+                Encoding encoding = new ASCIIEncoding();
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), encoding);
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), encoding);
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c), encoding);
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c), encoding);
+                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c), encoding);
                 if(c.RoBuGrover.ConflictGroepen?.Count > 0)
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}rgv.c"), GenerateRgvC(c), encoding);
                 }
                 if(c.PTPData.PTPKoppelingen?.Count > 0)
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ptp.c"), GeneratePtpC(c), encoding);
                 }
                 if (c.OVData.OVIngrepen.Any() ||
                     c.OVData.HDIngrepen.Any())
                 {
-                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c));
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.c"), GenerateOvC(c), encoding);
                 }
 	            if (c.HalfstarData.IsHalfstar)
 	            {
-		            File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c));
+		            File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), encoding);
 	            }
 
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, encoding);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, encoding);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, encoding);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, encoding);
+                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, encoding);
                 if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
                 {
-                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader);
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}ov.add"), c, GenerateOvAdd, GenerateOvAddHeader, encoding);
                 }
                 if (c.HalfstarData.IsHalfstar)
                 {
-                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader);
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader, encoding);
                 }
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
@@ -317,7 +318,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                                     var fileLines = new string[lines.Length - 1];
                                     Array.Copy(lines, 1, fileLines, 0, lines.Length - 1);
-                                    File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines);
+                                    File.WriteAllLines(Path.Combine(sourcefilepath, Path.GetFileName(f)), fileLines, encoding);
                                 }
                             }
                             catch
@@ -358,11 +359,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         }
 
         private void WriteAndReviseAdd(string filename, ControllerModel c, Func<ControllerModel, string> generateFunc,
-            Func<ControllerModel, string> generateHeaderFunc)
+            Func<ControllerModel, string> generateHeaderFunc, Encoding encoding)
         {
             if (!File.Exists(filename))
             {
-                File.WriteAllText(filename, generateFunc(c));
+                File.WriteAllText(filename, generateFunc(c), encoding);
             }
             else if(CCOLGeneratorSettingsProvider.Default.Settings.AlterAddHeadersWhileGenerating)
             {
@@ -411,7 +412,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         }
                     }
                     File.Delete(filename);
-                    File.WriteAllText(filename, sb.ToString());
+                    File.WriteAllText(filename, sb.ToString(), encoding);
                 }
                 catch
                 {
