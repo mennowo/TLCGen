@@ -875,6 +875,10 @@
       <Project>{688e5fbb-f084-4169-b484-5c5947720e38}</Project>
       <Name>TLCGen.Plugins.AFM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.DynamischHiaat\TLCGen.Plugins.DynamischeHiaat.csproj">
+      <Project>{470913de-034e-4502-aac8-e62aab880bd1}</Project>
+      <Name>TLCGen.Plugins.DynamischeHiaat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TLCGen.PluggedInItems\TLCGen.Plugins.RangeerElementen\TLCGen.Plugins.RangeerElementen.csproj">
       <Project>{f6cda01a-f99a-478d-95b6-e9d9e3152ddc}</Project>
       <Name>TLCGen.Plugins.RangeerElementen</Name>

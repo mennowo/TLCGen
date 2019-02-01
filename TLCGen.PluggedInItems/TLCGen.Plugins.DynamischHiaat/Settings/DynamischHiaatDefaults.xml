@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DynamischHiaatDefaults xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Defaults>
+    <DynamischHiaatDefault>
+      <Name>IVER'18</Name>
+      <DefaultSnelheid>50 km/u</DefaultSnelheid>
+      <Snelheden>
+        <Snelheid>
+          <Name>40 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>80</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>1</TDH1>
+              <TDH2>1</TDH2>
+              <Maxtijd>100</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>100</Moment1>
+              <Moment2>120</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>14</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>15</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+        <Snelheid>
+          <Name>50 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>80</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>1</TDH1>
+              <TDH2>1</TDH2>
+              <Maxtijd>100</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>100</Moment1>
+              <Moment2>220</Moment2>
+              <TDH1>20</TDH1>
+              <TDH2>8</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>25</TDH1>
+              <TDH2>25</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+        <Snelheid>
+          <Name>60 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>80</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>1</TDH1>
+              <TDH2>1</TDH2>
+              <Maxtijd>100</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>100</Moment1>
+              <Moment2>210</Moment2>
+              <TDH1>20</TDH1>
+              <TDH2>3</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>200</Moment1>
+              <Moment2>300</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>10</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>25</TDH1>
+              <TDH2>25</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+        <Snelheid>
+          <Name>70 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>80</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>1</TDH1>
+              <TDH2>1</TDH2>
+              <Maxtijd>100</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>120</Moment1>
+              <Moment2>200</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>250</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>150</Moment1>
+              <Moment2>310</Moment2>
+              <TDH1>35</TDH1>
+              <TDH2>10</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>25</TDH1>
+              <TDH2>25</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+        <Snelheid>
+          <Name>80 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>80</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>1</TDH1>
+              <TDH2>1</TDH2>
+              <Maxtijd>100</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>120</Moment1>
+              <Moment2>200</Moment2>
+              <TDH1>10</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>200</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>150</Moment1>
+              <Moment2>320</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>5</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>200</Moment1>
+              <Moment2>400</Moment2>
+              <TDH1>30</TDH1>
+              <TDH2>10</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>20</TDH1>
+              <TDH2>20</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+      </Snelheden>
+    </DynamischHiaatDefault>
+    <DynamischHiaatDefault>
+      <Name>GOM</Name>
+      <DefaultSnelheid>50 km/u</DefaultSnelheid>
+      <Snelheden>
+        <Snelheid>
+          <Name>40 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>85</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>65</Moment2>
+              <TDH1>7</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>65</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>65</Moment1>
+              <Moment2>175</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>8</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>20</TDH1>
+              <TDH2>20</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>            
+        </Snelheid>
+        <Snelheid>
+          <Name>50 km/u</Name>
+          <Detectoren>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>0</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>85</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>true</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>65</Moment2>
+              <TDH1>7</TDH1>
+              <TDH2>0</TDH2>
+              <Maxtijd>65</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>true</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>65</Moment1>
+              <Moment2>175</Moment2>
+              <TDH1>15</TDH1>
+              <TDH2>4</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>true</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>true</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+            <Detector>
+              <SignalGroupName />
+              <DetectorName />
+              <Moment1>0</Moment1>
+              <Moment2>0</Moment2>
+              <TDH1>20</TDH1>
+              <TDH2>20</TDH2>
+              <Maxtijd>0</Maxtijd>
+              <SpringStart>false</SpringStart>
+              <VerlengNiet>false</VerlengNiet>
+              <VerlengExtra>false</VerlengExtra>
+              <DirectAftellen>false</DirectAftellen>
+              <SpringGroen>false</SpringGroen>
+            </Detector>
+          </Detectoren>
+        </Snelheid>
+      </Snelheden>
+    </DynamischHiaatDefault>
+  </Defaults>
+</DynamischHiaatDefaults>

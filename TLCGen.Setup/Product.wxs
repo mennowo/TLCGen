@@ -129,9 +129,10 @@
         <File Id='TLCGen.Generators.TLCCC' Name='TLCGen.Generators.TLCCC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Generators.TLCCC.dll' KeyPath='no' />
         <File Id='TLCGen.Importers.TabC' Name='TLCGen.Importers.TabC.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Importers.TabC.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.AFM' Name='TLCGen.Plugins.AFM.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.AFM.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.DynamischHiaat' Name='TLCGen.Plugins.DynamischHiaat.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.DynamischHiaat.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.RIS' Name='TLCGen.Plugins.RIS.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.RIS.dll' KeyPath='no' />
-        <File Id='TLCGen.Plugins.Timings' Name='TLCGen.Plugins.Timings.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Timings.dll' KeyPath='no' />
         <File Id='TLCGen.Plugins.SUMO' Name='TLCGen.Plugins.SUMO.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.SUMO.dll' KeyPath='no' />
+        <File Id='TLCGen.Plugins.Timings' Name='TLCGen.Plugins.Timings.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Plugins.Timings.dll' KeyPath='no' />
         <File Id='TLCGen.Specificator' Name='TLCGen.Specificator.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.Specificator.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
