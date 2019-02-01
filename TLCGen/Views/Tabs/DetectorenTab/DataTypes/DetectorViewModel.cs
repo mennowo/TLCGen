@@ -244,11 +244,36 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _detector.VeiligheidsGroen = value;
-                Messenger.Default.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
+                if (value != NooitAltijdAanUitEnum.Nooit)
+                {
+                    if (VeiligheidsGroenHiaat == 0) VeiligheidsGroenHiaat = 80;
+                    if (VeiligheidsGroenVolgtijd == 0) VeiligheidsGroenVolgtijd = 30;
+                }
+                MessengerInstance.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
                 RaisePropertyChanged<object>(nameof(VeiligheidsGroen), broadcast: true);
             }
         }
-        
+
+        public int VeiligheidsGroenHiaat
+        {
+            get => _detector.VeiligheidsGroenHiaat;
+            set
+            {
+                _detector.VeiligheidsGroenHiaat = value;
+                RaisePropertyChanged<object>(nameof(VeiligheidsGroenHiaat), broadcast: true);
+            }
+        }
+
+        public int VeiligheidsGroenVolgtijd
+        {
+            get => _detector.VeiligheidsGroenVolgtijd;
+            set
+            {
+                _detector.VeiligheidsGroenVolgtijd = value;
+                RaisePropertyChanged<object>(nameof(VeiligheidsGroenVolgtijd), broadcast: true);
+            }
+        }
+
         public bool ResetAanvraag
         {
             get => _detector.ResetAanvraag;

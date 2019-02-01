@@ -1842,16 +1842,22 @@
             <Description>Veiligheidsgroen detector _E1_ fase _E2_</Description>
           </Setting>
           <Setting>
-            <Default>vga</Default>
-            <Setting>vga</Setting>
+            <Default>vgmax</Default>
+            <Setting>vgmax</Setting>
             <Type>Timer</Type>
-            <Description>Minimale tijdsduur MG voor veiligheidsgroen detector _E1_ van fase _E2_</Description>
+            <Description>Maximale tijdsduur veiligheidsgroen voor fase _E2_</Description>
           </Setting>
           <Setting>
-            <Default>vgb</Default>
-            <Setting>vgb</Setting>
+            <Default>vgvolg</Default>
+            <Setting>vgvolg</Setting>
             <Type>Timer</Type>
-            <Description>Tijdsduur veiligheidsgroen detector _E1_ van fase _E2_</Description>
+            <Description>Volgtijd meting opeenvolgende voertuigen tbv veiligheidsgroen detector _E1_ van fase _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>vghiaat</Default>
+            <Setting>vghiaat</Setting>
+            <Type>Timer</Type>
+            <Description>Hiaattijd bij actief zijn veiligheidsgroen detector _E1_ van fase _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

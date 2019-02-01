@@ -216,6 +216,7 @@ namespace TLCGen.Plugins.Timings
                     return 120;
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     return 120;
+                case CCOLCodeTypeEnum.TabCControlIncludes:
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     return 120;
                 default:
@@ -225,8 +226,7 @@ namespace TLCGen.Plugins.Timings
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-
-            if (!_timingsModel.TimingsToepassen) return "";
+            if (!_timingsModel.TimingsToepassen) return null;
 
             StringBuilder sb = new StringBuilder();
 
@@ -243,11 +243,12 @@ namespace TLCGen.Plugins.Timings
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
                     sb.AppendLine($"{ts}msg_fctiming();");
-                    sb.AppendLine();
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.TabCControlIncludes:
+                    sb.AppendLine($"{ts}void Timings_Eventstate_Definition(void);");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     sb.AppendLine($"{ts}Timings_Eventstate_Definition();");
-                    sb.AppendLine();
                     return sb.ToString();
                 default:
                     return null;

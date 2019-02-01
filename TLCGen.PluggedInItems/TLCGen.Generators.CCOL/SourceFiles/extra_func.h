@@ -41,8 +41,10 @@ bool hf_wsg_nl(void);
 void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht);
 bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
 bool kcv_primair_fk_gkl(count i);
+void veiligheidsgroen_V1(count fc, count tmaxvag4, ...);
 
 extern mulv FC_type[];
+extern mulv DVG[];
 extern int Knipper_1Hz;
 
 #endif

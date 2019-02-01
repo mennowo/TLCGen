@@ -12,30 +12,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     {
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _schvg;
-        private CCOLGeneratorCodeStringSettingModel _tvga; 
-        private CCOLGeneratorCodeStringSettingModel _tvgb; 
+        private CCOLGeneratorCodeStringSettingModel _tvgmax; 
+        private CCOLGeneratorCodeStringSettingModel _tvgvolg; 
+        private CCOLGeneratorCodeStringSettingModel _tvghiaat; 
 #pragma warning restore 0649
 
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
 
-            foreach (var fcm in c.Fasen)
+            foreach (var fcm in c.Fasen.Where(x => x.Detectoren.Any(x2 => x2.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit)))
             {
-                if(fcm.Detectoren.Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
+                _myElements.Add(
+                     CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tvgmax}{fcm.Naam}", fcm.VeiligheidsGroenMaximaal, CCOLElementTimeTypeEnum.TE_type, _tvgmax, fcm.Naam));
+                foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
                 {
-                    foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Altijd))
+                    if (dm.VeiligheidsGroen != NooitAltijdAanUitEnum.Altijd)
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
                                 $"{_schvg}{dm.Naam}", dm.VeiligheidsGroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schvg, dm.Naam, fcm.Naam));
-                        _myElements.Add(
-                                CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_tvga}{dm.Naam}", fcm.VeiligheidsGroenMinMG, CCOLElementTimeTypeEnum.TE_type, _tvga, dm.Naam, fcm.Naam));
-                        _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_tvgb}{dm.Naam}", fcm.VeiligheidsGroenTijdsduur, CCOLElementTimeTypeEnum.TE_type, _tvgb, dm.Naam, fcm.Naam));
                     }
+                    _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvgvolg}{dm.Naam}", dm.VeiligheidsGroenVolgtijd, CCOLElementTimeTypeEnum.TE_type, _tvgvolg, dm.Naam, fcm.Naam));
+                    _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tvghiaat}{dm.Naam}", dm.VeiligheidsGroenHiaat, CCOLElementTimeTypeEnum.TE_type, _tvghiaat, dm.Naam, fcm.Naam));
                 }
             }
         }
@@ -53,6 +57,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
+        public override bool HasCodeForController(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCMeeverlengen:
+                    return c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit);
+                default:
+                    return false;
+            }
+        }
+
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             var sb = new StringBuilder();
@@ -60,27 +75,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCMeeverlengen:
-                    if (c.Fasen.SelectMany(x => x.Detectoren).Any(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
+                    sb.AppendLine($"{ts}/* Veiligheidsgroen */");
+                    sb.AppendLine($"{ts}/* ---------------- */");
+                    foreach (var fcm in c.Fasen.Where(x => x.Detectoren.Any(x2 => x2.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit)))
                     {
-                        sb.AppendLine($"{ts}/* Veiligheidsgroen */");
-                        sb.AppendLine($"{ts}/* ---------------- */");
-                        foreach (var fcm in c.Fasen)
+                        sb.Append($"{ts}veiligheidsgroen_V1({_fcpf}{fcm.Naam}, {_tpf}{_tvgmax}{fcm.Naam}, ");
+                        foreach (var dm in fcm.Detectoren.Where(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit))
                         {
-                            foreach (var dm in fcm.Detectoren)
+                            if (dm.VeiligheidsGroen == NooitAltijdAanUitEnum.Altijd)
                             {
-                                if (dm.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit)
-                                {
-                                    if (dm.VeiligheidsGroen == NooitAltijdAanUitEnum.Altijd)
-                                    {
-                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{dm.Naam}, {_tpf}{_tvgb}{dm.Naam}, (bool)(TDH[{_dpf}{dm.Naam}]));");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine($"{ts}veiligheidsgroen({_fcpf}{fcm.Naam}, {_tpf}{_tvga}{dm.Naam}, {_tpf}{_tvgb}{dm.Naam}, (bool)(SCH[{_schpf}{_schvg}{dm.Naam}] && TDH[{_dpf}{dm.Naam}]));");
-                                    }
-                                }
+                                sb.Append($"{_dpf}{dm.Naam}, {_tpf}{_tvgvolg}{dm.Naam}, NG, {_tpf}{_tvghiaat}{dm.Naam}, ");
+                            }
+                            else
+                            {
+                                sb.Append($"{_dpf}{dm.Naam}, {_tpf}{_tvgvolg}{dm.Naam}, {_schpf}{_schvg}{dm.Naam}, {_tpf}{_tvghiaat}{dm.Naam}, ");
                             }
                         }
+                        sb.AppendLine("END);");
                     }
                     return sb.ToString();
                 default:

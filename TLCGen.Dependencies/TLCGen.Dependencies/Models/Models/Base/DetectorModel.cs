@@ -51,6 +51,8 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum AanvraagBijStoring { get; set; }
 
         public NooitAltijdAanUitEnum VeiligheidsGroen { get; set; }
+        public int VeiligheidsGroenHiaat { get; set; }
+        public int VeiligheidsGroenVolgtijd { get; set; }
 
         public bool ShouldSerializeWachtlichtBitmapData()
         {

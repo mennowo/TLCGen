@@ -147,24 +147,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateRegCTop(ControllerModel controller)
+        private string GenerateRegCTop(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("mulv TDH_old[DPMAX];");
             sb.AppendLine("mulv DB_old[DPMAX];");
+            if (c.GetAllDetectors(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit).Any())
+            {
+                sb.AppendLine("mulv DVG[DPMAX]; /* T.b.v. meting veiligheidsgroen */");
+            }
             sb.AppendLine();
 
 
-            if (controller.Data.CCOLMulti)
+            if (c.Data.CCOLMulti)
             {
-                sb.AppendLine($"s_int16 CCOL_SLAVE = {controller.Data.CCOLMultiSlave};");
+                sb.AppendLine($"s_int16 CCOL_SLAVE = {c.Data.CCOLMultiSlave};");
                 sb.AppendLine();
             }
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCTop])
             {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCTop, ts));
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCTop, ts));
             }
             sb.AppendLine();
 

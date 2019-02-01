@@ -842,3 +842,72 @@ bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period
 	return (FALSE);
 }
 
+/**************************************************************************
+ *  Functie  : veiligheidsgroen_V1
+ *
+ *  Functionele omschrijving :
+ *    Een verbeterde versie van de veiligheidsgroen functionaliteit uit
+ *    STDFUNC.C. Er wordt alleen veiligheidsgroen gegeven wanneer
+ *    zich meer dan 1 voertuig in de dilemmazone bevindt.
+ *    Deze variant start meteen met meten op start MG[].
+ *    Per fase dienen ALLE (schakelbaar) deelnemende lussen te worden opgegeven.
+ *
+ *  De code is een afgeleide van de dynamisch hiaat voorbeeldcode van IVER /
+ *  Goudappel Coffeng (Willem Kinzel).
+ *
+ *  De functie maakt gebruik van int BepaalBit(int exp)
+ *  Er kunnen maximaal 16 vag4 lussen per fase worden bediend.
+ *
+ **************************************************************************/
+void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
+{/* tmaxvag4            * maximale tijd dat veiligheidsgroen mag worden toegekend   */
+
+    va_list argpt;     /* variabele argumentenlijst                                 */
+    count dp;          /* detector waarop veiligheidsgroen wordt bepaald            */
+    count tvlg;        /* volgtijd tussen twee voertuigen                           */
+    count schvag4;     /* schakelaar per lus                                        */
+    count tvgh;        /* hiaattijd waarmee gerekend moet worden bij toekennen vag4 */
+   
+    bool vag4     = FALSE;
+    bool bewaking = FALSE;
+    YM[fc]       &= ~BIT2;
+   
+    va_start(argpt, tmaxvag4);
+    dp = va_arg(argpt, va_count);
+
+    do {
+        tvlg    = va_arg(argpt, va_count);
+        schvag4  = va_arg(argpt, va_count);
+        tvgh     = va_arg(argpt, va_count);
+
+        if (schvag4 == NG || SCH[schvag4]) {
+            /* meten dilemma */
+            if (SD[dp] && CIF_IS[dp] < CIF_DET_STORING) {  /* geen detectiestoring */
+                if (DVG[dp] < 2) ++DVG[dp];         /* ophogen teller gemeten voertuigen           */
+                if (DVG[dp] >= 2) bewaking = TRUE; /* bij meer dan 1 voeruig in dil.zone: bewaken */
+                RT[tvlg] = TRUE;                 /* herstarten volg tijd                        */
+            }
+            else {
+                RT[tvlg] = FALSE;
+            }
+
+            /* meten hiaat:
+               bij meer dan 1 voertuig in de dilemmazone
+               vag4hiaatmeting starten obv detectie */
+            if (DVG[dp] >= 2) RT[tvgh] = D[dp];
+            else              RT[tvgh] = FALSE;
+
+            /* bepalen VAG4:
+               indien bew.tijd en vag4hiaat beide lopen
+               veiligheidsgroen op zetten */
+            if (T[tmaxvag4] && T[tvgh]) vag4 = TRUE;
+            if (ET[tvlg]) DVG[dp] = 0;
+        }
+        dp = va_arg(argpt, va_count);
+    } while (dp != END);
+
+    RT[tmaxvag4] = !T[tmaxvag4] && (MG[fc] && bewaking);     /* bewakingstijd starten       */
+    if (MG[fc] && vag4)   YM[fc] |= BIT2;    /* veiligheidsgroen  activeren                 */
+
+    va_end(argpt);
+}

@@ -105,6 +105,15 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="DetectorWithVeiligheidsGroenStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DetectorBaseStyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=VeiligheidsGroen}" Value="Nooit">
+                    <Setter Property="IsEnabled" Value="False" />
+                    <Setter Property="Background" Value="LightGray" />
+                    <Setter Property="Foreground" Value="LightGray" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
         <DataGridTextColumn 
             x:Key="NaamColumn"
@@ -217,9 +226,18 @@
             Header="Veiligheidsgroen" 
             SelectedItemBinding="{Binding Path=VeiligheidsGroen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-            CellStyle="{StaticResource DetectorWithExtendStyle}"
-            Visibility="{Binding Path=ShowVeiligheidsGroen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
-        
+            CellStyle="{StaticResource DetectorBaseStyle}"
+            Visibility="{Binding Path=ShowFuncties, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn 
+            x:Key="VeiligheidsGrVolgTijdColumn"
+            Binding="{Binding Path=VeiligheidsGroenVolgtijd}" Header="Vgr.volgtijd"
+            CellStyle="{StaticResource DetectorWithVeiligheidsGroenStyle}"
+            Visibility="{Binding Path=ShowTijden, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
+        <DataGridTextColumn 
+            x:Key="VeiligheidsGrHiaatTijdColumn"
+            Binding="{Binding Path=VeiligheidsGroenHiaat}" Header="Vgr.hiaattijd"
+            CellStyle="{StaticResource DetectorWithVeiligheidsGroenStyle}"
+            Visibility="{Binding Path=ShowTijden, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}" />
         
     </UserControl.Resources>
     <Grid>
@@ -254,6 +272,8 @@
                 <StaticResource ResourceKey="RijstrookColumn" />
                 <StaticResource ResourceKey="AanvrBijStorColumn" />
                 <StaticResource ResourceKey="VeiligheidsGrColumn" />
+                <StaticResource ResourceKey="VeiligheidsGrVolgTijdColumn" />
+                <StaticResource ResourceKey="VeiligheidsGrHiaatTijdColumn" />
                 <StaticResource ResourceKey="ResetAanvraagColumn" />
                 <StaticResource ResourceKey="ResetAanvraagTijdColumn" />
             </DataGrid.Columns>

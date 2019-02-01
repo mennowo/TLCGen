@@ -381,24 +381,13 @@ namespace TLCGen.ViewModels
             }
         }
 
-
-        public int VeiligheidsGroenMinMG
+        public int VeiligheidsGroenMaximaal
         {
-            get => _faseCyclus.VeiligheidsGroenMinMG;
+            get => _faseCyclus.VeiligheidsGroenMaximaal;
             set
             {
-                _faseCyclus.VeiligheidsGroenMinMG = value;
-                RaisePropertyChanged<object>(nameof(VeiligheidsGroenMinMG), broadcast: true);
-            }
-        }
-
-        public int VeiligheidsGroenTijdsduur
-        {
-            get => _faseCyclus.VeiligheidsGroenTijdsduur;
-            set
-            {
-                _faseCyclus.VeiligheidsGroenTijdsduur = value;
-                RaisePropertyChanged<object>(nameof(VeiligheidsGroenTijdsduur), broadcast: true);
+                _faseCyclus.VeiligheidsGroenMaximaal = value;
+                RaisePropertyChanged<object>(nameof(VeiligheidsGroenMaximaal), broadcast: true);
             }
         }
 

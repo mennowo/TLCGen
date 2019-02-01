@@ -48,8 +48,7 @@ namespace TLCGen.Models
         public bool AanvraagBijDetectieStoring { get; set; }
         public bool PercentageGroenBijDetectieStoring { get; set; }
         public int? PercentageGroen { get; set; }
-        public int VeiligheidsGroenMinMG { get; set; }
-        public int VeiligheidsGroenTijdsduur { get; set; }
+        public int VeiligheidsGroenMaximaal { get; set; }
         public bool WachttijdVoorspeller { get; set; }
         public bool ToepassenMK2 { get; set; }
 

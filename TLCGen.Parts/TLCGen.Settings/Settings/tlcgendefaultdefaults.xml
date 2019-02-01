@@ -27,6 +27,7 @@
         <MeeverlengenType>To</MeeverlengenType>
         <MeeverlengenVerschil xsi:nil="true" />
         <AantalRijstroken>1</AantalRijstroken>
+        <VeiligheidsGroenMaximaal>300</VeiligheidsGroenMaximaal>
         <Detectoren />
       </Data>
     </Default>
@@ -281,6 +282,8 @@
         <Type>Verweg</Type>
         <Aanvraag>Uit</Aanvraag>
         <Verlengen>MK2</Verlengen>
+        <VeiligheidsGroenHiaat>80</VeiligheidsGroenHiaat>
+        <VeiligheidsGroenVolgtijd>30</VeiligheidsGroenVolgtijd>
       </Data>
     </Default>
     <Default>
@@ -672,7 +675,7 @@
         <AlleLijnen>false</AlleLijnen>
         <GeconditioneerdePrioriteit>Nooit</GeconditioneerdePrioriteit>
         <GeconditioneerdePrioTeVroeg>2</GeconditioneerdePrioTeVroeg>
-        <GeconditioneerdePrioOpTijd>12</GeconditioneerdePrioOpTijd>
+        <GeconditioneerdePrioOpTijd>23</GeconditioneerdePrioOpTijd>
         <GeconditioneerdePrioTeLaat>123</GeconditioneerdePrioTeLaat>
         <OVInmeldingBitmapData />
         <GeconditioneerdePrioTeVroegBitmapData />
