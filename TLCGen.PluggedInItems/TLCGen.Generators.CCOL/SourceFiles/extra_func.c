@@ -27,32 +27,64 @@ bool ym_maxV1(count i, mulv to_verschil)
 	if (MG[i])
 	{   /* let op! i.v.m. snelheid alleen in MG[] behandeld */
 		ym = TRUE;
+#ifndef NO_GGCONFLICT
 		for (n = 0; n<GKFC_MAX[i]; ++n)
+#else
+		for (n = 0; n<KFC_MAX[i]; ++n)
+#endif
 		{
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+#else
 			k = TO_pointer[i][n];
-			if ((RA[k] || AAPR[k])) 
+#endif
+			if (RA[k] || AAPR[k])
 			{
 				ym = FALSE;
-				if (TO_max[i][k]<GK)  break;
+#ifndef NO_GGCONFLICT
+#if defined CCOLTIG && !defined NO_TIGMAX
+				if (TIG_max[i][k] < GK)  break;
+#else
+				if (TO_max[i][k] < GK)  break;
+#endif
+#endif
 				for (j = 0; j<KFC_MAX[k]; ++j)
 				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
 					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+				    if (CV[m] && (((TIG_max[i][k] - to_verschil) <= TIG_max[m][k])
+#else
 					if (CV[m] && (((TO_max[i][k] - to_verschil) <= TO_max[m][k])
+#endif
 						|| (to_verschil<0)))
 					{
 						ym = TRUE;
 						break;
 					}
 				}
-				for (j = KFC_MAX[k]; j<GKFC_MAX[k]; ++j)
+#ifndef NO_GGCONFLICT
+				for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
 				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
 					m = TO_pointer[k][j];
-					if (CV[m] && (TO_max[m][k] == GKL||TO_max[i][k] <= GK))
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (TIG_max[m][k] == GKL || TIG_max[i][k] <= GK))
+#else
+			        if (CV[m] && (TO_max[m][k] == GKL || TO_max[i][k] <= GK))
+#endif
 					{
 						ym = TRUE;
 						break;
 					}
 				}
+#endif
 			}
 			if (!ym) break;
 		}
@@ -84,45 +116,85 @@ bool ym_maxV1(count i, mulv to_verschil)
 
 bool ym_max_toV1(count i, mulv to_verschil)
 {
-   register count n, j, k, m;
-   bool ym;
+	register count n, j, k, m;
+	bool ym;
 
-   if (MG[i]) {     /* let op! i.v.m. snelheid alleen in MG[] behandeld	*/
-      ym= TRUE;
-      for (n=0; n< GKFC_MAX[i]; n++) {
-	 k= TO_pointer[i][n];
-	 if ((RA[k]||AAPR[k])) {
-	    ym= FALSE;
-	    if (TO_max[i][k]<GK)  break;
-	    for (j=0; j<KFC_MAX[k]; j++) {
-	       m= TO_pointer[k][j];
-	       if ((CV[m] && (((TGL_max[i]+TO_max[i][k]-to_verschil)
-			   <= (TGL_max[m]+TO_max[m][k]))
-		   && ( (TGL_max[i]+TO_max[i][k]) < (TFG_max[m]-TFG_timer[m]
-			+TVG_max[m]-TVG_timer[m] + TGL_max[m]-TGL_timer[m]
-			+TO_max[m][k]-TO_timer[m]) )
-		   || (to_verschil<0))
-		   || TO[m][k]
-		   && ((TGL_max[i]+TO_max[i][k]) < (TGL_max[m]+TO_max[m][k]
-		     -TGL_timer[m]-TO_timer[m]) ) ))  {
-		  ym= TRUE;
-		  break;
-	       }
-	    }
+	if (MG[i]) /* let op! i.v.m. snelheid alleen in MG[] behandeld	*/
+	{
+		ym = TRUE;
+		for (n = 0; n < GKFC_MAX[i]; ++n)
+		{
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+#else
+			k = TO_pointer[i][n];
+#endif
+			if ((RA[k] || AAPR[k]))
+			{
+				ym = FALSE;
+#if defined CCOLTIG && !defined NO_TIGMAX
+				if (TIG_max[i][k] < GK)  break;
+#else
+				if (TO_max[i][k] < GK)  break;
+#endif
+				for (j = 0; j < KFC_MAX[k]; ++j)
+				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
+					m = TO_pointer[k][j];
+#endif
 
-	    for (j=KFC_MAX[k]; j<FKFC_MAX[k]; j++) {
-	       m= TO_pointer[k][j];
-	       if (CV[m] && (TO_max[m][k] == GKL||TO_max[i][k] <= GK)) {
-		  ym= TRUE;
-		  break;
-	       }
-	    }
-	 }
-	 if (!ym) break;
-      }
-   }
-   else  ym= CV[i];
-   return ym;
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (((TGL_max[i] + TIG_max[i][k] - to_verschil) <=
+						(TGL_max[m] + TIG_max[m][k])) &&
+						((TGL_max[i] + TIG_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
+							TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m] +
+							TIG_max[m][k] - TIG_timer[m]))
+						|| (to_verschil < 0))
+						|| TIG[m][k]
+						&& ((TGL_max[i] + TIG_max[i][k]) < (TGL_max[m] + TIG_max[m][k] -
+							TGL_timer[m] - TIG_timer[m])))
+#else
+					if (CV[m] && (((TGL_max[i] + TO_max[i][k] - to_verschil) <=
+						(TGL_max[m] + TO_max[m][k])) &&
+						((TGL_max[i] + TO_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
+							TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m] +
+							TO_max[m][k] - TO_timer[m]))
+						|| (to_verschil < 0))
+						|| TO[m][k]
+						&& ((TGL_max[i] + TO_max[i][k]) < (TGL_max[m] + TO_max[m][k] -
+							TGL_timer[m] - TO_timer[m])))
+#endif
+					{
+						ym = TRUE;
+						break;
+					}
+				}
+
+				for (j = KFC_MAX[k]; j < FKFC_MAX[k]; j++)
+				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
+					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (TIG_max[m][k] == GKL || TIG_max[i][k] <= GK))
+#else
+					if (CV[m] && (TO_max[m][k] == GKL || TO_max[i][k] <= GK))
+#endif
+					{
+						ym = TRUE;
+						break;
+					}
+				}
+			}
+			if (!ym) break;
+		}
+	}
+	else  ym = CV[i];
+	return ym;
 }
 
 
@@ -145,7 +217,6 @@ Ten opzichte van de functie uit de generator is het verschil:
 - De functie kijkt of de maximale groentijd voor de fase is bereikt
 t.o.v. de benodigde ontruiming van autorichtingen
 ------------------------------------------------------------------------------ */
-
 bool ym_max_vtgV1(count i)
 {
 	register count n, j, k, m;
@@ -155,26 +226,42 @@ bool ym_max_vtgV1(count i)
 	{
 		ym = TRUE;
 		/* nalopen of nog moet worden meeverlengd */
+#ifndef NO_GGCONFLICT
 		for (n = 0; n < GKFC_MAX[i]; ++n)
+#else
+		for (n = 0; n < KFC_MAX[i]; ++n)
+#endif
 		{
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+#else
 			k = TO_pointer[i][n];
-			if ((RA[k] || AAPR[k]))
+#endif
+			if (RA[k] || AAPR[k])
 			{
 				ym = FALSE;
+#ifndef NO_GGCONFLICT
 				if (TO_max[i][k] < GK)  break;
+#endif
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
 					m = TO_pointer[k][j];
+#endif
 					if (FC_type[m] == MVT_type)
 					{
-						/* bereken of max groentijd is bereikt tov benodigde
-						ontruiming */
+						/* bereken of max groentijd is bereikt tov benodigde ontruiming */
 						if (CV[m] && PR[m] && !(VG[m] &&
 							((TVG_max[m] - TVG_timer[m]) <
-								(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m])))
-								&& !(WG[m] &&
-							(TVG_max[m] <
-								(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))))
+#if defined CCOLTIG && !defined NO_TIGMAX
+							(TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
+							 !(WG[m] && (TVG_max[m] < (TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
+#else
+							(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))) &&
+							 !(WG[m] && (TVG_max[m] < (TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))))
+#endif
 						{
 							ym = TRUE;
 							break;
@@ -189,15 +276,25 @@ bool ym_max_vtgV1(count i)
 						}
 					}
 				}
+#ifndef NO_GGCONFLICT
 				for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
 				{
+#ifdef CCOLTIG
+					m = KF_pointer[k][j];
+#else
 					m = TO_pointer[k][j];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (CV[m] && (TIG_max[m][k] == GKL))
+#else
 					if (CV[m] && (TO_max[m][k] == GKL))
+#endif
 					{
 						ym = TRUE;
 						break;
 					}
 				}
+#endif
 			}
 			if (!ym)
 				break;
@@ -270,7 +367,7 @@ bool Rateltikkers(      count fc,       /* fase */
                         ...)            /* hulpelementen drukknoppen */
 {
 	va_list argpt;
-	count dkh;
+	count hdkh;
 
     /* verzorgen naloop rateltikker */
     RT[tnlrt] = EGL[fc] && IH[has] || EH[has_cont_];
@@ -279,22 +376,22 @@ bool Rateltikkers(      count fc,       /* fase */
     if (ET[tnlrt])
     {
         /* Check op continue aansturing */
-        if (has_cont_ > NG) if(!IH[has_cont_])      IH[has]  = FALSE;
-        else                                        IH[has]  = FALSE;
+		if (has_cont_ == NG || !IH[has_cont_])      IH[has] = FALSE;
     }
     
     /* continue aansturing rateltikkers */
     if (has_cont_ > NG)                             IH[has] |= IH[has_cont_];
     
     /* check tikkers werking */
-    if(IH[has_aan_])
+    if (IH[has_aan_])
     {
 		va_start(argpt, tnlrt);
-		while ((dkh = va_arg(argpt, va_count)) != END)
+		while ((hdkh = va_arg(argpt, va_count)) != END)
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
-			IH[has] |= IH[dkh];
+			IH[has] |= IH[hdkh];
 		}
+		va_end(argpt);
     }
 
     return (IH[has]);
@@ -353,6 +450,7 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 			/* opzetten rateltikkers bij detectie drukknoppen */
 			IH[has] |= D[dkid];
 		}
+		va_end(argpt);
 	}
 
 	/* eenmalige aanvraag afzetten Across */
@@ -574,35 +672,55 @@ void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht)
 
 bool kcv_primair_fk_gkl(count i)
 {
-   register count n, j;
+	register count n, j;
 
 #ifndef NO_GGCONFLICT
-   for (n=0; n<GKFC_MAX[i]; n++) {
+	for (n = 0; n < GKFC_MAX[i]; ++n)
 #else
-   for (n=0; n<KFC_MAX[i]; n++) {
+	for (n = 0; n < KFC_MAX[i]; ++n)
 #endif
-      j=TO_pointer[i][n];
-      if ((((R[j] || GL[j]) && AA[j] || CV[j]
-	 || G[j] && (RS[j] || RW[j])) && PR[j]) && !((TO_max[i][j] == GKL) && (TO_max[j][i] == FK)))
-	 return (TRUE);
-   }
-   return (FALSE);
+	{
+#ifdef CCOLTIG
+		j = KF_pointer[i][n];
+#else
+		j = TO_pointer[i][n];
+#endif
+		if ((((R[j] || GL[j]) && AA[j] || CV[j] ||
+			G[j] && (RS[j] || RW[j])) && PR[j]) &&
+#if defined CCOLTIG && !defined NO_TIGMAX
+			!((TIG_max[i][j] == GKL) && (TIG_max[j][i] == FK)))
+#else
+			!((TO_max[i][j] == GKL) && (TO_max[j][i] == FK)))
+#endif
+			return (TRUE);
+	}
+	return (FALSE);
 }
+
 static bool a_pg_fkprml(count i, bool *prml[], count ml)
 {
    register count n,j;
 
-   for (n=0; n<GKFC_MAX[i]; n++) {
-      j=TO_pointer[i][n];
-      if ((A[j] && !BL[j] && (!G[j] || CV[j]) || PP[j])
-	 && ((prml[ml][j] & PRIMAIR_VERSNELD) && !PG[j]) )
+   for (n = 0; n < GKFC_MAX[i]; ++n)
+   {
+#ifdef CCOLTIG
+	   j = KF_pointer[i][n];
+#else
+	   j = TO_pointer[i][n];
+#endif
+      if ((A[j] && !BL[j] && (!G[j] || CV[j]) || PP[j]) &&
+	      ((prml[ml][j] & PRIMAIR_VERSNELD) && !PG[j]) )
 	 return (FALSE);	 /* TO_pointer[i][n]	*/
    }
 
-   for (n=GKFC_MAX[i]; n<FKFC_MAX[i]; n++) {
-      j=TO_pointer[i][n];
-      if ((A[j] && !BL[j] && !G[j] || PP[j])
-	 && ((prml[ml][j] & PRIMAIR_VERSNELD) && !PG[j]) )
+   for (n = GKFC_MAX[i]; n < FKFC_MAX[i]; ++n) {
+#ifdef CCOLTIG
+	   j = KF_pointer[i][n];
+#else
+	   j = TO_pointer[i][n];
+#endif
+      if ((A[j] && !BL[j] && !G[j] || PP[j]) &&
+	      ((prml[ml][j] & PRIMAIR_VERSNELD) && !PG[j]) )
 	 return (FALSE);	 /* TO_pointer[i][n]	*/
    }
    return (TRUE);
@@ -612,85 +730,111 @@ static bool a_pg_fkprml(count i, bool *prml[], count ml)
 
 static bool a_ag_fkprml(count i, bool *prml[], count ml)
 {
-   register count n,j;
+	register count n, j;
 
-   for (n=0; n<FKFC_MAX[i]; n++) {
-      j=TO_pointer[i][n];
-      if ((A[j] && !BL[j] && !G[j])
-	 && ((prml[ml][j] & ALTERNATIEF_VERSNELD) && !AG[j]))
-	 return (FALSE);	 /* TO_pointer[i][n]	*/
-   }
-   return (TRUE);
+	for (n = 0; n < FKFC_MAX[i]; ++n) {
+#ifdef CCOLTIG
+		j = KF_pointer[i][n];
+#else
+		j = TO_pointer[i][n];
+#endif
+		if ((A[j] && !BL[j] && !G[j]) &&
+			((prml[ml][j] & ALTERNATIEF_VERSNELD) && !AG[j]))
+			return (FALSE);	 /* TO_pointer[i][n] */
+	}
+	return (TRUE);
 }
 
 static void set_pg_fkprml(count i, bool *prml[], count ml)
 {
-   register count n,j;
+	register count n, j;
 
-   for (n=0; n<FKFC_MAX[i]; n++) {
-      j=TO_pointer[i][n];
-      if (prml[ml][j] & PRIMAIR)  PG[j] |= PRIMAIR_OVERSLAG;
-   }
+	for (n = 0; n < FKFC_MAX[i]; ++n)
+	{
+#ifdef CCOLTIG
+		j = KF_pointer[i][n];
+#else
+		j = TO_pointer[i][n];
+#endif
+		if (prml[ml][j] & PRIMAIR)  PG[j] |= PRIMAIR_OVERSLAG;
+	}
 }
+
 bool kcv_fk_gkl(count i)
 {
-   register count n, k;
+	register count n, k;
 
 #ifndef NO_GGCONFLICT
-   for (n=0; n<GKFC_MAX[i]; n++) {
+	for (n = 0; n < GKFC_MAX[i]; ++n) {
 #else
-   for (n=0; n<KFC_MAX[i]; n++) {
+	for (n = 0; n < KFC_MAX[i]; ++n) {
 #endif
-      k= TO_pointer[i][n];
-      if (((R[k] || GL[k]) && AA[k] || CV[k] || G[k] && (RS[k] || RW[k])) && !((TO_max[i][k] == GKL) && (TO_max[k][i] == FK)))
-	 return (TRUE);
-   }
-   return (FALSE);
+#ifdef CCOLTIG
+		k = KF_pointer[i][n];
+#else
+		k = TO_pointer[i][n];
+#endif
+		if (((R[k] || GL[k]) && AA[k] || CV[k] || G[k] && (RS[k] || RW[k])) && 
+#if defined CCOLTIG && !defined NO_TIGMAX
+			!((TIG_max[i][k] == GKL) && (TIG_max[k][i] == FK)))
+#else
+			!((TO_max[i][k] == GKL) && (TO_max[k][i] == FK)))
+#endif
+			return (TRUE);
+	}
+	return (FALSE);
 }
 
 bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period)
 {
-   register count hml, m;
+	register count hml, m;
 
-   if (AAPR[i] && !AA[i] && !prml[ml][i])  AAPR[i]= FALSE;
+	if (AAPR[i] && !AA[i] && !prml[ml][i])  AAPR[i] = FALSE;
 
+	if (A[i] && RV[i] && !TRG[i] && !AA[i] && !BL[i])
+	{
+		if (!prml[ml][i] && !PG[i]) /* not in active module or realized */
+		{
+			hml = ml;
+			for (m = 0; m < ml_max; ++m)
+			{
+				if (!a_pg_fkprml(i, prml, hml))
+				{
+					AAPR[i] = 0;
+					return (FALSE);
+				}
+				if (!a_ag_fkprml(i, prml, hml))
+				{
+					AAPR[i] |= BIT1;
+				}
+				if (prml[hml][i] == PRIMAIR) 
+				{
+					if (!period) AAPR[i] |= BIT5;
+					if (RR[i])   AAPR[i] |= BIT4;
+					if (fkaa_primair(i))  AAPR[i] |= BIT3;
+					if (kcv_primair_fk_gkl(i))   AAPR[i] |= BIT2;
+					if (fkaa(i)) 	     AAPR[i] |= BIT1;
+					if (AAPR[i])  return (FALSE);
+					AAPR[i] = BIT0;
 
-   if (A[i] && RV[i] && !TRG[i] && !AA[i] && !BL[i] ) {
-      if (!prml[ml][i] && !PG[i]) {  /* not in active module or realized*/
-	 hml= ml;
-	 for (m=0; m<ml_max; m++) {
-	    if (!a_pg_fkprml(i, prml, hml)) {
-	       AAPR[i]= 0;
-	       return (FALSE);
-	    }
-	    if (!a_ag_fkprml(i, prml, hml))  {
-	       AAPR[i] |= BIT1;
-	    }
-	    if (prml[hml][i] == PRIMAIR) {
-               if (!period) AAPR[i] |= BIT5;
-               if (RR[i])   AAPR[i] |= BIT4;
-	       if (fkaa_primair(i))  AAPR[i] |= BIT3;
-		   if (kcv_primair_fk_gkl(i))   AAPR[i] |= BIT2;
-	       if (fkaa(i)) 	     AAPR[i] |= BIT1;
-	       if (AAPR[i])  return (FALSE);
-	       AAPR[i]= BIT0;
-
-	       if (!kcv_fk_gkl(i)) {
-		  do {
-		     hml--;
-		     if (hml<0)  hml= ml_max-1;
-		     set_pg_fkprml(i, prml, hml);  /* set confl. pg's	*/
-		     prml[hml][i] |= VERSNELD_PRIMAIR; /* set_FPRML	*/
-		  } while (hml != ml);
-		  return (TRUE);
-	       }
-	       else return (FALSE);
-	    }
-	    hml++;
-	    if (hml>=ml_max)  hml= ML1;
-	 }
-      }
-   }
-   return (FALSE);
+					if (!kcv_fk_gkl(i))
+					{
+						do
+						{
+							--hml;
+							if (hml < 0)  hml = ml_max - 1;
+							set_pg_fkprml(i, prml, hml);  /* set confl. pg's	*/
+							prml[hml][i] |= VERSNELD_PRIMAIR; /* set_FPRML	*/
+						} while (hml != ml);
+						return (TRUE);
+					}
+					else return (FALSE);
+				}
+				++hml;
+				if (hml >= ml_max)  hml = ML1;
+			}
+		}
+	}
+	return (FALSE);
 }
 

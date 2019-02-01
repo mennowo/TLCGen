@@ -1,4 +1,7 @@
-﻿#define    OV_A_BIT      BIT6
+﻿#ifndef __OVH
+#define __OVH
+
+#define    OV_A_BIT      BIT6
 #define    OV_Z_BIT      BIT6
 #define   OV_FM_BIT      BIT6
 #define   OV_RW_BIT      BIT6
@@ -168,3 +171,5 @@ extern int *iInOnderMaximumVerstreken[];
 extern int ovKFC_MAX[];
 extern int *ovTO_pointer[];
 extern int iLangstWachtendeAlternatief;
+
+#endif // __OVH

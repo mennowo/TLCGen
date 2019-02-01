@@ -564,7 +564,7 @@ mulv max_tar_tig(count i)
     return t_aa_max;
     }
 
-#endif // NO_TIGMAX
+#endif /* NO_TIGMAX */
 
 #endif
 
@@ -779,20 +779,24 @@ bool no_conflict(count fc1par, count fc2ov)
 #if !defined (CCOLFUNC) || defined (LWMLFUNC7)
 
 bool testpri_gk_calw(count i)
-
 {
-   register count n, j;
+    register count n, j;
 
-   for (n=0; n<GKFC_MAX[i]; n++) {
-      j=TO_pointer[i][n];
-      if ((R[j] || GL[j]) && !RR[j] && !BL[j] && (/* AA[j] && !AR[j]
+    for (n = 0; n < GKFC_MAX[i]; ++n)
+	{
+#ifdef CCOLTIG
+	   j = KF_pointer[i][n];
+#else
+	   j = TO_pointer[i][n];
+#endif
+       if ((R[j] || GL[j]) && !RR[j] && !BL[j] && (/* AA[j] && !AR[j]
 					      || */ (CALW[j]>CALW[i])))
-	 return (FALSE);
+	   return FALSE;
 		  /* test of !AR[j] i.v.m. het mogelijk tegenhouden  (RR[]) */
 		  /* alternatieve realisaties mbv rr_ar_fkpr()              */
-   }              /* de vraag is of hier wel op RR[] moet worden getest     */
+    }              /* de vraag is of hier wel op RR[] moet worden getest     */
 		  /* indien slechts een tijdelijke volgorde van afwikkeling */
-   return (TRUE); /* m.b.v. RR[] moet worden beheerst			    */
+    return TRUE; /* m.b.v. RR[] moet worden beheerst			    */
 }
 
 
@@ -809,21 +813,22 @@ bool testpri_gk_calw(count i)
  * set_PRIRLW() roept testpri_gk_calw() aan en  kcv().
  * set_PRIRLW() wordt aangeroepen in de procedure OVBijzonderRealiseren() in ov.c
  */
-
 bool set_PRIRLW(count i, bool period)
 {
-   if (AAPR[i] && !AA[i])  AAPR[i]= FALSE;
-   if (!AA[i] && period && (CALW[i]>=PRI_CALW) && A[i] && RV[i]
-       && !TRG[i] && !RR[i] && !BL[i] && testpri_gk_calw(i)) {
-      AAPR[i]= FALSE;
-      if (kcv(i)) AAPR[i] |= BIT6; /* prioriteit! */
-      if (!AAPR[i]) {
-	 AAPR[i]= TRUE;
-	 AAPR[i] |= BIT6;
-	 AA[i]= TRUE;		/* set actuation */
-	 PR[i]= BIT6;
-      }
-      return  (TRUE);
+   if (AAPR[i] && !AA[i])  AAPR[i] = FALSE;
+   if (!AA[i] && period && (CALW[i] >= PRI_CALW) && A[i] && RV[i]
+	   && !TRG[i] && !RR[i] && !BL[i] && testpri_gk_calw(i)) 
+   {
+	   AAPR[i] = FALSE;
+	   if (kcv(i)) AAPR[i] |= BIT6; /* prioriteit! */
+	   if (!AAPR[i])
+	   {
+		   AAPR[i] = TRUE;
+		   AAPR[i] |= BIT6;
+		   AA[i] = TRUE;		/* set actuation */
+		   PR[i] = BIT6;
+	   }
+	   return  (TRUE);
    }
    return (FALSE);
 }
@@ -839,20 +844,21 @@ bool set_PRIRLW(count i, bool period)
 bool set_ARLW_bit6 (count i)
 {
    if (PAR[i] && A[i] && RV[i] && !TRG[i] && !AA[i] && !RR[i]
-	   && !BL[i] && !kcv(i) && !fkaa(i) && testar_fk_calw(i)) {
-      AA[i]= TRUE;		/* set actuation		*/
-      AR[i]= BIT6;
-      return (TRUE);
+	   && !BL[i] && !kcv(i) && !fkaa(i) && testar_fk_calw(i))
+   {
+      AA[i] = TRUE;		/* set actuation		*/
+      AR[i] = BIT6;
+      return TRUE;
    }
-   return (FALSE);
+   return FALSE;
 }
-
 
 void langstwachtende_alternatief_bit6(void)
 {
    register count i;
 
-   for (i=0; i<FC_MAX; i++) {
+   for (i=0; i<FC_MAX; i++)
+   {
       set_ARLW_bit6(i);
    }
 }
