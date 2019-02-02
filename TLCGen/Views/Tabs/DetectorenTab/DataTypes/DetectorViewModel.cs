@@ -10,6 +10,7 @@ using TLCGen.Messaging.Messages;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Helpers;
 using TLCGen.ModelManagement;
+using System.Text.RegularExpressions;
 
 namespace TLCGen.ViewModels
 {
@@ -412,7 +413,21 @@ namespace TLCGen.ViewModels
 	        if (!(obj is DetectorViewModel fcvm)) throw new InvalidCastException();
 	        var myName = FaseCyclus == null ? Naam : Naam.Replace(FaseCyclus, "");
 	        var hisName = fcvm.FaseCyclus == null ? fcvm.Naam : fcvm.Naam.Replace(fcvm.FaseCyclus, "");
-	        if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+            if (Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+                {
+                    hisName = hisName + "0";
+                }
+            }
+            if (Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+                {
+                    myName = myName + "0";
+                }
+            }
+            if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
 	        else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
 	        return string.Compare(
 		        FaseCyclus == null ? myName : FaseCyclus + myName, 

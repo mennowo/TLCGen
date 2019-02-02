@@ -232,6 +232,8 @@
         <Type>Kop</Type>
         <Aanvraag>RnietTRG</Aanvraag>
         <Verlengen>Kopmax</Verlengen>
+        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
       </Data>
     </Default>
     <Default>
@@ -257,6 +259,8 @@
         <Type>Lang</Type>
         <Aanvraag>RnietTRG</Aanvraag>
         <Verlengen>MK2</Verlengen>
+        <VeiligheidsGroenHiaat>20</VeiligheidsGroenHiaat>
+        <VeiligheidsGroenVolgtijd>25</VeiligheidsGroenVolgtijd>
       </Data>
     </Default>
     <Default>

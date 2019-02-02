@@ -153,10 +153,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("mulv TDH_old[DPMAX];");
             sb.AppendLine("mulv DB_old[DPMAX];");
-            if (c.GetAllDetectors(x => x.VeiligheidsGroen != NooitAltijdAanUitEnum.Nooit).Any())
-            {
-                sb.AppendLine("mulv DVG[DPMAX]; /* T.b.v. meting veiligheidsgroen */");
-            }
+            sb.AppendLine("mulv DVG[DPMAX]; /* T.b.v. veiligheidsgroen */");
             sb.AppendLine();
 
 
