@@ -247,8 +247,8 @@ namespace TLCGen.ViewModels
                 _detector.VeiligheidsGroen = value;
                 if (value != NooitAltijdAanUitEnum.Nooit)
                 {
-                    if (VeiligheidsGroenHiaat == 0) VeiligheidsGroenHiaat = 80;
-                    if (VeiligheidsGroenVolgtijd == 0) VeiligheidsGroenVolgtijd = 30;
+                    if (VeiligheidsGroenHiaat == 0) VeiligheidsGroenHiaat = 20;
+                    if (VeiligheidsGroenVolgtijd == 0) VeiligheidsGroenVolgtijd = 25;
                 }
                 MessengerInstance.Send(new FaseDetectorVeiligheidsGroenChangedMessage(Naam, value));
                 RaisePropertyChanged<object>(nameof(VeiligheidsGroen), broadcast: true);
