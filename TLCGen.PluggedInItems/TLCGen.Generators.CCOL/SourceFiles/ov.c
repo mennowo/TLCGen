@@ -1,4 +1,4 @@
-﻿/* OVPROGRAMMA */
+/* OVPROGRAMMA */
 /* ----------- */
 
 #define MAX_INT                       32767L
@@ -1745,7 +1745,7 @@ void OVGroenVasthouden(void)
                 if(MG[fc]) RW[fc]|=OV_RW_BIT; /* toevoeging Ane */
                 YV[fc] |= OV_YV_BIT;
                 /* 15-02-2017 Werner : FM bit van alternatieven intrekken, om 'flipperen' te voorkomen */ 
-                /*                     we willen het groen vasthouden en niet beëindigen!              */
+                /*                     we willen het groen vasthouden en niet be?indigen!              */
                 FM[fc] &= ~BIT5;
             }
         }

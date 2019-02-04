@@ -1,4 +1,4 @@
-﻿/* DEFINITIE FUNCTIES - ROBUUSTE GROENTIJD VERDELER */
+/* DEFINITIE FUNCTIES - ROBUUSTE GROENTIJD VERDELER */
 /* ================================================ */
 
 

@@ -1,4 +1,4 @@
-﻿#ifndef __CCOLFUNC_H__
+#ifndef __CCOLFUNC_H__
 #define __CCOLFUNC_H__
 #endif
 #ifdef NALOPEN

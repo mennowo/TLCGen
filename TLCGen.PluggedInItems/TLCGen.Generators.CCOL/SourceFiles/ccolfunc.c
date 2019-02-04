@@ -1,4 +1,4 @@
-﻿#include <stdarg.h>
+#include <stdarg.h>
 
 #include "ccolfunc.h"
 

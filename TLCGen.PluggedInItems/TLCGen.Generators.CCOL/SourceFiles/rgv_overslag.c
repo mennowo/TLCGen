@@ -1,4 +1,4 @@
-﻿/* DEFINITIE FUNCTIE */
+/* DEFINITIE FUNCTIE */
 /* ================= */
 
 

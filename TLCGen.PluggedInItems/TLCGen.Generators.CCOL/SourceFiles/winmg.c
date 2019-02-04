@@ -1,4 +1,4 @@
-﻿#ifndef ___MGBARSRGV
+#ifndef ___MGBARSRGV
 #define ___MGBARSRGV
 
 

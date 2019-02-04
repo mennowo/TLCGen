@@ -1,4 +1,4 @@
-﻿/* FILE: SYNCFUNC.C */
+/* FILE: SYNCFUNC.C */
 /* ---------------- */
 
 #ifndef AUTOMAAT

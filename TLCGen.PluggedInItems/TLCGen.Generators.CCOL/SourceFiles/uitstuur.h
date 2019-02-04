@@ -1,4 +1,4 @@
-﻿#ifndef __UITSTUUR_H__
+#ifndef __UITSTUUR_H__
 #define __UITSTUUR_H__
 
   #if defined MLMAX || defined PLMAX

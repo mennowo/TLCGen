@@ -1,4 +1,4 @@
-﻿/* DETECTIE OPTIES VOOR REGELPROGRAMMA */
+/* DETECTIE OPTIES VOOR REGELPROGRAMMA */
 /* ----------------------------------- */
 
 
@@ -163,7 +163,7 @@ bool RichtingVerlengen(count fc,   /* de richting die verlengd wordt            
   /* als de rijtijd niet meer past binnen de resterende verlenggroentijd. */
   /*                                                                      */
   /* stop met het resetten van de hiaattijd als                           */
-  /* - als richting fc in verlenggroen zit �n                             */
+  /* - als richting fc in verlenggroen zit ?n                             */
   /* - de resterende verlenggroentijd is korter dan de 'rijtijd',         */
   /* -------------------------------------------------------------------- */
   if (VG[fc] && ((TVG_max[fc] - TVG_timer[fc]) < T_max[trgh]))

@@ -1,4 +1,4 @@
-﻿#include "halfstar.h"
+#include "halfstar.h"
 #include "halfstar_ov.h"     /* declaratie functies                                      */
 
 #if !defined AUTOMAAT || defined VISSIM
@@ -795,14 +795,14 @@ void tweederealisatie_halfstar(count fc_1,  /* fasecyclus 1e realisatie */
 		txd1 = TXD[PL][fc_1];
 		txe1 = TXE[PL][fc_1];
 
-		/* waarden 2e realisatie kopiëren naar 1e realisatie */
+		/* waarden 2e realisatie kopi?ren naar 1e realisatie */
 		TXA[PL][fc_1] = TXA[PL][fc_2];
 		TXB[PL][fc_1] = TXB[PL][fc_2];
 		TXC[PL][fc_1] = TXC[PL][fc_2];
 		TXD[PL][fc_1] = TXD[PL][fc_2];
 		TXE[PL][fc_1] = TXE[PL][fc_2];
 
-		/* oude waarden 1e realisatie kopiëren naar 2e realisatie */
+		/* oude waarden 1e realisatie kopi?ren naar 2e realisatie */
 		TXA[PL][fc_2] = txa1;
 		TXB[PL][fc_2] = txb1;
 		TXC[PL][fc_2] = txc1;

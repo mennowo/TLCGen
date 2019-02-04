@@ -1,4 +1,4 @@
-﻿#include "uitstuur.h"
+#include "uitstuur.h"
 
 #if defined MLMAX || defined PLMAX
 void SegmentSturing(count displ,

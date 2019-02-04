@@ -1,4 +1,4 @@
-﻿#ifndef __OVH
+#ifndef __OVH
 #define __OVH
 
 #define    OV_A_BIT      BIT6

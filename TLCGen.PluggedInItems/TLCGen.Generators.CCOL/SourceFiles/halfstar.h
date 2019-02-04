@@ -1,4 +1,4 @@
-﻿#ifndef __HALFSTARH__
+#ifndef __HALFSTARH__
 #define __HALFSTARH__
 
 #define RR_VS_HALFSTAR      BIT10 /* voorstart tegenhouden                      */

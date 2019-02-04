@@ -1,4 +1,4 @@
-﻿/* FILE: SYNCVAR.C */
+/* FILE: SYNCVAR.C */
 /* ---------------- */
 
 #ifndef __SYNCVAR_C__
