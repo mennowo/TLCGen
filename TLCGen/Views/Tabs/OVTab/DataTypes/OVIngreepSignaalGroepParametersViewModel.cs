@@ -96,17 +96,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int BlokkeertijdNaOVIngreep
-        {
-            get { return _Parameters.BlokkeertijdNaOVIngreep; }
-            set
-            {
-                _Parameters.BlokkeertijdNaOVIngreep = value;
-                SendTLCGenChangedMessage();
-                RaisePropertyChanged<object>("BlokkeertijdNaOVIngreep", broadcast: true);
-            }
-        }
-
         #endregion // Properties
 
         #region Commands

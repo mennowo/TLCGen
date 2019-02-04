@@ -192,7 +192,6 @@
         <PercMaxGroentijdVoorTerugkomen>100</PercMaxGroentijdVoorTerugkomen>
         <OndergrensNaTerugkomen>60</OndergrensNaTerugkomen>
         <OphoogpercentageNaAfkappen>0</OphoogpercentageNaAfkappen>
-        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
       </Data>
     </Default>
     <Default>
@@ -672,6 +671,7 @@
         <RijTijdGehinderd>60</RijTijdGehinderd>
         <OnderMaximum>150</OnderMaximum>
         <GroenBewaking>300</GroenBewaking>
+        <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
         <AfkappenConflicten>true</AfkappenConflicten>
         <AfkappenConflictenOV>false</AfkappenConflictenOV>
         <VasthoudenGroen>true</VasthoudenGroen>

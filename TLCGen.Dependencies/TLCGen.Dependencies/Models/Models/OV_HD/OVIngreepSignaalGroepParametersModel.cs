@@ -22,7 +22,6 @@ namespace TLCGen.Models
         public int PercMaxGroentijdVoorTerugkomen { get; set; }
         public int OndergrensNaTerugkomen { get; set; }
         public int OphoogpercentageNaAfkappen { get; set; }
-        public int BlokkeertijdNaOVIngreep { get; set; }
 
         #endregion // Properties
 

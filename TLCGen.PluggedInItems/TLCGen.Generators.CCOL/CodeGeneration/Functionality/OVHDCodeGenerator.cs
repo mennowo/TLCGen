@@ -325,7 +325,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtbg}{ov.FaseCyclus}", ov.RijTijdBeperktgehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtbg, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmrtg}{ov.FaseCyclus}", ov.RijTijdGehinderd, CCOLElementTimeTypeEnum.TE_type, _prmrtg, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{ov.FaseCyclus}", ov.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, ov.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tblk, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{ov.FaseCyclus}", ov.BlokkeertijdNaOVIngreep, CCOLElementTimeTypeEnum.TE_type, _tblk, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagb}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagb, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstp}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, _prmovstp, ov.FaseCyclus));
                 if ((ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||

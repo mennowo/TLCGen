@@ -1962,7 +1962,7 @@ void OVDebug(int ov)
 
     if (y < Y_MAX)
     {
-        xyprintf(1, y, "MaxWTOverschreden     =%4d ", iMaximumWachtTijdOverschreden);  ++y;
+		if (y < Y_MAX) { xyprintf(1, y, "MaxWTOverschreden     =%4d ", iMaximumWachtTijdOverschreden[ov]);  y++; }
     }
     if (y < Y_MAX)
     {
