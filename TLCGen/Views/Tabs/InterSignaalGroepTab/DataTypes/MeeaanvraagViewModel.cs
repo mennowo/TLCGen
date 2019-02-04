@@ -210,7 +210,7 @@ namespace TLCGen.ViewModels
             if (Detectoren?.Count == 0)
                 return;
 
-            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+            Detectoren.CollectionChanged -= Detectoren_CollectionChanged;
             foreach (MeeaanvraagDetectorModel ndm in _Meeaanvraag.Detectoren)
             {
                 Detectoren.Add(ndm);
