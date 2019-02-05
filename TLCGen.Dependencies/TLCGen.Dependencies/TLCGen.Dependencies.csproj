@@ -150,6 +150,7 @@
     <Compile Include="Models.Enumerations\OVIngreepTypeEnum.cs" />
     <Compile Include="Models.Enumerations\OVIngreepVoertuigTypeEnum.cs" />
     <Compile Include="Models.Enumerations\OVIngreepWisselTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\PelotonKoppelingRichtingEnum.cs" />
     <Compile Include="Models.Enumerations\PeriodeDagCodeEnum.cs" />
     <Compile Include="Models.Enumerations\PeriodeTypeEnum.cs" />
     <Compile Include="Models.Enumerations\RateltikkerTypeEnum.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />
     <Compile Include="Models\Models\Varia\DetectorVeiligheidsGroenModel.cs" />
     <Compile Include="Models\Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Varia\PelotonKoppelingenDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />
     <Compile Include="Models\Models\Varia\RichtingGevoeligeAanvraagModel.cs" />
@@ -247,6 +249,7 @@
     <Compile Include="Models\Models\Varia\VAOntruimenDetectorModel.cs" />
     <Compile Include="Models\Models\Varia\VAOntruimenFaseModel.cs" />
     <Compile Include="Models\Models\Varia\VAOntruimenNaarFaseModel.cs" />
+    <Compile Include="Models\Models\Varia\PelotonKoppelingModel.cs" />
     <Compile Include="Plugins\ITLCGenGenerator.cs" />
     <Compile Include="Plugins\ITLCGenHasSettings.cs" />
     <Compile Include="Plugins\ITLCGenImporter.cs" />

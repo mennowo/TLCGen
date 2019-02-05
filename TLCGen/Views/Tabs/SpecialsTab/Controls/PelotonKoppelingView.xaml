@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="TLCGen.Views.PelotonKoppelingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding Path=SelectedPelotonKoppeling}">
+        <Grid Visibility="{Binding Path=IsUitgaand,Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="135" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="PTP koppeling" Grid.Row="0" />
+            <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Ingangssignalen detectoren" />
+                <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
+                          Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <ct:ItemsManagerView Caption="" Grid.Row="2"
+                                     SelectableItemsVisibility="Visible"
+                                     SelectableItems="{Binding Path=DataContext.ControllerDetectoren,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                                     AddItemCommand="{Binding Path=UitgaandeDetectorenManager.AddItemCommand}"
+                                     RemoveItemCommand="{Binding Path=UitgaandeDetectorenManager.RemoveItemCommand}"
+                                     SelectedItemToAdd="{Binding Path=UitgaandeDetectorenManager.SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+        </Grid>
+        <Grid Visibility="{Binding Path=IsInkomend,Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="135" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="PTP koppeling" Grid.Row="0" />
+            <Label Content="Meetperiode" Grid.Row="1" />
+            <Label Content="Maximale hiaattijd" Grid.Row="2" />
+            <Label Content="Min. aantal voertuigen" Grid.Row="3" />
+            <Label Content="Toepassen aanvraag" Grid.Row="4" />
+            <Label Content="Tijd tot aanvraag" Grid.Row="5" />
+            <Label Content="Toepassen RW" Grid.Row="6" />
+            <Label Content="Tijd tot RW" Grid.Row="7" />
+            <Label Content="Tijd RW" Grid.Row="8" />
+            <Label Content="Toepassen MK" Grid.Row="9" />
+            
+            <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
+            <TextBox Text="{Binding Path=Meetperiode,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="1" />
+            <TextBox Text="{Binding Path=MaximaalHiaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="2" />
+            <TextBox Text="{Binding Path=MinimaalAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="3" />
+            <CheckBox IsChecked="{Binding Path=ToepassenAanvraag,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="4" />
+            <TextBox Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="5" />
+            <CheckBox IsChecked="{Binding Path=ToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="6" />
+            <TextBox Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="7" />
+            <TextBox Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="8" />
+            <CheckBox IsChecked="{Binding Path=ToepassenMeetkriterium,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="9" />
+            
+            <Grid Grid.Row="10" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Ingangssignalen detectoren" />
+                <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
+                          Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
+                                     AddItemCommand="{Binding Path=AddInkomendeDetectorCommand}" RemoveItemCommand="{Binding Path=RemoveInkomendeDetectorCommand}" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

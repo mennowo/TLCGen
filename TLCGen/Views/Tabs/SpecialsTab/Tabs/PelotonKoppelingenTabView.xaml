@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="TLCGen.Views.PelotonKoppelingenTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="190" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Label Content="Peloton Koppelingen" FontWeight="Bold" />
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=PelotonKoppelingen}" Margin="2"
+                      SelectedItem="{Binding Path=SelectedPelotonKoppeling,UpdateSourceTrigger=PropertyChanged}"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Kruispunt" Binding="{Binding Path=KruisingNaam,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridComboBoxColumn
+                        Header="Richting" 
+                        SelectedItemBinding="{Binding Path=Richting,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingRichtingEnum}}}" />
+                    <DataGridTemplateColumn 
+                        Header="Fase" Width="Auto" MinWidth="60" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=GekoppeldeSignaalGroep,Mode=OneWay}" Margin="2" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox 
+                                    ItemsSource="{Binding Path=DataContext.ControllerFasen,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}" 
+                                    FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                                    SelectedItem="{Binding Path=GekoppeldeSignaalGroep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Content="Toevoegen" Command="{Binding AddPelotonKoppelingCommand}" Margin="2" />
+                <Button Content="Verwijderen" Command="{Binding RemovePelotonKoppelingCommand}" Margin="2" />
+            </StackPanel>
+        </Grid>
+        <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />
+        <local:PelotonKoppelingView Grid.Column="2" />
+    </Grid>
+</UserControl>

@@ -42,6 +42,7 @@ void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht);
 bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
 bool kcv_primair_fk_gkl(count i);
 void veiligheidsgroen_V1(count fc, count tmaxvag4, ...);
+bool proc_pel_uit_V1(count fc, count he1, count he2, count he3, count tmeet, count tmaxth, count grens, count mvtg, count muit);                          /* MM uitsturing aktief                                             */
 
 extern mulv FC_type[];
 extern mulv DVG[];

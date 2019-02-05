@@ -51,6 +51,7 @@
     <Compile Include="CCOLCodeGeneratorPlugin.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateOvAdd.cs" />
     <Compile Include="CodeGeneration\Adds\CCOLGeneratorGenerateHstAdd.cs" />
+    <Compile Include="CodeGeneration\Functionality\PelotonKoppelingCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\DetectieAanvraagDirectCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\DetectieStoringGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\FileIngrepenCodeGenerator.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="CodeGeneration\Functionality\AlgemeenCodeGenerator.cs" />
     <Compile Include="CodeGeneration\Functionality\WachttijdVoorspellerCodeGenerator.cs" />
     <Compile Include="CodeGeneration\HelperClasses\CCOLCodeHelper.cs" />
+    <Compile Include="CodeGeneration\HelperClasses\CCOLKoppelSignaal.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateHstC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGenerateOvC.cs" />
     <Compile Include="CodeGeneration\Sources\CCOLGeneratorGeneratePtpC.cs" />

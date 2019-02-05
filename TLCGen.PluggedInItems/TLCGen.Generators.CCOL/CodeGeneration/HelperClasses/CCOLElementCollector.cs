@@ -9,11 +9,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
     {
         #region Static Fields
 
-        private static List<DetectorModel> AlleDetectoren;
+        private static int _koppelSignaalCount;
+        private static List<CCOLKoppelSignaal> _koppelSignalen;
 
         #endregion // Static Fields
 
+        #region Static Properties
+
+        public static void AddKoppelSignaal(string name, CCOLKoppelSignaalRichtingEnum richting)
+        {
+            _koppelSignalen.Add(new CCOLKoppelSignaal() { Name = name, Count = _koppelSignaalCount, Richting = richting });
+            ++_koppelSignaalCount;
+        }
+
+        public static int GetKoppelSignaalCount(string name, CCOLKoppelSignaalRichtingEnum richting)
+        {
+            var ks = _koppelSignalen.FirstOrDefault(x => x.Name == name && x.Richting == richting);
+            if (ks != null) return ks.Count;
+            else return 0;
+        }
+
+        #endregion // Static Properties
+
         #region Static Public Methods
+
+        public static void Reset()
+        {
+            _koppelSignaalCount = 1;
+        }
 
         public static void AddAllMaxElements(CCOLElemListData[] lists)
         {
@@ -29,15 +52,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static CCOLElemListData[] CollectAllCCOLElements(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            AlleDetectoren = new List<DetectorModel>();
-            foreach (var fcm in controller.Fasen)
-            {
-                foreach (var dm in fcm.Detectoren)
-                    AlleDetectoren.Add(dm);
-            }
-            foreach (var dm in controller.Detectoren)
-                AlleDetectoren.Add(dm);
-
             var lists = new CCOLElemListData[8];
 
             lists[0] = CollectAllUitgangen(controller, pgens);
@@ -58,7 +72,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private static CCOLElemListData CollectAllUitgangen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            var data = new CCOLElemListData {CCOLCode = "US_code"};
+            var data = new CCOLElemListData { CCOLCode = "US_code" };
 
             foreach (var pgen in pgens)
             {
@@ -76,7 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private static CCOLElemListData CollectAllIngangen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            var data = new CCOLElemListData {CCOLCode = "IS_code"};
+            var data = new CCOLElemListData { CCOLCode = "IS_code" };
 
             foreach (var pgen in pgens)
             {
@@ -94,7 +108,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private static CCOLElemListData CollectAllHulpElementen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            var data = new CCOLElemListData {CCOLCode = "H_code"};
+            var data = new CCOLElemListData { CCOLCode = "H_code" };
 
             // Collect everything
 
@@ -119,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private static CCOLElemListData CollectAllGeheugenElementen(ControllerModel controller, List<ICCOLCodePieceGenerator> pgens)
         {
-            var data = new CCOLElemListData {CCOLCode = "MM_code"};
+            var data = new CCOLElemListData { CCOLCode = "MM_code" };
 
             data.Elements.Add(new CCOLElement() { Define = "mperiod", Naam = "PERIOD", Commentaar = "Onthouden actieve periode" });
 

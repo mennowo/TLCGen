@@ -93,6 +93,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmmingov;
 #pragma warning restore 0649
 
+        public void CollectKoppelSignalen(ControllerModel c)
+        {
+            var _myKoppelSignalen = new List<CCOLKoppelSignaal>();
+
+        }
+
         public override void CollectCCOLElements(ControllerModel c)
 		{
 			_myElements = new List<CCOLElement>();
@@ -250,7 +256,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if(k.Type == HalfstarGekoppeldTypeEnum.Master)
 					{
 					
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "in"));
@@ -258,14 +264,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InKoppelpuls, $"{_uspf}in{k.KruisingNaam}{_uskpuls}"));
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodeVARegelen, $"{_uspf}in{k.KruisingNaam}{_uspervar}"));
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodenAlternatievenHoofdrichtingen, $"{_uspf}in{k.KruisingNaam}{_usperarh}"));
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
 						foreach (var pl in hsd.SignaalPlannen)
 						{
+                            CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
 							_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "in"));
 						}
 						foreach (var pl in k.PlanIngangen)
 						{
 							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}in{k.KruisingNaam}{pl.Plan}"));
 						}
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.Uit);
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "uit"));
@@ -275,7 +289,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					if (k.Type == HalfstarGekoppeldTypeEnum.Slave)
 					{
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.Uit);
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usperarh}", _usperarh, k.KruisingNaam, "uit"));
@@ -285,13 +303,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodenAlternatievenHoofdrichtingen, $"{_uspf}uit{k.KruisingNaam}{_usperarh}"));
 						foreach (var pl in hsd.SignaalPlannen)
 						{
+                            CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.Uit);
 							_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "uit"));
 						}
 						foreach (var pl in k.PlanUitgangen)
 						{
 							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}uit{k.KruisingNaam}{pl.Plan}"));
 						}
-						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.In);
+                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "in"));
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InLeven, $"{_uspf}in{k.KruisingNaam}{_usleven}"));
@@ -518,7 +540,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}{ts}MM[{_mpf}{_mmaster}] = TRUE;");
 							sb.AppendLine();
 							sb.Append($"{ts}{ts}if      ");
-							int i = 0, ipl = 5;
+							int i = 0;
 							foreach (var pl in c.HalfstarData.SignaalPlannen)
 							{
 								if (i > 0)
@@ -526,7 +548,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 									sb.AppendLine();
 									sb.Append($"{ts}{ts}else if ");
 								}
-								sb.Append($"(IH[{_hpf}{master.PTPKruising}{_hiks}{ipl++:00}]) APL = {pl.Naam};");
+                                var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
+								sb.Append($"(IH[{_hpf}{master.PTPKruising}{_hiks}{ipl:00}]) APL = {pl.Naam};");
 								++i;
 							}
 							sb.AppendLine();
@@ -556,8 +579,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}{ts}}}");
 							sb.AppendLine($"{ts}{ts}else");
 							sb.AppendLine($"{ts}{ts}{{");
-							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hpervar}] =  IH[{_hpf}{master.PTPKruising}{_hiks}03];");
-							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hperarh}] =  IH[{_hpf}{master.PTPKruising}{_hiks}04];");
+                            var ipl2 = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
+                            sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hpervar}] =  IH[{_hpf}{master.PTPKruising}{_hiks}{ipl2:00}];");
+                            ipl2 = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
+							sb.AppendLine($"{ts}{ts}{ts}IH[{_hpf}{_hperarh}] =  IH[{_hpf}{master.PTPKruising}{_hiks}{ipl2:00}];");
 							sb.AppendLine($"{ts}{ts}}}");
 							sb.AppendLine($"{ts}}}");
 						}
@@ -1053,7 +1078,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					foreach (var kp in c.HalfstarData.GekoppeldeKruisingen)
 					{
 						sb.AppendLine($"{ts}/* Levensignaal van {kp.KruisingNaam} */");
-						sb.AppendLine($"{ts}RT[{_tpf}{_tleven}{kp.KruisingNaam}] = SH[{_hpf}{kp.PTPKruising}{_hiks}01];");
+
+                        var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        sb.AppendLine($"{ts}RT[{_tpf}{_tleven}{kp.KruisingNaam}] = SH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
 						sb.AppendLine($"{ts}MM[{_mpf}{_mleven}{kp.KruisingNaam}] = T[{_tpf}{_tleven}{kp.KruisingNaam}];");
 					}
 
@@ -1083,7 +1110,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					if (master != null && c.HalfstarData.Type != HalfstarTypeEnum.Master)
 					{
 						#warning TODO need code for running single appl.
-						sb.AppendLine($"{ts}{ts}RT[{_tpf}{_toffset}] = SH[{_hpf}{master.PTPKruising}{_hiks}02]; /* offset starten op start koppelpuls */");
+                        var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+						sb.AppendLine($"{ts}{ts}RT[{_tpf}{_toffset}] = SH[{_hpf}{master.PTPKruising}{_hiks}{ipl:00}]; /* offset starten op start koppelpuls */");
 						sb.AppendLine($"{ts}{ts}SYN_TXS = ET[{_tpf}offset]; /* synchronisatie einde offset timer */");
 						sb.AppendLine($"{ts}{ts}synchronization_timer(SAPPLPROG, T_max[{_tpf}xmarge]);");
 					}
@@ -1141,8 +1169,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{ts}/* tijdens VA bedrijf hard synchroniseren */");
 						sb.AppendLine($"{ts}else");
 						sb.AppendLine($"{ts}{{");
-						sb.AppendLine($"{ts}{ts}RTX = SH[{_hpf}{master.PTPKruising}{_hiks}02];");
-						sb.AppendLine($"{ts}}}");
+                        var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+						sb.AppendLine($"{ts}{ts}RTX = SH[{_hpf}{master.PTPKruising}{_hiks}{ipl:00}];");
+                        sb.AppendLine($"{ts}}}");
 					}
 
 					sb.AppendLine();
@@ -1154,20 +1183,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							// If the coupled intersection is the master of this one
 							case HalfstarGekoppeldTypeEnum.Master:
-								ipl = 1;
 								// Receive: leven, koppelpuls, pervar, perarh, actief plan (op FALSE zetten indien geen leven)
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) van {kp.KruisingNaam} */");
-								ipl = 1;
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+                                
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                                sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
 								sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{kp.KruisingNaam}])");
 								sb.AppendLine($"{ts}{{");
-								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
+								sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
 								foreach (var pl in c.HalfstarData.SignaalPlannen)
 								{
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
 									sb.AppendLine($"{ts}{ts}GUS[{_uspf}in{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
-									ipl++;
 								}
 								sb.AppendLine($"{ts}}}");
 								sb.AppendLine($"{ts}else");
@@ -1182,17 +1214,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								sb.AppendLine($"{ts}}}");
 								sb.AppendLine();
                                 // Send: leven, synch, txs
-                                ipl = 1;
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.Uit);
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = REG && (MM[{_mpf}{_mleven}{kp.KruisingNaam}] && (TXS_delta == 0) && TXS_OKE);");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.Uit);
 								sb.AppendLine($"{ts}GUS[{_uspf}uit{kp.KruisingNaam}{_ustxsok}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = REG && MM[{_mpf}{_mleven}{kp.KruisingNaam}] && TXS_OKE;");
 								sb.AppendLine();
 								break;
 							// Otherwise, the coupled intersection is a slave of this one
 							case HalfstarGekoppeldTypeEnum.Slave:
-								ipl = 1;
-								var iplm = 1;
 								sb.AppendLine($"{ts}/* Koppelsignalen (PTP) naar {kp.KruisingNaam} */");
 								var mts2 = ts;
 								// If fallback: send master if master alive, otherwise determine by own judgement
@@ -1201,31 +1233,42 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 									mts2 = ts + ts;
 									sb.AppendLine($"{ts}if (MM[{_mpf}{_mleven}{master.KruisingNaam}])");
 									sb.AppendLine($"{ts}{{");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* koppelpuls master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode var master doorsturen */");
-									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm++:00}]; /* periode arh master doorsturen */");
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+                                    var ipli = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{ipli:00}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.Uit);
+                                    ipli = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{ipli:00}]; /* koppelpuls master doorsturen */");
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.Uit);
+                                    ipli = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{ipli:00}]; /* periode var master doorsturen */");
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.Uit);
+                                    ipli = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
+									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{ipli:00}]; /* periode arh master doorsturen */");
 									foreach (var pl in c.HalfstarData.SignaalPlannen)
 									{
-										sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{iplm:00}];");
-										ipl++;
-										iplm++;
+                                        ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.Uit);
+                                        ipli = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
+										sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{master.PTPKruising}{_hiks}{ipli:00}];");
 									}
 									sb.AppendLine($"{ts}}}");
 									sb.AppendLine($"{ts}else");
 									sb.AppendLine($"{ts}{{");
 								}
 
-								ipl = 1;
 								// For master and fallback, send data to coupled slave: leven, koppelpuls, pervar, perarh, actief plan
-								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = IH[{_hpf}{_hleven}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
-								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = ((TX_timer <= 1)); /* koppelpuls master */");
-								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = (IH[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvarstreng}]); /* periode var master */");
-								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl++:00}] = (IH[{_hpf}{_hperarh}]); /* periode arh master */");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = IH[{_hpf}{_hleven}]; /* uitgaand levensignaal naar alle aangesloten kp's */");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.Uit);
+								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uskpuls}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = ((TX_timer <= 1)); /* koppelpuls master */");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.Uit);
+								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_uspervar}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = (IH[{_hpf}{_hpervar}] || SCH[{_schpf}{_schvarstreng}]); /* periode var master */");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.Uit);
+								sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{_usperarh}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = (IH[{_hpf}{_hperarh}]); /* periode arh master */");
 								foreach (var pl in c.HalfstarData.SignaalPlannen)
 								{
+                                    ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.Uit);
 									sb.AppendLine($"{mts2}GUS[{_uspf}uit{kp.KruisingNaam}{pl.Naam}] = IH[{_hpf}{kp.PTPKruising}{_huks}{ipl:00}] = ((APL == {pl.Naam}));");
-									ipl++;
 								}
 								if (c.HalfstarData.Type == HalfstarTypeEnum.FallbackMaster)
 								{
@@ -1235,8 +1278,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 								// Receive from slave: leven, synch, txs
 								sb.AppendLine($"{ts}/* Koppelsignalen via (PTP) van {kp.KruisingNaam} */");
 								ipl = 1;
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
-								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl++:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_usleven}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.In);
+								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_ussyncok}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
+                                ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.In);
 								sb.AppendLine($"{ts}GUS[{_uspf}in{kp.KruisingNaam}{_ustxsok}] = IH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
 								sb.AppendLine();
 								break;

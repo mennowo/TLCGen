@@ -13,6 +13,16 @@ namespace TLCGen.Views
             InitializeComponent();
         }
 
+        public Visibility InsertableItemsVisibility
+        {
+            get { return (Visibility)GetValue(InsertableItemsVisibilityProperty); }
+            set { SetValue(InsertableItemsVisibilityProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for InsertableDetectorsVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty InsertableItemsVisibilityProperty =
+            DependencyProperty.Register("InsertableItemsVisibilityProperty", typeof(Visibility), typeof(ItemsManagerView), new PropertyMetadata(Visibility.Collapsed));
+
         public Visibility RemovableItemsVisibility
         {
             get { return (Visibility)GetValue(RemovableItemsVisibilityProperty); }

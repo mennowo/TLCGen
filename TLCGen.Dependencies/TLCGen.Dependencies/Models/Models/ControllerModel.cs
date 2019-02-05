@@ -45,6 +45,8 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "VAOntruimenFase")]
         public List<VAOntruimenFaseModel> VAOntruimenFasen { get; set; }
 
+        public PelotonKoppelingenDataModel PelotonKoppelingenData { get; set; }
+
         public PeriodenDataModel PeriodenData { get; set; }
 
         public PTPDataModel PTPData { get; set; }
@@ -86,6 +88,7 @@ namespace TLCGen.Models
             OVData = new OVDataModel();
             RoBuGrover = new RoBuGroverModel();
 			HalfstarData = new HalfstarDataModel();
+            PelotonKoppelingenData = new PelotonKoppelingenDataModel();
         }
 
         #endregion // Constructor

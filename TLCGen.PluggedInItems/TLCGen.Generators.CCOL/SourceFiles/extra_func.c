@@ -905,3 +905,55 @@ void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
 
     va_end(argpt);
 }
+
+/* -------------------------------------------------------------------------------------------------------- */
+/* Procedure inkomende pelotonkoppeling                                                                     */
+/* -------------------------------------------------------------------------------------------------------- */
+bool proc_pel_in_V1(                       /* Dh20130124                                                    */
+	 count hfc,                            /* fasecyclus                                                   */
+	 count tmeet,                          /* T meetperiode                                                 */
+	 count tmaxth,                         /* T max.hiaat                                                   */
+	 count grens,                          /* PRM grenswaarde                                               */
+	 count mvtg,                           /* MM aantal vtg                                                 */
+	 count muit,                           /* MM uitsturing aktief                                          */
+	 ...)                                  /* va arg list: inkomende signalen koplussen                     */
+{
+	va_list argpt;     /* variabele argumentenlijst                                 */
+	count hdp;
+	count edpel = 0;
+
+	/* Lezen inkomende signalen */
+	va_start(argpt, muit);
+	hdp = va_arg(argpt, va_count);
+	do {
+		if (EH[hdp]) ++edpel;
+        hdp = va_arg(argpt, va_count);
+	} while (hdp != END);
+	va_end(argpt);
+
+	AT[tmeet] = FALSE;
+	RT[tmeet] = RT[tmaxth] = H[fc] || !T[tmeet] && !T[tmaxth] && edpel > 0;
+
+	if (edpel > 0 && (RT[tmeet] || T[tmeet]))
+	{
+		MM[mvtg] += edpel;
+		RT[tmaxth] = TRUE;
+	}
+
+	if (ET[tmaxth] && !RT[tmaxth])
+	{
+		AT[tmeet] = TRUE;
+		MM[mvtg] = 0;
+	}
+
+	if (TS && (MM[muit] > 0)) --MM[muit];
+	if (MM[mvtg] >= PRM[grens])
+	{
+		MM[mvtg] = 0;
+		MM[muit] = 3;
+		AT[tmeet] = TRUE;
+	}
+
+	return (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) && (MM[muit] > 0);
+}
+

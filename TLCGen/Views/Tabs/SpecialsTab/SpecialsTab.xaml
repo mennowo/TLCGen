@@ -11,6 +11,9 @@
         <DataTemplate DataType="{x:Type vm:PTPKoppelingenTabViewModel}">
             <local:PTPKoppelingenTabView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PelotonKoppelingenTabViewModel}">
+            <local:PelotonKoppelingenTabView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:FileTabViewModel}">
             <local:FileTabView />
         </DataTemplate>

@@ -1684,6 +1684,92 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="PelotonKoppelingCodeGenerator">
+      <CodePieceData>
+        <ClassName>PelotonKoppelingCodeGenerator</ClassName>
+        <Description>Peloton koppelingen</Description>
+        <Settings>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden aanwezigheid peloton tbv peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmeet</Default>
+            <Setting>pelmeet</Setting>
+            <Type>Timer</Type>
+            <Description>Meetperiode peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmaxhiaat</Default>
+            <Setting>pelmaxhiaat</Setting>
+            <Type>Timer</Type>
+            <Description>Maximaal hiaat tbv meting peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelgrens</Default>
+            <Setting>pelgrens</Setting>
+            <Type>Parameter</Type>
+            <Description>Minimaal aantal voertuigen tbv peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelvtg</Default>
+            <Setting>pelvtg</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden aantal gemeten voertuigen tbv peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>GeheugenElement</Type>
+            <Description>Bijhouden inkomend peloton gezien tbv peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelin</Default>
+            <Setting>pelin</Setting>
+            <Type>Uitgang</Type>
+            <Description>Verklikken inkomend peloton gezien tbv peloton koppeling fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelrw</Default>
+            <Setting>pelrw</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur toepassen RW na meting peloton bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelstartrw</Default>
+            <Setting>pelstartrw</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur vanaf meting peloton tot toepassen RW bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelrw</Default>
+            <Setting>pelrw</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen retour wachtgroen na meting peloton bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelmk</Default>
+            <Setting>pelmk</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen vasthouden MK na meting peloton bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pela</Default>
+            <Setting>pela</Setting>
+            <Type>Timer</Type>
+            <Description>Tijdsduur tot aanvraag na meting peloton bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pela</Default>
+            <Setting>pela</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen aanvraag na meting peloton bij fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="RoBuGroverCodeGenerator">
       <CodePieceData>
         <ClassName>RoBuGroverCodeGenerator</ClassName>
