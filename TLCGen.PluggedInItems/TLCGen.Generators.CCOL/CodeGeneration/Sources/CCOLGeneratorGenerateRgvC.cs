@@ -244,13 +244,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         var first = true;
                         foreach(var d in faseMetRgv.Detectoren.Where(x => x.Rijstrook == i))
                         {
-                            if (!first) sb.Append(" || ");
                             var hd = fc.HiaatDetectoren.FirstOrDefault(x => x.Detector == d.Naam);
                             if(hd != null)
                             {
+                                if (!first) sb.Append(" || ");
                                 sb.Append($"RT[{_tpf}{_thd}{_dpf}{d.Naam}] || T[{_tpf}{_thd}{_dpf}{d.Naam}]");
+                                first = false;
                             }
-                            first = false;
                         }
                         sb.AppendLine(");");
                     }
