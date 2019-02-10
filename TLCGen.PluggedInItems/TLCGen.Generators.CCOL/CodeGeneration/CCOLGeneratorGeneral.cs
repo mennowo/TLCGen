@@ -49,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             foreach (var vm in data.Versies)
             {
                 if ((vm.Versie.Length + Distance) > verLength) verLength = vm.Versie.Length + Distance;
-                if ((vm.Datum.ToShortDateString().Length + Distance) > datLength) datLength = vm.Datum.ToShortDateString().Length + Distance;
+                if ((vm.Datum.ToString("dd-MM-yyyy").Length + Distance) > datLength) datLength = vm.Datum.ToString("dd-MM-yyyy").Length + Distance;
                 if ((vm.Ontwerper.Length + Distance) > ontLength) ontLength = vm.Ontwerper.Length + Distance;
             }
 
@@ -66,7 +66,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendFormat(" * {0}{1}{2}{3}",
                     vm.Versie.PadRight(verLength),
-                    vm.Datum.ToShortDateString().PadRight(datLength),
+                    vm.Datum.ToString("dd-MM-yyyy").PadRight(datLength),
                     vm.Ontwerper.PadRight(ontLength),
                     vm.Commentaar);
                 sb.AppendLine();
