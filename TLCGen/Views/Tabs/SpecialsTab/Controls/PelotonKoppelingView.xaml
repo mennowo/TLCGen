@@ -31,8 +31,14 @@
                 <Label Content="Ingangssignalen detectoren" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.DetectorNaam}"/>
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -101,14 +107,8 @@
                 <Label Content="Ingangssignalen detectoren" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
-                    <DataGrid.RowHeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
-                                          AncestorType={x:Type DataGridRow}}, 
-                                          Path=Item.DetectorNaam}"/>
-                        </DataTemplate>
-                    </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
+                        <DataGridTextColumn Header="Detector naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Ingangsignaal #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
