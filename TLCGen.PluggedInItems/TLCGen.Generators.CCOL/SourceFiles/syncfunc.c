@@ -86,11 +86,11 @@ void control_realisation_timers(void)
 #if defined CCOLTIG && !defined NO_TIGMAX
             if (CV[fc])
             {
-                R_timer[fc][k] = TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc] + TGL_max[fc] + TIG_max[fc][k];
+                R_timer[fc][k] = TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc] + TIG_max[fc][k];
             }
             else if (TIG[fc][k])
             {
-                R_timer[fc][k] = TGL_max[fc] - TGL_timer[fc] + TIG_max[fc][k] - TIG_timer[fc];
+                R_timer[fc][k] = TIG_max[fc][k] - TIG_timer[fc];
             }
 #else
             if (CV[fc])

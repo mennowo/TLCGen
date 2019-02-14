@@ -655,7 +655,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
 #if defined CCOLTIG && !defined NO_TIGMAX
                             if (TIG[k][i])               /* zoek grootste ontruimingstijd      */
                             {
-                                to_tmp = TGL_max[k] + TIG_max[k][i] - TGL_timer[k] - TIG_timer[k];
+                                to_tmp = TIG_max[k][i] - TIG_timer[k];
 #else
                             if (TO[k][i])               /* zoek grootste ontruimingstijd      */
                             {
@@ -671,7 +671,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 if (G[ov])
                                 {
 #if defined CCOLTIG && !defined NO_TIGMAX
-                                    totxb_tmp = T_max[vb] + TGL_max[ov] + TIG_max[ov][k] - T_timer[vb] - TGL_max[i] - TIG_max[i][k];
+                                    totxb_tmp = T_max[vb] + TIG_max[ov][k] - T_timer[vb] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - T_timer[vb] - TGL_max[i] - TO_max[i][k];
 #endif
@@ -683,7 +683,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 else if (RA[ov] && !RR[ov] && !BL[ov])
                                 {
 #if defined CCOLTIG && !defined NO_TIGMAX
-                                    totxb_tmp = T_max[vb] + TGL_max[ov] + TIG_max[ov][k] - TGL_max[i] - TIG_max[i][k];
+                                    totxb_tmp = T_max[vb] + TIG_max[ov][k] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - TGL_max[i] - TO_max[i][k];
 #endif

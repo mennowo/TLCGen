@@ -1161,7 +1161,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 #endif
                 0;
 #if defined CCOLTIG && !defined NO_TIGMAX
-            if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestGeel + iRestTO)
+            if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
 #else
             if (TO_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestGeel + iRestTO)
 #endif
@@ -1192,7 +1192,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
             iRestGeel = G[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) : GL[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) - TGL_timer[k] : 0;
 #if defined CCOLTIG && !defined NO_TIGMAX
             iRestTO = TIG[k][fc] ? TIG_max[k][fc] - TIG_timer[k] : 0;
-            if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestGeel + iRestTO)
+            if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
 #else
             iRestTO = TO[k][fc] ? TO_max[k][fc] - TO_timer[k] : 0;
             if (TO_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestGeel + iRestTO)
@@ -1410,7 +1410,7 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #endif
         if (G[k] &&
 #if defined CCOLTIG && !defined NO_TIGMAX
-            (TIG_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TIG_max[k][fc] >= iStartGr ||
+            (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
 #else
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
 #endif
@@ -1462,7 +1462,7 @@ void AfkappenMG(int fc, int iStartGr)
 #endif
         if (MG[k] &&
 #if defined CCOLTIG && !defined NO_TIGMAX
-            (TIG_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TIG_max[k][fc] >= iStartGr ||
+            (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
              TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr) /* TIG_max[k][fc]==GKL toegevoegd */
 #else
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||

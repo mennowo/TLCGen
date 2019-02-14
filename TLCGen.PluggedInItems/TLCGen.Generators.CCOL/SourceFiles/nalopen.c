@@ -362,9 +362,9 @@ void berekenTGK_max(count fc1, count fc2, count tnl_max)
 #if defined CCOLTIG && !defined NO_TIGMAX
 		if (TIG_max[fc1][k] == GKL &&
 			TIG_max[fc2][k] >= 0 &&
-			((tnl_max + TVG_max[fc2] + TGL_max[fc2] + TIG_max[fc2][k]) > TGK_max[fc1][k]))
+			((tnl_max + TVG_max[fc2] + TIG_max[fc2][k]) > TGK_max[fc1][k]))
 		{
-			TGK_max[fc1][k] = tnl_max + TVG_max[fc2] + TGL_max[fc2] + TIG_max[fc2][k];
+			TGK_max[fc1][k] = tnl_max + TVG_max[fc2] + TIG_max[fc2][k];
 		}
 		if (TIG_max[fc1][k] == GKL &&
 			TIG_max[fc2][k] == GK &&

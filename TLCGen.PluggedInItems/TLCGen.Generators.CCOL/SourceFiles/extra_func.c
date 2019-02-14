@@ -146,15 +146,14 @@ bool ym_max_toV1(count i, mulv to_verschil)
 #endif
 
 #if defined CCOLTIG && !defined NO_TIGMAX
-					if (CV[m] && (((TGL_max[i] + TIG_max[i][k] - to_verschil) <=
-						(TGL_max[m] + TIG_max[m][k])) &&
-						((TGL_max[i] + TIG_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
-							TVG_max[m] - TVG_timer[m] + TGL_max[m] - TGL_timer[m] +
+					if (CV[m] && (((TIG_max[i][k] - to_verschil) <=
+						(TIG_max[m][k])) &&
+						((TIG_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
+							TVG_max[m] - TVG_timer[m] +
 							TIG_max[m][k] - TIG_timer[m]))
 						|| (to_verschil < 0))
 						|| TIG[m][k]
-						&& ((TGL_max[i] + TIG_max[i][k]) < (TGL_max[m] + TIG_max[m][k] -
-							TGL_timer[m] - TIG_timer[m])))
+						&& ((TIG_max[i][k]) < (TIG_max[m][k] - TIG_timer[m])))
 #else
 					if (CV[m] && (((TGL_max[i] + TO_max[i][k] - to_verschil) <=
 						(TGL_max[m] + TO_max[m][k])) &&
@@ -260,8 +259,8 @@ bool ym_max_vtgV1(count i)
 						if (CV[m] && PR[m] && !(VG[m] &&
 							((TVG_max[m] - TVG_timer[m]) <
 #if defined CCOLTIG && !defined NO_TIGMAX
-							(TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))) &&
-							 !(WG[m] && (TVG_max[m] < (TIG_max[i][k] + TGL_max[i] - TIG_max[m][k] - TGL_max[m]))))
+							(TIG_max[i][k] - TIG_max[m][k]))) &&
+							 !(WG[m] && (TVG_max[m] < (TIG_max[i][k] - TIG_max[m][k]))))
 #else
 							(TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))) &&
 							 !(WG[m] && (TVG_max[m] < (TO_max[i][k] + TGL_max[i] - TO_max[m][k] - TGL_max[m]))))
