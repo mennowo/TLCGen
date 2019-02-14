@@ -94,7 +94,15 @@ namespace TLCGen.ViewModels
         {
             var Peloton = new PelotonKoppelingModel();
             if (ControllerFasen.Any()) Peloton.GekoppeldeSignaalGroep = ControllerFasen.First();
-            if (PTPKruisingenNames.Any()) Peloton.PTPKruising = PTPKruisingenNames.First();
+            if (PTPKruisingenNames.Any())
+            {
+                Peloton.PTPKruising = PTPKruisingenNames.First();
+                Peloton.KruisingNaam = PTPKruisingenNames.First();
+            }
+            else
+            {
+                Peloton.KruisingNaam = "KOP1";
+            }
             var vm = new PelotonKoppelingViewModel(Peloton);
             PelotonKoppelingen.Add(vm);
             SelectedPelotonKoppeling = vm;

@@ -20,8 +20,15 @@ namespace TLCGen.ViewModels
             get { return PelotonKoppeling.KruisingNaam; }
             set
             {
-                PelotonKoppeling.KruisingNaam = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                if (NameSyntaxChecker.IsValidName(value))
+                {
+                    PelotonKoppeling.KruisingNaam = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
+                else
+                {
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -206,7 +213,6 @@ namespace TLCGen.ViewModels
 
 
         #endregion // Properties
-
 
         #region Commands
 

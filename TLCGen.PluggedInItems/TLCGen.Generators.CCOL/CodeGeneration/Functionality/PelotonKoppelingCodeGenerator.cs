@@ -29,6 +29,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schpela;
 #pragma warning restore 0649
 
+        TODO:
+            // make detectorname for outgoing readonly (or use row header...)
+            // add field to enter # incoming signal for green
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
