@@ -49,13 +49,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT) && (!defined VISSIM)");
                         sb.AppendLine($"{ts}PI_save();");
                         sb.AppendLine($"#endif");
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT) && (!defined VISSIM)");
                         sb.AppendLine($"{ts}MvSave();");
                         sb.AppendLine($"#endif");
                     }
