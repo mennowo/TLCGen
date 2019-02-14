@@ -957,7 +957,7 @@ void PrioriteitsToekenning(void)
         for (i = 0; i < ovGKFC_MAX[ov]; ++i)
         {
             kov = ovTO_pointer[ov][i];
-            if (iPrioriteitsNiveau[kov] > 234 /* iPrioriteitsNiveau[ov] */ && !iXPrio[kov] &&
+            if (iPrioriteitsNiveau[kov] > iPrioriteitsNiveau[ov] && !iXPrio[kov] &&
                 (!G[fc] || iPrioriteitsOpties[kov] & poAfkappenKonflikterendOV))
             {
                 iPrioriteit[ov] = 0;
@@ -1871,8 +1871,8 @@ void OVAlternatieven(void)
     { 
         /* Resetten RR Bit 5 als PAR alsnog wordt opgezet door OV */
         if ((PAR[fc] & OV_PAR_BIT) && R[fc] && !ERA[fc]) RR[fc] &= ~BIT5;
-        langstwachtende_alternatief_bit6();
     }
+    langstwachtende_alternatief_bit6();
     for (fc = 0; fc < FCMAX; ++fc)
     {
         if(AR[fc]&BIT6 && !PAR[fc])
