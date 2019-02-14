@@ -82,6 +82,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Check op sirene")]
+        public bool Sirene
+        {
+            get { return _HDIngreep.Sirene; }
+            set
+            {
+                _HDIngreep.Sirene = value;
+                RaisePropertyChanged<object>("Sirene", broadcast: true);
+            }
+        }
+
         [Browsable(false)]
         public bool OpticomAvailable => OpticomIngangen != null && OpticomIngangen.Any();
 
@@ -127,17 +138,6 @@ namespace TLCGen.ViewModels
                 }
             }
         }
-
-        // TODO: this is not yet supported, because it is unclear what this should do
-        //public bool Sirene
-        //{
-        //    get { return _HDIngreep.Sirene; }
-        //    set
-        //    {
-        //        _HDIngreep.Sirene = value;
-        //        RaisePropertyChanged<object>("Sirene", broadcast: true);
-        //    }
-        //}
 
         [Category("Tijden")]
         [Description("Rijtijd ongehinderd")]

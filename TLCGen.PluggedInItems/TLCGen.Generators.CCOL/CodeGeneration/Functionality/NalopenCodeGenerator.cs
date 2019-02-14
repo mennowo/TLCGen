@@ -287,7 +287,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) (SG[{_fcpf}{nl.FaseVan}]));");
+                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}]));");
 							}
                         }
                     }
