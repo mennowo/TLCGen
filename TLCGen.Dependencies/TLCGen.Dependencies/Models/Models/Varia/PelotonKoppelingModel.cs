@@ -24,6 +24,8 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum ToepassenAanvraag { get; set; }
         public NooitAltijdAanUitEnum ToepassenMeetkriterium { get; set; }
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen { get; set; }
+        public bool AutoIngangsSignalen { get; set; }
+        public int IngangsSignaalFG { get; set; }
 
         [RefersTo]
         [HasDefault(false)]

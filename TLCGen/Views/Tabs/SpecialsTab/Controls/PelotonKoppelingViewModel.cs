@@ -117,6 +117,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int IngangsSignaalFG
+        {
+            get { return PelotonKoppeling.IngangsSignaalFG; }
+            set
+            {
+                PelotonKoppeling.IngangsSignaalFG = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public NooitAltijdAanUitEnum ToepassenAanvraag
         {
             get { return PelotonKoppeling.ToepassenAanvraag; }
@@ -124,6 +134,7 @@ namespace TLCGen.ViewModels
             {
                 PelotonKoppeling.ToepassenAanvraag = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasAanvraag));
             }
         }
 
@@ -144,6 +155,7 @@ namespace TLCGen.ViewModels
             {
                 PelotonKoppeling.ToepassenRetourWachtgroen = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(HasRetourWachtgroen));
             }
         }
 
@@ -192,6 +204,9 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+        public bool HasAanvraag => ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit;
+        public bool HasRetourWachtgroen => ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit;
 
         public ObservableCollectionAroundList<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel> Detectoren { get; }
 

@@ -10,20 +10,45 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         #region Static Fields
 
         private static int _koppelSignaalCount;
+        private static bool _koppelSignaalCountSet;
         private static List<CCOLKoppelSignaal> _koppelSignalen;
 
         #endregion // Static Fields
 
         #region Static Properties
 
-        public static void AddKoppelSignaal(string name, CCOLKoppelSignaalRichtingEnum richting)
+        public static void AddKoppelSignaal(int order, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
-            _koppelSignalen.Add(new CCOLKoppelSignaal() { Name = name, Count = _koppelSignaalCount, Richting = richting });
-            ++_koppelSignaalCount;
+            _koppelSignalen.Add(new CCOLKoppelSignaal() { Order = order, Name = name, Richting = richting });
+        }
+
+        public static void AddKoppelSignaal(int order, int count, string name, CCOLKoppelSignaalRichtingEnum richting)
+        {
+            if(_koppelSignalen.Any(x => x.Count == count))
+            {
+                // TODO: warn user
+            }
+            _koppelSignalen.Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
         }
 
         public static int GetKoppelSignaalCount(string name, CCOLKoppelSignaalRichtingEnum richting)
         {
+            if (!_koppelSignaalCountSet)
+            {
+                _koppelSignalen.Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
+                foreach (var k in _koppelSignalen)
+                {
+                    if (_koppelSignalen.Any(x => x.Count == _koppelSignaalCount))
+                    {
+                        // TODO : warn user
+                    }
+                    if (k.Count == 0)
+                    {
+                        k.Count = _koppelSignaalCount;
+                        ++_koppelSignaalCount;
+                    }
+                }
+            }
             var ks = _koppelSignalen.FirstOrDefault(x => x.Name == name && x.Richting == richting);
             if (ks != null) return ks.Count;
             else return 0;
@@ -36,6 +61,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public static void Reset()
         {
             _koppelSignaalCount = 1;
+            _koppelSignaalCountSet = false;
+            _koppelSignalen = new List<CCOLKoppelSignaal>();
         }
 
         public static void AddAllMaxElements(CCOLElemListData[] lists)

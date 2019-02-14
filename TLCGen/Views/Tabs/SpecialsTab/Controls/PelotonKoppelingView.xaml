@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d" 
@@ -54,6 +56,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -70,20 +73,26 @@
             <Label Content="Tijd tot RW" Grid.Row="7" />
             <Label Content="Tijd RW" Grid.Row="8" />
             <Label Content="Toepassen MK" Grid.Row="9" />
+            <Label Content="Ingangssignaal FG #" Grid.Row="10" />
             
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
                       SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
             <TextBox Text="{Binding Path=Meetperiode,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="1" />
             <TextBox Text="{Binding Path=MaximaalHiaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="2" />
             <TextBox Text="{Binding Path=MinimaalAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="3" />
-            <CheckBox IsChecked="{Binding Path=ToepassenAanvraag,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="4" />
-            <TextBox Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="5" />
-            <CheckBox IsChecked="{Binding Path=ToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="6" />
-            <TextBox Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="7" />
-            <TextBox Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="8" />
-            <CheckBox IsChecked="{Binding Path=ToepassenMeetkriterium,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="2" Grid.Column="1" Grid.Row="9" />
+            <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenAanvraag}" Grid.Row="4" Grid.Column="1" />
+            <TextBox IsEnabled="{Binding Path=HasAanvraag}" Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="5" />
+            <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" Grid.Row="6" Grid.Column="1" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="7" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="8" />
+            <ComboBox IsEnabled="{Binding Path=HasRetourWachtgroen}" 
+                      Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenMeetkriterium}" Grid.Row="9" Grid.Column="1" />
+            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="10" />
             
-            <Grid Grid.Row="10" Grid.ColumnSpan="2">
+            <Grid Grid.Row="11" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -92,9 +101,15 @@
                 <Label Content="Ingangssignalen detectoren" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
+                    <DataGrid.RowHeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                          AncestorType={x:Type DataGridRow}}, 
+                                          Path=Item.DetectorNaam}"/>
+                        </DataTemplate>
+                    </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Ingangsignaal #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 

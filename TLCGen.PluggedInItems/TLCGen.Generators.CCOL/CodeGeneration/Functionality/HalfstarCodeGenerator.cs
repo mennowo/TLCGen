@@ -264,22 +264,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InKoppelpuls, $"{_uspf}in{k.KruisingNaam}{_uskpuls}"));
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodeVARegelen, $"{_uspf}in{k.KruisingNaam}{_uspervar}"));
 						_myBitmapOutputs.Add(new CCOLIOElement(k.InPeriodenAlternatievenHoofdrichtingen, $"{_uspf}in{k.KruisingNaam}{_usperarh}"));
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.In);
 						foreach (var pl in hsd.SignaalPlannen)
 						{
-                            CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
+                            CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.In);
 							_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "in"));
 						}
 						foreach (var pl in k.PlanIngangen)
 						{
 							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}in{k.KruisingNaam}{pl.Plan}"));
 						}
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.Uit);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.Uit);
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "uit"));
@@ -289,10 +289,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					if (k.Type == HalfstarGekoppeldTypeEnum.Slave)
 					{
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.Uit);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.Uit);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}kpuls", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}pervar", CCOLKoppelSignaalRichtingEnum.Uit);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}perarh", CCOLKoppelSignaalRichtingEnum.Uit);
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uskpuls}", _uskpuls, k.KruisingNaam, "uit"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{_uspervar}", _uspervar, k.KruisingNaam, "uit"));
@@ -303,16 +303,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						_myBitmapOutputs.Add(new CCOLIOElement(k.UitPeriodenAlternatievenHoofdrichtingen, $"{_uspf}uit{k.KruisingNaam}{_usperarh}"));
 						foreach (var pl in hsd.SignaalPlannen)
 						{
-                            CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.Uit);
+                            CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}pl{pl.Naam}", CCOLKoppelSignaalRichtingEnum.Uit);
 							_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"uit{k.KruisingNaam}{pl.Naam}", _uspl, pl.Naam, k.KruisingNaam, "uit"));
 						}
 						foreach (var pl in k.PlanUitgangen)
 						{
 							_myBitmapOutputs.Add(new CCOLIOElement(pl, $"{_uspf}uit{k.KruisingNaam}{pl.Plan}"));
 						}
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.In);
-                        CCOLElementCollector.AddKoppelSignaal($"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}syncok", CCOLKoppelSignaalRichtingEnum.In);
+                        CCOLElementCollector.AddKoppelSignaal(0, $"{k.KruisingNaam}txsok", CCOLKoppelSignaalRichtingEnum.In);
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_usleven}", _usleven, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ussyncok}", _ussyncok, k.KruisingNaam, "in"));
 						_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"in{k.KruisingNaam}{_ustxsok}", _ustxsok, k.KruisingNaam, "in"));
@@ -1079,7 +1079,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					{
 						sb.AppendLine($"{ts}/* Levensignaal van {kp.KruisingNaam} */");
 
-                        var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{master.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
+                        var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{kp.KruisingNaam}leven", CCOLKoppelSignaalRichtingEnum.In);
                         sb.AppendLine($"{ts}RT[{_tpf}{_tleven}{kp.KruisingNaam}] = SH[{_hpf}{kp.PTPKruising}{_hiks}{ipl:00}];");
 						sb.AppendLine($"{ts}MM[{_mpf}{_mleven}{kp.KruisingNaam}] = T[{_tpf}{_tleven}{kp.KruisingNaam}];");
 					}
