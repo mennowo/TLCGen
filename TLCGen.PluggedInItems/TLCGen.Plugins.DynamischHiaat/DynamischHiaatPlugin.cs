@@ -288,7 +288,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     sb.AppendLine($"{ts}/* Dynamische hiaattijden: initialiseren oorspronkelijke waarden */");
                     sb.AppendLine($"{ts}if (!SAPPLPROG)");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}VeiligstellenTDHdhtijden();");
+                    sb.AppendLine($"{ts}{ts}VeiligstellenTDHdhtijden(NG, TDHdh_INIT);");
                     sb.AppendLine($"{ts}}}");
                     return sb.ToString();
 
