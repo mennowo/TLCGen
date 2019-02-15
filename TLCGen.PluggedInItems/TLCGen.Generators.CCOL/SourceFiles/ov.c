@@ -1462,11 +1462,21 @@ void AfkappenMG(int fc, int iStartGr)
 #endif
         if (MG[k] &&
 #if defined CCOLTIG && !defined NO_TIGMAX
+			/* TIG_max[k][fc]==GKL toegevoegd */
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
-             TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr) /* TIG_max[k][fc]==GKL toegevoegd */
+             TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL 
+#ifdef NALOOPGK
+			&& TGK_max[k][fc] >= iStartGr
+#endif
+			) 
 #else
+			/* TO_max[k][fc]==GKL toegevoegd */
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
-             TO_max[k][fc] == GK && iStartGr <= 0) || TO_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr) /* TO_max[k][fc]==GKL toegevoegd */
+             TO_max[k][fc] == GK && iStartGr <= 0) || TO_max[k][fc] == GKL 
+#ifdef NALOOPGK
+			&& TGK_max[k][fc] >= iStartGr
+#endif
+		)
 #endif
         {
             Z[k] |= OV_Z_BIT;
