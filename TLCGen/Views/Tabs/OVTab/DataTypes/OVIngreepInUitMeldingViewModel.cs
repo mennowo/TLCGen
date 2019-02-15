@@ -22,6 +22,8 @@ namespace TLCGen.ViewModels
 
         public ObservableCollection<string> Detectoren { get; }
 
+        public ObservableCollection<string> VecomDetectoren { get; }
+
         public ObservableCollection<string> SelectieveDetectoren { get; }
 
         public ObservableCollection<string> AvailableInputs
@@ -34,6 +36,10 @@ namespace TLCGen.ViewModels
                         return Detectoren;
                     case OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector:
                         return SelectieveDetectoren;
+                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding:
+                        break;
+                    case OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
+                        return VecomDetectoren;
                 }
                 return null;
             }
@@ -205,17 +211,9 @@ namespace TLCGen.ViewModels
             MessengerInstance.Send(msg);
             if (msg.FaseCyclus == null) return;
 
-            var sd1 = "";
-            var sd2 = "";
-            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
-            {
-                sd1 = RelatedInput1;
-                sd2 = RelatedInput2;
-            }
-
-            //var fc = DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.Where(x => x.Naam == msg.FaseCyclus).FirstOrDefault();
-            //if (fc != null)
-            //{
+            var sd1 = OVIngreepInUitMelding != null ? RelatedInput1 : "";
+            var sd2 = OVIngreepInUitMelding != null ? RelatedInput2 : "";
+            
             Detectoren.Clear();
             foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren))
             {
@@ -225,7 +223,16 @@ namespace TLCGen.ViewModels
             {
                 Detectoren.Add(d.Naam);
             }
-            //}
+
+            VecomDetectoren.Clear();
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Fasen.SelectMany(x => x.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.VecomDetector)))
+            {
+                VecomDetectoren.Add(d.Naam);
+            }
+            foreach (var d in DataAccess.TLCGenControllerDataProvider.Default.Controller.Detectoren.Where(x2 => x2.Type == DetectorTypeEnum.VecomDetector))
+            {
+                VecomDetectoren.Add(d.Naam);
+            }
 
             if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.Detector)
             {
@@ -234,6 +241,18 @@ namespace TLCGen.ViewModels
                     RelatedInput1 = sd1;
                 }
                 if (Detectoren.Contains(sd2))
+                {
+                    RelatedInput2 = sd2;
+                }
+            }
+
+            if (OVIngreepInUitMelding != null && Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector)
+            {
+                if (VecomDetectoren.Contains(sd1))
+                {
+                    RelatedInput1 = sd1;
+                }
+                if (VecomDetectoren.Contains(sd2))
                 {
                     RelatedInput2 = sd2;
                 }
@@ -279,6 +298,7 @@ namespace TLCGen.ViewModels
             OVIngreepInUitMelding = oVIngreepMassaDetectieMelding;
 
             Detectoren = new ObservableCollection<string>();
+            VecomDetectoren = new ObservableCollection<string>();
             SelectieveDetectoren = new ObservableCollection<string>();
 
             MessengerInstance.Register<DetectorenChangedMessage>(this, OnDetectorenChanged);
