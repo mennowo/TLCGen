@@ -931,7 +931,7 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 	va_end(argpt);
 
 	AT[tmeet] = FALSE;
-	RT[tmeet] = RT[tmaxth] = H[fc] || !T[tmeet] && !T[tmaxth] && edpel > 0;
+	RT[tmeet] = RT[tmaxth] = H[hfc] || !T[tmeet] && !T[tmaxth] && edpel > 0;
 
 	if (edpel > 0 && (RT[tmeet] || T[tmeet]))
 	{
