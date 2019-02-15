@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using TLCGen.Models;
@@ -6,6 +7,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
+    [Serializable]
     public class PelotonKoppelingModel
     {
         [HasDefault(false)]

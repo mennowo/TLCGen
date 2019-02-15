@@ -362,7 +362,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                         msg.SelectedDefault = MyDefaults.Defaults.FirstOrDefault(x => x.Name == _myModel.TypeDynamischHiaat);
                         if (string.IsNullOrEmpty(msg.Snelheid) || !msg.SelectedDefault.Snelheden.Any(x => x.Name == msg.Snelheid))
                         {
-                            msg.Snelheid = msg.SelectedDefault.DefaultSnelheid;
+                            if (msg.SelectedDefault != null) msg.Snelheid = msg.SelectedDefault.DefaultSnelheid;
                         }
                         _myTabViewModel.DynamischHiaatSignalGroups.Add(msg);
                     }
