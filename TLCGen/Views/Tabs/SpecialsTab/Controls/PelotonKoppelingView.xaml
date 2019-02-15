@@ -7,9 +7,9 @@
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding Path=SelectedPelotonKoppeling}">
+    <Grid DataContext="{Binding Path=SelectedPelotonKoppeling}" x:Name="root">
         <Grid Visibility="{Binding Path=IsUitgaand,Mode=OneWay}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -116,5 +116,18 @@
                                      AddItemCommand="{Binding Path=AddInkomendeDetectorCommand}" RemoveItemCommand="{Binding Path=RemoveInkomendeDetectorCommand}" />
             </Grid>
         </Grid>
+        <Border Grid.Row="0" Background="LightGray">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Label>Geen instellingen beschikbaar</Label>
+        </Border>
     </Grid>
 </UserControl>
