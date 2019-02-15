@@ -4,9 +4,7 @@ using System.Linq;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
-using TLCGen.ModelManagement;
 using TLCGen.Models;
-using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
