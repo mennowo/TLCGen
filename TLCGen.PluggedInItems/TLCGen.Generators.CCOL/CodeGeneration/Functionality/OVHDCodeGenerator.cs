@@ -449,15 +449,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+                case CCOLCodeTypeEnum.RegCSystemApplication:
                     var result = new List<Tuple<string, string, string>>();
+                    result.Add(new Tuple<string, string, string>("int", "ov", "0"));
+                    return result;
+
+                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
+                    var result2 = new List<Tuple<string, string, string>>();
                     if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        result.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
+                        result2.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
 
                     }
-                    return result;                        
+                    return result2;
                     
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -768,7 +773,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Verklikken overschreiding maximale wachttijd */");
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usmaxwt}] = iMaximumWachtTijdOverschreden;");
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_usmaxwt}] = FALSE;");
+                        sb.AppendLine($"{ts}for (ov = 0; ov < ovOVMAX; ++ov)");
+                        sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usmaxwt}] |= iMaximumWachtTijdOverschreden[ov];");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCInUitMelden:

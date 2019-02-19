@@ -5,7 +5,7 @@
 	  Id="*"
     Name="TLCGen"
     Language="1033" 
-    Version="0.3.7" 
+    Version="0.4.0" 
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -191,6 +191,7 @@
         <File Id="filAF0ED231C15896617EA28D9AF1C8F086" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.c" />
         <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C3" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\winmg.h" />
         <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C4" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\wtv_testwin.c" />
+        <File Id="fil9BB0B0A86101999DFC9E8CE1C3C582C5" KeyPath="no" Source="$(var.ReleaseDir)\SourceFiles\dynamischhiaat.c" />
       </Component>
     </ComponentGroup>
 

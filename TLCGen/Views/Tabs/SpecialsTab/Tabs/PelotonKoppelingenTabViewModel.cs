@@ -9,7 +9,7 @@ using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
 {
-    [TLCGenTabItem(index: 6, type: TabItemTypeEnum.SpecialsTab)]
+//    [TLCGenTabItem(index: 6, type: TabItemTypeEnum.SpecialsTab)]
     public class PelotonKoppelingenTabViewModel : TLCGenTabItemViewModel
     {
         #region Fields

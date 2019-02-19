@@ -54,7 +54,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("void WachtTijdBewaking_Add(void) {");
             sb.AppendLine("  /* --------------------------------------------------------");
             sb.AppendLine("     Pas hier zonodig MaximumWachtTijdOverschreden aan, bijv:");
-            sb.AppendLine("     iMaximumWachtTijdOverschreden = FALSE;");
+            sb.AppendLine("     iMaximumWachtTijdOverschreden[ov] = FALSE;");
             sb.AppendLine("     -------------------------------------------------------- */");
             sb.AppendLine("}");
             sb.AppendLine("");
