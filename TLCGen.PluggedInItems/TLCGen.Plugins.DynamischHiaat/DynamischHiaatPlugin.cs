@@ -230,7 +230,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                 _myElements.Add(new CCOLElement($"edkop_{msg.SignalGroupName}", msg.KijkenNaarKoplus ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Start timers dynamische hiaat fase {msg.SignalGroupName} op einde detectie koplus"));
                 foreach(var d in msg.DynamischHiaatDetectoren)
                 {
-                    _myElements.Add(new CCOLElement($"TDHst{_dpf}{d.DetectorName}", CCOLElementTypeEnum.Parameter, $"Onthouden oorspronkelijke TDH voor detector {d.DetectorName}"));
+                    _myElements.Add(new CCOLElement($"TDHst{_dpf}{d.DetectorName}", 999, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Parameter, $"Onthouden oorspronkelijke TDH voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"{d.DetectorName}_1", d.Moment1, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden moment 1 voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"{d.DetectorName}_2", d.Moment2, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden moment 2 voor detector {d.DetectorName}"));
                     _myElements.Add(new CCOLElement($"tdh_{d.DetectorName}_1", d.TDH1, CCOLElementTimeTypeEnum.TE_type, CCOLElementTypeEnum.Timer, $"Dynamische hiaattijden TDH 1 voor detector {d.DetectorName}"));
