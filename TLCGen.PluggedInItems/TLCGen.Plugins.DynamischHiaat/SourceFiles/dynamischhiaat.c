@@ -1,15 +1,15 @@
-﻿
-/* 
+﻿/* 
    BESTAND:   dynamischhiaat.c
-   TLCGEN :   0.3.7 en hoger
+   TLCGEN :   0.4.0 en hoger
 
    ****************************** Versie commentaar **********************************************************
    *
    * Versie   Datum        Ontwerper   Commentaar
-   * 1.0.0    25- 1-2018   Kzw         Basisversie i.o.v. IVER
+   * 1.0.0    25-01-2018   Kzw         Basisversie i.o.v. IVER
    * 2.0.0    05-12-2018   ddo         Diverse aanpassingen voor stedelijk gebruik
    * 2.1.0    24-12-2018   ddo         Diverse aanpassingen na Vissim simulatie
    * 2.2.0    01-02-2019   ddo         Correctie veiligheidsgroen verwijderd
+   * 2.3.0    15-02-2019   ddo         Veiligstellen hiaattijden aangepast
    *
    ***********************************************************************************************************
 
@@ -84,7 +84,7 @@
       de verlengfunctie UITschakelen)
    -- extra verlengvoorwaarde (bij TRUE altijd verlengen op deze lus; bijvoorbeeld bij permanente aanwezigheid
       deelconflict (G[fc11] && G[fc36]) )
-   -- aftelvoorwaarde (tijdens groen, als er wél hiaatmeting is op deze lus maar niet op de stroomafwartse 
+   -- aftelvoorwaarde (tijdens groen, als er wél hiaatmeting is op deze lus maar niet op de stroomafwaartse 
       lussen, meteen TDH_max[] gaan aftellen) 
    -- spring-tijdens-groen voorwaarde (wanneer tijdens G[] het hiaat valt, wordt de volgende detector 
       stroomopwaarts de aktieve verlenglus)
@@ -127,14 +127,14 @@
    hiaattijden_verlenging ( IH[hgeendynhiaat05], SCH[schedkop_05],  mmk05, IH[hopdrempelen05],   fc05, 
 
     rijstr,  det,  moment1,  moment2,       tdh1,       tdh2,  maxtijd,      spring- en verlengvoorwaarden, stat.TDH, 
-         1, d051,   t051_1,   t051_2, ttdh_051_1, ttdh_051_2, tmax_051, prmspringverleng_051, hverlengd051, mTDHd051, 
-         1, d053,   t053_1,   t053_2, ttdh_053_1, ttdh_053_2, tmax_053, prmspringverleng_053, hverlengd053, mTDHd053, 
-         1, d055,   t055_1,   t055_2, ttdh_055_1, ttdh_055_2, tmax_055, prmspringverleng_055, hverlengd055, mTDHd055, 
-         1, d057,   t057_1,   t057_2, ttdh_057_1, ttdh_057_2, tmax_057, prmspringverleng_057, hverlengd057, mTDHd057, 
-         2, d052,   t052_1,   t052_2, ttdh_052_1, ttdh_052_2, tmax_052, prmspringverleng_052, hverlengd052, mTDHd052, 
-         2, d054,   t054_1,   t054_2, ttdh_054_1, ttdh_054_2, tmax_054, prmspringverleng_054, hverlengd054, mTDHd054, 
-         2, d056,   t056_1,   t056_2, ttdh_056_1, ttdh_056_2, tmax_056, prmspringverleng_056, hverlengd056, mTDHd056, 
-         2, d058,   t058_1,   t058_2, ttdh_058_1, ttdh_058_2, tmax_058, prmspringverleng_058, hverlengd058, mTDHd058, 
+         1, d051,   t051_1,   t051_2, ttdh_051_1, ttdh_051_2, tmax_051, prmspringverleng_051, hverlengd051, prmTDHstd051, 
+         1, d053,   t053_1,   t053_2, ttdh_053_1, ttdh_053_2, tmax_053, prmspringverleng_053, hverlengd053, prmTDHstd053, 
+         1, d055,   t055_1,   t055_2, ttdh_055_1, ttdh_055_2, tmax_055, prmspringverleng_055, hverlengd055, prmTDHstd055, 
+         1, d057,   t057_1,   t057_2, ttdh_057_1, ttdh_057_2, tmax_057, prmspringverleng_057, hverlengd057, prmTDHstd057, 
+         2, d052,   t052_1,   t052_2, ttdh_052_1, ttdh_052_2, tmax_052, prmspringverleng_052, hverlengd052, prmTDHstd052, 
+         2, d054,   t054_1,   t054_2, ttdh_054_1, ttdh_054_2, tmax_054, prmspringverleng_054, hverlengd054, prmTDHstd054, 
+         2, d056,   t056_1,   t056_2, ttdh_056_1, ttdh_056_2, tmax_056, prmspringverleng_056, hverlengd056, prmTDHstd056, 
+         2, d058,   t058_1,   t058_2, ttdh_058_1, ttdh_058_2, tmax_058, prmspringverleng_058, hverlengd058, prmTDHstd058, 
          END);
 
 	De hulpelementen IH[hgeendynhiaat05] en IH[hopdrempelen05] kunnen zowel met een schakelaar als vanuit de 
@@ -142,30 +142,74 @@
 		
    ======================================================================================================== */
 
-
-//#if !defined AUTOMAAT || defined VISSIM   /* nog verwijderen */
-//   /* definitie tbv voorkomen compiler warning */
-//   extern int xyprintf(int x, int y, const char * szFormat, ...);
-//#endif
-
 static int eavl[FCMAX][5];
 static int detstor[FCMAX];
+
+void InitTDHstdtijden(void) { /*-*/
+
+  int dp, prm;
+
+  for (prm = 0; prm < PRMMAX; ++prm) {
+    if (strstr(PRM_code[prm], "TDHstd")) {
+      for (dp = 0; dp < DPMAX; ++dp) {
+        if (IS_type[dp] & DL_type) {
+          if (strstr(PRM_code[prm], D_code[dp])) {
+            if (PRM[prm] == 999) {
+              PRM[prm] = TDH_max[dp];
+              CIF_PARM1WIJZAP |= CIF_MEER_PARMWIJZ;
+            }
+            else {
+              TDH_max[dp] = PRM[prm];
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
 
 void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool opdr, count fc, ...)
 {
   va_list argpt;                                    /* variabele argumentenlijst                                 */
   count dpnr;                                       /* arraynummer detectie-element                              */
-  count t1, t2, tdh1, tdh2, tmax, tvag4_1, tvag4_2; /* arraynummers tijdelementen                                */
+  count t1, t2, tdh1, tdh2, tmax;                   /* arraynummers tijdelementen                                */
   count prmdetvw;                                   /* arraynummer parameter detectorvoorwaarden                 */
   count hevlvw;                                     /* arraynummer hulpelement extra verlengvoorwaarde           */
-  count msthiaat;                                   /* arraynummer mem.element tbv bewaren statische hiaattijd   */
+  count prmsthiaat;                                 /* arraynummer parameter tbv bewaren statische hiaattijd     */
   count rijstrook_old = -1;                         /* vorige rijstrooknummer                                    */
   count rijstrook;                                  /* rijstrooknummer                                           */
   count max_rijstrook = 1;                          /* hoogste rijstrooknummer                                   */
   bool svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[5], tdh_saw[5];
   count dp_teller=0;                                /* telt aantal lussen vanaf stopstreep op bepaalde rijstrook */
 
-  if (nietToepassen) return;
+  if (nietToepassen) {                              /* apart doorlopen ivm snelheid (va_arg 1 x per sewconde)    */ /*-*/
+
+    /* zet oorspronkelijke statische hiaattijden terug ... */ /*-*/
+    if (TS) {
+      va_start(argpt, fc);                          /* start var. argumentenlijst                                */
+      do {                                                                                                       
+        rijstrook = va_arg(argpt, va_count);        /* lees rijstrooknummer                                      */
+        if (rijstrook >= 0) {                                                                                    
+          dpnr = va_arg(argpt, va_count);           /* lees array-nummer detectie                                */
+          t1 = va_arg(argpt, va_count);             /* ongebruikt tijdens nietToepassen                          */
+          t2 = va_arg(argpt, va_count);             /* ongebruikt tijdens nietToepassen                          */
+          tdh1 = va_arg(argpt, va_count);           /* ongebruikt tijdens nietToepassen                          */
+          tdh2 = va_arg(argpt, va_count);           /* ongebruikt tijdens nietToepassen                          */
+          tmax = va_arg(argpt, va_count);           /* ongebruikt tijdens nietToepassen                          */
+          prmdetvw = va_arg(argpt, va_count);       /* ongebruikt tijdens nietToepassen                          */
+          hevlvw = va_arg(argpt, va_count);         /* ongebruikt tijdens nietToepassen                          */
+          prmsthiaat = va_arg(argpt, va_count);     /* lees array-nummer PRM tbv opslaan statisch hiaat          */ 
+                                                                                                                 
+          TDH_max[dpnr] = PRM[prmsthiaat];          /* zet oorspronkelijke statische hiaattijden terug           */
+        }
+      } while (rijstrook >= 0);
+      va_end(argpt);                         /* maak var. arg-lijst leeg */
+    }
+    /* ... en breek de functie af.         */
+    return;
+  }
 
   /* initialisatie */
   for (rijstrook=0; rijstrook<5; rijstrook++)
@@ -183,15 +227,15 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
     do {
       rijstrook = va_arg(argpt, va_count);          /* lees rijstrooknummer                                      */
       if (rijstrook>=0) {																			            
-        dpnr     = va_arg(argpt, va_count);          /* lees array-nummer detectie                               */
-        t1       = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        t2       = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        tdh1     = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        tdh2     = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        tmax     = va_arg(argpt, va_count);          /* ongebruikt                                               */
-		prmdetvw = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        hevlvw   = va_arg(argpt, va_count);          /* ongebruikt                                               */
-        msthiaat = va_arg(argpt, va_count);          /* lees array-nummer MM tbv opslaan statisch hiaat          */ /*-*/
+        dpnr       = va_arg(argpt, va_count);          /* lees array-nummer detectie                             */
+        t1         = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        t2         = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        tdh1       = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        tdh2       = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        tmax       = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+		prmdetvw   = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        hevlvw     = va_arg(argpt, va_count);          /* ongebruikt tijdens R[]                                 */
+        prmsthiaat = va_arg(argpt, va_count);          /* lees array-nummer PRM tbv opslaan statisch hiaat       */ /*-*/
   
         if (!TRG[fc] && !ERV[fc]) {
             #if defined (DL_type) && !defined (NO_DDFLUTTER) /* CCOL7 of hoger */  
@@ -199,39 +243,35 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
             #else
               if (CIF_IS[dpnr] >= CIF_DET_STORING /*|| OG[dpnr]*/ || BG[dpnr])               detstor[fc] |= TRUE;
             #endif
-        
-//            #if !defined AUTOMAAT || defined VISSIM  /* nog verwijderen */
-//              xyprintf(125,10,"detstor");
-//              xyprintf(125,10+2*fc+rijstrook, "     %d",detstor[fc]);
-//            #endif
          }
   
-        /* tijdens R[] statische hiaten gebruiken tbv default TLCGen detectieopvang; det.storing resetten op TRG[] */ /*-*/
-        if (!TRG[fc]) {
-           MM[msthiaat] = TDH_max[dpnr];              /* bewaar oorspronkelijke statische hiaattijd in MM          */
+        /* tijdens R[] mogelijk om statischge hiaattijden aan te passen */ /*-*/
+        /* uitgecommentaard; bij voorkeur ALTIJD de PRM waardes aanpassen bij wijzigen statische hiaten          */
+        /* Statische hiaten worden veiliggesteld bij opstart regeling                                            */
+/*      if (ER[fc]) {
+           PRM[prmsthiaat] = TDH_max[dpnr];         / * bewaar oorspronkelijke statische hiaattijd in PRM       * /
+           CIF_PARM1WIJZAP |= CIF_MEER_PARMWIJZ;
         }		
-  
+*/  
       }
     } while (rijstrook>=0);
     va_end(argpt);                     /* maak var. arg-lijst leeg */
   }
 
   if (RA[fc] && !SRA[fc] || G[fc] || GL[fc]) {        /*-*/ 
-    va_start(argpt, fc);                              /* start var. argumentenlijst                                */
+    va_start(argpt, fc);                              /* start var. argumentenlijst                              */
     do {
-      rijstrook = va_arg(argpt, va_count);            /* lees rijstrooknummer                                      */
+      rijstrook = va_arg(argpt, va_count);            /* lees rijstrooknummer                                    */
       if (rijstrook>=0 && (detstor[fc] != TRUE)) {	  /*-*/
-        dpnr     = va_arg(argpt, va_count);           /* lees array-nummer detectie                                */
-        t1       = va_arg(argpt, va_count);           /* lees array-nummer tijdelement - moment 1                  */
-        t2       = va_arg(argpt, va_count);           /* lees array-nummer tijdelement - moment 2                  */
-        tdh1     = va_arg(argpt, va_count);           /* lees array-nummer tijdelement - hiaattijd 1               */
-        tdh2     = va_arg(argpt, va_count);           /* lees array-nummer tijdelement - hiaattijd 2               */
-        tmax     = va_arg(argpt, va_count);           /* lees array-nummer tijdelement - maximum groentijd         */
-        prmdetvw = va_arg(argpt, va_count);           /* lees array-nummer parameter   - detectorvoorwaarden       */
-        hevlvw   = va_arg(argpt, va_count);           /* lees array-nummer hulpelement - extra verlengvoorwaarde   */
-        tvag4_1  = va_arg(argpt, va_count);           /* lees veiligheidsgroen 1e timer                            */ /*-*/
-        tvag4_2  = va_arg(argpt, va_count);           /* lees veiligheidsgroen 2e timer                            */ /*-*/
-        msthiaat = va_arg(argpt, va_count);           /* lees array-nummer MM tbv opslaan statisch hiaat           */ /*-*/
+        dpnr       = va_arg(argpt, va_count);         /* lees array-nummer detectie                              */
+        t1         = va_arg(argpt, va_count);         /* lees array-nummer tijdelement - moment 1                */
+        t2         = va_arg(argpt, va_count);         /* lees array-nummer tijdelement - moment 2                */
+        tdh1       = va_arg(argpt, va_count);         /* lees array-nummer tijdelement - hiaattijd 1             */
+        tdh2       = va_arg(argpt, va_count);         /* lees array-nummer tijdelement - hiaattijd 2             */
+        tmax       = va_arg(argpt, va_count);         /* lees array-nummer tijdelement - maximum groentijd       */
+        prmdetvw   = va_arg(argpt, va_count);         /* lees array-nummer parameter   - detectorvoorwaarden     */
+        hevlvw     = va_arg(argpt, va_count);         /* lees array-nummer hulpelement - extra verlengvoorwaarde */
+        prmsthiaat = va_arg(argpt, va_count);         /* lees array-nummer PRM tbv opslaan statisch hiaat        */ /*-*/
         
         /* omzetten parameter verlengvoorwaarden naar booleanse criteria */           /*-*/
         svw   =  PRM[prmdetvw]&BIT0;                  /* springvoorwaarde  (op SG[])     */
@@ -243,10 +283,11 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
         /* afbreken lopende hiaattimers op start geel */
         AT[t1]=AT[t2]=AT[tmax] = SGL[fc];              
         
-        if (GL[fc]) {							    
-            TDH_max[dpnr] = MM[msthiaat];             /* zet oorspronkelijke statische hiaattijden terug                  */
+        if (SGL[fc]) {							    
+            TDH_max[dpnr] = PRM[prmsthiaat];          /* zet oorspronkelijke statische hiaattijden terug                  */
         }
-            
+
+
         max_rijstrook = rijstrook;                    /* onthoud hoogste rijstrooknummer                                  */
         if (rijstrook != rijstrook_old) {
           eavl[fc][rijstrook] = 0;
@@ -286,7 +327,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
           }
         }
         
-        /* Er mag verlengd worden op deze lus tot de timer is afgelopen     */           /* klopt dit? verlengen evlw nog testen! hier lijkt per rijstrook. */
+        /* Er mag verlengd worden op deze lus tot de timer is afgelopen     */           
         /* of wanneer extra verlengvoorwaarde evlvw aanwezig is             */
         if ((RT[tmax] || T[tmax] || evlvw) && G[fc] && TDH[dpnr]) {                                /*-*/ /* evlvw toegevoegd            */
           verlengen[rijstrook] = TRUE;
@@ -298,7 +339,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
             G[fc]                    &&     /* signaalgroep is groen                                             */
 /*          TDH[dpnr]                && */  /* hiaattijd van de detector loopt                                   */ /* uitgecommentaard in Goudappel code */
             eavl[fc][rijstrook] == 0   ) {  /* eerste actieve verlenglus is op deze rijstrook nog niet ingesteld */
-          eavl[fc][rijstrook] = dp_teller;
+            eavl[fc][rijstrook] = dp_teller;
         }
         
         /* afkappen maxtimer t.b.v. springen naar eerstvolgende lus stroomopwaarts*/ /*-*/
@@ -318,15 +359,6 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
         	T_timer[t1] = T_max[t1];
         	T_timer[t2] = T_max[t1];
         }
-        
-        
-//       #if !defined AUTOMAAT || defined VISSIM /* nog verwijderen */
-//         xyprintf(30,10+0,   "   dp   tdh   t1   t2   h1   h2    max  tmmax TDHsaw  dp ");
-//         xyprintf(30,10+1+dpnr, "  %s   %3d  %3d  %3d  %3d  %3d    %3d   %3d   %3d  %3d ",D_code[dpnr],TDH_max[dpnr],T_timer[t1],T_timer[t2],T_max[tdh1],T_max[tdh2],
-//       	                                                                               T_max[tmax],T_timer[tmax],tdh_saw[rijstrook], dp_teller);
-//       xyprintf(90,10,"fc   rijstr   eavl   verl   MMmk ");
-//       xyprintf(90,10+2*fc+rijstrook, "%s     %3d    %3d      %d  %5d",FC_code[fc],rijstrook,eavl[fc][rijstrook],verlengen[rijstrook],MM[mmk]);
-//       #endif
         
         /* Correctie MM[mmk] bij opdrempelen toegestaan; andere aanroep van meetkriterium2 niet nodig */   /*-*/
         if (opdr) {

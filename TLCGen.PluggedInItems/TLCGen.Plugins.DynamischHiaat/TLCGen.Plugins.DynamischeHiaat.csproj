@@ -51,7 +51,9 @@
     <Compile Include="Models\DynamischHiaatSignalGroupModel.cs" />
     <Compile Include="DynamischHiaatPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Content Include="SourceFiles\dynamischhiaat.c" />
+    <Content Include="SourceFiles\dynamischhiaat.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Compile Include="ViewModels\DynamischHiaatDetectorViewModel.cs" />
     <Compile Include="ViewModels\DynamischHiaatSignalGroupViewModel.cs" />
     <Compile Include="Views\DynamischHiaatPluginTabView.xaml.cs">
