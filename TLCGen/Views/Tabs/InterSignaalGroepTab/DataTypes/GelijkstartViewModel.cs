@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.ViewModels
 {
@@ -43,7 +44,17 @@ namespace TLCGen.ViewModels
             }
 		}
 
-		public string Comment1 =>
+        public AltijdAanUitEnum Schakelbaar
+        {
+            get => _gelijkstart.Schakelbaar;
+            set
+            {
+                _gelijkstart.Schakelbaar = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public string Comment1 =>
 			$"Fictive ontruimingstijd van {_gelijkstart.FaseVan} naar {_gelijkstart.FaseNaar}";
 
 		public string Comment2 =>

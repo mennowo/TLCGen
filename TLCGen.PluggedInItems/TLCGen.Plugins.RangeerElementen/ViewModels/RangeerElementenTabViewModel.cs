@@ -161,7 +161,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 var inserted = false;
                 foreach (var l in lines)
                 {
-                    if (Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z]+\s+[0-9]+.*"))
+                    if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z]+\s+[0-9]+.*"))
                     {
                         var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z]+)\s+[0-9]+.*");
                         if (m.Success)
@@ -173,7 +173,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                             }
                         }
                     }
-                    if (!inserted && Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*"))
+                    if (!inserted && (Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*") || Regex.IsMatch(l, $@"\s*#if !defined\s+AUTOMAAT.*") || Regex.IsMatch(l, $@"\s*#if !\(definded\s+AUTOMAAT.*")))
                     {
                         sb.Append(GetNewDetectorDefines());
                         inserted = true;

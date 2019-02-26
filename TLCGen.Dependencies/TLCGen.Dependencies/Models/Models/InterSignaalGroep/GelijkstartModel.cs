@@ -19,6 +19,7 @@ namespace TLCGen.Models
         public int GelijkstartOntruimingstijdFaseVan { get; set; }
         public int GelijkstartOntruimingstijdFaseNaar { get; set; }
         public bool DeelConflict { get; set; }
+        public Enumerations.AltijdAanUitEnum Schakelbaar { get; set; }
 
         #endregion // Properties
     }
