@@ -212,6 +212,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.Append($" && SCH[{_schpf}{_schpelmk}{pk.GekoppeldeSignaalGroep}]");
                                 }
+                                sb.AppendLine(")");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}MK[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT2 | BIT12;");
                                 sb.AppendLine($"{ts}}}");
