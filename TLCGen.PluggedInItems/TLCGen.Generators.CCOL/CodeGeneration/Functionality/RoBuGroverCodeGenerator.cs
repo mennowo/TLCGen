@@ -20,6 +20,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private CCOLGeneratorCodeStringSettingModel _prmtvg_verschil;
         private CCOLGeneratorCodeStringSettingModel _prmtvg_npr_omlaag;
         private CCOLGeneratorCodeStringSettingModel _hprreal;
+        private CCOLGeneratorCodeStringSettingModel _hrgvact;
         private CCOLGeneratorCodeStringSettingModel _schrgv;
         private CCOLGeneratorCodeStringSettingModel _schrgv_snel;
         private CCOLGeneratorCodeStringSettingModel _usrgv;
@@ -42,6 +43,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactor, CCOLElementTimeTypeEnum.TE_type, _prmtvg_omlaag));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_verschil.Setting, c.RoBuGrover.GroentijdVerschil, CCOLElementTimeTypeEnum.TE_type, _prmtvg_verschil));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_prmtvg_npr_omlaag.Setting, c.RoBuGrover.GroenVerlaagFactorNietPrimair, CCOLElementTimeTypeEnum.TE_type, _prmtvg_npr_omlaag));
+            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_hrgvact.Setting, _hrgvact));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv.Setting, c.RoBuGrover.RoBuGrover ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_schrgv_snel.Setting, c.RoBuGrover.OphogenTijdensGroen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schrgv_snel));
             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(_usrgv.Setting, _usrgv));
@@ -75,6 +77,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    return 60;
                 case CCOLCodeTypeEnum.RegCTop:
                     return 30;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
@@ -102,10 +106,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine();
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    sb.AppendLine($"{ts}/* Robuuste Groenverdeler */");
+                    sb.AppendLine($"{ts}IH[{_hpf}{_hrgvact}] = SCH[{_schpf}{_schrgv}];");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     sb.AppendLine($"{ts}/* AANROEP EN RAPPOTEREN ROBUGROVER */");
-                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schrgv}] != 0)");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hrgvact}] != 0)");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}int teller = 0;");
                     sb.AppendLine();
