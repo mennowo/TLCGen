@@ -317,7 +317,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovuit}{ov.FaseCyclus}", ov.MeldingenData.AntiJutterTijdVoorAlleUitmeldingen, CCOLElementTimeTypeEnum.TE_type, _tovuit, ov.FaseCyclus));
                 }
 
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tbtovg, ov.FaseCyclus));
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tbtovg}{ov.FaseCyclus}", ov.BezettijdOVGehinderd, CCOLElementTimeTypeEnum.TE_type, _tbtovg, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trt}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _trt, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvc}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvc, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgb}{ov.FaseCyclus}", ov.GroenBewaking, CCOLElementTimeTypeEnum.TE_type, _tgb, ov.FaseCyclus));

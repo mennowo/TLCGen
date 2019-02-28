@@ -172,6 +172,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Bezettijd OV gehinderd")]
+        public int BezettijdOVGehinderd
+        {
+            get { return OVIngreep.BezettijdOVGehinderd; }
+            set
+            {
+                OVIngreep.BezettijdOVGehinderd = value;
+                RaisePropertyChanged<object>("BezettijdOVGehinderd", broadcast: true);
+            }
+        }
 
         [Category("Prioriteitsopties")]
         [Description("Afkappen conflicten")]

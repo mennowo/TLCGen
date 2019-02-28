@@ -35,6 +35,7 @@ namespace TLCGen.Models
         public int OnderMaximum { get; set; }
         public int GroenBewaking { get; set; }
         public int BlokkeertijdNaOVIngreep { get; set; }
+        public int BezettijdOVGehinderd { get; set; }
 
         public bool AfkappenConflicten { get; set; }
         public bool AfkappenConflictenOV { get; set; }
