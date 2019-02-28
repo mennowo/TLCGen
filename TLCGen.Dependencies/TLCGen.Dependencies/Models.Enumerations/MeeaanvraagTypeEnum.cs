@@ -13,7 +13,7 @@ namespace TLCGen.Models.Enumerations
     {
         [Description("Aanvraag")]
         Aanvraag,
-        [Description("Rood voor aanvraag")]
+        [Description("RA")]
         RoodVoorAanvraag,
         [Description("RA geen conflicten")]
         RoodVoorAanvraagGeenConflicten,
