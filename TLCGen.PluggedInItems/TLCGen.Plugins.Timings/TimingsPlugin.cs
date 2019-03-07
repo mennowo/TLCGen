@@ -226,7 +226,7 @@ namespace TLCGen.Plugins.Timings
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            if (!_timingsModel.TimingsToepassen) return null;
+            if (_controller.Data.CCOLVersie <= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
 
             StringBuilder sb = new StringBuilder();
 
@@ -257,7 +257,7 @@ namespace TLCGen.Plugins.Timings
 
         public override List<string> GetSourcesToCopy()
         {
-            if (!_timingsModel.TimingsToepassen) return null;
+            if (_controller.Data.CCOLVersie <= TLCGen.Models.Enumerations.CCOLVersieEnum.CCOL8 || !_timingsModel.TimingsToepassen) return null;
             return new List<string>
             {
                 "timingsfunc.c",

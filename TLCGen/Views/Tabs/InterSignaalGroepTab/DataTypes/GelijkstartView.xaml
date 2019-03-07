@@ -18,10 +18,10 @@
         <StackPanel 
             HorizontalAlignment="Stretch" Grid.Row="1">
             <CheckBox Content="Deelconflict" IsChecked="{Binding Path=DeelConflict}" Margin="5" />
-            <!--<Label Content="Schakelbaar" />
+            <Label Content="Schakelbaar" />
             <ComboBox 
                     ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:AltijdAanUitEnum}}}"
-                    SelectedItem="{Binding Path=Schakelbaar,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />-->
+                    SelectedItem="{Binding Path=Schakelbaar,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <StackPanel IsEnabled="{Binding Path=DeelConflict}" HorizontalAlignment="Stretch">
                 <Label Content="{Binding Path=Comment1}" />
                 <TextBox Text="{Binding Path=OntruimingstijdFaseVan}" Margin="2" />
