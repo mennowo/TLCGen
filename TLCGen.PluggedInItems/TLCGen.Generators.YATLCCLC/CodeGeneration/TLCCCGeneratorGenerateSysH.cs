@@ -159,7 +159,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
                 controller.Detectoren.Any() && controller.Detectoren.Any(x => x.Dummy) ||
                 ovdummies.Any())
             {
-                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 foreach (var fcm in controller.Fasen)
                 {
                     foreach (var dm in fcm.Detectoren)

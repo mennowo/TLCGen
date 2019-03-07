@@ -183,7 +183,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
                 ovdummies.Any())
             {
-                sb.AppendLine("#if !defined AUTOMAAT || defined VISSIM");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
                 foreach (var dm in controller.GetAllDetectors(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));
@@ -328,7 +328,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.SelectieveDetectoren.Any(x => x.Dummy))
             {
                 var rindex = index;
-                sb.AppendLine($"{ts}#if !defined AUTOMAAT || defined VISSIM");
+                sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
                 foreach (var d in controller.SelectieveDetectoren.Where(x => x.Dummy))
                 {
                     sb.AppendLine($"{ts}#define {(_dpf + d.Naam).ToUpper()} {index++}{(!string.IsNullOrWhiteSpace(d.Omschrijving) ? " /* " + d.Omschrijving + "*/" : "")}");

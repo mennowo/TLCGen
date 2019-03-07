@@ -18,7 +18,7 @@
 
 #include "halfstar_ov.h"     /* declaratie functies                                      */
 
-#if !defined AUTOMAAT || defined VISSIM
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */
    #include <stdio.h>      /* declaration printf()       */
 #endif
@@ -65,7 +65,7 @@ extern mulv test_pr_fk_totxb(count i, bool fpr);  /* standaard CCOL functie uit 
 mulv set_pg_primair_ov_ple(count i)
 {
    register count n, k;
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
    char str[20];
 #endif
    mulv to_max, to_tmp;
@@ -113,7 +113,7 @@ mulv set_pg_primair_ov_ple(count i)
             if (!PG[i])
             {
                PG[i]= TRUE;     /* onvoldoende tijd tot TXD-moment of TXD-moment bereikt? */
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
                if (A[i])
                {
                   timetostr(str);

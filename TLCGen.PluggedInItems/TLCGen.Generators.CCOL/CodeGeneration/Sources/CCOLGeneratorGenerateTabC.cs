@@ -639,7 +639,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 pad5 = "TDH_max[] ".Length + defmax;
                 pad6 = pad1 + pad2;
 
-                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 foreach(var dm in detectorModels)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);

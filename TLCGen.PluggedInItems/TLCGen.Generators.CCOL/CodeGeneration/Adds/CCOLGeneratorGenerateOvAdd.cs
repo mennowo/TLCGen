@@ -179,7 +179,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine("");
-            sb.AppendLine("#ifndef AUTOMAAT");
+            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine("void OVDebug_Add(void) {");
             sb.AppendLine("  OVDebug(NG);");
             sb.AppendLine("}");

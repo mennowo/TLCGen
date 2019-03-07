@@ -91,7 +91,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");
                     sb.AppendLine($"{ts}/* ============ */");
-                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) && !defined(VISSIM)");
+                    sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
                     sb.AppendLine($"{ts}{ts}if (!SAPPLPROG)");
                     sb.AppendLine($"{ts}{ts}{{");
                     sb.AppendLine($"{ts}{ts}#ifdef DUURTEST");
@@ -113,7 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCPostApplication:
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");
                     sb.AppendLine($"{ts}/* ============ */");
-                    sb.AppendLine($"{ts}#if !defined (AUTOMAAT) && !defined(VISSIM)");
+                    sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
                     sb.AppendLine($"{ts}{ts}if (TS &&");
                     sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_JAAR] == 2099) &&");
                     sb.AppendLine($"{ts}{ts}    (CIF_KLOK[CIF_MAAND] == 1) &&");

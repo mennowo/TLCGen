@@ -77,7 +77,7 @@ void yv_ov_pl_halfstar(count fc, bool bit, bool condition);
 bool yws_groen_fk(count i);
 void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
   bool txboverslag(count fc, bool  condition);
   #ifdef PRINTTIG
     void print_tig(void);

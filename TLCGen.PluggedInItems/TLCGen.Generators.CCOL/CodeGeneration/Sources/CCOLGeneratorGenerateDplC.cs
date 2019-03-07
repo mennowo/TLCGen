@@ -241,19 +241,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
             var alldets = controller.GetAllDetectors().Concat(ovdummydets);
 
-            foreach (var dm in alldets)
+            foreach (var dm in alldets.Where(x => !x.Dummy))
             {
                 sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
             }
-            
+
+            if (alldets.Any(x => x.Dummy))
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+                foreach (var dm in alldets.Where(x => x.Dummy))
+                {
+                    sb.Append(GetCoordinatesString(dm as IOElementModel, dm.GetDefine(), "is"));
+                }
+                sb.AppendLine("#endif");
+            }
+
             sb.AppendLine();
 
             sb.AppendLine($"{ts}/* overige uitgangen */");
             sb.AppendLine($"{ts}/* ----------------- */");
 
-            foreach (var item in AllCCOLOutputElements)
+            foreach (var item in AllCCOLOutputElements.Where(x => !x.Dummy))
             {
                 if(item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+            }
+            if (AllCCOLOutputElements.Any(x => x.Dummy))
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+                foreach (var item in AllCCOLOutputElements.Where(x => x.Dummy))
+                {
+                    if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "us"));
+                }
+                sb.AppendLine("#endif");
             }
 
             foreach (var item in AllOutputModelElements)
@@ -265,10 +284,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"{ts}/* overige ingangen */");
             sb.AppendLine($"{ts}/* ---------------- */");
-            
-            foreach (var item in AllCCOLInputElements)
+
+
+            foreach (var item in AllCCOLInputElements.Where(x => !x.Dummy))
             {
                 if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+            }
+            if (AllCCOLInputElements.Any(x => x.Dummy))
+            {
+                sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+                foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
+                {
+                    if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
+                }
+                sb.AppendLine("#endif");
             }
 
             foreach (var item in AllInputModelElements)

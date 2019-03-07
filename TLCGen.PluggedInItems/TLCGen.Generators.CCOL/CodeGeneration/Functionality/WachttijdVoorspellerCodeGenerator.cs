@@ -99,7 +99,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine("/* Include files wachttijdvoorspeller*/");
                     sb.AppendLine("#include \"wtvfunc.c\" /* berekening van de wachttijden voorspelling */");
                     sb.AppendLine("#include \"wtlleds.c\" /* aansturing van de wachttijdlantaarn met leds */");
-                    sb.AppendLine("#if !defined AUTOMAAT && !defined NO_WTV_WIN");
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
                     sb.AppendLine($"{ts}#include \"wtv_testwin.c\"");
                     sb.AppendLine("#endif");
                     return sb.ToString();
@@ -114,7 +114,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
-                    sb.AppendLine("#if !defined AUTOMAAT && !defined NO_WTV_WIN");
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
                     sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
@@ -294,7 +294,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     #endregion
 
                     #region aansturen test window
-                    sb.AppendLine("#if !defined AUTOMAAT && !defined NO_WTV_WIN");
+                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         sb.AppendLine($"{ts}extrawin_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam});");

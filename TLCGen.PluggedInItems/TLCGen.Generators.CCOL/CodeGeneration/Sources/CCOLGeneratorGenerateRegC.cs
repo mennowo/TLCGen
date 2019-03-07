@@ -118,7 +118,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");
             }
             sb.AppendLine();
-            sb.AppendLine("#ifndef AUTOMAAT");
+            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine("/*    #include \"ccdump.inc\" */");
             sb.AppendLine($"{ts}#include \"keysdef.c\"     /* Definitie toetsenbord t.b.v. stuffkey  */");
             sb.AppendLine($"{ts}#if !defined (_DEBUG)");
@@ -497,7 +497,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCInitApplication, true, false, false, true);
 
-            sb.AppendLine("#if !defined AUTOMAAT && !defined VISSIM");
+            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined VISSIM");
             sb.AppendLine($"{ts}if (!SAPPLPROG)");
             sb.AppendLine($"{ts}{ts}stuffkey(CTRLF4KEY);");
             sb.AppendLine("#endif");

@@ -327,7 +327,7 @@ void AFMResetBits(void)
 
 
 
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 
 int AFMmonitor_data_pre(int x, int y)
 {
@@ -344,7 +344,7 @@ int AFMmonitor_data_pre(int x, int y)
 	return yret;
 }
 #endif
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 int AFMmonitor_data_fc(int x, int y, AFM_FC_STRUCT * AFM_data_fc)
 {
 
@@ -358,7 +358,7 @@ int AFMmonitor_data_fc(int x, int y, AFM_FC_STRUCT * AFM_data_fc)
 
 }
 #endif
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 int AFMmonitor_acties_pre(int x, int y)
 {
 
@@ -373,7 +373,7 @@ int AFMmonitor_acties_pre(int x, int y)
 
 }
 #endif
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 int AFMmonitor_acties_fc(int x, int y, AFM_FC_STRUCT * AFM_data_fc)
 {
 
@@ -400,7 +400,7 @@ void AFMinterfacemonitor(AFM_FC_STRUCT afmfcstructs[AFM_fcmax])
 	/* AFMinterfacemonitor wordt éénmalig aangeroepen in pre_system_application (zodat de */
 	/* regelstatus ook tijdens knipperen wordt doorgegeven) met 'AFMinterfacemonitor();' */
 	
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 	int afmprm, AFMfc;
 
 	xyprintf(2, 6,                    "__________________________________________________________________  ");
@@ -432,7 +432,7 @@ void AFMinterfacemonitor(AFM_FC_STRUCT afmfcstructs[AFM_fcmax])
 #endif
 	
 
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 	/* Afbeelden programmastatus in xyprintf scherm */ 
 	switch (CIF_WPS[CIF_PROG_STATUS])
 	{

@@ -2,7 +2,7 @@
 
 #include "ccolfunc.h"
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
    #include <conio.h>
 #endif
 

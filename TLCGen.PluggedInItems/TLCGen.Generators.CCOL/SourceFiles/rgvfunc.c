@@ -36,7 +36,7 @@
 /* ============= */
    #include <stdarg.h>     /* gebruik variabele argumentenlijst   */
    #include "fcvar.h"      /* declaratie fasecyclusvariabelen     */
-#if !defined (AUTOMAAT) || (defined (VISSIM) && !defined PROMITE)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined (VISSIM) && !defined PROMITE)
    #include "xyprintf.h"   /* declaratie xyprintf()               */
 #endif
 
@@ -300,7 +300,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
    TC_rgv_max= TFG_som + TVG_rgv_som + TGL_som + TO_som;     /* bereken totale cyclustijd     */
    TC_basis_max= TFG_som + TVG_basis_som + TGL_som + TO_som; /* bereken totale cyclustijd     */
 
-#if !defined (AUTOMAAT) || defined (VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
    /* display resultaten in xyprintf-scherm */
    /* ------------------------------------- */
 //   xyprintf (0, 15,"TC_basis_max=  %d   ", TC_basis_max);
@@ -341,7 +341,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
          j++;
       }
 
-#if !defined (AUTOMAAT) || defined (VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
       /* display resultaten in xyprintf-scherm */
       /* ------------------------------------- */
       j=0;
@@ -406,7 +406,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
          }
       }
   
-#if !defined (AUTOMAAT) || defined (VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
       /* display resultaten in xyprintf-scherm */
       /* ------------------------------------- */
       j=0;

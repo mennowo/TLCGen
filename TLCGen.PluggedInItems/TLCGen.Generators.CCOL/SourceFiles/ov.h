@@ -102,13 +102,13 @@ void OVTegenhouden_Add(void);
 void OVAfkappen_Add(void);
 void OVAlternatieven_Add(void);
 void PostAfhandelingOV_Add(void);
-#if !defined AUTOMAAT || defined VISSIM
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
 void OVDebug_Add(void);
 #endif
 #endif
 
 
-#if !defined AUTOMAAT || defined VISSIM
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
 void OVDebug(int ov);
 #endif
 

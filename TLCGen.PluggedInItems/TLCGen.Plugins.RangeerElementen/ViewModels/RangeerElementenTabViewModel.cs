@@ -173,7 +173,11 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                             }
                         }
                     }
-                    if (!inserted && (Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*") || Regex.IsMatch(l, $@"\s*#if !defined\s+AUTOMAAT.*") || Regex.IsMatch(l, $@"\s*#if !\(definded\s+AUTOMAAT.*")))
+                    if (!inserted && 
+                        (Regex.IsMatch(l, $@"\s*#ifndef\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, $@"\s*#if\s+!defined\s+AUTOMAAT.*") || 
+                         Regex.IsMatch(l, $@"\s*#if\s+!\(defined\s+AUTOMAAT.*") ||
+                         Regex.IsMatch(l, $@"\s*#if\s+\(!defined\s+AUTOMAAT.*")))
                     {
                         sb.Append(GetNewDetectorDefines());
                         inserted = true;

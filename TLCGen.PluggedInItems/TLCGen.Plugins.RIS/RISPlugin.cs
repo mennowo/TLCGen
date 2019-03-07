@@ -353,14 +353,14 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     sb.AppendLine($"{ts}{ts}#include \"risvar.c\" /* ccol ris controller */");
                     sb.AppendLine($"{ts}{ts}#include \"risappl.c\" /* RIS applicatiefuncties */");
-                    sb.AppendLine($"{ts}{ts}#ifndef AUTOMAAT");
+                    sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                     sb.AppendLine($"{ts}{ts}{ts}#include \"rissimvar.h\" /* ccol ris simulatie functie */");
                     sb.AppendLine($"{ts}{ts}#endif");
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    sb.AppendLine($"{ts}{ts}#ifndef AUTOMAAT");
+                    sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                     sb.AppendLine($"{ts}{ts}{ts}/* zet display van RIS-berichten aan in de testomgeving */");
                     sb.AppendLine($"{ts}{ts}{ts}/* ---------------------------------------------------- */");
                     sb.AppendLine($"{ts}{ts}{ts}RIS_DIPRM[RIS_DIPRM_ALL] = 1;");
@@ -385,7 +385,7 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
-                    sb.AppendLine($"{ts}{ts}#ifndef AUTOMAAT");
+                    sb.AppendLine($"{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                     sb.AppendLine($"{ts}{ts}{ts}/* simulatie van RIS berichten */");
                     sb.AppendLine($"{ts}{ts}{ts}/* --------------------------- */");
                     sb.AppendLine($"{ts}{ts}{ts}ris_simulation(SAPPLPROG);");

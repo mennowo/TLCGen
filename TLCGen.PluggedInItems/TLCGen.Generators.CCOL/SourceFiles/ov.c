@@ -1874,7 +1874,7 @@ void OVAlternatieven(void)
     }
 }
 
-#if !defined(AUTOMAAT) || defined (VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined (VISSIM)
 int PrioriteitsOpties2PRM(int iPO)
 {
     int iReturn = 0;
@@ -1911,7 +1911,7 @@ int PrioriteitsOpties2PRM(int iPO)
 }
 #endif
 
-#if !defined(AUTOMAAT) || defined(VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined(VISSIM)
 
 /* -------------------------------------------------------------------
    OVDebug toont in het debugscherm (F11) de volgende informatie:
@@ -2288,7 +2288,7 @@ void AfhandelingOV(void)
 	PostAfhandelingOV_Add();
 #endif
 
-#if !defined(AUTOMAAT) || defined(VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined(VISSIM)
 #ifdef OV_ADDFILE
     OVDebug_Add();
 #endif

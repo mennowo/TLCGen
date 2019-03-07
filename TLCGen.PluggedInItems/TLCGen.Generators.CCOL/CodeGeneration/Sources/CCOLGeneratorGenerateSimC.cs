@@ -17,13 +17,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
-            sb.Append(GenerateSimCExtraDefines(controller));
+            var prms = GenerateSimCSimulationParameters(controller, out var lnkmax);
+            sb.Append(GenerateSimCExtraDefines(controller, lnkmax));
             sb.AppendLine();
             sb.Append(GenerateSimCIncludes(controller));
             sb.AppendLine();
             sb.Append(GenerateSimCSimulationDefaults(controller));
             sb.AppendLine();
-            sb.Append(GenerateSimCSimulationParameters(controller));
+            sb.Append(prms);
 
             return sb.ToString();
         }
@@ -41,19 +42,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSimCExtraDefines(ControllerModel controller)
+        private string GenerateSimCExtraDefines(ControllerModel controller, int lnkmax)
         {
             StringBuilder sb = new StringBuilder();
 
-            var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
-            var controllerdets = controller.Detectoren;
-            var ovdummydets = controller.OVData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
-            int dpmax = alldets.Count();
-
-            var simelems = PieceGenerators.Sum(x => (x.HasSimulationElements() ? x.GetSimulationElements().Count() : 0));
-
-            sb.AppendLine($"#define LNKMAX {dpmax + simelems} /* aantal links */");
+            sb.AppendLine($"#define LNKMAX {lnkmax} /* aantal links */");
 
             return sb.ToString();
         }
@@ -77,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateSimCSimulationParameters(ControllerModel controller)
+        private string GenerateSimCSimulationParameters(ControllerModel controller, out int lnkmax)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -96,9 +89,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var fasendets = controller.Fasen.SelectMany(x => x.Detectoren);
             var controllerdets = controller.Detectoren;
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
-            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets);
+            var alldets = fasendets.Concat(controllerdets).Concat(ovdummydets).ToList();
+            var itsstations = PieceGenerators.Where(x => x.HasSimulationElements()).SelectMany(x => x.GetSimulationElements()).ToList();
 
-            foreach (var dm in alldets)
+            foreach (var dm in alldets.Where(x => !x.Dummy))
             {
                 sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
                 sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
@@ -112,20 +106,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine();
                 ++index;
             }
-
-            foreach (var e in PieceGenerators.Where(x => x.HasSimulationElements()).SelectMany(x => x.GetSimulationElements()))
+            if(alldets.Any(x => x.Dummy) || itsstations.Any())
             {
-                sb.AppendLine($"{ts}LNK_code[{index}] = \"{e.RelatedName}\";");
-                sb.AppendLine($"{ts}IS_nr[{index}] = {_ispf}{e.RelatedName};");
-                sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(e.FCNr) && e.FCNr.ToUpper() != "NG" ? _fcpf + e.FCNr : "NG")};");
-                sb.AppendLine($"{ts}S_generator[{index}] = NG;");
-                sb.AppendLine($"{ts}S_stopline[{index}] = {e.Stopline};");
-                sb.AppendLine($"{ts}Q1[{index}] = {e.Q1};");
-                sb.AppendLine($"{ts}Q2[{index}] = {e.Q2};");
-                sb.AppendLine($"{ts}Q3[{index}] = {e.Q3};");
-                sb.AppendLine($"{ts}Q4[{index}] = {e.Q4};");
-                sb.AppendLine();
-                ++index;
+                sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+                foreach (var dm in alldets.Where(x => x.Dummy))
+                {
+                    sb.AppendLine($"{ts}LNK_code[{index}] = \"{dm.Naam}\";");
+                    sb.AppendLine($"{ts}IS_nr[{index}] = {dm.GetDefine()};");
+                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(dm.Simulatie.FCNr) && dm.Simulatie.FCNr.ToUpper() != "NG" ? _fcpf + dm.Simulatie.FCNr : "NG")};");
+                    sb.AppendLine($"{ts}S_generator[{index}] = NG;");
+                    sb.AppendLine($"{ts}S_stopline[{index}] = {dm.Simulatie.Stopline};");
+                    sb.AppendLine($"{ts}Q1[{index}] = {dm.Simulatie.Q1};");
+                    sb.AppendLine($"{ts}Q2[{index}] = {dm.Simulatie.Q2};");
+                    sb.AppendLine($"{ts}Q3[{index}] = {dm.Simulatie.Q3};");
+                    sb.AppendLine($"{ts}Q4[{index}] = {dm.Simulatie.Q4};");
+                    sb.AppendLine();
+                    ++index;
+                }
+                foreach (var e in itsstations)
+                {
+                    sb.AppendLine($"{ts}LNK_code[{index}] = \"{e.RelatedName}\";");
+                    sb.AppendLine($"{ts}IS_nr[{index}] = {_ispf}{e.RelatedName};");
+                    sb.AppendLine($"{ts}FC_nr[{index}] = {(!string.IsNullOrWhiteSpace(e.FCNr) && e.FCNr.ToUpper() != "NG" ? _fcpf + e.FCNr : "NG")};");
+                    sb.AppendLine($"{ts}S_generator[{index}] = NG;");
+                    sb.AppendLine($"{ts}S_stopline[{index}] = {e.Stopline};");
+                    sb.AppendLine($"{ts}Q1[{index}] = {e.Q1};");
+                    sb.AppendLine($"{ts}Q2[{index}] = {e.Q2};");
+                    sb.AppendLine($"{ts}Q3[{index}] = {e.Q3};");
+                    sb.AppendLine($"{ts}Q4[{index}] = {e.Q4};");
+                    sb.AppendLine();
+                    ++index;
+                }
+                sb.AppendLine("#endif");
             }
 
             sb.AppendLine();
@@ -136,6 +148,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine();
             sb.AppendLine("}");
+
+            lnkmax = index;
 
             return sb.ToString();
         }

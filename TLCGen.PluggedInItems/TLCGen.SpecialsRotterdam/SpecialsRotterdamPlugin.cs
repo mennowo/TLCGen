@@ -286,7 +286,7 @@ namespace TLCGen.SpecialsRotterdam
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}if (TFB_timer[fc]>PRM[{_prmpf}tfbmax])");
                     sb.AppendLine($"{ts}{ts}{{");
-                    sb.AppendLine($"{ts}{ts}{ts}#if (!defined AUTOMAAT) || (defined VISSIM)");
+                    sb.AppendLine($"{ts}{ts}{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
                     sb.AppendLine();
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 0, \"Hoogste TFB waarde\");");
                     sb.AppendLine($"{ts}{ts}{ts}{ts}xyprintf(32, 1, \"------------------\");");

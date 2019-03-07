@@ -28,7 +28,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCTop:
 					sb.AppendLine($"/* kruispuntnaam in VISSIM */");
-					sb.AppendLine($"#if !defined AUTOMAAT || defined VISSIM");
+					sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM");
 					sb.AppendLine($"{ts}code SCJ_code[] = \"{c.Data.VissimNaam}\";");
 					sb.AppendLine($"#endif");
                     return sb.ToString();

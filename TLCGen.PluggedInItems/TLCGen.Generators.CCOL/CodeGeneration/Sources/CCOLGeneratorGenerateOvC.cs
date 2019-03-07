@@ -62,7 +62,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
             sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
             sb.AppendLine($"{ts}#include \"cif.inc\"    /* interface                         */");
-            sb.AppendLine($"{ts}#ifndef AUTOMAAT");
+            sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
             sb.AppendLine($"{ts}{ts}#include \"xyprintf.h\" /* Printen debuginfo                 */");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");

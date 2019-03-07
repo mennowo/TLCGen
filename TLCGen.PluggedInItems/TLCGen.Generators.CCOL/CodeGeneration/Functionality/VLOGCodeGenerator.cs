@@ -100,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                          c.Data.VLOGSettings?.VLOGToepassen == true) &&
                         !c.Data.VLOGInTestOmgeving)
                     {
-                        sb.AppendLine("#ifndef AUTOMAAT");
+                        sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                         sb.AppendLine($"{ts}#define NO_VLOG");
                         sb.AppendLine("#endif");
                     }
@@ -127,7 +127,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             (c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_ASCII ||
                              c.Data.VLOGSettings.LOGPRM_VLOGMODE == VLOGLogModeEnum.VLOGMODE_LOG_FILE_BINAIR))
                         {
-                            sb.AppendLine($"{ts}#ifndef AUTOMAAT");
+                            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                             sb.AppendLine($"{ts}{ts}file_uber_to_file_hour(LOGFILE_NUMBER_MAX, LOGFILE_LENGTH_MAX);");
                             sb.AppendLine($"{ts}#endif");
                         }

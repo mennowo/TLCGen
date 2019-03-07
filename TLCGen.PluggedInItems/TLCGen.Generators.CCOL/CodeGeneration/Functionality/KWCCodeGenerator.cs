@@ -30,7 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCIncludes:
                     if(c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#ifndef AUTOMAAT");
+                        sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                         sb.AppendLine($"{ts}#include \"pi_ccol.h\"");
                         sb.AppendLine($"#else");
                         sb.AppendLine($"{ts}#include \"pi_ccol.c\"");
@@ -38,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#ifndef AUTOMAAT");
+                        sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                         sb.AppendLine($"{ts}#include \"mv_ccol.h\"");
                         sb.AppendLine($"#else");
                         sb.AppendLine($"{ts}#include \"mv_ccol.c\"");
@@ -49,13 +49,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     if (c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#if (defined AUTOMAAT) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
                         sb.AppendLine($"{ts}PI_save();");
                         sb.AppendLine($"#endif");
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#if (defined AUTOMAAT) && (!defined VISSIM)");
+                        sb.AppendLine($"#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
                         sb.AppendLine($"{ts}MvSave();");
                         sb.AppendLine($"#endif");
                     }

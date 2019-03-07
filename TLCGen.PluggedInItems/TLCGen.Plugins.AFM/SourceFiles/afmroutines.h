@@ -1,6 +1,6 @@
 ﻿#ifndef __AFMROUTINES
 #define __AFMROUTINES
-#if !(defined AUTOMAAT) || (defined VISSIM)
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)
 	#include "xyprintf.h"
 #endif
 #include <stdlib.h>

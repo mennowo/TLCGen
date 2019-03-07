@@ -47,7 +47,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("mulv TC_max, DD_anyfase;");
             sb.AppendLine("mulv TO_ontwerp[FCMAX][FCMAX];");
             sb.AppendLine("");
-            sb.AppendLine("#if (!defined AUTOMAAT) || (defined VISSIM)");
+            sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}mulv TC_rgv[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine($"{ts}string TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine("#endif");
@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             if (c.RoBuGrover.RoBuGroverVenster)
             {
-                sb.AppendLine("#if (!defined AUTOMAAT) || (defined VISSIM)");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
                 sb.AppendLine($"{ts}#include \"winmg.c\"");
                 sb.AppendLine("#endif");
             }
@@ -87,7 +87,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}static mulv TVG_rgv_older[FCMAX]; /* Opslag 'older' TVG tijden */");
             sb.AppendLine($"{ts}static mulv rgvinit = 1;          /* Onthouden initialisatie */");
             sb.AppendLine($"{ts}int teller = 0;");
-            sb.AppendLine("#ifdef AUTOMAAT");
+            sb.AppendLine("#if (defined AUTOMAAT || defined AUTOMAAT_TEST)");
             sb.AppendLine($"{ts}int fc;");
             sb.AppendLine("#endif");
             sb.AppendLine($"{ts}int i, j;");
@@ -132,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}DD_anyfase = 0;");
-            sb.AppendLine($"{ts}#if defined (AUTOMAAT)");
+            sb.AppendLine($"{ts}#if (defined AUTOMAAT || defined AUTOMAAT_TEST)");
             foreach (var fc in c.RoBuGrover.SignaalGroepInstellingen)
             {
                 if(fc.FileDetectoren.Count == 0 && fc.HiaatDetectoren.Count == 0)
@@ -302,7 +302,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}/* ------------------------------------------------------------------ */");
 
             StringBuilder sb2 = new StringBuilder();
-            sb2.AppendLine($"{ts}#if (defined AUTOMAAT) && (!defined VISSIM)");
+            sb2.AppendLine($"{ts}#if (defined AUTOMAAT || defined AUTOMAAT_TEST) && (!defined VISSIM)");
             foreach(var gr in c.RoBuGrover.ConflictGroepen)
             {
                 sb2.Append($"{ts}{ts}rgv_verlenggroentijd_correctie_va_arg(PRM[{_prmpf}{_prmrgv}], DD_anyfase, PRM[{_prmpf}min_tcyclus], PRM[{_prmpf}max_tcyclus], ");
@@ -328,7 +328,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(sb2.ToString());
 
             sb.AppendLine();
-            sb.AppendLine($"{ts}#if (!defined AUTOMAAT) || (defined VISSIM)");
+            sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}{ts}teller = 0;");
             foreach (var gr in c.RoBuGrover.ConflictGroepen)
             {
@@ -379,7 +379,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             sb.AppendLine();
-            sb.AppendLine($"{ts}#if !defined (AUTOMAAT) || (defined (VISSIM))");
+            sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined (VISSIM))");
             sb.AppendLine($"{ts}{ts}/* Toon de waarden in de tesstomgeving */");
             sb.AppendLine($"{ts}{ts}/* ----------------------------------- */ ");
             sb.AppendLine($"{ts}{ts}for (teller = 10; teller < MAX_AANTAL_CONFLICTGROEPEN; ++teller)");

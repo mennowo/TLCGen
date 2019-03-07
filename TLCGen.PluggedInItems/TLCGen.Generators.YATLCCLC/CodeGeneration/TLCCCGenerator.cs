@@ -94,7 +94,7 @@ namespace TLCGen.Generators.TLCCC.CodeGeneration
 
             if (data.Elements.Count > 0 && data.Elements.Any(x => x.Dummy))
             {
-                sb.AppendLine("#ifndef AUTOMAAT");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
                 foreach (var elem in data.Elements)
                 {
                     if (!elem.Dummy || Regex.IsMatch(elem.Define, @"[A-Z]+MAX"))

@@ -1,7 +1,7 @@
 /* FILE: SYNCFUNC.C */
 /* ---------------- */
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
   #if defined (_DEBUG)
     #include "xyprintf.h"   /* Printen debuginfo */
   #endif
@@ -133,7 +133,7 @@ void correction_realisation_timers(count fcv, count fcn, count tcorrection, bool
 
 void print_realisation_timers(void)
 {
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
 #if defined (_DEBUG)
     //   register count fc, i;
     //
@@ -262,7 +262,7 @@ void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool 
         RW[fcv] &= (G[fcn] || !A[fcn]) ? ~0 : ~BIT4;
         YM[fcv] &= (G[fcn] || !A[fcn] || kcv_primair(fcn)) ? ~0 : ~BIT4;
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
 #if defined (_DEBUG)
         if (SG[fcn] && (!R[fcv] || T[tftofcvfcn] && (T_max[tftofcvfcn] > 0)) && !SG[fcv])
         {
@@ -385,7 +385,7 @@ void VoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit)
         /* -------------------------------------------------- */
         PG[fcvs] |= !PG[fcvs] && !xpg && (!A[fcvs] || !A_old[fcvs] || !A_old_old[fcvs] || SGL[fcvs]) && PG[fcls] && G[fcls] ? PRIMAIR_OVERSLAG : 0;
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
 #if defined (_DEBUG)
         if (SG[fcvs] && !R[fcls] && (T[tvs] && (T_max[tvs] > 0) || !SG[fcls] && (T_max[tvs] == 0))) {
             xyprintf(1, /*FC_MAX+ */fcvs, "Voorstart: Startgroen fc%s conflicteert met fc%s.", FC_code[fcvs], FC_code[fcls]);

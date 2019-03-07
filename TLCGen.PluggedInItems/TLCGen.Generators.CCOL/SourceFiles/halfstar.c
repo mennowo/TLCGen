@@ -1,7 +1,7 @@
 #include "halfstar.h"
 #include "halfstar_ov.h"     /* declaratie functies                                      */
 
-#if !defined AUTOMAAT || defined VISSIM
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM
    #include "xyprintf.h"/* voor debug infowindow                                          */
    #include <stdio.h>      /* declaration printf()       */
 #endif
@@ -1049,7 +1049,7 @@ void reset_realisation_timers(void) {
 }
 #endif
 
-#ifndef AUTOMAAT
+#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
 /**********************************************************************************/
 /* Functie dump_overslag_fc() dumpt op het moment dat een (hoofd)richting 
    geen groen heeft op zijn TXB moment een melding in de UBER_FILE */
