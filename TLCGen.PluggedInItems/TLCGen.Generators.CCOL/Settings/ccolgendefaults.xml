@@ -304,6 +304,12 @@
             <Description>Fictief ontruimen voorstart van _E1_ naar _E2_</Description>
           </Setting>
           <Setting>
+            <Default>gs</Default>
+            <Setting>gs</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schakelbare gelijkstart van _E1_ naar _E2_</Description>
+          </Setting>
+          <Setting>
             <Default>gsot</Default>
             <Setting>gsot</Setting>
             <Type>Timer</Type>

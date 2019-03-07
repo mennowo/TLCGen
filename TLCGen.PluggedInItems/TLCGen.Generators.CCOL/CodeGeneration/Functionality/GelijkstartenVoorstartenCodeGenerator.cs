@@ -14,6 +14,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tgsot;
+        private CCOLGeneratorCodeStringSettingModel _schgs;
         private CCOLGeneratorCodeStringSettingModel _tvs;
         private CCOLGeneratorCodeStringSettingModel _tvsot;
 #pragma warning restore 0649
@@ -26,20 +27,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
             {
-                if(gs.DeelConflict)
+                if (gs.DeelConflict)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tgsot.Setting}{gs.FaseVan}{gs.FaseNaar}",
+                            $"{_tgsot}{gs.FaseVan}{gs.FaseNaar}",
                             gs.GelijkstartOntruimingstijdFaseVan,
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseVan, gs.FaseNaar));
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tgsot.Setting}{gs.FaseNaar}{gs.FaseVan}",
+                            $"{_tgsot}{gs.FaseNaar}{gs.FaseVan}",
                             gs.GelijkstartOntruimingstijdFaseNaar,
                             CCOLElementTimeTypeEnum.TE_type,
                             _tgsot, gs.FaseNaar, gs.FaseVan));
+                }
+                if (gs.Schakelbaar != Models.Enumerations.AltijdAanUitEnum.Altijd)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schgs}{gs.FaseNaar}{gs.FaseVan}",
+                            gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.SchAan ? 1 : 0,
+                            CCOLElementTimeTypeEnum.SCH_type,
+                            _schgs, gs.FaseNaar, gs.FaseVan));
                 }
             }
 
@@ -47,13 +57,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvs.Setting}{vs.FaseVan}{vs.FaseNaar}",
+                        $"{_tvs}{vs.FaseVan}{vs.FaseNaar}",
                         vs.VoorstartTijd,
                         CCOLElementTimeTypeEnum.TE_type,
                         _tvs, vs.FaseVan, vs.FaseNaar));
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_tvsot.Setting}{vs.FaseNaar}{vs.FaseVan}",
+                        $"{_tvsot}{vs.FaseNaar}{vs.FaseVan}",
                         vs.VoorstartOntruimingstijd,
                         CCOLElementTimeTypeEnum.TE_type,
                         _tvsot, vs.FaseVan, vs.FaseNaar));
@@ -161,7 +171,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* ------------------------------ */");
                     foreach(var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                        if(gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
+                        {
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                        }
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
                     {
@@ -172,7 +189,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* -------------- */");
                     foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
                     {
-                        sb.AppendLine($"{ts}GelijkStarten((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
+                        if (gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.Altijd)
+                        {
+                            sb.AppendLine($"{ts}GelijkStarten((bool) TRUE, {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}GelijkStarten((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                        }
                     }
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Voorstarten */");
