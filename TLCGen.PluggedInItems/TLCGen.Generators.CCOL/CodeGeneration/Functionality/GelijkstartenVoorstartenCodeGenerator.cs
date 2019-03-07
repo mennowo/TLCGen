@@ -46,7 +46,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schgs}{gs.FaseNaar}{gs.FaseVan}",
+                            $"{_schgs}{gs.FaseVan}{gs.FaseNaar}",
                             gs.Schakelbaar == Models.Enumerations.AltijdAanUitEnum.SchAan ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             _schgs, gs.FaseNaar, gs.FaseVan));
@@ -177,7 +177,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
                         }
                     }
                     foreach (var vs in c.InterSignaalGroep.Voorstarten)
@@ -195,8 +195,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         else
                         {
-                            sb.AppendLine($"{ts}GelijkStarten((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
-                            sb.AppendLine($"{ts}GelijkStarten_correctionKR((bool) SCH[{_schpf}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar});");
+                            sb.AppendLine($"{ts}GelijkStarten((bool) SCH[{_schpf}{_schgs}{gs.FaseVan}{gs.FaseNaar}], {_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, BIT1, (bool) FALSE);");
                         }
                     }
                     sb.AppendLine();
