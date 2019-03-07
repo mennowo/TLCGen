@@ -48,7 +48,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmmwta;
         private CCOLGeneratorCodeStringSettingModel _prmmwtfts;
         private CCOLGeneratorCodeStringSettingModel _prmmwtvtg;
-        private CCOLGeneratorCodeStringSettingModel _prmovstp;
         private CCOLGeneratorCodeStringSettingModel _prmtestdsivert;
         private CCOLGeneratorCodeStringSettingModel _prmtestdsilyn;
         private CCOLGeneratorCodeStringSettingModel _prmtestdsicat;
@@ -327,7 +326,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomx}{ov.FaseCyclus}", ov.OnderMaximum, CCOLElementTimeTypeEnum.TE_type, _prmomx, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblk}{ov.FaseCyclus}", ov.BlokkeertijdNaOVIngreep, CCOLElementTimeTypeEnum.TE_type, _tblk, ov.FaseCyclus));
                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schupinagb}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.SCH_type, _schupinagb, ov.FaseCyclus));
-                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmovstp}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.None, _prmovstp, ov.FaseCyclus));
                 if ((ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchAan ||
                      ov.VersneldeInmeldingKoplus == NooitAltijdAanUitEnum.SchUit) &&
                      !string.IsNullOrWhiteSpace(ov.Koplus) && ov.Koplus != "NG")

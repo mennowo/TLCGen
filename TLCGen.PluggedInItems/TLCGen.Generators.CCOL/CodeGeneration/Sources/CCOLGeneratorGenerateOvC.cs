@@ -826,7 +826,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _hhdin = CCOLGeneratorSettingsProvider.Default.GetElementName("hhdin");
             var _hovuit = CCOLGeneratorSettingsProvider.Default.GetElementName("hovuit");
             var _hhduit = CCOLGeneratorSettingsProvider.Default.GetElementName("hhduit");
-            var _prmovstp = CCOLGeneratorSettingsProvider.Default.GetElementName("prmovstp");
             var _schcprio = CCOLGeneratorSettingsProvider.Default.GetElementName("schcprio");
             var _prmlaatcrit = CCOLGeneratorSettingsProvider.Default.GetElementName("prmlaatcrit");
             var _prmallelijnen = CCOLGeneratorSettingsProvider.Default.GetElementName("prmallelijnen");
