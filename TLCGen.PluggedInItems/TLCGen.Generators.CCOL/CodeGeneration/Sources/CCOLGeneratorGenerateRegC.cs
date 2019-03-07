@@ -645,6 +645,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("{");
 
 
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCSystemApplication, true, false, false, true);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPreSystemApplication, true, false, false, true);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostApplication, true, false, false, true);
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCPostSystemApplication, true, false, false, true);

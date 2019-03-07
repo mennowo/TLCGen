@@ -8,69 +8,85 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 {
     public partial class CCOLGenerator
     {
-        private string GenerateSysH(ControllerModel controller)
+        private string GenerateSysH(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("/* ALGEMENE APPLICATIEFILE */");
             sb.AppendLine("/* ----------------------- */");
             sb.AppendLine();
-            sb.Append(GenerateFileHeader(controller.Data, "sys.h"));
+            sb.Append(GenerateFileHeader(c.Data, "sys.h"));
             sb.AppendLine();
-            sb.Append(GenerateVersionHeader(controller.Data));
+            sb.Append(GenerateVersionHeader(c.Data));
             sb.AppendLine();
-            sb.AppendLine($"#define SYSTEM \"{controller.Data.Naam}\"");
+            sb.AppendLine($"#define SYSTEM \"{c.Data.Naam}\"");
             sb.AppendLine();
-            sb.Append(GenerateSysHFasen(controller));
+            sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHUitgangen(controller));
+            sb.Append(GenerateSysHUitgangen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHDetectors(controller));
+            sb.Append(GenerateSysHDetectors(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHIngangen(controller));
+            sb.Append(GenerateSysHIngangen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHHulpElementen(controller));
+            sb.Append(GenerateSysHHulpElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHGeheugenElementen(controller));
+            sb.Append(GenerateSysHGeheugenElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHTijdElementen(controller));
+            sb.Append(GenerateSysHTijdElementen(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHCounters(controller));
+            sb.Append(GenerateSysHCounters(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHSchakelaars(controller));
+            sb.Append(GenerateSysHSchakelaars(c));
             sb.AppendLine();
-            sb.Append(GenerateSysHParameters(controller));
+            sb.Append(GenerateSysHParameters(c));
             sb.AppendLine();
-            if (controller.HasDSI())
+            if (c.HasDSI())
             {
-                sb.Append(GenerateSysHDS(controller));
+                sb.Append(GenerateSysHDS(c));
+                sb.AppendLine();
+            }
+            if (c.OVData.OVIngreepType == OVIngreepTypeEnum.Uitgebreid)
+            {
+                var ov = 0;
+                foreach (var ovFC in c.OVData.OVIngrepen)
+                {
+                    sb.AppendLine($"{ts}#define ovFC{ovFC.FaseCyclus} {ov.ToString()}");
+                    ++ov;
+                }
+                foreach (var hdFC in c.OVData.HDIngrepen)
+                {
+                    sb.AppendLine($"{ts}#define hdFC{hdFC.FaseCyclus} {ov.ToString()}");
+                    ++ov;
+                }
+                sb.AppendLine($"{ts}#define ovOVMAX {ov.ToString()}");
+                sb.AppendLine();
             }
             
-            sb.AppendLine();
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
-            sb.AppendLine($"{ts}#define MLMAX1 {controller.ModuleMolen.Modules.Count} /* aantal modulen */");
+            sb.AppendLine($"{ts}#define MLMAX1 {c.ModuleMolen.Modules.Count} /* aantal modulen */");
 	        sb.AppendLine();
-	        if (controller.HalfstarData.IsHalfstar)
+	        if (c.HalfstarData.IsHalfstar)
 	        {
 		        sb.AppendLine("/* signaalplannen*/");
 		        sb.AppendLine("/* -------------- */");
-		        sb.AppendLine($"{ts}#define PLMAX1 {controller.HalfstarData.SignaalPlannen.Count} /* aantal signaalplannen */");
+		        sb.AppendLine($"{ts}#define PLMAX1 {c.HalfstarData.SignaalPlannen.Count} /* aantal signaalplannen */");
 		        sb.AppendLine();
 	        }
 	        sb.AppendLine("/* Aantal perioden voor max groen */");
             sb.AppendLine("/* ------- */");
 			// Here: +1 to allow room for default period in arrays made with this value
-            sb.AppendLine($"{ts}#define MPERIODMAX {controller.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
+            sb.AppendLine($"{ts}#define MPERIODMAX {c.PeriodenData.Perioden.Count(x => x.Type == PeriodeTypeEnum.Groentijden) + 1} /* aantal groenperioden */");
             sb.AppendLine();
 
             foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.SysHBeforeUserDefines])
             {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts));
+                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.SysHBeforeUserDefines, ts));
             }
 
             sb.AppendLine("/* Gebruikers toevoegingen file includen */");
             sb.AppendLine("/* ------------------------------------- */");
-            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.add\"");
+            sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.add\"");
             sb.AppendLine();
 
             return sb.ToString();

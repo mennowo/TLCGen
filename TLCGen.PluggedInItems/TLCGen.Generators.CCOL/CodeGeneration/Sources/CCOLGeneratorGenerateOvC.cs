@@ -91,18 +91,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
             sb.AppendLine();
-            sb.AppendLine("typedef enum {");
-            foreach (var fc in c.OVData.OVIngrepen)
-            {
-                sb.AppendLine($"{ts}ovFC{fc.FaseCyclus},");
-            }
-            foreach (var fc in c.OVData.HDIngrepen)
-            {
-                sb.AppendLine($"{ts}hdFC{fc.FaseCyclus},");
-            }
-            sb.AppendLine($"{ts}ovOVMAX");
-            sb.AppendLine("} TOVRichtingIndex;");
-            sb.AppendLine();
             sb.AppendLine("extern mulv DB_old[];");
             sb.AppendLine("extern mulv TDH_old[];");
             sb.AppendLine();
