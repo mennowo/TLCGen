@@ -371,7 +371,7 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach(var l in _RISModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -379,7 +379,7 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach (var l in _RISModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
