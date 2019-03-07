@@ -540,6 +540,12 @@
             <Description>Eenmalig instellen signaalplannen na wijziging</Description>
           </Setting>
           <Setting>
+            <Default>instprm</Default>
+            <Setting>instprm</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Eenmalig kopieren signaalplan parameters naar signaalplannen</Description>
+          </Setting>
+          <Setting>
             <Default>omschtegenh</Default>
             <Setting>omschtegenh</Setting>
             <Type>HulpElement</Type>
@@ -682,6 +688,36 @@
             <Setting>mingov</Setting>
             <Type>Parameter</Type>
             <Description>Minimale groentijd bij afkappen fase _E1_ tijdens plan _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>txa</Default>
+            <Setting>txa</Setting>
+            <Type>Parameter</Type>
+            <Description>TXA _E1_ fase _E2_ plan _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>txb</Default>
+            <Setting>txb</Setting>
+            <Type>Parameter</Type>
+            <Description>TXB _E1_ fase _E2_ plan _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>txc</Default>
+            <Setting>txc</Setting>
+            <Type>Parameter</Type>
+            <Description>TXC _E1_ fase _E2_ plan _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>txd</Default>
+            <Setting>txd</Setting>
+            <Type>Parameter</Type>
+            <Description>TXD _E1_ fase _E2_ plan _E3_</Description>
+          </Setting>
+          <Setting>
+            <Default>txe</Default>
+            <Setting>txe</Setting>
+            <Type>Parameter</Type>
+            <Description>TXE _E1_ fase _E2_ plan _E3_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

@@ -20,6 +20,7 @@ namespace TLCGen.Models
 		public bool OVPrioriteitPL { get; set; }
 		public bool VARegelen { get; set; }
 		public bool AlternatievenVoorHoofdrichtingen { get; set; }
+		public bool PlantijdenInParameters { get; set; }
 		public List<HalfstarPeriodeDataModel> HalfstarPeriodenData { get; set; }
 		public List<SignaalPlanModel> SignaalPlannen { get; set; }
 		public List<HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; set; }

@@ -70,6 +70,7 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"#define SIS(is)  (IS[is] && !IS_old[is])");
             sb.AppendLine($"void ris_simulation_application(void)");
             sb.AppendLine($"{{");
+            sb.AppendLine($"{ts}#if (!defined AUTOMAAT_TEST)");
             foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
                 foreach (var s in l.SimulatedStations)
@@ -91,6 +92,7 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine($"/* ------------------------------------------ */  ");
             sb.AppendLine($"xyprintf(0, {i + 1}, \"ItsStation =% -3d ItsStation - Ex =% -3d\", RIS_ITSSTATION_AP_NUMBER,  RIS_ITSSTATION_EX_AP_NUMBER);");
             sb.AppendLine($"xyprintf(0, {i + 2}, \"PrioRequest =% -3d PrioRequest_Ex =% -3d\", RIS_PRIOREQUEST_AP_NUMBER, RIS_PRIOREQUEST_EX_AP_NUMBER);");
+            sb.AppendLine($"{ts}#endif");
 
             sb.AppendLine("}");
 

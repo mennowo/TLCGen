@@ -69,7 +69,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _prmtx;
 		private CCOLGeneratorCodeStringSettingModel _hxpl;
 		private CCOLGeneratorCodeStringSettingModel _schinst;
-		private CCOLGeneratorCodeStringSettingModel _homschtegenh;
+		private CCOLGeneratorCodeStringSettingModel _schinstprm;
+        private CCOLGeneratorCodeStringSettingModel _homschtegenh;
 		private CCOLGeneratorCodeStringSettingModel _prmrstotxa;
 		private CCOLGeneratorCodeStringSettingModel _tleven;
 		private CCOLGeneratorCodeStringSettingModel _hleven;
@@ -91,6 +92,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmmwthst;
         private CCOLGeneratorCodeStringSettingModel _prmpriohst;
         private CCOLGeneratorCodeStringSettingModel _prmmingov;
+
+        private CCOLGeneratorCodeStringSettingModel _prmtxa;
+        private CCOLGeneratorCodeStringSettingModel _prmtxb;
+        private CCOLGeneratorCodeStringSettingModel _prmtxc;
+        private CCOLGeneratorCodeStringSettingModel _prmtxd;
+        private CCOLGeneratorCodeStringSettingModel _prmtxe;
 #pragma warning restore 0649
 
         public void CollectKoppelSignalen(ControllerModel c)
