@@ -235,7 +235,7 @@ namespace TLCGen.Settings
             {
                 if (_AddDetectorCommand == null)
                 {
-                    _AddDetectorCommand = new RelayCommand(new Action<object>(AddDetectorCommand_Executed), new Predicate<object>(AddDetectorCommand_CanExecute));
+                    _AddDetectorCommand = new RelayCommand(AddDetectorCommand_Executed, AddDetectorCommand_CanExecute);
                 }
                 return _AddDetectorCommand;
             }
@@ -249,7 +249,7 @@ namespace TLCGen.Settings
             {
                 if (_RemoveDetectorCommand == null)
                 {
-                    _RemoveDetectorCommand = new RelayCommand(new Action<object>(RemoveDetectorCommand_Executed), new Predicate<object>(RemoveDetectorCommand_CanExecute));
+                    _RemoveDetectorCommand = new RelayCommand(RemoveDetectorCommand_Executed, RemoveDetectorCommand_CanExecute);
                 }
                 return _RemoveDetectorCommand;
             }
@@ -262,7 +262,7 @@ namespace TLCGen.Settings
             {
                 if (_ApplyDefaultsCommand == null)
                 {
-                    _ApplyDefaultsCommand = new RelayCommand(new Action<object>(ApplyDefaultsCommand_Executed), new Predicate<object>(ApplyDefaultsCommand_CanExecute));
+                    _ApplyDefaultsCommand = new RelayCommand(ApplyDefaultsCommand_Executed, ApplyDefaultsCommand_CanExecute);
                 }
                 return _ApplyDefaultsCommand;
             }
@@ -276,6 +276,7 @@ namespace TLCGen.Settings
         {
             DetectorModel d = new DetectorModel();
             d.Naam = Replace + "_" + (Detectoren.Count + 1);
+            d.Rijstrook = 1;
             Detectoren.Add(d);
         }
 

@@ -370,7 +370,7 @@ namespace TLCGen.Settings
             {
                 if (_AddFaseCommand == null)
                 {
-                    _AddFaseCommand = new RelayCommand(new Action<object>(AddFaseCommand_Executed), new Predicate<object>(AddFaseCommand_CanExecute));
+                    _AddFaseCommand = new RelayCommand(AddFaseCommand_Executed, AddFaseCommand_CanExecute);
                 }
                 return _AddFaseCommand;
             }
@@ -384,7 +384,7 @@ namespace TLCGen.Settings
             {
                 if (_RemoveFaseCommand == null)
                 {
-                    _RemoveFaseCommand = new RelayCommand(new Action<object>(RemoveFaseCommand_Executed), new Predicate<object>(RemoveFaseCommand_CanExecute));
+                    _RemoveFaseCommand = new RelayCommand(RemoveFaseCommand_Executed, RemoveFaseCommand_CanExecute);
                 }
                 return _RemoveFaseCommand;
             }
@@ -397,7 +397,7 @@ namespace TLCGen.Settings
             {
                 if (_AddFaseDetectorCommand == null)
                 {
-                    _AddFaseDetectorCommand = new RelayCommand(new Action<object>(AddFaseDetectorCommand_Executed), new Predicate<object>(AddFaseDetectorCommand_CanExecute));
+                    _AddFaseDetectorCommand = new RelayCommand(AddFaseDetectorCommand_Executed, AddFaseDetectorCommand_CanExecute);
                 }
                 return _AddFaseDetectorCommand;
             }
@@ -410,7 +410,7 @@ namespace TLCGen.Settings
             {
                 if (_RemoveFaseDetectorCommand == null)
                 {
-                    _RemoveFaseDetectorCommand = new RelayCommand(new Action<object>(RemoveFaseDetectorCommand_Executed), new Predicate<object>(RemoveFaseDetectorCommand_CanExecute));
+                    _RemoveFaseDetectorCommand = new RelayCommand(RemoveFaseDetectorCommand_Executed, RemoveFaseDetectorCommand_CanExecute);
                 }
                 return _RemoveFaseDetectorCommand;
             }
@@ -423,7 +423,7 @@ namespace TLCGen.Settings
             {
                 if (_ApplyDefaultsToFaseCommand == null)
                 {
-                    _ApplyDefaultsToFaseCommand = new RelayCommand(new Action<object>(ApplyDefaultsToFaseCommand_Executed), new Predicate<object>(ApplyDefaultsToFaseCommand_CanExecute));
+                    _ApplyDefaultsToFaseCommand = new RelayCommand(ApplyDefaultsToFaseCommand_Executed, ApplyDefaultsToFaseCommand_CanExecute);
                 }
                 return _ApplyDefaultsToFaseCommand;
             }
@@ -436,7 +436,7 @@ namespace TLCGen.Settings
             {
                 if (_ApplyDefaultsToFaseDetectorCommand == null)
                 {
-                    _ApplyDefaultsToFaseDetectorCommand = new RelayCommand(new Action<object>(ApplyDefaultsToFaseDetectorCommand_Executed), new Predicate<object>(ApplyDefaultsToFaseDetectorCommand_CanExecute));
+                    _ApplyDefaultsToFaseDetectorCommand = new RelayCommand(ApplyDefaultsToFaseDetectorCommand_Executed, ApplyDefaultsToFaseDetectorCommand_CanExecute);
                 }
                 return _ApplyDefaultsToFaseDetectorCommand;
             }
@@ -474,6 +474,7 @@ namespace TLCGen.Settings
         {
             DetectorModel d = new DetectorModel();
             d.Naam = "fase_" + (FaseDetectoren.Count + 1);
+            d.Rijstrook = 1;
             FaseDetectoren.Add(d);
         }
 

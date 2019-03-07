@@ -442,6 +442,8 @@ namespace TLCGen.ViewModels
         public DetectorViewModel(DetectorModel detector)
         {
             _detector = detector;
+            // Fix potential missing value from old or invalid templates
+            if (_detector.Rijstrook == null) _detector.Rijstrook = 1;
         }
 
         #endregion // Constructor
