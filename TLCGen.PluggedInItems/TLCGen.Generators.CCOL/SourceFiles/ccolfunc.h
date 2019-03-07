@@ -1,17 +1,10 @@
 #ifndef __CCOLFUNC_H__
 #define __CCOLFUNC_H__
 #endif
-#ifdef NALOPEN
-   #include "nalopen.h"
-   #include "gkvar.h"    /* groengroenkonflikten              */
-   #include "nlvar.h"    /* nalopen                           */
-#endif
+#include "nalopen.h"
+#include "gkvar.h"    /* groengroenkonflikten              */
+#include "nlvar.h"    /* nalopen                           */
 
-#ifdef NALOOPGK
-   #include "gkvar.h"    /* groengroenkonflikten              */
-   #include "nlvar.h"    /* nalopen                           */
-   #include "naloopgk.h"
-#endif
 
 #ifdef STARTOPTIES
    #include "startopt.h"

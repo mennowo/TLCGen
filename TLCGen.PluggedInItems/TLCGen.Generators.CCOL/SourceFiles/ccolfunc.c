@@ -6,17 +6,9 @@
    #include <conio.h>
 #endif
 
-#ifdef NALOPEN
-   #include "nalopen.c"
-   #include "gkvar.c"    /* groengroenkonflikten              */
-   #include "nlvar.c"    /* nalopen                           */
-#endif
-
-#ifdef NALOOPGK
-   #include "gkvar.c"    /* groengroenkonflikten              */
-   #include "nlvar.c"    /* nalopen                           */
-   #include "naloopgk.c"
-#endif
+#include "nalopen.c"
+#include "gkvar.c"    /* groengroenkonflikten              */
+#include "nlvar.c"    /* nalopen                           */
 
 #ifdef SYNC
    #include "syncfunc.c"

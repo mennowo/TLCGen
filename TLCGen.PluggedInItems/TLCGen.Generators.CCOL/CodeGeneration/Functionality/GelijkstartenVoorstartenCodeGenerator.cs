@@ -69,6 +69,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
+                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+                        return base.GetFunctionLocalVariables(c, type);
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -92,15 +94,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
+            // return if no sync
+            if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
+                return null;
+
             StringBuilder sb = new StringBuilder();
 
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
-                    // return if no synch
-                    if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
-                        return null;
-                    
                     // bits reset
                     sb.AppendLine($"{ts}/* reset synchronisatiebits. */");
                     sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
@@ -184,10 +186,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-	                // return if no synch
-	                if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
-		                return null;
-
 					sb.AppendLine($"{ts}/* set meerealisatie voor gelijk- of voorstartende richtingen */");
                     sb.AppendLine($"{ts}/* ---------------------------------------------------------- */");
                     foreach(var vs in c.InterSignaalGroep.Voorstarten)
@@ -202,10 +200,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
 				case CCOLCodeTypeEnum.OvCIncludes:
-					// return if no synch
-					if (c.InterSignaalGroep?.Gelijkstarten?.Count == 0 && c.InterSignaalGroep?.Voorstarten?.Count == 0)
-						return null;
-
 					sb.AppendLine("#include \"syncvar.h\"");
 					return sb.ToString();
 

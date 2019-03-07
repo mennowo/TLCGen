@@ -966,7 +966,7 @@ void PrioriteitsToekenning(void)
         }
     }
     /* Deel prioriteiten uit */
-    for (ov = 0; ov < ovOVMAX; ov++)
+	for (ov = 0; ov < ovOVMAX; ov++)
     {
         fc = iFC_OVix[ov];
         if (!BL[fc] &&
@@ -976,7 +976,7 @@ void PrioriteitsToekenning(void)
             !iPrioriteit[ov] &&
             (iPrioriteitsOpties[ov] & poNoodDienst ||
                 !iSelDetFout[ov] &&
-                !iMaximumWachtTijdOverschreden &&
+                !(!G[fc] && iMaximumWachtTijdOverschreden[ov]) &&
                 (!G[fc] || !iOnderMaximumVerstreken[ov]) &&
                 /* Werner : hieronder toegevoegd als beveiliging als ondermax niet is ingevuld */
                 !(G[fc] && iMaximumWachtTijdOverschreden[ov] && (iOnderMaximum[ov] <= 0)) &&
@@ -994,6 +994,7 @@ void PrioriteitsToekenning(void)
             }
         }
     }
+
 
     PrioriteitsToekenningExtra();
 }
@@ -1106,9 +1107,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 #else
         if (TO[k][fc]
 #endif
-#ifdef NALOOPGK
             || TGK[k][fc]
-#endif
             )
         {
             iKPrioriteitsOpties[k] |= iPrioriteitsOptiesFC;
@@ -1129,12 +1128,10 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                         iRestGroen = G[k] && CV[k] ? TFG_max[k] - TFG_timer[k] + TVG_max[k] - TVG_timer[k] : 0;
                     }
                 }
-#ifdef NALOOPGK
                 if (TNL[k] && iRestGroen < TNL_max[k] - TNL_timer[k])
                 {
                     iRestGroen = TNL_max[k] - TNL_timer[k];
                 }
-#endif
             }
             else
             {
@@ -1156,9 +1153,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 #else
             iRestTO = TO_max[k][fc] >= 0 ? TO_max[k][fc] - TO_timer[k] :
 #endif
-#ifdef NALOOPGK
                 TGK[k][fc] ? TGK_max[k][fc] - TGK_timer[k] :
-#endif
                 0;
 #if defined CCOLTIG && !defined NO_TIGMAX
             if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
@@ -1414,22 +1409,12 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #else
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
 #endif
-#ifdef NALOOPGK
 #if defined CCOLTIG && !defined NO_TIGMAX
              TIG_max[k][fc] == GK && iStartGr <= 0 ||
-             TIG_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr
+             TIG_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr ||
 #else
              TO_max[k][fc] == GK && iStartGr <= 0 ||
              TO_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr
-#endif
-#else
-#if defined CCOLTIG && !defined NO_TIGMAX
-             TIG_max[k][fc] <= GK && iStartGr <= 0 ||
-             TIG_max[k][fc] == GKL    /* PS Gooit voedende richting er direct uit */
-#else
-             TO_max[k][fc] <= GK && iStartGr <= 0 ||
-             TO_max[k][fc] == GKL    /* PS Gooit voedende richting er direct uit */
-#endif
 #endif
             ))
         {
@@ -1465,17 +1450,13 @@ void AfkappenMG(int fc, int iStartGr)
 			/* TIG_max[k][fc]==GKL toegevoegd */
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
              TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL 
-#ifdef NALOOPGK
 			&& TGK_max[k][fc] >= iStartGr
-#endif
 			) 
 #else
 			/* TO_max[k][fc]==GKL toegevoegd */
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
              TO_max[k][fc] == GK && iStartGr <= 0) || TO_max[k][fc] == GKL 
-#ifdef NALOOPGK
 			&& TGK_max[k][fc] >= iStartGr
-#endif
 		)
 #endif
         {
@@ -1533,7 +1514,7 @@ void OVAfkappen(void)
     }
     for (fc = 0; fc < FCMAX; fc++)
     {
-        if (iMaximumWachtTijdOverschreden && iTotaalAantalInmeldingen > 0)
+        if (iMaxWachtTijdOverschreden && iTotaalAantalInmeldingen > 0)
         {
 /* toevoeging Ane 100204 ikv. niet afbreken fc wanneer fc prioriteit moet hebben  */
             for (ov = 0; ov < ovOVMAX; ++ov) if (fc == iFC_OVix[ov]) break;
