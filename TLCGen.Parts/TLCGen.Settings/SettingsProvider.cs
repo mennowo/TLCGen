@@ -64,7 +64,7 @@ namespace TLCGen.Settings
         {
             try
             {
-                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "settings.xml");
+                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TLCGen", "settings.xml");
                 if (File.Exists(settingsfile))
                 {
                     _Settings = TLCGenSerialization.DeSerialize<TLCGenSettingsModel>(settingsfile);
@@ -86,7 +86,7 @@ namespace TLCGen.Settings
         {
             try
             {
-                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "settings.xml");
+                string settingsfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TLCGen", "settings.xml");
                 TLCGenSerialization.Serialize(settingsfile, _Settings);
             }
             catch (Exception e)
