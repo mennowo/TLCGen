@@ -33,6 +33,7 @@
                   SelectedItem="{Binding Path=GridSelectedItem,ElementName=root,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                   ext:DataGridExtensions.SelectedItemsList="{Binding ElementName=root,Path=GridSelectedItems,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                   CanUserAddRows="False"
+            SelectionMode="Extended"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False" >
             <DataGrid.Columns>

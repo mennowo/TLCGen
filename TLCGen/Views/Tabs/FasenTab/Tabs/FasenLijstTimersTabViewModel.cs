@@ -114,7 +114,7 @@ namespace TLCGen.ViewModels
 
         #region Event Handling
 
-        private bool _SettingMultiple = false;
+        private volatile bool _SettingMultiple = false;
         private void FaseCyclus_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))

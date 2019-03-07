@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System.Collections;
 using GalaSoft.MvvmLight;
 using TLCGen.Models.Enumerations;
+using System.Linq;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -202,6 +203,7 @@ namespace TLCGen.GebruikersOpties
                         SelectedOptie as GebruikersOptieWithIOViewModel) + 1;
 
                 var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
+                o.PropertyChanged += Optie_PropertyChanged;
                 int i = 1;
                 while(string.IsNullOrEmpty(o.Naam))
                 {
@@ -221,6 +223,7 @@ namespace TLCGen.GebruikersOpties
                         SelectedOptie as GebruikersOptieViewModel) + 1;
 
                 var o = new GebruikersOptieViewModel(new GebruikersOptieModel());
+                o.PropertyChanged += Optie_PropertyChanged;
                 int i = 1;
                 while (string.IsNullOrEmpty(o.Naam))
                 {
@@ -290,6 +293,7 @@ namespace TLCGen.GebruikersOpties
                     }
                     foreach(var o in rlist)
                     {
+                        o.PropertyChanged -= Optie_PropertyChanged;
                         list.Remove(o);
                     }
                 }
@@ -304,6 +308,7 @@ namespace TLCGen.GebruikersOpties
                     }
                     foreach (var o in rlist)
                     {
+                        o.PropertyChanged -= Optie_PropertyChanged;
                         list.Remove(o);
                     }
                 }
@@ -316,13 +321,15 @@ namespace TLCGen.GebruikersOpties
                     var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOptie as GebruikersOptieWithIOViewModel);
                     list.Remove(SelectedOptie as GebruikersOptieWithIOViewModel);
+                    (SelectedOptie as GebruikersOptieWithIOViewModel).PropertyChanged -= Optie_PropertyChanged;
                 }
                 else
                 {
                     var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
                     index = list.IndexOf(SelectedOptie as GebruikersOptieViewModel);
                     list.Remove(SelectedOptie as GebruikersOptieViewModel);
-                }        
+                    (SelectedOptie as GebruikersOptieViewModel).PropertyChanged -= Optie_PropertyChanged;
+                }
             }
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
@@ -524,6 +531,15 @@ namespace TLCGen.GebruikersOpties
 
         private void ResetMyGebruikersOpties()
         {
+            if (Uitgangen != null) foreach (var op in Uitgangen) op.PropertyChanged -= Optie_PropertyChanged;
+            if (Ingangen != null) foreach (var ip in Ingangen) ip.PropertyChanged -= Optie_PropertyChanged;
+            if (HulpElementen != null) foreach (var he in HulpElementen) he.PropertyChanged -= Optie_PropertyChanged;
+            if (Timers != null) foreach (var ti in Timers) ti.PropertyChanged -= Optie_PropertyChanged;
+            if (Counters != null) foreach (var ct in Counters) ct.PropertyChanged -= Optie_PropertyChanged;
+            if (Schakelaars != null) foreach (var sch in Schakelaars) sch.PropertyChanged -= Optie_PropertyChanged;
+            if (GeheugenElementen != null) foreach (var me in GeheugenElementen) me.PropertyChanged -= Optie_PropertyChanged;
+            if (Parameters != null) foreach (var prm in Parameters) prm.PropertyChanged -= Optie_PropertyChanged;
+
             MyGebruikersOpties = new GebruikersOptiesModel();
 
             Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
@@ -544,9 +560,36 @@ namespace TLCGen.GebruikersOpties
             _AlleOpties[SchakelaarsConst] = Schakelaars;
             _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
             _AlleOpties[ParametersConst] = Parameters;
+
+            foreach (var op in Uitgangen) op.PropertyChanged += Optie_PropertyChanged;
+            foreach (var ip in Ingangen) ip.PropertyChanged += Optie_PropertyChanged;
+            foreach (var he in HulpElementen) he.PropertyChanged += Optie_PropertyChanged;
+            foreach (var ti in Timers) ti.PropertyChanged += Optie_PropertyChanged;
+            foreach (var ct in Counters) ct.PropertyChanged += Optie_PropertyChanged;
+            foreach (var sch in Schakelaars) sch.PropertyChanged += Optie_PropertyChanged;
+            foreach (var me in GeheugenElementen) me.PropertyChanged += Optie_PropertyChanged;
+            foreach (var prm in Parameters) prm.PropertyChanged += Optie_PropertyChanged;
         }
 
         #endregion // Private Methods
+
+        #region Event Handling
+
+        private volatile bool _SettingMultiple = false;
+        private void Optie_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_SettingMultiple || string.IsNullOrEmpty(e.PropertyName))
+                return;
+
+            if (SelectedOpties != null && SelectedOpties.Count > 1)
+            {
+                _SettingMultiple = true;
+                MultiPropertySetter.SetPropertyForAllItems<GebruikersOptieViewModel>(sender, e.PropertyName, SelectedOpties);
+            }
+            _SettingMultiple = false;
+        }
+
+        #endregion // Event Handling
 
         #region ITLCGenTabItem
 

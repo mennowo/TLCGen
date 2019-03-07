@@ -144,6 +144,10 @@ namespace TLCGen.Integrity
         /// <returns>True if unique, false if not</returns>
         public static bool IsElementNaamUnique(ControllerModel _Controller, string naam)
         {
+            foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationPlugins.Where(x => x.Item1.HasFlag(Plugins.TLCGenPluginElems.IOElementProvider)))
+            {
+                if (!((Plugins.ITLCGenElementProvider)pl.Item2).IsElementNameUnique(naam)) return false;
+            }
             return IsElementNaamUnique((object)_Controller, naam);
         }
 
