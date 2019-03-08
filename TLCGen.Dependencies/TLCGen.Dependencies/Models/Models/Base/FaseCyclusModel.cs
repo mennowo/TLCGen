@@ -20,6 +20,7 @@ namespace TLCGen.Models
         [ModelName(TLCGenObjectTypeEnum.Fase)]
         [Browsable(false)]
         public override string Naam { get; set; }
+        public override bool Dummy { get; set; }
         [Browsable(false)]
         public FaseTypeEnum Type { get; set; }
 

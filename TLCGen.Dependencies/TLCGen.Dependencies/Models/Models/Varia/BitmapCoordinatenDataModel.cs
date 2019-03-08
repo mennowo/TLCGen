@@ -10,5 +10,6 @@ namespace TLCGen.Models
     public class BitmapCoordinatenDataModel : IOElementModel
     {
         public override string Naam { get; set; }
+        public override bool Dummy { get; set; }
     }
 }

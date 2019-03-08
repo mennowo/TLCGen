@@ -290,19 +290,34 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
             }
-            if (AllCCOLInputElements.Any(x => x.Dummy))
+
+            foreach (var item in AllInputModelElements.Where(x => !x.Dummy))
+            {
+                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
+            }
+
+            
+            if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
             {
                 sb.AppendLine("#if (!defined AUTOMAAT_TEST)");
+            }
+            if (AllCCOLInputElements.Any(x => x.Dummy))
+            {
                 foreach (var item in AllCCOLInputElements.Where(x => x.Dummy))
                 {
                     if (item.Element != null) sb.Append(GetCoordinatesString(item.Element, item.Naam, "is"));
                 }
-                sb.AppendLine("#endif");
             }
-
-            foreach (var item in AllInputModelElements)
+            if (AllInputModelElements.Any(x => x.Dummy))
             {
-                sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
+                foreach (var item in AllInputModelElements.Where(x => x.Dummy))
+                {
+                    sb.Append(GetCoordinatesString(item, _ispf + item.Naam, "is"));
+                }
+            }
+            if (AllCCOLInputElements.Any(x => x.Dummy) || AllInputModelElements.Any(x => x.Dummy))
+            { 
+                sb.AppendLine("#endif");
             }
 
             sb.AppendLine();

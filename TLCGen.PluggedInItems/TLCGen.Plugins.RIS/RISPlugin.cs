@@ -182,6 +182,7 @@ namespace TLCGen.Plugins.RIS
             foreach (var station in _RISModel.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations))
             {
                 station.StationBitmapData.Naam = station.Naam;
+                station.StationBitmapData.Dummy = true;
                 items.Add(station.StationBitmapData);
             }
             return items;

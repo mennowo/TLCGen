@@ -8,7 +8,8 @@ namespace TLCGen.Models
 	public class HalfstarGekoppeldeKruisingPlanUitgangModel : IOElementModel, IComparable
 	{
 		public override string Naam { get; set; }
-		
+        public override bool Dummy { get; set; }
+
         [HasDefault(false)]
 		public string Plan { get; set; }
         [HasDefault(false)]

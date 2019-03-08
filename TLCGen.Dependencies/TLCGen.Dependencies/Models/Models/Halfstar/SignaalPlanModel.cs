@@ -17,6 +17,7 @@ namespace TLCGen.Models
 		[ModelName(TLCGenObjectTypeEnum.SignaalPlan)]
 		[Browsable(false)]
 		public override string Naam { get; set; }
+        public override bool Dummy { get; set; }
         [HasDefault(false)]
         public string Commentaar { get; set; }
 		public int Cyclustijd { get; set; }

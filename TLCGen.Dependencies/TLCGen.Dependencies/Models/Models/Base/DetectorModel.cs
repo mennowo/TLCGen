@@ -22,6 +22,7 @@ namespace TLCGen.Models
         [ModelName(TLCGenObjectTypeEnum.Detector)]
         [Browsable(false)]
         public override string Naam { get; set; }
+        public override bool Dummy { get; set; }
         [VissimName]
         [Browsable(false)]
         public string VissimNaam { get; set; }
@@ -35,7 +36,6 @@ namespace TLCGen.Models
         public int ResetAanvraagTijdsduur { get; set; }
         public bool AanvraagDirect { get; set; }
         public bool Wachtlicht { get; set; }
-        public bool Dummy { get; set; }
         [HasDefault(false)]
         public int? Rijstrook { get; set; }
 
