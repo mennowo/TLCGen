@@ -21,26 +21,38 @@ namespace TLCGen.Models
 
         [IOElement("rtact", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevant")]
         public BitmapCoordinatenDataModel RatelTikkerActiefBitmapData { get; set; }
-        [IOElement("rtaltijd", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevant")]
+        [IOElement("rtaltijd", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevantAltijd")]
         public BitmapCoordinatenDataModel RatelTikkerAltijdBitmapData { get; set; }
-        [IOElement("rtdim", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevant")]
+        [IOElement("rtdim", BitmappedItemTypeEnum.Uitgang, "", "RatelTikkersBitmapDataRelevantDimmen")]
         public BitmapCoordinatenDataModel RatelTikkerDimmenBitmapData { get; set; }
         [IOElement("belact", BitmappedItemTypeEnum.Uitgang, "", "WaarschuwingsGroepenBitmapDataRelevant")]
         public BitmapCoordinatenDataModel BellenActiefBitmapData { get; set; }
-        [IOElement("beldim", BitmappedItemTypeEnum.Uitgang, "", "WaarschuwingsGroepenBitmapDataRelevant")]
+        [IOElement("beldim", BitmappedItemTypeEnum.Uitgang, "", "WaarschuwingsGroepenBitmapDataRelevantDimmen")]
         public BitmapCoordinatenDataModel BellenDimmenBitmapData { get; set; }
 
         [XmlIgnore]
-        public bool RatelTikkersBitmapDataRelevant
-        {
-            get { return Rateltikkers.Count > 0; }
-        }
+        public bool ControllerHasPeriodRtAltijd { get; set; }
 
         [XmlIgnore]
-        public bool WaarschuwingsGroepenBitmapDataRelevant
-        {
-            get { return WaarschuwingsGroepen.Count > 0; }
-        }
+        public bool ControllerHasPeriodRtDimmen { get; set; }
+
+        [XmlIgnore]
+        public bool ControllerHasPeriodBellenDimmen { get; set; }
+
+        [XmlIgnore]
+        public bool RatelTikkersBitmapDataRelevant => Rateltikkers.Count > 0;
+
+        [XmlIgnore]
+        public bool RatelTikkersBitmapDataRelevantAltijd => Rateltikkers.Count > 0 && ControllerHasPeriodRtAltijd;
+
+        [XmlIgnore]
+        public bool RatelTikkersBitmapDataRelevantDimmen => Rateltikkers.Count > 0 && ControllerHasPeriodRtDimmen;
+
+        [XmlIgnore]
+        public bool WaarschuwingsGroepenBitmapDataRelevant => WaarschuwingsGroepen.Count > 0;
+
+        [XmlIgnore]
+        public bool WaarschuwingsGroepenBitmapDataRelevantDimmen => WaarschuwingsGroepen.Count > 0 && ControllerHasPeriodBellenDimmen;
 
         public SignalenDataModel()
         {

@@ -209,6 +209,7 @@ namespace TLCGen.DataAccess
                         }
                         Controller = c;
                         TLCGenModelManager.Default.CorrectModelByVersion(Controller, ControllerFileName);
+                        TLCGenModelManager.Default.PrepareModelForUI(Controller);
                     }
                     return true;
                 }

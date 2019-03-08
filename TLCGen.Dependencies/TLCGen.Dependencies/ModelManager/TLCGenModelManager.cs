@@ -88,6 +88,18 @@ namespace TLCGen.ModelManagement
             return true;
         }
 
+        /// <summary>
+        /// THis method is supposed to set properties on the model that are not saved, and
+        /// are only used internally to ensure correct displaying of settings to the end user
+        /// </summary>
+        public void PrepareModelForUI(ControllerModel controller)
+        {
+            // set signalen bitmap items availability
+            controller.Signalen.ControllerHasPeriodRtAltijd = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd);
+            controller.Signalen.ControllerHasPeriodRtDimmen = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen);
+            controller.Signalen.ControllerHasPeriodBellenDimmen= controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen);
+        }
+
         public void CorrectModelByVersion(ControllerModel controller, string filename)
         {
             // correct segment items
@@ -98,6 +110,8 @@ namespace TLCGen.ModelManagement
                     s.Naam = s.Naam.Replace("segm", "");
                 }
             }
+
+
 
             // check PostAfhandelingOV_Add in ov.add
             var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
@@ -361,6 +375,9 @@ namespace TLCGen.ModelManagement
         {
             switch (msg)
             {
+                case PeriodenChangedMessage periodenMsg:
+                    PrepareModelForUI(Controller);
+                    break;
                 case OVIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
                     if (ovi != null && meldingMsg.MeldingType == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
