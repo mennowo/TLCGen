@@ -16,6 +16,11 @@
           <viewKind>Solution Explorer</viewKind>
         </Favorite>
         <Favorite>
+          <name>CCOLGen SourceFiles folder</name>
+          <path>TLCGen.PluggedInItems\TLCGen.Generators.CCOL\SourceFiles</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
+        <Favorite>
           <name>TLCGen Models</name>
           <path>TLCGen.Dependencies\TLCGen.Dependencies\Models\Models</path>
           <viewKind>Solution Explorer</viewKind>

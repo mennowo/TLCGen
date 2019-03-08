@@ -28,6 +28,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             string _schrgv_snel = CCOLGeneratorSettingsProvider.Default.GetElementName("schrgv_snel");
             string _tfd = CCOLGeneratorSettingsProvider.Default.GetElementName("tfd");
             string _thd = CCOLGeneratorSettingsProvider.Default.GetElementName("thd");
+            string _tnlcv = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcv");
+            string _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            string _tnleg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnleg");
+            string _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
 
             string _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
 
@@ -45,7 +49,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"#define MAX_AANTAL_CONFLICTGROEPEN {c.RoBuGrover.ConflictGroepen.Count}");
             sb.AppendLine("mulv TC[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine("mulv TC_max, DD_anyfase;");
-            sb.AppendLine("mulv TO_ontwerp[FCMAX][FCMAX];");
+            if(c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
+            {
+                sb.AppendLine($"#if defined CCOLTIG && !defined NO_TIGMAX");
+                sb.AppendLine($"{ts}mulv TIG_ontwerp[FCMAX][FCMAX];");
+                sb.AppendLine($"#else");
+                sb.AppendLine($"{ts}mulv TO_ontwerp[FCMAX][FCMAX];");
+                sb.AppendLine($"#end");
+            }
+            else
+            {
+                sb.AppendLine("mulv TO_ontwerp[FCMAX][FCMAX];");
+            }
             sb.AppendLine("");
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}mulv TC_rgv[MAX_AANTAL_CONFLICTGROEPEN];");
@@ -96,10 +111,58 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{{");
             sb.AppendLine($"{ts}{ts}for(j = 0; j < FCMAX; ++j) ");
             sb.AppendLine($"{ts}{ts}{{");
-            sb.AppendLine($"{ts}{ts}{ts}TO_ontwerp[i][j]=TO_max[i][j];");
+            if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
+            {
+                sb.AppendLine($"{ts}{ts}{ts}#if defined CCOLTIG && !defined NO_TIGMAX");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}TIG_ontwerp[i][j] = TIG_max[i][j];");
+                sb.AppendLine($"{ts}{ts}{ts}#else");
+                sb.AppendLine($"{ts}{ts}{ts}{ts}TO_ontwerp[i][j] = TO_max[i][j];");
+                sb.AppendLine($"{ts}{ts}{ts}#end");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}{ts}{ts}TO_ontwerp[i][j] = TO_max[i][j];");
+            }
             sb.AppendLine($"{ts}{ts}}}");
             sb.AppendLine($"{ts}}}");
             sb.AppendLine();
+            if(c.InterSignaalGroep.Nalopen.Any(x => x.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen || x.Type == Models.Enumerations.NaloopTypeEnum.EindeGroen))
+            {
+                sb.AppendLine($"{ts}/* Fictieve ontwerp ontruimingstijden obv nalooptijden");
+                sb.AppendLine($"{ts}   - voor nalopen op CV of EG wordt TO_ontwerp gecorrigeerd */");
+                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => x.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen || x.Type == Models.Enumerations.NaloopTypeEnum.EindeGroen))
+                {
+                    var tnl = _tnleg;
+                    if (nl.Type == Models.Enumerations.NaloopTypeEnum.EindeGroen && nl.DetectieAfhankelijk) tnl = _tnlegd;
+                    else if (nl.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen && nl.DetectieAfhankelijk) tnl = _tnlcvd;
+                    else if (nl.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen) tnl = _tnlcv;
+                    var nlfc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseNaar);
+                    if (nlfc == null) continue;
+                    sb.AppendLine($"{ts}/* Fase {nl.FaseVan} en conflicten van naloop {nl.FaseNaar} */");
+                    if (c.Data.CCOLVersie >= Models.Enumerations.CCOLVersieEnum.CCOL9 && c.Data.Intergroen)
+                    {
+                        sb.AppendLine($"{ts}#if defined CCOLTIG && !defined NO_TIGMAX");
+                        foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
+                        {
+                            sb.AppendLine($"{ts}{ts}TIG_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TIG[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                        }
+                        sb.AppendLine($"{ts}#else");
+                        foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
+                        {
+                            sb.AppendLine($"{ts}{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                        }
+                        sb.AppendLine($"{ts}#endif");
+                    }
+                    else
+                    {
+                        foreach (var conf in c.InterSignaalGroep.Conflicten.Where(x => x.FaseVan == nlfc.Naam))
+                        {
+                            sb.AppendLine($"{ts}TO_ontwerp[{_fcpf}{nl.FaseVan}][{_fcpf}{conf.FaseNaar}] = TO[{_fcpf}{conf.FaseVan}][{_fcpf}{conf.FaseNaar}] + T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}];");
+                        }
+                    }
+                    sb.AppendLine();
+                }
+            }
             sb.AppendLine($"{ts}/* intitieer waarden TGV_rgv */");
             sb.AppendLine($"{ts}/* ------------------------- */");
             sb.AppendLine($"{ts}if(rgvinit)");

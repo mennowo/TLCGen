@@ -26,7 +26,11 @@
    mulv TVG_procentueel[FCMAX];    /* procentueel verlenggroentijd actueel en basis      */
 
 #ifdef TO_ONTWERPTIJD
-   mulv TO_ontwerp[FCMAX][FCMAX];  
+   #if defined CCOLTIG && !defined NO_TIGMAX
+      mulv TIG_ontwerp[FCMAX][FCMAX];
+   #else
+      mulv TO_ontwerp[FCMAX][FCMAX];
+   #endif
 #endif
 
 
