@@ -2,7 +2,7 @@
 
 namespace TLCGen.Messaging.Messages
 {
-    public class PeriodenChangedMessage
+    public class PeriodenChangedMessage : ModelManagerMessageBase
     {
     }
 }

@@ -113,6 +113,7 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged(string.Empty);
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                MessengerInstance.Send(new PeriodenChangedMessage());
             }
         }
 

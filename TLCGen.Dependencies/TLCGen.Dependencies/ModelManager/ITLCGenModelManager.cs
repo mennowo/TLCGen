@@ -12,6 +12,7 @@ namespace TLCGen.ModelManagement
         void InjectDefaultAction(Action<object, string> setDefaultsAction);
         bool CheckVersionOrder(ControllerModel controller);
         void CorrectModelByVersion(ControllerModel controller, string filename);
+        void PrepareModelForUI(ControllerModel controller);
         void ChangeNameOnObject(object obj, string oldName, string newName);
     }
 }
