@@ -303,6 +303,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     for (int i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
+                        if (!faseMetRgv.Detectoren.Any(x => x.Rijstrook == i)) continue;
                         sb.Append($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (");
                         var first = true;
                         foreach(var d in faseMetRgv.Detectoren.Where(x => x.Rijstrook == i))
