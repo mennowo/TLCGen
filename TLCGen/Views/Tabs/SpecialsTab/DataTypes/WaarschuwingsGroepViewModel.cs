@@ -41,6 +41,8 @@ namespace TLCGen.ViewModels
             {
                 _WaarschuwingsGroep.Bellen = value;
                 RaisePropertyChanged<object>("Bellen", broadcast: true);
+                // cause a check, so rtbel will be hidden or shown in the bitmap tab
+                MessengerInstance.Send(new Messaging.Messages.ModelManagerMessageBase());
             }
         }
 

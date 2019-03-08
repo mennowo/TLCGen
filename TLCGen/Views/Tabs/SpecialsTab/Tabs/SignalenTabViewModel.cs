@@ -137,6 +137,8 @@ namespace TLCGen.ViewModels
             {
                 AddPeriodToModel(PeriodeTypeEnum.BellenDimmen, "beldim");
             }
+
+            Messenger.Default.Send(new ModelManagerMessageBase());
         }
 
         bool AddWaarschuwingsGroepCommand_CanExecute(object prm)
@@ -156,6 +158,7 @@ namespace TLCGen.ViewModels
                 SelectedWaarschuwingsGroep = WaarschuwingsGroepen[id];
             }
             Messenger.Default.Send(new ControllerDataChangedMessage());
+            Messenger.Default.Send(new ModelManagerMessageBase());
             UpdateSelectables();
         }
 
@@ -207,8 +210,9 @@ namespace TLCGen.ViewModels
 	        if (_Controller.PeriodenData.Perioden.All(x => x.Type != PeriodeTypeEnum.RateltikkersDimmen))
 	        {
 		        AddPeriodToModel(PeriodeTypeEnum.RateltikkersDimmen, "rtdimmen");
-	        }
-		}
+            }
+            Messenger.Default.Send(new ModelManagerMessageBase());
+        }
 
         bool AddRatelTikkerCommand_CanExecute(object prm)
         {
@@ -235,6 +239,7 @@ namespace TLCGen.ViewModels
                 id2 = id2 >= SelectableRatelTikkerFasen.Count ? SelectableRatelTikkerFasen.Count - 1 : id2;
                 SelectedRatelTikkerFaseToAdd = SelectableRatelTikkerFasen[id2];
             }
+            Messenger.Default.Send(new ModelManagerMessageBase());
         }
 
         bool RemoveRatelTikkerCommand_CanExecute(object prm)

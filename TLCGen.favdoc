@@ -15,6 +15,16 @@
           <path>TLCGen.PluggedInItems\TLCGen.Generators.CCOL\CodeGeneration\Sources</path>
           <viewKind>Solution Explorer</viewKind>
         </Favorite>
+        <Favorite>
+          <name>TLCGen Models</name>
+          <path>TLCGen.Dependencies\TLCGen.Dependencies\Models\Models</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
+        <Favorite>
+          <name>TLCGen Tabs folder</name>
+          <path>TLCGen\Views\Tabs</path>
+          <viewKind>Solution Explorer</viewKind>
+        </Favorite>
       </favorites>
     </Folder>
   </folders>

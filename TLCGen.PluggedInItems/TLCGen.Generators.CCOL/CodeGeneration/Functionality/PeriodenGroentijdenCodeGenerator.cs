@@ -233,19 +233,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode rateltikkers altijd */");
                             sb.AppendLine($"{ts}/* ------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrt}] = ");
-                            foreach(var per in c.PeriodenData.Perioden)
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd))
                             {
-                                if(per.Type == PeriodeTypeEnum.RateltikkersAltijd)
+                                if (iperrt != 1)
                                 {
-                                    if(iperrt != 1)
-                                    {
-                                        sb.AppendLine(" || ");
-                                    }
-                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{iperrt}], ");
-                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrt}{iperrt}]) && ");
-                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{iperrt}]))");
-                                    iperrt++;
+                                    sb.AppendLine(" || ");
                                 }
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrt}{iperrt}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrt}{iperrt}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrt}{iperrt}]))");
+                                iperrt++;
                             }
                             sb.AppendLine(";");
                         }
@@ -255,19 +252,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode rateltikker op aanvraag */");
                             sb.AppendLine($"{ts}/* ----------------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrta}] = ");
-                            foreach (var per in c.PeriodenData.Perioden)
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag))
                             {
-                                if (per.Type == PeriodeTypeEnum.RateltikkersAanvraag)
+                                if (iperrta != 1)
                                 {
-                                    if (iperrta != 1)
-                                    {
-                                        sb.AppendLine(" || ");
-                                    }
-                                    sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{iperrta}], ");
-                                    sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrta}{iperrta}]) && ");
-                                    sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{iperrta}]))");
-                                    iperrta++;
+                                    sb.AppendLine(" || ");
                                 }
+                                sb.Append($"{ts}{ts}(klokperiode(PRM[{_prmpf}{_prmstkp}{_prmperrta}{iperrta}], ");
+                                sb.Append($"PRM[{_prmpf}{_prmetkp}{_prmperrta}{iperrta}]) && ");
+                                sb.Append($"dagsoort(PRM[{_prmpf}{_prmdckp}{_prmperrta}{iperrta}]))");
+                                iperrta++;
                             }
                             sb.AppendLine(";");
                         }
@@ -277,9 +271,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode rateltikker dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------------ */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperrtdim}] = ");
-                            foreach (var per in c.PeriodenData.Perioden)
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen))
                             {
-                                if (per.Type != PeriodeTypeEnum.RateltikkersDimmen) continue;
                                 if (iperrtdim != 1)
                                 {
                                     sb.AppendLine(" || ");
@@ -297,9 +290,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode bellen actief */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbel}] = ");
-                            foreach (var per in c.PeriodenData.Perioden)
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenActief))
                             {
-                                if (per.Type != PeriodeTypeEnum.RateltikkersAanvraag) continue;
                                 if (iperbel != 1)
                                 {
                                     sb.AppendLine(" || ");
@@ -317,9 +309,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                             sb.AppendLine($"{ts}/* klokperiode bellen dimmen */");
                             sb.AppendLine($"{ts}/* ------------------------- */");
                             sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{_prmperbeldim}] = ");
-                            foreach (var per in c.PeriodenData.Perioden)
+                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.BellenDimmen))
                             {
-                                if (per.Type != PeriodeTypeEnum.RateltikkersAanvraag) continue;
                                 if (iperbeldim != 1)
                                 {
                                     sb.AppendLine(" || ");

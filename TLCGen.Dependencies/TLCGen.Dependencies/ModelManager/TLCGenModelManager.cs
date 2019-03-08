@@ -95,6 +95,7 @@ namespace TLCGen.ModelManagement
         public void PrepareModelForUI(ControllerModel controller)
         {
             // set signalen bitmap items availability
+            controller.Signalen.ControllerHasPeriodRtAanvraag = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAanvraag);
             controller.Signalen.ControllerHasPeriodRtAltijd = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd);
             controller.Signalen.ControllerHasPeriodRtDimmen = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen);
             controller.Signalen.ControllerHasPeriodBellenDimmen= controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen);
@@ -373,11 +374,9 @@ namespace TLCGen.ModelManagement
 
         public void OnModelManagerMessage(ModelManagerMessageBase msg)
         {
+            PrepareModelForUI(Controller);
             switch (msg)
             {
-                case PeriodenChangedMessage periodenMsg:
-                    PrepareModelForUI(Controller);
-                    break;
                 case OVIngreepMeldingChangedMessage meldingMsg:
                     var ovi = Controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == meldingMsg.FaseCyclus);
                     if (ovi != null && meldingMsg.MeldingType == OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding)
