@@ -101,7 +101,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#ifdef PTP_{k.TeKoppelenKruispunt}PORT");
                 sb.AppendLine($"{ts}{ts}/* ptp-parameters t.b.v. koppeling met PTP_{k.TeKoppelenKruispunt} */");
                 sb.AppendLine($"{ts}{ts}/* ----------------------------------------- */");
-                sb.AppendLine($"{ts}#if (defined AUTOMAAT || defined AUTOMAAT_TEST)");
+                sb.AppendLine($"{ts}#if (defined AUTOMAAT)");
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerAutomaatOmgeving};        /* poortnummer in het regeltoestel     */  /* @ door fabrikant aanpassen */");
                 sb.AppendLine($"{ts}#else");
                 sb.AppendLine($"{ts}{ts}PTP_{k.TeKoppelenKruispunt}.PORTNR = {k.PortnummerSimuatieOmgeving};        /* poortnr. testomgeving (schrijvend) */ /* @ nummer van KS-buffer */");

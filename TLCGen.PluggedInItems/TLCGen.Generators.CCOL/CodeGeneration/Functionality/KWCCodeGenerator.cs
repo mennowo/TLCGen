@@ -30,7 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCIncludes:
                     if(c.Data.KWCType == Models.Enumerations.KWCTypeEnum.Vialis)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                        sb.AppendLine($"#if (!defined AUTOMAAT)");
                         sb.AppendLine($"{ts}#include \"pi_ccol.h\"");
                         sb.AppendLine($"#else");
                         sb.AppendLine($"{ts}#include \"pi_ccol.c\"");
@@ -38,7 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     else if (c.Data.KWCType != Models.Enumerations.KWCTypeEnum.Geen)
                     {
-                        sb.AppendLine($"#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                        sb.AppendLine($"#if (!defined AUTOMAAT)");
                         sb.AppendLine($"{ts}#include \"mv_ccol.h\"");
                         sb.AppendLine($"#else");
                         sb.AppendLine($"{ts}#include \"mv_ccol.c\"");

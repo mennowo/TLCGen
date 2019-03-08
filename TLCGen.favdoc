@@ -2,59 +2,17 @@
 <Favorites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <folders>
     <Folder>
-      <name>ViewModels</name>
-      <folders />
-      <favorites>
-        <Favorite>
-          <name>MainWindowViewModel.cs</name>
-          <path>TLCGen\ViewModels\MainWindowViewModel.cs</path>
-          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen\ViewModels\MainWindowViewModel.cs</absolutePath>
-        </Favorite>
-        <Favorite>
-          <name>ControllerViewModel.cs</name>
-          <path>TLCGen.ViewModels\ControllerViewModel.cs</path>
-          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.ViewModels\ControllerViewModel.cs</absolutePath>
-        </Favorite>
-      </favorites>
-    </Folder>
-    <Folder>
-      <name>Settings</name>
-      <folders />
-      <favorites>
-        <Favorite>
-          <name>tlcgendefaultdefaults.xml</name>
-          <path>TLCGen.Settings\Settings\tlcgendefaultdefaults.xml</path>
-          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Settings\Settings\tlcgendefaultdefaults.xml</absolutePath>
-        </Favorite>
-        <Favorite>
-          <name>tlcgendefaulttemplates.xml</name>
-          <path>TLCGen.Settings\Settings\tlcgendefaulttemplates.xml</path>
-          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Settings\Settings\tlcgendefaulttemplates.xml</absolutePath>
-        </Favorite>
-        <Favorite>
-          <name>ccolgendefaults.xml</name>
-          <path>TLCGen.Generators.CCOL\Settings\ccolgendefaults.xml</path>
-          <absolutePath>C:\Users\NL33478\Documents\Ontwikkeling\TLCGen\TLCGen.Generators.CCOL\Settings\ccolgendefaults.xml</absolutePath>
-        </Favorite>
-      </favorites>
-    </Folder>
-    <Folder>
       <name>Links</name>
       <folders />
       <favorites>
         <Favorite>
-          <name>TLCGen.Views</name>
-          <path>TLCGen\Views</path>
+          <name>CCOLGen Functionality folder</name>
+          <path>TLCGen.PluggedInItems\TLCGen.Generators.CCOL\CodeGeneration\Functionality</path>
           <viewKind>Solution Explorer</viewKind>
         </Favorite>
         <Favorite>
-          <name>TLCGen.Generators.CodeGeneration</name>
-          <path>TLCGen.Generators\TLCGen.Generators.CCOL\CodeGeneration</path>
-          <viewKind>Solution Explorer</viewKind>
-        </Favorite>
-        <Favorite>
-          <name>TLCGen.Models</name>
-          <path>TLCGen.Models\Models</path>
+          <name>CCOLGen GenSources folder</name>
+          <path>TLCGen.PluggedInItems\TLCGen.Generators.CCOL\CodeGeneration\Sources</path>
           <viewKind>Solution Explorer</viewKind>
         </Favorite>
       </favorites>
