@@ -63,6 +63,7 @@
             <Directory Id="VISUALTEMPLATESFOLDER" Name="VisualTemplates" />
           </Directory>
           <Directory Id="CCOLSOURCEFILESFOLDER" Name="SourceFiles" />
+          <Directory Id="CCOLDOCSFOLDER" Name="Docs" />
           <Directory Id="CCOLSOURCEFILESTOCOPYFOLDER" Name="SourceFilesToCopy" />
         </Directory>
 			</Directory>
@@ -155,6 +156,11 @@
         <File Id="VisualTemplate2017filters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_filters.xml" />
         <File Id="VisualTemplate2017vissim" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim.xml" />
         <File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLDOCSFOLDER">
+      <Component Id='AllCCOLSources' Guid='343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9'>
+        <File Id="fildocD3B88A5E78E73E3F80CF84F42E47C" KeyPath="no" Source="$(var.ReleaseDir)\Docs\BITSturing.ods" />
       </Component>
     </ComponentGroup>
     <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLSOURCEFILESFOLDER">
