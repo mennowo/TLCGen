@@ -55,7 +55,7 @@ namespace TLCGen.UnitTests
         {
             var _modelmanager = Substitute.For<ITLCGenModelManager>();
             _modelmanager.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, "")
-                .ReturnsForAnyArgs(x => TLCGenIntegrityChecker.IsElementNaamUnique(m, (string)x[1]));
+                .ReturnsForAnyArgs(x => TLCGenIntegrityChecker.IsElementNaamUnique(m, (string)x[1], TLCGenObjectTypeEnum.Fase));
             return _modelmanager;
         }
 
