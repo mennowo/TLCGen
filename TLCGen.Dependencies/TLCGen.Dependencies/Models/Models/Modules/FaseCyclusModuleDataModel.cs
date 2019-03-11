@@ -1,9 +1,10 @@
 ﻿using System;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class FaseCyclusModuleDataModel : IComparable
     {
         #region Properties

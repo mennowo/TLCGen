@@ -4,7 +4,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class HardMeeverlengenFaseCyclusModel
     {
         [HasDefault(false)]

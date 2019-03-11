@@ -12,7 +12,7 @@ namespace TLCGen.Plugins.RIS.Models
         public int Snelheid { get; set; }
         public int Afstand { get; set; }
         public DetectorSimulatieModel SimulationData { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }

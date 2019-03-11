@@ -1,14 +1,11 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("Detector")]
+    [RefersTo(TLCGenObjectTypeEnum.Detector, "Detector")]
     public class RoBuGroverFileDetectorModel
     {
         [Browsable(false)]

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Xml.Serialization;
-using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -13,7 +12,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string KruisingNaam { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string GekoppeldeSignaalGroep { get; set; }
 
@@ -29,7 +28,7 @@ namespace TLCGen.Models
         public bool AutoIngangsSignalen { get; set; }
         public int IngangsSignaalFG { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
         [HasDefault(false)]
         public string PTPKruising { get; set; }
 
@@ -55,7 +54,7 @@ namespace TLCGen.Models
 
     public class PelotonKoppelingDetectorModel
     {
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         public string DetectorNaam { get; set; }
         public int KoppelSignaal { get; set; }
     }

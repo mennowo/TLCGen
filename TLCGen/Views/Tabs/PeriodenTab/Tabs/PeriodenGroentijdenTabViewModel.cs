@@ -342,7 +342,7 @@ namespace TLCGen.ViewModels
 
             foreach (var per in items)
             {
-                if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, per.Naam)))
+                if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, per.Naam, TLCGenObjectTypeEnum.Periode)))
                 {
                     MessageBox.Show("Error bij toevoegen van periode met naam " + per.Naam + ".\nNaam van de periode is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class OVIngreepSignaalGroepParametersModel : IComparable
     {
         #region Properties

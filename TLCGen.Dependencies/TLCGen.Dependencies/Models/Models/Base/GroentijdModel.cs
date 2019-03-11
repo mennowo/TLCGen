@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class GroentijdModel : IComparable
     {
         #region Properties

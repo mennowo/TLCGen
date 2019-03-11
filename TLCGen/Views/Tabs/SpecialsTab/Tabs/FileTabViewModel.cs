@@ -5,6 +5,7 @@ using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins;
 using TLCGen.Settings;
 
@@ -84,7 +85,7 @@ namespace TLCGen.ViewModels
             DefaultsProvider.Default.SetDefaultsOnModel(fim);
             int i = FileIngrepen.Count + 1;
             fim.Naam = "File" + i.ToString();
-            while(!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam))
+            while(!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fim.Naam, TLCGenObjectTypeEnum.FileIngreep))
             {
                 ++i;
                 fim.Naam = "File" + i.ToString();

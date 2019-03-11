@@ -244,7 +244,7 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         private void OnNameChanged(NameChangedMessage message)
         {
-            ModelManagement.TLCGenModelManager.Default.ChangeNameOnObject(_model, message.OldName, message.NewName);
+            ModelManagement.TLCGenModelManager.Default.ChangeNameOnObject(_model, message.OldName, message.NewName, message.ObjectType);
             foreach (var mfc in DynamischHiaatSignalGroups) mfc.DynamischHiaatDetectoren.BubbleSort();
             RaisePropertyChanged("");
         }

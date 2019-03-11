@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("Naam")]
+    [RefersTo(TLCGenObjectTypeEnum.Detector, "Naam")]
     [IOElement("", BitmappedItemTypeEnum.Detector, "Naam")]
     public class DetectorModel : IOElementModel, IComparable, IHaveName
     {

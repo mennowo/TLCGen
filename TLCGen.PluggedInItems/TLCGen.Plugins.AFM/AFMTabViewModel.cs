@@ -107,7 +107,7 @@ namespace TLCGen.Plugins.AFM
         {
             if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
             {
-                TLCGenModelManager.Default.ChangeNameOnObject(AfmModel, msg.OldName, msg.NewName);
+                TLCGenModelManager.Default.ChangeNameOnObject(AfmModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
                 AFMFasen.Rebuild();
                 AFMFasen.BubbleSort();
             }

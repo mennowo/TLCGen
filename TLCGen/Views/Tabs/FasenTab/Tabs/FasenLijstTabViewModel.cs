@@ -360,8 +360,8 @@ namespace TLCGen.ViewModels
 
             foreach (var fc in items)
             {
-                if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fc.Naam) &&
-                     (fc.Detectoren.Count == 0 || fc.Detectoren.All(x => TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, x.Naam) != false))))
+                if (!(TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, fc.Naam, TLCGenObjectTypeEnum.Fase) &&
+                     (fc.Detectoren.Count == 0 || fc.Detectoren.All(x => TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, x.Naam, TLCGenObjectTypeEnum.Detector) != false))))
                 {
                     MessageBox.Show("Error bij toevoegen van fase met naam " + fc.Naam + ".\nFase en/of bijbehorende detectie is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

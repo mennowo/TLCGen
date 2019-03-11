@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class HDIngreepMeerealiserendeFaseCyclusModel : IComparable
     {
         [XmlText]

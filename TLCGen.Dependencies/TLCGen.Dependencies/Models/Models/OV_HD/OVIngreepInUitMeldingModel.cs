@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using TLCGen.Helpers;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -13,13 +11,13 @@ namespace TLCGen.Models
         public OVIngreepInUitMeldingTypeEnum InUit { get; set; }
         public OVIngreepInUitMeldingVoorwaardeTypeEnum Type { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
         public string RelatedInput1 { get; set; }
         public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput1Type { get; set; }
 
         public bool TweedeInput { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
         public string RelatedInput2 { get; set; }
         public OVIngreepInUitMeldingVoorwaardeInputTypeEnum RelatedInput2Type { get; set; }

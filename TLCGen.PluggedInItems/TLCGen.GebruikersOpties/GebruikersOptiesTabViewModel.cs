@@ -211,7 +211,13 @@ namespace TLCGen.GebruikersOpties
                     ++i;
                 }
 
-                if(index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count)
+                switch (OptiesNames[SelectedTabIndex])
+                {
+                    case "us": o.ObjectType = TLCGenObjectTypeEnum.Output; break;
+                    case "is": o.ObjectType = TLCGenObjectTypeEnum.Input; break;
+                }
+
+                if (index > 0 && index < ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count)
                     ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Insert(index, o);
                 else
                     ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Add(o);
@@ -248,8 +254,6 @@ namespace TLCGen.GebruikersOpties
 
                 switch (OptiesNames[SelectedTabIndex])
                 {
-                    case "us": o.ObjectType = TLCGenObjectTypeEnum.Output; break;
-                    case "is": o.ObjectType = TLCGenObjectTypeEnum.Input; break;
                     case "h": o.ObjectType = TLCGenObjectTypeEnum.CCOLHelpElement; break;
                     case "t": o.ObjectType = TLCGenObjectTypeEnum.CCOLTimer; break;
                     case "c": o.ObjectType = TLCGenObjectTypeEnum.CCOLCounter; break;
@@ -521,11 +525,11 @@ namespace TLCGen.GebruikersOpties
             var o = SelectedOptie as GebruikersOptieViewModel;
             if (oio != null)
             {
-                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, oio.Naam, oio.ObjectType);
             }
             else
             {
-                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, o.Naam);
+                return TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, o.Naam, o.ObjectType);
             }
         }
 
@@ -561,14 +565,14 @@ namespace TLCGen.GebruikersOpties
             _AlleOpties[GeheugenElementenConst] = GeheugenElementen;
             _AlleOpties[ParametersConst] = Parameters;
 
-            foreach (var op in Uitgangen) op.PropertyChanged += Optie_PropertyChanged;
-            foreach (var ip in Ingangen) ip.PropertyChanged += Optie_PropertyChanged;
-            foreach (var he in HulpElementen) he.PropertyChanged += Optie_PropertyChanged;
-            foreach (var ti in Timers) ti.PropertyChanged += Optie_PropertyChanged;
-            foreach (var ct in Counters) ct.PropertyChanged += Optie_PropertyChanged;
-            foreach (var sch in Schakelaars) sch.PropertyChanged += Optie_PropertyChanged;
-            foreach (var me in GeheugenElementen) me.PropertyChanged += Optie_PropertyChanged;
-            foreach (var prm in Parameters) prm.PropertyChanged += Optie_PropertyChanged;
+            foreach (var op in Uitgangen) { op.PropertyChanged += Optie_PropertyChanged; op.ObjectType = TLCGenObjectTypeEnum.Output; }
+            foreach (var ip in Ingangen) { ip.PropertyChanged += Optie_PropertyChanged; ip.ObjectType = TLCGenObjectTypeEnum.Input; }
+            foreach (var he in HulpElementen) { he.PropertyChanged += Optie_PropertyChanged; he.ObjectType = TLCGenObjectTypeEnum.CCOLHelpElement; }
+            foreach (var ti in Timers) { ti.PropertyChanged += Optie_PropertyChanged; ti.ObjectType = TLCGenObjectTypeEnum.CCOLTimer; }
+            foreach (var ct in Counters) { ct.PropertyChanged += Optie_PropertyChanged; ct.ObjectType = TLCGenObjectTypeEnum.CCOLCounter; }
+            foreach (var sch in Schakelaars) { sch.PropertyChanged += Optie_PropertyChanged; sch.ObjectType = TLCGenObjectTypeEnum.CCOLSchakelaar; }
+            foreach (var me in GeheugenElementen) { me.PropertyChanged += Optie_PropertyChanged; me.ObjectType = TLCGenObjectTypeEnum.CCOLMemoryElement; }
+            foreach (var prm in Parameters) { prm.PropertyChanged += Optie_PropertyChanged; prm.ObjectType = TLCGenObjectTypeEnum.CCOLParameter; }
         }
 
         #endregion // Private Methods
@@ -771,16 +775,16 @@ namespace TLCGen.GebruikersOpties
             return items;
         }
 
-        public bool IsElementNameUnique(string name)
+        public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
         {
-            foreach(var o in Uitgangen) { if (o.Naam == name) return false; }
-            foreach(var o in Ingangen) { if (o.Naam == name) return false; }
-            foreach(var o in HulpElementen) { if (o.Naam == name) return false; }
-            foreach(var o in Timers) { if (o.Naam == name) return false; }
-            foreach(var o in Counters) { if (o.Naam == name) return false; }
-            foreach(var o in Schakelaars) { if (o.Naam == name) return false; }
-            foreach(var o in GeheugenElementen) { if (o.Naam == name) return false; }
-            foreach(var o in Parameters) { if (o.Naam == name) return false; }
+            foreach(var o in Uitgangen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in Ingangen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in HulpElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in Timers) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in Counters) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in Schakelaars) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in GeheugenElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach(var o in Parameters) { if (o.Naam == name && o.ObjectType == type) return false; }
             return true;
         }
 

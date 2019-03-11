@@ -1,15 +1,13 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.ComponentModel;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("FaseCyclus")]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
     public class RoBuGroverFaseCyclusInstellingenModel
     {
         #region Properties

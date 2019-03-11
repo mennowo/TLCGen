@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo("Detector")]
+    [RefersTo(TLCGenObjectTypeEnum.Detector, "Detector")]
     public class VAOntruimenDetectorModel
     {
         [XmlArrayItem(ElementName = "ConflictendeFase")]

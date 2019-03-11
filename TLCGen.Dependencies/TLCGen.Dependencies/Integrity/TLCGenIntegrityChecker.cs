@@ -142,16 +142,16 @@ namespace TLCGen.Integrity
         /// </summary>
         /// <param name="naam">The Name property to check</param>
         /// <returns>True if unique, false if not</returns>
-        public static bool IsElementNaamUnique(ControllerModel _Controller, string naam)
+        public static bool IsElementNaamUnique(ControllerModel _Controller, string naam, TLCGenObjectTypeEnum type)
         {
             foreach (var pl in Plugins.TLCGenPluginManager.Default.ApplicationPlugins.Where(x => x.Item1.HasFlag(Plugins.TLCGenPluginElems.IOElementProvider)))
             {
-                if (!((Plugins.ITLCGenElementProvider)pl.Item2).IsElementNameUnique(naam)) return false;
+                if (!((Plugins.ITLCGenElementProvider)pl.Item2).IsElementNameUnique(naam, type)) return false;
             }
-            return IsElementNaamUnique((object)_Controller, naam);
+            return IsElementNaamUnique((object)_Controller, naam, type);
         }
 
-        private static bool IsElementNaamUnique(object obj, string naam)
+        private static bool IsElementNaamUnique(object obj, string naam, TLCGenObjectTypeEnum type)
         {
             if (obj == null || string.IsNullOrWhiteSpace(naam))
                 return true;
@@ -165,8 +165,9 @@ namespace TLCGen.Integrity
                 {
                     var attr = property.GetCustomAttributes(typeof(ModelNameAttribute), true);
                     if (attr.Length != 1) continue;
+                    var mnAttr = (ModelNameAttribute)attr.First();
                     var propString = (string) propValue;
-                    if (propString == naam)
+                    if (propString == naam && mnAttr.Type == type)
                     {
                         return false;
                     }
@@ -175,14 +176,14 @@ namespace TLCGen.Integrity
                 {
                     if (propValue is IList elems)
                     {
-                        if (elems.Cast<object>().Any(item => !IsElementNaamUnique(item, naam)))
+                        if (elems.Cast<object>().Any(item => !IsElementNaamUnique(item, naam, type)))
                         {
                             return false;
                         }
                     }
                     else
                     {
-                        if(!IsElementNaamUnique(propValue, naam))
+                        if(!IsElementNaamUnique(propValue, naam, type))
                         {
                             return false;
                         }

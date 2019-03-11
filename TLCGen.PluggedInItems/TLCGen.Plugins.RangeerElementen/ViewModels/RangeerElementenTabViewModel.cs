@@ -144,7 +144,7 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
         {
             if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Detector)
             {
-                TLCGenModelManager.Default.ChangeNameOnObject(RangeerElementenModel, msg.OldName, msg.NewName);
+                TLCGenModelManager.Default.ChangeNameOnObject(RangeerElementenModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Detector);
                 RangeerElementen.Rebuild();
             }
         }

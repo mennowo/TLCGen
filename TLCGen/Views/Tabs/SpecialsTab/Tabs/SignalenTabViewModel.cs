@@ -118,7 +118,7 @@ namespace TLCGen.ViewModels
             var grm = new WaarschuwingsGroepModel();
             int i = WaarschuwingsGroepen.Count + 1;
             grm.Naam = "groep" + i;
-            while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, grm.Naam))
+            while (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, grm.Naam, TLCGenObjectTypeEnum.WaarschuwingsGroep))
             {
                 ++i;
                 grm.Naam = "groep" + i;

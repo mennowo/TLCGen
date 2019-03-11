@@ -1,9 +1,10 @@
 ﻿using System;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
 	[Serializable]
-	[RefersTo("Periode")]
+	[RefersTo(TLCGenObjectTypeEnum.Periode, "Periode")]
 	public class HalfstarPeriodeDataModel
 	{
 		#region Properties

@@ -15,20 +15,20 @@ namespace TLCGen.Models
         [XmlArrayItem("Uitmelding")]
         public List<OVIngreepInUitMeldingModel> Uitmeldingen { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
         public string Wissel1Input { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [HasDefault(false)]
         public string Wissel2Detector { get; set; }
         public bool Wissel1 { get; set; }
         public OVIngreepInUitDataWisselTypeEnum Wissel1Type { get; set; }
         public bool Wissel1InputVoorwaarde { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Input)]
         [HasDefault(false)]
         public string Wissel2Input { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [HasDefault(false)]
         public string Wissel1Detector { get; set; }
         public bool Wissel2 { get; set; }

@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.RIS.Models
 {
     [Serializable]
     public class RISLaneExtendDataModel
     {
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
         public int RijstrookIndex { get; set; }
         public bool RISVerlengen { get; set; }

@@ -280,7 +280,7 @@ namespace TLCGen.Plugins.RIS
         {
             if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
             {
-                TLCGenModelManager.Default.ChangeNameOnObject(RISModel, msg.OldName, msg.NewName);
+                TLCGenModelManager.Default.ChangeNameOnObject(RISModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
                 RISFasen.Rebuild();
                 RISFasen.BubbleSort();
             }

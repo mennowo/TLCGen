@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -10,6 +9,7 @@ using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins.RIS.Models;
 
 namespace TLCGen.Plugins.RIS
@@ -188,7 +188,7 @@ namespace TLCGen.Plugins.RIS
             return items;
         }
 
-        public bool IsElementNameUnique(string name)
+        public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
         {
             return true;
         }

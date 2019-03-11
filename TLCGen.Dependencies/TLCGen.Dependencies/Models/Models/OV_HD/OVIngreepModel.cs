@@ -7,7 +7,7 @@ using TLCGen.Models.Enumerations;
 namespace TLCGen.Models
 {
     [Serializable]
-    [RefersTo(nameof(FaseCyclus))]
+    [RefersTo(TLCGenObjectTypeEnum.Fase, nameof(FaseCyclus))]
     public class OVIngreepModel : IComparable
     {
         #region Properties
@@ -25,7 +25,7 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum VersneldeInmeldingKoplus { get; set; }
         public bool NoodaanvraagKoplus { get; set; }
         public bool KoplusKijkNaarWisselstand { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         [HasDefault(false)]
         public string Koplus { get; set; }
 

@@ -1,14 +1,15 @@
 ﻿using System;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.DynamischHiaat.Models
 {
     [Serializable]
     public class DynamischHiaatDetectorModel
     {
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         public string DetectorName { get; set; }
 
         public int Moment1 { get; set; }

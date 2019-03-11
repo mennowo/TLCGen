@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
     public class DetectorSimulatieModel
     {
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Detector)]
         public string RelatedName { get; set; }
         public int Q1 { get; set; }
         public int Q2 { get; set; }

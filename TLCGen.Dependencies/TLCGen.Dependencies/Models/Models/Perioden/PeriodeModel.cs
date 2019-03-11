@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
     [Serializable]
-	[RefersTo("Naam")]
+	[RefersTo(TLCGenObjectTypeEnum.Periode, "Naam")]
     public class PeriodeModel : IHaveName
     {
         #region Properties

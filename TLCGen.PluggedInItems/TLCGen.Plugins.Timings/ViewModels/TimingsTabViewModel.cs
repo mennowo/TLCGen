@@ -99,7 +99,7 @@ namespace TLCGen.Plugins.Timings
         {
             if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
             {
-                TLCGenModelManager.Default.ChangeNameOnObject(TimingsModel, msg.OldName, msg.NewName);
+                TLCGenModelManager.Default.ChangeNameOnObject(TimingsModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
                 TimingsFasen.Rebuild();
                 TimingsFasen.BubbleSort();
             }

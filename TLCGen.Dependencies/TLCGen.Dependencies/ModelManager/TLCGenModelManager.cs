@@ -207,7 +207,7 @@ namespace TLCGen.ModelManagement
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)
         {
-            if(!vissim) return TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier);
+            if(!vissim) return TLCGenIntegrityChecker.IsElementNaamUnique(Controller, identifier, objectType);
             return TLCGenIntegrityChecker.IsElementVissimNaamUnique(Controller, identifier);
         }
 
@@ -312,11 +312,11 @@ namespace TLCGen.ModelManagement
 
         private void OnNameChanging(NameChangingMessage msg)
         {
-            ChangeNameOnObject(Controller, msg.OldName, msg.NewName);
+            ChangeNameOnObject(Controller, msg.OldName, msg.NewName, msg.ObjectType);
             MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
         }
 
-        public void ChangeNameOnObject(object obj, string oldName, string newName)
+        public void ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType)
         {
             if (obj == null) return;
             Type objType = obj.GetType();
@@ -334,9 +334,9 @@ namespace TLCGen.ModelManagement
                 {
                     // if this is the referent string, set it if needed
                     if (refToAttr != null &&
-                        (property.Name == refToAttr.ReferProperty1 || 
-                         property.Name == refToAttr.ReferProperty2 ||
-                         property.Name == refToAttr.ReferProperty3))
+                        (property.Name == refToAttr.ReferProperty1 && objectType == refToAttr.ObjectType1 || 
+                         property.Name == refToAttr.ReferProperty2 && objectType == refToAttr.ObjectType2 ||
+                         property.Name == refToAttr.ReferProperty3 && objectType == refToAttr.ObjectType3))
                     {
                         if ((string)propValue == oldName)
                         {
@@ -361,13 +361,13 @@ namespace TLCGen.ModelManagement
                 {
                     foreach (var item in elems)
                     {
-                        ChangeNameOnObject(item, oldName, newName);
+                        ChangeNameOnObject(item, oldName, newName, objectType);
                     }
                 }
                 // for objects
                 else if(!property.PropertyType.IsValueType)
                 {
-                    ChangeNameOnObject(propValue, oldName, newName);
+                    ChangeNameOnObject(propValue, oldName, newName, objectType);
                 }
             }
         }

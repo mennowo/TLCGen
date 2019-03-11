@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
@@ -14,7 +10,7 @@ namespace TLCGen.Models
         public BitmapCoordinatenDataModel BitmapData { get; set; }
 
         private string _Naam;
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Module)]
         [HasDefault(false)]
         public string Naam
         {

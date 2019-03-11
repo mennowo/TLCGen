@@ -397,7 +397,7 @@ namespace TLCGen.ViewModels
 
             foreach (var d in items)
             {
-                if (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, d.Naam))
+                if (!Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_Controller, d.Naam, TLCGenObjectTypeEnum.Detector))
                 {
                     MessageBox.Show("Error bij toevoegen van detector met naam " + d.Naam + ".\nDe detector naam is niet uniek in de regeling.", "Error bij toepassen template");
                     return;

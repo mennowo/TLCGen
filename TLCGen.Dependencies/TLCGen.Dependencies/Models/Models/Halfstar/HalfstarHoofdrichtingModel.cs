@@ -1,9 +1,10 @@
 ﻿using System;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
 	[Serializable]
-	[RefersTo(nameof(FaseCyclus))]
+	[RefersTo(TLCGenObjectTypeEnum.Fase, nameof(FaseCyclus))]
 	public class HalfstarHoofdrichtingModel
 	{
 		#region Properties

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Plugins.RIS.Models
 {
@@ -10,7 +11,7 @@ namespace TLCGen.Plugins.RIS.Models
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }
 
-        [RefersTo]
+        [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }
 
         public List<RISFaseCyclusLaneSimulatedStationModel> SimulatedStations { get; set; }

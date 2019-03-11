@@ -10,6 +10,7 @@ using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Helpers;
 using TLCGen.Models;
+using TLCGen.Models.Enumerations;
 using TLCGen.Plugins.Timings.Models;
 
 namespace TLCGen.Plugins.Timings
@@ -170,7 +171,7 @@ namespace TLCGen.Plugins.Timings
             return new List<IOElementModel>();
         }
 
-        public bool IsElementNameUnique(string name)
+        public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
         {
             return true;
         }
