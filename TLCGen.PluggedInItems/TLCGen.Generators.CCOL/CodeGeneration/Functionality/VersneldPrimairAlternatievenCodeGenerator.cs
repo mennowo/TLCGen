@@ -291,11 +291,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                        var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
-                        var yes = false;
-                        foreach (var r in molens)
-                        {
-                            foreach (var gs in gelijkstarttuples.Where(x => r.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                            var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                            var yes = false;
+                            foreach (var gs in gelijkstarttuples)
                             {
                                 if (gs.Item2.Count > 1)
                                 {
@@ -322,23 +320,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 sb.AppendLine();
                             }
-                        }
 
-                        foreach (var r in molens)
-                        {
-                            foreach (var fc in r.FasenModuleData)
+                            foreach (var fc in c.ModuleMolen.FasenModuleData)
                             {
                                 sb.AppendLine(
                                     $"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
                             }
-                        }
-                        sb.AppendLine();
+                            sb.AppendLine();
 
-                        var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
+                            var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
 
-                        foreach (var r in molens)
-                        {
-                            foreach (var fc in r.FasenModuleData)
+                            foreach (var fc in c.ModuleMolen.FasenModuleData)
                             {
                                 Tuple<string, List<string>> hasgs = null;
                                 foreach (var gs in gelijkstarttuples)
@@ -370,17 +362,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
                             }
-                        }
-                        sb.AppendLine();
+                            sb.AppendLine();
 
-                        if (c.InterSignaalGroep.Nalopen.Count > 0)
-                        {
-                            var tnl = "";
-
-                            sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
-                            foreach (var r in molens)
+                            if (c.InterSignaalGroep.Nalopen.Count > 0)
                             {
-                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => r.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                var tnl = "";
+
+                                sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
+                                foreach (var nl in c.InterSignaalGroep.Nalopen)
                                 {
                                     #region Get naloop type timer
                                     tnl = "";
@@ -420,24 +409,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine(
                                         $"{ts}PAR[{_fcpf}{nl.FaseVan}] = PAR[{_fcpf}{nl.FaseVan}] && (({maxtartotig}({_fcpf}{nl.FaseNaar}) >= T_max[{_tpf}{tnl}{nl.FaseVan}{nl.FaseNaar}]) || G[{_fcpf}{nl.FaseVan}] || !A[{_fcpf}{nl.FaseNaar}]);");
                                 }
-                            }
-                            sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Verzorgen PAR voor naloop richtingen */");
-                            foreach (var r in molens)
-                            {
-                                foreach (var nl in c.InterSignaalGroep.Nalopen.Where(x => r.FasenModuleData.Any(x2 => x2.FaseCyclus == x.FaseVan)))
+                                sb.AppendLine();
+                                sb.AppendLine($"{ts}/* Verzorgen PAR voor naloop richtingen */");
+                                foreach (var nl in c.InterSignaalGroep.Nalopen)
                                 {
                                     sb.AppendLine(
                                         $"{ts}PAR[{_fcpf}{nl.FaseNaar}] = PAR[{_fcpf}{nl.FaseNaar}] || RA[{_fcpf}{nl.FaseVan}] || FG[{_fcpf}{nl.FaseVan}];");
                                 }
+                                sb.AppendLine();
                             }
-                            sb.AppendLine();
-                        }
 
-                        yes = false;
-                        foreach (var r in molens)
-                        {
-                            foreach (var gs in gelijkstarttuples.Where(x => r.FasenModuleData.Any(x2 => x2.FaseCyclus == x.Item1)))
+                            yes = false;
+                            foreach (var gs in gelijkstarttuples)
                             {
                                 if (gs.Item2.Count > 1)
                                 {
@@ -454,46 +437,43 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine(";");
                                 }
                             }
-                        }
-                        if (yes)
-                        {
-                            sb.AppendLine();
-                        }
-
-                        yes = false;
-                        foreach (var fcm in c.Fasen)
-                        {
-                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                            if (yes)
                             {
-                                foreach (var r in molens)
-                                {
-                                    var fm = c.FileIngrepen.FirstOrDefault(
-                                        x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam && r.FasenModuleData.Any(x3 => x3.FaseCyclus == x2.FaseCyclus)));
-                                    if (fm != null)
-                                    {
-                                        if (!yes)
-                                        {
-                                            yes = true;
-                                            sb.AppendLine();
-                                            sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
-                                        }
+                                sb.AppendLine();
+                            }
 
-                                        sb.AppendLine(
-                                            $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                            yes = false;
+                            foreach (var fcm in c.Fasen)
+                            {
+                                if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                                {
+                                    {
+                                        var fm = c.FileIngrepen.FirstOrDefault(
+                                            x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
+                                        if (fm != null)
+                                        {
+                                            if (!yes)
+                                            {
+                                                yes = true;
+                                                sb.AppendLine();
+                                                sb.AppendLine($"{ts}/* Niet alternatief komen tijdens file */");
+                                            }
+                                            sb.AppendLine(
+                                                $"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) PAR[{_fcpf}{fcm.Naam}] = FALSE;");
+                                        }
                                     }
                                 }
                             }
-                        }
-                        if (yes)
-                        {
-                            sb.AppendLine();
-                        }
+                            if (yes)
+                            {
+                                sb.AppendLine();
+                            }
 
-                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
-                        {
-                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
-                            sb.AppendLine();
-                        }
+                            foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
+                            {
+                                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
+                                sb.AppendLine();
+                            }
 
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         if (c.HalfstarData.IsHalfstar)
@@ -534,16 +514,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 {
                                                     new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc,
                                                         mlfc)
-                                                });
-                                        }
-                                        else
-                                        {
-                                            altdict[amlfc.FaseCyclus].Add(new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc));
+                                                    });
+                                            }
+                                            else
+                                            {
+                                                altdict[amlfc.FaseCyclus].Add(new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc));
+                                            }
                                         }
                                     }
+                                    modulesWithAlternatives.Add(altdict);
                                 }
-                                modulesWithAlternatives.Add(altdict);
-                            }
 
                             var mlidx = 1;
                             foreach (var moduleWithAlternatives in modulesWithAlternatives)
