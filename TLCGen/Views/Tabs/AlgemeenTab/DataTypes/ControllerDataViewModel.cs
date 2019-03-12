@@ -255,6 +255,16 @@ namespace TLCGen.ViewModels
                                 Naam = m.Naam
                             });
                         }
+                        foreach (var r in _Controller.MultiModuleMolens)
+                        {
+                            foreach (var m in r.Modules)
+                            {
+                                _Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                {
+                                    Naam = m.Naam
+                                });
+                            }
+                        }
                     }
                     else
                     {
