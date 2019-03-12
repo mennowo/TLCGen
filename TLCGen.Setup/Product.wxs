@@ -29,6 +29,7 @@
         <ComponentGroupRef Id="TLCGenComponents" />
         <ComponentGroupRef Id="TLCGenPlugins" />
         <ComponentGroupRef Id="TLCGenSettings" />
+        <ComponentGroupRef Id="TLCGenCCOLDocs" />
         <ComponentGroupRef Id="TLCGenCCOLSources" />
         <ComponentGroupRef Id="TLCGenCCOLSourcesToCopy" />
         <ComponentGroupRef Id="TLCGenCCOLVisualTemplates" />
@@ -158,8 +159,8 @@
         <File Id="VisualTemplate2017vissimfilters" KeyPath="no" Source="$(var.ReleaseDir)\Settings\VisualTemplates\Visual_2017_vissim_filters.xml" />
       </Component>
     </ComponentGroup>
-    <ComponentGroup Id="TLCGenCCOLSources" Directory="CCOLDOCSFOLDER">
-      <Component Id='AllCCOLSources' Guid='343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9'>
+    <ComponentGroup Id="TLCGenCCOLDocs" Directory="CCOLDOCSFOLDER">
+      <Component Id='AllCCOLDocs' Guid='343F3AAF-A30B-47C0-BBB0-37C82DF4DCD9'>
         <File Id="fildocD3B88A5E78E73E3F80CF84F42E47C" KeyPath="no" Source="$(var.ReleaseDir)\Docs\BITSturing.ods" />
       </Component>
     </ComponentGroup>
