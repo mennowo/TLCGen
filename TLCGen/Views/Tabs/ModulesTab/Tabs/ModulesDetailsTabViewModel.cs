@@ -1,4 +1,6 @@
-﻿using TLCGen.Models;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TLCGen.Models;
 using TLCGen.Plugins;
 
 namespace TLCGen.ViewModels
@@ -10,6 +12,7 @@ namespace TLCGen.ViewModels
 
         private ModuleMolenViewModel _ModuleMolenVM;
         private ModulesTabFasenLijstViewModel _FasenLijstVM;
+        private string _selectedModuleReeks;
 
         #endregion // Fields
 
@@ -18,12 +21,55 @@ namespace TLCGen.ViewModels
         public ModuleMolenViewModel ModuleMolenVM
         {
             get { return _ModuleMolenVM; }
+            set
+            {
+                _ModuleMolenVM = value;
+                RaisePropertyChanged();
+            }
         }
 
         public ModulesTabFasenLijstViewModel FasenLijstVM
         {
             get { return _FasenLijstVM; }
         }
+
+        public string SelectedModuleReeks
+        {
+            get => _selectedModuleReeks;
+            set
+            {
+                if (value == null || _Controller == null) return;
+                _selectedModuleReeks = value;             
+                if (value != "ML" && !_Controller.MultiModuleMolens.Any(x => x.Reeks == value))
+                {
+                    _Controller.MultiModuleMolens.Add(new ModuleMolenModel() { Reeks = value });
+                }
+                if(value == "ML")
+                {
+                    ModuleMolenVM = new ModuleMolenViewModel(this, _Controller.ModuleMolen);
+                }
+                else
+                {
+                    ModuleMolenVM = new ModuleMolenViewModel(this, _Controller.MultiModuleMolens.FirstOrDefault(x => x.Reeks == value));
+                }
+                if (ModuleMolenVM.Modules.Count > 0)
+                {
+                    ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
+                    FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<string> ModuleReeks { get; } = new List<string>
+        {
+            "ML",
+            "MLA",
+            "MLB",
+            "MLC",
+            "MLD",
+            "MLE"
+        };
 
         #endregion // Properties
 
@@ -45,7 +91,7 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
-            
+
         }
 
         public override ControllerModel Controller
@@ -58,14 +104,8 @@ namespace TLCGen.ViewModels
             set
             {
                 base.Controller = value;
-                ModuleMolenVM.Controller = value;
                 FasenLijstVM.Controller = value;
-                if (ModuleMolenVM.Modules.Count > 0)
-                {
-                    ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];
-                    FasenLijstVM.SelectedModule = ModuleMolenVM.Modules[0];
-                }
-
+                SelectedModuleReeks = "ML";
                 if (FasenLijstVM.Fasen.Count > 0)
                 {
                     FasenLijstVM.SelectedFaseCyclus = FasenLijstVM.Fasen[0];
@@ -101,8 +141,8 @@ namespace TLCGen.ViewModels
 
         public ModulesDetailsTabViewModel() : base()
         {
-            _ModuleMolenVM = new ModuleMolenViewModel(this);
             _FasenLijstVM = new ModulesTabFasenLijstViewModel();
+            SelectedModuleReeks = "ML";
         }
 
         #endregion // Constructor

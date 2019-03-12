@@ -20,7 +20,15 @@
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="1" />
         <Grid Grid.Column="2" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <local:ModuleMolenView DataContext="{Binding ModuleMolenVM}" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Label Content="Module reeks" />
+                <ComboBox ItemsSource="{Binding Path=ModuleReeks}" Margin="2" SelectedValue="{Binding Path=SelectedModuleReeks,UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>
