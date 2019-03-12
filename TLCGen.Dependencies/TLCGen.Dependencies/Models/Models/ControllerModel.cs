@@ -55,6 +55,9 @@ namespace TLCGen.Models
 
         public ModuleMolenModel ModuleMolen { get; set; }
 
+        [XmlArrayItem(ElementName = "ModuleMolen")]
+        public List<ModuleMolenModel> MultiModuleMolens { get; set; }
+
         public RoBuGroverModel RoBuGrover { get; set; }
 
         public SignalenDataModel Signalen { get; set; }
@@ -76,6 +79,7 @@ namespace TLCGen.Models
             Ingangen = new List<IngangModel>();
             GroentijdenSets = new List<GroentijdenSetModel>();
             ModuleMolen = new ModuleMolenModel();
+            MultiModuleMolens = new List<ModuleMolenModel>();
             PeriodenData = new PeriodenDataModel();
             CustomData = new CustomDataModel();
             InterSignaalGroep = new InterSignaalGroepModel();

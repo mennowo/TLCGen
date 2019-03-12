@@ -19,6 +19,9 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string WachtModule { get; set; }
 
+        [HasDefault(false)]
+        public string Reeks { get; set; }
+
         public bool LangstWachtendeAlternatief { get; set; }
 
         public ModuleMolenModel()
