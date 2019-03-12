@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Extensions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -857,14 +858,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
+            var ml = false;
 
-            foreach (ModuleModel mm in controller.ModuleMolen.Modules)
+            if (controller.ModuleMolen.Modules.Any())
             {
-                foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                ml = true;
+                foreach (ModuleModel mm in controller.ModuleMolen.Modules)
                 {
-                    sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                    foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                    {
+                        sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                    }
+                    sb.AppendLine();
                 }
-                sb.AppendLine();
+            }
+            foreach(var r in controller.MultiModuleMolens)
+            {
+                if (r.Modules.Any())
+                {
+                    if (ml) sb.AppendLine();
+                    ml = true;
+                    sb.AppendLine($"/* modules reeks {r.Reeks} */");
+                    foreach (ModuleModel mm in r.Modules)
+                    {
+                        foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                        {
+                            var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
+                            sb.AppendLine($"{ts}PR{r.Reeks}[{mmNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                        }
+                        sb.AppendLine();
+                    }
+                }
             }
 
             return sb.ToString();

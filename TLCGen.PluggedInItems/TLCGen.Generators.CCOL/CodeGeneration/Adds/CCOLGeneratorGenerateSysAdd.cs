@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using TLCGen.Models;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
@@ -38,7 +39,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#define SCHMAX (SCHMAX1+0) /* Totaal aantal gebruikte schakelaars    */");
             sb.AppendLine("#define PRMMAX (PRMMAX1+0) /* Totaal aantal gebruikte parameters     */");
             sb.AppendLine("#define MLMAX  (MLMAX1+0)  /* Totaal aantal gebruikte modulen        */");
-	        if (c.HalfstarData.IsHalfstar)
+            foreach (var r in c.MultiModuleMolens)
+            {
+                if (r.Modules.Any())
+                {
+                    sb.AppendLine($"#define {r.Reeks}MAX  ({r.Reeks}MAX1+0)  /* Totaal aantal gebruikte modulen reeks {r.Reeks} */");
+                }
+            }
+            if (c.HalfstarData.IsHalfstar)
 	        {
 				sb.AppendLine("#define PLMAX  (PLMAX1+0)  /* Totaal aantal gebruikte signaalplannen */");
 	        }
