@@ -65,6 +65,7 @@ namespace TLCGen.ViewModels
 
         public List<string> ModuleReeks { get; } = new List<string>
         {
+            "ML",
             "MLA",
             "MLB",
             "MLC",
