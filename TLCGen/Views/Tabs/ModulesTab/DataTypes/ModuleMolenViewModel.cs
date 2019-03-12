@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
+using System.Collections.Generic;
 
 namespace TLCGen.ViewModels
 {
@@ -14,7 +15,6 @@ namespace TLCGen.ViewModels
     {
         #region Fields
 
-        private ControllerModel _Controller;
         private ModulesDetailsTabViewModel _ModulesTabVM;
         private ModuleMolenModel _ModuleMolen;
         private ObservableCollection<ModuleViewModel> _Modules;
@@ -26,24 +26,10 @@ namespace TLCGen.ViewModels
 
         #region Properties
 
-        public ControllerModel Controller
+        public string Reeks
         {
-            get { return _Controller; }
-            set
-            {
-                _Controller = value;
-                if (_Controller != null)
-                {
-                    _ModuleMolen = _Controller.ModuleMolen;
-                    ReloadModules();
-                }
-                else
-                {
-                    _ModuleMolen = null;
-                    Modules.CollectionChanged -= Modules_CollectionChanged;
-                    Modules.Clear();
-                }
-            }
+            get => _ModuleMolen.Reeks;
+
         }
 
         public ObservableCollection<ModuleViewModel> Modules
@@ -329,7 +315,7 @@ namespace TLCGen.ViewModels
                 int i = 1;
                 foreach (ModuleViewModel mvm in Modules)
                 {
-                    mvm.Naam = "ML" + i.ToString();
+                    mvm.Naam = Reeks + i.ToString();
                     ++i;
                 }
                 // Set WachtModule if needed
@@ -347,8 +333,10 @@ namespace TLCGen.ViewModels
 
         #region Constructor
 
-        public ModuleMolenViewModel(ModulesDetailsTabViewModel mltab)
+        public ModuleMolenViewModel(ModulesDetailsTabViewModel mltab, ModuleMolenModel moduleMolen)
         {
+            _ModuleMolen = moduleMolen;
+            ReloadModules();
             _ModulesTabVM = mltab;
             Messenger.Default.Register(this, new Action<FasenChangedMessage>(OnFasenChanged));
             Messenger.Default.Register(this, new Action<ConflictsChangedMessage>(OnConflictsChanged));

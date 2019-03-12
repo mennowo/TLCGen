@@ -112,7 +112,10 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-
+            if (controller.ModuleMolen.Reeks == null)
+            {
+                controller.ModuleMolen.Reeks = "ML";
+            }
 
             // check PostAfhandelingOV_Add in ov.add
             var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
