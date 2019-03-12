@@ -548,6 +548,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             var pad1 = data.DefineMaxWidth + $"{ts}#define  ".Length;
             var pad2 = data.Elements.Count.ToString().Length;
+            int pad3 = data.CommentsMaxWidth;
             var index = 0;
 
             foreach (var elem in data.Elements)
@@ -568,8 +569,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
 				if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 				{
-					sb.Append($" /* {elem.Commentaar} */");
-				}
+                    sb.Append($" /*");
+                    sb.Append($"{elem.Commentaar}".PadRight(pad3));
+                    sb.Append($" */");
+                }
 				sb.AppendLine();
                 ++index;
             }
@@ -596,8 +599,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 					{
-						sb.Append($" /* {elem.Commentaar} */");
-					}
+                        sb.Append($" /*");
+                        sb.Append($"{elem.Commentaar}".PadRight(pad3));
+                        sb.Append($" */");
+                    }
 					sb.AppendLine();
                     ++indexautom;
                 }
@@ -653,6 +658,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad3 = data.CCOLSettingWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
             int pad4 = data.SettingMaxWidth + 4;  // 4: space = space ;
             int pad5 = data.CCOLTTypeWidth + 3 + data.DefineMaxWidth; // 3: space [ ]
+            int pad6 = data.CommentsMaxWidth;
+            int pad7 = data.TTypeMaxWidth + 4; // 4: ' = ;'
 
             foreach (CCOLElement elem in data.Elements)
             {
@@ -673,10 +680,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.Append($" {data.CCOLTType}[{elem.Define}]".PadRight(pad5));
                         sb.Append($" = {elem.TType};");
                     }
-
+                    else
+                    {
+                        sb.Append("".PadRight(pad5 + pad7));
+                    }
 					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 					{
-						sb.Append($" /* {elem.Commentaar} */");
+                        sb.Append($" /* ");
+                        sb.Append($"{ elem.Commentaar}".PadRight(pad6));
+                        sb.Append($" */");
 					}
                     sb.AppendLine();
                 }
@@ -700,6 +712,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         sb.Append($" {data.CCOLTType}[{delem.Define}]".PadRight(pad5));
                         sb.Append($" = {delem.TType};");
+                    }
+                    else
+                    {
+                        sb.Append("".PadRight(pad5));
+                    }
+                    if (!string.IsNullOrWhiteSpace(delem.Commentaar))
+                    {
+                        sb.Append($" /*");
+                        sb.Append($"{ delem.Commentaar}".PadRight(pad6));
+                        sb.Append($" */");
                     }
                     sb.AppendLine();
                 }

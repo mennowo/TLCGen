@@ -14,9 +14,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public int CCOLSettingWidth { get { return CCOLSetting == null ? 0 : CCOLSetting.Length; } }
         public int CCOLTTypeWidth { get { return CCOLTType == null ? 0 : CCOLTType.Length; } }
 
+        public int TTypeMaxWidth { get; set; }
         public int DefineMaxWidth { get; set; }
         public int NameMaxWidth { get; set; }
         public int SettingMaxWidth { get; set; }
+        public int CommentsMaxWidth { get; set; }
 
         public void SetMax()
         {
@@ -25,6 +27,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (elem.Define?.Length > this.DefineMaxWidth) this.DefineMaxWidth = elem.Define.Length;
                 if (elem.Naam?.Length > this.NameMaxWidth) this.NameMaxWidth = elem.Naam.Length;
                 if (elem.Instelling?.ToString().Length > this.SettingMaxWidth) this.SettingMaxWidth = elem.Instelling.ToString().Length;
+                if (elem.Commentaar?.ToString().Length > this.CommentsMaxWidth) this.CommentsMaxWidth = elem.Commentaar.ToString().Length;
+                if (elem.TType.ToString().Length > this.TTypeMaxWidth) this.TTypeMaxWidth = elem.TType.ToString().Length;
             }
         }
 
