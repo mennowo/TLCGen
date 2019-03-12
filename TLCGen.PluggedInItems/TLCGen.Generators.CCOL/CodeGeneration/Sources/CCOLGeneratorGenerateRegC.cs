@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -406,39 +408,56 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateRegCRealisatieAfhandeling(ControllerModel controller)
+        private string GenerateRegCRealisatieAfhandeling(ControllerModel c)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("void RealisatieAfhandeling(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
-            
-            if(controller.InterSignaalGroep.Nalopen.Any())
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, true, false, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
+
+            var molens = new List<ModuleMolenModel> { c.ModuleMolen }.Concat(c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any()))).ToList();
+
+            if (c.InterSignaalGroep.Nalopen.Any())
             {
-                sb.AppendLine($"{ts}YML[ML] = yml_cv_pr_nl(PRML, ML, ML_MAX);");
+                foreach(var m in molens)
+                {
+                    sb.AppendLine($"{ts}YML[{m.Reeks}] = yml_cv_pr_nl(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
+                }
             }
             else
             {
-              sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PRML, ML, ML_MAX);");
+                foreach (var m in molens)
+                {
+                    sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
+                }
             }
             sb.AppendLine();
-            foreach(var mm in controller.ModuleMolen.Modules)
+            foreach (var m in molens)
             {
-                if(mm.Naam == controller.ModuleMolen.WachtModule)
-                    sb.AppendLine($"{ts}YML[{mm.Naam}] |= yml_wml(PRML, ML_MAX);");
-                else
-                    sb.AppendLine($"{ts}YML[{mm.Naam}] |= FALSE;");
+                foreach (var mm in m.Modules)
+                {
+                    var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
+                    if (mm.Naam == m.WachtModule)
+                    {
+                        sb.AppendLine($"{ts}Y{m.Reeks}[{mmNaam}] |= yml_wml(PR{m.Reeks}, {m.Reeks}_MAX);");
+                    }
+                    else
+                        sb.AppendLine($"{ts}Y{m.Reeks}[{mmNaam}] |= FALSE;");
+                }
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}Modules_Add();");
 	        sb.AppendLine();
-            sb.AppendLine($"{ts}SML = modules(ML_MAX, PRML, YML, &ML);");
+            foreach (var m in molens)
+            {
+                sb.AppendLine($"{ts}S{m.Reeks} = modules({m.Reeks}_MAX, PR{m.Reeks}, Y{m.Reeks}, &{m.Reeks});");
+            }
             sb.AppendLine();
             sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
             sb.AppendLine($"{ts}" + "{");
@@ -447,7 +466,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}" + "}");
             sb.AppendLine();
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, false, true, false, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, false, true, false, true);
 
             sb.AppendLine($"{ts}RealisatieAfhandeling_Add();");
 	        sb.AppendLine("}");

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -172,7 +173,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach(var m in c.Data.ModulenDisplayBitmapData)
                         {
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{m.Naam.Replace("ML", _usML.Setting)}] = ML == {m.Naam};");
+                            var mNaam = Regex.Replace(m.Naam, @"ML[A-E]+", "ML");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{m.Naam.Replace("ML", _usML.Setting)}] = ML == {mNaam};");
                         }
                     }
 
