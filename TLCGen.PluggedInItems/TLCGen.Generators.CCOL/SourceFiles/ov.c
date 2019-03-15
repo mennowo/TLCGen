@@ -1107,7 +1107,9 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 #else
         if (TO[k][fc]
 #endif
+#ifdef NALOPEN
             || TGK[k][fc]
+#endif
             )
         {
             iKPrioriteitsOpties[k] |= iPrioriteitsOptiesFC;
@@ -1153,7 +1155,9 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 #else
             iRestTO = TO_max[k][fc] >= 0 ? TO_max[k][fc] - TO_timer[k] :
 #endif
+#ifdef NALOPEN
                 TGK[k][fc] ? TGK_max[k][fc] - TGK_timer[k] :
+#endif
                 0;
 #if defined CCOLTIG && !defined NO_TIGMAX
             if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
@@ -1411,10 +1415,13 @@ void AfkappenStartGroen(int fc, int iStartGr)
 #endif
 #if defined CCOLTIG && !defined NO_TIGMAX
              TIG_max[k][fc] == GK && iStartGr <= 0 ||
-             TIG_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr ||
+             TIG_max[k][fc] == GKL 
 #else
              TO_max[k][fc] == GK && iStartGr <= 0 ||
-             TO_max[k][fc] == GKL && TGK_max[k][fc] >= iStartGr
+             TO_max[k][fc] == GKL 
+#endif
+#ifdef NALOPEN
+				&& TGK_max[k][fc] >= iStartGr
 #endif
             ))
         {
@@ -1450,15 +1457,15 @@ void AfkappenMG(int fc, int iStartGr)
 			/* TIG_max[k][fc]==GKL toegevoegd */
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
              TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL 
-			&& TGK_max[k][fc] >= iStartGr
-			) 
 #else
 			/* TO_max[k][fc]==GKL toegevoegd */
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
              TO_max[k][fc] == GK && iStartGr <= 0) || TO_max[k][fc] == GKL 
-			&& TGK_max[k][fc] >= iStartGr
-		)
 #endif
+#ifdef NALOPEN
+			&& TGK_max[k][fc] >= iStartGr
+#endif
+		)
         {
             Z[k] |= OV_Z_BIT;
         }

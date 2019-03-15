@@ -43,6 +43,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             var sb = new StringBuilder();
 
+            if (c.InterSignaalGroep.Nalopen.Any())
+            {
+                sb.AppendLine("#define NALOPEN");
+                sb.AppendLine();
+            }
+
             sb.AppendLine("/*include files */");
             sb.AppendLine("/*------------- */");
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
