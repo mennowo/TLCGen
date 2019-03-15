@@ -128,6 +128,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
 				case CCOLCodeTypeEnum.RegCInitApplication:
+                    if (c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        sb.AppendLine($"{ts}/* Nalopen */");
+                        sb.AppendLine($"{ts}/* ------- */");
+                        sb.AppendLine("gk_InitGK();");
+                        sb.AppendLine("gk_InitNL();");
+                    }
                     // TODO: eerst controleren
                     //if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen && x.InrijdenTijdensGroen))
                     //{
@@ -143,8 +150,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     //}
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCPreApplication:
+                    if (c.InterSignaalGroep?.Nalopen?.Count > 0)
+                    {
+                        sb.AppendLine($"{ts}/* Nalopen */");
+                        sb.AppendLine($"{ts}/* ------- */");
+                        sb.AppendLine("gk_ResetGK();");
+                        sb.AppendLine("gk_ResetNL();");
+                    }
+                    // TODO: should only generate if any nalopen are there?
                     if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
 					{
+                        sb.AppendLine();
 						sb.AppendLine($"{ts}IH[{_hpf}{_homschtegenh}] |=");
 						var k = 0;
 						foreach (var t in _myElements.Where(x => x.Type == CCOLElementTypeEnum.Timer))
@@ -185,10 +201,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
 
+
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
+                        sb.AppendLine("gk_ResetGK();");
+                        sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}RW[fc] &= ~BIT2;");
