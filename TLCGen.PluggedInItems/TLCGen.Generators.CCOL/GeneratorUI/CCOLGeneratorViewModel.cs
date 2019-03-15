@@ -108,7 +108,9 @@ namespace TLCGen.Generators.CCOL
         private bool GenerateCodeCommand_CanExecute(object prm)
         {
             return _Plugin?.Controller?.Fasen.Any() == true &&
-                   _Plugin.Controller.ModuleMolen.Modules.Any() &&
+                   (_Plugin.Controller.ModuleMolen.Modules.Any(x2 => x2.Fasen.Any()) ||
+                    _Plugin.Controller.Data.MultiModuleReeksen && 
+                    _Plugin.Controller.MultiModuleMolens.Any(x => x.Modules.Any(x2 => x2.Fasen.Any()))) &&
                    _Plugin.Controller.GroentijdenSets.Any() &&
                    _Plugin.Controller.PeriodenData.DefaultPeriodeGroentijdenSet != null &&
                    !string.IsNullOrWhiteSpace(_Plugin.ControllerFileName);

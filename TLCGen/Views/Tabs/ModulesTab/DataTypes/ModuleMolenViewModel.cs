@@ -93,7 +93,6 @@ namespace TLCGen.ViewModels
                     _ModuleMolen.LangstWachtendeAlternatief = value;
                     RaisePropertyChanged<object>("LangstWachtendeAlternatief", broadcast: true);
                     RaisePropertyChanged("NotLangstWachtendeAlternatief");
-                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
                 }
             }
         }
