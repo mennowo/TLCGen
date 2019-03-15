@@ -421,25 +421,30 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingModules, false, true, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandelingNaModules, false, true, false, true);
 
-            var molens = new List<ModuleMolenModel> { c.ModuleMolen }.Concat(c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any()))).ToList();
+            var molens = new List<ModuleMolenModel> { c.ModuleMolen };
+            if (c.Data.MultiModuleReeksen)
+            {
+                molens = c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())).ToList();
+            }
 
             if (c.InterSignaalGroep.Nalopen.Any())
             {
                 foreach(var m in molens)
                 {
-                    sb.AppendLine($"{ts}YML[{m.Reeks}] = yml_cv_pr_nl(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
+                    sb.AppendLine($"{ts}Y{m.Reeks}[{m.Reeks}] = yml_cv_pr_nl(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
                 }
             }
             else
             {
                 foreach (var m in molens)
                 {
-                    sb.AppendLine($"{ts}YML[ML] = yml_cv_pr(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
+                    sb.AppendLine($"{ts}Y{m.Reeks}[{m.Reeks}] = yml_cv_pr(PR{m.Reeks}, {m.Reeks}, {m.Reeks}_MAX);");
                 }
             }
             sb.AppendLine();
             foreach (var m in molens)
             {
+                if (!m.Modules.Any()) continue;
                 foreach (var mm in m.Modules)
                 {
                     var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
@@ -459,11 +464,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}S{m.Reeks} = modules({m.Reeks}_MAX, PR{m.Reeks}, Y{m.Reeks}, &{m.Reeks});");
             }
             sb.AppendLine();
-            sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-            sb.AppendLine($"{ts}" + "{");
-            sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
-            sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
-            sb.AppendLine($"{ts}" + "}");
+            if (!c.Data.MultiModuleReeksen)
+            {
+                sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                sb.AppendLine($"{ts}" + "{");
+                sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
+                sb.AppendLine($"{ts}{ts}YM[fc] |= SML && PG[fc] ? BIT5 : FALSE;");
+                sb.AppendLine($"{ts}" + "}");
+            }
+            else
+            {
+                sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                sb.AppendLine($"{ts}" + "{");
+                sb.AppendLine($"{ts}{ts}YM[fc] &= ~BIT5;");
+                sb.AppendLine($"{ts}" + "}");
+                foreach (var m in molens)
+                {
+                    if (!m.Modules.Any()) continue;
+                    foreach(var fc in m.Modules.SelectMany(x => x.Fasen).Distinct())
+                    {
+                        sb.AppendLine($"{ts}YM[{_fcpf}{fc.FaseCyclus}] |= S{m.Reeks} && PG[{_fcpf}{fc.FaseCyclus}] ? BIT5 : FALSE;");
+                    }
+                }
+            }
             sb.AppendLine();
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.RegCRealisatieAfhandeling, false, true, false, true);
@@ -613,7 +636,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (controller.Data.FixatieData.FixatieMogelijk)
             {
-                sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
+                if (!controller.Data.MultiModuleReeksen)
+                {
+                    sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);");
+                }
+                else
+                {
+                    foreach(var r in controller.MultiModuleMolens)
+                    {
+                        sb.AppendLine($"{ts}Fixatie(isfix, 0, FCMAX-1, SCH[schbmfix], PR{r.Reeks}, {r.Reeks});");
+                    }
+                }
             }
             sb.AppendLine("");
             sb.AppendLine($"{ts}PostApplication();");

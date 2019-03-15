@@ -418,23 +418,50 @@ namespace TLCGen.ModelManagement
                 case ModulesChangedMessage modulesMessage:
                     if (Controller.Data.UitgangPerModule)
                     {
-                        foreach (var m in Controller.ModuleMolen.Modules)
+                        if (!Controller.Data.MultiModuleReeksen)
                         {
-                            if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                            foreach (var m in Controller.ModuleMolen.Modules)
                             {
-                                Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
                                 {
-                                    Naam = m.Naam
-                                });
-                                Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                                    Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                    {
+                                        Naam = m.Naam
+                                    });
+                                    Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var m in Controller.MultiModuleMolens.SelectMany(x => x.Modules))
+                            {
+                                if (!Controller.Data.ModulenDisplayBitmapData.Any(x => x.Naam == m.Naam))
+                                {
+                                    Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                    {
+                                        Naam = m.Naam
+                                    });
+                                    Controller.Data.ModulenDisplayBitmapData.BubbleSort();
+                                }
                             }
                         }
                         var rd = new List<ModuleDisplayElementModel>();
                         foreach (var md in Controller.Data.ModulenDisplayBitmapData)
                         {
-                            if (!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                            if (!Controller.Data.MultiModuleReeksen)
                             {
-                                rd.Add(md);
+                                if (!Controller.ModuleMolen.Modules.Any(x => x.Naam == md.Naam))
+                                {
+                                    rd.Add(md);
+                                }
+                            }
+                            else
+                            {
+                                if (!Controller.MultiModuleMolens.SelectMany(x => x.Modules).Any(x => x.Naam == md.Naam))
+                                {
+                                    rd.Add(md);
+                                }
                             }
                         }
                         foreach (var r in rd)

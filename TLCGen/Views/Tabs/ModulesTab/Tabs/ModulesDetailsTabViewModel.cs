@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
 
@@ -63,13 +65,14 @@ namespace TLCGen.ViewModels
 
         public List<string> ModuleReeks { get; } = new List<string>
         {
-            "ML",
             "MLA",
             "MLB",
             "MLC",
             "MLD",
             "MLE"
         };
+
+        public Visibility HasMultiML => _Controller.Data.MultiModuleReeksen ? Visibility.Visible : Visibility.Collapsed;
 
         #endregion // Properties
 
@@ -91,7 +94,30 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            RaisePropertyChanged(nameof(HasMultiML));
+            if (_Controller.Data.MultiModuleReeksen && SelectedModuleReeks == "ML")
+            {
+                SelectedModuleReeks = "MLA";
+            }
+            else if (!_Controller.Data.MultiModuleReeksen && SelectedModuleReeks != "ML")
+            {
+                SelectedModuleReeks = "ML";
+            }
+        }
 
+        public bool LangstWachtendeAlternatief
+        {
+            get { return _Controller?.ModuleMolen == null ? false : _Controller.ModuleMolen.LangstWachtendeAlternatief; }
+            set
+            {
+                if (_Controller?.ModuleMolen != null)
+                {
+                    _Controller.ModuleMolen.LangstWachtendeAlternatief = value;
+                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
+                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                    _ModuleMolenVM.LangstWachtendeAlternatief = value;
+                }
+            }
         }
 
         public override ControllerModel Controller
@@ -105,7 +131,17 @@ namespace TLCGen.ViewModels
             {
                 base.Controller = value;
                 FasenLijstVM.Controller = value;
-                SelectedModuleReeks = "ML";
+                if (value != null)
+                {
+                    if (value.Data.MultiModuleReeksen)
+                    {
+                        SelectedModuleReeks = "MLA";
+                    }
+                    else
+                    {
+                        SelectedModuleReeks = "ML";
+                    }
+                }
                 if (FasenLijstVM.Fasen.Count > 0)
                 {
                     FasenLijstVM.SelectedFaseCyclus = FasenLijstVM.Fasen[0];
