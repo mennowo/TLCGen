@@ -334,9 +334,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         sb.AppendLine();
 
-                            var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
+                        var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
 
-                            foreach (var fc in c.ModuleMolen.FasenModuleData)
+                        foreach (var r in molens)
+                        {
+                            foreach (var fc in r.FasenModuleData)
                             {
                                 Tuple<string, List<string>> hasgs = null;
                                 foreach (var gs in gelijkstarttuples)
@@ -368,11 +370,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         $"{ts}PAR[{_fcpf}{fc.FaseCyclus}] = ({maxtartotig}({_fcpf}{fc.FaseCyclus}) >= PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}]) && SCH[{_schpf}{_schaltg}{fc.FaseCyclus}];");
                                 }
                             }
-                            sb.AppendLine();
+                        }
+                        sb.AppendLine();
 
-                            if (c.InterSignaalGroep.Nalopen.Count > 0)
-                            {
-                                var tnl = "";
+                        if (c.InterSignaalGroep.Nalopen.Count > 0)
+                        {
+                            var tnl = "";
 
                             sb.AppendLine($"{ts}/* Verzorgen PAR voor voedende richtingen */");
                             foreach (var r in molens)
@@ -486,11 +489,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
-                            foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
-                            {
-                                sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
-                                sb.AppendLine();
-                            }
+                        foreach (var gen in CCOLGenerator.OrderedPieceGenerators[CCOLCodeTypeEnum.RegCAlternatieven])
+                        {
+                            sb.Append(gen.Value.GetCode(c, CCOLCodeTypeEnum.RegCAlternatieven, ts));
+                            sb.AppendLine();
+                        }
 
                         sb.AppendLine($"{ts}Alternatief_Add();");
                         if (c.HalfstarData.IsHalfstar)
@@ -531,16 +534,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                                 {
                                                     new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc,
                                                         mlfc)
-                                                    });
-                                            }
-                                            else
-                                            {
-                                                altdict[amlfc.FaseCyclus].Add(new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc));
-                                            }
+                                                });
+                                        }
+                                        else
+                                        {
+                                            altdict[amlfc.FaseCyclus].Add(new Tuple<ModuleFaseCyclusAlternatiefModel, ModuleFaseCyclusModel>(amlfc, mlfc));
                                         }
                                     }
-                                    modulesWithAlternatives.Add(altdict);
                                 }
+                                modulesWithAlternatives.Add(altdict);
+                            }
 
                             var mlidx = 1;
                             foreach (var moduleWithAlternatives in modulesWithAlternatives)
