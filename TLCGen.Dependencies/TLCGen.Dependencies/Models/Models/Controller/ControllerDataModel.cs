@@ -71,16 +71,13 @@ namespace TLCGen.Models
 
         [Browsable(false)]
         public List<ModuleDisplayElementModel> ModulenDisplayBitmapData { get; set; }
-        
-        private SegmentDisplayTypeEnum _segmentDisplayType;
+
         [Browsable(false)]
-        public SegmentDisplayTypeEnum SegmentDisplayType
-        {
-            get => _segmentDisplayType;
-            set => _segmentDisplayType = value;
-        }
+        public SegmentDisplayTypeEnum SegmentDisplayType { get; set; }
 
         public bool UitgangPerModule { get; set; }
+
+        public bool MultiModuleReeksen { get; set; }
 
         public FixatieModel FixatieData { get; set; }
 
@@ -109,7 +106,7 @@ namespace TLCGen.Models
         public void SetSegmentOutputs()
         {
             SegmentenDisplayBitmapData.Clear();
-            switch (_segmentDisplayType)
+            switch (SegmentDisplayType)
             {
                 case SegmentDisplayTypeEnum.EnkelDisplay:
                     for (int i = 1; i <= 7; ++i)

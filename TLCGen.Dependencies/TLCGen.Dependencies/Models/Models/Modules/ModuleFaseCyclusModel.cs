@@ -7,7 +7,7 @@ namespace TLCGen.Models
 {
     [Serializable]
     [RefersTo(TLCGenObjectTypeEnum.Fase, "FaseCyclus")]
-    public class ModuleFaseCyclusModel
+    public class ModuleFaseCyclusModel : IComparable<ModuleFaseCyclusModel>
     {
         #region Properties
 
@@ -19,13 +19,18 @@ namespace TLCGen.Models
 
         #endregion // Properties
 
+        public int CompareTo(ModuleFaseCyclusModel other)
+        {
+            return FaseCyclus.CompareTo(other.FaseCyclus);
+        }
+
         #region Constructor
 
         public ModuleFaseCyclusModel()
         {
             Alternatieven = new List<ModuleFaseCyclusAlternatiefModel>();
         }
-        
+
         #endregion // Constructor
 
     }

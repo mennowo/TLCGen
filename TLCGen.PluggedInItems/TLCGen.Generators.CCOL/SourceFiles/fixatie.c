@@ -38,7 +38,7 @@ bool konf_groen(count fc)
  * Voorbeeld:
  *    Fixatie(isFix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);
  *************************************************************************/
-#if MLMAX
+#if defined MLMAX || defined MLAMAX
 void Fixatie(count isFix, count first, count last, bool bijkomen, bool *prml[], count ml)
 #else
 void Fixatie(count isFix, count first, count last, bool bijkomen)

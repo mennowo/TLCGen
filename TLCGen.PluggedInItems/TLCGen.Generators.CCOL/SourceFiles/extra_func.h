@@ -19,17 +19,21 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 	count has_cont_,/* hulpelement tikkers continu */
 	...);           /* drukknoppen */
 void Eerlijk_doseren_V1(count hfile,            /* hulpelement wel/geen file */
-    count _prmperc,         /* indexnummer parameter % doseren */
-    count aantalfc,         /* aantal te doseren fasen */
-    count fc[],             /* pointer naar array met fasenummers */
-    count fcmg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
-    int nogtedoseren[]);     /* pointer naar array met nog te doseren waarden */
+	count _prmperc,         /* indexnummer parameter % doseren */
+	count aantalfc,         /* aantal te doseren fasen */
+	count fc[],             /* pointer naar array met fasenummers */
+	count fcmg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
+	int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
+	bool *prml[],
+	count ml);
 void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            /* hulpelement wel/geen file */
     count _prmperc,         /* indexnummer parameter % doseren */
     count aantalfc,         /* aantal te doseren fasen */
     count fc[],             /* pointer naar array met fasenummers */
     count fcvg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
-    int nogtedoseren[]);     /* pointer naar array met nog te doseren waarden */
+    int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
+	bool *prml[], 
+	count ml);
 void FileMeldingV2(count det,     /* filelus                                */
     count tbez,    /* bezettijd  als D langer bezet -> file  */
     count trij,    /* rijtijd    als D korter bezet -> !file */

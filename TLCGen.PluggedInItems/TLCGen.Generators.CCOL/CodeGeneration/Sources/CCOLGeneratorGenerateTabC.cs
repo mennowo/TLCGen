@@ -860,33 +860,39 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* ------- */");
             var ml = false;
 
-            if (controller.ModuleMolen.Modules.Any())
+            if (!controller.Data.MultiModuleReeksen)
             {
-                ml = true;
-                foreach (ModuleModel mm in controller.ModuleMolen.Modules)
+                if (controller.ModuleMolen.Modules.Any(x => x.Fasen.Any()))
                 {
-                    foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
-                    {
-                        sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
-                    }
-                    sb.AppendLine();
-                }
-            }
-            foreach(var r in controller.MultiModuleMolens)
-            {
-                if (r.Modules.Any())
-                {
-                    if (ml) sb.AppendLine();
                     ml = true;
-                    sb.AppendLine($"/* modules reeks {r.Reeks} */");
-                    foreach (ModuleModel mm in r.Modules)
+                    foreach (ModuleModel mm in controller.ModuleMolen.Modules.Where(x => x.Fasen.Any()))
                     {
                         foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
                         {
-                            var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
-                            sb.AppendLine($"{ts}PR{r.Reeks}[{mmNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                            sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                         }
                         sb.AppendLine();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var r in controller.MultiModuleMolens)
+                {
+                    if (r.Modules.Any())
+                    {
+                        if (ml) sb.AppendLine();
+                        ml = true;
+                        sb.AppendLine($"/* modules reeks {r.Reeks} */");
+                        foreach (ModuleModel mm in r.Modules.Where(x => x.Fasen.Any()))
+                        {
+                            foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
+                            {
+                                var mmNaam = Regex.Replace(mm.Naam, @"ML[A-E]+", "ML");
+                                sb.AppendLine($"{ts}PR{r.Reeks}[{mmNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                            }
+                            sb.AppendLine();
+                        }
                     }
                 }
             }
