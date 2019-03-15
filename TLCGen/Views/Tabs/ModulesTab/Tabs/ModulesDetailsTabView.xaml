@@ -24,10 +24,25 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <local:ModuleMolenView DataContext="{Binding ModuleMolenVM}" />
-            <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <Label Content="Module reeks" />
-                <ComboBox ItemsSource="{Binding Path=ModuleReeks}" Margin="2" SelectedValue="{Binding Path=SelectedModuleReeks,UpdateSourceTrigger=PropertyChanged}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <local:ModuleMolenView DataContext="{Binding ModuleMolenVM}" />
+                <CheckBox 
+                    Grid.Row="1"
+                    Margin="5" Content="Langstwachtende alternatief" IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+            <StackPanel Orientation="Vertical" Grid.Row="1" Visibility="{Binding Path=HasMultiML,Mode=OneWay}">
+                <Border BorderBrush="Gray" BorderThickness="0.7" />
+                <StackPanel Orientation="Vertical" Grid.Row="1" >
+                    <Label Content="Meerdere module reeksen" FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" >
+                        <Label Content="Actuele module reeks" />
+                        <ComboBox ItemsSource="{Binding Path=ModuleReeks}" Margin="2" SelectedValue="{Binding Path=SelectedModuleReeks,UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

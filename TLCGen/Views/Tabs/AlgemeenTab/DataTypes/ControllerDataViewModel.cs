@@ -248,21 +248,27 @@ namespace TLCGen.ViewModels
                     _Controller.Data.UitgangPerModule = value;
                     if (value)
                     {
-                        foreach(var m in _Controller.ModuleMolen.Modules)
+                        if (!_Controller.Data.MultiModuleReeksen)
                         {
-                            _Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
-                            {
-                                Naam = m.Naam
-                            });
-                        }
-                        foreach (var r in _Controller.MultiModuleMolens)
-                        {
-                            foreach (var m in r.Modules)
+                            foreach (var m in _Controller.ModuleMolen.Modules)
                             {
                                 _Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
                                 {
                                     Naam = m.Naam
                                 });
+                            }
+                        }
+                        else
+                        {
+                            foreach (var r in _Controller.MultiModuleMolens)
+                            {
+                                foreach (var m in r.Modules)
+                                {
+                                    _Controller.Data.ModulenDisplayBitmapData.Add(new ModuleDisplayElementModel
+                                    {
+                                        Naam = m.Naam
+                                    });
+                                }
                             }
                         }
                     }
@@ -318,6 +324,17 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.CCOLMulti = value;
                 RaisePropertyChanged<object>(nameof(CCOLMulti), broadcast: true);
+            }
+        }
+
+        [Description("Meerdere module reeksen")]
+        public bool MultiModuleReeksen
+        {
+            get => _Controller?.Data?.MultiModuleReeksen ?? false;
+            set
+            {
+                _Controller.Data.MultiModuleReeksen = value;
+                RaisePropertyChanged<object>(nameof(MultiModuleReeksen), broadcast: true);
             }
         }
 

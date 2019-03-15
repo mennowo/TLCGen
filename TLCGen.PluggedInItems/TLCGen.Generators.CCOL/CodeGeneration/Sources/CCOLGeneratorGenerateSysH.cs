@@ -65,10 +65,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             sb.AppendLine("/* modulen */");
             sb.AppendLine("/* ------- */");
-            var molens = new List<ModuleMolenModel> { c.ModuleMolen }.Concat(c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any()))).ToList();
-            foreach (var r in molens)
+            if (!c.Data.MultiModuleReeksen)
             {
-                sb.AppendLine($"{ts}#define {r.Reeks}MAX1 {c.ModuleMolen.Modules.Count} /* aantal modulen reeks {r.Reeks} */");
+                sb.AppendLine($"{ts}#define MLMAX1 {c.ModuleMolen.Modules.Count} /* aantal modulen */");
+            }
+            else
+            {
+                foreach (var r in c.MultiModuleMolens)
+                {
+                    sb.AppendLine($"{ts}#define {r.Reeks}MAX1 {r.Modules.Count} /* aantal modulen reeks {r.Reeks} */");
+                }
             }
 	        sb.AppendLine();
 	        if (c.HalfstarData.IsHalfstar)

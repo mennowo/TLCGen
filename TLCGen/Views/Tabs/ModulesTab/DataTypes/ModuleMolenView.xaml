@@ -15,7 +15,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label FontWeight="Bold" Content="Modules" />
         <ListView Grid.Row="1" Margin="2" ItemsSource="{Binding Path=Modules}" SelectedItem="{Binding Path=SelectedModule}" >
@@ -94,10 +93,5 @@
                           SelectedValue="{Binding WachtModule,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             </StackPanel>
         </WrapPanel>
-        <Grid Grid.Row="3">
-            <WrapPanel Orientation="Horizontal">
-                <CheckBox Margin="5" Content="Langstwachtende alternatief" IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
-            </WrapPanel>
-        </Grid>
     </Grid>
 </UserControl>

@@ -134,7 +134,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
                     if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.EnkelDisplay)
                     {
-                        sb.AppendLine($"{ts}SegmentSturing(ML+1, {_uspf}{_ussegm}1, {_uspf}{_ussegm}2, {_uspf}{_ussegm}3, {_uspf}{_ussegm}4, {_uspf}{_ussegm}5, {_uspf}{_ussegm}6, {_uspf}{_ussegm}7);");
+                        if (!c.Data.MultiModuleReeksen)
+                        {
+                            sb.AppendLine($"{ts}SegmentSturing(ML+1, {_uspf}{_ussegm}1, {_uspf}{_ussegm}2, {_uspf}{_ussegm}3, {_uspf}{_ussegm}4, {_uspf}{_ussegm}5, {_uspf}{_ussegm}6, {_uspf}{_ussegm}7);");
+                        }
                     }
                     else if (c.Data.SegmentDisplayType == SegmentDisplayTypeEnum.DrieCijferDisplay)
                     {
@@ -174,7 +177,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach(var m in c.Data.ModulenDisplayBitmapData)
                         {
                             var mNaam = Regex.Replace(m.Naam, @"ML[A-E]+", "ML");
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{m.Naam.Replace("ML", _usML.Setting)}] = ML == {mNaam};");
+                            var mReeks = Regex.Replace(m.Naam, @"ML([A-E]?)[0-9]+", "ML$1");
+                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{m.Naam.Replace("ML", _usML.Setting)}] = {mReeks} == {mNaam};");
                         }
                     }
 

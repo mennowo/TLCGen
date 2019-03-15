@@ -485,7 +485,9 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
                         count aantalfc,           /* aantal te doseren fasen                           */
                         count fc[],               /* pointer naar array met fasenummers                */
                         count fcmg[][MPERIODMAX], /* pointer naar array met mg parameter index nummers */
-                        int nogtedoseren[])       /* pointer naar array met nog te doseren waarden     */
+                        int nogtedoseren[],       /* pointer naar array met nog te doseren waarden     */
+	                    bool *prml[],
+	                    count ml)
 {
     int i, j, laatstedosering;
 
@@ -517,7 +519,7 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
         }
         /* Op eindegroen wanneer er geen file is, of wel file maar geen MK,
            zet actuele waarden op 0 */
-        if((nogtedoseren[i] && EG[fc[i]] && PR[fc[i]] && !H[hfile]) || (EG[fc[i]] && H[hfile] && !MK[fc[i]]) || nogtedoseren[i] && !A[fc[i]] && PRML[ML][fc[i]] == PRIMAIR)
+        if((nogtedoseren[i] && EG[fc[i]] && PR[fc[i]] && !H[hfile]) || (EG[fc[i]] && H[hfile] && !MK[fc[i]]) || nogtedoseren[i] && !A[fc[i]] && prml[ml][fc[i]] == PRIMAIR)
         {
             nogtedoseren[i] = 0;
         }
@@ -537,7 +539,9 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
                         count aantalfc,                 /* aantal te doseren fasen                           */
                         count fc[],                     /* pointer naar array met fasenummers                */
                         count fcvg[][MPERIODMAX],       /* pointer naar array met mg parameter index nummers */
-                        int nogtedoseren[])             /* pointer naar array met nog te doseren waarden     */
+                        int nogtedoseren[],             /* pointer naar array met nog te doseren waarden     */
+	                    bool *prml[],
+	                    count ml)
 {
     int i, j, laatstedosering;
 
@@ -569,7 +573,7 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
         }
         /* Op eindegroen wanneer er geen file is, of wel file maar geen MK,
            zet actuele waarden op 0 */
-        if((nogtedoseren[i] && EG[fc[i]] && PR[fc[i]] && !H[hfile]) || (EG[fc[i]] && H[hfile] && !MK[fc[i]]) || nogtedoseren[i] && !A[fc[i]] && PRML[ML][fc[i]] == PRIMAIR)
+        if((nogtedoseren[i] && EG[fc[i]] && PR[fc[i]] && !H[hfile]) || (EG[fc[i]] && H[hfile] && !MK[fc[i]]) || nogtedoseren[i] && !A[fc[i]] && prml[ml][fc[i]] == PRIMAIR)
         {
             nogtedoseren[i] = 0;
         }
