@@ -132,8 +132,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine("gk_InitGK();");
-                        sb.AppendLine("gk_InitNL();");
+                        sb.AppendLine($"{ts}gk_InitGK();");
+                        sb.AppendLine($"{ts}gk_InitNL();");
                     }
                     // TODO: eerst controleren
                     //if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen && x.InrijdenTijdensGroen))
@@ -154,8 +154,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine("gk_ResetGK();");
-                        sb.AppendLine("gk_ResetNL();");
+                        sb.AppendLine($"{ts}gk_ResetGK();");
+                        sb.AppendLine($"{ts}gk_ResetNL();");
                     }
                     // TODO: should only generate if any nalopen are there?
                     if (c.HalfstarData.IsHalfstar && _myElements.Any(x => x.Type == CCOLElementTypeEnum.Timer))
@@ -206,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine("gk_ResetGK();");
+                        sb.AppendLine($"{ts}gk_ResetGK();");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
