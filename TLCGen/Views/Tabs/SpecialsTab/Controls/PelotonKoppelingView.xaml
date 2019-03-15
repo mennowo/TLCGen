@@ -39,7 +39,7 @@
                         </DataTemplate>
                     </DataGrid.RowHeaderTemplate>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
+                        <!--<DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />-->
                     </DataGrid.Columns>
                 </DataGrid>
                 <ct:ItemsManagerView Caption="" Grid.Row="2"
