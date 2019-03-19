@@ -28,7 +28,7 @@ bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
 	if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
 	for (index = 0; index < lijnmax; ++index)
 	{
-		if (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) return TRUE;
+		if (PRM[lijnparm + 1 + index] != 0 && CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index]) return TRUE;
 	}
 	return FALSE;
 }
@@ -40,9 +40,9 @@ bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 	if (CIF_DSI[CIF_DSI_LYN] == 0 || CIF_DSI[CIF_DSI_RITC] == 0) return FALSE;
 	for (index = 0; index < lijnmax; ++index)
 	{
-		if (CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index] &&
-			(CIF_DSI[CIF_DSI_RITC] == PRM[lijnparm + 11 + index] ||
-			 PRM[lijnparm + 11 + index] == 999)) return TRUE;
+		if (PRM[lijnparm + 1 + index] != 0 && CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index] &&
+			(PRM[lijnparm + 11 + index] != 0 && CIF_DSI[CIF_DSI_RITC] == PRM[lijnparm + 11 + index] ||
+				PRM[lijnparm + 11 + index] == 999)) return TRUE;
 	}
 	return FALSE;
 }
