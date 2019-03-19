@@ -13,7 +13,7 @@ bool DSIMeldingOV_V1(
 	bool extra);
 
 bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax);
-bool DSIMeldingOV_RitCategorie_V1(count ritcatparm, count ritmax);
+bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax);
 
 bool DSIMelding_HD_V1(count dir, /* 1. fc nummer of richtingnummer (201, 202, 203)  */
 	count meldingtype,           /* 2. Type melding: in of uit */

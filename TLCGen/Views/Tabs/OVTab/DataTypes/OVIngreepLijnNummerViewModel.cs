@@ -20,7 +20,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer = value;
-                RaisePropertyChanged<object>("LijnNummer", broadcast: true);
+                RaisePropertyChanged<object>(nameof(LijnNummer), broadcast: true);
             }
         }
 
@@ -30,7 +30,17 @@ namespace TLCGen.ViewModels
             set
             {
                 _LijnNummer.Nummer = value;
-                RaisePropertyChanged<object>("Nummer", broadcast: true);
+                RaisePropertyChanged<object>(nameof(Nummer), broadcast: true);
+            }
+        }
+
+        public string RitCategorie
+        {
+            get { return _LijnNummer.RitCategorie; }
+            set
+            {
+                _LijnNummer.RitCategorie = value;
+                RaisePropertyChanged<object>(nameof(RitCategorie), broadcast: true);
             }
         }
 

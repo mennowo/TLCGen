@@ -1460,19 +1460,13 @@
             <Default>lijn</Default>
             <Setting>lijn</Setting>
             <Type>Parameter</Type>
-            <Description>Lijnnummers prioriteit OV fase _E1_</Description>
-          </Setting>
-          <Setting>
-            <Default>alleritcat</Default>
-            <Setting>alleritcat</Setting>
-            <Type>Parameter</Type>
-            <Description>Prioriteit geven aan alle rit categorien fase _E1_</Description>
+            <Description>Lijnnummer _E1_ tbv prioriteit OV fase _E2_</Description>
           </Setting>
           <Setting>
             <Default>ritcat</Default>
             <Setting>ritcat</Setting>
             <Type>Parameter</Type>
-            <Description>Categorien prioriteit OV fase _E1_</Description>
+            <Description>Ritcategorie bij lijnnummer _E1_ tbv prioriteit OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>cprio</Default>

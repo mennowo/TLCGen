@@ -7,5 +7,8 @@ namespace TLCGen.Models
     {
         [HasDefault(false)]
         public string Nummer { get; set; }
+
+        [HasDefault(false)]
+        public string RitCategorie { get; set; }
     }
 }

@@ -293,6 +293,18 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
+        [Description("Check op ritcategorie")]
+        public bool CheckRitCategorie
+        {
+            get { return OVIngreep.CheckRitCategorie; }
+            set
+            {
+                OVIngreep.CheckRitCategorie = value;
+                RaisePropertyChanged<object>(nameof(CheckRitCategorie), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
         [EnabledCondition(nameof(CheckLijnNummer))]
         [Description("Prioriteit voor alle lijnen")]
         public bool AlleLijnen
@@ -331,64 +343,6 @@ namespace TLCGen.ViewModels
         private ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> _lijnNummers;
         public ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel> LijnNummers =>
             _lijnNummers ?? (_lijnNummers = new ObservableCollectionAroundList<OVIngreepLijnNummerViewModel, OVIngreepLijnNummerModel>(OVIngreep.LijnNummers));
-
-
-        [Browsable(false)]
-        [Description("Check op ritcategorie")]
-        public bool CheckRitCategorie
-        {
-            get { return OVIngreep.CheckRitCategorie; }
-            set
-            {
-                OVIngreep.CheckRitCategorie = value;
-                if (value && !RitCategorien.Any())
-                {
-                    Add4RitCategorienCommand.Execute(null);
-                }
-                RaisePropertyChanged<object>(nameof(CheckRitCategorie), broadcast: true);
-            }
-        }
-
-        [Browsable(false)]
-        [EnabledCondition(nameof(CheckRitCategorie))]
-        [Description("Prioriteit voor alle ritcategoriën")]
-        public bool AlleRitCategorien
-        {
-            get { return OVIngreep.AlleRitCategorien; }
-            set
-            {
-                OVIngreep.AlleRitCategorien = value;
-                RaisePropertyChanged<object>(nameof(AlleRitCategorien), broadcast: true);
-            }
-        }
-
-        [Browsable(false)]
-        public OVIngreepRitCategorieViewModel SelectedRitCategorie
-        {
-            get { return _SelectedRitCategorie; }
-            set
-            {
-                _SelectedRitCategorie = value;
-                RaisePropertyChanged(nameof(SelectedRitCategorie));
-            }
-        }
-
-        [Browsable(false)]
-        public string NewRitCategorie
-        {
-            get { return _NewRitCategorie; }
-            set
-            {
-                _NewRitCategorie = value;
-                RaisePropertyChanged(nameof(NewRitCategorie));
-            }
-        }
-
-        [Browsable(false)]
-        private ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel> _ritCategorien;
-        public ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel> RitCategorien =>
-            _ritCategorien ?? (_ritCategorien = new ObservableCollectionAroundList<OVIngreepRitCategorieViewModel, OVIngreepRitCategorieModel>(OVIngreep.RitCategorien));
-
 
         [Browsable(false)]
         public bool HasKAR => OVIngreep.HasOVIngreepKAR();
@@ -443,45 +397,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        RelayCommand _AddRitCategorieCommand;
-        public ICommand AddRitCategorieCommand
-        {
-            get
-            {
-                if (_AddRitCategorieCommand == null)
-                {
-                    _AddRitCategorieCommand = new RelayCommand(AddRitCategorieCommand_Executed, AddRitCategorieCommand_CanExecute);
-                }
-                return _AddRitCategorieCommand;
-            }
-        }
-
-        RelayCommand _Add4RitCategorienCommand;
-        public ICommand Add4RitCategorienCommand
-        {
-            get
-            {
-                if (_Add4RitCategorienCommand == null)
-                {
-                    _Add4RitCategorienCommand = new RelayCommand(Add4RitCategorienCommand_Executed, Add4RitCategorienCommand_CanExecute);
-                }
-                return _Add4RitCategorienCommand;
-            }
-        }
-
-
-        RelayCommand _RemoveRitCategorieCommand;
-        public ICommand RemoveRitCategorieCommand
-        {
-            get
-            {
-                if (_RemoveRitCategorieCommand == null)
-                {
-                    _RemoveRitCategorieCommand = new RelayCommand(RemoveRitCategorieCommand_Executed, RemoveRitCategorieCommand_CanExecute);
-                }
-                return _RemoveRitCategorieCommand;
-            }
-        }
         #endregion // Commands
 
         #region Command functionality
@@ -492,7 +407,7 @@ namespace TLCGen.ViewModels
             {
                 OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
                 {
-                    Nummer = NewLijnNummer
+                    Nummer = NewLijnNummer, RitCategorie = "999"
                 };
                 LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
             }
@@ -500,7 +415,7 @@ namespace TLCGen.ViewModels
             {
                 OVIngreepLijnNummerModel nummer = new OVIngreepLijnNummerModel()
                 {
-                    Nummer = "0"
+                    Nummer = "0", RitCategorie = "999"
                 };
                 LijnNummers.Add(new OVIngreepLijnNummerViewModel(nummer));
             }
@@ -543,66 +458,6 @@ namespace TLCGen.ViewModels
         bool RemoveLijnNummerCommand_CanExecute(object prm)
         {
             return LijnNummers != null && LijnNummers.Count > 0;
-        }
-
-        void AddRitCategorieCommand_Executed(object prm)
-        {
-            if (!string.IsNullOrWhiteSpace(NewRitCategorie))
-            {
-                OVIngreepRitCategorieModel nummer = new OVIngreepRitCategorieModel()
-                {
-                    Nummer = NewRitCategorie
-                };
-                RitCategorien.Add(new OVIngreepRitCategorieViewModel(nummer));
-            }
-            else
-            {
-                OVIngreepRitCategorieModel nummer = new OVIngreepRitCategorieModel()
-                {
-                    Nummer = "0"
-                };
-                RitCategorien.Add(new OVIngreepRitCategorieViewModel(nummer));
-            }
-            NewRitCategorie = "";
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        bool AddRitCategorieCommand_CanExecute(object prm)
-        {
-            return RitCategorien != null;
-        }
-
-        void Add4RitCategorienCommand_Executed(object prm)
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                _NewRitCategorie = (10 + i).ToString();
-                AddRitCategorieCommand.Execute(prm);
-            }
-        }
-
-        bool Add4RitCategorienCommand_CanExecute(object prm)
-        {
-            return RitCategorien != null;
-        }
-
-        void RemoveRitCategorieCommand_Executed(object prm)
-        {
-            if (SelectedRitCategorie != null)
-            {
-                RitCategorien.Remove(SelectedRitCategorie);
-                SelectedRitCategorie = null;
-            }
-            else
-            {
-                RitCategorien.RemoveAt(RitCategorien.Count - 1);
-            }
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(new ControllerDataChangedMessage());
-        }
-
-        bool RemoveRitCategorieCommand_CanExecute(object prm)
-        {
-            return RitCategorien != null && RitCategorien.Count > 0;
         }
 
         #endregion // Command functionality
