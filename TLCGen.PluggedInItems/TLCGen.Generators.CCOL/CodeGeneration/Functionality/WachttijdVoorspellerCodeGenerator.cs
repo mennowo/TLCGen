@@ -187,7 +187,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     #region bereken de primaire wachttijd van alle richtingen
                     sb.AppendLine($"{ts}/* bereken de primaire wachttijd van alle richtingen */");
-                    sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PRML, ML, ML_MAX, t_wacht);");
+                    if (!c.Data.MultiModuleReeksen)
+                    {
+                        sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PRML, ML, ML_MAX, t_wacht);");
+                    }
+                    else
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, t_wacht);");
+                        }
+                    }
                     sb.AppendLine();
                     #endregion
 
@@ -201,12 +211,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     #endregion
 
                     #region corrigeer waarde i.v.m. gelijkstart fietsers
-                    sb.AppendLine($"{ts}/* corrigeer waarde i.v.m. gelijkstart fietsers */");
+                    var start = false;
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
                         var gss = c.InterSignaalGroep.Gelijkstarten.Where(x => x.FaseVan == fc.Naam);
                         if (gss.Any())
                         {
+                            if (!start)
+                            {
+                                start = true;
+                                sb.AppendLine($"{ts}/* corrigeer waarde i.v.m. gelijkstart fietsers */");
+                            }
                             foreach (var gs in gss)
                             {
                                 sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht);");
@@ -224,7 +239,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     #region check of richting wordt tegengehouden door OV/HD
                     sb.AppendLine($"{ts}/* check of richting wordt tegengehouden door OV/HD */");
-                    sb.AppendLine($"{ts}rr_modulen_primair(PRML, ML, ML_MAX, rr_twacht);");
+                    if (!c.Data.MultiModuleReeksen)
+                    {
+                        sb.AppendLine($"{ts}rr_modulen_primair(PRML, ML, ML_MAX, rr_twacht);");
+                    }
+                    else
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht);");
+                        }
+                    }
                     sb.AppendLine();
                     #endregion
 
