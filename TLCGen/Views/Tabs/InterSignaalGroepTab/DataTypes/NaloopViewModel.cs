@@ -34,6 +34,7 @@ namespace TLCGen.ViewModels
                     _naloop.Type = value;
                     SetNaloopTijden();
                     RaisePropertyChanged<object>(nameof(Type), broadcast: true);
+                    RaisePropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
                 }
             }
         }
@@ -64,6 +65,7 @@ namespace TLCGen.ViewModels
                     MaximaleVoorstart = null;
                 }
                 RaisePropertyChanged(nameof(MaximaleVoorstartAllowed));
+                RaisePropertyChanged(nameof(ShowNotSupportedInCCOLWarning));
             }
         }
 
@@ -76,7 +78,6 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged();
             }
         }
-
 
         public bool DetectieAfhankelijk
         {
@@ -145,6 +146,11 @@ namespace TLCGen.ViewModels
                 return _detectorManager;
             }
         }
+
+        public System.Windows.Visibility ShowNotSupportedInCCOLWarning =>
+            (Type == NaloopTypeEnum.EindeGroen) && InrijdenTijdensGroen ? 
+            System.Windows.Visibility.Visible : 
+            System.Windows.Visibility.Collapsed;
 
         #endregion // Properties
 
