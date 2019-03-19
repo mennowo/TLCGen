@@ -54,6 +54,7 @@ namespace TLCGen.ViewModels
                 {
                     ModuleMolenVM = new ModuleMolenViewModel(this, _Controller.MultiModuleMolens.FirstOrDefault(x => x.Reeks == value));
                 }
+                ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules.FirstOrDefault();
                 if (ModuleMolenVM.Modules.Count > 0)
                 {
                     ModuleMolenVM.SelectedModule = ModuleMolenVM.Modules[0];

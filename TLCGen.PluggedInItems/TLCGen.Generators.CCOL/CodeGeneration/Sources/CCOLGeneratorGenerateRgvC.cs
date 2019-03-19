@@ -355,7 +355,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     continue;
                 }
-                sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PRML, ML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                if (!c.Data.MultiModuleReeksen)
+                {
+                    sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PRML, ML, SML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                }
+                else
+                {
+                    var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc.FaseCyclus)));
+                    if (r != null)
+                    {
+                        sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PR{r.Reeks}, {r.Reeks}, S{r.Reeks}, {r.Reeks}_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                    }
+                }
             }
             sb.AppendLine();
             sb.AppendLine($"{ts}/* Opslaan 'oude' TVG tijd volgens RoBuGrover */");
