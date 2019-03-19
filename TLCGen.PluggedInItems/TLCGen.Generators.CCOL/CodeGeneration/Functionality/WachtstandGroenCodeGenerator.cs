@@ -111,7 +111,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.Data.ExtraMeeverlengenInWG)
                     {
                         sb.AppendLine($"{ts}/* Zet voor alle fasen het WS[] bitje. */");
-                        sb.AppendLine($"{ts}WachtStand(PRML, ML, MLMAX);");
+                        if (!c.Data.MultiModuleReeksen)
+                        {
+                            sb.AppendLine($"{ts}WachtStand(PRML, ML, MLMAX);");
+                        }
+                        else
+                        {
+                            foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                            {
+                                sb.AppendLine($"{ts}WachtStand(PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX);");
+                            }
+                        }
                         sb.AppendLine();
                     }
                     sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
