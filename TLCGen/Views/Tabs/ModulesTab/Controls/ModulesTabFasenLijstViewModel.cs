@@ -79,8 +79,8 @@ namespace TLCGen.ViewModels
                 {
                     fcmvm.ModuleVM = value;
                     fcmvm.ModuleFaseVM = null;
-                    if (SelectedModuleFase != null ||
-                        _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)))
+                    if (!_Controller.Data.MultiModuleReeksen && _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)) ||
+                        _Controller.MultiModuleMolens.Any(y => y.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam))))
                     {
                         fcmvm.HasModule = true;
                     }
@@ -105,8 +105,8 @@ namespace TLCGen.ViewModels
                 {
                     fcmvm.ModuleVM = null;
                     fcmvm.ModuleFaseVM = value;
-                    if (SelectedModuleFase != null ||
-                        _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)))
+                    if (!_Controller.Data.MultiModuleReeksen && _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam)) ||
+                        _Controller.MultiModuleMolens.Any(y => y.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == fcmvm.Naam))))
                     {
                         fcmvm.HasModule = true;
                     }
@@ -187,8 +187,8 @@ namespace TLCGen.ViewModels
             }
             foreach (FaseCyclusModuleViewModel _fcmvm in Fasen)
             {
-                if (SelectedModuleFase != null || 
-                    _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam)))
+                if (!_Controller.Data.MultiModuleReeksen && _Controller.ModuleMolen.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam)) ||
+                    _Controller.MultiModuleMolens.Any(y => y.Modules.Any(x => x.Fasen.Any(x2 => x2.FaseCyclus == _fcmvm.Naam))))
                 {
                     _fcmvm.HasModule = true;
                 }
