@@ -39,7 +39,8 @@
 bool rgv_niet_primair (
     count fc,           /* fasecyclusnummer                             */
     bool *prml[],       /* primaire module toedeling                    */
-    count ml,           /* actieve module                               */
+	count ml,           /* actieve module                               */
+	count sml,          /* start module                               */
     count ml_max,       /* maxium aantal modulen                        */
     count hpri,         /* hulpelementnummer                            */
     mulv PRM_mintvg,    /* parameter minimum maximum verlenggroentijd   */
@@ -54,7 +55,7 @@ bool rgv_niet_primair (
       IH[hpri]= TRUE;                                  /* onthou primaire realisatie          */
    }
 
-   if (SML) {  /* module overgang? */
+   if (sml) {  /* module overgang? */
       if (!(prml[ml][fc] & PRIMAIR_VERSNELD)) {        /* niet primair in de actieve module   */
          hml= ml-1;     /* voorgaande module */
          if (hml<ML1) hml= ml_max-1;
