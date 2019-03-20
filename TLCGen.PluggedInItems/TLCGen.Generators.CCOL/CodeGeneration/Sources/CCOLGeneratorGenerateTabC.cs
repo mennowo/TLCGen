@@ -169,6 +169,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.HasDSI())
             {
                 sb.Append(GenerateTabCControlParametersDS(controller));
+                sb.AppendLine();
             }
             sb.Append(GenerateTabCControlParametersModulen(controller));
             sb.AppendLine();
@@ -177,6 +178,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append(GenerateTabCControlParametersVLOG(controller));
                 sb.AppendLine();
             }
+            sb.Append(GenerateTabCControlParametersIOTypes(controller));
+            sb.AppendLine();
 
 	        AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, false, true, false, true);
 
@@ -189,6 +192,147 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"{controller.Data.Naam}tab.add\"");
 
             sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateTabCControlParametersIOTypes(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("/* Typen ingangen */");
+            sb.AppendLine("/* -------------- */");
+
+            foreach (FaseCyclusModel fc in c.Fasen)
+            {
+                foreach (DetectorModel dm in fc.Detectoren)
+                {
+                    sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                    switch (dm.Type)
+                    {
+                        case DetectorTypeEnum.Knop:
+                        case DetectorTypeEnum.KnopBinnen:
+                        case DetectorTypeEnum.KnopBuiten:
+                            sb.AppendLine("DK_type;");
+                            break;
+                        case DetectorTypeEnum.File:
+                        case DetectorTypeEnum.Verweg:
+                            sb.AppendLine("DL_type | DVER_type;");
+                            break;
+                        case DetectorTypeEnum.Kop:
+                            sb.AppendLine("DL_type | DKOP_type;");
+                            break;
+                        case DetectorTypeEnum.Lang:
+                            sb.AppendLine("DL_type | DLNG_type;");
+                            break;
+                        case DetectorTypeEnum.OpticomIngang:
+                        case DetectorTypeEnum.VecomDetector:
+                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
+                            sb.AppendLine("DS_type;");
+                            break;
+                        case DetectorTypeEnum.Overig:
+                            sb.AppendLine("DL_type;");
+                            break;
+                        case DetectorTypeEnum.WisselStandDetector:
+                        case DetectorTypeEnum.WisselDetector:
+                        case DetectorTypeEnum.WisselStroomKringDetector:
+                        case DetectorTypeEnum.Radar:
+                            sb.AppendLine("DL_type | DKOP_type;");
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type);
+                    }
+                }
+            }
+            foreach (DetectorModel dm in c.Detectoren)
+            {
+                sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
+                switch (dm.Type)
+                {
+                    case DetectorTypeEnum.Knop:
+                    case DetectorTypeEnum.KnopBinnen:
+                    case DetectorTypeEnum.KnopBuiten:
+                        sb.AppendLine("DK_type;");
+                        break;
+                    case DetectorTypeEnum.File:
+                    case DetectorTypeEnum.Verweg:
+                        sb.AppendLine("DL_type | DVER_type;");
+                        break;
+                    case DetectorTypeEnum.Kop:
+                        sb.AppendLine("DL_type | DKOP_type;");
+                        break;
+                    case DetectorTypeEnum.Lang:
+                        sb.AppendLine("DL_type | DLNG_type;");
+                        break;
+                    case DetectorTypeEnum.OpticomIngang:
+                    case DetectorTypeEnum.VecomDetector:
+                        // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
+                        sb.AppendLine("DS_type;");
+                        break;
+                    case DetectorTypeEnum.Overig:
+                        sb.AppendLine("DL_type;");
+                        break;
+                    case DetectorTypeEnum.WisselStandDetector:
+                    case DetectorTypeEnum.WisselDetector:
+                    case DetectorTypeEnum.WisselStroomKringDetector:
+                    case DetectorTypeEnum.Radar:
+                        sb.AppendLine("DL_type | DKOP_type;");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
+                }
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("/* Typen uitgangen */");
+            sb.AppendLine("/* --------------- */");
+
+            foreach (FaseCyclusModel fc in c.Fasen)
+            {
+                sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
+                switch (fc.Type)
+                {
+                    case Models.Enumerations.FaseTypeEnum.Auto:
+                        sb.AppendLine("MVT_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.OV:
+                        sb.AppendLine("OV_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Fiets:
+                        sb.AppendLine("FTS_type;");
+                        break;
+                    case Models.Enumerations.FaseTypeEnum.Voetganger:
+                        sb.AppendLine("VTG_type;");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException("Unknown vehicle type while generating tab.c: " + fc.Type.ToString());
+                }
+            }
+
+            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+                AllCCOLInputElements.Any(x => x.Multivalent))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Multivalente ingangen */");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent))
+                {
+                    sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
+                }
+                sb.AppendLine("#endif /* NO_VLOG_300 */");
+            }
+            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
+                AllCCOLOutputElements.Any(x => x.Multivalent))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"{ts}/* Multivalente ingangen */");
+                sb.AppendLine($"#if !defined NO_VLOG_300");
+                foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
+                {
+                    sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
+                }
+                sb.AppendLine("#endif /* NO_VLOG_300 */");
+            }
 
             return sb.ToString();
         }
@@ -854,7 +998,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}DS_code[{(_dpf + sd.Naam).ToUpper()}]  = \"{sd.Naam.ToUpper()}\";");
                 }
             }
-            sb.AppendLine();
 
             return sb.ToString();
         }
@@ -987,116 +1130,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}MONPRM[MONPRM_EVENT] = {c.Data.VLOGSettings.MONPRM_EVENT};");
                 sb.AppendLine($"#endif");
                 sb.AppendLine($"{ts}MONPRM[MONPRM_VLOGMODE] = {(c.Data.VLOGSettings.MONPRM_VLOGMODE == VLOGMonModeEnum.Binair ? "VLOGMODE_MON_BINAIR" : "VLOGMODE_MON_ASCII")};");
-                sb.AppendLine();
-            }
-
-            sb.AppendLine("/* Typen ingangen */");
-            sb.AppendLine("/* -------------- */");
-
-            foreach(FaseCyclusModel fc in c.Fasen)
-            {
-                foreach (DetectorModel dm in fc.Detectoren)
-                {
-                    sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
-                    switch (dm.Type)
-                    {
-                        case DetectorTypeEnum.Knop:
-                        case DetectorTypeEnum.KnopBinnen:
-                        case DetectorTypeEnum.KnopBuiten:
-                            sb.AppendLine("DK_type;");
-                            break;
-                        case DetectorTypeEnum.File:
-                        case DetectorTypeEnum.Verweg:
-                            sb.AppendLine("DL_type | DVER_type;");
-                            break;
-                        case DetectorTypeEnum.Kop:
-                            sb.AppendLine("DL_type | DKOP_type;");
-                            break;
-                        case DetectorTypeEnum.Lang:
-                            sb.AppendLine("DL_type | DLNG_type;");
-                            break;
-                        case DetectorTypeEnum.OpticomIngang:
-                        case DetectorTypeEnum.VecomDetector:
-                            // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
-                            sb.AppendLine("DS_type;");
-                            break;
-                        case DetectorTypeEnum.Overig:
-                            sb.AppendLine("DL_type;");
-                            break;
-                        case DetectorTypeEnum.WisselStandDetector:
-                        case DetectorTypeEnum.WisselDetector:
-                        case DetectorTypeEnum.WisselStroomKringDetector:
-                        case DetectorTypeEnum.Radar:
-                            sb.AppendLine("DL_type | DKOP_type;");
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type);
-                    }
-                }
-            }
-            foreach (DetectorModel dm in c.Detectoren)
-            {
-                sb.Append($"{ts}IS_type[{_dpf}{dm.Naam}] = ");
-                switch (dm.Type)
-                {
-                    case DetectorTypeEnum.Knop:
-                    case DetectorTypeEnum.KnopBinnen:
-                    case DetectorTypeEnum.KnopBuiten:
-                        sb.AppendLine("DK_type;");
-                        break;
-                    case DetectorTypeEnum.File:
-                    case DetectorTypeEnum.Verweg:
-                        sb.AppendLine("DL_type | DVER_type;");
-                        break;
-                    case DetectorTypeEnum.Kop:
-                        sb.AppendLine("DL_type | DKOP_type;");
-                        break;
-                    case DetectorTypeEnum.Lang:
-                        sb.AppendLine("DL_type | DLNG_type;");
-                        break;
-                    case DetectorTypeEnum.OpticomIngang:
-                    case DetectorTypeEnum.VecomDetector:
-                        // TODO: it is possible to use DKOP and DVER to mark in- and uitmelding: use? how?
-                        sb.AppendLine("DS_type;");
-                        break;
-                    case DetectorTypeEnum.Overig:
-                        sb.AppendLine("DL_type;");
-                        break;
-                    case DetectorTypeEnum.WisselStandDetector:
-                    case DetectorTypeEnum.WisselDetector:
-                    case DetectorTypeEnum.WisselStroomKringDetector:
-                    case DetectorTypeEnum.Radar:
-                        sb.AppendLine("DL_type | DKOP_type;");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Unknown detector type while generating tab.c: " + dm.Type.ToString());
-                }
-            }
-
-            sb.AppendLine();
-            sb.AppendLine("/* Typen uitgangen */");
-            sb.AppendLine("/* --------------- */");
-
-            foreach(FaseCyclusModel fc in c.Fasen)
-            {
-                sb.Append($"{ts}US_type[{_fcpf}{fc.Naam}] = ");
-                switch (fc.Type)
-                {
-                    case Models.Enumerations.FaseTypeEnum.Auto:
-                        sb.AppendLine("MVT_type;");
-                        break;
-                    case Models.Enumerations.FaseTypeEnum.OV:
-                        sb.AppendLine("OV_type;");
-                        break;
-                    case Models.Enumerations.FaseTypeEnum.Fiets:
-                        sb.AppendLine("FTS_type;");
-                        break;
-                    case Models.Enumerations.FaseTypeEnum.Voetganger:
-                        sb.AppendLine("VTG_type;");
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException("Unknown vehicle type while generating tab.c: " + fc.Type.ToString());
-                }
             }
 
             if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
@@ -1115,35 +1148,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                 }
             }
-            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
-                AllCCOLInputElements.Any(x => x.Multivalent))
-            {
-                sb.AppendLine();
-                sb.AppendLine($"{ts}/* Multivalente ingangen */");
-                sb.AppendLine($"#if !defined NO_VLOG_300");
-                foreach (var i in AllCCOLInputElements.Where(x => x.Multivalent))
-                {
-                    sb.AppendLine($"{ts}IS_type[{i.Naam}] = ISM_type;");
-                }
-                sb.AppendLine("#endif /* NO_VLOG_300 */");
-            }
-            if (c.Data.CCOLVersie > CCOLVersieEnum.CCOL8 &&
-                AllCCOLOutputElements.Any(x => x.Multivalent))
-            {
-                sb.AppendLine();
-                sb.AppendLine($"{ts}/* Multivalente ingangen */");
-                sb.AppendLine($"#if !defined NO_VLOG_300");
-                foreach (var i in AllCCOLOutputElements.Where(x => x.Multivalent))
-                {
-                    sb.AppendLine($"{ts}US_type[{i.Naam}] = USM_type;");
-                }
-                sb.AppendLine("#endif /* NO_VLOG_300 */");
-            }
 
-            sb.AppendLine();
             sb.AppendLine("#endif /* NO_VLOG */");
-            
-            sb.AppendLine();
+
             return sb.ToString();
         }
     }
