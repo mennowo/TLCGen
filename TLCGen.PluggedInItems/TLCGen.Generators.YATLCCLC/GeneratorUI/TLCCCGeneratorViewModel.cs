@@ -40,7 +40,7 @@ namespace TLCGen.Generators.TLCCC.GeneratorUI
 
         private void GenerateCodeCommand_Executed()
         {
-            var prepreq = new Messaging.Requests.PrepareForGenerationRequest();
+            var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_plugin.Controller);
             Messenger.Default.Send(prepreq);
             var s = TLCGenIntegrityChecker.IsControllerDataOK(_plugin.Controller);
             if (s == null)

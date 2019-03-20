@@ -91,7 +91,7 @@ namespace TLCGen.Generators.CCOL
 
         private void GenerateCodeCommand_Executed(object prm)
         {
-            var prepreq = new Messaging.Requests.PrepareForGenerationRequest();
+            var prepreq = new Messaging.Requests.PrepareForGenerationRequest(_Plugin.Controller);
             GalaSoft.MvvmLight.Messaging.Messenger.Default.Send(prepreq);
             string s = TLCGenIntegrityChecker.IsControllerDataOK(_Plugin.Controller);
             if (s == null)

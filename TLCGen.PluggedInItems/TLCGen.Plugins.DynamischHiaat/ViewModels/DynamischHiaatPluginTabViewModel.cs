@@ -169,6 +169,13 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         private void OnDetectorenChanged(DetectorenChangedMessage message)
         {
+            if(message.AddedDetectoren == null && message.RemovedDetectoren == null)
+            {
+                foreach(var mfc in DynamischHiaatSignalGroups)
+                {
+                    mfc.DynamischHiaatDetectoren.BubbleSort();
+                }
+            }
             if (message.AddedDetectoren?.Count > 0)
             {
                 foreach(var d in message.AddedDetectoren)

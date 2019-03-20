@@ -136,11 +136,38 @@ namespace TLCGen.Plugins.DynamischHiaat.ViewModels
 
         public int CompareTo(object obj)
         {
-            var d1 = Regex.Replace(Detector.DetectorName, $@"^{Detector.SignalGroupName}", "");
-            var d2 = Regex.Replace(((DynamischHiaatDetectorViewModel)obj).Detector.DetectorName, $@"^{Detector.SignalGroupName}", "");
-            if (d1.Length < d2.Length) d1 = d1.PadLeft(d2.Length, '0');
-            if (d2.Length < d1.Length) d2 = d2.PadLeft(d1.Length, '0');
-            return string.CompareOrdinal(d1, d2);
+            // TODO: this code is used in at least 3 places. make into 1!
+
+            if (!(obj is DynamischHiaatDetectorViewModel dm)) throw new InvalidCastException();
+
+            var myName = DetectorName;
+            var hisName = dm.DetectorName;
+
+            if (Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+                {
+                    hisName = hisName + "0";
+                }
+            }
+            if (Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+                {
+                    myName = myName + "0";
+                }
+            }
+            if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+            else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+            return string.Compare(
+                myName,
+                hisName,
+                StringComparison.Ordinal);
+            //var d1 = Regex.Replace(Detector.DetectorName, $@"^{Detector.SignalGroupName}", "");
+            //var d2 = Regex.Replace(((DynamischHiaatDetectorViewModel)obj).Detector.DetectorName, $@"^{Detector.SignalGroupName}", "");
+            //if (d1.Length < d2.Length) d1 = d1.PadLeft(d2.Length, '0');
+            //if (d2.Length < d1.Length) d2 = d2.PadLeft(d1.Length, '0');
+            //return string.CompareOrdinal(d1, d2);
         }
 
         #endregion // IComparable

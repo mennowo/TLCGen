@@ -349,6 +349,10 @@ namespace TLCGen.ViewModels
             foreach (var fcm in _Controller.Fasen)
             {
                 Fasen.Add(fcm.Naam);
+                if (!fcm.Detectoren.IsSorted())
+                {
+                    fcm.Detectoren.BubbleSort();
+                }
             }
             if (tfc == null || !Fasen.Contains(tfc))
             {

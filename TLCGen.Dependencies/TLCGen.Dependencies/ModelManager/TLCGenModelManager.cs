@@ -11,6 +11,7 @@ using TLCGen.Extensions;
 using TLCGen.Integrity;
 using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
+using TLCGen.Messaging.Requests;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -115,6 +116,15 @@ namespace TLCGen.ModelManagement
             if (controller.ModuleMolen.Reeks == null)
             {
                 controller.ModuleMolen.Reeks = "ML";
+            }
+
+            foreach (var fcm in controller.Fasen)
+            {
+                if (!fcm.Detectoren.IsSorted())
+                {
+                    fcm.Detectoren.BubbleSort();
+                    MessengerInstance.Send(new DetectorenChangedMessage(null, null));
+                }
             }
 
             // check PostAfhandelingOV_Add in ov.add
@@ -474,6 +484,14 @@ namespace TLCGen.ModelManagement
             }
         }
 
+        private void OnPrepareForGenerationRequest(PrepareForGenerationRequest msg)
+        {
+            foreach (var fcm in msg.Controller.Fasen)
+            {
+                fcm.Detectoren.BubbleSort();
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -487,6 +505,7 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
             MessengerInstance.Register(this, new Action<NameChangingMessage>(OnNameChanging));
             MessengerInstance.Register(this, true, new Action<ModelManagerMessageBase>(OnModelManagerMessage));
+            MessengerInstance.Register(this, new Action<TLCGen.Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
         }
 
         #endregion // Constructor
