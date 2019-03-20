@@ -268,7 +268,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     return 115;
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return 115;
-                case CCOLCodeTypeEnum.RegCPostApplication:
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
                     return 115;
                 default:
                     return 0;
@@ -305,7 +305,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     }
                     return sb.ToString();
 
-                case CCOLCodeTypeEnum.RegCPostApplication:
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
                     foreach(var sg in sgs)
                     {
                         var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
