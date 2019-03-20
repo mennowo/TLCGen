@@ -90,27 +90,56 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             var verschil = fcm.MeeverlengenVerschil?.ToString() ?? "NG";
                             var hf_wsg = "hf_wsg";
+                            var hf_wsg_args = "";
+                            if (c.Data.MultiModuleReeksen)
+                            {
+                                hf_wsg = "hf_wsg_fcfc";
+                                var reeks = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fcm.Naam)));
+                                if (reeks != null)
+                                {
+                                    var rfc1 = c.Fasen.FirstOrDefault(x => reeks.Modules.SelectMany(x2 => x2.Fasen).Any(x3 => x3.FaseCyclus == x.Naam));
+                                    var rfc2 = c.Fasen.LastOrDefault(x => reeks.Modules.SelectMany(x2 => x2.Fasen).Any(x3 => x3.FaseCyclus == x.Naam));
+                                    if (rfc1 == null || rfc2 == null)
+                                    {
+                                        hf_wsg_args = "0, FCMAX";
+                                    }
+                                    else
+                                    {
+                                        var id2 = c.Fasen.IndexOf(rfc2);
+                                        ++id2;
+                                        hf_wsg_args = $"{_fcpf}{rfc1.Naam}, {(id2 == c.Fasen.Count ? "FCMAX" : $"{_fcpf}{c.Fasen[id2].Naam}")}";
+                                    }
+                                }
+                                else
+                                {
+                                    hf_wsg_args = "0, FCMAX";
+                                }
+                            }
                             if(c.InterSignaalGroep.Nalopen.Any())
                             {
                                 var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.FaseVan == fcm.Naam);
                                 if (nl != null && nl.Type == NaloopTypeEnum.EindeGroen)
                                 {
                                     hf_wsg = "hf_wsg_nl";
+                                    if (c.Data.MultiModuleReeksen)
+                                    {
+                                        hf_wsg = "hf_wsg_nl_fcfc";
+                                    }
                                 }
                             }
                             switch (fcm.MeeverlengenType)
                             {
                                 case MeeVerlengenTypeEnum.Default:
-                                    sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}() ? BIT4 : 0;");
+                                    sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.To:
-                                    sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}() ? BIT4 : 0;");
+                                    sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.MKTo:
-                                    sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}() ? BIT4 : 0;");
+                                    sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
                                     break;
                                 case MeeVerlengenTypeEnum.Voetganger:
-                                    sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}() ? BIT4 : 0;");
+                                    sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
                                     break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
