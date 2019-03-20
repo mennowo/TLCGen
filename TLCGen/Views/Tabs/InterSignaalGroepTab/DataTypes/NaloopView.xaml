@@ -9,8 +9,7 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" MinWidth="200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -42,6 +41,10 @@
                         </ct:InfoElement.InfoPopup>
                     </ct:InfoElement>
             </StackPanel>
+            <TextBlock 
+                MaxWidth="200"
+                Foreground="Red" TextWrapping="Wrap" Margin="5" Visibility="{Binding Path=ShowNotSupportedInCCOLWarning}"
+                Text="Let op! Deze optie wordt i.c.m. naloop op EG in CCOL nog niet ondersteund en geeft warnings." />
             <CheckBox Content="Detectie afhankelijk" 
                       IsEnabled="{Binding Path=DetectieAfhankelijkPossible}"
                       IsChecked="{Binding Path=DetectieAfhankelijk}" Margin="5" />

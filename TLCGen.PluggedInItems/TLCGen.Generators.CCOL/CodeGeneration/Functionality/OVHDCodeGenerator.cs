@@ -43,7 +43,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmpriohd;
         private CCOLGeneratorCodeStringSettingModel _prmallelijnen;
         private CCOLGeneratorCodeStringSettingModel _prmlijn;
-        private CCOLGeneratorCodeStringSettingModel _prmalleritcat;
         private CCOLGeneratorCodeStringSettingModel _prmritcat;
         private CCOLGeneratorCodeStringSettingModel _prmmwta;
         private CCOLGeneratorCodeStringSettingModel _prmmwtfts;
@@ -349,25 +348,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (!int.TryParse(l.Nummer, out var num)) continue;
                         _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmlijn, ov.FaseCyclus));
+                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmlijn}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmlijn, n.ToString(), ov.FaseCyclus));
                         ++n;
                     }
-                }
-
-                if (ov.CheckRitCategorie)
-                {
-                    // Note!!! "alleritcat" must alway be DIRECTLY above the cat prms, cause of the way these prms are used in code
-                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmalleritcat}{ov.FaseCyclus}", ov.AlleRitCategorien == true ? 1 : 0, CCOLElementTimeTypeEnum.None, _prmalleritcat, ov.FaseCyclus));
-                    var n = 1;
-                    foreach (var l in ov.RitCategorien)
+                    if (ov.CheckRitCategorie)
                     {
-                        if (!int.TryParse(l.Nummer, out var num)) continue;
-                        _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmritcat}{ov.FaseCyclus}_{n:00}", num, CCOLElementTimeTypeEnum.None, _prmritcat, ov.FaseCyclus));
-                        ++n;
+                        n = 1;
+                        foreach (var l in ov.LijnNummers)
+                        {
+                            if (!int.TryParse(l.RitCategorie, out var ritcat)) continue;
+                            _myElements.Add(
+                                CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmritcat}{ov.FaseCyclus}_{n:00}", ritcat, CCOLElementTimeTypeEnum.None, _prmritcat, n.ToString(), ov.FaseCyclus));
+                            ++n;
+                        }
                     }
                 }
-
 
                 // Help elements to store wissel condition
                 if (ov.HasOVIngreepWissel())
@@ -647,16 +642,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             var extra = "";
             if (ov.CheckLijnNummer && ov.LijnNummers.Any())
             {
-                extra += "DSIMeldingOV_LijnNummer_V1(" +
-                         $"{_prmpf + _prmallelijnen + ov.FaseCyclus}, " +
-                         $"{ov.LijnNummers.Count})";
-            }
-            if (ov.CheckRitCategorie && ov.RitCategorien.Any())
-            {
-                if (extra != "") extra += " && ";
-                extra += "DSIMeldingOV_RitCategorie_V1(" +
-                         $"{_prmpf + _prmalleritcat + ov.FaseCyclus}, " +
-                         $"{ov.RitCategorien.Count})";
+                if (!ov.CheckRitCategorie)
+                {
+                    extra += "DSIMeldingOV_LijnNummer_V1(" +
+                             $"{_prmpf + _prmallelijnen + ov.FaseCyclus}, " +
+                             $"{ov.LijnNummers.Count})";
+                }
+                else
+                {
+                    extra += "DSIMeldingOV_LijnNummerEnRitCategorie_V1(" +
+                             $"{_prmpf + _prmallelijnen + ov.FaseCyclus}, " +
+                             $"{ov.LijnNummers.Count})";
+                }
             }
             if (extra == "") extra = "TRUE";
 

@@ -7,8 +7,8 @@
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance vm:GelijkstartViewModel}">
+             mc:Ignorable="d" MinWidth="200"
+             d:DataContext="{d:DesignInstance vm:GelijkstartViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

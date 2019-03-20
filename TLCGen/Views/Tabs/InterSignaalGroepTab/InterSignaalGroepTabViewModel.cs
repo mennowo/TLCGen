@@ -55,6 +55,10 @@ namespace TLCGen.ViewModels
                         cvm.DisplayType = value;
                     }
                 }
+                if (SelectedSynchronisatie == null && ConflictMatrix != null && ConflictMatrix.GetLength(0) > 1 && ConflictMatrix.GetLength(1) > 1)
+                {
+                    SelectedSynchronisatie = ConflictMatrix[0, 1];
+                }
                 RaisePropertyChanged("");
             }
         }
@@ -806,8 +810,10 @@ namespace TLCGen.ViewModels
 
             _MatrixChanged = false;
 
-            if (ConflictMatrix != null && ConflictMatrix.Length > 0)
-                SelectedSynchronisatie = ConflictMatrix[0, 0];
+            if (SelectedSynchronisatie == null && ConflictMatrix != null && ConflictMatrix.GetLength(0) > 1 && ConflictMatrix.GetLength(1) > 1)
+            {
+                SelectedSynchronisatie = ConflictMatrix[0, 1];
+            }
         }
 
         /// <summary>

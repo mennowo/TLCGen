@@ -201,16 +201,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
-                string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG};";
-                int i = s.Length;
+                string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
+                //int i = s.Length;
                 sb.AppendLine(s);
-                sb.AppendLine($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min};".PadLeft(i));
-                sb.AppendLine($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG};".PadLeft(i));
-                sb.AppendLine($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min};".PadLeft(i));
-                sb.AppendLine($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG};".PadLeft(i));
-                sb.AppendLine($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL};".PadLeft(i));
-                sb.AppendLine($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min};".PadLeft(i));
-                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;".PadLeft(i));
+                //sb.AppendLine($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min};".PadLeft(i));
+                //sb.AppendLine($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG};".PadLeft(i));
+                //sb.AppendLine($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min};".PadLeft(i));
+                //sb.AppendLine($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG};".PadLeft(i));
+                //sb.AppendLine($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL};".PadLeft(i));
+                //sb.AppendLine($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min};".PadLeft(i));
+                //sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;".PadLeft(i));
+                sb.Append($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min}; ");
+                sb.Append($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG}; ");
+                sb.Append($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min}; ");
+                sb.Append($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG}; ");
+                sb.Append($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
+                sb.Append($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min}; ");
+                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;");
             }
 
             return sb.ToString();
@@ -893,7 +900,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_US] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_PS] = BIT0+BIT1;");
                 sb.AppendLine($"{ts}LOGTYPE[LOGTYPE_DS] = BIT0+BIT1;");
-                
+                if (c.Data.VLOGType == VLOGTypeEnum.Filebased)
+                {
+                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_LOGKLOKSCH] = 1;");
+                    sb.AppendLine($"{ts}LOGPRM[LOGPRM_VLOGMODE] = VLOGMODE_LOG_FILE_ASCII;");
+                }
+
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* VLOG - monitoring */");
                 sb.AppendLine($"{ts}/* ----------------- */");
