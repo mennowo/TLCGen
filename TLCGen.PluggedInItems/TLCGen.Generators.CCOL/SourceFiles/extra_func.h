@@ -38,6 +38,7 @@ void FileMeldingV2(count det,     /* filelus                                */
 void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
 void UpdateKnipperSignalen();
 bool hf_wsg_nl(void);
+bool hf_wsg_nl_fcfc(count fc1, count fc2);
 void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix);
 bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
 bool kcv_primair_fk_gkl(count i);

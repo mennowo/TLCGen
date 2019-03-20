@@ -659,6 +659,18 @@ bool hf_wsg_nl(void)
 	return (FALSE);
 }
 
+bool hf_wsg_nl_fcfc(count fc1, count fc2)
+{
+	register count i;
+
+	for (i = fc1; i < fc2; i++) {
+		if (G[i] && !MG[i] && !WS[i] && !(WG[i] && (RW[i] & BIT2)) || G[i] && MK[i] || GL[i] || TRG[i]
+			|| R[i] && A[i] && !BL[i])
+			return (TRUE);
+	}
+	return (FALSE);
+}
+
 void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix)
 {
 	/* fc    - fasecyclusnummer                            */

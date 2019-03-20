@@ -23,13 +23,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (FaseCyclusModel fcm in c.Fasen)
             {
-                if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit &&
-                    fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit &&
+                    fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_schmv}{fcm.Naam}", 
-                            (fcm.Meeverlengen == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
+                            (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
                             CCOLElementTimeTypeEnum.SCH_type, 
                             _schmv, fcm.Naam));
                 }
@@ -81,10 +81,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
-                        if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
+                        if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                         {
                             sb.Append($"{ts}YM[{fcm.GetDefine()}] |= ");
-                            if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                             {
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
