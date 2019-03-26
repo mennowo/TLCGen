@@ -373,8 +373,8 @@ bool Rateltikkers(      count fc,       /* fase */
 	count hdkh;
 	bool hdk = FALSE;
 
-    /* verzorgen naloop rateltikker */
-    RT[tnlrt] = EGL[fc] && IH[has] || EH[has_cont_];
+	/* verzorgen naloop rateltikker */
+	RT[tnlrt] = (G[fc] || GL[fc]) && IH[has] || EH[has_cont_];
 
 	/* check tikkers werking */
 	if (IH[has_aan_])
@@ -384,7 +384,7 @@ bool Rateltikkers(      count fc,       /* fase */
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
 			IH[has] |= IH[hdkh];
-			hdk = TRUE;
+			if (IH[hdkh]) hdk = TRUE;
 		}
 		va_end(argpt);
 	}
