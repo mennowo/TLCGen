@@ -241,6 +241,7 @@
     <Compile Include="Models\Models\Varia\DetectorSimulatieModel.cs" />
     <Compile Include="Models\Models\Varia\DetectorVeiligheidsGroenModel.cs" />
     <Compile Include="Models\Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
+    <Compile Include="Models\Models\Varia\PelotonKoppelingDetectorModel.cs" />
     <Compile Include="Models\Models\Varia\PelotonKoppelingenDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />

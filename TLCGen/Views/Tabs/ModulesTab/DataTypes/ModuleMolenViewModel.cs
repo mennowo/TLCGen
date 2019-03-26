@@ -226,8 +226,10 @@ namespace TLCGen.ViewModels
 
         void AddNewModuleCommand_Executed(object prm)
         {
-            ModuleModel mm = new ModuleModel();
-            mm.Naam = "ML" + (Modules.Count + 1).ToString();
+            ModuleModel mm = new ModuleModel
+            {
+                Naam = Reeks + (Modules.Count + 1).ToString()
+            };
             ModuleViewModel mvm = new ModuleViewModel(mm);
             Modules.Add(mvm);
             SelectedModule = mvm;

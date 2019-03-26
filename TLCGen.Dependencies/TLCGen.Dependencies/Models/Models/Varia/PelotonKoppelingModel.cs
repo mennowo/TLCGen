@@ -51,11 +51,4 @@ namespace TLCGen.Models
             InkomendVerklikking = new BitmapCoordinatenDataModel();
         }
     }
-
-    public class PelotonKoppelingDetectorModel
-    {
-        [RefersTo(TLCGenObjectTypeEnum.Detector)]
-        public string DetectorNaam { get; set; }
-        public int KoppelSignaal { get; set; }
-    }
 }
