@@ -10,9 +10,11 @@ namespace TLCGen.ViewModels
 
 		private readonly GelijkstartModel _gelijkstart;
 
-		#endregion // Fields
+        #endregion // Fields
 
         #region Properties
+
+        public GelijkstartViewModel MirroredViewModel;
 
 		public bool DeelConflict
 		{
@@ -20,29 +22,59 @@ namespace TLCGen.ViewModels
 			set
 			{
 				_gelijkstart.DeelConflict = value;
-				RaisePropertyChanged<object>(broadcast: true);
+                if (MirroredViewModel != null)
+                {
+                    MirroredViewModel.DeelConflictNoMessaging = value;
+                }
+                RaisePropertyChanged<object>(broadcast: true);
 			}
 		}
 
-		public int OntruimingstijdFaseVan
+        public bool DeelConflictNoMessaging
+        {
+            get => _gelijkstart.DeelConflict;
+            set => _gelijkstart.DeelConflict = value;
+        }
+
+        public int OntruimingstijdFaseVan
 		{
 			get => _gelijkstart.GelijkstartOntruimingstijdFaseVan;
 			set
 			{
 				_gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
+                if (MirroredViewModel != null)
+                {
+                    MirroredViewModel.OntruimingstijdFaseNaarNoMessaging = value;
+                }
                 RaisePropertyChanged<object>(broadcast: true);
             }
 		}
 
-		public int OntruimingstijdFaseNaar
+        public int OntruimingstijdFaseVanNoMessaging
+        {
+            get => _gelijkstart.GelijkstartOntruimingstijdFaseVan;
+            set => _gelijkstart.GelijkstartOntruimingstijdFaseVan = value;
+        }
+
+        public int OntruimingstijdFaseNaar
 		{
 			get => _gelijkstart.GelijkstartOntruimingstijdFaseNaar;
 			set
 			{
 				_gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
+                if (MirroredViewModel != null)
+                {
+                    MirroredViewModel.OntruimingstijdFaseVanNoMessaging = value;
+                }
                 RaisePropertyChanged<object>(broadcast: true);
             }
 		}
+
+        public int OntruimingstijdFaseNaarNoMessaging
+        {
+            get => _gelijkstart.GelijkstartOntruimingstijdFaseNaar;
+            set => _gelijkstart.GelijkstartOntruimingstijdFaseNaar = value;
+        }
 
         public AltijdAanUitEnum Schakelbaar
         {
@@ -50,7 +82,20 @@ namespace TLCGen.ViewModels
             set
             {
                 _gelijkstart.Schakelbaar = value;
+                if (MirroredViewModel != null)
+                {
+                    MirroredViewModel.SchakelbaarNoMessaging = value;
+                }
                 RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public AltijdAanUitEnum SchakelbaarNoMessaging
+        {
+            get => _gelijkstart.Schakelbaar;
+            set
+            {
+                _gelijkstart.Schakelbaar = value;
             }
         }
 

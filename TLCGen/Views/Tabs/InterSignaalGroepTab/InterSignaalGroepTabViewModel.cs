@@ -146,6 +146,20 @@ namespace TLCGen.ViewModels
                             break;
                         }
                     }
+                    var br = false;
+                    for (var i1 = 0; i1 < ConflictMatrix.GetLength(0); ++i1)
+                    {
+                        for (var i2 = 0; i2 < ConflictMatrix.GetLength(1); ++i2)
+                        {
+                            if (ConflictMatrix[i1, i2] == value)
+                            {
+                                value.GelijkstartVM.MirroredViewModel = ConflictMatrix[i2, i1].GelijkstartVM;
+                                br = true;
+                                break;
+                            }
+                        }
+                        if (br) break;
+                    }
                     value.NaloopVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                     value.MeeaanvraagVM.DetectieAfhankelijkPossible = Detectoren.Count > 0;
                 }
