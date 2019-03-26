@@ -718,7 +718,7 @@ bool kcv_primair_fk_gkl(count i)
 	return (FALSE);
 }
 
-static bool a_pg_fkprml(count i, bool *prml[], count ml)
+static bool a_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
 {
    register count n,j;
 
@@ -749,7 +749,7 @@ static bool a_pg_fkprml(count i, bool *prml[], count ml)
 }
 
 
-static bool a_ag_fkprml(count i, bool *prml[], count ml)
+static bool a_ag_fkprml_fk_gkl(count i, bool *prml[], count ml)
 {
 	register count n, j;
 
@@ -766,7 +766,7 @@ static bool a_ag_fkprml(count i, bool *prml[], count ml)
 	return (TRUE);
 }
 
-static void set_pg_fkprml(count i, bool *prml[], count ml)
+static void set_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
 {
 	register count n, j;
 
@@ -819,12 +819,12 @@ bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period
 			hml = ml;
 			for (m = 0; m < ml_max; ++m)
 			{
-				if (!a_pg_fkprml(i, prml, hml))
+				if (!a_pg_fkprml_fk_gkl(i, prml, hml))
 				{
 					AAPR[i] = 0;
 					return (FALSE);
 				}
-				if (!a_ag_fkprml(i, prml, hml))
+				if (!a_ag_fkprml_fk_gkl(i, prml, hml))
 				{
 					AAPR[i] |= BIT1;
 				}
@@ -844,7 +844,7 @@ bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period
 						{
 							--hml;
 							if (hml < 0)  hml = ml_max - 1;
-							set_pg_fkprml(i, prml, hml);  /* set confl. pg's	*/
+							set_pg_fkprml_fk_gkl(i, prml, hml);  /* set confl. pg's	*/
 							prml[hml][i] |= VERSNELD_PRIMAIR; /* set_FPRML	*/
 						} while (hml != ml);
 						return (TRUE);
