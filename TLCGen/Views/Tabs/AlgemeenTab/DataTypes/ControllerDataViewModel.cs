@@ -200,6 +200,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Genereren code t.b.v. DUURTEST")]
+        public bool GenererenDuurtestCode
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.GenererenDuurtestCode; }
+            set
+            {
+                _Controller.Data.GenererenDuurtestCode = value;
+                RaisePropertyChanged<object>("GenererenDuurtestCode", broadcast: true);
+            }
+        }
+
         [Description("Extra meeverlengen in WG")]
         public bool ExtraMeeverlengenInWG
         {

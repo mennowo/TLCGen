@@ -39,6 +39,7 @@ namespace TLCGen.Models
         public VLOGTypeEnum VLOGType { get; set; }
         public VLOGSettingsDataModel VLOGSettings { get; set; }
         public bool VLOGInTestOmgeving { get; set; }
+        public bool GenererenDuurtestCode { get; set; }
         [IsDocumented]
         public bool GarantieOntruimingsTijden { get; set; }
         [IsDocumented]

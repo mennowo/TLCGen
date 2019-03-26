@@ -90,6 +90,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
+                    if (!c.Data.GenererenDuurtestCode) return "";
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");
                     sb.AppendLine($"{ts}/* ============ */");
                     sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
@@ -112,6 +113,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCPostApplication:
+                    if (!c.Data.GenererenDuurtestCode) return "";
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");
                     sb.AppendLine($"{ts}/* ============ */");
                     sb.AppendLine($"{ts}#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST && !defined VISSIM)");
