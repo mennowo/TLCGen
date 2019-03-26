@@ -167,6 +167,7 @@
     <Compile Include="Models\Attributes\IOElementAttribute.cs" />
     <Compile Include="Models\Attributes\IsDocumentedAttribute.cs" />
     <Compile Include="Models\Attributes\ModelNameAttribute.cs" />
+    <Compile Include="Models\Attributes\NoTemplateApplicableAttribute.cs" />
     <Compile Include="Models\Attributes\RefersToAttribute.cs" />
     <Compile Include="Models\Attributes\VissimNameAttribute.cs" />
     <Compile Include="Models\Extensions.cs" />

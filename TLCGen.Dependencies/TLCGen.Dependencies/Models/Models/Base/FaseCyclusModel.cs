@@ -33,8 +33,12 @@ namespace TLCGen.Models
         public int TGL_min { get; set; }
         public int Kopmax { get; set; }
         [Browsable(false)]
+        [HasDefault(false)]
+        [NoTemplateApplicable]
         public bool OVIngreep { get; set; }
         [Browsable(false)]
+        [HasDefault(false)]
+        [NoTemplateApplicable]
         public bool HDIngreep { get; set; }
         public NooitAltijdAanUitEnum VasteAanvraag { get; set; }
         public NooitAltijdAanUitEnum Wachtgroen { get; set; }

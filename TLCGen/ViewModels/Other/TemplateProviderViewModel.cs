@@ -147,6 +147,9 @@ namespace TLCGen.ViewModels
                 var props = typeof(T2).GetProperties().Where(x => x.CanWrite && x.CanRead).ToList();
                 foreach (var prop in props)
                 {
+                    var templateApplicableAttr = prop.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(NoTemplateApplicableAttribute));
+                    if (templateApplicableAttr != null) continue;
+
                     object valueOriginal = prop.GetValue(item);
                     object valueCloned = prop.GetValue(cloneditem);
                     if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
