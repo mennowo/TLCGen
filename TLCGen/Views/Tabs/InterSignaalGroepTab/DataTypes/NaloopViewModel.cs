@@ -8,6 +8,7 @@ using TLCGen.DataAccess;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
+using TLCGen.Helpers;
 
 namespace TLCGen.ViewModels
 {
@@ -16,7 +17,7 @@ namespace TLCGen.ViewModels
         #region Fields
 
         private readonly NaloopModel _naloop;
-        private ObservableCollection<NaloopTijdModel> _tijden;
+        private ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel> _tijden;
         private ObservableCollection<NaloopDetectorModel> _detectoren;
         private bool _detectieAfhankelijkPossible;
         
@@ -105,7 +106,7 @@ namespace TLCGen.ViewModels
 
         public bool MaximaleVoorstartAllowed => !InrijdenTijdensGroen;
 
-        public ObservableCollection<NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollection<NaloopTijdModel>());
+        public ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel> Tijden => _tijden ?? (_tijden = new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden));
 
         public ObservableCollection<NaloopDetectorModel> Detectoren => _detectoren ?? (_detectoren = new ObservableCollection<NaloopDetectorModel>());
 
@@ -219,7 +220,7 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
-            _tijden = new ObservableCollection<NaloopTijdModel>(_naloop.Tijden);
+            _tijden = new ObservableCollectionAroundList<NaloopTijdViewModel, NaloopTijdModel>(_naloop.Tijden);
             RaisePropertyChanged(nameof(Tijden));
         }
 
@@ -303,10 +304,6 @@ namespace TLCGen.ViewModels
             foreach (var ndm in nm.Detectoren)
             {
                 Detectoren.Add(ndm);
-            }
-            foreach(var ntm in nm.Tijden)
-            {
-                Tijden.Add(ntm);
             }
 
             SetNaloopTijden();
