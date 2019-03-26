@@ -89,7 +89,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var fc = c.Fasen.Where(x => x.Detectoren.FirstOrDefault(x2 => x2.Naam == d) != null).FirstOrDefault();
                             if (fc != null)
                             {
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hdrt}{d}] = SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hdrt}{d}] || D[{_dpf}{d}] && !G[{_fcpf}{fc.Naam}] && A[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hdrt}{d}] = SG[{_fcpf}{fc.Naam}] ? FALSE : IH[{_hpf}{_hdrt}{d}] || (D[{_dpf}{d}] && !SD[{_dpf}{d}] || ED[{_dpf}{d}]) && !G[{_fcpf}{fc.Naam}] && A[{_fcpf}{fc.Naam}];");
                             }
                         }
                         sb.AppendLine();

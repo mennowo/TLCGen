@@ -371,31 +371,33 @@ bool Rateltikkers(      count fc,       /* fase */
 {
 	va_list argpt;
 	count hdkh;
+	bool hdk = FALSE;
 
     /* verzorgen naloop rateltikker */
     RT[tnlrt] = EGL[fc] && IH[has] || EH[has_cont_];
-    
-    /* afzetten rateltikker na aflopen naloop timer en niet continu */
-    if (ET[tnlrt])
-    {
-        /* Check op continue aansturing */
-		if (has_cont_ == NG || !IH[has_cont_])      IH[has] = FALSE;
-    }
-    
-    /* continue aansturing rateltikkers */
-    if (has_cont_ > NG)                             IH[has] |= IH[has_cont_];
-    
-    /* check tikkers werking */
-    if (IH[has_aan_])
-    {
+
+	/* check tikkers werking */
+	if (IH[has_aan_])
+	{
 		va_start(argpt, tnlrt);
 		while ((hdkh = va_arg(argpt, va_count)) != END)
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
 			IH[has] |= IH[hdkh];
+			hdk = TRUE;
 		}
 		va_end(argpt);
+	}
+
+    /* afzetten rateltikker na aflopen naloop timer (indien geen nieuwe drukknop melding) */
+    if (ET[tnlrt] && !hdk) {
+		IH[has] = FALSE;
     }
+    
+    /* continue aansturing rateltikkers */
+	if (has_cont_ > NG) {
+		IH[has] |= IH[has_cont_];
+	}
 
     return (IH[has]);
 }
