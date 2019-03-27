@@ -79,7 +79,7 @@ namespace TLCGen.Plugins.RIS
                 {
                     _ContentDataTemplate = new DataTemplate();
                     var tab = new FrameworkElementFactory(typeof(RISTabView));
-                    tab.SetValue(RISTabView.DataContextProperty, _RISVM);
+                    tab.SetValue(FrameworkElement.DataContextProperty, _RISVM);
                     _ContentDataTemplate.VisualTree = tab;
                 }
                 return _ContentDataTemplate;
@@ -335,7 +335,19 @@ namespace TLCGen.Plugins.RIS
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     sb.AppendLine($"/* Systeem naam in het topologiebestand */");
                     sb.AppendLine($"/* ------------------------------------ */");
-                    sb.AppendLine($"#define SYSTEM_ITF \"{_RISModel.SystemITF}\"");
+                    if (_RISModel.HasMultipleSystemITF)
+                    {
+                        var i = 1;
+                        foreach(var sitf in _RISModel.MultiSystemITF)
+                        {
+                            sb.AppendLine($"#define SYSTEM_ITF{i} \"{_RISModel.SystemITF}\"");
+                            ++i;
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"#define SYSTEM_ITF \"{_RISModel.SystemITF}\"");
+                    }
                     sb.AppendLine();
                     sb.AppendLine($"/* Definitie lane id in het topologiebestand */");
                     sb.AppendLine($"/* ----------------------------------------- */");
@@ -372,7 +384,22 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach(var l in _RISModel.RISRequestLanes.Where(x => x.RISAanvraag))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        var sitf = "SYSTEM_ITF";
+                        if (_RISModel.HasMultipleSystemITF)
+                        {
+                            sitf = "SYSTEM_ITF1";
+                            var risfcl = _RISModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
+                            if( risfcl != null)
+                            {
+                                var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == risfcl.SystemITF);
+                                if (msitf != null)
+                                {
+                                    var i = _RISModel.MultiSystemITF.IndexOf(msitf);
+                                    sitf = $"SYSTEM_ITF{i + 1}";
+                                }
+                            }
+                        }
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -380,7 +407,22 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
                     foreach (var l in _RISModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
+                        var sitf = "SYSTEM_ITF";
+                        if (_RISModel.HasMultipleSystemITF)
+                        {
+                            sitf = "SYSTEM_ITF1";
+                            var risfcl = _RISModel.RISFasen.SelectMany(x => x.LaneData).FirstOrDefault(x => x.SignalGroupName == l.SignalGroupName && x.RijstrookIndex == l.RijstrookIndex);
+                            if (risfcl != null)
+                            {
+                                var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == risfcl.SystemITF);
+                                if (msitf != null)
+                                {
+                                    var i = _RISModel.MultiSystemITF.IndexOf(msitf);
+                                    sitf = $"SYSTEM_ITF{i + 1}";
+                                }
+                            }
+                        }
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -414,32 +456,33 @@ namespace TLCGen.Plugins.RIS
 
         #region Private Methods
 
-        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg, int LaneID, int RijstrookIndex)
+        internal static RISFaseCyclusLaneSimulatedStationViewModel GetNewStationForSignalGroup(FaseCyclusModel sg, int LaneID, int RijstrookIndex, string systemITF)
         {
             var st = new RISFaseCyclusLaneSimulatedStationViewModel(new RISFaseCyclusLaneSimulatedStationModel());
             st.StationData.SignalGroupName = sg.Naam;
             st.StationData.RijstrookIndex = RijstrookIndex;
             st.StationData.LaneID = LaneID;
+            st.StationData.SystemITF = systemITF;
             if (sg != null)
             {
                 switch (sg.Type)
                 {
-                    case TLCGen.Models.Enumerations.FaseTypeEnum.Auto:
+                    case FaseTypeEnum.Auto:
                         st.Type = RISStationTypeSimEnum.PASSENGERCAR;
                         st.Flow = 200;
                         st.Snelheid = 50;
                         break;
-                    case TLCGen.Models.Enumerations.FaseTypeEnum.Fiets:
+                    case FaseTypeEnum.Fiets:
                         st.Type = RISStationTypeSimEnum.CYCLIST;
                         st.Flow = 20;
                         st.Snelheid = 15;
                         break;
-                    case TLCGen.Models.Enumerations.FaseTypeEnum.Voetganger:
+                    case FaseTypeEnum.Voetganger:
                         st.Type = RISStationTypeSimEnum.PEDESTRIAN;
                         st.Flow = 20;
                         st.Snelheid = 5;
                         break;
-                    case TLCGen.Models.Enumerations.FaseTypeEnum.OV:
+                    case FaseTypeEnum.OV:
                         st.Type = RISStationTypeSimEnum.BUS;
                         st.Flow = 10;
                         st.Snelheid = 45;
@@ -454,6 +497,15 @@ namespace TLCGen.Plugins.RIS
         {
             if (_controller != null && _RISModel != null)
             {
+                var sitf = _RISVM.SystemITF;
+                if (_RISVM.HasMultipleSystemITF)
+                {
+                    var msitf = _RISVM.MultiSystemITF.FirstOrDefault();
+                    if(msitf != null)
+                    {
+                        sitf = msitf.SystemITF;
+                    }
+                }
                 foreach (var fc in Controller.Fasen)
                 {
                     if (_RISVM.RISFasen.All(x => x.FaseCyclus != fc.Naam))
@@ -462,7 +514,7 @@ namespace TLCGen.Plugins.RIS
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
                         for (int i = 0; i < fc.AantalRijstroken; i++)
                         {
-                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1 }));
+                            risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf }));
                         }
                         _RISVM.RISFasen.Add(risfc);
                     }
@@ -476,7 +528,7 @@ namespace TLCGen.Plugins.RIS
                                 var i = risfc.Lanes.Count;
                                 for (; i < fc.AantalRijstroken; i++)
                                 {
-                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1}));
+                                    risfc.Lanes.Add(new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf}));
                                 }
                             }
                             else if (fc.AantalRijstroken < risfc.Lanes.Count)

@@ -9,20 +9,49 @@
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls" 
              mc:Ignorable="d" Name="root"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="Bool2VisConv" />
+    </UserControl.Resources>
     <Grid Background="AliceBlue">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <CheckBox IsChecked="{Binding Path=RISToepassen,UpdateSourceTrigger=PropertyChanged}" Content="RIS toepassen" Margin="5" Grid.ColumnSpan="2" />
-        <TextBlock Text="SYSTEM_ITF" Grid.Row="1" Margin="5" IsEnabled="{Binding Path=RISToepassen}" />
-        <TextBox Text="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Row="1" Grid.Column="1" IsEnabled="{Binding Path=RISToepassen}" />
-        <TabControl Grid.Row="2" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
+        <CheckBox IsChecked="{Binding Path=HasMultipleSystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="5" Grid.Row="1" Grid.ColumnSpan="2" >
+            <TextBlock Text="Meerdere SYSTEM_ITF waarden" />
+        </CheckBox>
+        <Grid Visibility="{Binding Path=NoHasMultipleSystemITF,Converter={StaticResource Bool2VisConv}}"
+              Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="SYSTEM_ITF" Margin="5" IsEnabled="{Binding Path=RISToepassen}" />
+            <TextBox Text="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" IsEnabled="{Binding Path=RISToepassen}" />
+        </Grid>
+        <Grid Visibility="{Binding Path=HasMultipleSystemITF,Converter={StaticResource Bool2VisConv}}"
+              Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <DataGrid ItemsSource="{Binding Path=MultiSystemITF}"
+                      SelectedItem="{Binding Path=SelectedSystemITF,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="2" Grid.Row="1" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=SystemITF,UpdateSourceTrigger=PropertyChanged}" Header="System ITF waarden" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <Button Margin="2" Content="Toevoegen" Command="{Binding Path=AddSystemITFCommand}" />
+                <Button Margin="2" Content="Verwijderen" Command="{Binding Path=RemoveSystemITFCommand}" />
+            </StackPanel>
+        </Grid>
+        <TabControl Grid.Row="3" Grid.ColumnSpan="2" Margin="2"  IsEnabled="{Binding Path=RISToepassen}" >
             <!--<TabItem Header="Instellingen fasen">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -84,18 +113,21 @@
                         ItemsSource="{Binding Path=RISLanes}" Margin="2"
                         IsEnabled="{Binding Path=RISToepassen}" Grid.Row="1"
                         CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
-                        <DataGrid.Resources>
+                        <ct:SpecialDataGrid.Resources>
+                            <DataGridTextColumn Binding="{Binding Path=SystemITF}" Header="SystemITF" x:Key="SystemITFCol"
+                                                Visibility="{Binding Path=DataContext.HasMultipleSystemITF,Source={x:Reference root},Converter={StaticResource Bool2VisConv}}" />
                             <Style TargetType="{x:Type DataGridCell}" x:Key="ReadOnlyStyle">
                                 <Style.Setters>
                                     <Setter Property="Background" Value="LightGray" />
                                     <Setter Property="Foreground" Value="Black" />
                                 </Style.Setters>
                             </Style>
-                        </DataGrid.Resources>
+                        </ct:SpecialDataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Path=SignalGroupName,Mode=OneWay}" Header="Signaalgroep" CellStyle="{StaticResource ReadOnlyStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=RijstrookIndex,Mode=OneWay}" Header="Index" CellStyle="{StaticResource ReadOnlyStyle}" />
                             <DataGridTextColumn Binding="{Binding Path=LaneID,UpdateSourceTrigger=PropertyChanged}" Header="Lane ID" />
+                            <StaticResource ResourceKey="SystemITFCol" />
                         </DataGrid.Columns>
                     </ct:SpecialDataGrid>
                 </Grid>         

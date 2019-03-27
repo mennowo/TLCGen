@@ -16,6 +16,7 @@ namespace TLCGen.Plugins.RIS.Models
         public string SignalGroupName { get; set; }
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }
+        public string SystemITF { get; set; }
 
         [IOElement("ris", BitmappedItemTypeEnum.Ingang, "Naam")]
         public BitmapCoordinatenDataModel StationBitmapData { get; set; }

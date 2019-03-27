@@ -51,11 +51,13 @@
     <Compile Include="Models\RISFaseCyclusLaneSimulatedStationModel.cs" />
     <Compile Include="Models\RISStationTypeSimEnum.cs" />
     <Compile Include="Models\RISStationTypeEnum.cs" />
+    <Compile Include="Models\RISSystemITFModel.cs" />
     <Compile Include="RisSimGenerator.cs" />
     <Compile Include="ViewModels\RISLaneRequestDataViewModel.cs" />
     <Compile Include="ViewModels\RISLaneExtendDataViewModel.cs" />
     <Compile Include="ViewModels\RISFaseCyclusLaneDataViewModel.cs" />
     <Compile Include="ViewModels\RISFaseCyclusDataViewModel.cs" />
+    <Compile Include="ViewModels\RISSystemITFViewModel.cs" />
     <Compile Include="Views\RISFaseCyclusLaneSimulatieView.xaml.cs">
       <DependentUpon>RISFaseCyclusLaneSimulatieView.xaml</DependentUpon>
     </Compile>
