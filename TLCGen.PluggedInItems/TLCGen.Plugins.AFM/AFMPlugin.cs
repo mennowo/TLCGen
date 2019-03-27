@@ -163,8 +163,8 @@ namespace TLCGen.Plugins.AFM
                 {
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_FC", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxCCOL", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMin", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
-                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMax", 80, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMin", fc.MinimaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
+                    _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxMax", fc.MaximaleGroentijd, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxAct", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_GmaxGem", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
                     _myElements.Add(new CCOLElement($"AFM{fc.FaseCyclus}_Afgekapt", 0, CCOLElementTimeTypeEnum.None, CCOLElementTypeEnum.Parameter));
