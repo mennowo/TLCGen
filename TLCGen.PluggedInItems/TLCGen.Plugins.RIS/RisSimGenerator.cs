@@ -48,7 +48,17 @@ namespace TLCGen.Plugins.RIS
             {
                 foreach(var s in l.SimulatedStations)
                 {
-                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters(SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
+                    var sitf = "SYSTEM_ITF";
+                    if (_RISModel.HasMultipleSystemITF)
+                    {
+                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        if (msitf != null)
+                        {
+                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            sitf = $"SYSTEM_ITF{j + 1}";
+                        }
+                    }
+                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
                 }
             }
             sb.AppendLine($"{ts}#endif // RISSIMULATIE");
@@ -59,7 +69,17 @@ namespace TLCGen.Plugins.RIS
                 {
                     var tl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 1 : s.Type == RISStationTypeSimEnum.CYCLIST ? 2 : 6;
                     var dl = s.Type == RISStationTypeSimEnum.PEDESTRIAN ? 50 : s.Type == RISStationTypeSimEnum.CYCLIST ? 100 : 300;
-                    sb.AppendLine($"{ts}ris_display_lane_parameters(SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, \"{l.SignalGroupName}-{l.RijstrookIndex}\", {tl}, {dl});");
+                    var sitf = "SYSTEM_ITF";
+                    if (_RISModel.HasMultipleSystemITF)
+                    {
+                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        if (msitf != null)
+                        {
+                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            sitf = $"SYSTEM_ITF{j + 1}";
+                        }
+                    }
+                    sb.AppendLine($"{ts}ris_display_lane_parameters({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, \"{l.SignalGroupName}-{l.RijstrookIndex}\", {tl}, {dl});");
                 }
             }
             sb.AppendLine($"}}");
