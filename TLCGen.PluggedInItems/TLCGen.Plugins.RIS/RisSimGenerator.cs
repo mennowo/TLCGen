@@ -95,7 +95,17 @@ namespace TLCGen.Plugins.RIS
             {
                 foreach (var s in l.SimulatedStations)
                 {
-                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb( SYSTEM_ITF, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Snelheid}, {s.Afstand}, 1);");
+                    var sitf = "SYSTEM_ITF";
+                    if (_RISModel.HasMultipleSystemITF)
+                    {
+                        var msitf = _RISModel.MultiSystemITF.FirstOrDefault(x => x.SystemITF == s.SystemITF);
+                        if (msitf != null)
+                        {
+                            var j = _RISModel.MultiSystemITF.IndexOf(msitf);
+                            sitf = $"SYSTEM_ITF{j + 1}";
+                        }
+                    }
+                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Snelheid}, {s.Afstand}, 1);");
                 }
             }
             sb.AppendLine($"");
