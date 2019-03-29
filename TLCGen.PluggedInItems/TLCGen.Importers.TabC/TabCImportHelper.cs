@@ -226,9 +226,8 @@ namespace TLCGen.Importers.TabC
                         }
                     }
 
-                    // assign detectors in two round
+                    // assign detectors based on d[a-zA-Z]+## in the sg name
                     var assigned = new List<DetectorModel>();
-                    // round 1: assign based on d[a-zA-Z]+## in the sg name
                     foreach (var d in outcome.Detectoren)
                     {
                         foreach (var fc in outcome.Fasen)
@@ -242,9 +241,9 @@ namespace TLCGen.Importers.TabC
                             }
                         }
                     }
-                    foreach (var d in outcome.Detectoren.Where(x => assigned.All(x2 => x2.Naam != x.Naam)))
+                    foreach(var d in assigned)
                     {
-                        outcome.Detectoren.Add(d);
+                        outcome.Detectoren.Remove(d);
                     }
                 }
             }
@@ -305,6 +304,14 @@ namespace TLCGen.Importers.TabC
                                 var named = m.Groups["name"].Value.Replace("d", "");
                                 var namefc = m.Groups["name"].Value.Replace("fc", "");
                                 var d = outcome.Detectoren.FirstOrDefault(x => x.Naam == named.ToLower());
+                                if (d == null)
+                                {
+                                    d = outcome.Fasen.SelectMany(x => x.Detectoren).FirstOrDefault(x => x.Naam == named.ToLower());
+                                    if (d == null)
+                                    {
+                                        continue;
+                                    }
+                                }
                                 var fc = outcome.Fasen.FirstOrDefault(x => x.Naam == namefc.ToLower());
                                 switch (re.Item1)
                                 {

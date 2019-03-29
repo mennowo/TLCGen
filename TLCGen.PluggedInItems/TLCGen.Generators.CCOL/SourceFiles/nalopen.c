@@ -16,6 +16,8 @@ void NaloopVtg(count fc1, count fc2, count tnl)
    if (RT[tnl])             RW[fc2] |= BIT2;
    if (RT[tnl] || T[tnl])   YV[fc2] |= BIT2;
    berekenTNL(fc2,tnl);
+   if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
+
 }
 
 /**************************************************************************
@@ -33,6 +35,7 @@ void NaloopVtgDet(count fc1, count fc2, count dk, count hdk, count tnl)
    if (RT[tnl])             RW[fc2] |= BIT2;
    if (RT[tnl] || T[tnl])   YV[fc2] |= BIT2;
    berekenTNL(fc2,tnl);
+   if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
 }
 
 
@@ -49,6 +52,7 @@ void NaloopEG(count fc1, count fc2, count tnl)
    if (RT[tnl] || T[tnl])   RW[fc2] |= BIT2;
    berekenTGK_max(fc1,fc2,T_max[tnl]);
    berekenTNL(fc2,tnl);
+   if (TNL_PAR[fc2] < (T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = T_max[tnl] + TVG_max[fc2]; 
 }
 
 /**************************************************************************
@@ -76,6 +80,8 @@ void NaloopEGDet(count fc1, count fc2, count tnl, ...)
 	if (EGL[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl] + TGL_max[fc1];
 	if (R[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
+    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] + TVG_max[fc2]; 
+
 }
 
 
@@ -91,6 +97,7 @@ void NaloopCV(count fc1, count fc2, count tnl)
 	RT[tnl] = CV[fc1] && !RA[fc1];
 	if (RT[tnl] || T[tnl]) RW[fc2] |= BIT2;
 	berekenTNL(fc2, tnl);
+    if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
 }
 
 /**************************************************************************
@@ -115,6 +122,8 @@ void NaloopCVDet(count fc1, count fc2, count tnl, ...)
 	va_end(argpt);
 	if (RT[tnl] || T[tnl]) RW[fc2] |= BIT2;
 	berekenTNL(fc2, tnl);
+    if (TNL_PAR[fc2] < T_max[tnl]) TNL_PAR[fc2] = T_max[tnl]; 
+
 }
 
 /**************************************************************************
@@ -133,6 +142,7 @@ void NaloopFG(count fc1, count fc2, count tnl)
 	if (EG[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl];
 	if (!G[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
+   if (TNL_PAR[fc2] < (T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = T_max[tnl] + TVG_max[fc2]; 
 }
 
 /**************************************************************************
@@ -161,6 +171,7 @@ void NaloopFGDet(count fc1, count fc2, count tnl, ...)
 	if (EG[fc1]) TNL_TGK[tnl] = T_max[tnl] - T_timer[tnl];
 	if (!G[fc1] && GKC[fc1]) berekenTGK_max(fc1, fc2, TNL_TGK[tnl]);
 	berekenTNL(fc2, tnl);
+    if (TNL_PAR[fc2] < (TGL_max[fc1] + T_max[tnl] + TVG_max[fc2])) TNL_PAR[fc2] = TGL_max[fc1] + T_max[tnl] + TVG_max[fc2]; 
 }
 
 /* YMLX[] - VASTHOUDEN MODULE AFWIKKELING */
@@ -203,13 +214,13 @@ bool yml_cv_pr_nl(bool *prml[], count ml, count ml_max)
  **************************************************************************/
 void berekenTNL(count fc2, count tnl)
 {
-	if (T[tnl])
+	if (T[tnl]|| ET[tnl] || VG[fc2])
 	{
 		TNL[fc2] = TRUE;
-		if (T_max[tnl] - T_timer[tnl] > TNL_max[fc2] - TNL_timer[fc2])
+		if ((T_max[tnl] - T_timer[tnl] + TVG_max[fc2]) > (TNL_max[fc2] - TNL_timer[fc2]))
 		{
 			TNL_max[fc2] = T_max[tnl] + TVG_max[fc2];
-			TNL_timer[fc2] = T_timer[tnl];
+			TNL_timer[fc2] = T_timer[tnl] + TVG_timer[fc2];
 		}
 	}
 }
@@ -292,6 +303,7 @@ void gk_ResetNL(void)
 
 	for (fc = 0; fc < FC_MAX; ++fc)
 	{
+		TNL_PAR[fc] = 0;
 		TNL_max[fc] = 0;
 		TNL[fc] = FALSE;
 		TNL_timer[fc] = 0;
