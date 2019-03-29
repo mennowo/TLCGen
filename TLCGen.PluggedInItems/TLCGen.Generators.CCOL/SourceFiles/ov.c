@@ -1271,9 +1271,12 @@ void OVAanvragen(void)
     {
         fc = iFC_OVix[ov];
         if (iAantalInmeldingen[ov] > 0 &&
-            (iPrioriteitsOpties[ov] & poAanvraag && /*!iSelDetFout[ov] && */
+            iPrioriteitsOpties[ov] & poAanvraag && /*!iSelDetFout[ov] && */
             (!iSelDetFout[ov] && iRijTimer[ov] >= iRijTijd[ov] ||
-                iPrioriteitsOpties[ov] & poNoodDienst)))
+                iPrioriteitsOpties[ov] & poNoodDienst || 
+				iPrioriteitsOpties[ov] & poAfkappenKonfliktRichtingen && !(iPrioriteitsOpties[ov] & poBijzonderRealiseren))) /* OV-richting mag niet worden overgeslagen,
+																															   zodat conflictrichtingen niet nogmaals kan realiseren 
+																															   als er afgekapt is */
         {
             A[fc] |= !(EG[fc] || GL[fc]) ? OV_A_BIT : 0; /* R[fc] vervangen door !(EG[fc] || GL[fc]) 15-2-2016 */
         }

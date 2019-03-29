@@ -10,6 +10,7 @@ namespace TLCGen.Plugins.RIS.Models
     {
         public int RijstrookIndex { get; set; }
         public int LaneID { get; set; }
+        public string SystemITF { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         public string SignalGroupName { get; set; }

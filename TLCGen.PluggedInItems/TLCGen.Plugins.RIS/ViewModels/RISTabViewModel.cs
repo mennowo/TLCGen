@@ -19,12 +19,20 @@ namespace TLCGen.Plugins.RIS
         #region Fields
 
         private RISPlugin _plugin;
+        private RISFaseCyclusDataViewModel _selectedRISFase;
+        private RISSystemITFViewModel _selectedSystemITF;
+        private RISDataModel _RISModel;
+        private AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> _lanesRequestManager;
+        private AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> _lanesExtendManager;
+        private RelayCommand _addDefaultRequestLanesCommand;
+        private RelayCommand _addDefaultExtendLanesCommand;
+        private RelayCommand _addSystemITFCommand;
+        private RelayCommand _removeSystemITFCommand;
 
         #endregion // Fields
 
         #region Properties
 
-        private RISFaseCyclusDataViewModel _selectedRISFase;
         public RISFaseCyclusDataViewModel SelectedRISFase
         {
             get => _selectedRISFase;
@@ -35,7 +43,6 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
-        private RISDataModel _RISModel;
         public RISDataModel RISModel
         {
             get => _RISModel;
@@ -45,14 +52,25 @@ namespace TLCGen.Plugins.RIS
                 RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen);
                 RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes);
                 RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes);
+                MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
             }
         }
 
         public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
         public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes { get; private set; }
         public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes { get; private set; }
-
+        public ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel> MultiSystemITF { get; private set; }
         public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
+
+        public RISSystemITFViewModel SelectedSystemITF
+        {
+            get => _selectedSystemITF;
+            set
+            {
+                _selectedSystemITF = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool RISToepassen
         {
@@ -98,17 +116,36 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
+        public bool HasMultipleSystemITF
+        {
+            get => _RISModel.HasMultipleSystemITF;
+            set
+            {
+                _RISModel.HasMultipleSystemITF = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(NoHasMultipleSystemITF));
+            }
+        }
+
+        public bool NoHasMultipleSystemITF => !HasMultipleSystemITF;
+
         public string SystemITF
         {
             get => _RISModel.SystemITF;
             set
             {
                 _RISModel.SystemITF = value;
+                if (!HasMultipleSystemITF)
+                {
+                    foreach(var l in RISLanes)
+                    {
+                        l.SystemITF = value;
+                    }
+                }
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-        
-        private AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> _lanesRequestManager;
+
         public AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string> LanesRequestManager =>
             _lanesRequestManager ??
             (_lanesRequestManager = new AddRemoveItemsManager<RISLaneRequestDataViewModel, RISLaneRequestDataModel, string>(
@@ -127,7 +164,6 @@ namespace TLCGen.Plugins.RIS
                 (x, y) => false
                 ));
 
-        private AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> _lanesExtendManager;
         public AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string> LanesExtendManager =>
             _lanesExtendManager ??
             (_lanesExtendManager = new AddRemoveItemsManager<RISLaneExtendDataViewModel, RISLaneExtendDataModel, string>(
@@ -150,12 +186,11 @@ namespace TLCGen.Plugins.RIS
 
         #region Commands
 
-        private RelayCommand _addDefaultRequestLanesCommand;
         public ICommand AddDefaultRequestLanesCommand => _addDefaultRequestLanesCommand ?? (_addDefaultRequestLanesCommand = new RelayCommand(AddDefaultRequestLanesCommand_executed));
 
         private void AddDefaultRequestLanesCommand_executed()
         {
-            foreach(var fc in _plugin.Controller.Fasen)
+            foreach (var fc in _plugin.Controller.Fasen)
             {
                 var t = GetTypeForFase(fc);
                 for (int i = 0; i < fc.AantalRijstroken; i++)
@@ -175,7 +210,6 @@ namespace TLCGen.Plugins.RIS
             return;
         }
 
-        private RelayCommand _addDefaultExtendLanesCommand;
         public ICommand AddDefaultExtendLanesCommand => _addDefaultExtendLanesCommand ?? (_addDefaultExtendLanesCommand = new RelayCommand(AddDefaultExtendLanesCommand_executed));
 
         private void AddDefaultExtendLanesCommand_executed()
@@ -199,6 +233,24 @@ namespace TLCGen.Plugins.RIS
             RISExtendLanes.BubbleSort();
             return;
         }
+
+        public ICommand AddSystemITFCommand => _addSystemITFCommand ?? (_addSystemITFCommand =
+            new RelayCommand(
+                () =>
+                {
+                    MultiSystemITF.Add(new RISSystemITFViewModel(new RISSystemITFModel()));
+                },
+                () => HasMultipleSystemITF));
+
+
+        public ICommand RemoveSystemITFCommand => _removeSystemITFCommand ?? (_removeSystemITFCommand =
+            new RelayCommand(
+                () =>
+                {
+                    MultiSystemITF.Remove(SelectedSystemITF);
+                    SelectedSystemITF = null;
+                },
+                () => HasMultipleSystemITF && SelectedSystemITF != null));
 
         #endregion // Commands
 
@@ -232,12 +284,12 @@ namespace TLCGen.Plugins.RIS
 
         private void OnFasenChanged(FasenChangedMessage msg)
         {
-            if(msg.RemovedFasen != null && msg.RemovedFasen.Any())
+            if (msg.RemovedFasen != null && msg.RemovedFasen.Any())
             {
-                foreach(var fc in msg.RemovedFasen)
+                foreach (var fc in msg.RemovedFasen)
                 {
                     var RISFc = RISFasen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
-                    if(RISFc != null)
+                    if (RISFc != null)
                     {
                         RISFasen.Remove(RISFc);
                     }
@@ -251,7 +303,12 @@ namespace TLCGen.Plugins.RIS
                                 new RISFaseCyclusDataModel { FaseCyclus = fc.Naam });
                     for (int i = 0; i < fc.AantalRijstroken; i++)
                     {
-                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1 });
+                        var sitf = SystemITF;
+                        if (HasMultipleSystemITF)
+                        {
+                            sitf = MultiSystemITF.FirstOrDefault()?.SystemITF;
+                        }
+                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = fc.Naam, RijstrookIndex = i + 1, SystemITF = sitf });
                         risfc.Lanes.Add(l);
                     }
                     RISFasen.Add(risfc);
@@ -278,7 +335,7 @@ namespace TLCGen.Plugins.RIS
 
         private void OnNameChanged(NameChangedMessage msg)
         {
-            if(msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
+            if (msg.ObjectType == TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase)
             {
                 TLCGenModelManager.Default.ChangeNameOnObject(RISModel, msg.OldName, msg.NewName, TLCGen.Models.Enumerations.TLCGenObjectTypeEnum.Fase);
                 RISFasen.Rebuild();
@@ -291,12 +348,17 @@ namespace TLCGen.Plugins.RIS
             var risfc = RISFasen.FirstOrDefault(x => x.FaseCyclus == obj.Fase.Naam);
             if (risfc != null)
             {
-                if(obj.AantalRijstroken > risfc.Lanes.Count)
+                if (obj.AantalRijstroken > risfc.Lanes.Count)
                 {
                     var i = risfc.Lanes.Count;
                     for (; i < obj.AantalRijstroken; i++)
                     {
-                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = obj.Fase.Naam, RijstrookIndex = i + 1 });
+                        var sitf = SystemITF;
+                        if (HasMultipleSystemITF)
+                        {
+                            sitf = MultiSystemITF.FirstOrDefault()?.SystemITF;
+                        }
+                        var l = new RISFaseCyclusLaneDataViewModel(new RISFaseCyclusLaneDataModel() { SignalGroupName = obj.Fase.Naam, RijstrookIndex = i + 1, SystemITF = sitf });
                         risfc.Lanes.Add(l);
                     }
                 }

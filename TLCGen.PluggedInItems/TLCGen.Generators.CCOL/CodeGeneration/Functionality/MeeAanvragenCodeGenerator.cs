@@ -162,7 +162,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     {
                                         sb.Append(" || ");
                                     }
-
                                     ++i;
                                     sb.Append($"H[{_hpf}{_hmad}{dm.MeeaanvraagDetector}]");
                                 }
@@ -174,9 +173,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (!ma.DetectieAfhankelijk || !ma.Detectoren.Any())
                             {
-                                sb.AppendLine(!ma.Uitgesteld
-                                    ? $"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));"
-                                    : $"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                if (ma.Uitgesteld)
+                                {
+                                    sb.AppendLine($"{tts}if (PRM[{_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}] == 4)");
+                                    sb.AppendLine($"{tts}{{");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag({_fcpf}{ma.FaseNaar}, (bool)(ET[{_tpf}{_tuitgestma}{ma.FaseVan}{ma.FaseNaar}]));");
+                                    sb.AppendLine($"{tts}}}");
+                                    sb.AppendLine($"{tts}else");
+                                    sb.AppendLine($"{tts}{{");
+                                    sb.AppendLine($"{tts}{ts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));");
+                                    sb.AppendLine($"{tts}}}");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"{tts}mee_aanvraag_prm({_fcpf}{ma.FaseNaar}, {_fcpf}{ma.FaseVan}, {_prmpf}{_prmtypema}{ma.FaseVan}{ma.FaseNaar}, (bool)(TRUE));");
+                                }
                             }
                             else
                             {
@@ -195,7 +206,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 var i = 0;
                                 foreach (var dm in ma.Detectoren)
                                 {
-                                    if (i == 1)
+                                    if (i > 0)
                                     {
                                         sb.Append(" || ");
                                     }

@@ -38,6 +38,20 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
+        public string SystemITF
+        {
+            get => _laneData.SystemITF;
+            set
+            {
+                _laneData.SystemITF = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                foreach (var s in SimulatedStations)
+                {
+                    s.StationData.SystemITF = value;
+                }
+            }
+        }
+
         public string SignalGroupName => _laneData.SignalGroupName;
 
         public int RijstrookIndex => _laneData.RijstrookIndex;
@@ -52,7 +66,7 @@ namespace TLCGen.Plugins.RIS
                 x => 
                 {
                     var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x2 => x2.Naam == _laneData.SignalGroupName);
-                    return RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex);
+                    return RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
                 },
                 (x, y) => false
                 ));

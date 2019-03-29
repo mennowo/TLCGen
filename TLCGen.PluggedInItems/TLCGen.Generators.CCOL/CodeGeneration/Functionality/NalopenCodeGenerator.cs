@@ -200,13 +200,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
-
-
                     if (c.InterSignaalGroep?.Nalopen?.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* Nalopen */");
                         sb.AppendLine($"{ts}/* ------- */");
-                        sb.AppendLine($"{ts}gk_ControlGK();");
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
                         sb.AppendLine($"{ts}{{");
@@ -279,6 +276,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     break;
                             }
                         }
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}gk_ControlGK();");
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCAlternatieven:

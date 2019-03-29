@@ -74,7 +74,7 @@ namespace TLCGen.ViewModels
 	        set
             {
                 _Meeaanvraag.DetectieAfhankelijk = value;
-	            if (value)
+	            if (value && !Detectoren.Any())
 	            {
 		            var fc = TLCGenControllerDataProvider.Default.Controller.Fasen.First(x => x.Naam == _Meeaanvraag.FaseVan);
 		            switch (fc.Type)

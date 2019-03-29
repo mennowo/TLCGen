@@ -4,13 +4,14 @@ using System.Xml.Serialization;
 
 namespace TLCGen.Plugins.RIS.Models
 {
-
     [Serializable]
     [XmlRoot(ElementName = "RISData")]
     public class RISDataModel
     {
         public bool RISToepassen { get; set; }
+        public bool HasMultipleSystemITF { get; set; }
         public string SystemITF { get; set; }
+        public List<RISSystemITFModel> MultiSystemITF { get; set; }
 
         [XmlArray(ElementName = "RISFaseCyclusData")]
         public List<RISFaseCyclusDataModel> RISFasen { get; set; }
@@ -26,6 +27,7 @@ namespace TLCGen.Plugins.RIS.Models
             RISFasen = new List<RISFaseCyclusDataModel>();
             RISRequestLanes = new List<RISLaneRequestDataModel>();
             RISExtendLanes = new List<RISLaneExtendDataModel>();
+            MultiSystemITF = new List<RISSystemITFModel>();
         }
     }
 }
