@@ -322,7 +322,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine($"{ts}Maxgroen_Add();");
                     sb.AppendLine("}");
 
-                    sb.AppendLine();
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, true, false, true);
+
                     break;
 
                 case GroentijdenTypeEnum.VerlengGroentijden:

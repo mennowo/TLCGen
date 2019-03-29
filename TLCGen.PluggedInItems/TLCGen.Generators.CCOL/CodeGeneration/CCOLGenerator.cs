@@ -507,7 +507,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                 }
                                 else
                                 {
-                                    MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
+                                    // ignore: local variable already exists
+                                    //MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
                                 }
                             }
                             if (addnewlineatend) sb.AppendLine();
