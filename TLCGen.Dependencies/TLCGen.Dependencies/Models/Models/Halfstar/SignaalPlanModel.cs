@@ -7,7 +7,7 @@ namespace TLCGen.Models
 {
 	[Serializable]
 	[IOElement("", BitmappedItemTypeEnum.Uitgang, "Naam")]
-	public class SignaalPlanModel : IOElementModel, IHaveName
+	public class SignaalPlanModel : IOElementModel, IHaveName, IComparable<SignaalPlanModel>
     {
 		#region Fields
 		#endregion // Fields
@@ -25,15 +25,24 @@ namespace TLCGen.Models
 		public int SwitchMoment { get; set; }
 		public List<SignaalPlanFaseModel> Fasen { get; set; }
 
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Constructor
+        #region IComparable<SignaalPlanModel>
 
-		public SignaalPlanModel()
+        public int CompareTo(SignaalPlanModel other)
+        {
+            return this.Naam.CompareTo(other.Naam);
+        }
+
+        #endregion // IComparable<SignaalPlanModel>
+
+        #region Constructor
+
+        public SignaalPlanModel()
 		{
 			Fasen = new List<SignaalPlanFaseModel>();
 		}
 
-		#endregion // Constructor
-	}
+        #endregion // Constructor
+    }
 }

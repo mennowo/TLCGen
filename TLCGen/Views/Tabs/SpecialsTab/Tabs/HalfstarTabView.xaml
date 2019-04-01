@@ -227,6 +227,7 @@
                         <Button Content="Verwijderen" Margin="2" Command="{Binding Path=RemoveSignaalPlanCommand}" />
                         <Button Content="Dupliceren" Margin="2" Command="{Binding Path=DuplicateSignaalPlanCommand}" />
                         <Button Content="Importeren" Margin="2" Command="{Binding Path=ImportSignaalPlanCommand}" />
+                        <Button Content="Multi import" Margin="2" Command="{Binding Path=ImportManySignaalPlanCommand}" />
                     </StackPanel>
                     <local:SignaalPlanView DataContext="{Binding Path=SelectedSignaalPlan}" Grid.Column="2" Grid.RowSpan="2" />
                 </Grid>

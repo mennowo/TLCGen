@@ -320,9 +320,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                     // Add file
                     sb.AppendLine($"{ts}Maxgroen_Add();");
-                    sb.AppendLine("}");
 
-                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, true, false, true);
+                    AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCMaxgroenNaAdd, true, true, false, false);
+
+                    sb.AppendLine("}");
 
                     break;
 

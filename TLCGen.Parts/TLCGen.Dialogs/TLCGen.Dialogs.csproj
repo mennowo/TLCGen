@@ -54,6 +54,9 @@
     <Compile Include="ImportDplCWindow.xaml.cs">
       <DependentUpon>ImportDplCWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImportManySignalPlanWindow.xaml.cs">
+      <DependentUpon>ImportManySignalPlanWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImportSignalPlanWindow.xaml.cs">
       <DependentUpon>ImportSignalPlanWindow.xaml</DependentUpon>
     </Compile>
@@ -86,6 +89,10 @@
     <Page Include="ImportDplCWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ImportManySignalPlanWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ImportSignalPlanWindow.xaml">
       <SubType>Designer</SubType>

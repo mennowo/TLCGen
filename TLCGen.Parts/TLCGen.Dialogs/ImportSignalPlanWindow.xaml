@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="Selecteer het bestand:" />
+        <Label Content="Selecteer het bestand (.csv uitvoer van COCON):" />
         <controls:FileTextBox Grid.Row="1" Name="FileTextBox" ChooseDialogFilter="*.csv|Cocon .csv export" />
         <StackPanel Grid.Row="2">
             <Button Margin="2" Content="Importeer" Click="ImportButton_OnClick" IsDefault="True" />

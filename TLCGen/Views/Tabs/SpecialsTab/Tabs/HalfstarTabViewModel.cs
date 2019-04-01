@@ -278,9 +278,22 @@ namespace TLCGen.ViewModels
 				}
 				return _importSignaalPlanCommand;
 			}
-		}
+        }
 
-		private RelayCommand _addHoofdRichtingCommand;
+        private RelayCommand _importManySignaalPlanCommand;
+        public ICommand ImportManySignaalPlanCommand
+        {
+            get
+            {
+                if (_importManySignaalPlanCommand == null)
+                {
+                    _importManySignaalPlanCommand = new RelayCommand(ImportManySignaalPlanCommand_Executed, ImportManySignaalPlanCommand_CanExecute);
+                }
+                return _importManySignaalPlanCommand;
+            }
+        }
+
+        private RelayCommand _addHoofdRichtingCommand;
 		public ICommand AddHoofdRichtingCommand
 		{
 			get
@@ -475,9 +488,11 @@ namespace TLCGen.ViewModels
 
 		private void ImportSignaalPlanCommand_Executed(object obj)
 		{
-			var importWindow = new ImportSignalPlanWindow(SelectedSignaalPlan.SignaalPlan);
-			importWindow.Owner = Application.Current.MainWindow;
-			importWindow.ShowDialog();
+            var importWindow = new ImportSignalPlanWindow(SelectedSignaalPlan.SignaalPlan)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            importWindow.ShowDialog();
 			SelectedSignaalPlan.RaisePropertyChanged("");
 			foreach (var fc in SelectedSignaalPlan.Fasen)
 			{
@@ -485,7 +500,22 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		private bool AddHoofdRichtingCommand_CanExecute(object obj)
+        private bool ImportManySignaalPlanCommand_CanExecute(object obj)
+        {
+            return true;
+        }
+
+        private void ImportManySignaalPlanCommand_Executed(object obj)
+        {
+            var importWindow = new ImportManySignalPlanWindow(HalfstarData)
+            {
+                Owner = Application.Current.MainWindow
+            };
+            importWindow.ShowDialog();
+            SignaalPlannen.Rebuild();
+        }
+
+        private bool AddHoofdRichtingCommand_CanExecute(object obj)
 		{
 			return SelectedHoofdRichtingToAdd != null;
 		}
