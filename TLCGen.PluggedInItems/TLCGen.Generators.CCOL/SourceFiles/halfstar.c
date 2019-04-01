@@ -512,10 +512,32 @@ void SetPlanTijden2R(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mu
 void sync_pg(void)
 {
 	register count fc;
+	count *prml[];
+	count ml = -1;
+	count mlx = -1;
+	count mlmax;
 
 	for (fc = 0; fc<FCMAX; fc++)
 	{
-		if (PG[fc] && !PRML[ML][fc] && !PRML[(ML + 1 == MLMAX ? ML1 : ML + 1)][fc])
+#ifdef MLMAX
+#else
+#ifdef MLAMAX
+		if (mlx == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { mlx = MLA; break; prml = PRMLA; mlmax = MLAMAX; }
+#endif
+#ifdef MLBMAX
+		if (mlx == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { mlx = MLB; break; prml = PRMLB; mlmax = MLBMAX; }
+#endif
+#ifdef MLCMAX
+		if (mlx == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { mlx = MLC; break; prml = PRMLC; mlmax = MLCMAX; }
+#endif
+#ifdef MLDMAX
+		if (mlx == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { mlx = MLD; break; prml = PRMLD; mlmax = MLDMAX;}
+#endif
+#ifdef MLEMAX
+		if (mlx == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { mlx = MLE; break; prml = PRMLE; mlmax = MLEMAX; }
+#endif
+#endif
+		if (PG[fc] && !prml[ml][fc] && !prml[(ml + 1 == mlmax ? ML1 : ml + 1)][fc])
 		{
 			PG[fc] = FALSE;
 		}
@@ -1321,7 +1343,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 #endif
 #endif
 				{
-					bool conflict_txb_txd = TRUE;
+					bool conflict_txb_txd = FALSE;
 
 					// calculate TXB and TXD including amber (or not) and clearing/intergreen times
 					txb_cfc = PRM[txa1 + cfc * 10 + real * 5 + 1];

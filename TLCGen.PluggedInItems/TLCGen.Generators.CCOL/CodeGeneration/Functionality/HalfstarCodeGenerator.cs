@@ -1128,9 +1128,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}if (!error)");
                             sb.AppendLine($"{ts}{ts}{{");
                             sb.AppendLine($"{ts}{ts}{ts}error = CheckSignalplanPrms({ppl.Naam}, TX_max[{pl}], {_prmpf}{_prmtx}A1{ppl.Naam}_{ppl.Fasen.First().FaseCyclus});");
-                            sb.AppendLine($"{ts}{ts}{ts}if (!error) SignalplanPrmsToTx({ppl.Naam}, {_prmpf}{_prmtx}A1{ppl.Naam}_{ppl.Fasen.First().FaseCyclus});");
                             sb.AppendLine($"{ts}{ts}}}");
                         }
+                        sb.AppendLine($"{ts}{ts}if (!error)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        for (int pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
+                        {
+                            var ppl = c.HalfstarData.SignaalPlannen[pl];
+                            if (!c.HalfstarData.SignaalPlannen[pl].Fasen.Any()) continue;
+                            sb.AppendLine($"{ts}{ts}{ts}SignalplanPrmsToTx({ppl.Naam}, {_prmpf}{_prmtx}A1{ppl.Naam}_{ppl.Fasen.First().FaseCyclus});");
+                        }
+                        sb.AppendLine($"{ts}{ts}}}");
 
                         sb.AppendLine($"{ts}{ts}if (!error)");
                         sb.AppendLine($"{ts}{ts}{{");
