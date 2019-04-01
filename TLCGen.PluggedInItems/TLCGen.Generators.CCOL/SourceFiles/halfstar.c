@@ -423,8 +423,13 @@ void set_special_MR(count i, count j, bool condition)
 /**********************************************************************************/
 void set_ym_pl_halfstar(count fc, bool condition)
 {
-  if (ym_max_to(fc, NG)      &&   /* meeverlengen kan volgens ontruimingstijden      */
-      ym_max_tig(fc, NG)     &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#ifdef CCOLTIG
+  if (ym_max_tig(fc, NG)      &&   /* meeverlengen kan volgens ontruimingstijden      */
+      ym_max_trig(fc, NG)     &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#else
+	if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+		ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#endif
 	  ym_max_halfstar(fc, 10)&&   /* meeverlengen kan volgens signaalplan            */
       hf_wsg()               &&   /* minimaal 1 richting actief                      */
       condition             )
@@ -435,22 +440,22 @@ void set_ym_pl_halfstar(count fc, bool condition)
 
 /**********************************************************************************/
 /* YS_PL[] zelf opzetten bij primair startgroen, dit gebeurt nl.
-niet als een fasecyclus voor zijn TXA-moment primair groen krijgt */
+   niet als een fasecyclus voor zijn TXA-moment primair groen krijgt */
 void set_yspl(count fc)
 {
 	if (SG[fc] && PR[fc] && (TXA_PL[fc]> 0))
 		YS_PL[fc] = TRUE;
 }
 
-
 /* dubbele realisatie per richting per plan. Let op, er wordt gebruik gemaakt van baseparameters:
-voor de eerste realisatie de eerste TXA parameter en voor de tweede realisatie de tweede TXA
-parameter meegeven */
+   voor de eerste realisatie de eerste TXA parameter en voor de tweede realisatie de tweede TXA
+   parameter meegeven */
 void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, bool condition)
 {
-	if (prm_tweede_txa != NG)
+	if (prm_tweede_txa != NG && 
+		PRM[prm_tweede_txa + 1] != 0 && PRM[prm_tweede_txa + 3] != 0)
 	{
-		rhdhv_tx_change(fc, pl, (prm_eerste_txa + 0),
+		set_tx_change(fc, pl, (prm_eerste_txa + 0),
 			(prm_eerste_txa + 1),
 			(prm_eerste_txa + 2),
 			(prm_eerste_txa + 3),
@@ -464,7 +469,7 @@ void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, bo
 	}
 	else
 	{
-		rhdhv_tx_change(fc, pl, (prm_eerste_txa + 0),
+		set_tx_change(fc, pl, (prm_eerste_txa + 0),
 			(prm_eerste_txa + 1),
 			(prm_eerste_txa + 2),
 			(prm_eerste_txa + 3),
@@ -570,7 +575,7 @@ bool tussen_txb_en_txd(count fc)
 }
 
 /**********************************************************************************/
-void rhdhv_tx_change(count fc, /* signaalgroep         */
+void set_tx_change(count fc, /* signaalgroep         */
 	count pl, /* actieve plan         */
 	count ptxa1, /* eerste a realisatie    */
 	count ptxb1, /* eerste b realisatie    */
@@ -708,10 +713,20 @@ bool txb_gemist(count i, int marge)
 #ifndef TIGNEW
         for (n=0; n<KFC_MAX[i]; n++)
         {
-            k= TO_pointer[i][n];
-            if (TO[k][i])           /* zoek grootste ontruimingstijd   */
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+#else
+			k = TO_pointer[i][n];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+			if (TIG[k][i])           /* zoek grootste ontruimingstijd   */
             {
-                to_tmp= TGL_max[k]+TO_max[k][i]-TGL_timer[k]-TO_timer[k];
+				to_tmp = TIG_max[k][i] - TIG_timer[k];
+#else
+			if (TO[k][i])           /* zoek grootste ontruimingstijd   */
+			{
+				to_tmp = TGL_max[k] + TO_max[k][i] - TGL_timer[k] - TO_timer[k];
+#endif
                 if (to_tmp>to_max)
                     to_max= to_tmp;
             }
@@ -719,10 +734,17 @@ bool txb_gemist(count i, int marge)
 #else
         for (n=0; n<FKFC_MAX[i]; n++)
         {
-            k= TO_pointer[i][n];
-            if (TIG_max[k][i]>=0)
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+            if (TRIG_max[k][i]>=0)
             {
-                to_tmp= TIG_max[k][i]-TIG_timer[k];
+                to_tmp= TRIG_max[k][i]-TRIG_timer[k];
+#else
+			k= TO_pointer[i][n];
+			if (TIG_max[k][i] >= 0)
+			{
+				to_tmp = TIG_max[k][i] - TIG_timer[k];
+#endif
                 if (to_tmp>to_max)  /* zoek grootste ontruimingstijd       */
                     to_max= to_tmp;
             }
@@ -829,12 +851,21 @@ bool ym_max_halfstar(count i, mulv koppeltijd)
 
 		for (n = 0; n<FKFC_MAX[i]; n++)
 		{
+#ifdef CCOLTIG
+			k = KF_pointer[i][n];
+			if (TRIG_max[i][k] >= 0)
+#else
 			k = TO_pointer[i][n];
 			if (TIG_max[i][k] >= 0)
+#endif
 			{
 				if ((TOTXB_PL[k] > 0) && !PG[k] && R[k] && (A[k] || PP[k]) || ((TOTXB_PL[k] == 0) && RA[k]))
 				{
+#ifdef CCOLTIG
+					if ((TRIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k] - 9))  /* -9 om rekening te houden met ORT's in tienden van seconden          */
+#else
 					if ((TIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k] - 9))  /* -9 om rekening te houden met ORT's in tienden van seconden          */
+#endif
 					{                                                       /* (refresh van TOTXB_PL is maar per seconde en niet per 1/10 seconde) */
 						ym = FALSE;
 						break;
@@ -866,14 +897,22 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
   
     for (n=0; n<FKFC_MAX[i]; n++) 
     {
-      k= TO_pointer[i][n];
-    
-      if (TIG_max[i][k]>=0) 
+#ifdef CCOLTIG
+      k = KF_pointer[i][n];
+      if (TRIG_max[i][k] >= 0)
+#else
+      k = TO_pointer[i][n];
+      if (TIG_max[i][k] >= 0)
+#endif
       {
         if (TOTXB_PL[k]>0 && !PG[k] && R[k] && (A[k] || PP[k]) || TOTXB_PL[k]==0 && RA[k]) 
         {
-          if ((TIG_max[i][k]+koppeltijd) >= (TOTXB_PL[k])) 
-          {
+#ifdef CCOLTIG
+			if ((TRIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k]))
+#else
+			if ((TIG_max[i][k] + koppeltijd) >= (TOTXB_PL[k]))
+#endif
+			{
             yv = FALSE;
             break;
           }
@@ -909,7 +948,11 @@ bool yws_groen_fk(count i)
 
 	for (n = 0; n<FKFC_MAX[i]; n++)
 	{
+#ifdef CCOLTIG
+		k = KF_pointer[i][n];
+#else
 		k = TO_pointer[i][n];
+#endif
 		if (A[k])  return (FALSE);
 	}
 	return (TRUE);
@@ -964,7 +1007,11 @@ void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool con
   {
     for (j=0; j<FKFC_MAX[fc]; j++) 
     {
-      k = TO_pointer[fc][j];
+#ifdef CCOLTIG
+		k = KF_pointer[fc][j];
+#else
+		k = TO_pointer[fc][j];
+#endif
       
       /* resetten wachtstand aanvraag bij (fictief) conflicterende aanvraag */
       if (A[k])
@@ -1113,6 +1160,18 @@ void print_tig(void)
     /* printen TIG tabel */
     for (fc1=0; fc1<FCMAX; fc1++)
     {
+#ifdef CCOLTIG
+      if (fc==fc1)
+        xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," X ", TRIG_max[fc][fc1]);
+      else
+      if (TRIG_max[fc][fc1] == NG)
+        xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," . ", TRIG_max[fc][fc1]);
+      else
+      if (TRIG_max[fc][fc1] == FK)
+        xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," FK", TRIG_max[fc][fc1]);
+      else
+        xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc,"%3d", TRIG_max[fc][fc1]);
+#else
       if (fc==fc1)
         xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," X ", TIG_max[fc][fc1]);
       else
@@ -1123,8 +1182,278 @@ void print_tig(void)
         xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc," FK", TIG_max[fc][fc1]);
       else
         xyprintf(3 + fc1 + fc1 + fc1 + fc1, 1 + fc + fc,"%3d", TIG_max[fc][fc1]);
+#endif
     } 
   }
 }
 #endif
 #endif
+
+void SignalplanPrmsToTx(count pl, count txa1)
+{
+	short fc;
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		TXA[pl][fc] = PRM[txa1 + fc * 10 + 0];
+		TXB[pl][fc] = PRM[txa1 + fc * 10 + 1];
+		TXC[pl][fc] = PRM[txa1 + fc * 10 + 2];
+		TXD[pl][fc] = PRM[txa1 + fc * 10 + 3];
+		TXE[pl][fc] = PRM[txa1 + fc * 10 + 4];
+	}
+}
+
+bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
+{
+	char temp[1024];
+	short i, cfc, fc, real, tg_min;
+	short txa, txb, txc, txd, txe;
+	short txb_fc, txb_cfc, txd_fc, txd_cfc;
+	short tx[5];
+	char txS[5][1] = { 'A', 'B', 'C', 'D', 'E' };
+	short txmax = PRM[ctijd];
+
+	if (txmax < 0)
+	{
+		sprintf(temp, "copy PRM to TX: new signalplan %d has an invalid cycletime: %d\n", pl + 1, txmax);
+		uber_puts(temp);
+		return TRUE;
+	}
+
+	for (fc = 0; fc < FCMAX; ++fc)
+	{
+		for (real = 0; real < 2; ++real)
+		{
+			tx[0] = txa = PRM[txa1 + fc * 10 + real * 5 + 0];
+			tx[1] = txb = txb_fc = PRM[txa1 + fc * 10 + real * 5 + 1];
+			tx[2] = txc = PRM[txa1 + fc * 10 + real * 5 + 2];
+			tx[3] = txd = PRM[txa1 + fc * 10 + real * 5 + 3];
+			tx[4] = txe = PRM[txa1 + fc * 10 + real * 5 + 4];
+
+			// skip 2nd realisation if empty
+			if (real == 1 && txb == 0 && txd == 0) continue;
+
+			// check between 0 and txmax
+			for (i = 0; i < 5; ++i)
+			{
+				if (tx[i] < 0 || tx[i] >= txmax)
+				{
+					sprintf(temp, "copy PRM to TX: TX%c for fc%s for new signalplan %d has an invalid value: %d\n", txS[i], FC_code[fc], pl + 1, txa);
+					uber_puts(temp);
+					return TRUE;
+				}
+			}
+
+			// check a, c and e
+			if (txb < txd)
+			{
+				tg_min = (txd - txb) * 10;
+				if (txa > 0 && txa > txb && txa < txd)
+				{
+					sprintf(temp, "copy PRM to TX: TXA for fc%s for new signalplan %d is between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+				if (txc > 0 && (txc < txb || txc > txd))
+				{
+					sprintf(temp, "copy PRM to TX: TXC for fc%s for new signalplan %d is not between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+				if (txe > 0 && txe > txb && txe < txd)
+				{
+					sprintf(temp, "copy PRM to TX: TXE for fc%s for new signalplan %d is between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+			}
+			else if (!(txb == 0 && txd == 0))
+			{
+				tg_min = (txmax - txb + txd) * 10;
+				if (txa > 0 && (txa > txb || txa < txd))
+				{
+					sprintf(temp, "copy PRM to TX: TXA for fc%s for new signalplan %d is between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+				if (txc > 0 && txc < txb && txc > txd)
+				{
+					sprintf(temp, "copy PRM to TX: TXC for fc%s for new signalplan %d is not between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+				if (txe > 0 && (txe > txb || txe < txd))
+				{
+					sprintf(temp, "copy PRM to TX: TXE for fc%s for new signalplan %d is between TXB and TXD\n", FC_code[fc], pl + 1);
+					uber_puts(temp);
+					return TRUE;
+				}
+			}
+
+			// check at least tggmax/tfgmax
+			if (tg_min < TFG_max[fc])
+			{
+				sprintf(temp, "copy PRM to TX: fixed green time for fc%s not met in new signalplan %d\n", FC_code[fc], pl + 1);
+				uber_puts(temp);
+				return TRUE;
+			}
+			if (tg_min < TGG_max[fc])
+			{
+				sprintf(temp, "copy PRM to TX: minimum green time for fc%s not met in new signalplan %d\n", FC_code[fc], pl + 1);
+				uber_puts(temp);
+				return TRUE;
+			}
+
+			// check conflicts
+			for (cfc = fc + 1; cfc < FCMAX; ++cfc)
+			{
+				// check if conflicting
+#if defined CCOLTIG && !defined NO_TIGMAX
+#ifndef NO_GGCONFLICT
+				if (TIG_max[fc][cfc] >= 0 || TIG_max[fc][cfc] <= GK)
+#else
+				if (TIG_max[fc][cfc] >= 0)
+#endif
+#else
+#ifndef NO_GGCONFLICT
+				if (TO_max[fc][cfc] >= 0 || TO_max[fc][cfc] <= GK)
+#else
+				if (TO_max[fc][cfc] >= 0)
+#endif
+#endif
+				{
+					bool conflict_txb_txd = TRUE;
+
+					// calculate TXB and TXD including amber (or not) and clearing/intergreen times
+					txb_cfc = PRM[txa1 + cfc * 10 + real * 5 + 1];
+#if defined CCOLTIG && !defined NO_TIGMAX
+					if (TIG_max[fc][cfc] >= 0)
+					{
+						txd_fc = txd + ((TIG_max[fc][cfc] + 9) / 10);
+						if (txd_fc > txmax)  txd_fc -= txmax;
+						txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TIG_max[cfc][fc] + 9) / 10);
+						if (txd_cfc > txmax)  txd_cfc -= txmax;
+					}
+#else
+					if (TO_max[fc][cfc] >= 0)
+					{
+						txd_fc = txd + ((TGL_max[fc] + 9) / 10) + ((TO_max[fc][cfc] + 9) / 10);
+						if (txd_fc > txmax)  txd_fc -= txmax;
+						txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TGL_max[cfc] + 9) / 10) + ((TO_max[cfc][fc] + 9) / 10);
+						if (txd_cfc > txmax)  txd_cfc -= txmax;
+					}
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+#ifndef NO_GGCONFLICT
+					else /* TIG_max[fc][cfc] <= GK */
+					{
+						if (TIG_max[fc][cfc] == GK)
+						{
+							txd_fc = txd;
+						}
+						else if (TIG_max[fc][cfc] == GKL)
+						{
+							txd_fc = txd + ((TGL_max[fc] + 9) / 10);
+						}
+#ifdef GKL_IN_TOMAX
+						else if (TIG_max[fc][cfc] < GKL) /* bijv: TIG_max[fc][cfc]= -120 */
+						{
+							txd_fc = txd + ((TGL_max[fc] + 9) / 10) + (((-TIG_max[fc][cfc]) + 9) / 10);
+						}
+#endif
+						if (txd_fc > txmax) txd_fc -= txmax;
+
+						if (TIG_max[cfc][fc] == GK)
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3];
+						}
+						else if (TIG_max[cfc][fc] == GKL)
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TGL_max[cfc] + 9) / 10);
+						}
+#ifdef GKL_IN_TOMAX
+						else if (TIG_max[cfc][fc] < GKL)   /* bijv: TIG_max[fc][cfc]= -120 */
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TGL_max[cfc] + 9) / 10) + (((-TIG_max[cfc][fc]) + 9) / 10);
+						}
+#endif
+#endif
+#else
+#ifndef NO_GGCONFLICT
+					else /* TO_max[fc][cfc] <= GK */
+					{
+						if (TO_max[fc][cfc] == GK)
+						{
+							txd_fc = txd;
+						}
+						else if (TO_max[fc][cfc] == GKL)
+						{
+							txd_fc = txd + ((TGL_max[fc] + 9) / 10);
+						}
+#ifdef GKL_IN_TOMAX
+						else if (TO_max[fc][cfc] < GKL) /* bijv: TO_max[fc][cfc]= -120 */
+						{
+							txd_fc = txd + ((TGL_max[fc] + 9) / 10) + (((-TO_max[fc][cfc]) + 9) / 10);
+						}
+#endif
+						if (txd_fc > txmax) txd_fc -= txmax;
+
+						if (TO_max[cfc][fc] == GK)
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3];
+						}
+						else if (TO_max[cfc][fc] == GKL)
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TGL_max[cfc] + 9) / 10);
+						}
+#ifdef GKL_IN_TOMAX
+						else if (TO_max[cfc][fc] < GKL)   /* bijv: TO_max[fc][cfc]= -120 */
+						{
+							txd_cfc = PRM[txa1 + cfc * 10 + real * 5 + 3] + ((TGL_max[cfc] + 9) / 10) + (((-TO_max[cfc][fc]) + 9) / 10);
+						}
+#endif
+#endif
+#endif
+						if (txd_cfc > txmax) txd_cfc -= txmax;
+					}
+					if ((txb_fc < txd_fc) && (txb_cfc < txd_cfc))
+					{
+						if ((txb_fc > txb_cfc) && (txb_fc < txd_cfc))
+						{
+							conflict_txb_txd = TRUE;
+						}
+						if ((txb_cfc > txb_fc) && (txb_cfc < txd_fc))
+						{
+							conflict_txb_txd = TRUE;
+						}
+					}
+					else if (txb_fc < txd_fc && txb_cfc > txd_cfc)
+					{
+						if ((txb_fc < txd_cfc) || (txd_fc > txb_cfc))
+						{
+							conflict_txb_txd = TRUE;
+						}
+					}
+					else if (txb_fc > txd_fc && txb_cfc < txd_cfc)
+					{
+						if ((txb_cfc < txd_fc) || (txd_cfc > txb_fc))
+						{
+							conflict_txb_txd = TRUE;
+						}
+					}
+					else if (txb_fc > txd_fc && txb_cfc > txd_cfc)
+					{
+						conflict_txb_txd = TRUE;
+					}
+
+					if (conflict_txb_txd)
+					{
+						sprintf(temp, "realisations for fc%s and fc%s are conflicting in plan %d\n", FC_code[fc], FC_code[cfc], pl + 1);
+						uber_puts(temp);
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+	return FALSE;
+}

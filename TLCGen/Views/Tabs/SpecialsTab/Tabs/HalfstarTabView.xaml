@@ -42,6 +42,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
@@ -57,10 +58,12 @@
                             SelectedItem="{Binding Path=TypeVARegelen,UpdateSourceTrigger=PropertyChanged}"/>
                         <Label Content="VA regelen inschakelen" Grid.Row="2" />
                         <CheckBox Grid.Row="2" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VARegelen}" />
-                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AlternatievenVoorHoofdrichtingen}" />
                         <Label Content="Hoofdr.alt. inschakelen" Grid.Row="3" />
-                        <Label Grid.Row="4" Grid.Column="0" Content="Hoofdrichtingen" />
-                        <Grid Grid.Row="4" Grid.Column="1">
+                        <CheckBox Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AlternatievenVoorHoofdrichtingen}" />
+                        <Label Content="TX tijden in prms" Grid.Row="4" />
+                        <CheckBox Grid.Row="4" Grid.Column="1" Margin="5" IsChecked="{Binding Path=PlantijdenInParameters}" />
+                        <Label Grid.Row="5" Grid.Column="0" Content="Hoofdrichtingen" />
+                        <Grid Grid.Row="5" Grid.Column="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" MinHeight="30" />
                                 <RowDefinition Height="Auto" />
@@ -93,8 +96,8 @@
                                 </Button>
                             </StackPanel>
                         </Grid>
-                        <Label Content="Gekoppelde regelaars" Grid.Row="5" Grid.ColumnSpan="2" />
-                        <ListBox Grid.Row="6" Grid.ColumnSpan="2" Margin="2"
+                        <Label Content="Gekoppelde regelaars" Grid.Row="6" Grid.ColumnSpan="2" />
+                        <ListBox Grid.Row="7" Grid.ColumnSpan="2" Margin="2"
                                  HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding GekoppeldeKruisingen}" SelectedItem="{Binding SelectedHalfstarGekoppeldeKruising}">
                             <ListBox.ItemTemplate>
@@ -144,7 +147,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <StackPanel Grid.Row="7" Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal">
                             <Button Content="Kruising toevoegen" Command="{Binding AddGekoppeldeKruisingCommand}" Margin="2" />
                             <Button Content="Kruising verwijderen" Command="{Binding RemoveGekoppeldeKruisingCommand}" Margin="2" />
                         </StackPanel>

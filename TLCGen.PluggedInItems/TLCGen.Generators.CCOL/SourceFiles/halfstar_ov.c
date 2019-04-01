@@ -64,7 +64,7 @@ extern mulv test_pr_fk_totxb(count i, bool fpr);  /* standaard CCOL functie uit 
 /* -------------------------------------------------------------------------------------- */
 mulv set_pg_primair_ov_ple(count i)
 {
-   register count n, k;
+	register count n, k;
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
    char str[20];
 #endif
@@ -85,10 +85,20 @@ mulv set_pg_primair_ov_ple(count i)
 #ifdef NO_TIG
       for (n=0; n<KFC_MAX[i]; n++)
       {
-         k= TO_pointer[i][n];
-         if (TO[k][i])                                   /* zoek grootste ontruimingstijd */
+#ifdef CCOLTIG
+		  k = KF_pointer[i][n];
+#else
+		  k = TO_pointer[i][n];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+		  if (TIG[k][i])                                   /* zoek grootste ontruimingstijd */
+		  {
+			  to_tmp = TIG_max[k][i] - TIG_timer[k];
+#else
+		 if (TO[k][i])                                   /* zoek grootste ontruimingstijd */
          {
             to_tmp= TGL_max[k]+TO_max[k][i]-TGL_timer[k]-TO_timer[k];
+#endif
             if (to_tmp>to_max)
                to_max= to_tmp;
          }
@@ -96,10 +106,17 @@ mulv set_pg_primair_ov_ple(count i)
 #else
       for (n=0; n<FKFC_MAX[i]; n++)
       {
-         k= TO_pointer[i][n];
-         if (TIG_max[k][i]>=0)
+#ifdef CCOLTIG
+		  k = KF_pointer[i][n];
+         if (TRIG_max[k][i]>=0)
          {
-            to_tmp= TIG_max[k][i]-TIG_timer[k];
+            to_tmp = TRIG_max[k][i] - TRIG_timer[k];
+#else
+		  k= TO_pointer[i][n];
+		 if (TIG_max[k][i] >= 0)
+		 {
+			 to_tmp = TIG_max[k][i] - TIG_timer[k];
+#endif
             if (to_tmp>to_max)                           /* zoek grootste ontruimingstijd */
                to_max= to_tmp;
          }
@@ -170,7 +187,11 @@ void set_pg_fk_totxb_ov_ple(count i)
    /* ------------------------------------------------------- */
    for (n=0; n<FKFC_MAX[i]; n++)
    {
-      k= TO_pointer[i][n];
+#ifdef CCOLTIG
+	   k = KF_pointer[i][n];
+#else
+	   k = TO_pointer[i][n];
+#endif
       if ((((TOTXB_PL[k]>0) || (TX_PL_timer==TXB_PL[k])) && (TOTXB_PL[i]>TOTXB_PL[k])))
       {
          PG[k] |= PRIMAIR_OVERSLAG;
@@ -615,18 +636,33 @@ mulv BepaalGrootsteTO(count fc)
    to_max = 0;
 #ifdef NO_TIG
    for (n=0; n < KFC_MAX[fc]; n++) {
-      k= TO_pointer[fc][n];
-      if (TO[k][fc]) {                              /* zoek grootste ontruimingstijd      */
-         to_tmp = TGL_max[k] + TO_max[k][fc] - TGL_timer[k] - TO_timer[k];
+#ifdef CCOLTIG
+	   k = KF_pointer[fc][n];
+#else
+	   k = TO_pointer[fc][n];
+#endif
+#if defined CCOLTIG && !defined NO_TIGMAX
+	   if (TIG[k][fc]) {                              /* zoek grootste intergroentijd      */
+         to_tmp = TIG_max[k][fc] - TIG_timer[k];
+#else
+	   if (TO[k][fc]) {                              /* zoek grootste ontruimingstijd      */
+		   to_tmp = TGL_max[k] + TO_max[k][fc] - TGL_timer[k] - TO_timer[k];
+#endif
          if (to_tmp > to_max)
             to_max = to_tmp;
       }
    }
 #else
    for (n=0; n < FKFC_MAX[fc]; n++) {
-      k= TO_pointer[fc][n];
-      if (TIG_max[k][fc]>=0) {                      /* zoek grootste ontruimingstijd      */
-        to_tmp= TIG_max[k][fc]-TIG_timer[k];
+#ifdef CCOLTIG
+	   k = KF_pointer[fc][n];
+	   if (TRIG_max[k][fc] >= 0) {                      /* zoek grootste ontruimingstijd      */
+		   to_tmp = TRIG_max[k][fc] - TRIG_timer[k];
+#else
+	   k = TO_pointer[fc][n];
+		if (TIG_max[k][fc]>=0) {                      /* zoek grootste ontruimingstijd      */
+		   to_tmp= TIG_max[k][fc]-TIG_timer[k];
+#endif
         if (to_tmp > to_max)
            to_max = to_tmp;
       }
@@ -707,7 +743,11 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k)
          /* en daarna de minimale groentijd tot TXD van de conflictrichting toe te wijzen */
          if (TOTXD_PL[k] > 0 || (TX_timer == TXD_PL[k]))
          {
-            totxb_min = TOTXD_PL[k] - gr_min[k] - TO_max[fcov][k] - TGL_max[fcov];
+#if defined CCOLTIG && !defined NO_TIGMAX
+			 totxb_min = TOTXD_PL[k] - gr_min[k] - TIG_max[fcov][k];
+#else
+			 totxb_min = TOTXD_PL[k] - gr_min[k] - TO_max[fcov][k] - TGL_max[fcov];
+#endif
          }
       }
       else
@@ -732,7 +772,11 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k)
 
          if (TOTXB_PL[k] > 0 || (TX_timer == TXB_PL[k]))
          {
-            totxb_tmp = TOTXB_PL[k] - TO_max[fcov][k] - TGL_max[fcov];
+#if defined CCOLTIG && !defined NO_TIGMAX
+			 totxb_tmp = TOTXB_PL[k] - TIG_max[fcov][k];
+#else
+			 totxb_tmp = TOTXB_PL[k] - TO_max[fcov][k] - TGL_max[fcov];
+#endif
             if (totxb_tmp < totxb_min)             /* zoek kleinste starttijd confl. fc   */
             {
                totxb_min = totxb_tmp;
@@ -761,7 +805,11 @@ bool StartGroenConflictenUitstellen(count fc)
 
    for (j=0; j<FKFC_MAX[fc]; j++)
    {
-      k = TO_pointer[fc][j];
+#ifdef CCOLTIG
+	   k = KF_pointer[fc][j];
+#else
+	   k = TO_pointer[fc][j];
+#endif
       if (!ConflictAfgekapt[fc][k] && (TijdTotLaatsteRealisatieMomentConflict(fc, k) <= 0))
       {
          l_fReturn = FALSE;
@@ -789,7 +837,11 @@ bool StartGroenHoofdRichtingenUitstellen(count fc)
 
    for (j=0; j<FKFC_MAX[fc]; j++)
    {
-      k = TO_pointer[fc][j];
+#ifdef CCOLTIG
+	   k = KF_pointer[fc][j];
+#else
+	   k = TO_pointer[fc][j];
+#endif
       if (HoofdRichting[k] && !ConflictAfgekapt[fc][k] && (TijdTotLaatsteRealisatieMomentConflict(fc, k) <= 0))
       {
          l_fReturn = FALSE;
@@ -1144,7 +1196,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 				/* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
 				for (i = 0; i < FKFC_MAX[fc] && afkappen_mag; i++)
 				{
+#ifdef CCOLTIG
+					j = KF_pointer[fc][i];
+#else
 					j = TO_pointer[fc][i];
+#endif
 					if (HoofdRichting[j])
 					{
 						/* Maatregelen als conflict groen is en min. groen bereikt heeft  */
@@ -1203,7 +1259,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 					fasevolgorde_wisselen_gewenst = FALSE;
 					for (i = 0; i < FKFC_MAX[fc]; i++)
 					{
+#ifdef CCOLTIG
+						j = KF_pointer[fc][i];
+#else
 						j = TO_pointer[fc][i];
+#endif
 						/* Afkappen wachtgroen en/of verlenggroen door FM instructie      */
 						RS[j] = YW[j] = RW[j] = YV[j] = FALSE;
 						FM[j] |= OV_PLE_BIT;
@@ -1296,7 +1356,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 				/* de bool afkappen_mag FALSE en wordt geen enkele richting afgekapt    */
 				for (i = 0; i < FKFC_MAX[fc]; i++)
 				{
+#ifdef CCOLTIG
+					j = KF_pointer[fc][i];
+#else
 					j = TO_pointer[fc][i];
+#endif
 					if (HoofdRichting[j])
 					{
 						if (R[j] && !ConflictAfgekapt[fc][j] && (TijdTotLaatsteRealisatieMomentConflict(fc, j) <= 0))
@@ -1341,7 +1405,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 					fasevolgorde_wisselen_gewenst = FALSE;
 					for (i = 0; i < FKFC_MAX[fc]; i++)
 					{
+#ifdef CCOLTIG
+						j = KF_pointer[fc][i];
+#else
 						j = TO_pointer[fc][i];
+#endif
 						if (R[j])
 						{
 							RR[j] |= OV_PLE_BIT;
@@ -1360,7 +1428,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 					fasevolgorde_wisselen_gewenst = FALSE;
 					for (i = 0; i < FKFC_MAX[fc]; i++)
 					{
+#ifdef CCOLTIG
+						j = KF_pointer[fc][i];
+#else
 						j = TO_pointer[fc][i];
+#endif
 						if (!HoofdRichting[j] || blokkeren_mag)
 						{
 							YW[j] = RW[j] = YV[j] = FALSE;
@@ -1413,7 +1485,11 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 				/* conflicterende hoofdrichtingen direct blokkeren en afkappen          */
 				for (i = 0; i < FKFC_MAX[fc]; i++)
 				{
+#ifdef CCOLTIG
+					j = KF_pointer[fc][i];
+#else
 					j = TO_pointer[fc][i];
+#endif
 					if (R[j])
 					{
 						RR[j] |= OV_PLE_BIT;
@@ -1466,11 +1542,20 @@ void OVIngreep_ple(count fc,     /* fc met prioriteit                           
 			for (i = 0; i < FKFC_MAX[fc]; i++)
 			{
 				to_tmp = 0;
+#ifdef CCOLTIG
+				j = KF_pointer[fc][i];                    /* Index conflicterende fc          */
+#else
 				j = TO_pointer[fc][i];                    /* Index conflicterende fc          */
+#endif
 				if (!HoofdRichting[j] || (prio > 3))
 				{
+#if defined CCOLTIG && !defined NO_TIGMAX
+					to_tmp = max(TFG_max[fc] - TFG_timer[fc], TGG_max[fc] - TGG_timer[fc])
+						+ TIG_max[fc][j];
+#else
 					to_tmp = max(TFG_max[fc] - TFG_timer[fc], TGG_max[fc] - TGG_timer[fc])
 						+ TGL_max[fc] + TO_max[fc][j];
+#endif
 					if (to_tmp > TOTXD_PL[j])
 					{
 						if (!PG[j])

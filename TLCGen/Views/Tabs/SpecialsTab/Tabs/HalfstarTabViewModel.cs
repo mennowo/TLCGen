@@ -194,7 +194,17 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public string DefaultSignaalplan
+        public bool PlantijdenInParameters
+        {
+            get => HalfstarData.PlantijdenInParameters;
+            set
+            {
+                HalfstarData.PlantijdenInParameters = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public string DefaultSignaalplan
 		{
 			get => HalfstarData.DefaultPeriodeSignaalplan; 
 			set

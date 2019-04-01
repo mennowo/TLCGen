@@ -95,7 +95,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"schvar.c\"   /* software schakelaars              */");
 	        if (controller.HalfstarData.IsHalfstar)
 	        {
-				sb.AppendLine($"{ts}#include \"tigvar.c\"   /* uitgebreide signaalplan structuur */");
+                if(controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+                {
+				    sb.AppendLine($"{ts}#include \"trigvar.c\"   /* uitgebreide signaalplan structuur */");
+                }
+                else
+                {
+				    sb.AppendLine($"{ts}#include \"tigvar.c\"   /* uitgebreide signaalplan structuur */");
+                }
 				sb.AppendLine($"{ts}#include \"plevar.c\"   /* uitgebreide signaalplan structuur */");
 	        }
             sb.AppendLine($"{ts}#include \"prmvar.c\"   /* parameters                        */");
