@@ -108,6 +108,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 30;
                 case CCOLCodeTypeEnum.RegCSynchronisaties:
                     return 20;
+                case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
+                    return 10;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
                     return 20;
                 case CCOLCodeTypeEnum.RegCVerlenggroen:
@@ -277,11 +279,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}gk_ControlGK();");
                     }
                     return sb.ToString();
+                case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
+                        sb.AppendLine($"{ts}gk_ControlGK();");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCAlternatieven:
-                    if(c.InterSignaalGroep.Nalopen.Count > 0)
+                    if (c.InterSignaalGroep.Nalopen.Count > 0)
                     {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");
                         sb.AppendLine($"{ts}/* --------------------------------------------- */");

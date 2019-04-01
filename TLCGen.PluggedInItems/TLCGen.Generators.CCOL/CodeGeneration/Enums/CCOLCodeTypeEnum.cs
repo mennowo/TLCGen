@@ -11,6 +11,7 @@
         RegCAanvragen,
         RegCVerlenggroen,
         RegCMaxgroen,
+        RegCMaxgroenNaAdd,
         RegCWachtgroen,
         RegCMeetkriterium,
         RegCFileVerwerking,
