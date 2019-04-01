@@ -55,7 +55,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}mulv TIG_ontwerp[FCMAX][FCMAX];");
                 sb.AppendLine($"#else");
                 sb.AppendLine($"{ts}mulv TO_ontwerp[FCMAX][FCMAX];");
-                sb.AppendLine($"#end");
+                sb.AppendLine($"#endif");
             }
             else
             {
@@ -117,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}{ts}{ts}TIG_ontwerp[i][j] = TIG_max[i][j];");
                 sb.AppendLine($"{ts}{ts}{ts}#else");
                 sb.AppendLine($"{ts}{ts}{ts}{ts}TO_ontwerp[i][j] = TO_max[i][j];");
-                sb.AppendLine($"{ts}{ts}{ts}#end");
+                sb.AppendLine($"{ts}{ts}{ts}#endif");
             }
             else
             {

@@ -299,6 +299,7 @@ void TerugKomGroen(void)
 void OVTimers(void)
 {
     int fc, inm, ov;
+	int sml = -1, ml;
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
@@ -332,7 +333,26 @@ void OVTimers(void)
                 iVerstrekenGroenTijd2[fc] = -1;
             }
         }
-        if (SML && iGerealiseerdeGroenTijd[fc] > 0 && !PG[fc])
+#ifdef MLMAX
+		sml = SML;
+#else
+#ifdef MLAMAX
+		if (sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { sml = SMLA; break; }
+#endif
+#ifdef MLBMAX
+		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { sml = SMLB; break; }
+#endif
+#ifdef MLCMAX
+		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { sml = SMLC; break; }
+#endif
+#ifdef MLDMAX
+		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { sml = SMLD; break; }
+#endif
+#ifdef MLEMAX
+		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { sml = SMLE; break; }
+#endif
+#endif
+        if (sml && iGerealiseerdeGroenTijd[fc] > 0 && !PG[fc])
         {
             iGerealiseerdeGroenTijd[fc] = 0;
         }
@@ -1130,10 +1150,12 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                         iRestGroen = G[k] && CV[k] ? TFG_max[k] - TFG_timer[k] + TVG_max[k] - TVG_timer[k] : 0;
                     }
                 }
+#ifdef NALOPEN
                 if (TNL[k] && iRestGroen < TNL_max[k] - TNL_timer[k])
                 {
                     iRestGroen = TNL_max[k] - TNL_timer[k];
                 }
+#endif
             }
             else
             {
@@ -1501,6 +1523,7 @@ void AfkappenMG(int fc, int iStartGr)
 void OVAfkappen(void)
 {
     int ov, fc, iTotaalAantalInmeldingen, iMaxWachtTijdOverschreden;
+	int sml = -1, ml;
 
     iTotaalAantalInmeldingen = 0;
     iMaxWachtTijdOverschreden= 0;
@@ -1569,7 +1592,26 @@ void OVAfkappen(void)
             (iAantalMalenNietAfkappen[fc])--;
             iNietAfkappen[fc] = 0;
         }
-        if ((/* SG[fc] */PR[fc] && RA[fc] || SML && PG[fc] && G[fc]) && PR[fc] && iAantalMalenNietAfkappen[fc]>0 && !iNietAfkappen[fc]) 
+#ifdef MLMAX
+		sml = SML;
+#else
+#ifdef MLAMAX
+		if(sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { sml = SMLA; break; }
+#endif
+#ifdef MLBMAX
+		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { sml = SMLB; break; }
+#endif
+#ifdef MLCMAX
+		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { sml = SMLC; break; }
+#endif
+#ifdef MLDMAX
+		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { sml = SMLD; break; }
+#endif
+#ifdef MLEMAX
+		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { sml = SMLE; break; }
+#endif
+#endif
+        if ((/* SG[fc] */PR[fc] && RA[fc] || sml && PG[fc] && G[fc]) && PR[fc] && iAantalMalenNietAfkappen[fc]>0 && !iNietAfkappen[fc]) 
         {
     	    /* wijz. Ane 14-11-2016 SG[fc] gewijzigd in PR[fc] && RA[fc], ivm. berekening iRealisatieTijd[fc][k], 
     	       zie ook RealisatieTijden(int fc, int iPrioriteitsOptiesFC) */
@@ -2198,7 +2240,7 @@ void AfhandelingOV(void)
     OVInstellingen_Add();
 #endif
 
-    OVTimers();
+	OVTimers();
     KonfliktTijden();
 #ifdef OV_ADDFILE
     KonfliktTijden_Add();

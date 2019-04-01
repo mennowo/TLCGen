@@ -25,9 +25,9 @@ namespace TLCGen.ModelManagement
         private static ITLCGenModelManager _Default;
 
         private IMessenger _MessengerInstance;
-	    private Action<object, string> _setDefaultsAction;
+        private Action<object, string> _setDefaultsAction;
 
-	    #endregion // Fields
+        #endregion // Fields
 
         #region Properties
 
@@ -63,6 +63,33 @@ namespace TLCGen.ModelManagement
         #endregion // Properties
 
         #region Public Methods
+
+        public void ConvertToIntergroen(ControllerModel controller)
+        {
+            foreach(var igt in controller.InterSignaalGroep.Conflicten)
+            {
+                var fc = controller.Fasen.FirstOrDefault(x => x.Naam == igt.FaseVan);
+                if (fc == null) continue;
+                igt.Waarde += fc.TGL;
+                if (igt.GarantieWaarde.HasValue) igt.GarantieWaarde += fc.TGL;
+            }
+        }
+
+        public void ConvertToOntruimingstijden(ControllerModel controller)
+        {
+            foreach (var igt in controller.InterSignaalGroep.Conflicten)
+            {
+                var fc = controller.Fasen.FirstOrDefault(x => x.Naam == igt.FaseVan);
+                if (fc == null) continue;
+                igt.Waarde -= fc.TGL;
+                if (igt.Waarde < 0) igt.Waarde = 0;
+                if (igt.GarantieWaarde.HasValue)
+                {
+                    igt.GarantieWaarde -= fc.TGL;
+                    if (igt.GarantieWaarde < 0) igt.GarantieWaarde = 0;
+                }
+            }
+        }
 
         public static void OverrideDefault(ITLCGenModelManager provider)
         {

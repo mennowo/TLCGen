@@ -1,7 +1,10 @@
 #ifndef EXTRA_FUNC
 #define EXTRA_FUNC
+
+#ifdef NALOPEN
 	#include "gkvar.h"
 	#include "nlvar.h"
+#endif
 
 bool ym_maxV1(count i, mulv to_verschil);
 bool ym_max_toV1(count i, mulv to_verschil);

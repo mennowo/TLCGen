@@ -89,6 +89,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#define DEFAULT_MAX_WACHTTIJD           120");
             sb.AppendLine("#define NO_REALISEREN_TOEGESTAAN");
             sb.AppendLine("#define OV_ADDFILE");
+            if (c.InterSignaalGroep.Nalopen.Any())
+            {
+                sb.AppendLine("#define NALOPEN");
+            }
 
             if (c.HalfstarData.IsHalfstar)
             {
@@ -1063,7 +1067,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _hov = CCOLGeneratorSettingsProvider.Default.GetElementName("hov");
             var _hhd = CCOLGeneratorSettingsProvider.Default.GetElementName("hhd");
 
-            sb.AppendLine("/*-----------------------------------------------------");
+            sb.AppendLine("/* -----------------------------------------------------");
             sb.AppendLine("   OVCcol zorgt voor het bijwerken van de CCOL-elementen");
             sb.AppendLine("   voor het OV.");
             sb.AppendLine("   ----------------------------------------------------- */");
@@ -1099,7 +1103,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _ddummyvecomin = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomin");
             var _ddummyvecomuit = CCOLGeneratorSettingsProvider.Default.GetElementName("ddummyvecomuit");
 
-            sb.AppendLine("/*----------------------------------------------------------------");
+            sb.AppendLine("/* ----------------------------------------------------------------");
             sb.AppendLine("   OVSpecialSignals wordt aangeroepen vanuit de functie ");
             sb.AppendLine("   is_special_signals. Deze wordt in de testomgeving gebruikt voor ");
             sb.AppendLine("   het opzetten van bijzondere ingangen.");

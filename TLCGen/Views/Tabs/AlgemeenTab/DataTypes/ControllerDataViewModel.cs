@@ -151,11 +151,43 @@ namespace TLCGen.ViewModels
             get { return _Controller?.Data == null ? false : _Controller.Data.Intergroen; }
             set
             {
-                _Controller.Data.Intergroen = value;
-                RaisePropertyChanged<object>("Intergroen", broadcast: true);
-                if (TLCGenDialogProvider.Default.ShowDialogs)
+                if (_Controller.Data.Intergroen != value)
                 {
-                    TLCGenDialogProvider.Default.ShowMessageBox("Let op! TLCGen voert geen conversies uit tussen ontruimingstijden en intergroen tijden.", "Controle intersignaalgroep tijden", System.Windows.MessageBoxButton.OK);
+                    if (TLCGenDialogProvider.Default.ShowDialogs)
+                    {
+                        if (value == true)
+                        {
+                            var result = TLCGenDialogProvider.Default.ShowMessageBox("De regeling wordt omgezet naar intergroen. Huidige ontruimingstijden ophogen met de geeltijd?", "Conversie naar intergroen", System.Windows.MessageBoxButton.YesNoCancel);
+                            if(result == System.Windows.MessageBoxResult.Yes)
+                            {
+                                ModelManagement.TLCGenModelManager.Default.ConvertToIntergroen(_Controller);
+                            }
+                            else if(result == System.Windows.MessageBoxResult.Cancel)
+                            {
+                                RaisePropertyChanged();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            var result = TLCGenDialogProvider.Default.ShowMessageBox("De regeling wordt omgezet naar ontruimingstijden. Huidige intergroentijden verlagen met de geeltijd?", "Conversie naar ontruimingstijden", System.Windows.MessageBoxButton.YesNoCancel);
+                            if (result == System.Windows.MessageBoxResult.Yes)
+                            {
+                                ModelManagement.TLCGenModelManager.Default.ConvertToOntruimingstijden(_Controller);
+                            }
+                            else if (result == System.Windows.MessageBoxResult.Cancel)
+                            {
+                                RaisePropertyChanged();
+                                return;
+                            }
+                        }
+                        _Controller.Data.Intergroen = value;
+                        RaisePropertyChanged<object>("Intergroen", broadcast: true);
+                    }
+                    else
+                    {
+                        RaisePropertyChanged();
+                    }
                 }
             }
         }
