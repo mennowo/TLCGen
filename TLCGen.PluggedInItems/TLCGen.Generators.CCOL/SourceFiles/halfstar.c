@@ -512,10 +512,10 @@ void SetPlanTijden2R(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mu
 void sync_pg(void)
 {
 	register count fc;
-	bool **prml;
+	bool **prml = NULL;
 	count ml = -1;
 	count mlx = -1;
-	count mlmax;
+	count mlmax = 0;
 
 	for (fc = 0; fc<FCMAX; fc++)
 	{
