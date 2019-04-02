@@ -282,12 +282,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMaxgroenNaAdd:
+                    if (c.InterSignaalGroep.Nalopen.Count > 0)
                         sb.AppendLine($"{ts}gk_ControlGK();");
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCAlternatieven:
                     if (c.InterSignaalGroep.Nalopen.Count > 0)
-                    {
+                        {
                         sb.AppendLine($"{ts}/* set meerealisatie voor richtingen met nalopen */");
                         sb.AppendLine($"{ts}/* --------------------------------------------- */");
                         foreach (var nl in c.InterSignaalGroep.Nalopen)
