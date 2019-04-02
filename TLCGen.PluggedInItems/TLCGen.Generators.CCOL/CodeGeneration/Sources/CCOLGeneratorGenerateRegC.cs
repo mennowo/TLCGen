@@ -604,6 +604,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         break;
                 }
                 sb.AppendLine($"{hsts}Wachtgroen_halfstar();");
+                sb.AppendLine($"{hsts}Meetkriterium();");
                 sb.AppendLine($"{hsts}Meetkriterium_halfstar();");
                 sb.AppendLine($"{hsts}Meeverlengen_halfstar();");
                 sb.AppendLine($"{hsts}Synchronisaties_halfstar();");

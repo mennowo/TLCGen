@@ -459,7 +459,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			    foreach (var plfc in pl.Fasen)
 			    {
 				    sb.AppendLine(
-					    $"{ts}SetPlanTijden({_fcpf}{plfc.FaseCyclus}, {pl.Naam}, {plfc.A1 ?? 0}, {plfc.B1}, {plfc.C1 ?? 0}, {plfc.D1}, {plfc.E1 ?? 0});");
+					    $"{ts}SetPlanTijden({_fcpf}{plfc.FaseCyclus}, " +
+                        $"{pl.Naam}, " +
+                        $"{(plfc.A1 ?? 0).ToString().PadLeft(3)}, " +
+                        $"{plfc.B1.ToString().PadLeft(3)}, " +
+                        $"{(plfc.C1 ?? 0).ToString().PadLeft(3)}, " +
+                        $"{plfc.D1.ToString().PadLeft(3)}, " +
+                        $"{(plfc.E1 ?? 0).ToString().PadLeft(3)});");
 			    }
 				sb.AppendLine();
 		    }

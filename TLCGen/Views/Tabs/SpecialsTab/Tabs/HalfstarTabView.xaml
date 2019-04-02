@@ -209,7 +209,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Alternatieven" IsEnabled="{Binding Path=IsHalfstar}">
+            <TabItem Header="Alternatieven" IsEnabled="{Binding Path=IsHalfstarWithAltenatieven}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

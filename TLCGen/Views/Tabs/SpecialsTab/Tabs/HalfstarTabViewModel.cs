@@ -80,7 +80,9 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public bool IsHalfstar
+        public bool IsHalfstarWithAltenatieven => IsHalfstar && _Controller.ModuleMolen.LangstWachtendeAlternatief;
+
+        public bool IsHalfstar
 		{
 			get => HalfstarData.IsHalfstar;
 			set
@@ -122,6 +124,7 @@ namespace TLCGen.ViewModels
 				}
 
 				RaisePropertyChanged<object>(broadcast: true);
+				RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
 			}
 		}
 
@@ -710,10 +713,10 @@ namespace TLCGen.ViewModels
 
 		public override void OnSelected()
 		{
+            RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
+        }
 
-		}
-
-		public override ControllerModel Controller
+        public override ControllerModel Controller
 		{
 			get => base.Controller;
 			set

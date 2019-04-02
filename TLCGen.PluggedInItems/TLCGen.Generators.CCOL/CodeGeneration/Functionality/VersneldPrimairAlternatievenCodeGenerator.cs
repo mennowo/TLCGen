@@ -441,10 +441,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
 
                         sb.AppendLine($"{ts}Alternatief_Add();");
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            sb.AppendLine($"{ts}Alternatief_halfstar();");
-                        }
                         sb.AppendLine();
                         foreach (var r in molens)
                         {
