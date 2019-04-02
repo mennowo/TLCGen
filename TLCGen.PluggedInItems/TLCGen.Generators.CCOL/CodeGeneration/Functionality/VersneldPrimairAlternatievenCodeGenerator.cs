@@ -576,65 +576,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     return sb.ToString();
-                case CCOLCodeTypeEnum.HstCAlternatief:
-                    var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
-                    foreach (var fc in c.ModuleMolen.FasenModuleData)
-                    {
-                        Tuple<string, List<string>> hasgs = null;
-                        foreach (var gs in gelijkstarttuples2)
-                        {
-                            if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
-                            {
-                                hasgs = gs;
-                                break;
-                            }
-                        }
-                        if (hasgs != null)
-                        {
-                            sb.Append(
-                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}");
-                            foreach (var ofc in hasgs.Item2)
-                            {
-                                sb.Append(ofc);
-                            }
-                            sb.Append($"], SCH[{_schpf}{_schaltg}");
-                            foreach (var ofc in hasgs.Item2)
-                            {
-                                sb.Append(ofc);
-                            }
-                            sb.AppendLine("]);");
-                        }
-                        else
-                        {
-                            sb.AppendLine(
-                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltp}{fc.FaseCyclus}], SCH[{_schpf}{_schaltg}{fc.FaseCyclus}]);");
-                        }
-                    }
-                    foreach (var nl in c.InterSignaalGroep.Nalopen)
-                    {
-                        if (nl.Type == NaloopTypeEnum.EindeGroen ||
-                            nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
-                        {
-                            var t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnleg}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcv}{nl.FaseVan}{nl.FaseNaar}";
-                            if (nl.DetectieAfhankelijk)
-                            {
-                                t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
-                            }
-                            sb.AppendLine($"{ts}altcor_kop_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {t});");
-                        }
-                        if (nl.Type == NaloopTypeEnum.StartGroen)
-                        {
-                            if (nl.DetectieAfhankelijk && nl.Detectoren.Any())
-                            {
-                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
-                            }
-                            else
-                            {
-                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
-                            }
-                        }
-                    }
-                    return sb.ToString();
+                
                 default:
                     return null;
             }

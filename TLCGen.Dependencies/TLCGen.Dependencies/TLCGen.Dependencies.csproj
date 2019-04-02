@@ -191,6 +191,7 @@
     <Compile Include="Models\Models\FileIngreep\FileIngreepModel.cs" />
     <Compile Include="Models\Models\FileIngreep\FileIngreepTeDoserenSignaalGroepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarFaseCyclusAlternatiefModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanIngangModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />

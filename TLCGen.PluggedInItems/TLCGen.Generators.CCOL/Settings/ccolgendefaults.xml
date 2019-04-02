@@ -690,34 +690,22 @@
             <Description>Minimale groentijd bij afkappen fase _E1_ tijdens plan _E2_</Description>
           </Setting>
           <Setting>
-            <Default>txa</Default>
-            <Setting>txa</Setting>
+            <Default>altghst</Default>
+            <Setting>altghst</Setting>
             <Type>Parameter</Type>
-            <Description>TXA _E1_ fase _E2_ plan _E3_</Description>
+            <Description>Alternatieve groentijd fase _E1_ tijden halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>txb</Default>
-            <Setting>txb</Setting>
+            <Default>altphst</Default>
+            <Setting>altphst</Setting>
             <Type>Parameter</Type>
-            <Description>TXB _E1_ fase _E2_ plan _E3_</Description>
+            <Description>Alternatieve ruimte fase _E1_ tijden halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>txc</Default>
-            <Setting>txc</Setting>
-            <Type>Parameter</Type>
-            <Description>TXC _E1_ fase _E2_ plan _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>txd</Default>
-            <Setting>txd</Setting>
-            <Type>Parameter</Type>
-            <Description>TXD _E1_ fase _E2_ plan _E3_</Description>
-          </Setting>
-          <Setting>
-            <Default>txe</Default>
-            <Setting>txe</Setting>
-            <Type>Parameter</Type>
-            <Description>TXE _E1_ fase _E2_ plan _E3_</Description>
+            <Default>altghst</Default>
+            <Setting>altghst</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Alternatief realiseren fase _E1_ toestaan tijdens halfstar regelen</Description>
           </Setting>
         </Settings>
       </CodePieceData>

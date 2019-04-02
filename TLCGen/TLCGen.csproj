@@ -163,6 +163,7 @@
     <Compile Include="Views\Tabs\SpecialsTab\Controls\PelotonKoppelingViewModel.cs">
       <DependentUpon>PelotonKoppelingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarFaseCyclusAlternatiefViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarGekoppeldeKruisingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarHoofdrichtingViewModel.cs" />
     <Compile Include="Views\Tabs\SpecialsTab\DataTypes\HalfstarPeriodeDataViewModel.cs" />

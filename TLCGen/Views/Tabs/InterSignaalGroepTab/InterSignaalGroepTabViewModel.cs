@@ -132,7 +132,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _SelectedSynchronisatie = value;
-                if (_AllDetectoren != null && !string.IsNullOrEmpty(value?.FaseVan))
+                if (_Controller != null && value != null && _AllDetectoren != null && !string.IsNullOrEmpty(value?.FaseVan))
                 {
                     Detectoren.Clear();
                     foreach (var fc in _Controller.Fasen)

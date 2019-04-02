@@ -79,6 +79,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _txmarge;
 		private CCOLGeneratorCodeStringSettingModel _uspl;
 
+        private CCOLGeneratorCodeStringSettingModel _prmaltghst;
+        private CCOLGeneratorCodeStringSettingModel _prmaltphst;
+        private CCOLGeneratorCodeStringSettingModel _schaltghst;
+
         private CCOLGeneratorCodeStringSettingModel _cvbhst;
         private CCOLGeneratorCodeStringSettingModel _cvchst;
         private CCOLGeneratorCodeStringSettingModel _tivhst;
@@ -93,11 +97,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmpriohst;
         private CCOLGeneratorCodeStringSettingModel _prmmingov;
 
-        private CCOLGeneratorCodeStringSettingModel _prmtxa;
-        private CCOLGeneratorCodeStringSettingModel _prmtxb;
-        private CCOLGeneratorCodeStringSettingModel _prmtxc;
-        private CCOLGeneratorCodeStringSettingModel _prmtxd;
-        private CCOLGeneratorCodeStringSettingModel _prmtxe;
 #pragma warning restore 0649
 
         public void CollectKoppelSignalen(ControllerModel c)
@@ -114,6 +113,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			if (c.HalfstarData.IsHalfstar)
 			{
 				var hsd = c.HalfstarData;
+
+                if (c.ModuleMolen.LangstWachtendeAlternatief)
+                {
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltghst}{fc.FaseCyclus}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, fc.FaseCyclus));
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltphst}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, fc.FaseCyclus));
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schaltghst}{fc.FaseCyclus}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltghst, fc.FaseCyclus));
+                }
 
                 if (c.OVData.OVIngrepen.Any())
                 {
@@ -961,7 +967,65 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
-					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
+                    var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                    foreach (var fc in c.ModuleMolen.FasenModuleData)
+                    {
+                        Tuple<string, List<string>> hasgs = null;
+                        foreach (var gs in gelijkstarttuples2)
+                        {
+                            if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                            {
+                                hasgs = gs;
+                                break;
+                            }
+                        }
+                        if (hasgs != null)
+                        {
+                            sb.Append(
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltphst}");
+                            foreach (var ofc in hasgs.Item2)
+                            {
+                                sb.Append(ofc);
+                            }
+                            sb.Append($"], SCH[{_schpf}{_schaltghst}");
+                            foreach (var ofc in hasgs.Item2)
+                            {
+                                sb.Append(ofc);
+                            }
+                            sb.AppendLine("]);");
+                        }
+                        else
+                        {
+                            sb.AppendLine(
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltphst}{fc.FaseCyclus}], SCH[{_schpf}{_schaltghst}{fc.FaseCyclus}]);");
+                        }
+                    }
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        if (nl.Type == NaloopTypeEnum.EindeGroen ||
+                            nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
+                        {
+                            var t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnleg}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcv}{nl.FaseVan}{nl.FaseNaar}";
+                            if (nl.DetectieAfhankelijk)
+                            {
+                                t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
+                            }
+                            sb.AppendLine($"{ts}altcor_kop_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {t});");
+                        }
+                        if (nl.Type == NaloopTypeEnum.StartGroen)
+                        {
+                            if (nl.DetectieAfhankelijk && nl.Detectoren.Any())
+                            {
+                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
+                            }
+                        }
+                    }
+                    
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_ALTCOR_HALFSTAR;");
 					sb.AppendLine();
 					
