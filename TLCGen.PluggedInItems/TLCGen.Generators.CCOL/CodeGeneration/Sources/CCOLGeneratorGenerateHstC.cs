@@ -375,7 +375,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 		{
 			var sb = new StringBuilder();
 						
-			sb.AppendLine("bool application1_tig(void)");
+            if(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+            {
+			    sb.AppendLine("bool application1_trig(void)");
+            }
+            else
+            {
+                sb.AppendLine("bool application1_tig(void)");
+            }
 			sb.AppendLine("{");
 			sb.AppendLine($"{ts}return application1_tig_Add();");
 			sb.AppendLine("}");
@@ -388,7 +395,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 		{
 			var sb = new StringBuilder();
 
-			sb.AppendLine("bool application2_tig(void)");
+            if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+            {
+                sb.AppendLine("bool application2_trig(void)");
+            }
+            else
+            {
+                sb.AppendLine("bool application2_tig(void)");
+            }
 			sb.AppendLine("{");
             sb.AppendLine($"{ts}return application2_tig_Add();");
             sb.AppendLine("}");
@@ -445,7 +459,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			    foreach (var plfc in pl.Fasen)
 			    {
 				    sb.AppendLine(
-					    $"{ts}SetPlanTijden({_fcpf}{plfc.FaseCyclus}, {pl.Naam}, {plfc.A1 ?? 0}, {plfc.B1}, {plfc.C1 ?? 0}, {plfc.D1}, {plfc.E1 ?? 0});");
+					    $"{ts}SetPlanTijden({_fcpf}{plfc.FaseCyclus}, " +
+                        $"{pl.Naam}, " +
+                        $"{(plfc.A1 ?? 0).ToString().PadLeft(3)}, " +
+                        $"{plfc.B1.ToString().PadLeft(3)}, " +
+                        $"{(plfc.C1 ?? 0).ToString().PadLeft(3)}, " +
+                        $"{plfc.D1.ToString().PadLeft(3)}, " +
+                        $"{(plfc.E1 ?? 0).ToString().PadLeft(3)});");
 			    }
 				sb.AppendLine();
 		    }

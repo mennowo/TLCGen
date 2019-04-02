@@ -11,10 +11,6 @@ namespace TLCGen.Models
     [IOElement("", BitmappedItemTypeEnum.Fase, "Naam")]
     public class FaseCyclusModel : IOElementModel, IComparable, IHaveName
     {
-        #region Fields
-
-        #endregion // Fields
-
         #region Properties
         
         [ModelName(TLCGenObjectTypeEnum.Fase)]

@@ -39,6 +39,7 @@ namespace TLCGen.ViewModels
 		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
 		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
+		public ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; private set; }
 
 		public SignaalPlanViewModel SelectedSignaalPlan
 		{
@@ -79,7 +80,9 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public bool IsHalfstar
+        public bool IsHalfstarWithAltenatieven => IsHalfstar && _Controller.ModuleMolen.LangstWachtendeAlternatief;
+
+        public bool IsHalfstar
 		{
 			get => HalfstarData.IsHalfstar;
 			set
@@ -116,10 +119,12 @@ namespace TLCGen.ViewModels
 						}
 					}
 
-					UpdatePeriodenData();
+                    UpdateAlternatievenFromController();
+                    UpdatePeriodenData();
 				}
 
 				RaisePropertyChanged<object>(broadcast: true);
+				RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
 			}
 		}
 
@@ -194,7 +199,17 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		public string DefaultSignaalplan
+        public bool PlantijdenInParameters
+        {
+            get => HalfstarData.PlantijdenInParameters;
+            set
+            {
+                HalfstarData.PlantijdenInParameters = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public string DefaultSignaalplan
 		{
 			get => HalfstarData.DefaultPeriodeSignaalplan; 
 			set
@@ -333,7 +348,6 @@ namespace TLCGen.ViewModels
 		}
 
 		private RelayCommand _removeGekoppeldeKruisingCommand;
-
 		public ICommand RemoveGekoppeldeKruisingCommand
 		{
 			get
@@ -623,6 +637,20 @@ namespace TLCGen.ViewModels
 
 		#region Private methods
 
+        private void UpdateAlternatievenFromController()
+        {
+            foreach (var fc in Controller.Fasen)
+            {
+                if (Alternatieven.All(x => fc.Naam != x.Model.FaseCyclus))
+                {
+                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel()
+                    {
+                        FaseCyclus = fc.Naam
+                    }));
+                }
+            }
+        }
+
 		private void UpdateSelectables()
 		{
 			var s = SelectedHoofdRichtingToAdd;
@@ -685,10 +713,10 @@ namespace TLCGen.ViewModels
 
 		public override void OnSelected()
 		{
+            RaisePropertyChanged(nameof(IsHalfstarWithAltenatieven));
+        }
 
-		}
-
-		public override ControllerModel Controller
+        public override ControllerModel Controller
 		{
 			get => base.Controller;
 			set
@@ -701,7 +729,10 @@ namespace TLCGen.ViewModels
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
 					GekoppeldeKruisingen = new ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel>(HalfstarData.GekoppeldeKruisingen);
 					HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
-					SignaalPlannen.CollectionChanged += (o, e) =>
+                    Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel>(HalfstarData.Alternatieven);
+                    UpdateAlternatievenFromController();
+
+                    SignaalPlannen.CollectionChanged += (o, e) =>
 					{
 						if (e.OldItems != null && e.OldItems.Count > 0)
 						{
@@ -763,6 +794,7 @@ namespace TLCGen.ViewModels
 						}));
 						pl.Fasen.BubbleSort();
 					}
+                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel() { FaseCyclus = fc.Naam }));
 				}
 			}
 
@@ -783,7 +815,10 @@ namespace TLCGen.ViewModels
 
 					var rfc = HoofdRichtingen.FirstOrDefault(x => x.FaseCyclus == fc.Naam);
 					if (rfc != null) HoofdRichtingen.Remove(rfc);
-				}
+
+                    var rafc = Alternatieven.FirstOrDefault(x => x.Model.FaseCyclus == fc.Naam);
+                    if (rafc != null) Alternatieven.Remove(rafc);
+                }
 			}
 
 			UpdateSelectables();
@@ -822,6 +857,7 @@ namespace TLCGen.ViewModels
 				pl.Fasen.BubbleSort();
 			}
 			HoofdRichtingen.BubbleSort();
+            Alternatieven.BubbleSort();
 		}
 
 		private void OnPeriodenChanged(PeriodenChangedMessage msg)

@@ -62,7 +62,7 @@ bool tussen_txb_en_txc(count fc);
 bool tussen_txb_en_txd(count fc);
 void tvga_timer_halfstar(void);
 void tweederealisatie_halfstar(count fc_1, count fc_2);
-void rhdhv_tx_change(count fc, count pl, 
+void set_tx_change(count fc, count pl,
 	                 count ptxa1, count ptxb1, count ptxc1, count ptxd1, count ptxe1, 
 	                 count ptxa2, count ptxb2, count ptxc2, count ptxd2, count ptxe2, bool condition);
 bool txb_gemist(count i, int marge);
@@ -76,6 +76,9 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd);
 void yv_ov_pl_halfstar(count fc, bool bit, bool condition);
 bool yws_groen_fk(count i);
 void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
+
+void SignalplanPrmsToTx(count pl, count txa1);
+bool CheckSignalplanPrms(count pl, count ctijd, count txa1);
 
 #if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)
   bool txboverslag(count fc, bool  condition);

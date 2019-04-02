@@ -79,6 +79,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _txmarge;
 		private CCOLGeneratorCodeStringSettingModel _uspl;
 
+        private CCOLGeneratorCodeStringSettingModel _prmaltghst;
+        private CCOLGeneratorCodeStringSettingModel _prmaltphst;
+        private CCOLGeneratorCodeStringSettingModel _schaltghst;
+
         private CCOLGeneratorCodeStringSettingModel _cvbhst;
         private CCOLGeneratorCodeStringSettingModel _cvchst;
         private CCOLGeneratorCodeStringSettingModel _tivhst;
@@ -93,11 +97,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmpriohst;
         private CCOLGeneratorCodeStringSettingModel _prmmingov;
 
-        private CCOLGeneratorCodeStringSettingModel _prmtxa;
-        private CCOLGeneratorCodeStringSettingModel _prmtxb;
-        private CCOLGeneratorCodeStringSettingModel _prmtxc;
-        private CCOLGeneratorCodeStringSettingModel _prmtxd;
-        private CCOLGeneratorCodeStringSettingModel _prmtxe;
 #pragma warning restore 0649
 
         public void CollectKoppelSignalen(ControllerModel c)
@@ -114,6 +113,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			if (c.HalfstarData.IsHalfstar)
 			{
 				var hsd = c.HalfstarData;
+
+                if (c.ModuleMolen.LangstWachtendeAlternatief)
+                {
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltghst}{fc.FaseCyclus}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, fc.FaseCyclus));
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltphst}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, fc.FaseCyclus));
+                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schaltghst}{fc.FaseCyclus}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltghst, fc.FaseCyclus));
+                }
 
                 if (c.OVData.OVIngrepen.Any())
                 {
@@ -154,6 +160,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_usklok}", _usklok));
 				_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_ushand}", _ushand));
 
+                if (c.HalfstarData.PlantijdenInParameters)
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schinstprm}", 0, CCOLElementTimeTypeEnum.SCH_type, _schinstprm));
+                }
+
                 foreach (var pl in c.HalfstarData.SignaalPlannen)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspl}{pl.Naam}", _uspl, pl.Naam));
@@ -161,7 +172,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach(var fcpl in pl.Fasen)
                     {
-                        if (fcpl.B2.HasValue && fcpl.B2 != 0 && fcpl.D2.HasValue && fcpl.D2 != 0)
+                        if (fcpl.B2.HasValue && fcpl.D2.HasValue || c.HalfstarData.PlantijdenInParameters)
                         {
                             var times = new []{ fcpl.A1, fcpl.B1, fcpl.C1, fcpl.D1, fcpl.E1, fcpl.A2, fcpl.B2, fcpl.C2, fcpl.D2, fcpl.E2 };
                             var moments = new [] { "A", "B", "C", "D", "E", "A", "B", "C", "D", "E" };
@@ -389,6 +400,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
                 case CCOLCodeTypeEnum.HstCPreSystemApplication:
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
+                case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 case CCOLCodeTypeEnum.HstCKlokPerioden:
                     return new List<Tuple<string, string, string>>
@@ -477,7 +489,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}/* na omschakeling van PL -> VA, modules opnieuw initialiseren */");
 					sb.AppendLine($"{ts}if (SH[{_hpf}{_hplact}] || EH[{_hpf}{_hplact}])");
 					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}init_modules(ML_MAX, PRML, YML, &ML, &SML);");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"{ts}{ts}init_modules({r.Reeks}_MAX, PR{r.Reeks}, Y{r.Reeks}, &{r.Reeks}, &S{r.Reeks});");
+                        }
+                    }
+                    else
+                    {
+					    sb.AppendLine($"{ts}{ts}init_modules(ML_MAX, PRML, YML, &ML, &SML);");
+                    }
 					if (c.InterSignaalGroep.Gelijkstarten.Any() ||
 					    c.InterSignaalGroep.Voorstarten.Any())
 					{
@@ -513,8 +535,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					}
 					return sb.ToString();
 				case CCOLCodeTypeEnum.HstCKlokPerioden:
-			        sb.AppendLine($"{ts}char volgMaster = TRUE;");
-					sb.AppendLine();
 					sb.AppendLine($"{ts}/* BepaalKoppeling */");
 					sb.AppendLine($"{ts}/* --------------- */");
 
@@ -947,7 +967,65 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
-					sb.AppendLine($"{ts}for (fc=0; fc<FCMAX; fc++)");
+                    var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+                    foreach (var fc in c.ModuleMolen.FasenModuleData)
+                    {
+                        Tuple<string, List<string>> hasgs = null;
+                        foreach (var gs in gelijkstarttuples2)
+                        {
+                            if (gs.Item1 == fc.FaseCyclus && gs.Item2.Count > 1)
+                            {
+                                hasgs = gs;
+                                break;
+                            }
+                        }
+                        if (hasgs != null)
+                        {
+                            sb.Append(
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltphst}");
+                            foreach (var ofc in hasgs.Item2)
+                            {
+                                sb.Append(ofc);
+                            }
+                            sb.Append($"], SCH[{_schpf}{_schaltghst}");
+                            foreach (var ofc in hasgs.Item2)
+                            {
+                                sb.Append(ofc);
+                            }
+                            sb.AppendLine("]);");
+                        }
+                        else
+                        {
+                            sb.AppendLine(
+                                $"{ts}alternatief_halfstar({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltphst}{fc.FaseCyclus}], SCH[{_schpf}{_schaltghst}{fc.FaseCyclus}]);");
+                        }
+                    }
+                    foreach (var nl in c.InterSignaalGroep.Nalopen)
+                    {
+                        if (nl.Type == NaloopTypeEnum.EindeGroen ||
+                            nl.Type == NaloopTypeEnum.CyclischVerlengGroen)
+                        {
+                            var t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnleg}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcv}{nl.FaseVan}{nl.FaseNaar}";
+                            if (nl.DetectieAfhankelijk)
+                            {
+                                t = nl.Type == NaloopTypeEnum.EindeGroen ? $"{_tpf}{_tnlegd}{nl.FaseVan}{nl.FaseNaar}" : $"{_tpf}{_tnlcvd}{nl.FaseVan}{nl.FaseNaar}";
+                            }
+                            sb.AppendLine($"{ts}altcor_kop_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {t});");
+                        }
+                        if (nl.Type == NaloopTypeEnum.StartGroen)
+                        {
+                            if (nl.DetectieAfhankelijk && nl.Detectoren.Any())
+                            {
+                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, IH[{_hpf}{_hnla}{nl.Detectoren[0].Detector}], {_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
+                            }
+                        }
+                    }
+                    
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}RR[fc] &= ~RR_ALTCOR_HALFSTAR;");
 					sb.AppendLine();
 					
@@ -993,7 +1071,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}/* {pl.Naam} */");
                             foreach (var fcpl in pl.Fasen)
                             {
-                                if (fcpl.B2.HasValue && fcpl.B2 != 0 && fcpl.D2.HasValue && fcpl.D2 != 0)
+                                if (fcpl.B2.HasValue && fcpl.D2.HasValue)
                                 {
                                     sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, (bool)(IH[{_hpf}{_hplact}]));");
                                 }
@@ -1098,14 +1176,70 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					return sb.ToString();
 				
 				case CCOLCodeTypeEnum.HstCPreSystemApplication:
-					sb.AppendLine($"{ts}/* copieer signaalplantijden - na wijziging */");
+                    if (c.HalfstarData.PlantijdenInParameters)
+                    {
+
+                        sb.AppendLine($"{ts}/* kopieer signaalplantijden - vanuit parameter lijst */");
+                        sb.AppendLine($"{ts}/* -------------------------------------------------- */");
+                        sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinstprm}])");
+                        sb.AppendLine($"{ts}{{");
+                        sb.AppendLine($"{ts}{ts}short pl = 0;");
+                        sb.AppendLine($"{ts}{ts}short error = FALSE;");
+                        for (int pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
+                        {
+                            var ppl = c.HalfstarData.SignaalPlannen[pl];
+                            if (!c.HalfstarData.SignaalPlannen[pl].Fasen.Any()) continue;
+                            sb.AppendLine($"{ts}{ts}if (!error)");
+                            sb.AppendLine($"{ts}{ts}{{");
+                            sb.AppendLine($"{ts}{ts}{ts}error = CheckSignalplanPrms({ppl.Naam}, TX_max[{pl}], {_prmpf}{_prmtx}A1{ppl.Naam}_{ppl.Fasen.First().FaseCyclus});");
+                            sb.AppendLine($"{ts}{ts}}}");
+                        }
+                        sb.AppendLine($"{ts}{ts}if (!error)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        for (int pl = 0; pl < c.HalfstarData.SignaalPlannen.Count; pl++)
+                        {
+                            var ppl = c.HalfstarData.SignaalPlannen[pl];
+                            if (!c.HalfstarData.SignaalPlannen[pl].Fasen.Any()) continue;
+                            sb.AppendLine($"{ts}{ts}{ts}SignalplanPrmsToTx({ppl.Naam}, {_prmpf}{_prmtx}A1{ppl.Naam}_{ppl.Fasen.First().FaseCyclus});");
+                        }
+                        sb.AppendLine($"{ts}{ts}}}");
+
+                        sb.AppendLine($"{ts}{ts}if (!error)");
+                        sb.AppendLine($"{ts}{ts}{{");
+                        sb.AppendLine($"{ts}{ts}{ts}copy_signalplan(PL);");
+                        if(c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}create_trig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
+                            sb.AppendLine($"{ts}{ts}{ts}correction_trig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}{ts}{ts}create_tig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
+                            sb.AppendLine($"{ts}{ts}{ts}correction_tig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
+                        }
+                        sb.AppendLine($"{ts}{ts}{ts}check_signalplans(); /* check signalplans */");
+                        sb.AppendLine($"{ts}{ts}}}");
+                        sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinstprm}] = 0;");
+                        sb.AppendLine($"{ts}{ts}CIF_PARM1WIJZAP = (s_int16) (&SCH[{_schpf}{_schinstprm}] - CIF_PARM1);");
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine();
+                    }
+                    sb.AppendLine($"{ts}/* kopieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
 					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}copy_signalplan(PL);");
-					sb.AppendLine($"{ts}{ts}create_tig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
-					sb.AppendLine($"{ts}{ts}correction_tig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
-					sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
+                    if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
+                    {
+                        sb.AppendLine($"{ts}{ts}create_trig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
+                        sb.AppendLine($"{ts}{ts}correction_trig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}{ts}create_tig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");
+                        sb.AppendLine($"{ts}{ts}correction_tig();    /* correcties TIG-tabel a.g.v. koppelingen e.d. */");
+                    }
+                    sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
 					sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinst}] = 0;");
 					sb.AppendLine($"{ts}{ts}COPY_2_TIG = FALSE;");
 					sb.AppendLine($"{ts}{ts}CIF_PARM1WIJZAP = (s_int16) (&SCH[{_schpf}{_schinst}] - CIF_PARM1);");
@@ -1302,7 +1436,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usplact}] = IH[{_hpf}{_hplact}];");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlact}] = IH[{_hpf}{_hmlact}];");
 					sb.AppendLine($"{ts}GUS[{_uspf}{_uskpact}] = IH[{_hpf}{_hkpact}];");
-					sb.AppendLine($"{ts}GUS[{_uspf}{_usmlpl}] = IH[{_hpf}{_hplact}] ? (s_int16)(PL+1): (s_int16)(ML+1);");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+					    sb.AppendLine($"{ts}GUS[{_uspf}{_usmlpl}] = IH[{_hpf}{_hplact}] ? (s_int16)(PL+1): 0;");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}GUS[{_uspf}{_usmlpl}] = IH[{_hpf}{_hplact}] ? (s_int16)(PL+1): (s_int16)(ML+1);");
+                    }
                     foreach(var pl in c.HalfstarData.SignaalPlannen)
                     {
 					    sb.AppendLine($"{ts}GUS[{_uspf}{_uspl}{pl.Naam}] = PL == {pl.Naam};");
