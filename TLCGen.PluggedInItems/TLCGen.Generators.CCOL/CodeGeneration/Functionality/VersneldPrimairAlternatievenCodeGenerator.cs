@@ -318,6 +318,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.AppendLine();
                         }
+
+                        AppendNalopenEG_RRFMCorrection(c, sb, ts);
+
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             sb.AppendLine(
@@ -544,6 +547,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ++mlidx;
                             }
                             sb.AppendLine();
+
+                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
+
                             mlidx = 1;
                             foreach (var moduleWithAlternatives in modulesWithAlternatives)
                             {
@@ -575,6 +581,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 
                 default:
                     return null;
+            }
+        }
+
+        private void AppendNalopenEG_RRFMCorrection(ControllerModel c, StringBuilder sb, string ts)
+        {
+            if (c.InterSignaalGroep.Nalopen.Any(x => x.Type == NaloopTypeEnum.EindeGroen || x.Type == NaloopTypeEnum.CyclischVerlengGroen))
+            {
+                sb.AppendLine($"{ts}/* Bij nalopen op EG mag de volgrichting niet RR en FM");
+                sb.AppendLine($"{ts}   gestuurd worden indien de voedende richting groen is */");
+                foreach (var nl in c.InterSignaalGroep.Nalopen)
+                {
+                    sb.AppendLine($"{ts}if (!R[{_fcpf}{nl.FaseVan}] || TNL[{_fcpf}{nl.FaseNaar}]) {{ RR[{_fcpf}{nl.FaseNaar}] &= ~BIT5; FM[{_fcpf}{nl.FaseNaar}] &= ~BIT5; }}");
+                }
             }
         }
 
