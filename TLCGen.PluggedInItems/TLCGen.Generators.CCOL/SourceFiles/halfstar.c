@@ -1259,7 +1259,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 			{
 				if (tx[i] < 0 || tx[i] >= txmax)
 				{
-					sprintf(temp, "copy PRM to TX: TX%c for fc%s for new signalplan %d has an invalid value: %d\n", txS[i], FC_code[fc], pl + 1, txa);
+					sprintf(temp, "copy PRM to TX: TX%c for fc%s for new signalplan %d has an invalid value: %d\n", txS[i][0], FC_code[fc], pl + 1, txa);
 					uber_puts(temp);
 					return TRUE;
 				}
