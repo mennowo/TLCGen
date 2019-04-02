@@ -11,6 +11,7 @@ namespace TLCGen.Models
     {
         [RefersTo(Enumerations.TLCGenObjectTypeEnum.Fase)]
         public string FaseCyclus { get; set; }
+
         public bool AlternatiefToestaan { get; set; }
         public int AlternatieveRuimte { get; set; }
         public int AlternatieveGroenTijd { get; set; }
