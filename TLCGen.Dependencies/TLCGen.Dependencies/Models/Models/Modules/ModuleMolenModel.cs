@@ -27,6 +27,7 @@ namespace TLCGen.Models
         public ModuleMolenModel()
         {
             Modules = new List<ModuleModel>();
+            Reeks = "ML";
             FasenModuleData = new List<FaseCyclusModuleDataModel>();
         }
     }
