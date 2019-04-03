@@ -348,7 +348,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
                 //int i = s.Length;
-                sb.AppendLine(s);
+                sb.Append(s);
                 //sb.AppendLine($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min};".PadLeft(i));
                 //sb.AppendLine($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG};".PadLeft(i));
                 //sb.AppendLine($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min};".PadLeft(i));
