@@ -140,7 +140,7 @@ namespace TLCGen.ModelManagement
                 }
             }
 
-            if (controller.ModuleMolen.Reeks == null)
+            if (string.IsNullOrWhiteSpace(controller.ModuleMolen.Reeks))
             {
                 controller.ModuleMolen.Reeks = "ML";
             }
