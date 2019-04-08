@@ -1019,7 +1019,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
                         {
-                            sb.AppendLine($"{ts}PRML[{controller.ModuleMolen.Reeks}{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                            var mlNaam = "";
+                            if (mlNaam.StartsWith("ML"))
+                            {
+                                mlNaam = $"{mm.Naam}";
+                            }
+                            else
+                            {
+                                mlNaam = $"{controller.ModuleMolen.Reeks}{mm.Naam}";
+                            }
+                            sb.AppendLine($"{ts}PRML[{mlNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                         }
                         sb.AppendLine();
                     }
