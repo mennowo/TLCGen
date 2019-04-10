@@ -51,6 +51,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("/*include files */");
             sb.AppendLine("/*------------- */");
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#ifndef _VRIWINTEST");
+            }
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
@@ -75,8 +79,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
             sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#endif // _VRIWINTEST");
+            }
 
-			AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true, true, true);
 
 			return sb.ToString();
         }
@@ -104,7 +112,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("extern mulv DB_old[];");
             sb.AppendLine("extern mulv TDH_old[];");
             sb.AppendLine();
-            sb.AppendLine("#include \"ov.c\"");
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#ifndef _VRIWINTEST");
+                sb.AppendLine("#include \"ov.c\"");
+                sb.AppendLine("#else");
+                sb.AppendLine("#include \"ov.h\"");
+                sb.AppendLine("#endif");
+            }
+            else
+            {
+                sb.AppendLine("#include \"ov.c\"");
+            }
             if (c.HalfstarData.IsHalfstar)
             {
                 sb.AppendLine("#include \"halfstar_ov.h\"");
@@ -1119,6 +1138,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}{ts}reset_DSI_message();");
             sb.AppendLine($"{ts}#endif");
             sb.AppendLine();
+
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine($"{ts}#if !defined AUTOMAAT || defined _VRIWINTEST");
+            }
+
             if (c.OVData.OVIngrepen.Any())
             {
                 sb.AppendLine($"{ts}/* OV ingrepen */");
@@ -1180,8 +1205,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
 
 	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCSpecialSignals, false, true, false, false);
-			
-			sb.AppendLine("}");
+
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine($"{ts}#endif // !defined AUTOMAAT || defined _VRIWINTEST");
+            }
+
+            sb.AppendLine("}");
             sb.AppendLine("#endif");
             sb.AppendLine();
 
@@ -1194,7 +1224,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             
             sb.AppendLine($"#include \"{c.Data.Naam}ov.add\"");
 
-	        AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, false, true, false, false);
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine();
+                sb.AppendLine("#ifdef _VRIWINTEST");
+                sb.AppendLine("#include \"ov.c\"");
+                sb.AppendLine("#endif");
+            }
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCBottom, false, true, false, false);
 			
 			return sb.ToString();
         }

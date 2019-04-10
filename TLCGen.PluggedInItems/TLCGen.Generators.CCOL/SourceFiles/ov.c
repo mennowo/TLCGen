@@ -299,7 +299,10 @@ void TerugKomGroen(void)
 void OVTimers(void)
 {
     int fc, inm, ov;
-	int sml = -1, ml;
+	int sml = -1;
+#ifndef MLMAX
+	int ml;
+#endif
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
@@ -1523,7 +1526,10 @@ void AfkappenMG(int fc, int iStartGr)
 void OVAfkappen(void)
 {
     int ov, fc, iTotaalAantalInmeldingen, iMaxWachtTijdOverschreden;
-	int sml = -1, ml;
+	int sml = -1;
+#ifndef MLMAX
+	int ml;
+#endif
 
     iTotaalAantalInmeldingen = 0;
     iMaxWachtTijdOverschreden= 0;

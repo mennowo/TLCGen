@@ -221,28 +221,6 @@ namespace TLCGen.ViewModels
         [Browsable(false)]
         public bool IsVLOGVersieLowerThan9 => CCOLVersie < CCOLVersieEnum.CCOL9;
 
-        [Description("VLOG in testomgeving")]
-        public bool VLOGInTestOmgeving
-        {
-            get { return _Controller?.Data == null ? false : _Controller.Data.VLOGInTestOmgeving; }
-            set
-            {
-                _Controller.Data.VLOGInTestOmgeving = value;
-                RaisePropertyChanged<object>("VLOGInTestOmgeving", broadcast: true);
-            }
-        }
-
-        [Description("Genereren code t.b.v. DUURTEST")]
-        public bool GenererenDuurtestCode
-        {
-            get { return _Controller?.Data == null ? false : _Controller.Data.GenererenDuurtestCode; }
-            set
-            {
-                _Controller.Data.GenererenDuurtestCode = value;
-                RaisePropertyChanged<object>("GenererenDuurtestCode", broadcast: true);
-            }
-        }
-
         [Description("Extra meeverlengen in WG")]
         public bool ExtraMeeverlengenInWG
         {
@@ -435,6 +413,52 @@ namespace TLCGen.ViewModels
             {
                 _Controller.Data.WachttijdvoorspellerAansturenBusHD = value;
                 RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBusHD), broadcast: true);
+            }
+        }
+
+        [Category("Opties ontwikkel omgeving")]
+        [Description("VLOG in testomgeving")]
+        public bool VLOGInTestOmgeving
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.VLOGInTestOmgeving; }
+            set
+            {
+                _Controller.Data.VLOGInTestOmgeving = value;
+                RaisePropertyChanged<object>("VLOGInTestOmgeving", broadcast: true);
+            }
+        }
+
+        [Description("Genereren code t.b.v. DUURTEST")]
+        public bool GenererenDuurtestCode
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.GenererenDuurtestCode; }
+            set
+            {
+                _Controller.Data.GenererenDuurtestCode = value;
+                RaisePropertyChanged<object>("GenererenDuurtestCode", broadcast: true);
+            }
+        }
+
+        [Description("Niet gebruiken bitmap")]
+        public bool GebruikBitmap
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.NietGebruikenBitmap; }
+            set
+            {
+                _Controller.Data.NietGebruikenBitmap = value;
+                RaisePropertyChanged<object>("GebruikBitmap", broadcast: true);
+                Messenger.Default.Send(new UpdateTabsEnabledMessage());
+            }
+        }
+
+        [Description("Practice omgeving")]
+        public bool PracticeOmgeving
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.PracticeOmgeving; }
+            set
+            {
+                _Controller.Data.PracticeOmgeving = value;
+                RaisePropertyChanged<object>("PracticeOmgeving", broadcast: true);
             }
         }
 

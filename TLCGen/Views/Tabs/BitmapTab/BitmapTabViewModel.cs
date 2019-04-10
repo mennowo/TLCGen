@@ -232,7 +232,10 @@ namespace TLCGen.ViewModels
         {
             SetBitmapFileName();
 
-            return !string.IsNullOrWhiteSpace(BitmapFileName) && File.Exists(BitmapFileName);
+            return 
+                !string.IsNullOrWhiteSpace(BitmapFileName) && 
+                File.Exists(BitmapFileName) && 
+                _Controller?.Data.NietGebruikenBitmap == false;
         }
 
         #endregion // TabItem Overrides

@@ -40,20 +40,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCIncludes(ControllerModel controller)
+        private string GenerateTabCIncludes(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
-            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#ifndef _VRIWINTEST");
+            }
+            sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
             sb.AppendLine($"{ts}#include \"dpvar.h\"    /* detectie elementen                */");
-            if (controller.Data.GarantieOntruimingsTijden)
+            if (c.Data.GarantieOntruimingsTijden)
             {
-                if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen)
                 {
                     sb.AppendLine($"{ts}#include \"tig_min.h\"   /* garantie-ontruimingstijden        */");
                 }
@@ -66,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.h\"  /* garantie-geeltijden               */");
             sb.AppendLine($"{ts}#include \"isvar.h\"    /* ingangs elementen                 */");
-            if (controller.HasDSI())
+            if (c.HasDSI())
             {
                 sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
             }
@@ -78,7 +82,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prmvar.h\"   /* parameters                        */");
             sb.AppendLine($"{ts}#include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
             sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
-            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
                 sb.AppendLine($"{ts}#ifndef NO_VLOG");
                 sb.AppendLine($"{ts}{ts}#include \"vlogvar.h\"  /* variabelen t.b.v. vlogfuncties                */");
@@ -87,17 +91,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#endif");
             }
 
-            if (controller.HalfstarData.IsHalfstar)
+            if (c.HalfstarData.IsHalfstar)
             {
                 sb.AppendLine($"{ts}#include \"tx_synch.h\"");
                 sb.AppendLine($"{ts}#include \"plevar.h\"");
                 sb.AppendLine($"{ts}#include \"halfstar.h\"");
             }
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#endif // _VRIWINTEST");
+            }
 
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
 
             return sb.ToString();
         }
@@ -791,7 +799,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 pad5 = "TDH_max[] ".Length + defmax;
                 pad6 = pad1 + pad2;
 
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined _VRIWINTEST");
                 foreach(var dm in detectorModels)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
