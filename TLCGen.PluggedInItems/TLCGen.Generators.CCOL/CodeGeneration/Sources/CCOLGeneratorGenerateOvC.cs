@@ -987,11 +987,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, true, false, false, true);
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsOpties, true, true, false, true);
 
-            sb.AppendLine($"{ts}PrioriteitsOpties_Add();");
+            sb.AppendLine($"{ts}#ifdef OV_ADDFILE");
+            sb.AppendLine($"{ts}{ts}PrioriteitsOpties_Add();");
+            sb.AppendLine($"{ts}#endif");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCPrioriteitsNiveau, false, true, true, true);
 
+            sb.AppendLine($"{ts}#ifdef OV_ADDFILE");
             sb.AppendLine($"{ts}PrioriteitsNiveau_Add();");
+            sb.AppendLine($"{ts}#endif");
             sb.AppendLine("}");
 
             return sb.ToString();

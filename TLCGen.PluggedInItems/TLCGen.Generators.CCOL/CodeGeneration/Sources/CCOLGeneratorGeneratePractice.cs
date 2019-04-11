@@ -31,7 +31,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (controller.Data.VLOGInTestOmgeving)
             {
                 sb.AppendLine();
-                sb.AppendLine($"#include \"ccolmon.c\"");
+                sb.AppendLine($"#include \"ccol_mon.c\"");
             }
             sb.AppendLine();
             if (controller.InterSignaalGroep.Gelijkstarten.Any() ||
