@@ -133,11 +133,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
                         {
-                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = (WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] |= (WG[{fcm.GetDefine()}] && SCH[schwg{fcm.Naam}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
                         }
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] = (WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
+                            sb.AppendLine($"{ts}WS[{fcm.GetDefine()}] |= (WG[{fcm.GetDefine()}] && yws_groen({fcm.GetDefine()})) ? BIT1 : 0;");
                         }
                     }
                     return sb.ToString();
