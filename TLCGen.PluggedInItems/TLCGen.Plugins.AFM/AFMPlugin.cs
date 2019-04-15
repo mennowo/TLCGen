@@ -253,6 +253,12 @@ namespace TLCGen.Plugins.AFM
                     sb.AppendLine();
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.OvCIncludes:
+                    sb.AppendLine("/* Ten behoeve van AFM */");
+                    sb.AppendLine("#include \"AFMroutines.h\"");
+                    sb.AppendLine();
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCIncludes:
                     sb.AppendLine("/* Ten behoeve van AFM */");
                     sb.AppendLine("#include \"AFMroutines.c\"");
