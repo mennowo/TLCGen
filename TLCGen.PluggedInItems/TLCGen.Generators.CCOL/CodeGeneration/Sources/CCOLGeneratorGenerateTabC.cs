@@ -150,7 +150,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if(controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
-                sb.AppendLine($"{ts}#ifdef MONTYPEMAX");
+                sb.AppendLine($"{ts}#ifndef NO_VLOG");
                 sb.AppendLine($"{ts}{ts}int i;");
                 sb.AppendLine($"{ts}#endif");
                 sb.AppendLine();

@@ -118,6 +118,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#include \"ov.c\"");
                 sb.AppendLine("#else");
                 sb.AppendLine("#include \"ov.h\"");
+                sb.AppendLine("const code *iFC_OV_code[ovOVMAX];");
                 sb.AppendLine("#endif");
             }
             else
@@ -294,16 +295,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
-                sb.AppendLine($"{ts}/* Code voor OV-richtingen */");
-                foreach (var ov in c.OVData.OVIngrepen)
+                if (c.Data.PracticeOmgeving)
                 {
-                    sb.AppendLine($"{ts}iFC_OV_code[ovFC{ov.FaseCyclus}] = \"ov{ov.FaseCyclus}\";");
+                    sb.AppendLine($"{ts}/* Code voor OV-richtingen */");
+                    foreach (var ov in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}iFC_OV_code[ovFC{ov.FaseCyclus}] = \"ov{ov.FaseCyclus}\";");
+                    }
+                    foreach (var hd in c.OVData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
+                    }
+                    sb.AppendLine();
                 }
-                foreach (var hd in c.OVData.HDIngrepen)
-                {
-                    sb.AppendLine($"{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
-                }
-                sb.AppendLine();
             }
 
             sb.AppendLine($"{ts}/* Index van de groenbewakingstimer */");
