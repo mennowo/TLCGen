@@ -25,6 +25,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#define NALOPEN");
             }
+            if (controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
+            {
+                sb.AppendLine("#define OV_ADDFILE");
+            }
             sb.AppendLine();
             sb.Append(GenerateRegCIncludes(controller));
             sb.Append(GenerateRegCTop(controller));
