@@ -81,6 +81,30 @@ namespace TLCGen.Importers.TabC
                     {
                         newc.Data.CCOLVersie = Models.Enumerations.CCOLVersieEnum.CCOL95;
                     }
+                    foreach(var gs in NewData.Gelijkstarten)
+                    {
+                        newc.InterSignaalGroep.Gelijkstarten.Add(gs);
+                    }
+                    foreach (var gs in NewData.Voorstarten)
+                    {
+                        newc.InterSignaalGroep.Voorstarten.Add(gs);
+                    }
+                    foreach (var gs in NewData.LateReleases)
+                    {
+                        newc.InterSignaalGroep.LateReleases.Add(gs);
+                    }
+                    if (!string.IsNullOrWhiteSpace(NewData.KruisingNaam))
+                    {
+                        newc.Data.Naam = NewData.KruisingNaam;
+                    }
+                    if (!string.IsNullOrWhiteSpace(NewData.KruisingStraat1))
+                    {
+                        newc.Data.Straat1 = NewData.KruisingStraat1;
+                    }
+                    if (!string.IsNullOrWhiteSpace(NewData.KruisingStraat2))
+                    {
+                        newc.Data.Straat2 = NewData.KruisingStraat2;
+                    }
                     return newc;
                 }
                 catch (Exception e)

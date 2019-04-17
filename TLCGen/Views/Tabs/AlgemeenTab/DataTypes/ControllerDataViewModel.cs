@@ -41,6 +41,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public string Nummer
+        {
+            get { return _Controller?.Data?.Nummer; }
+            set
+            {
+                _Controller.Data.Nummer = value;
+                RaisePropertyChanged<object>("Nummer", broadcast: true);
+            }
+        }
+
         public string Stad
         {
             get { return _Controller?.Data?.Stad; }

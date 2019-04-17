@@ -18,6 +18,8 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]
+        public string Nummer { get; set; }
+        [HasDefault(false)]
         public string Stad { get; set; }
         [HasDefault(false)]
         public string Straat1 { get; set; }

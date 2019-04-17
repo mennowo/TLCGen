@@ -40,6 +40,7 @@ namespace TLCGen.ViewModels
         private MeeaanvraagViewModel _MeeaanvraagVM;
         private VoorstartViewModel _VoorstartVM;
 	    private GelijkstartViewModel _GelijkstartVM;
+	    private LateReleaseViewModel _LateReleaseVM;
 
         private Dictionary<IntersignaalGroepTypeEnum, IInterSignaalGroepElement> _InterSignaalGroepElements;
 
@@ -54,6 +55,8 @@ namespace TLCGen.ViewModels
 	    public VoorstartViewModel VoorstartVM => _VoorstartVM ?? (_VoorstartVM = new VoorstartViewModel(_Voorstart));
 	    
 	    public GelijkstartViewModel GelijkstartVM => _GelijkstartVM ?? (_GelijkstartVM = new GelijkstartViewModel(_Gelijkstart));
+
+        public LateReleaseViewModel LateReleaseVM => _LateReleaseVM ?? (_LateReleaseVM = new LateReleaseViewModel(_LateRelease));
 
 	    public ConflictModel Conflict
         {

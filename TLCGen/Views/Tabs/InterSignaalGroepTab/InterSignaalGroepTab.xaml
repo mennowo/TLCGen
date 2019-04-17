@@ -123,6 +123,12 @@
                 Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.Naloop}}" >
                 <local:NaloopView DataContext="{Binding Path=SelectedSynchronisatie.NaloopVM,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
+            
+            <Grid Grid.Row="1"
+                IsEnabled="{Binding Path=SelectedSynchronisatie.IsCoupled}"
+                Visibility="{Binding Path=DisplayType,Converter={StaticResource DisplayTypeToVisibilityConverter},ConverterParameter={x:Static vmenums:IntersignaalGroepTypeEnum.LateRelease}}" >
+                <local:LateReleaseView DataContext="{Binding Path=SelectedSynchronisatie.LateReleaseVM,UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
