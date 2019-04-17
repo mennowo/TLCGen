@@ -111,9 +111,39 @@ namespace TLCGen.Specificator
             {
                 new List<string> { "Periode", "Start", "Einde", "Dagtype", "Groentijden set" }
             };
-            foreach (var p in c.PeriodenData.Perioden)
+            foreach (var p in c.PeriodenData.Perioden.Where(x => x.Type == Models.Enumerations.PeriodeTypeEnum.Groentijden))
             {
                 l.Add(new List<string> { p.Naam, p.StartTijd.ToString(@"hh\:mm"), p.EindTijd.ToString(@"hh\:mm"), p.DagCode.ToString(), p.GroentijdenSet });
+            }
+            items.Add(OpenXmlHelper.GetTable(l));
+
+            return items;
+        }
+
+        public static List<OpenXmlCompositeElement> GetTable_AlternatievenOnderDekking(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_AlternatievenOnderDekking");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_AlternatievenOnderDekking"], styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string> { "Module", "Richting", "Onder dekking van", "Groentijd" }
+            };
+            foreach (var ml in c.ModuleMolen.Modules)
+            {
+                foreach(var mlfc in ml.Fasen)
+                {
+                    if (mlfc.Alternatieven.Any())
+                    {
+                        foreach(var alt in mlfc.Alternatieven)
+                        {
+                            l.Add(new List<string> { ml.Naam, alt.FaseCyclus, mlfc.FaseCyclus, alt.AlternatieveGroenTijd.ToString() });
+                        }
+                    }
+                }
             }
             items.Add(OpenXmlHelper.GetTable(l));
 
@@ -562,6 +592,212 @@ namespace TLCGen.Specificator
                     fc.HiaatKoplusBijDetectieStoring ? fc.VervangendHiaatKoplus.ToString() : "-",
                     fc.PercentageGroenBijDetectieStoring.ToCustomString(),
                     fc.PercentageGroenBijDetectieStoring ? fc.PercentageGroen.ToString() : "-"
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Intersignaalgroep_Meeaanvragen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Intersignaalgroep_Meeaanvragen");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Intersignaalgroep_Meeaanvragen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Van",
+                    "Naar",
+                    "Type meeaanvraag",
+                    "Schakelbaar",
+                    "Type instelbaar",
+                    "Detectie afhankelijk",
+                    "Uitgesteld"
+                }
+            };
+            foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
+            {
+                var da = "-";
+                if (ma.DetectieAfhankelijk && ma.Detectoren.Any())
+                {
+                    da = "x (";
+                    var first = true;
+                    foreach (var d in ma.Detectoren)
+                    {
+                        if (!first) da += ", ";
+                        first = false;
+                        da += d.MeeaanvraagDetector;
+                    }
+                    da += ")";
+                }
+                l.Add(new List<string>
+                {
+                    ma.FaseVan,
+                    ma.FaseNaar,
+                    ma.Type.GetDescription(),
+                    ma.AanUit.GetDescription(),
+                    ma.TypeInstelbaarOpStraat.ToCustomString(),
+                    da,
+                    ma.Type == Models.Enumerations.MeeaanvraagTypeEnum.Startgroen && ma.Uitgesteld ? "x (" + ma.UitgesteldTijdsduur.ToString() + ")" : "-"
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Intersignaalgroep_Nalopen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Intersignaalgroep_Nalopen");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Intersignaalgroep_Nalopen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Van",
+                    "Naar",
+                    "Type naloop",
+                    "Vaste naloop",
+                    "Detectie afhankelijk",
+                    "Inlopen/rijden bij groen",
+                    "Max.voorstart tijd",
+                    "Tijd SG/FG",
+                    "Det.afh.tijd SG/FG",
+                    "Tijd CV/EG",
+                    "Det.afh.tijd CV/EG"
+                }
+            };
+            foreach (var ma in c.InterSignaalGroep.Nalopen)
+            {
+                var da = "-";
+                if (ma.DetectieAfhankelijk && ma.Detectoren.Any())
+                {
+                    da = "x (";
+                    var first = true;
+                    foreach (var d in ma.Detectoren)
+                    {
+                        if (!first) da += ", ";
+                        first = false;
+                        da += d.Detector;
+                    }
+                    da += ")";
+                }
+                var t1 = "-";
+                var t2 = "-";
+                var t3 = "-";
+                var t4 = "-";
+                if(ma.Type == Models.Enumerations.NaloopTypeEnum.StartGroen)
+                {
+                    if (ma.VasteNaloop)
+                    {
+                        t1 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroen).Waarde.ToString();
+                    }
+                    if (ma.DetectieAfhankelijk)
+                    {
+                        t2 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.StartGroenDetectie).Waarde.ToString();
+                    }
+                }
+                if (ma.Type == Models.Enumerations.NaloopTypeEnum.EindeGroen && ma.VasteNaloop)
+                {
+                    if (ma.VasteNaloop)
+                    {
+                        t1 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroen).Waarde.ToString();
+                    }
+                    if (ma.DetectieAfhankelijk)
+                    {
+                        t2 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroenDetectie).Waarde.ToString();
+                    }
+                }
+                if (ma.Type == Models.Enumerations.NaloopTypeEnum.EindeGroen && ma.DetectieAfhankelijk)
+                {
+                    if (ma.VasteNaloop)
+                    {
+                        t3 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroen).Waarde.ToString();
+                    }
+                    if (ma.DetectieAfhankelijk)
+                    {
+                        t4 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeGroenDetectie).Waarde.ToString();
+                    }
+                }
+                if (ma.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen && ma.VasteNaloop)
+                {
+                    if (ma.VasteNaloop)
+                    {
+                        t1 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroen).Waarde.ToString();
+                    }
+                    if (ma.DetectieAfhankelijk)
+                    {
+                        t2 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.VastGroenDetectie).Waarde.ToString();
+                    }
+                }
+                if (ma.Type == Models.Enumerations.NaloopTypeEnum.CyclischVerlengGroen && ma.DetectieAfhankelijk)
+                {
+                    if (ma.VasteNaloop)
+                    {
+                        t3 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeVerlengGroen).Waarde.ToString();
+                    }
+                    if (ma.DetectieAfhankelijk)
+                    {
+                        t4 = ma.Tijden.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTijdTypeEnum.EindeVerlengGroenDetectie).Waarde.ToString();
+                    }
+                }
+                l.Add(new List<string>
+                {
+                    ma.FaseVan,
+                    ma.FaseNaar,
+                    ma.Type.GetDescription(),
+                    ma.VasteNaloop.ToCustomString(),
+                    da,
+                    ma.InrijdenTijdensGroen.ToCustomString(),
+                    ma.MaximaleVoorstart == null ? "-" : ma.MaximaleVoorstart.Value.ToString(),
+                    t1, t2, t3, t4
+                    
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Intersignaalgroep_Gelijkstarten(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Intersignaalgroep_Gelijkstarten");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Intersignaalgroep_Gelijkstarten"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Van",
+                    "Naar",
+                    "Deelconflict",
+                    "Schakelbaar",
+                    "Fictieve o.t. van > naar",
+                    "Fictieve o.t. naar > van"
+                }
+            };
+            foreach (var ma in c.InterSignaalGroep.Gelijkstarten)
+            {
+                l.Add(new List<string>
+                {
+                    ma.FaseVan,
+                    ma.FaseNaar,
+                    ma.DeelConflict.ToCustomString(),
+                    ma.Schakelbaar.GetDescription(),
+                    ma.DeelConflict ? ma.GelijkstartOntruimingstijdFaseVan.ToString() : "-",
+                    ma.DeelConflict ? ma.GelijkstartOntruimingstijdFaseNaar.ToString() : "-",
                 });
             }
             items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));

@@ -238,12 +238,15 @@ namespace TLCGen.Specificator
 
         #region Constructor
 
-        public SpecificatorPlugin()
+        public SpecificatorPlugin(bool tester = false)
         {
             _myVm = new SpecificatorViewModel(this);
 
-            _generatorView = new SpecificatorView();
-            _generatorView.DataContext = _myVm;
+            if (!tester)
+            {
+                _generatorView = new SpecificatorView();
+                _generatorView.DataContext = _myVm;
+            }
         }
 
         #endregion // Constructor

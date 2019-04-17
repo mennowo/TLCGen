@@ -31,7 +31,7 @@ namespace TLCGen.Specificator.Tester
 
             SendMessage(windowPtr, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
 
-            var sp = new SpecificatorPlugin()
+            var sp = new SpecificatorPlugin(true)
             {
                 Controller = Helpers.TLCGenSerialization.DeSerialize<ControllerModel>(@"C:\Users\menno\Documents\temp\SP16\SP16.tlc")
             };

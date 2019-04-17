@@ -189,6 +189,81 @@ namespace TLCGen.Specificator
             return items;
         }
 
+        internal static IEnumerable<OpenXmlElement> GetChapter_Synchronisaties(ControllerModel c, WordprocessingDocument doc)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            if (!c.Data.GarantieOntruimingsTijden) return items;
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Synchronisaties"]}", 2));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Dit hoofdstuk geeft een overzicht van de synchronisaties tussen signaalgroepen binnen de regeling."));
+
+            if (c.InterSignaalGroep.Meeaanvragen.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Meeaanvragen"]}", 3));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Een meeaanvraag tussen twee signaalgroepen zorgt ervoor dat een aanvraag bij de ene signaalgroep " +
+                    $"onder bepaalde voorwaarden zorgt dat ook de andere signaalgroep een aanvraag krijgt, ongeacht de " +
+                    $"aanwezigheid van verkeer bij die tweede signaalgroep. Hierbij zijn de volgende voorwaarden mogelijk:"));
+                var sl = new List<Tuple<string, int>>();
+                sl.Add(new Tuple<string, int>("Meeaanvraag op aanvraag.", 0));
+                sl.Add(new Tuple<string, int>("Meeaanvraag op rood voor aanvraag (RA).", 0));
+                sl.Add(new Tuple<string, int>("Meeaanvraag op RA en geen conflicten", 0));
+                sl.Add(new Tuple<string, int>("Meeaanvraag op start groen", 0));
+                items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Elke meeaanvraag kan als detectie afhankelijke meeaanvraag worden ingesteld, zodat enkel bij een melding " +
+                    $"op een bepaalde detector, de meeaanvraag wordt gezet. Optioneel is het mogelijk het type meeaanvraag het " +
+                    $"type meaanvraag instelbaar te maken op straat. Voor meeaanvragen op startgroen kan worden gekozen voor een " +
+                    $"(instelbare) uitgestelde meeaanvraag. Voor meeaanvragen gelden de volgende instellingen:"));
+                items.AddRange(TableGenerator.GetTable_Intersignaalgroep_Meeaanvragen(c));
+            }
+            if (c.InterSignaalGroep.Nalopen.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Nalopen"]}", 3));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Een naloop tussen twee signaalgroepen zorgt ervoor dat het groen op de volgrichting " +
+                    $"onder bepaalde voorwaarden wordt vastgehouden wanneer de voedende richting groen is (geweest), ongeacht de " +
+                    $"aanwezigheid van verkeer bij die tweede signaalgroep. Hierbij zijn de volgende voorwaarden mogelijk:"));
+                var sl = new List<Tuple<string, int>>();
+                sl.Add(new Tuple<string, int>("Naloop op startgroen.", 0));
+                sl.Add(new Tuple<string, int>("Naloop tijdens cyclisch verlengroen.", 0));
+                sl.Add(new Tuple<string, int>("Naloop op einde groen", 0));
+                items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Elke naloop kan als detectie afhankelijke naloop worden ingesteld, zodat enkel bij een melding " +
+                    $"op een bepaalde detector, de naloopo actief wordt. Bij detectieafhankelijke nalopen kan ervoor worden " +
+                    $"gekozen geen vaste naloop aan te houden. Voor nalopen gelden de volgende instellingen:"));
+                items.AddRange(TableGenerator.GetTable_Intersignaalgroep_Nalopen(c));
+
+            }
+            if (c.InterSignaalGroep.Gelijkstarten.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Gelijkstarten"]}", 3));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Wanneer tussen twee signaalgroepen een gelijsktart geldt, wordt ervoor gezorgd dat de betreffende " +
+                    $"richtingen gelijktijdig groen krijgen wanneer beide een aanvraag hebben. Is er sprake van een deelconflict, " +
+                    $"dan gelden aanvullend fictieve ontruimingstijden tussen beide richtingen, en mag een richting niet bij komen " +
+                    $"wanneer de andere richting reeds groen is."));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Voor gelijkstarten gelden de volgende instellingen:"));
+                items.AddRange(TableGenerator.GetTable_Intersignaalgroep_Gelijkstarten(c));
+            }
+            if (c.InterSignaalGroep.Voorstarten.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Voorstarten"]}", 3));
+            }
+            if (c.InterSignaalGroep.LateReleases.Any())
+            {
+                items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_LateRelease"]}", 3));
+            }
+
+            return items;
+        }
+
+
         internal static List<OpenXmlCompositeElement> GetChapter_DetectieInstellingen(WordprocessingDocument doc, ControllerModel c)
         {
             var body = doc.MainDocumentPart.Document.Body;
@@ -466,11 +541,50 @@ namespace TLCGen.Specificator
             l.Add(new List<string> { (string)Texts["Generic_FixatieMogelijk"], c.Data.FixatieMogelijk.ToCustomString() });
             l.Add(new List<string> { (string)Texts["Generic_BijkomenFixatie"], c.Data.BijkomenTijdensFixatie.ToCustomString() });
             l.Add(new List<string> { (string)Texts["Generic_TypeGroentijden"], c.Data.TypeGroentijden.GetDescription() });
+            if (c.Fasen.Any(x => x.WachttijdVoorspeller))
+            {
+                l.Add(new List<string> { (string)Texts["Generic_WTVNietHalterenAlsMeerDanLeds"], c.Data.WachttijdvoorspellerNietHalterenMax.ToString() });
+                l.Add(new List<string> { (string)Texts["Generic_WTVNietHalterenAlsMinderDanLeds"], c.Data.WachttijdvoorspellerNietHalterenMin.ToString() });
+                l.Add(new List<string> { (string)Texts["Generic_WTVAansturenBusTijdensOV"], c.Data.WachttijdvoorspellerNietHalterenMin.ToString() });
+            }
             body.Append(OpenXmlHelper.GetTable(l));
         }
 
         // TODO: tabel met ingangen (indien aanwezig)
         // TODO: tabel met selectieve detectie (indien aanwezig)
+
+        public static string GetGroentijden(ControllerModel c, bool multiple = true)
+        {
+            if(multiple) return $"{(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "maximum" : "verleng")} groentijden";
+            else return $"{(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "maximum" : "verleng")} groentijd";
+        }
+
+        public static List<OpenXmlCompositeElement> GetChapter_StructureIntroduction(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+            var t = "";
+            if (c.HalfstarData.IsHalfstar)
+            {
+                t = $"De kruising wordt zowel voertuigafhankelijk (VA) als halfstar geregeld. ";
+            }
+            else
+            {
+                t = $"De kruising wordt voertuigafhankelijk (VA) geregeld. ";
+            }
+            t +=  "VA regelen houdt in de signaalgroepen binnen de regeling groen krijgen toegedeeld " +
+                 $"op basis van de aanwezigheid van voertuigen. Hierbij gelden periode gebonden {GetGroentijden(c)}. " +
+                 $"In dit hoofdstuk worden de voertuigafhankelijke signaalgroepafhandeling en de modulenstructuur " +
+                 $"nader toegelicht.";
+            if (c.HalfstarData.IsHalfstar)
+            {
+                t += $"De functionaliteit van en instellingen omtrent halfstar regelen komen " +
+                     $"in hoofdstuk inzake halfstar regelen aan de orde. ";
+            }
+
+            items.Add(OpenXmlHelper.GetTextParagraph(t));
+
+            return items;
+        }
 
         public static List<OpenXmlCompositeElement> GetChapter_Perioden(ControllerModel c)
         {
@@ -482,22 +596,19 @@ namespace TLCGen.Specificator
             {
                 items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Op het moment dat de regeling voertuigafhankelijk regelt, gelden de volgende " +
-                    $"klokperiodes ten behoeve van de {(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "maximum" : "verleng")} groentijden"));
+                    $"klokperiodes ten behoeve van de {GetGroentijden(c)}"));
             }
             else
             {
                 items.Add(OpenXmlHelper.GetTextParagraph(
                     $"Voor voertuigafhankelijk regelen gelden de volgende " +
-                    $"klokperiodes ten behoeve van de {(c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden ? "maximum" : "verleng")} groentijden"));
+                    $"klokperiodes ten behoeve van de {GetGroentijden(c)}"));
             }
-
-            items.Add(OpenXmlHelper.GetTextParagraph("TODO: hieronder moeten alleen MG perioden worden weergegeven. De perioden voor " +
-                "specials zoals rateltikkers moeten bij die special worden weergegeven (?)", "TODO"));
 
             items.AddRange(TableGenerator.GetTable_Perioden(c));
 
             items.Add(OpenXmlHelper.GetTextParagraph(
-                    $"Wanneer geen van bovenstaande perioden actief is geldt de dalperiode."));
+                    $"Wanneer geen van bovenstaande perioden actief is geldt de dalperiode (met groentijdenset {c.PeriodenData.DefaultPeriodeGroentijdenSet})."));
 
             return items;
         }
@@ -581,10 +692,8 @@ namespace TLCGen.Specificator
             var tableModulen = TableGenerator.GetTable_Modulen(c);
 
             items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Modulestructuur"]}", 2));
-            items.Add(OpenXmlHelper.GetTextParagraph("TODO: de tekst hieronder moet worden herzien. Daarbij geldt: het moet afhankelijk" +
-                " zijn van al dan niet actief zijn van langstwachtende alternatief. Is dat niet actief dan geldt de mogelijkheid voor alternatief onder dekking van...", "TODO"));
             items.Add(OpenXmlHelper.GetTextParagraph(
-                "Tijdens voertuigafhankelijk bedrijf wordt gebruik gemaakt van de modulestructuur. De " +
+                "Tijdens voertuigafhankelijk regelen wordt gebruik gemaakt van de modulestructuur. De " +
                 "modulestructuur is opgebouwd uit primaire, bijzondere en alternatieve realisaties."));
             items.Add(OpenXmlHelper.GetTextParagraph("Primaire realisatie", bold: true));
             items.Add(OpenXmlHelper.GetTextParagraph(
@@ -616,23 +725,36 @@ namespace TLCGen.Specificator
                 "realisaties worden gebruikt om prioriteit te geven aan bussen of hulpdiensten."));
 
             items.Add(OpenXmlHelper.GetTextParagraph("Alternatieve realisaties", bold: true));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Extra realisatiemogelijkheden zijn met alternatieve realisaties toegekend. Deze alternatieve " +
-                "realisaties worden volgens het langstwachtende principe afgewikkeld. Dat wil zeggen dat wanneer " +
-                "er op een bepaald moment meerdere richtingen alternatief kunnen realiseren, de richting met de " +
-                "hoogste wachttijd als eerste groen krijgt. Bij alternatieve toedeling krijgen fietsrichtingen " +
-                "voorrang ten opzichte van autorichtingen, hiertoe wordt de wachttijd voor alternatieve toedeling " +
-                "voor fietsers met een instelbare waarde opgehoogd (default 1000 sec.). De alternatieve realisaties " +
-                "zijn dusdanig opgenomen dat ze de regeling zo min mogelijk ophouden."));
-            items.Add(OpenXmlHelper.GetTextParagraph(
-                "Per richting is een schakelaar opgenomen om alternatieve realisaties toe te staan (default voor " +
-                "alle richtingen aan). Daarnaast is per richting een referentie opgeven hoeveel ruimte er in de " +
-                "regeling beschikbaar moet zijn om alternatief te realiseren. Deze ruimte wordt berekend op basis van " +
-                "de vigerende maximum groentijd van een " +
-                "niet conflict dat op dat moment in cyclisch verlenggroen staat, of op het punt staat om primair " +
-                "dan wel bijzonder te realiseren. Hierbij wordt voor richtingen met een naloop rekening mee gehouden " +
-                "dat ook die moet passen. Voor ieder richting is opgegeven wat de maximale groentijd voor " +
-                "alternatief realiseren is, als de voorwaarde voor alternatief realiseren is vervallen."));
+            if (c.ModuleMolen.LangstWachtendeAlternatief)
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph("TODO: klopt onderstaande tekst vwb default prio voor fietsers?", "TODO"));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    "Extra realisatiemogelijkheden zijn met alternatieve realisaties toegekend. Deze alternatieve " +
+                    "realisaties worden volgens het langstwachtende principe afgewikkeld. Dat wil zeggen dat wanneer " +
+                    "er op een bepaald moment meerdere richtingen alternatief kunnen realiseren, de richting met de " +
+                    "hoogste wachttijd als eerste groen krijgt. Bij alternatieve toedeling krijgen fietsrichtingen " +
+                    "voorrang ten opzichte van autorichtingen, hiertoe wordt de wachttijd voor alternatieve toedeling " +
+                    "voor fietsers met een instelbare waarde opgehoogd (default 1000 sec.). De alternatieve realisaties " +
+                    "zijn dusdanig opgenomen dat ze de regeling zo min mogelijk ophouden."));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    "Per richting is een schakelaar opgenomen om alternatieve realisaties toe te staan (default voor " +
+                    "alle richtingen aan). Daarnaast is per richting een referentie opgeven hoeveel ruimte er in de " +
+                    "regeling beschikbaar moet zijn om alternatief te mogen realiseren. Deze ruimte wordt berekend op basis van " +
+                    $"de vigerende {GetGroentijden(c, false)} van een " +
+                    "niet conflict dat op dat moment in cyclisch verlenggroen staat, of op het punt staat om primair " +
+                    "dan wel bijzonder te realiseren. Hierbij wordt voor richtingen met een naloop rekening mee gehouden " +
+                    "dat ook die moet passen. Voor iedere richting is opgegeven wat de maximale groentijd voor " +
+                    "alternatief realiseren is, als de voorwaarde voor alternatief realiseren is vervallen."));
+            }
+            else
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    "Alternatieve relatisaties zijn binnen de regeling uitsluitend mogelijk voor richtingen waarvoor expliciet is " +
+                    "ingesteld data deze onder dekking van een of meer andere richtingen alternatief mogen komen. Dit is ingesteld " +
+                    "richting per blok. Hiervoor gelden de volgende instellingen:"
+                    ));
+                items.AddRange(TableGenerator.GetTable_AlternatievenOnderDekking(c));
+            }
 
             items.AddRange(tableModulen);
 
