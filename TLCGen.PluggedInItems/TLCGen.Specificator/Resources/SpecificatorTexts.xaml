@@ -71,6 +71,7 @@
     <system:String x:Key="Title_Perioden">Klokperioden</system:String>
     <system:String x:Key="Table_Perioden">Tabel met perioden</system:String>
     
+    <!-- Intersignaalgroep -->
     <system:String x:Key="Title_Intersignaalgroep">Intersignaalgroep instellingen</system:String>
     <system:String x:Key="Title_Synchronisaties">Synchronisaties</system:String>
     <system:String x:Key="Title_Meeaanvragen">Meeaanvragen</system:String>
@@ -83,12 +84,23 @@
     <system:String x:Key="Table_Intersignaalgroep_Gelijkstarten">Tabel met instellingen voor gelijkstarten</system:String>
     <system:String x:Key="Table_Intersignaalgroep_Voorstarten">Tabel met instellingen voor voorstarten</system:String>
     <system:String x:Key="Table_Intersignaalgroep_LateRelease">Tabel met instellingen voor late release</system:String>
-    
     <system:String x:Key="Title_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
     <system:String x:Key="Table_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
     <system:String x:Key="Title_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
     <system:String x:Key="Table_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
-    
+
+    <!-- OV / HD -->
+    <system:String x:Key="Title_OVHD">Afhandeling openbaar vervoer en hulpdiensten</system:String>
+    <system:String x:Key="Title_OV">Afhandeling openbaar vervoer</system:String>
+    <system:String x:Key="Title_HD">Afhandeling hulpdiensten</system:String>
+    <system:String x:Key="Title_OVIngreep">Functionaliteit OV ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepAfkappen">Afkappen</system:String>
+    <system:String x:Key="Title_OVIngreepBijzonderRealiseren">Bijzonder realiseren</system:String>
+    <system:String x:Key="Title_OVIngreepNaOVIngreep">Na afloop OV-ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepDefecteUitmelding">Defecte uitmelding</system:String>
+    <system:String x:Key="Title_OVParameters">Parameters OV ingrepen</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsOpties">Tabel met overzicht van beschikbare prioriteitsopties</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsInstellingen">Tabel met overzicht van prioriteitsinstellingen</system:String>
     
     <!-- Halfstar -->
     <system:String x:Key="Title_Halfstar">Halfstar regelen</system:String>

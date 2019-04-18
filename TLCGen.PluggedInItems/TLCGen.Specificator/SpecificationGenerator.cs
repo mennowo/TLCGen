@@ -117,6 +117,24 @@ namespace TLCGen.Specificator
                 body.Append(FunctionalityGenerator.GetChapter_OntruimingstijdenGarantie(c));
                 body.Append(FunctionalityGenerator.GetChapter_Synchronisaties(c, doc));
 
+                if (c.OVData.OVIngreepType != Models.Enumerations.OVIngreepTypeEnum.Geen && c.HasPTorHD())
+                {
+                    if (c.HasPT() && c.HasHD())
+                    {
+                        body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVHD"]}", 1));
+                        body.Append(FunctionalityGenerator.GetChapter_OVHDIntro(c));
+                    }
+                    if (c.HasPT())
+                    {
+                        body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OV"]}", c.HasHD() ? 2 : 1));
+                        body.Append(FunctionalityGenerator.GetChapter_OV(c, doc, c.HasHD() ? 2 : 1));
+                    }
+                    if (c.HasHD())
+                    {
+                        body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_HD"]}", c.HasPT() ? 2 : 1));
+                    }
+                }
+
                 if (c.HalfstarData.IsHalfstar)
                 {
                     body.Append(OpenXmlHelper.GetChapterTitleParagraph($"Title_Halfstar", 1));
@@ -124,8 +142,8 @@ namespace TLCGen.Specificator
 
                 }
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"TODO", 1));
-                body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk afhandeling signaalgroepen met nalopen, etc. (Waarom zit dit in een apart hoofdstuk?)", "TODO")));
-                body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk OV.", "TODO")));
+                body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk OV: details toevoegen, zoals: " +
+                    $"lijnnummers, details rond in/uitmelden, inmelden koplus, .", "TODO")));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk hulpdiensten.", "TODO")));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Overige punten, zoals: PTP, VA ontruimen, file ingrepen, rateltikkers, " +
                     $"ingangen, selectieve detectie, uitgestelde vaste aanvragen, hard meeverlengen, veiligheidsgroen, RoBuGrover, special van plugins zoals AFM, etc.", "TODO")));

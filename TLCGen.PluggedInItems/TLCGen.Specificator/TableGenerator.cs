@@ -804,5 +804,245 @@ namespace TLCGen.Specificator
 
             return items;
         }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Intersignaalgroep_Voorstarten(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Intersignaalgroep_Voorstarten");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Intersignaalgroep_Voorstarten"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Van",
+                    "Naar",
+                    "Voorstart tijd",
+                    "Fictieve o.t. naar > van"
+                }
+            };
+            foreach (var ma in c.InterSignaalGroep.Voorstarten)
+            {
+                l.Add(new List<string>
+                {
+                    ma.FaseVan,
+                    ma.FaseNaar,
+                    ma.VoorstartTijd.ToString(),
+                    ma.VoorstartOntruimingstijd.ToString()
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_Intersignaalgroep_LateRelease(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_Intersignaalgroep_LateRelease");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_Intersignaalgroep_LateRelease"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Van",
+                    "Naar",
+                    "Late release tijd",
+                    "Fictieve o.t. naar > van"
+                }
+            };
+            foreach (var ma in c.InterSignaalGroep.LateReleases)
+            {
+                l.Add(new List<string>
+                {
+                    ma.FaseVan,
+                    ma.FaseNaar,
+                    ma.LateReleaseTijd.ToString(),
+                    ma.LateReleaseOntruimingstijd.ToString()
+                });
+            }
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_OV_PrioriteitsOpties(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_OV_PrioriteitsOpties");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_OV_PrioriteitsOpties"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>
+            {
+                new List<string>
+                {
+                    "Optie",
+                    "Toelichting"
+                }
+            };
+            l.Add(new List<string> { "0", "Geen opties" });
+            l.Add(new List<string> { "1", "Aanvragen en afkappen conflicterende richtingen" });
+            l.Add(new List<string> { "2", "Aanvragen en vasthouden van het groen" });
+            l.Add(new List<string> { "3", "Aanvragen en bijzonder realiseren" });
+            l.Add(new List<string> { "4", "Aanvragen, afkappen conflicterende richtingen en afkappen conflicterende OV richtingen" });
+            l.Add(new List<string> { "5", "Nooddienst: Omvat alle voorgaande prioriteitsopties en maakt die dus overbodig. Verder " +
+                "wordt er niet gekeken naar het ondermaximum, overschrijding van de maximum wachttijd, of blokkeringstijd. Conflicten " +
+                "mogen worden afgekapt na garantiegroen. Tijdens een nooddienstingreep worden de fasebewakingstijden gereset." });
+
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: false));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_OV_PrioriteitsInstellingen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_OV_PrioriteitsInstellingen");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_OV_PrioriteitsInstellingen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            List<List<string>> l;
+            if (c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+            {
+                l = new List<List<string>>
+                {
+                    new List<string>
+                    {
+                        "Signaalgroep",
+                        "Prioriteit geconditioneerd",
+                        "Prioriteitsopties te vroeg",
+                        "Prioriteitsopties op tijd",
+                        "Prioriteitsopties te laat",
+                        "Prioriteitsopties geen",
+                        "Ongehinderde rijtijd",
+                        "Beperkt rijtijd",
+                        "Gehinderde rijtijd",
+                        "Bezettijd OV gehinderd",
+                        "Blokkeringstijd",
+                        "Groenbewaking",
+                        "Ondermaximum"
+                    }
+                };
+                foreach(var ov in c.OVData.OVIngrepen)
+                {
+                    var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                    var opties = 0;
+                    if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
+                    if (ov.AfkappenConflictenOV) opties += 300;
+                    if (ov.TussendoorRealiseren) opties += 3;
+                    if (ov.VasthoudenGroen) opties += 20;
+                    var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                    l.Add(new List<string>
+                    {
+                        ov.FaseCyclus,
+                        ov.GeconditioneerdePrioriteit.GetDescription(),
+                        cp ? ov.GeconditioneerdePrioTeVroeg.ToString() : "-",
+                        cp ? ov.GeconditioneerdePrioOpTijd.ToString() : "-",
+                        cp ? ov.GeconditioneerdePrioTeLaat.ToString() : "-",
+                        sopties,
+                        ov.RijTijdOngehinderd.ToString(),
+                        ov.RijTijdBeperktgehinderd.ToString(),
+                        ov.RijTijdGehinderd.ToString(),
+                        ov.BezettijdOVGehinderd.ToString(),
+                        ov.BlokkeertijdNaOVIngreep.ToString(),
+                        ov.GroenBewaking.ToString(),
+                        ov.OnderMaximum.ToString()
+                    });
+                }
+            }
+            else
+            {
+                l = new List<List<string>>
+                {
+                    new List<string>
+                    {
+                        "Signaalgroep",
+                        "Prioriteitsopties",
+                        "Ongehinderde rijtijd",
+                        "Beperkt rijtijd",
+                        "Gehinderde rijtijd",
+                        "Bezettijd OV gehinderd",
+                        "Blokkeringstijd",
+                        "Groenbewaking",
+                        "Ondermaximum"
+                    }
+                };
+                foreach (var ov in c.OVData.OVIngrepen)
+                {
+                    var cp = ov.GeconditioneerdePrioriteit != Models.Enumerations.NooitAltijdAanUitEnum.Nooit;
+                    var opties = 0;
+                    if (ov.AfkappenConflicten || ov.AfkappenConflictenOV) opties += 100;
+                    if (ov.AfkappenConflictenOV) opties += 300;
+                    if (ov.TussendoorRealiseren) opties += 3;
+                    if (ov.VasthoudenGroen) opties += 20;
+                    var sopties = opties == 0 ? "0" : opties.ToString().Replace("0", "");
+                    l.Add(new List<string>
+                    {
+                        ov.FaseCyclus,
+                        sopties,
+                        ov.RijTijdOngehinderd.ToString(),
+                        ov.RijTijdBeperktgehinderd.ToString(),
+                        ov.RijTijdGehinderd.ToString(),
+                        ov.BezettijdOVGehinderd.ToString(),
+                        ov.BlokkeertijdNaOVIngreep.ToString(),
+                        ov.GroenBewaking.ToString(),
+                        ov.OnderMaximum.ToString()
+                    });
+                }
+            }
+            
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_OV_ConflictenInstellingen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_OV_ConflictenInstellingen");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_OV_ConflictenInstellingen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            List<List<string>> l;
+            l = new List<List<string>>
+                {
+                    new List<string>
+                    {
+                        "Signaalgroep",
+                        "Afkapgarantie",
+                        "Percentage maximum groentijd",
+                        "Ophoog percentage maximumgroentijd",
+                        "Aantal malen niet afbreken",
+                        "Percentage groentijd t.b.v. terugkeren",
+                        "Ondergrens na terugkomen"
+                    }
+                };
+            foreach (var ovcf in c.OVData.OVIngreepSignaalGroepParameters)
+            {
+                l.Add(new List<string>
+                {
+                        ovcf.FaseCyclus,
+                        ovcf.MinimumGroentijdConflictOVRealisatie.ToString(),
+                        ovcf.PercMaxGroentijdConflictOVRealisatie.ToString(),
+                        ovcf.OphoogpercentageNaAfkappen.ToString(),
+                        ovcf.AantalKerenNietAfkappen.ToString(),
+                        ovcf.PercMaxGroentijdVoorTerugkomen.ToString(),
+                        ovcf.OndergrensNaTerugkomen.ToString()
+                });
+            }
+            
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
     }
 }

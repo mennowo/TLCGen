@@ -189,6 +189,197 @@ namespace TLCGen.Specificator
             return items;
         }
 
+        internal static IEnumerable<OpenXmlElement> GetChapter_OVHDIntro(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De regeling heeft zowel ingrepen voor afhandeling van openbaar vervoer, als voor afhandeling van hulpdiensten. " +
+                $"De navolgende paragrafen geven een overzicht van de werking en instellingen voor deze ingrepen."));
+            return items;
+        }
+
+        internal static IEnumerable<OpenXmlElement> GetChapter_OV(ControllerModel c, WordprocessingDocument doc, int startLevel)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            items.Add(OpenXmlHelper.GetTextParagraph("Het openbaar vervoer kan in de regeling op volgende manieren in- en/of uitmelden:"));
+
+            var sl = new List<Tuple<string, int>>();
+            if (c.HasKAR())
+            {
+                sl.Add(new Tuple<string, int>("KAR berichten", 0));
+            }
+            if (c.HasVecom())
+            {
+                sl.Add(new Tuple<string, int>("VECOM detectie", 0));
+            }
+            if (c.HasVecomIO())
+            {
+                sl.Add(new Tuple<string, int>("Externe VECOM detectie via ingangen", 0));
+            }
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreep"]}", startLevel + 1));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Op basis van de parameters wordt bepaald welke mate van prioriteit een ingemeld voertuig krijgt met daarbij " +
+                $"behorende prioriteitsopties voor de ingreep. Deze paragraaf geeft een funcioneel overzicht van de werking van de " +
+                $"OV ingreep. In de volgende paragraaf wordt dit nader uitgewerkt, en zijn de instellingen voor de OV ingrepen " +
+                $"in deze regeling opgenomen."));
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepAfkappen"]}", startLevel + 2));
+            items.Add(OpenXmlHelper.GetTextParagraph("Wanneer een richting mag afkappen wordt wel rekening gehouden met de " +
+                "instellingen van de parameters:"));
+            sl = new List<Tuple<string, int>>
+            {
+                 new Tuple<string, int>("Afkapgarantie bij conflicterend OV", 0),
+                 new Tuple<string, int>("Percentage maximum groentijd bij conflicterend OV", 0),
+                 new Tuple<string, int>("Aantal malen niet afbreken bij conflicterend OV", 0),
+            };
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+            items.Add(OpenXmlHelper.GetTextParagraph("Verder hoeft de conflictrichting, die als laatste groen heeft voor de " +
+                "OV-richting, pas afgekapt te worden op het moment dat de geeltijd +ontruimingstijd  resterende rijtijd. Wanneer " +
+                "de OV-richting door omstandigheden niet op het gewenste moment groen kan worden, bijvoorbeeld doordat een " +
+                "conflictrichting niet afgekapt mag worden, hoeven (overige) conflictrichtingen niet onnodig vroeg te worden " +
+                "afgekapt. Er moet dan bepaald worden op welk moment de OV-richting op zijn vroegst groen kan worden. Aan " +
+                "de hand van dat moment moet (opnieuw) bepaald worden wanneer conflictrichtingen afgekapt moeten worden."));
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepBijzonderRealiseren"]}", startLevel + 2));
+            items.Add(OpenXmlHelper.GetTextParagraph("Als een richting bijzonder mag realiseren betekent dat de realisatie " +
+                "buiten de modulestructuur om plaats vindt. De OV-richting wordt op deze manier eigenlijk tussen de modulen " +
+                "door gerealiseerd."));
+            items.Add(OpenXmlHelper.GetTextParagraph("Tijdens een realisatie ten behoeve van een OV-ingreep wordt het groen " +
+                "vastgehouden zolang het voertuig zich niet heeft uitgemeld en de groenbewaking niet is verstreken.Tijdens " +
+                "een bijzondere realisatie mogen richtingen die niet conflicterend zijn met de OV - richting alternatief " +
+                "realiseren. Hiervoor gelden dezelfde voorwaarde die gelden voor alternatief realiseren."));
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepNaOVIngreep"]}", startLevel + 2));
+            items.Add(OpenXmlHelper.GetTextParagraph("Na afloop van de OV-ingreep gaat de regeling verder op het punt waar " +
+                "de regeling was voor de OV-ingreep.Afhankelijk van de instelling van de parameter \"Percentage groentijd " +
+                "t.b.v. terugkeren\" en de gerealiseerde groentijden van de afgekapte richtingen, worden deze richtingen al " +
+                "dan niet opnieuw groen.Deze richtingen mogen hun resterende deel van maximum groentijd maken, of in ieder " +
+                "geval uitverlengen tot en met de \"Ondergrens na terugkomen\". Is er geen sprake van richtingen die " +
+                "terugkeren, dan worden de richtingen groen die volgens de regelstructuur als eerstvolgende aan de " +
+                "beurt zijn."));
+
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVIngreepDefecteUitmelding"]}", startLevel + 2));
+            items.Add(OpenXmlHelper.GetTextParagraph("Wanneer er voor het aflopen van de groenbewaking geen goede uitmelding " +
+                "is ontvangen, wordt schakelbaar(default uit) de prioriteitsingreep uitgeschakeld. Er wordt dan vanuit gegaan " +
+                "dat de uitmelding niet goed binnenkomt. De prioriteitsingreep wordt pas weer geactiveerd als er na een " +
+                "correcte inmelding ook een correcte uitmelding is ontvangen."));
+            items.Add(OpenXmlHelper.GetTextParagraph("De groenbewakingstijd loop altijd tijdens groen als een OV-voertuig " +
+                "is ingemeld, alleen wordt het groen van een OV-richting zonder prioriteit niet vastgehouden. Dit zal tot " +
+                "gevolg hebben dat na het constateren van een defecte uitmelding de aanvraag op de betreffende richting " +
+                "blijft staan totdat de richting langer dan de groenbewakingstijd groen is geweest."));
+            items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_OVParameters"]}", startLevel + 1));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Met behulp van een parameter zijn voor elke signaalgroep met OV de verschillende prioriteitsopties in te stellen. " +
+                $"Het honderdtal, het tiental en de eenheid van de parameter kunnen hiervoor worden gebruikt.Er kunnen dus maximaal " +
+                $"3 prioriteitsopties worden gekozen.Met de waarde 123 krijgt de OV-richting de opties aanvragen, afkappen, groen " +
+                $"vasthouden en bijzonder realiseren(\"volledige prioriteit\"). Mag de OV-richting ook conflicterende OV-richtingen " +
+                $"afkappen dan wordt de waarde 234 toegekend; optie 4 maakt optie 1 overbodig. Met behulp van de waarde 500 wordt " +
+                $"een nooddienst toegekend; optie 5 maakt opties 1, 2, 3 en 4 overbodig."));
+            if(c.OVData.OVIngrepen.Any(x => x.GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit))
+            {
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Binnen deze regeling is voorzien in de mogelijk de toe te kennen prioriteit afhankelijk te maken van de stiptheid" +
+                    $"van het voertuig. Hiertoe wordt bij de inmelding (indien deze verloopt middels KAR of VECOM) gekeken naar de " +
+                    $"afwijking ten opzichte van de dienstregeling. Hierbij gelden de volgende instellingen:"));
+                sl = new List<Tuple<string, int>>();
+                sl.Add(new Tuple<string, int>($"Meer dan {c.OVData.GeconditioneerdePrioGrensTeVroeg} voor op dienstregeling: te vroeg", 0));
+                sl.Add(new Tuple<string, int>($"Meer dan {c.OVData.GeconditioneerdePrioGrensTeLaat} achter op dienstregeling: te laat", 0));
+                sl.Add(new Tuple<string, int>($"Tussen deze twee waarden: op tijd", 0));
+                items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+            }
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De beschikbare opties worden toegelicht in onderstaande tabel:"));
+            items.AddRange(TableGenerator.GetTable_OV_PrioriteitsOpties(c));
+
+            items.Add(OpenXmlHelper.GetTextParagraph("Met dezelfde parameter zijn 10 prioriteitsniveaus instelbaar. Hiervoor is het " +
+                "duizendtal van de parameter gereserveerd.Het prioriteitsniveau kan dus variëren van 0 t / m 9.Een richting met een " +
+                "hoger prioriteitsniveau dan een conflictrichting, mag de prioriteitsafhandeling van die conflictrichting intrekken " +
+                "en afhankelijk van de prioriteitsopties afkappen. Voor prioriteitsingrepen met hetzelfde prioriteitsniveau geldt " +
+                "het “first in first out” principe."));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Wanneer een voertuig zich heeft ingemeld en de prioriteit niet is ingesteld op 0, wordt op basis van parameter " +
+                $"instellingen bepaald of, gegeven de actuele status van de regeling, prioriteit mag worden verleend. Hiervoor zijn " +
+                $"de volgende instellingen beschikbaar:"));
+
+            sl = new List<Tuple<string, int>>
+            {
+                new Tuple<string, int>("Rijtijd: per signaalgroep wordt voor maximaal 10 voertuigen vanaf het moment dat een " +
+                    "voertuig zich inmeldt de rijtijd bijgehouden.Deze rijtijd wordt afgezet tegen de tijd die het voertuig nodig heeft " +
+                    "om vanaf het inmeldpunt tot aan het punt voor de stopstreep te komen waarop het licht groen moet zijn. Er worden " +
+                    "drie parameters gebruikt:", 0),
+                new Tuple<string, int>("Ongehinderde rijtijd. Alle lussen zijn onbezet.", 1),
+                new Tuple<string, int>("Beperkt gehinderde rijtijd. Koplus of lange lus is bezet.", 1),
+                new Tuple<string, int>("Gehinderde rijtijd. Koplus en lange lus tegelijkertijd gedurende een instelbare tijd bezet.", 1),
+                new Tuple<string, int>("Blokkeringstijd: Ten behoeve van het niet honoreren van een prioriteitsaanvraag, zolang de " +
+                    "blokkeringtijd loopt. Deze tijd wordt per OV-richting bijgehouden en wordt gestart op startrood en afgekapt als " +
+                    "er geen (fictief) conflicterende aanvragen zijn. Deze instelling speelt geen rol bij OV-inmeldingen met " +
+                    "prioriteitsoptie nooddienst.", 0),
+                new Tuple<string, int>("Groenbewaking: Geeft aan hoelang een OV-richting maximaal groen krijgt ten behoeve van een " +
+                    "OV-voertuig. Dit wordt per OV-voertuig bijgehouden. Er wordt daarbij vanuit gegaan dat er per OV-traject niet meer " +
+                    "dan 10 OV-voertuigen tegelijkertijd ingemeld kunnen zijn. Na afloop van de groenbewaking, zonder een uitmelding, " +
+                    "wordt het OV-voertuig uitgemeld.", 0),
+                new Tuple<string, int>("Ondermaximum: Hiermee wordt aangegeven tot welk moment voor het bereiken van de maximum " +
+                    "groentijd een OV-voertuig nog prioriteit mag krijgen. Deze instelling speelt geen rol bij OV-inmeldingen met " +
+                    "prioriteitsoptie nooddienst.", 0)
+            };
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Onderstaande tabel geeft een overzicht van de prioriteitsinstellingen voor richtingen met OV in deze regeling:"));
+
+            items.AddRange(TableGenerator.GetTable_OV_PrioriteitsInstellingen(c));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Naast bovenstaande parameters zijn een aantal parameters beschikbaar om de mate van verstoring door een OV-ingreep " +
+                $"te beperken:"));
+
+            sl = new List<Tuple<string, int>>
+            {
+                
+                new Tuple<string, int>("Wachttijdcriterium: Indien één of meer fasecycli een hogere wachttijd hebben dan de waarde " +
+                    "van het wachttijdcriterium, mag er niet bijzonder gerealiseerd worden. Conflicten mogen wel afgebroken worden om " +
+                    "zodoende een versnelde cyclus te kunnen maken. De waarde van het wachttijdcriterium is voor autorichtingen (default " +
+                    "120 seconden), fietsrichtingen (default 90 seconden) en voetgangersrichtingen (default 90 seconden) apart in te stellen. Deze instelling speelt geen rol bij OV-inmeldingen met prioriteitsoptie nooddienst.", 0),
+                new Tuple<string, int>("Afkapgarantie bij conflicterend OV: Per richting is middels een parameter aan te geven hoelang " +
+                    "die richting groen mag zijn, voordat deze kan worden afgekapt door een conflicterende OV-ingreep. Deze instelling speelt geen rol bij OV-inmeldingen met prioriteitsoptie nooddienst.", 0),
+                new Tuple<string, int>("Percentage maximum groentijd bij conflicterend OV: Per richting is middels een percentage aan " +
+                    "te geven hoelang die richting groen mag zijn, voordat deze kan worden afgekapt door een conflicterende OV-ingreep. " +
+                    "Deze instelling speelt geen rol bij OV-inmeldingen met prioriteitsoptie nooddienst.", 0),
+                new Tuple<string, int>("Ophoogpercentage maximum groentijd bij conflicterend OV: Per richting is een percentage aan te " +
+                    "geven waarmee het percentage maximum groentijd bij conflicterend OV wordt opgehoogd nadat die richting is afgebroken. " +
+                    "Staat het percentage maximum groentijd bij conflicterend OV bijvoorbeeld op 50% en het ophoogpercentage op 25%, dan mag " +
+                    "een afgekapte richting de volgende cyclus 75% van zijn groen maken, voordat hij wordt afgekapt. Wordt de richting dan " +
+                    "weer afgekapt dan mag de cyclus daarna 100% worden gemaakt. Dit mag er overigens nooit toe leiden dat het percentage " +
+                    "maximum groen bij conflicterend OV groter wordt dan 100%. Wanneer een richting op hiaat wordt beëindigd of een keer " +
+                    "100% van zijn maximum groen maakt, wordt het percentage maximum groentijd bij conflicterend OV gereset naar de " +
+                    "ingestelde waarde.", 0),
+                new Tuple<string, int>("Aantal malen niet afbreken bij conflicterend OV: Geeft aan hoe vaak een conflicterende richting " +
+                    "niet mag worden afgebroken, nadat deze richting afgekapt is ten behoeve van een ingreep.", 0),
+                new Tuple<string, int>("Percentage groentijd t.b.v. terugkeren: Per richting is een percentage van de groentijd aan te " +
+                    "geven waarvoor geldt dat als de primaire realisatie van een richting wordt afgekapt door een conflicterende OV-ingreep " +
+                    "en dit percentage van de groentijd nog niet is bereikt, dat die richting dan na afloop van de conflicterende OV-ingreep " +
+                    "opnieuw wordt gerealiseerd.", 0),
+                new Tuple<string, int>("Ondergrens na terugkomen: Als na afloop van een OV-ingreep een afgekapte conflicterende " +
+                    "richting opnieuw mag realiseren dan mag deze richting het restant van zijn maximum groentijd maken. Als dit restant " +
+                    "lager is dan de ondergrens na terugkomen dan dient de ondergrens gehanteerd te worden.", 0)
+            };
+            items.AddRange(OpenXmlHelper.GetBulletList(doc, sl));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"Onderstaande tabel geeft een overzicht van de instellingen voor met het OV conflicteren richtingen:"));
+
+            items.AddRange(TableGenerator.GetTable_OV_ConflictenInstellingen(c));
+
+
+            return items;
+        }
+
         internal static IEnumerable<OpenXmlElement> GetChapter_Synchronisaties(ControllerModel c, WordprocessingDocument doc)
         {
             var items = new List<OpenXmlCompositeElement>();
@@ -236,6 +427,8 @@ namespace TLCGen.Specificator
                     $"Elke naloop kan als detectie afhankelijke naloop worden ingesteld, zodat enkel bij een melding " +
                     $"op een bepaalde detector, de naloopo actief wordt. Bij detectieafhankelijke nalopen kan ervoor worden " +
                     $"gekozen geen vaste naloop aan te houden. Voor nalopen gelden de volgende instellingen:"));
+                items.Add(OpenXmlHelper.GetTextParagraph("TODO: bovenstaande tekst moet de instelling \"inlopen/inrijden " +
+                    "tijdens groen\" nader toelichten."));
                 items.AddRange(TableGenerator.GetTable_Intersignaalgroep_Nalopen(c));
 
             }
@@ -243,7 +436,7 @@ namespace TLCGen.Specificator
             {
                 items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Gelijkstarten"]}", 3));
                 items.Add(OpenXmlHelper.GetTextParagraph(
-                    $"Wanneer tussen twee signaalgroepen een gelijsktart geldt, wordt ervoor gezorgd dat de betreffende " +
+                    $"Wanneer tussen twee signaalgroepen een gelijktart geldt, wordt ervoor gezorgd dat de betreffende " +
                     $"richtingen gelijktijdig groen krijgen wanneer beide een aanvraag hebben. Is er sprake van een deelconflict, " +
                     $"dan gelden aanvullend fictieve ontruimingstijden tussen beide richtingen, en mag een richting niet bij komen " +
                     $"wanneer de andere richting reeds groen is."));
@@ -254,10 +447,25 @@ namespace TLCGen.Specificator
             if (c.InterSignaalGroep.Voorstarten.Any())
             {
                 items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Voorstarten"]}", 3));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Bij toepassen van een voorstart krijgt de ene richting altijd groen een instelbare tijd vooraf aan start groen " +
+                    $"van de andere richting. Die tweede richting wordt hiertoe tijdelijk tegengehouden. Er geldt een fictieve " +
+                    $"ontruimingstijd van de tweede richting naar de eerste: pas na het aflopen van die tijd kan de voorstartende " +
+                    $"richting weer groen worden."));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Voor voorstarten gelden de volgende instellingen:"));
+                items.AddRange(TableGenerator.GetTable_Intersignaalgroep_Voorstarten(c));
             }
             if (c.InterSignaalGroep.LateReleases.Any())
             {
                 items.Add(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_LateRelease"]}", 3));
+                items.Add(OpenXmlHelper.GetTextParagraph("TODO: deze tekst moet uitleg geven over de functionele werking van een late release, " +
+                    "inclusief het verschil met een reguliere voorstart.", "TODO"));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Bij toepassen van een late release ..."));
+                items.Add(OpenXmlHelper.GetTextParagraph(
+                    $"Voor late release gelden de volgende instellingen:"));
+                items.AddRange(TableGenerator.GetTable_Intersignaalgroep_LateRelease(c));
             }
 
             return items;
