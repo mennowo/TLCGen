@@ -17,7 +17,6 @@ namespace TLCGen.Views
             set { SetValue(ShowFunctiesProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowFunctiesProperty =
             DependencyProperty.Register("ShowFuncties", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
 
@@ -28,7 +27,6 @@ namespace TLCGen.Views
             set { SetValue(ShowTijdenProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowTijdenProperty =
             DependencyProperty.Register("ShowTijden", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
 
@@ -39,7 +37,6 @@ namespace TLCGen.Views
             set { SetValue(ShowResetProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowResetProperty =
             DependencyProperty.Register("ShowReset", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
@@ -49,7 +46,6 @@ namespace TLCGen.Views
             set { SetValue(ShowVeiligheidsGroenProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowVeiligheidsGroenProperty =
             DependencyProperty.Register("ShowVeiligheidsGroen", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
@@ -60,7 +56,6 @@ namespace TLCGen.Views
             set { SetValue(ShowStoringProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowStoringProperty =
             DependencyProperty.Register("ShowStoring", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
@@ -70,7 +65,6 @@ namespace TLCGen.Views
             set { SetValue(ShowRijstrookProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowRijstrookProperty =
             DependencyProperty.Register("ShowRijstrook", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
@@ -80,7 +74,6 @@ namespace TLCGen.Views
             set { SetValue(ShowFaseCyclusProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowFaseCyclusProperty =
             DependencyProperty.Register("ShowFaseCyclus", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(false));
 
@@ -90,9 +83,18 @@ namespace TLCGen.Views
             set { SetValue(ShowAanvraagVerlengenProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ShowFaseCyclus.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ShowAanvraagVerlengenProperty =
             DependencyProperty.Register("ShowAanvraagVerlengen", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
+
+
+        public bool ShowAanvraagVerlengenHard
+        {
+            get { return (bool)GetValue(ShowAanvraagVerlengenHardProperty); }
+            set { SetValue(ShowAanvraagVerlengenHardProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowAanvraagVerlengenHardProperty =
+            DependencyProperty.Register("ShowAanvraagVerlengenHard", typeof(bool), typeof(DetectorenLijstView), new PropertyMetadata(true));
 
         public DetectorenLijstView()
         {

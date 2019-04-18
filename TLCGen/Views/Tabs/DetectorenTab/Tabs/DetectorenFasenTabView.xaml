@@ -43,6 +43,7 @@
             </StackPanel>
             <local:DetectorenLijstView 
                 Grid.Row="1" Margin="2"
+                ShowAanvraagVerlengenHard="{Binding Path=ShowFuncties,Mode=OneWay}"
                 ShowAanvraagVerlengen="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowFuncties="{Binding Path=ShowFunctiesActual,Mode=OneWay}"
                 ShowTijden="{Binding Path=ShowTijdenActual,Mode=OneWay}" ShowReset="{Binding Path=ShowFunctiesActual,Mode=OneWay}"
                 ShowFaseCyclus="False" ShowRijstrook="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowStoring="{Binding Path=ShowFunctiesActual,Mode=OneWay}" ShowVeiligheidsGroen="{Binding Path=ShowFunctiesActual,Mode=OneWay}" />

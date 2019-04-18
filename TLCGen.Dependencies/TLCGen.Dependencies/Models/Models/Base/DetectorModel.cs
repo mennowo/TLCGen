@@ -44,7 +44,9 @@ namespace TLCGen.Models
         [Browsable(false)]
         public DetectorTypeEnum Type { get; set; }
         public DetectorAanvraagTypeEnum Aanvraag { get; set; }
+        public bool AanvraagHardOpStraat { get; set; }
         public DetectorVerlengenTypeEnum Verlengen { get; set; }
+        public bool VerlengenHardOpStraat { get; set; }
         public NooitAltijdAanUitEnum AanvraagBijStoring { get; set; }
 
         public NooitAltijdAanUitEnum VeiligheidsGroen { get; set; }

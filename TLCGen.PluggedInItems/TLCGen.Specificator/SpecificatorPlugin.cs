@@ -238,6 +238,11 @@ namespace TLCGen.Specificator
 
         #region Constructor
 
+        public SpecificatorPlugin() : this(false)
+        {
+
+        }
+
         public SpecificatorPlugin(bool tester = false)
         {
             _myVm = new SpecificatorViewModel(this);

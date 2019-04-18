@@ -148,6 +148,12 @@
             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorAanvraagTypeEnum}}}" 
             Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
             CellStyle="{StaticResource DetectorWithRequestStyle}" />
+        <DataGridCheckBoxColumn 
+            x:Key="AanvraagHardColumn"
+            Header="A hard"
+            Binding="{Binding Path=AanvraagHardOpStraat,UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding Path=ShowAanvraagVerlengenHard, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithRequestStyle}" />
         <DataGridComboBoxColumn 
             x:Key="VerlengenColumn"
             Header="Verlengen" 
@@ -155,6 +161,12 @@
             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:DetectorVerlengenTypeEnum}}}"
             Visibility="{Binding Path=ShowAanvraagVerlengen, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
             CellStyle="{StaticResource DetectorWithExtendStyle}" />
+        <DataGridCheckBoxColumn 
+            x:Key="VerlengenHardColumn"
+            Header="Verl. hard"
+            Binding="{Binding Path=VerlengenHardOpStraat,UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding Path=ShowAanvraagVerlengenHard, Source={x:Reference root}, Converter={StaticResource Bool2VisConv}}"
+            CellStyle="{StaticResource DetectorWithRequestStyle}" />
         <DataGridTextColumn 
             x:Key="TBGColumn"
             Binding="{Binding Path=TBG,TargetNullValue={x:Static sys:String.Empty}}" Header="TBG" 
@@ -260,7 +272,9 @@
                 <StaticResource ResourceKey="TypeColumn" />
                 <StaticResource ResourceKey="FaseColumn" />
                 <StaticResource ResourceKey="AanvraagColumn" />
+                <StaticResource ResourceKey="AanvraagHardColumn" />
                 <StaticResource ResourceKey="VerlengenColumn" />
+                <StaticResource ResourceKey="VerlengenHardColumn" />
                 <StaticResource ResourceKey="TDBColumn" />
                 <StaticResource ResourceKey="TDHColumn" />
                 <StaticResource ResourceKey="TOGColumn" />
