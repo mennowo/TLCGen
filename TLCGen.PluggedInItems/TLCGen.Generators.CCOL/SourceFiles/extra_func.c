@@ -453,7 +453,7 @@ bool Rateltikkers_Accross(count fc,       /* fase */
 		while ((dkid = va_arg(argpt, va_count)) != END)
 		{
 			/* opzetten rateltikkers bij detectie drukknoppen */
-			IH[has] |= D[dkid];
+			IH[has] |= IH[dkid];
 		}
 		va_end(argpt);
 	}
