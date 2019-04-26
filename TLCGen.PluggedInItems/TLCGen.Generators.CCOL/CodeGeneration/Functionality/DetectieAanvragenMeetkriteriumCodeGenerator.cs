@@ -22,6 +22,52 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning restore 0169
 #pragma warning restore 0649
 
+        private int GetAanvraagSetting(DetectorModel dm)
+        {
+            var set = 0;
+            switch (dm.Aanvraag)
+            {
+                case DetectorAanvraagTypeEnum.Uit:
+                    set = 0;
+                    break;
+                case DetectorAanvraagTypeEnum.RnietTRG:
+                    set = 1;
+                    break;
+                case DetectorAanvraagTypeEnum.Rood:
+                    set = 2;
+                    break;
+                case DetectorAanvraagTypeEnum.RoodGeel:
+                    set = 3;
+                    break;
+            }
+            return set;
+        }
+
+        private int GetVerlengenSetting(FaseCyclusModel fc, DetectorModel dm)
+        {
+            var dmVerl = (int)dm.Verlengen;
+            if (fc.ToepassenMK2)
+            {
+                switch (dm.Rijstrook)
+                {
+                    default:
+                    case 1:
+                        // leave as is
+                        break;
+                    case 2:
+                        dmVerl += 4;
+                        break;
+                    case 3:
+                        dmVerl += 8;
+                        break;
+                    case 4:
+                        dmVerl += 12;
+                        break;
+                }
+            }
+            return dmVerl;
+        }
+
         public override void CollectCCOLElements(ControllerModel c)
         {
             _myElements = new List<CCOLElement>();
@@ -34,25 +80,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (dm.Aanvraag == DetectorAanvraagTypeEnum.Geen)
                     continue;
 
-                int set = 0;
-                switch (dm.Aanvraag)
+                if (!dm.AanvraagHardOpStraat)
                 {
-                    case DetectorAanvraagTypeEnum.Uit:
-                        set = 0;
-                        break;
-                    case DetectorAanvraagTypeEnum.RnietTRG:
-                        set = 1;
-                        break;
-                    case DetectorAanvraagTypeEnum.Rood:
-                        set = 2;
-                        break;
-                    case DetectorAanvraagTypeEnum.RoodGeel:
-                        set = 3;
-                        break;
+                    int set = GetAanvraagSetting(dm);
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
                 }
-                _myElements.Add(
-                    CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_prmda}{dm.Naam}", set, CCOLElementTimeTypeEnum.None, _prmda, dm.Naam));
                 if (dm.ResetAanvraag)
                 {
                     _myElements.Add(
@@ -68,29 +102,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     if (dm.Verlengen == DetectorVerlengenTypeEnum.Geen)
                         continue;
-                    var dmVerl = (int)dm.Verlengen;
-                    if (fc.ToepassenMK2)
+                    if (!dm.VerlengenHardOpStraat)
                     {
-                        switch (dm.Rijstrook)
-                        {
-                            default:
-                            case 1:
-                                // leave as is
-                                break;
-                            case 2:
-                                dmVerl += 4;
-                                break;
-                            case 3:
-                                dmVerl += 8;
-                                break;
-                            case 4:
-                                dmVerl += 12;
-                                break;
-                        }
+                        
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmmk}{dm.Naam}", GetVerlengenSetting(fc, dm), CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
                     }
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_prmmk}{dm.Naam}", dmVerl, CCOLElementTimeTypeEnum.TE_type, _prmmk, dm.Naam));
                 }
             }
 
@@ -182,7 +200,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && !dm.ResetAanvraag)
-                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                                {
+                                    if(!dm.AanvraagHardOpStraat)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
+                                    }
+                                }
                             }
                             sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
@@ -192,7 +219,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             foreach (DetectorModel dm in fcm.Detectoren)
                             {
                                 if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.ResetAanvraag)
-                                    sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                                {
+                                    if (!dm.AanvraagHardOpStraat)
+                                    {
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
+                                    }
+                                    else
+                                    {
+                                        sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
+                                    }
+                                }
                             }
                             sb.AppendLine($"{ts}{ts}(va_count) END);");
                         }
@@ -231,7 +267,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (dm.Verlengen != DetectorVerlengenTypeEnum.Geen)
                             {
                                 sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
-                                sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
+                                if (!dm.VerlengenHardOpStraat)
+                                {
+                                    sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
+                                }
+                                else
+                                {
+                                    sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv){GetVerlengenSetting(fcm, dm)},");
+                                }
                             }
                         }
                         sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));

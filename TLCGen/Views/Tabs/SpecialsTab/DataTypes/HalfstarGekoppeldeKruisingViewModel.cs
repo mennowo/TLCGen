@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using System;
 using TLCGen.Helpers;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -10,10 +11,12 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 		#region Fields
 
 		private readonly HalfstarGekoppeldeKruisingModel _gekoppeldeKruising;
-		
-		#endregion // Fields
-		
-		#region Properties
+
+        #endregion // Fields
+
+        #region Properties
+
+        public event EventHandler TypeChanged;
 
 		public HalfstarGekoppeldeKruisingModel GekoppeldeKruising => _gekoppeldeKruising;
 
@@ -37,6 +40,7 @@ namespace TLCGen.Views.Tabs.SpecialsTab.DataTypes
 			set
 			{
 				_gekoppeldeKruising.Type = value;
+                TypeChanged?.Invoke(this, EventArgs.Empty);
 				foreach (var u in _gekoppeldeKruising.PlanUitgangen)
 				{
 					u.Type = value;

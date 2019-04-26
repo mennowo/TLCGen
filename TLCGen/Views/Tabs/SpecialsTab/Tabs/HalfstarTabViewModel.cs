@@ -41,7 +41,18 @@ namespace TLCGen.ViewModels
 		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; private set; }
 
-		public SignaalPlanViewModel SelectedSignaalPlan
+        public bool ShowHalfstarAlert
+        {
+            get
+            {
+                return Type != HalfstarTypeEnum.Master &&
+                    !GekoppeldeKruisingen.Any(x => x.Type == HalfstarGekoppeldTypeEnum.Master);
+            }
+        }
+
+        public string HalfstarAlert => "Let op! Gezien het type halfstarre regelaar, moet er een master regelaar worden opgegeven.";
+
+        public SignaalPlanViewModel SelectedSignaalPlan
 		{
 			get => _selectedSignaalPlan;
 			set
@@ -727,8 +738,21 @@ namespace TLCGen.ViewModels
 					HalfstarData = Controller.HalfstarData;
 					SignaalPlannen = new ObservableCollectionAroundList<SignaalPlanViewModel, SignaalPlanModel>(HalfstarData.SignaalPlannen);
 					HalfstarPeriodenData = new ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel>(Controller.HalfstarData.HalfstarPeriodenData);
+                    if (GekoppeldeKruisingen != null)
+                    {
+                        foreach (var k in GekoppeldeKruisingen)
+                        {
+                            k.TypeChanged += GekoppeldeKruising_TypeChanged;
+                        }
+                        GekoppeldeKruisingen.CollectionChanged -= GekoppeldeKruisingen_CollectionChanged;
+                    }
 					GekoppeldeKruisingen = new ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel>(HalfstarData.GekoppeldeKruisingen);
-					HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
+                    GekoppeldeKruisingen.CollectionChanged += GekoppeldeKruisingen_CollectionChanged;
+                    foreach(var k in GekoppeldeKruisingen)
+                    {
+                        k.TypeChanged += GekoppeldeKruising_TypeChanged;
+                    }
+                    HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
                     Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel>(HalfstarData.Alternatieven);
                     UpdateAlternatievenFromController();
 
@@ -776,11 +800,35 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-		#endregion // TLCGen TabItem overrides
+        private void GekoppeldeKruising_TypeChanged(object sender, EventArgs e)
+        {
+            RaisePropertyChanged(nameof(ShowHalfstarAlert));
+        }
 
-		#region TLCGen Events
+        private void GekoppeldeKruisingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (HalfstarGekoppeldeKruisingViewModel k in e.OldItems)
+                {
+                    k.TypeChanged -= GekoppeldeKruising_TypeChanged;
+                }
+            }
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (HalfstarGekoppeldeKruisingViewModel k in e.NewItems)
+                {
+                    k.TypeChanged += GekoppeldeKruising_TypeChanged;
+                }
+            }
+            RaisePropertyChanged(nameof(ShowHalfstarAlert));
+        }
 
-		private void OnFasenChanged(FasenChangedMessage message)
+        #endregion // TLCGen TabItem overrides
+
+        #region TLCGen Events
+
+        private void OnFasenChanged(FasenChangedMessage message)
 		{
 			if (message.AddedFasen != null && message.AddedFasen.Count > 0)
 			{

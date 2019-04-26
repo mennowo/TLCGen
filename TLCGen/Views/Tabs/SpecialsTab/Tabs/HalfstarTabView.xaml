@@ -96,7 +96,13 @@
                                 </Button>
                             </StackPanel>
                         </Grid>
-                        <Label Content="Gekoppelde regelaars" Grid.Row="6" Grid.ColumnSpan="2" />
+                        <StackPanel Orientation="Vertical"
+                                    Grid.Row="6" Grid.ColumnSpan="2" >
+                            <Label Content="Gekoppelde regelaars" />
+                            <TextBlock FontWeight="Bold" Foreground="Red" Margin="5"
+                                       Visibility="{Binding Path=ShowHalfstarAlert,Mode=OneWay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                       Text="{Binding Path=HalfstarAlert,Mode=OneWay}" TextWrapping="Wrap" />
+                        </StackPanel>
                         <ListBox Grid.Row="7" Grid.ColumnSpan="2" Margin="2"
                                  HorizontalContentAlignment="Stretch"
                                  ItemsSource="{Binding GekoppeldeKruisingen}" SelectedItem="{Binding SelectedHalfstarGekoppeldeKruising}">

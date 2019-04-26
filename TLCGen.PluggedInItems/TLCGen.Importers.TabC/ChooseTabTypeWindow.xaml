@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:TLCGen.Importers.TabC"
              mc:Ignorable="d" 
              SizeToContent="Height" Width="300">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visConv" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -27,6 +30,9 @@
             <CheckBox Name="IntergroenCheck" Margin="5" Content="Intergroen" />
             <CheckBox Name="ImportDetCheck" Margin="5" Content="Importeer detectoren" />
             <CheckBox Name="ImportTijdCheck" Margin="5" Content="Importeer instellingen" />
+            <CheckBox Name="ImportDeelconflictenCheck" Margin="5" Content="Importeer deelconflicten" />
+            <Label Content="Importeer gemotoriseerd &lt;&gt; langzaam als:" Visibility="{Binding ElementName=ImportDeelconflictenCheck,Path=IsChecked,Converter={StaticResource bool2visConv}}" />
+            <ComboBox Name="DeelconflictenTypeCB" Margin="2" Visibility="{Binding ElementName=ImportDeelconflictenCheck,Path=IsChecked,Converter={StaticResource bool2visConv}}" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3">
             <Button Content="OK" IsDefault="True" Margin="2" Click="Button_Click" Name="OKButton" />

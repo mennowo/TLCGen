@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="TLCGen.Views.LateReleaseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Views"
+             mc:Ignorable="d" 
+             MinWidth="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Label Content="Late release opties" FontWeight="Bold" Grid.Row="0" />
+        <StackPanel HorizontalAlignment="Stretch" Grid.Row="1">
+            <Label Content="{Binding Path=Comment1}" />
+            <TextBox Text="{Binding Path=LateReleaseTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="{Binding Path=Comment2}" />
+            <TextBox Text="{Binding Path=LateReleaseOntruimingstijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        </StackPanel>
+    </Grid>
+</UserControl>

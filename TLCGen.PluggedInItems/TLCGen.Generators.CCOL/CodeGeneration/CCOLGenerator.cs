@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
+using TLCGen.Dependencies.Providers;
 using TLCGen.Generators.CCOL.Settings;
 using TLCGen.Models;
 using TLCGen.Plugins;
@@ -163,7 +164,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 CCOLElementCollector.AddAllMaxElements(CCOLElementLists);
 
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.c"), GenerateRegC(c), Encoding.Default);
-                File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), Encoding.Default);
+                if (!c.Data.NietGebruikenBitmap)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.c"), GenerateDplC(c), Encoding.Default);
+                }
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.c"), GenerateTabC(c), Encoding.Default);
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.c"), GenerateSimC(c), Encoding.Default);
                 File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.h"), GenerateSysH(c), Encoding.Default);
@@ -184,10 +188,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 	            {
 		            File.WriteAllText(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.c"), GenerateHstC(c), Encoding.Default);
 	            }
+                if (c.Data.PracticeOmgeving)
+                {
+                    File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg.txt"), GeneratePraticeCcolReg(c), Encoding.Default);
+                    File.WriteAllText(Path.Combine(sourcefilepath, "ccolreg2.txt"), GeneratePraticeCcolReg2(c), Encoding.Default);
+                }
 
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}reg.add"), c, GenerateRegAdd, GenerateRegAddHeader, Encoding.Default);
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}tab.add"), c, GenerateTabAdd, GenerateTabAddHeader, Encoding.Default);
-                WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, Encoding.Default);
+                if (!c.Data.NietGebruikenBitmap)
+                {
+                    WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}dpl.add"), c, GenerateDplAdd, GenerateDplAddHeader, Encoding.Default);
+                }
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sim.add"), c, GenerateSimAdd, GenerateSimAddHeader, Encoding.Default);
                 WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}sys.add"), c, GenerateSysAdd, GenerateSysAddHeader, Encoding.Default);
                 if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
@@ -201,10 +213,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 CopySourceIfNeeded("extra_func.c", sourcefilepath);
                 CopySourceIfNeeded("extra_func.h", sourcefilepath);
-                CopySourceIfNeeded("gkvar.c", sourcefilepath);
-                CopySourceIfNeeded("gkvar.h", sourcefilepath);
-                CopySourceIfNeeded("nlvar.c", sourcefilepath);
-                CopySourceIfNeeded("nlvar.h", sourcefilepath);
                 CopySourceIfNeeded("ccolfunc.c", sourcefilepath);
                 CopySourceIfNeeded("ccolfunc.h", sourcefilepath);
                 CopySourceIfNeeded("detectie.c", sourcefilepath);
@@ -225,6 +233,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 if(c.InterSignaalGroep.Nalopen.Any())
                 {
+                    CopySourceIfNeeded("gkvar.c", sourcefilepath);
+                    CopySourceIfNeeded("gkvar.h", sourcefilepath);
+                    CopySourceIfNeeded("nlvar.c", sourcefilepath);
+                    CopySourceIfNeeded("nlvar.h", sourcefilepath);
                     CopySourceIfNeeded("nalopen.c", sourcefilepath);
                     CopySourceIfNeeded("nalopen.h", sourcefilepath);
                 }
@@ -351,7 +363,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
                     catch
                     {
-                        // ignored
+                        TLCGenDialogProvider.Default.ShowMessageBox($"Bestand {filename} kan niet worden overschreven. Staat het nog ergens open?", "Fout bij overschrijven bestand", MessageBoxButton.OK);
+                        return;
                     }
                 }
                 File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
@@ -481,8 +494,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 			if (OrderedPieceGenerators[type].Any())
 			{
                 if ((includevars || includecode) && addnewlinebefore) sb.AppendLine();
-                var hasvars = false;
-                var hascode = false;
                 if (includevars)
                 {
                     var vars = new List<string>();

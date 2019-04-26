@@ -112,6 +112,12 @@
       <DependentUpon>VLOGSettingsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\FasenTab\DataTypes\HardMeeverlengenFaseCyclusViewModel.cs" />
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseView.xaml.cs">
+      <DependentUpon>LateReleaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseViewModel.cs">
+      <DependentUpon>LateReleaseView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Tabs\InterSignaalGroepTab\DataTypes\NaloopTijdViewModel.cs" />
     <Compile Include="Views\Tabs\InterSignaalGroepTab\InterSignaalGroepTabViewModel.cs">
       <DependentUpon>InterSignaalGroepTab.xaml</DependentUpon>
@@ -561,6 +567,10 @@
     <Page Include="Views\Tabs\AlgemeenTab\Tabs\VLOGSettingsTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Tabs\InterSignaalGroepTab\DataTypes\LateReleaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\OVTab\Tabs\OVInUitmeldenTabView.xaml">
       <SubType>Designer</SubType>

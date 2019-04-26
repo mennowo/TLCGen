@@ -40,20 +40,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
-        private string GenerateTabCIncludes(ControllerModel controller)
+        private string GenerateTabCIncludes(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
 
             sb.AppendLine($"/* include files */");
             sb.AppendLine($"/* ------------- */");
-            sb.AppendLine($"{ts}#include \"{controller.Data.Naam}sys.h\"");
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#ifndef _VRIWINTEST");
+            }
+            sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
             sb.AppendLine($"{ts}#include \"kfvar.h\"    /* conflicten                        */");
             sb.AppendLine($"{ts}#include \"usvar.h\"    /* uitgangs elementen                */");
             sb.AppendLine($"{ts}#include \"dpvar.h\"    /* detectie elementen                */");
-            if (controller.Data.GarantieOntruimingsTijden)
+            if (c.Data.GarantieOntruimingsTijden)
             {
-                if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen)
                 {
                     sb.AppendLine($"{ts}#include \"tig_min.h\"   /* garantie-ontruimingstijden        */");
                 }
@@ -66,7 +70,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"tgg_min.h\"  /* garantie-groentijden              */");
             sb.AppendLine($"{ts}#include \"tgl_min.h\"  /* garantie-geeltijden               */");
             sb.AppendLine($"{ts}#include \"isvar.h\"    /* ingangs elementen                 */");
-            if (controller.HasDSI())
+            if (c.HasDSI())
             {
                 sb.AppendLine($"{ts}#include \"dsivar.h\"   /* selectieve detectie               */");
             }
@@ -78,7 +82,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"prmvar.h\"   /* parameters                        */");
             sb.AppendLine($"{ts}#include \"lwmlvar.h\"  /* langstwachtende modulen structuur */");
             sb.AppendLine($"{ts}#include \"control.h\"  /* controller interface              */");
-            if (controller.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
+            if (c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen)
             {
                 sb.AppendLine($"{ts}#ifndef NO_VLOG");
                 sb.AppendLine($"{ts}{ts}#include \"vlogvar.h\"  /* variabelen t.b.v. vlogfuncties                */");
@@ -87,17 +91,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#endif");
             }
 
-            if (controller.HalfstarData.IsHalfstar)
+            if (c.HalfstarData.IsHalfstar)
             {
                 sb.AppendLine($"{ts}#include \"tx_synch.h\"");
                 sb.AppendLine($"{ts}#include \"plevar.h\"");
                 sb.AppendLine($"{ts}#include \"halfstar.h\"");
             }
+            if (c.Data.PracticeOmgeving)
+            {
+                sb.AppendLine("#endif // _VRIWINTEST");
+            }
 
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
 
-            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
 
             return sb.ToString();
         }
@@ -139,6 +147,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine("void control_parameters(void)");
             sb.AppendLine("{");
+
+            if(controller.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
+            {
+                sb.AppendLine($"{ts}#ifndef NO_VLOG");
+                sb.AppendLine($"{ts}{ts}int i;");
+                sb.AppendLine($"{ts}#endif");
+                sb.AppendLine();
+            }
 
             AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.TabCControlParameters, true, false, false, true);
 
@@ -344,25 +360,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/* fasecycli */");
             sb.AppendLine("/* --------- */");
 
+            var gs = controller.GroentijdenSets.FirstOrDefault();
             foreach (FaseCyclusModel fcm in controller.Fasen)
             {
                 string s = $"   FC_code[{fcm.GetDefine()}] = \"{fcm.Naam}\"; TRG_max[{fcm.GetDefine()}] = {fcm.TRG}; ";
-                //int i = s.Length;
                 sb.Append(s);
-                //sb.AppendLine($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min};".PadLeft(i));
-                //sb.AppendLine($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG};".PadLeft(i));
-                //sb.AppendLine($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min};".PadLeft(i));
-                //sb.AppendLine($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG};".PadLeft(i));
-                //sb.AppendLine($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL};".PadLeft(i));
-                //sb.AppendLine($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min};".PadLeft(i));
-                //sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;".PadLeft(i));
                 sb.Append($"TRG_min[{fcm.GetDefine()}] = {fcm.TRG_min}; ");
                 sb.Append($"TGG_max[{fcm.GetDefine()}] = {fcm.TGG}; ");
                 sb.Append($"TGG_min[{fcm.GetDefine()}] = {fcm.TGG_min}; ");
                 sb.Append($"TFG_max[{fcm.GetDefine()}] = {fcm.TFG}; ");
                 sb.Append($"TGL_max[{fcm.GetDefine()}] = {fcm.TGL}; ");
                 sb.Append($"TGL_min[{fcm.GetDefine()}] = {fcm.TGL_min}; ");
-                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = NG;");
+                var tvg = "NG";
+                if (gs != null)
+                {
+                    var fcgs = gs.Groentijden.FirstOrDefault(x => x.FaseCyclus == fcm.Naam);
+                    if (fcgs != null)
+                    {
+                        tvg = fcgs.Waarde == null ? "NG" : fcgs.Waarde.Value.ToString();
+                    }
+                }
+                sb.AppendLine($"TVG_max[{fcm.GetDefine()}] = {tvg};");
             }
 
             return sb.ToString();
@@ -723,11 +741,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int? dhmax = 0;
             int? ogmax = 0;
             int? bgmax = 0;
-            int? cflmax = 0;
             int? tflmax = 0;
 
             var ovdummydets = controller.OVData.GetAllDummyDetectors();
             var alldets = controller.GetAllDetectors().Concat(ovdummydets);
+
+            var nondummydets = alldets.Where(x => !x.Dummy);
+            var detectorModels = nondummydets as DetectorModel[] ?? nondummydets.ToArray();
 
             foreach (var dm in alldets.Where(x => !x.Dummy))
             {
@@ -738,14 +758,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
                 if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
                 if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
-                if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
             }
             dbmax = dbmax.ToString().Length;
             dhmax = dhmax.ToString().Length;
             ogmax = ogmax.ToString().Length;
             bgmax = bgmax.ToString().Length;
             tflmax = tflmax.ToString().Length;
-            cflmax = cflmax.ToString().Length;
 
             int pad1 = "D_code[] ".Length + defmax;
             int pad2 = "= \"\"; ".Length + namemax;
@@ -753,20 +771,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             int pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
             int pad5 = "TDH_max[] ".Length + defmax;
             int pad6 = pad1 + pad2;
+            var pad7 = "TFL_max[] = ;".Length + defmax + tflmax;
 
-            foreach(var dm in alldets)
+            foreach (var dm in alldets)
             {
                 if (!dm.Dummy)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
                 }
             }
+
+            if (detectorModels.Any(x => x.TFL != null || x.CFL != null))
+            {
+                sb.AppendLine("#if !defined NO_DDFLUTTER");
+                foreach (var dm in detectorModels)
+                {
+                    AppendDetectorFlutterTabString(sb, dm, pad7);
+                }
+                sb.AppendLine("#endif // !defined NO_DDFLUTTER");
+            }
+
             /* Dummies */
             var dummydets = alldets.Where(x => x.Dummy);
-            var detectorModels = dummydets as DetectorModel[] ?? dummydets.ToArray();
+            detectorModels = dummydets as DetectorModel[] ?? dummydets.ToArray();
             if (detectorModels.Any())
             {
-                dbmax = dhmax = ogmax = bgmax = tflmax = cflmax = defmax = namemax = 0;
+                dbmax = dhmax = ogmax = bgmax = tflmax = defmax = namemax = 0;
                 foreach (var dm in detectorModels)
                 {
                     if (dm.GetDefine()?.Length > defmax) defmax = dm.GetDefine().Length;
@@ -776,25 +806,33 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (dm.TOG != null && dm.TOG > ogmax) ogmax = dm.TOG;
                     if (dm.TBG != null && dm.TBG > bgmax) bgmax = dm.TBG;
                     if (dm.TFL != null && dm.TFL > tflmax) tflmax = dm.TFL;
-                    if (dm.CFL != null && dm.CFL > cflmax) cflmax = dm.CFL;
                 }
                 dbmax = dbmax.ToString().Length;
                 dhmax = dhmax.ToString().Length;
                 ogmax = ogmax.ToString().Length;
                 bgmax = bgmax.ToString().Length;
                 tflmax = tflmax.ToString().Length;
-                cflmax = cflmax.ToString().Length;
                 pad1 = "D_code[] ".Length + defmax;
                 pad2 = "= \"\"; ".Length + namemax;
                 pad3 = "TDB_max[] ".Length + defmax;
                 pad4 = "= ; ".Length + Math.Max(dbmax ?? 0, bgmax ?? 0);
                 pad5 = "TDH_max[] ".Length + defmax;
                 pad6 = pad1 + pad2;
+                pad7 = "TFL_max[] = ;".Length + defmax + tflmax;
 
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined _VRIWINTEST");
                 foreach(var dm in detectorModels)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);
+                }
+                if(detectorModels.Any(x => x.TFL != null || x.CFL != null))
+                {
+                    sb.AppendLine("#if !defined NO_DDFLUTTER");
+                    foreach (var dm in detectorModels)
+                    {
+                        AppendDetectorFlutterTabString(sb, dm, pad7);
+                    }
+                    sb.AppendLine("#endif // !defined NO_DDFLUTTER");
                 }
                 sb.AppendLine("#endif");
             }
@@ -804,7 +842,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         private void AppendDetectorTabString(StringBuilder sb, DetectorModel dm, int pad1, int pad2, int pad3, int pad4, int pad5, int pad6)
         {
-            sb.Append("    ");
+            sb.Append($"{ts}");
             sb.Append($"D_code[{dm.GetDefine()}] ".PadRight(pad1));
             sb.Append($"= \"{dm.Naam}\"; ".PadRight(pad2));
             if (dm.TDB != null)
@@ -817,15 +855,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.Append($"TDH_max[{dm.GetDefine()}] ".PadRight(pad5));
                 sb.AppendLine($"= {dm.TDH};");
             }
-            else
-            {
-                sb.AppendLine("");
-            }
 
             if (dm.TBG != null || dm.TOG != null)
             {
-                sb.Append("    ");
-                sb.Append("".PadLeft(pad6));
+                if (dm.TDB != null || dm.TDH != null)
+                {
+                    sb.Append($"{ts}");
+                    sb.Append("".PadLeft(pad6));
+                }
                 if (dm.TBG != null)
                 {
                     sb.Append($"TBG_max[{dm.GetDefine()}] ".PadRight(pad3));
@@ -841,19 +878,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     sb.AppendLine("");
                 }
             }
-
+            else
+            {
+                sb.AppendLine("");
+            }
+        }
+        private void AppendDetectorFlutterTabString(StringBuilder sb, DetectorModel dm, int? tflmax)
+        {
             if (dm.TFL != null || dm.CFL != null)
             {
-                sb.Append("    ");
-                sb.Append("".PadLeft(pad6));
                 if (dm.TFL != null)
                 {
-                    sb.Append($"TFL_max[{dm.GetDefine()}] ".PadRight(pad3));
-                    sb.Append($"= {dm.TFL}; ".PadRight(pad4));
+                    sb.Append($"{ts}");
+                    var l = $"TFL_max[{dm.GetDefine()}] = {dm.TFL};";
+                    sb.Append($"TFL_max[{dm.GetDefine()}] = {dm.TFL};".PadRight(tflmax.Value));
+                }
+                else
+                {
+                    sb.Append("".PadRight(tflmax.Value));
                 }
                 if (dm.CFL != null)
                 {
-                    sb.Append($"CFL_max[{dm.GetDefine()}] ".PadRight(pad5));
+                    if (dm.TFL != null) sb.Append(" ");
+                    sb.Append($"CFL_max[{dm.GetDefine()}] ");
                     sb.AppendLine($"= {dm.CFL};");
                 }
                 else
@@ -1019,17 +1066,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         foreach (ModuleFaseCyclusModel mfcm in mm.Fasen)
                         {
-                            // TODO: is this needed? does (should?) mm.Naam always start with ML ?
-                            var mlNaam = "";
-                            if (mlNaam.StartsWith("ML"))
-                            {
-                                mlNaam = $"{mm.Naam}";
-                            }
-                            else
-                            {
-                                mlNaam = $"{controller.ModuleMolen.Reeks}{mm.Naam}";
-                            }
-                            sb.AppendLine($"{ts}PRML[{mlNaam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
+                            sb.AppendLine($"{ts}PRML[{mm.Naam}][{mfcm.GetFaseCyclusDefine()}] = PRIMAIR;");
                         }
                         sb.AppendLine();
                     }
@@ -1145,18 +1182,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.CCOLVersie < CCOLVersieEnum.CCOL9)
             {
                 sb.AppendLine();
-                foreach (FaseCyclusModel fc in c.Fasen)
-                {
-                    sb.AppendLine($"{ts}MONFC[{_fcpf}{fc.Naam}] = BIT0+BIT1+BIT2+BIT3;");
-                }
-                sb.AppendLine();
-                foreach (var u in _uitgangen.Elements)
-                {
-                    if (u.Naam != null)
-                    {
-                        sb.AppendLine($"{ts}MONUS[{u.Define}]= BIT0+BIT1;");
-                    }
-                }
+                sb.AppendLine($"{ts}for (i = 0; i < FCMAX; ++i) MONFC[i] = BIT0+BIT1+BIT2+BIT3;");
+                sb.AppendLine($"{ts}for (i = FCMAX; i < USMAX; ++i) MONUS[i] = BIT0+BIT1;");
             }
 
             sb.AppendLine("#endif /* NO_VLOG */");

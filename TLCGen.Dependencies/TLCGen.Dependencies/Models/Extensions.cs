@@ -66,10 +66,32 @@ namespace TLCGen.Models
                    c.OVData.HDIngrepen.Any(x => x.KAR);
         }
 
+        public static bool HasVecom(this ControllerModel c)
+        {
+            return c.SelectieveDetectoren.Any(x => x.SdType == SelectieveDetectorTypeEnum.VECOM) &&
+                   c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecom());
+        }
+
+        public static bool HasVecomIO(this ControllerModel c)
+        {
+            return c.GetAllDetectors(x => x.Type == DetectorTypeEnum.VecomDetector).Any() &&
+                   c.OVData.OVIngrepen.Any(x => x.HasOVIngreepVecomIO());
+        }
+
         public static bool HasKAR(this OVDataModel ovdm)
         {
             return ovdm.OVIngrepen.Any(x => x.HasOVIngreepKAR()) ||
                    ovdm.HDIngrepen.Any(x => x.KAR);
+        }
+
+        public static bool HasPT(this ControllerModel c)
+        {
+            return c.OVData.OVIngrepen.Any();
+        }
+
+        public static bool HasHD(this ControllerModel c)
+        {
+            return c.OVData.HDIngrepen.Any();
         }
 
         public static bool HasPTorHD(this ControllerModel c)

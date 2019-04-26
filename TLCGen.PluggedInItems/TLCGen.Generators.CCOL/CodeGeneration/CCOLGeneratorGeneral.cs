@@ -12,7 +12,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.AppendLine($"/* KRUISPUNT: {data.Stad}");
             sb.Append(' ', 14);
-            sb.AppendLine(data.Naam);
+            sb.Append(data.Naam);
+            if (!string.IsNullOrWhiteSpace(data.Nummer) &&
+                !string.Equals(data.Naam, data.Nummer))
+            {
+                sb.Append($" ({data.Nummer})");
+            }
+            sb.AppendLine();
             sb.Append(' ', 14);
             sb.AppendLine(data.Straat1);
             sb.Append(' ', 14);

@@ -14,6 +14,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string FaseNaar { get; set; }
         public int LateReleaseTijd { get; set; }
+        public int LateReleaseOntruimingstijd { get; set; }
 
         #endregion // Properties
     }

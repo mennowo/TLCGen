@@ -209,6 +209,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AanvraagHardOpStraat
+        {
+            get => _detector.AanvraagHardOpStraat;
+            set
+            {
+                _detector.AanvraagHardOpStraat = value;
+                RaisePropertyChanged<object>(nameof(AanvraagHardOpStraat), broadcast: true);
+            }
+        }
+
+        public bool VerlengenHardOpStraat
+        {
+            get => _detector.VerlengenHardOpStraat;
+            set
+            {
+                _detector.VerlengenHardOpStraat = value;
+                RaisePropertyChanged<object>(nameof(VerlengenHardOpStraat), broadcast: true);
+            }
+        }
+
         public NooitAltijdAanUitEnum AanvraagBijStoring
         {
             get => _detector.AanvraagBijStoring;

@@ -36,6 +36,9 @@
     <system:String x:Key="Generic_FixatieMogelijk">Fixatie mogelijk</system:String>
     <system:String x:Key="Generic_BijkomenFixatie">Bijkomen tijdens fixatie</system:String>
     <system:String x:Key="Generic_TypeGroentijden">Type groentijden</system:String>
+    <system:String x:Key="Generic_WTVNietHalterenAlsMeerDanLeds">Niet halteren wtv bij meer dan # leds</system:String>
+    <system:String x:Key="Generic_WTVNietHalterenAlsMinderDanLeds">Niet halteren wtv bij minder dan # leds</system:String>
+    <system:String x:Key="Generic_WTVAansturenBusTijdensOV">Aansturen BUS licht in wtv bij OV ingreep</system:String>
     
     <!-- Intro etc. -->
     <system:String x:Key="Title_Versioning">Versiebeheer</system:String>
@@ -68,11 +71,39 @@
     <system:String x:Key="Title_Perioden">Klokperioden</system:String>
     <system:String x:Key="Table_Perioden">Tabel met perioden</system:String>
     
+    <!-- Intersignaalgroep -->
+    <system:String x:Key="Title_Intersignaalgroep">Intersignaalgroep instellingen</system:String>
+    <system:String x:Key="Title_Synchronisaties">Synchronisaties</system:String>
+    <system:String x:Key="Title_Meeaanvragen">Meeaanvragen</system:String>
+    <system:String x:Key="Title_Nalopen">Nalopen</system:String>
+    <system:String x:Key="Title_Gelijkstarten">Gelijkstarten</system:String>
+    <system:String x:Key="Title_Voorstarten">Voorstarten</system:String>
+    <system:String x:Key="Title_LateRelease">Late release</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Meeaanvragen">Tabel met instellingen voor meeaanvragen</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Nalopen">Tabel met instellingen voor nalopen</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Gelijkstarten">Tabel met instellingen voor gelijkstarten</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_Voorstarten">Tabel met instellingen voor voorstarten</system:String>
+    <system:String x:Key="Table_Intersignaalgroep_LateRelease">Tabel met instellingen voor late release</system:String>
     <system:String x:Key="Title_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
     <system:String x:Key="Table_Ontruimingstijden">Tabel met ontruimingstijden</system:String>
     <system:String x:Key="Title_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
     <system:String x:Key="Table_OntruimingstijdenGarantie">Tabel met garantie ontruimingstijden</system:String>
-    <system:String x:Key="Title_Conflicten">Conflicten en ontruimingstijden</system:String>
+
+    <!-- OV / HD -->
+    <system:String x:Key="Title_OVHD">Afhandeling openbaar vervoer en hulpdiensten</system:String>
+    <system:String x:Key="Title_OV">Afhandeling openbaar vervoer</system:String>
+    <system:String x:Key="Title_HD">Afhandeling hulpdiensten</system:String>
+    <system:String x:Key="Title_OVIngreep">Functionaliteit OV ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepAfkappen">Afkappen</system:String>
+    <system:String x:Key="Title_OVIngreepBijzonderRealiseren">Bijzonder realiseren</system:String>
+    <system:String x:Key="Title_OVIngreepNaOVIngreep">Na afloop OV-ingreep</system:String>
+    <system:String x:Key="Title_OVIngreepDefecteUitmelding">Defecte uitmelding</system:String>
+    <system:String x:Key="Title_OVParameters">Parameters OV ingrepen</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsOpties">Tabel met overzicht van beschikbare prioriteitsopties</system:String>
+    <system:String x:Key="Table_OV_PrioriteitsInstellingen">Tabel met overzicht van prioriteitsinstellingen</system:String>
+    
+    <!-- Halfstar -->
+    <system:String x:Key="Title_Halfstar">Halfstar regelen</system:String>
     
     <!-- Groentijden -->
     <system:String x:Key="Title_Groentijden">Groentijden</system:String>
@@ -84,5 +115,5 @@
     <system:String x:Key="Table_Modulen">Tabel met fasen per module</system:String>
     <system:String x:Key="Table_VooruitAltInst">Tabel met instellingen voor alternatieven en vooruit realisaties</system:String>
     <system:String x:Key="Table_Vooruit">Tabel met instellingen voor vooruit realisaties</system:String>
-    
+    <system:String x:Key="Table_AlternatievenOnderDekking">Tabel met overzicht mogelijke alternatieve realisaties onder dekking</system:String>
 </ResourceDictionary>

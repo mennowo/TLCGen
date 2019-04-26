@@ -299,7 +299,10 @@ void TerugKomGroen(void)
 void OVTimers(void)
 {
     int fc, inm, ov;
-	int sml = -1, ml;
+	int sml = -1;
+#ifndef MLMAX
+	int ml;
+#endif
 
     for (fc = 0; fc < FCMAX; ++fc)
     {
@@ -1183,12 +1186,16 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                 0;
 #if defined CCOLTIG && !defined NO_TIGMAX
             if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
+            {
+                iStartGroenFC = iRestGroen + iRestTO;
+            }
+
 #else
             if (TO_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestGeel + iRestTO)
-#endif
             {
                 iStartGroenFC = iRestGroen + iRestGeel + iRestTO;
             }
+#endif
 #if defined CCOLTIG && !defined NO_TIGMAX
             if (TIG_max[k][fc] <= GK && iStartGroenFC < iRestGroen + iRestTO)
 #else
@@ -1523,7 +1530,10 @@ void AfkappenMG(int fc, int iStartGr)
 void OVAfkappen(void)
 {
     int ov, fc, iTotaalAantalInmeldingen, iMaxWachtTijdOverschreden;
-	int sml = -1, ml;
+	int sml = -1;
+#ifndef MLMAX
+	int ml;
+#endif
 
     iTotaalAantalInmeldingen = 0;
     iMaxWachtTijdOverschreden= 0;

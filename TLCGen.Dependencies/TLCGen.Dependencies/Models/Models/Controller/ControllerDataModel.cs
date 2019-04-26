@@ -18,6 +18,8 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string Naam { get; set; }
         [HasDefault(false)]
+        public string Nummer { get; set; }
+        [HasDefault(false)]
         public string Stad { get; set; }
         [HasDefault(false)]
         public string Straat1 { get; set; }
@@ -56,6 +58,9 @@ namespace TLCGen.Models
 
         [IsDocumented(conditionProperty: "CCOLVersie", conditionPropertyValue: "CCOL8")]
         public bool Intergroen { get; set; }
+
+        public bool PracticeOmgeving { get; set; }
+        public bool NietGebruikenBitmap { get; set; }
 
         public bool CCOLMulti { get; set; }
         public int CCOLMultiSlave { get; set; }
