@@ -111,7 +111,7 @@ namespace TLCGen.Plugins.RIS
                 UpdateRISLanes();
                 for (int l = 0; l < RISLanes.Count; l++)
                 {
-                    RISLanes[l].LaneID = l;
+                    RISLanes[l].LaneID = l + 1;
                 }
             }
         }
