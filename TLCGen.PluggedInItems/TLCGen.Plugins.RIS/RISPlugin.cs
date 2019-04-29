@@ -351,9 +351,10 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine();
                     sb.AppendLine($"/* Definitie lane id in het topologiebestand */");
                     sb.AppendLine($"/* ----------------------------------------- */");
+                    sb.AppendLine($"#define ris_conflict_gebied    0 /* connection tussen alle ingress lanes en egress lanes */");
                     foreach (var l in lanes)
                     {
-                        sb.AppendLine($"#define ris_lane{l.SignalGroupName}{l.RijstrookIndex} {l.LaneID} /* lane ID van richting {l.SignalGroupName} van strook {l.RijstrookIndex + 1} */");
+                        sb.AppendLine($"#define ris_lane{l.SignalGroupName}{l.RijstrookIndex}          {l.LaneID,3} /* lane ID van richting {l.SignalGroupName} van strook {l.RijstrookIndex} */");
                     }
                     sb.AppendLine();
                     return sb.ToString();
