@@ -82,15 +82,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                 }
                 var multiStrook = detectorDict.Count > 1;
+                var multiLusPerStrook = detectorDict.Any(x => x.Value.Count > 1) ||
+                                        detectorDict.Count == 0 && fm.FileDetectoren.Count > 1;
 
                 if (fm.FileDetectoren.Count > 1)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_hfile}{fm.Naam}{_schparlus}",
-                            fm.MetingPerLus ? 1 : 0,
-                            CCOLElementTimeTypeEnum.SCH_type,
-                            _schparlus, fm.Naam));
+                    if (multiLusPerStrook)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_hfile}{fm.Naam}{_schparlus}",
+                                fm.MetingPerLus ? 1 : 0,
+                                CCOLElementTimeTypeEnum.SCH_type,
+                                _schparlus, fm.Naam));
+                    }
                     if(multiStrook)
                     {
                         _myElements.Add(

@@ -48,6 +48,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         ++_koppelSignaalCount;
                     }
                 }
+                _koppelSignaalCountSet = true;
             }
             var ks = _koppelSignalen.FirstOrDefault(x => x.Name == name && x.Richting == richting);
             if (ks != null) return ks.Count;

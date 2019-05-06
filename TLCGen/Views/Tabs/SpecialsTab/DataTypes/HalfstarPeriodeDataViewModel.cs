@@ -35,11 +35,21 @@ namespace TLCGen.ViewModels
             }
         }
 
-		#endregion // Properties
+        public bool AlternatievenVoorHoofdrichtingen
+        {
+            get => PeriodeData.AlternatievenVoorHoofdrichtingen;
+            set
+            {
+                PeriodeData.AlternatievenVoorHoofdrichtingen = value;
+                RaisePropertyChanged<object>(nameof(AlternatievenVoorHoofdrichtingen), broadcast: true);
+            }
+        }
 
-		#region IViewModelWithItem
+        #endregion // Properties
 
-		public object GetItem()
+        #region IViewModelWithItem
+
+        public object GetItem()
 		{
 			return PeriodeData;
 		}

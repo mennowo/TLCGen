@@ -914,7 +914,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             var xnl = "NG";
                             if (nl.MaximaleVoorstart.HasValue)
                             {
-                                xnl = $"{_prmpf}{_prmxnl}";
+                                xnl = $"{_prmpf}{_prmxnl}{nl.FaseVan}{nl.FaseNaar}";
                             }
 							sb.AppendLine($"{ts}naloopEG_CV_halfstar(TRUE, {_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, {xnl}, {dt}, {_tpf}{t}{nl.FaseVan}{nl.FaseNaar});");
 						}
