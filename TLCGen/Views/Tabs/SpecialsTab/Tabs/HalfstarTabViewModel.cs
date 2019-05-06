@@ -91,15 +91,15 @@ namespace TLCGen.ViewModels
 			}
 		}
 
-        public bool IsHalfstarWithAltenatieven => IsHalfstar && _Controller.ModuleMolen.LangstWachtendeAlternatief;
+        public bool IsHalfstarWithAltenatieven => IsHalfstar && _Controller?.ModuleMolen.LangstWachtendeAlternatief == true;
 
         public bool IsHalfstar
 		{
-			get => HalfstarData.IsHalfstar;
+			get => HalfstarData?.IsHalfstar == true;
 			set
 			{
 				HalfstarData.IsHalfstar = value;
-				if (value)
+                if (value && Controller != null)
 				{
 					// TODO: can make this generic?
 					foreach (var sp in SignaalPlannen)
@@ -141,7 +141,7 @@ namespace TLCGen.ViewModels
 
 		public HalfstarTypeEnum Type
 		{
-			get => HalfstarData.Type;
+			get => HalfstarData?.Type ?? HalfstarTypeEnum.FallbackMaster;
 			set
 			{
 				HalfstarData.Type = value;
@@ -172,7 +172,7 @@ namespace TLCGen.ViewModels
 
 		public HalfstarVARegelenTypeEnum TypeVARegelen
 		{
-			get => HalfstarData.TypeVARegelen;
+			get => HalfstarData?.TypeVARegelen ?? HalfstarVARegelenTypeEnum.ML;
 			set
 			{
 				HalfstarData.TypeVARegelen = value;
@@ -182,7 +182,7 @@ namespace TLCGen.ViewModels
 
 		public bool VARegelen
 		{
-			get => HalfstarData.VARegelen;
+			get => HalfstarData?.VARegelen == true;
 			set
 			{
 				HalfstarData.VARegelen = value;
@@ -192,7 +192,7 @@ namespace TLCGen.ViewModels
 
 		public bool OVPrioriteitPL
 		{
-			get => HalfstarData.OVPrioriteitPL;
+			get => HalfstarData?.OVPrioriteitPL == true;
 			set
 			{
 				HalfstarData.OVPrioriteitPL = value;
@@ -202,7 +202,7 @@ namespace TLCGen.ViewModels
 
 		public bool AlternatievenVoorHoofdrichtingen
 		{
-			get => HalfstarData.AlternatievenVoorHoofdrichtingen;
+			get => HalfstarData?.AlternatievenVoorHoofdrichtingen == true;
 			set
 			{
 				HalfstarData.AlternatievenVoorHoofdrichtingen = value;
@@ -212,7 +212,7 @@ namespace TLCGen.ViewModels
 
         public bool PlantijdenInParameters
         {
-            get => HalfstarData.PlantijdenInParameters;
+            get => HalfstarData?.PlantijdenInParameters == true;
             set
             {
                 HalfstarData.PlantijdenInParameters = value;
@@ -222,7 +222,7 @@ namespace TLCGen.ViewModels
 
         public string DefaultSignaalplan
 		{
-			get => HalfstarData.DefaultPeriodeSignaalplan; 
+			get => HalfstarData?.DefaultPeriodeSignaalplan; 
 			set
 			{
 				HalfstarData.DefaultPeriodeSignaalplan = value;
@@ -232,7 +232,7 @@ namespace TLCGen.ViewModels
 
 		public bool DefaultPeriodeVARegelen
 		{
-			get => HalfstarData.DefaultPeriodeVARegelen; 
+			get => HalfstarData?.DefaultPeriodeVARegelen == true; 
 			set
 			{
 				HalfstarData.DefaultPeriodeVARegelen = value;
@@ -242,7 +242,7 @@ namespace TLCGen.ViewModels
 
 		public bool DefaultPeriodeAlternatievenVoorHoofdrichtingen
 		{
-			get => HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen; 
+			get => HalfstarData?.DefaultPeriodeAlternatievenVoorHoofdrichtingen == true;
 			set
 			{
 				HalfstarData.DefaultPeriodeAlternatievenVoorHoofdrichtingen = value;

@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="SingleClickDataGridTemplateColumn.cs" />
     <Compile Include="SpecialDataGrid.cs" />
+    <Compile Include="TabControlEx.cs" />
     <Compile Include="TimeSpanUpDown24Hours.cs" />
     <Compile Include="ZoomBorder.cs" />
   </ItemGroup>

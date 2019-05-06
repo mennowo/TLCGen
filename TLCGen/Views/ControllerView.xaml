@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -18,7 +19,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <TabControl ItemsSource="{Binding Path=TabItems}" 
+        <ct:TabControlEx ItemsSource="{Binding Path=TabItems}" 
                     SelectedItem="{Binding Path=SelectedTab,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     TabStripPlacement="Left"
                     HorizontalContentAlignment="Left">
@@ -47,6 +48,6 @@
                     <Setter Property="ContentTemplate" Value="{Binding ContentDataTemplate}" />
                 </Style>
             </TabControl.ItemContainerStyle>
-        </TabControl>
+        </ct:TabControlEx>
     </Grid>
 </UserControl>

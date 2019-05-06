@@ -209,8 +209,8 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridCheckBoxColumn Header="VA regelen" Binding="{Binding VARegelen}" />
-                            <DataGridCheckBoxColumn Header="Hoofdr.alt." Binding="{Binding AlternatievenVoorHoofdrichtingen}" />
+                            <DataGridCheckBoxColumn Header="VA regelen" Binding="{Binding VARegelen,UpdateSourceTrigger=PropertyChanged}" />
+                            <DataGridCheckBoxColumn Header="Hoofdr.alt." Binding="{Binding AlternatievenVoorHoofdrichtingen,UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

@@ -34,7 +34,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _Controller = value;
-                RaisePropertyChanged("");
+                if(value != null) RaisePropertyChanged("");
             }
         }
 
