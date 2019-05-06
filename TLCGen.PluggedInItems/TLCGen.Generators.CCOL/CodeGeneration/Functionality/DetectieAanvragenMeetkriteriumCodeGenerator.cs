@@ -269,11 +269,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append("".PadLeft($"{ts}meetkriterium_prm_va_arg(".Length));
                                 if (!dm.VerlengenHardOpStraat)
                                 {
-                                    sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
+                                    if (fcm.ToepassenMK2)
+                                        sb.AppendLine($"(va_bool)TDH[{dm.GetDefine()}], (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
+                                    else
+                                        sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv)PRM[{_prmpf}{_prmmk}{dm.Naam}],");
                                 }
                                 else
                                 {
-                                    sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv){GetVerlengenSetting(fcm, dm)},");
+                                    if (fcm.ToepassenMK2)
+                                        sb.AppendLine($"(va_bool)TDH[{dm.GetDefine()}], (va_mulv){GetVerlengenSetting(fcm, dm)},");
+                                    else
+                                        sb.AppendLine($"(va_count){dm.GetDefine()}, (va_mulv){GetVerlengenSetting(fcm, dm)},");
                                 }
                             }
                         }
