@@ -298,14 +298,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.Data.PracticeOmgeving)
                 {
                     sb.AppendLine($"{ts}/* Code voor OV-richtingen */");
+                    sb.AppendLine($"{ts}#ifdef _VRIWINTEST");
                     foreach (var ov in c.OVData.OVIngrepen)
                     {
-                        sb.AppendLine($"{ts}iFC_OV_code[ovFC{ov.FaseCyclus}] = \"ov{ov.FaseCyclus}\";");
+                        sb.AppendLine($"{ts}{ts}iFC_OV_code[ovFC{ov.FaseCyclus}] = \"ov{ov.FaseCyclus}\";");
                     }
                     foreach (var hd in c.OVData.HDIngrepen)
                     {
-                        sb.AppendLine($"{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
+                        sb.AppendLine($"{ts}{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
                     }
+                    sb.AppendLine($"{ts}#endif // _VRIWINTEST");
                     sb.AppendLine();
                 }
             }
