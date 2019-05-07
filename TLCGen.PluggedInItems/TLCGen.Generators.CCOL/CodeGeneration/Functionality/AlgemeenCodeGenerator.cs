@@ -73,6 +73,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    return 10;
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 40;
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -89,6 +91,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.SysHBeforeUserDefines:
+                    if (!c.Data.PracticeOmgeving) return "";
+                    sb.AppendLine($"/* T.b.v. practice */");
+                    sb.AppendLine($"#ifdef _VRIWINTEST");
+                    sb.AppendLine($"{ts}#define XTND_DIC");
+                    sb.AppendLine($"#endif");
+                    sb.AppendLine($"");
+                    sb.AppendLine($"");
+                    sb.AppendLine($"");
+                    sb.AppendLine($"");
+
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     if (!c.Data.GenererenDuurtestCode) return "";
                     sb.AppendLine($"{ts}/* TESTOMGEVING */");

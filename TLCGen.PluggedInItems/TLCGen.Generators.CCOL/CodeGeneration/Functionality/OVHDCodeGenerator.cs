@@ -681,7 +681,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine(GetMeldingDetectieCode(melding) + ";");
                     break;
                 case OVIngreepInUitMeldingVoorwaardeTypeEnum.VecomViaDetector:
-                    sb.AppendLine($" && SD[{_dpf}{melding.RelatedInput1}];");
+                    sb.AppendLine($" SD[{_dpf}{melding.RelatedInput1}];");
                     break;
             }
             sb.AppendLine($"{ts}}}");
