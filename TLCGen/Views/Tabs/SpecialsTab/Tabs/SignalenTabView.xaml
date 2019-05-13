@@ -25,9 +25,9 @@
             <DataGrid Margin="2" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Grid.Row="1"
                   ItemsSource="{Binding Path=WaarschuwingsGroepen}" SelectedItem="{Binding Path=SelectedWaarschuwingsGroep}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam}" />
-                    <DataGridCheckBoxColumn Header="Lichten" Binding="{Binding Path=Lichten}" />
-                    <DataGridCheckBoxColumn Header="Bellen" Binding="{Binding Path=Bellen}" />
+                    <DataGridTextColumn Header="Naam" Binding="{Binding Path=Naam,UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Lichten" Binding="{Binding Path=Lichten,UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridCheckBoxColumn Header="Bellen" Binding="{Binding Path=Bellen,UpdateSourceTrigger=PropertyChanged}" />
                     <DataGridTemplateColumn Header="Fasecyclus" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -78,7 +78,7 @@
                         Header="Type"
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:RateltikkerTypeEnum}}}"  />
-                    <DataGridTextColumn Header="Naloop tijd" Binding="{Binding Path=NaloopTijd}" >
+                    <DataGridTextColumn Header="Naloop tijd" Binding="{Binding Path=NaloopTijd,UpdateSourceTrigger=PropertyChanged}" >
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>

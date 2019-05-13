@@ -968,12 +968,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             #region Noodaanvragen
 
-            if (c.OVData.OVIngrepen.Any(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
+            if (c.OVData.OVIngrepen.Any(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
             {
                 sb.AppendLine();
                 sb.AppendLine($"{ts}/* Noodaanvragen obv koplus */");
 
-                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.VersneldeInmeldingKoplus != NooitAltijdAanUitEnum.Nooit && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
+                foreach (var ov in c.OVData.OVIngrepen.Where(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
                 {
                     sb.Append($"{ts}if (!C[{_cpf}{_cvc}{ov.FaseCyclus}] && DB[{_dpf}{ov.Koplus}] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}]");
                     if (ov.KoplusKijkNaarWisselstand && ov.HasOVIngreepWissel())

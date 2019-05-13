@@ -581,7 +581,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
 				if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 				{
-                    sb.Append($" /*");
+                    sb.Append($" /* ");
                     sb.Append($"{elem.Commentaar}".PadRight(pad3));
                     sb.Append($" */");
                 }
@@ -611,7 +611,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     }
 					if (!string.IsNullOrWhiteSpace(elem.Commentaar))
 					{
-                        sb.Append($" /*");
+                        sb.Append($" /* ");
                         sb.Append($"{elem.Commentaar}".PadRight(pad3));
                         sb.Append($" */");
                     }

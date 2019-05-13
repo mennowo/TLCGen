@@ -1388,7 +1388,7 @@
             <Default>blk</Default>
             <Setting>blk</Setting>
             <Type>Timer</Type>
-            <Description>Belokkertijd na ingreep OV fase _E1_</Description>
+            <Description>Blokkeertijd na ingreep OV fase _E1_</Description>
           </Setting>
           <Setting>
             <Default>btovg</Default>

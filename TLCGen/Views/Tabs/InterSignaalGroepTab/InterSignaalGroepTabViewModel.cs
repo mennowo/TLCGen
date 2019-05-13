@@ -925,6 +925,12 @@ namespace TLCGen.ViewModels
         {
             _MatrixChanged = true;
 
+            if (message.IsNew)
+            {
+                BuildConflictMatrix();
+                return;
+            }
+
             // Conflict
             if (message.Conflict != null)
             {

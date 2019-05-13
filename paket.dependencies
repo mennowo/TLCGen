@@ -9,3 +9,4 @@ nuget NUnit framework: >= net45
 nuget Gu.Wpf.DataGrid2D framework: >= net45
 nuget gong-wpf-dragdrop >= 2 alpha framework: >= net45
 nuget DocumentFormat.OpenXml framework: >= net45
+nuget NewtonSoft.Json framework: >= net45

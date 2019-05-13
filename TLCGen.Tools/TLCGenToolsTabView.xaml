@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="TLCGen.Plugins.Tools.TLCGenToolsTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TLCGen.Plugins.Tools"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label Content="Combinatie templates" FontWeight="Bold" />
+        <Label Grid.Column="2" Content="Opties voor template" FontWeight="Bold" />
+        <ListView ItemsSource="{Binding Path=CombinatieTemplates}" Grid.Row="1" Margin="2" Name="CTList"
+                  SelectedItem="{Binding Path=SelectedTemplate}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Label Content="{Binding Path=Name}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
+        <Grid Grid.Row="1" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <local:CombinatieTemplateView Margin="2" DataContext="{Binding ElementName=CTList,Path=SelectedItem}" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <Button Content="Toepassen" Command="{Binding Path=ApplyTemplateCommand}" Margin="2" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
