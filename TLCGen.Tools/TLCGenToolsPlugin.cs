@@ -23,13 +23,12 @@ namespace TLCGen.Plugins.Tools
         {
             get
             {
-                //ResourceDictionary dict = new ResourceDictionary();
-                //Uri u = new Uri("pack://application:,,,/" +
-                //    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                //    ";component/" + "Resources/Icon.xaml");
-                //dict.Source = u;
-                //return (DrawingImage)dict["AdditorIconDrawingImage"];
-                return null;
+                ResourceDictionary dict = new ResourceDictionary();
+                Uri u = new Uri("pack://application:,,,/" +
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
+                    ";component/" + "Resources/TabIcons.xaml");
+                dict.Source = u;
+                return (DrawingImage)dict["ToolsTabDrawingImage"];
             }
         }
 
