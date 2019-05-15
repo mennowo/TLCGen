@@ -287,11 +287,13 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine("#ifdef SUMO");
                     sb.AppendLine($"{ts}/* SUMO KOPPELING */");
                     sb.AppendLine($"{ts}/* ============== */");
+                    var id = _MyModel.PrependIdToDetectors ? _MyModel.SumoKruispuntNaam : "";
                     foreach(var d in _MyModel.Detectoren.Where(x => !string.IsNullOrWhiteSpace(x.SumoNaam1)))
                     {
-                        sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[0], 32, \"%s\", \"{d.SumoNaam1}\");");
-                        if (!string.IsNullOrWhiteSpace(d.SumoNaam2)) sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[1], 32, \"%s\", \"{d.SumoNaam2}\");");
-                        if (!string.IsNullOrWhiteSpace(d.SumoNaam3)) sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[2], 32, \"%s\", \"{d.SumoNaam3}\");");
+
+                        sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[0], 32, \"%s\", \"{id}{d.SumoNaam1}\");");
+                        if (!string.IsNullOrWhiteSpace(d.SumoNaam2)) sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[1], 32, \"%s\", \"{id}{d.SumoNaam2}\");");
+                        if (!string.IsNullOrWhiteSpace(d.SumoNaam3)) sb.AppendLine($"{ts}sprintf_s(SUMODetectors[{_dpf}{d.Naam}].SumoNamen[2], 32, \"%s\", \"{id}{d.SumoNaam3}\");");
                         if (d.Selectief) sb.AppendLine($"{ts}SUMODetectors[{_dpf}{d.Naam}].Selectief = TRUE;");
                     }
                     sb.AppendLine($"{ts}for (isumo = 0; isumo < {_MyModel.SumoKruispuntLinkMax}; ++isumo)");
@@ -301,9 +303,9 @@ namespace TLCGen.Plugins.Sumo
                     foreach (var fc in _MyModel.FaseCycli)
                     {
                         var ids = fc.SumoIds.Replace(" ", "").Split(',');
-                        foreach(var id in ids)
+                        foreach(var sid in ids)
                         {
-                            sb.AppendLine($"{ts}SUMOIds[{id}] = {_fcpf}{fc.Naam};");
+                            sb.AppendLine($"{ts}SUMOIds[{sid}] = {_fcpf}{fc.Naam};");
                         }
                     }
                     sb.AppendLine("#endif // #ifdef SUMO");

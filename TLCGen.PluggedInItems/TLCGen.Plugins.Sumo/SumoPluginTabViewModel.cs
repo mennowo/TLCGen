@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models.Enumerations;
+using WindowsInput;
 
 namespace TLCGen.Plugins.Sumo
 {
@@ -18,6 +21,7 @@ namespace TLCGen.Plugins.Sumo
 
         SumoDataModel _data;
         SumoPlugin _plugin;
+        HotKey _namingHotkey = null;
 
         #endregion // Fields
 
@@ -129,6 +133,19 @@ namespace TLCGen.Plugins.Sumo
             }
         }
 
+        public bool PrependIdToDetectors
+        {
+            get => _data?.PrependIdToDetectors ?? false;
+            set
+            {
+                if (_data != null)
+                {
+                    _data.PrependIdToDetectors = value;
+                    RaisePropertyChanged<object>("PrependIdToDetectors", broadcast: true);
+                }
+            }
+        }
+
         public bool AutoStartSumo
         {
             get => _data?.AutoStartSumo ?? false;
@@ -180,9 +197,54 @@ namespace TLCGen.Plugins.Sumo
             private set;
         }
 
+        public DetectorSumoDataViewModel SelectedDetector
+        {
+            get => _selectedDetector;
+            set
+            {
+                _selectedDetector = value;
+                RaisePropertyChanged();
+            }
+        }
         #endregion // Properties
 
         #region Commands
+
+        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _startSUMODetectorNamingCommand;
+        public ICommand StartSUMODetectorNamingCommand => _startSUMODetectorNamingCommand ?? (_startSUMODetectorNamingCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+            {
+                _namingHotkey = new HotKey(Key.F6, KeyModifier.None, OnHotKeyHandler);
+            },
+            () => _namingHotkey == null && SelectedDetector != null));
+
+        private GalaSoft.MvvmLight.CommandWpf.RelayCommand _stopSUMODetectorNamingCommand;
+        private DetectorSumoDataViewModel _selectedDetector;
+
+        public ICommand StopSUMODetectorNamingCommand => _stopSUMODetectorNamingCommand ?? (_stopSUMODetectorNamingCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand(() =>
+            {
+            _namingHotkey.Unregister();
+            _namingHotkey.Dispose();
+            _namingHotkey = null;
+            },
+            () => _namingHotkey != null));
+
+        private void OnHotKeyHandler(HotKey hotKey)
+        {
+            var name = (PrependIdToDetectors ? SumoKruispuntNaam : "") + SelectedDetector.SumoNaam1;
+            var index = Detectoren.IndexOf(SelectedDetector);
+            if (index < Detectoren.Count - 1)
+            {
+                SelectedDetector = Detectoren[index + 1];
+            }
+            var sim = new InputSimulator();
+            Clipboard.SetText(name);
+            sim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.CONTROL);
+            sim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_A);
+            sim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
+            sim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.CONTROL);
+            sim.Keyboard.KeyDown(WindowsInput.Native.VirtualKeyCode.VK_V);
+            sim.Keyboard.KeyUp(WindowsInput.Native.VirtualKeyCode.CONTROL);
+        }
 
         #endregion // Commands
 
@@ -266,7 +328,7 @@ namespace TLCGen.Plugins.Sumo
                     }
                 }
             }
-            if(message.AddedDetectoren == null && message.RemovedDetectoren == null)
+            if (message.AddedDetectoren == null && message.RemovedDetectoren == null)
             {
                 _plugin.UpdateModel();
             }

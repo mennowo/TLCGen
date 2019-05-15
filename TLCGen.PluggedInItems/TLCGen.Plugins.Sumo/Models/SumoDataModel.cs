@@ -16,6 +16,7 @@ namespace TLCGen.Plugins.Sumo
         public string SumoKruispuntNaam { get; set; }
         public int SumoKruispuntLinkMax { get; set; }
         public bool AutoStartSumo { get; set; }
+        public bool PrependIdToDetectors { get; set; }
         public string SumoHomePath { get; set; }
         public string SumoConfigPath { get; set; }
 

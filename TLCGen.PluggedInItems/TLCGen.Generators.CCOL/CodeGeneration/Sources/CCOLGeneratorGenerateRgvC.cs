@@ -304,19 +304,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     for (int i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
                         if (!faseMetRgv.Detectoren.Any(x => x.Rijstrook == i)) continue;
-                        sb.Append($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (");
                         var first = true;
                         foreach(var d in faseMetRgv.Detectoren.Where(x => x.Rijstrook == i))
                         {
                             var hd = fc.HiaatDetectoren.FirstOrDefault(x => x.Detector == d.Naam);
                             if(hd != null)
                             {
-                                if (!first) sb.Append(" || ");
+                                if(first)
+                                {
+                                    sb.Append($"{ts}MK{i}[{_fcpf}{fc.FaseCyclus}] = SVG[{_fcpf}{fc.FaseCyclus}] || G[{_fcpf}{fc.FaseCyclus}] && MK{i}[{_fcpf}{fc.FaseCyclus}] && (");
+                                }
+                                else
+                                {
+                                    sb.Append(" || ");
+                                }
                                 sb.Append($"RT[{_tpf}{_thd}{_dpf}{d.Naam}] || T[{_tpf}{_thd}{_dpf}{d.Naam}]");
                                 first = false;
                             }
                         }
-                        sb.AppendLine(");");
+                        if (!first) sb.AppendLine(");");
                     }
                 }
             }
