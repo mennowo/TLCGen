@@ -5,7 +5,7 @@ using TLCGen.Models;
 
 namespace TLCGen.ViewModels
 {
-    public class HalfstarFaseCyclusAlternatiefViewModel : ViewModelBase, IViewModelWithItem, IComparable<HalfstarFaseCyclusAlternatiefViewModel>
+    public class HalfstarFaseCyclusAlternatiefViewModel : ViewModelBase, IViewModelWithItem, IComparable<HalfstarFaseCyclusAlternatiefViewModel>, IComparable
     {
         #region Properties
 
@@ -42,9 +42,18 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-        
+
         #endregion // Properties
-        
+
+        #region IComparable
+
+        public int CompareTo(object obj)
+        {
+            return FaseCyclus.CompareTo(((HalfstarFaseCyclusAlternatiefViewModel)obj).FaseCyclus);
+        }
+
+        #endregion // IComparable
+
         #region IComparable<HalfstarFaseCyclusAlternatiefViewModel>
 
         public int CompareTo(HalfstarFaseCyclusAlternatiefViewModel other)

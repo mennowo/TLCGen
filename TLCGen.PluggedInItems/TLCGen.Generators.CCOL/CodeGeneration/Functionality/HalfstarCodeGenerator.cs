@@ -1495,7 +1495,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* Geen prioriteit indien voorwaarden tegenhouden omschakelen waar zijn */");
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}])");
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}] && IH[{_hpf}{_hplact}])");
                         sb.AppendLine($"{ts}{{");
                         sb.AppendLine($"{ts}{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
                         sb.AppendLine($"{ts}{ts}{ts}iXPrio[fc] |= BIT6;");

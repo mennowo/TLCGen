@@ -10,6 +10,7 @@ namespace TLCGen.Messaging.Messages
         public string FaseNaar { get; }
 
         public bool IsCoupled { get; }
+        public bool IsNew { get; }
 
         public ConflictModel Conflict { get; }
         public NaloopModel Naloop { get; }
@@ -18,7 +19,7 @@ namespace TLCGen.Messaging.Messages
         public MeeaanvraagModel Meeaanvraag { get; }
         public LateReleaseModel LateRelease { get; }
 
-        public InterSignaalGroepChangedMessage(string fasevan, string fasenaar, object synchronisatieobject, bool iscoupled = false)
+        public InterSignaalGroepChangedMessage(string fasevan, string fasenaar, object synchronisatieobject, bool iscoupled = false, bool isnew = false)
         {
             var t = synchronisatieobject.GetType();
             if (t == typeof(ConflictModel)) Conflict = (ConflictModel)synchronisatieobject;
@@ -30,6 +31,7 @@ namespace TLCGen.Messaging.Messages
             FaseVan = fasevan;
             FaseNaar = fasenaar;
             IsCoupled = iscoupled;
+            IsNew = isnew;
         }
     }
 }

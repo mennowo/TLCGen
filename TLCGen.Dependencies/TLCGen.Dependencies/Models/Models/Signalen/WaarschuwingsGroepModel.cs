@@ -15,10 +15,10 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string FaseCyclusVoorAansturing { get; set; }
 
-        [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam")]
+        [IOElement("wl", BitmappedItemTypeEnum.Uitgang, "Naam", "Lichten")]
         public BitmapCoordinatenDataModel LichtenBitmapData { get; set; }
 
-        [IOElement("bel", BitmappedItemTypeEnum.Uitgang, "Naam")]
+        [IOElement("bel", BitmappedItemTypeEnum.Uitgang, "Naam", "Bellen")]
         public BitmapCoordinatenDataModel BellenBitmapData { get; set; }
 
         public bool ShouldSerializeLichtenBitmapData()

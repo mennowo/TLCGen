@@ -356,9 +356,10 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Send(new NameChangedMessage(msg.ObjectType, msg.OldName, msg.NewName));
         }
 
-        public void ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType)
+        public int ChangeNameOnObject(object obj, string oldName, string newName, TLCGenObjectTypeEnum objectType)
         {
-            if (obj == null) return;
+            var i = 0;
+            if (obj == null) return i;
             Type objType = obj.GetType();
 
             // class refers to?
@@ -381,6 +382,7 @@ namespace TLCGen.ModelManagement
                         if ((string)propValue == oldName)
                         {
                             property.SetValue(obj, newName);
+                            ++i;
                         }
                     }
                     // otherwise, check if the string has RefersTo itself, and set if needed
@@ -392,6 +394,7 @@ namespace TLCGen.ModelManagement
                             if ((string)propValue == oldName)
                             {
                                 property.SetValue(obj, newName);
+                                ++i;
                             }
                         }
                     }
@@ -410,6 +413,7 @@ namespace TLCGen.ModelManagement
                     ChangeNameOnObject(propValue, oldName, newName, objectType);
                 }
             }
+            return i;
         }
 
         public void OnModelManagerMessage(ModelManagerMessageBase msg)
