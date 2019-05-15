@@ -1469,7 +1469,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				
 				case CCOLCodeTypeEnum.HstCPostDumpApplication:
 					return sb.ToString();
-
+                    
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                     if (c.HalfstarData.IsHalfstar)
                     {
@@ -1491,7 +1491,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{{");
                             foreach (var ov in c.OVData.OVIngrepen)
                             {
-                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] = SCH[{_schpf}{_schovpriople}] ? poAanvraag : 0; ");
+                                sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] |= OV_ple_BepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{ov.FaseCyclus});");
                             }
                             sb.AppendLine($"{ts}}}");
                             sb.AppendLine();
@@ -1563,13 +1563,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.HstCOVSettingsHalfstar:
+                    var enter = false;
+                    if (c.HalfstarData.IsHalfstar && c.HasPT())
+                    {
+                        sb.AppendLine($"/* Bepalen tijd na TXD t.b.v. verlengen bij OV ingreep */");
+                        foreach (var ov in c.OVData.OVIngrepen)
+                        {
+                            sb.AppendLine($"{ts}iExtraGroenNaTXD[ovFC{ov.FaseCyclus}] = PRM[{_prmpf}{_prmnatxdhst}{ov.FaseCyclus}];");
+                        }
+                        enter = true;
+                    }
                     if (c.HalfstarData.Hoofdrichtingen.Any())
                     {
-                        sb.AppendLine($"{ts}HoofdrichtingOpties(NG, ");
+                        if (enter) sb.AppendLine();
+                        sb.AppendLine($"{ts}OV_ple_BepaalHoofdrichtingOpties(NG, ");
                         foreach (var hr in c.HalfstarData.Hoofdrichtingen)
                         {
                             // TODO: make this configurable (replace FALSE...)
-                            sb.AppendLine($"{ts}                   (va_count) {_fcpf}{hr.FaseCyclus}, (va_mulv) FALSE, (va_mulv) FALSE, (va_mulv) FALSE,");
+                            sb.AppendLine($"{ts}                   (va_mulv)SCH[{_schpf}{_schtegenov}{hr.FaseCyclus}hst], (va_mulv)SCH[{_schpf}{_schafkwgov}{hr.FaseCyclus}hst], (va_mulv)SCH[{_schpf}{_schafkvgov}{hr.FaseCyclus}hst], TFG_max[{_fcpf}{hr.FaseCyclus}],");
                         }
                         sb.AppendLine($"{ts}                   (va_count)END); ");
                     }

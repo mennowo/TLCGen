@@ -28,6 +28,7 @@ typedef struct {
 extern VLOG_MON5 VLOG_mon5[FCMAX];
 
 /* Functie declaraties voor functies uit de applicatie */
+void OVInitExtra(void);
 void OVInstellingen(void);
 void RijTijdScenario(void);
 void InUitMelden(void);

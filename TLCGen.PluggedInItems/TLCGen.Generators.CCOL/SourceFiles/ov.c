@@ -167,6 +167,8 @@ void OVInit(void)
             }
         }
     }
+
+	OVInitExtra();
 }
 
 int BepaalPrioriteitsOpties(int prm_prio)

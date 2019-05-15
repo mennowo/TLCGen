@@ -35,6 +35,7 @@
         // OV
         OvCIncludes,
 		OvCTop,
+		OvCInitOV,
 		OvCInstellingen,
 		OvCRijTijdScenario,
 		OvCInUitMelden,

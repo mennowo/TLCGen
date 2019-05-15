@@ -24,6 +24,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.Append(GenerateOvCIncludes(controller));
             sb.Append(GenerateOvCTop(controller));
+            sb.Append(GenerateOvCInit(controller));
             sb.Append(GenerateOvCInstellingen(controller));
             sb.Append(GenerateOvCRijTijdScenario(controller));
             sb.Append(GenerateOvCInUitMelden(controller));
@@ -231,6 +232,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("   - iLangstWachtendeAlternatief         : de regeling maakt gebruik van");
             sb.AppendLine("                                           langstwachtende alternatief");
             sb.AppendLine("   ------------------------------------------------------------------------------------------- */");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCInit(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void OVInitExtra(void) ");
+            sb.AppendLine("{");
+            sb.AppendLine("}");
             sb.AppendLine();
 
             return sb.ToString();
