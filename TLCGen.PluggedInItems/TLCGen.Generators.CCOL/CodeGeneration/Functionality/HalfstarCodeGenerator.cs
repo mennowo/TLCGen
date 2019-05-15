@@ -227,7 +227,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_mslave}", _mslave));
 					
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schslavebep}", 0, CCOLElementTimeTypeEnum.SCH_type, _schslavebep));
-					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvolgmasterpl}", 32767, CCOLElementTimeTypeEnum.None, _prmvolgmasterpl));
+					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmvolgmasterpl}", 65535, CCOLElementTimeTypeEnum.None, _prmvolgmasterpl));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_toffset}", 0, CCOLElementTimeTypeEnum.TS_type, _toffset));
 					_myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_txmarge}", 2, CCOLElementTimeTypeEnum.TS_type, _txmarge));
 				}
@@ -1241,8 +1241,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
 					sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinst}] = 0;");
-					sb.AppendLine($"{ts}{ts}COPY_2_TIG = FALSE;");
-					sb.AppendLine($"{ts}{ts}CIF_PARM1WIJZAP = (s_int16) (&SCH[{_schpf}{_schinst}] - CIF_PARM1);");
+					sb.AppendLine($"{ts}{ts}#if defined CCOLTIG");
+					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TRIG = FALSE;");
+					sb.AppendLine($"{ts}{ts}#else");
+					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TIG = FALSE;");
+					sb.AppendLine($"{ts}{ts}#endif");
+                    sb.AppendLine($"{ts}{ts}CIF_PARM1WIJZAP = (s_int16) (&SCH[{_schpf}{_schinst}] - CIF_PARM1);");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine($"{ts}RTX = FALSE;");
 					sb.AppendLine($"{ts}");

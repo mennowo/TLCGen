@@ -221,9 +221,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
                         sb.AppendLine($"{ts}/* vrije klokperiode: {comm} */");
                         sb.AppendLine($"{ts}/* -------------------{new string('-', comm.Length)} */");
-                        sb.AppendLine($"{ts}if (klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpero}{kpm.Naam}], PRM[{_prmpf}{_prmetkp}{_prmpero}{kpm.Naam}]) &&");
-                        sb.AppendLine($"{ts}    dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpero}{kpm.Naam}]));");
-                        sb.AppendLine($"{ts}{ts}IH[{_hpf}{_hperiod}{kpm.Naam}] = TRUE;");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hperiod}{kpm.Naam}] = (klokperiode(PRM[{_prmpf}{_prmstkp}{_prmpero}{kpm.Naam}], PRM[{_prmpf}{_prmetkp}{_prmpero}{kpm.Naam}]) && dagsoort(PRM[{_prmpf}{_prmdckp}{_prmpero}{kpm.Naam}]));");
                     }
                     if (c.PeriodenData.Perioden.Count > 0)
                     {

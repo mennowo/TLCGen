@@ -6,7 +6,11 @@
    #include <stdio.h>      /* declaration printf()       */
 #endif
 
+#if defined CCOLTIG
+bool COPY_2_TRIG = FALSE;  /* nieuwe TX-tijden copieren naar TRIG tabel             */
+#else
 bool COPY_2_TIG = FALSE;  /* nieuwe TX-tijden copieren naar TIG tabel             */
+#endif
 char HalfstarOmschakelenToegestaan = 0;
 
 /*****************************************************************************/
@@ -620,32 +624,40 @@ void set_tx_change(count fc, /* signaalgroep         */
 	/* als geen tweede realisatie mag worden uitgevoerd, dan eerste realisatie instellen */
 	if (!condition || (PRM[ptxb2] == 0) || (ptxb2 == NG) || (pl != PL))
 	{
+		bool copy = FALSE;
 		if (TXA[pl][fc] != PRM[ptxa1])
 		{
 			TXA[pl][fc] = PRM[ptxa1];
-			COPY_2_TIG = TRUE;
+			copy = TRUE;
 		}
 
 		if (TXB[pl][fc] != PRM[ptxb1])
 		{
 			TXB[pl][fc] = PRM[ptxb1];
-			COPY_2_TIG = TRUE;
+			copy = TRUE;
 		}
 		if (TXC[pl][fc] != PRM[ptxc1])
 		{
 			TXC[pl][fc] = PRM[ptxc1];
-			COPY_2_TIG = TRUE;
+			copy = TRUE;
 		}
 		if (TXD[pl][fc] != PRM[ptxd1])
 		{
 			TXD[pl][fc] = PRM[ptxd1];
-			COPY_2_TIG = TRUE;
+			copy = TRUE;
 		}
 		if (TXE[pl][fc] != PRM[ptxe1])
 		{
 			TXE[pl][fc] = PRM[ptxe1];
-			COPY_2_TIG = TRUE;
+			copy = TRUE;
 		}
+		if(copy)
+		{
+#if defined CCOLTIG
+			COPY_2_TRIG = TRUE;
+#else
+			COPY_2_TIG = TRUE;
+#endif
 		return;
 	}
 
