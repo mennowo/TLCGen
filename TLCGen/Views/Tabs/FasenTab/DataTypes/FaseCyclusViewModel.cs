@@ -240,6 +240,10 @@ namespace TLCGen.ViewModels
                         }
                     }
                 }
+                if (AantalRijstroken <= 1)
+                {
+                    if (ToepassenMK2) ToepassenMK2 = false;
+                }
                 RaisePropertyChanged(nameof(ToepassenMK2Enabled));
                 RaisePropertyChanged<object>(nameof(AantalRijstroken), broadcast: true);
                 MessengerInstance.Send(new FaseAantalRijstrokenChangedMessage(_faseCyclus, _faseCyclus.AantalRijstroken));
