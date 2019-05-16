@@ -40,7 +40,7 @@ bool rgv_niet_primair (
     count fc,           /* fasecyclusnummer                             */
     bool *prml[],       /* primaire module toedeling                    */
 	count ml,           /* actieve module                               */
-	count sml,          /* start module                               */
+	bool sml,          /* start module                               */
     count ml_max,       /* maxium aantal modulen                        */
     count hpri,         /* hulpelementnummer                            */
     mulv PRM_mintvg,    /* parameter minimum maximum verlenggroentijd   */

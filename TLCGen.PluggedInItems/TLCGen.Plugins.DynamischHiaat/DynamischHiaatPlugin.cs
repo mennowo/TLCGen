@@ -349,9 +349,7 @@ namespace TLCGen.Plugins.DynamischHiaat
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
-            //_mmk = CCOLGeneratorSettingsProvider.Default.GetElementName("mmk");
-            _mmk = "mk";
-
+            _mmk = CCOLGeneratorSettingsProvider.Default.GetElementName("mmk");
             return base.SetSettings(settings);
         }
 

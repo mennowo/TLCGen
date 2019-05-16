@@ -37,21 +37,18 @@
 
 /* declaratie globale functies */
 /* =========================== */
+   bool rgv_niet_primair (count fc, bool *prml[], count ml, bool sml, count ml_max, count hpri, mulv PRM_mintvg, mulv PRM_tvgomlaag, bool DD_fc);
+   void rgv_verlenggroentijd1(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag, mulv PRM_tvgverschil, mulv PRM_maxtvg_dd,
 #ifdef TVG_VEVG
-   void rgv_verlenggroentijd( count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag,
-                              mulv PRM_tvgverschil, mulv PRM_maxtvg_dd, bool SCH_schrgvwtvs, bool DD_fc);
-
-   void rgv_verlenggroentijd2(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag,
-                              mulv PRM_tvgverschil, mulv PRM_maxtvg_dd, bool SCH_schrgvwtvs, bool DD_fc, bool MK_speciaal);
-#else
-   void rgv_verlenggroentijd( count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag,
-                              mulv PRM_tvgverschil, mulv PRM_maxtvg_dd, /* bool SCH_schrgvwtvs, */ bool DD_fc);
-   void rgv_verlenggroentijd2(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag,
-                              mulv PRM_tvgverschil, mulv PRM_maxtvg_dd, /* bool SCH_schrgvwtvs, */ bool DD_fc, bool MK_speciaal);
+	   bool SCH_schrgvwtvs,
 #endif
-
-   bool rgv_niet_primair (count fc, count ml_max, bool *prml[], count ml, bool sml, count hpri, mulv PRM_mintvg, mulv PRM_tvgomlaag);
-   mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv PRM_tcmax, ...);
+	   bool DD_fc, bool MK_speciaal);
+   void rgv_verlenggroentijd2(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag, mulv PRM_tvgverschil, mulv PRM_maxtvg_dd,
+#ifdef TVG_VEVG
+	   bool SCH_schrgvwtvs,
+#endif
+	   bool DD_fc, bool MK_speciaal);
+   mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va_mulv PRM_tcmin, va_mulv PRM_tcmax, ...);
    mulv berekencyclustijd_va_arg(va_count fcnr_first, ...);
    void copy_TVG_max_to_TVG_basis (void);
    void copy_TVG_rgv_to_TVG_max (void);
