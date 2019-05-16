@@ -417,10 +417,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (!c.OVData.OVIngrepen.Any()) return "";
 
-            sb.AppendLine("void OVSettingsHalfstar(void)");
+            sb.AppendLine("void OVHalfstarSettings(void)");
             sb.AppendLine("{");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCOVSettingsHalfstar, true, true, false, false);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCOVHalfstarSettings, true, true, false, false);
             
             sb.AppendLine("}");
             sb.AppendLine();

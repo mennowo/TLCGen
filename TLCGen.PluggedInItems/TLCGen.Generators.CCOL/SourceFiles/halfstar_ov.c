@@ -305,7 +305,7 @@ void signaalplan_primair_ov_ple(void)
 /* Params:  Geen                                                                          */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void OV_ple_init(void)
+void OVHalfstarInit(void)
 {
 	int i;
 
@@ -321,7 +321,7 @@ void OV_ple_init(void)
 }
 
 
-int OV_ple_BepaalPrioriteitsOpties(int prm_prio) {
+int OVHalfstarBepaalPrioriteitsOpties(int prm_prio) {
 	int p, iReturn;
 
 	for (iReturn = 0, p = PRM[prm_prio] % 10000L;
@@ -372,7 +372,7 @@ int OV_ple_BepaalPrioriteitsOpties(int prm_prio) {
 /*                         (va_count) END);                                               */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-void OV_ple_BepaalHoofdrichtingOpties(int dummy, ...)
+void OVHalfstarBepaalHoofdrichtingOpties(int dummy, ...)
 {
 	va_list argpt;                                     /*  variabele argumentenlijst       */
 	count fc;                                          /*  arraynummer fc hoofdrichting    */
