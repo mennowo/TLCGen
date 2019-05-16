@@ -651,13 +651,14 @@ void set_tx_change(count fc, /* signaalgroep         */
 			TXE[pl][fc] = PRM[ptxe1];
 			copy = TRUE;
 		}
-		if(copy)
+		if (copy)
 		{
 #if defined CCOLTIG
 			COPY_2_TRIG = TRUE;
 #else
 			COPY_2_TIG = TRUE;
 #endif
+		}
 		return;
 	}
 
