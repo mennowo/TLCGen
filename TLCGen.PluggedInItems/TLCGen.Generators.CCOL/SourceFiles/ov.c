@@ -2321,7 +2321,7 @@ void AfhandelingOV(void)
        TVG_max wordt aangepast op basis van de TerugKomGroenTijd.
        ---------------------------------------------------------- */
 	TerugKomGroen();
-	OVTerugKomGroenExtra();
+	OVTerugkomGroenExtra();
 
     /* ---------------------------------------------------------
        Bijzonder realiseren als het StartGroenMoment is bereikt.

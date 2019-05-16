@@ -417,6 +417,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (!c.OVData.OVIngrepen.Any()) return "";
 
+            sb.AppendLine($"/* Deze functie wordt aangeroepen vanuit OVInstellingen() in {c.Data.Naam}ov.c */");
             sb.AppendLine("void OVHalfstarSettings(void)");
             sb.AppendLine("{");
 

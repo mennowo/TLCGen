@@ -1509,3 +1509,34 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 	}
 	return FALSE;
 }
+
+bool TX_between(int tx_value, int tx_first, int tx_second, int tx_max)
+{
+	bool fReturn = TRUE;
+
+	/* check boundaries */
+	if ((tx_value <= tx_max) && (tx_first <= tx_max) && (tx_second <= tx_max))
+	{
+		if (tx_first < tx_second) // b before d, c should be between b and d
+		{
+			fReturn = (bool)((tx_value >= tx_first) && (tx_value <= tx_second));
+		}
+		else
+		{
+			// b after d, ie 13 and 3
+			if (tx_value >= tx_first)
+			{
+				fReturn = (bool)(((tx_value + tx_max) >= tx_first) && (tx_value < (tx_second + tx_max)));
+			}
+			else
+			{
+				fReturn = (bool)(((tx_value + tx_max) >= tx_first) && (tx_value < tx_second));
+			}
+		}
+	}
+	else
+	{
+		fReturn = FALSE;
+	}
+	return fReturn;
+}
