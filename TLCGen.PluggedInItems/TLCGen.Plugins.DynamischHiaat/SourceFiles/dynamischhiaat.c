@@ -184,7 +184,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
   bool svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[5], tdh_saw[5];
   count dp_teller=0;                                /* telt aantal lussen vanaf stopstreep op bepaalde rijstrook */
 
-  if (nietToepassen) {                              /* apart doorlopen ivm snelheid (va_arg 1 x per sewconde)    */ /*-*/
+  if (nietToepassen) {                              /* apart doorlopen ivm snelheid va_arg (1 x per seconde)     */
 
     /* zet oorspronkelijke statische hiaattijden terug ... */ /*-*/
     if (TS) {
@@ -385,7 +385,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
   hulp_bit3 = FALSE;
   for (rijstrook=1; rijstrook<=max_rijstrook; rijstrook++)   /* voor alle rijstroken van de betreffende signaalgroep */
   {
-    if (verlengen[rijstrook]) {
+    if (verlengen[rijstrook] || detstor[fc]) {
       hulp_bit3 = TRUE;
     }
     else

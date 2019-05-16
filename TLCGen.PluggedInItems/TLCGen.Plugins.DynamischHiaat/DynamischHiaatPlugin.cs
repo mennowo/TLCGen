@@ -224,6 +224,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                         "Foutieve signaalgroep instellingen", MessageBoxButton.OK);
                 }
 
+                _myElements.Add(new CCOLElement($"dynhiaat{msg.SignalGroupName}", 1, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Toepassen dynamsich hiaat bij fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"opdrempelen{msg.SignalGroupName}", CCOLElementTypeEnum.HulpElement, $"Opdrempelen toepassen voor fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"opdrempelen{msg.SignalGroupName}", msg.Opdrempelen ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, CCOLElementTypeEnum.Schakelaar, $"Opdrempelen toepassen voor fase {msg.SignalGroupName}"));
                 _myElements.Add(new CCOLElement($"geendynhiaat{msg.SignalGroupName}", CCOLElementTypeEnum.HulpElement, "Tegenhouden toepassen dynamische hiaattijden voor fase " + msg.SignalGroupName));
@@ -310,7 +311,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     {
                         var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
                         if (ofc == null) continue;
-                        sb.AppendLine($"{ts}hiaattijden_verlenging(IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
+                        sb.AppendLine($"{ts}hiaattijden_verlenging(SCH[{_schpf}dynhiaat{sg.SignalGroupName}] && IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
                         for (int i = 0; i < ofc.AantalRijstroken; i++)
                         {
                             foreach(var dd in sg.DynamischHiaatDetectoren)
