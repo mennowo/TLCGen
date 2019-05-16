@@ -11,6 +11,10 @@ namespace TLCGen.Models
 
         [HasDefault(false)]
 		public string FaseCyclus { get; set; }
+
+        public bool Tegenhouden { get; set; }
+        public bool AfkappenWG { get; set; }
+        public bool AfkappenVG { get; set; }
 		
 		#endregion // Properties
 	}

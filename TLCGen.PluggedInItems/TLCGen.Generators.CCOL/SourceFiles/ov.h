@@ -37,6 +37,13 @@ void PrioriteitsToekenningExtra(void);
 void TegenhoudenConflictenExtra(void);
 void PostAfhandelingOV(void);
 void OVPARCorrecties(void);
+void OnderMaximumExtra(void);
+void AfkapGroenExtra(void);
+void StartGroenMomentenExtra(void);
+void OVAfkappenExtra(void);
+void OVTerugKomGroenExtra(void);
+void OVGroenVasthoudenExtra(void);
+void OVMeetKriteriumExtra(void);
 
 /* Functie declaraties voor functies uit ov.c */
 void AfhandelingOV(void);

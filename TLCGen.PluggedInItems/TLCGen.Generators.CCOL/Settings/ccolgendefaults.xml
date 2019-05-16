@@ -684,12 +684,6 @@
             <Description>Prioriteit fase _E1_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>mingov</Default>
-            <Setting>mingov</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale groentijd bij afkappen fase _E1_ tijdens plan _E2_</Description>
-          </Setting>
-          <Setting>
             <Default>altghst</Default>
             <Setting>altghst</Setting>
             <Type>Parameter</Type>
@@ -706,6 +700,30 @@
             <Setting>altghst</Setting>
             <Type>Schakelaar</Type>
             <Description>Alternatief realiseren fase _E1_ toestaan tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>tegenov</Default>
+            <Setting>tegenov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Tegenhouden hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>afkwgov</Default>
+            <Setting>afkwgov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Afkappen WG hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>afkvgov</Default>
+            <Setting>afkvgov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Afkappen VG hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>natxdhst</Default>
+            <Setting>natxdhst</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximale tijd na TXD tbv. verlengen voor OV ingreep bij fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

@@ -39,6 +39,13 @@
 		OvCInstellingen,
 		OvCRijTijdScenario,
 		OvCInUitMelden,
+		OvCOnderMaximum,
+		OvCAfkapGroen,
+		OvCStartGroenMomenten,
+		OvCAfkappen,
+		OvCTerugkomGroen,
+		OvCGroenVasthouden,
+		OvCMeetkriterium,
 	    OvCPrioriteitsOpties,
         OvCPrioriteitsNiveau,
 	    OvCPrioriteitsToekenning,
@@ -76,6 +83,6 @@
 		HstCPreSystemApplication,
 		HstCPostSystemApplication,
 		HstCPostDumpApplication,
-        HstCOVSettingsHalfstar
+        HstCOVHalfstarSettings
     };
 }
