@@ -62,6 +62,7 @@ bool tussen_txb_en_txc(count fc);
 bool tussen_txb_en_txd(count fc);
 void tvga_timer_halfstar(void);
 void tweederealisatie_halfstar(count fc_1, count fc_2);
+bool TX_between(int tx_value, int tx_first, int tx_second, int tx_max);
 void set_tx_change(count fc, count pl,
 	                 count ptxa1, count ptxb1, count ptxc1, count ptxd1, count ptxe1, 
 	                 count ptxa2, count ptxb2, count ptxc2, count ptxd2, count ptxe2, bool condition);

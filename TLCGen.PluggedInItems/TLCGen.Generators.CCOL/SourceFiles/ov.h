@@ -12,6 +12,29 @@
 #define  OV_PAR_BIT      BIT6
 #define OV_RTFB_BIT      BIT6
 
+typedef enum
+{
+	poGeenPrioriteit = 0,
+	poAanvraag = 1,
+	poAfkappenKonfliktRichtingen = 2,
+	poGroenVastHouden = 4,
+	poBijzonderRealiseren = 8,
+	poAfkappenKonflikterendOV = 16,
+	poNoodDienst = 32,
+
+	poPLGroenVastHoudenNaTXD = 64,
+	poPLTegenhoudenHoofdrichting = 128,
+	poPLAbsolutePrioriteit = 256,
+	poPLNoodDienst = 512,
+} TPrioriteitsOpties;
+
+typedef enum
+{
+	rtsOngehinderd,
+	rtsBeperktGehinderd,
+	rtsGehinderd,
+} TRijTijdScenario;
+
 typedef struct {
 	bool voorinov;
 	bool inmov;
@@ -41,7 +64,7 @@ void OnderMaximumExtra(void);
 void AfkapGroenExtra(void);
 void StartGroenMomentenExtra(void);
 void OVAfkappenExtra(void);
-void OVTerugKomGroenExtra(void);
+void OVTerugkomGroenExtra(void);
 void OVGroenVasthoudenExtra(void);
 void OVMeetKriteriumExtra(void);
 

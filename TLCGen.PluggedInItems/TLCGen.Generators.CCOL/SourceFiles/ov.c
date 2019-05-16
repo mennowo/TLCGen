@@ -5,24 +5,6 @@
 
 #include "ov.h"
 
-typedef enum
-{
-    poGeenPrioriteit             =0,
-    poAanvraag                   =1,
-    poAfkappenKonfliktRichtingen =2,
-    poGroenVastHouden            =4,
-    poBijzonderRealiseren        =8,
-    poAfkappenKonflikterendOV    =16,
-    poNoodDienst                 =32,
-} TPrioriteitsOpties;
-
-typedef enum
-{
-    rtsOngehinderd,
-    rtsBeperktGehinderd,
-    rtsGehinderd,
-} TRijTijdScenario;
-
 VLOG_MON5 VLOG_mon5[FCMAX];
 
 int iMaximumWachtTijd[FCMAX];
@@ -2321,7 +2303,7 @@ void AfhandelingOV(void)
        TVG_max wordt aangepast op basis van de TerugKomGroenTijd.
        ---------------------------------------------------------- */
 	TerugKomGroen();
-	OVTerugKomGroenExtra();
+	OVTerugkomGroenExtra();
 
     /* ---------------------------------------------------------
        Bijzonder realiseren als het StartGroenMoment is bereikt.

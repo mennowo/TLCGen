@@ -1057,7 +1057,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCAfkapgroen(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVAfkapgroen(void)");
+            sb.AppendLine("void AfkapGroenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCAfkapGroen, true, true, false, true);
@@ -1070,7 +1070,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCStartGroenMomenten(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OvStartGroenMomenten(void)");
+            sb.AppendLine("void StartGroenMomentenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCStartGroenMomenten, true, true, false, true);
@@ -1083,7 +1083,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCAfkappen(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVAfkappen(void)");
+            sb.AppendLine("void OVAfkappenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCAfkappen, true, true, false, true);
@@ -1096,7 +1096,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCTerugkomGroen(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVTerugkomGroen(void)");
+            sb.AppendLine("void OVTerugkomGroenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTerugkomGroen, true, true, false, true);
@@ -1109,7 +1109,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCGroenVasthouden(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVGroenVasthouden(void)");
+            sb.AppendLine("void OVGroenVasthoudenExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCGroenVasthouden, true, true, false, true);
@@ -1122,7 +1122,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         private string GenerateOvCMeetkriterium(ControllerModel c)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("void OVMeetkriterium(void)");
+            sb.AppendLine("void OVMeetKriteriumExtra(void)");
             sb.AppendLine("{");
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCMeetkriterium, true, true, false, true);

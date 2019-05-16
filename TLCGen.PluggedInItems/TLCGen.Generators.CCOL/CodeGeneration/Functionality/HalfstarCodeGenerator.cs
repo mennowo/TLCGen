@@ -128,9 +128,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 foreach(var hr in c.HalfstarData.Hoofdrichtingen)
                 {
-				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtegenov}", hr.Tegenhouden ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schtegenov, hr.FaseCyclus));
-				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schafkwgov}", hr.AfkappenVG ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schafkwgov, hr.FaseCyclus));
-				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schafkvgov}", hr.AfkappenVG ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schafkvgov, hr.FaseCyclus));
+				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schtegenov}{hr.FaseCyclus}", hr.Tegenhouden ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schtegenov, hr.FaseCyclus));
+				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schafkwgov}{hr.FaseCyclus}", hr.AfkappenVG ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schafkwgov, hr.FaseCyclus));
+				    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schafkvgov}{hr.FaseCyclus}", hr.AfkappenVG ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schafkvgov, hr.FaseCyclus));
                 }
 
                 if (c.OVData.OVIngrepen.Any())
@@ -546,24 +546,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{ts}/* bijhouden verlenggroentijden t.b.v. calculaties diverse functies */");
 					sb.AppendLine($"{ts}{ts}tvga_timer_halfstar();");
 					sb.AppendLine($"{ts}}}");
-					sb.AppendLine();
-                    if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
-					{
-						sb.AppendLine($"{ts}/* tbv ov_ple */");
-						sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
-						sb.AppendLine($"{ts}{{");
-						sb.AppendLine($"{ts}{ts}/* Instellen OV parameters */");
-						sb.AppendLine($"{ts}{ts}if (CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ ||");
-						sb.AppendLine($"{ts}{ts}{ts}{ts}CIF_PARM1WIJZAP != CIF_GEEN_PARMWIJZ)");
-						sb.AppendLine($"{ts}{ts}{{");
-						sb.AppendLine($"{ts}{ts}{ts}OVSettingsHalfstar();");
-						sb.AppendLine($"{ts}{ts}}}");
-						sb.AppendLine($"{ts}{ts}{ts}");
-						sb.AppendLine($"{ts}{ts}BijhoudenWachtTijd();");
-						sb.AppendLine($"{ts}{ts}BijhoudenMinimumGroenTijden();");
-						sb.AppendLine($"{ts}}}");
-						sb.AppendLine();
-					}
+					//sb.AppendLine();
+                    //if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
+					//{
+					//	sb.AppendLine($"{ts}/* tbv ov_ple */");
+					//	sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}])");
+					//	sb.AppendLine($"{ts}{{");
+					//	sb.AppendLine($"{ts}{ts}/* Instellen OV parameters */");
+					//	sb.AppendLine($"{ts}{ts}if (CIF_PARM1WIJZPB != CIF_GEEN_PARMWIJZ ||");
+					//	sb.AppendLine($"{ts}{ts}    CIF_PARM1WIJZAP != CIF_GEEN_PARMWIJZ)");
+					//	sb.AppendLine($"{ts}{ts}{{");
+					//	sb.AppendLine($"{ts}{ts}{ts}OVHalfstarSettings();");
+					//	sb.AppendLine($"{ts}{ts}}}");
+					//	sb.AppendLine($"{ts}{ts}{ts}");
+					//	sb.AppendLine($"{ts}{ts}BijhoudenWachtTijd();");
+					//	sb.AppendLine($"{ts}{ts}BijhoudenMinimumGroenTijden();");
+					//	sb.AppendLine($"{ts}}}");
+					//	sb.AppendLine();
+					//}
 					return sb.ToString();
 
 				case CCOLCodeTypeEnum.HstCKlokPerioden:
@@ -1258,8 +1258,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}/* kopieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
-					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
-					sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}#if defined CCOLTIG");
+					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TRIG)");
+                    sb.AppendLine($"{ts}#else");
+					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
+					sb.AppendLine($"{ts}#endif");
+                    sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}copy_signalplan(PL);");
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
                     {
@@ -1506,7 +1510,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var enter = false;
                     if (c.HalfstarData.IsHalfstar && c.HasPT())
                     {
-                        sb.AppendLine($"/* Bepalen tijd na TXD t.b.v. verlengen bij OV ingreep */");
+                        sb.AppendLine($"{ts}/* Bepalen tijd na TXD t.b.v. verlengen bij OV ingreep */");
                         foreach (var ov in c.OVData.OVIngrepen)
                         {
                             sb.AppendLine($"{ts}iExtraGroenNaTXD[ovFC{ov.FaseCyclus}] = PRM[{_prmpf}{_prmnatxdhst}{ov.FaseCyclus}];");
@@ -1516,12 +1520,20 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.HalfstarData.Hoofdrichtingen.Any())
                     {
                         if (enter) sb.AppendLine();
-                        sb.AppendLine($"{ts}OV_ple_BepaalHoofdrichtingOpties(NG, ");
+                        sb.AppendLine($"{ts}/* OV opties hoofdrichtingen */");
+                        sb.Append($"{ts}OVHalfstarBepaalHoofdrichtingOpties(NG, ");
+                        var first = true;
                         foreach (var hr in c.HalfstarData.Hoofdrichtingen)
                         {
-                            sb.AppendLine($"{ts}                   (va_mulv)SCH[{_schpf}{_schtegenov}{hr.FaseCyclus}hst], (va_mulv)SCH[{_schpf}{_schafkwgov}{hr.FaseCyclus}hst], (va_mulv)SCH[{_schpf}{_schafkvgov}{hr.FaseCyclus}hst], TFG_max[{_fcpf}{hr.FaseCyclus}],");
+                            if (!first)
+                            {
+                                sb.Append($"{ts}                                        ");
+                            }
+                            first = false;
+                            sb.AppendLine($"(va_count){_fcpf}{hr.FaseCyclus}, (va_mulv)SCH[{_schpf}{_schtegenov}{hr.FaseCyclus}], (va_mulv)SCH[{_schpf}{_schafkwgov}{hr.FaseCyclus}], (va_mulv)SCH[{_schpf}{_schafkvgov}{hr.FaseCyclus}], TFG_max[{_fcpf}{hr.FaseCyclus}],");
                         }
-                        sb.AppendLine($"{ts}                   (va_count)END); ");
+                        sb.Append($"{ts}                                        ");
+                        sb.AppendLine($"(va_count)END);");
                     }
                     return sb.ToString();
 
@@ -1556,7 +1568,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{{");
                         foreach (var ov in c.OVData.OVIngrepen)
                         {
-                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] |= OV_ple_BepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{ov.FaseCyclus});");
+                            sb.AppendLine($"{ts}{ts}iPrioriteitsOpties[ovFC{ov.FaseCyclus}] |= OVHalfstarBepaalPrioriteitsOpties({_prmpf}{_prmpriohst}{ov.FaseCyclus});");
                         }
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
@@ -1578,25 +1590,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCOnderMaximum:
-                    sb.AppendLine($"{ts}OnderMaximumExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarOnderMaximum();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCAfkapGroen:
-                    sb.AppendLine($"{ts}AfkapGroenExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarAfkapGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCStartGroenMomenten:
-                    sb.AppendLine($"{ts}StartGroenMomentenExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarStartGroenMomenten();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCAfkappen:
-                    sb.AppendLine($"{ts}OVAfkappenExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarAfkappen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCTerugkomGroen:
-                    sb.AppendLine($"{ts}OVTerugKomGroenExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarTerugkomGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCGroenVasthouden:
-                    sb.AppendLine($"{ts}OVGroenVasthoudenExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarGroenVasthouden();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCMeetkriterium:
-                    sb.AppendLine($"{ts}OVMeetKriteriumExtra();");
+                    sb.AppendLine($"{ts}OVHalfstarMeetKriterium();");
                     return sb.ToString();
 
                 #endregion // ov.c
