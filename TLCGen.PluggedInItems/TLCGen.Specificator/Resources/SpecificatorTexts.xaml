@@ -101,6 +101,7 @@
     <system:String x:Key="Title_OVParameters">Parameters OV ingrepen</system:String>
     <system:String x:Key="Table_OV_PrioriteitsOpties">Tabel met overzicht van beschikbare prioriteitsopties</system:String>
     <system:String x:Key="Table_OV_PrioriteitsInstellingen">Tabel met overzicht van prioriteitsinstellingen</system:String>
+    <system:String x:Key="Table_HD_Instellingen">Tabel met instellingen voor hulpdienst ingrepen</system:String>
     
     <!-- Halfstar -->
     <system:String x:Key="Title_Halfstar">Halfstar regelen</system:String>

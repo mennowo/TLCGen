@@ -198,6 +198,34 @@ namespace TLCGen.Specificator
             return items;
         }
 
+        internal static IEnumerable<OpenXmlElement> GetChapter_HD(ControllerModel c, WordprocessingDocument doc, int startLevel)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+            var text = "De regeling is uitgerust met hulpdienstingrepen op basis van ";
+            if (c.HasHDKAR() && c.HasHDOpticom()) text += "KAR en Opticom.";
+            else if (c.HasHDKAR()) text += "KAR.";
+            else if (c.HasHDOpticom()) text += "Opticom.";
+            text +=
+                $" Een hulpdienstingreep kent de hoogste vorm van prioriteit (zie tabel {TableGenerator.Tables["Table_OV_PrioriteitsOpties"]}: " +
+                $"{Texts["Table_OV_PrioriteitsOpties"]}). Deze ingreep kapt af (na verstrijken van de garantiegroentijd) en blokkeert " +
+                $"alle signaalgroepen die conflicteren met de hulpdienst.";
+            if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
+            {
+                if (c.OVData.BlokkeerNietConflictenAlleenLangzaamVerkeer)
+                    text += $" Van niet-conflicten worden alleen richtingen met langzaam verkeer afgekapt en geblokkeerd.";
+                else
+                    text += $" Ook niet-conflicten worden afgekapt, voor zover ze niet ook een actieve hulpdienst ingreep hebben.";
+            }
+            text += " Tijdens een hulpdienstingreep wordt de fasebewakingstimer herstart.";
+            items.Add(OpenXmlHelper.GetTextParagraph(text));
+
+            items.Add(OpenXmlHelper.GetTextParagraph(
+                $"De instellingen en opties voor hulpdienstingrepen worden weergegeven in onderstaande tabel:"));
+            items.AddRange(TableGenerator.GetTable_HD_Instellingen(c));
+            
+            return items;
+        }
+
         internal static IEnumerable<OpenXmlElement> GetChapter_OV(ControllerModel c, WordprocessingDocument doc, int startLevel)
         {
             var items = new List<OpenXmlCompositeElement>();

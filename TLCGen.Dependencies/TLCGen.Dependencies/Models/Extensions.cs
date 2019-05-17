@@ -94,6 +94,16 @@ namespace TLCGen.Models
             return c.OVData.HDIngrepen.Any();
         }
 
+        public static bool HasHDKAR(this ControllerModel c)
+        {
+            return c.OVData.HDIngrepen.Any(x => x.KAR);
+        }
+
+        public static bool HasHDOpticom(this ControllerModel c)
+        {
+            return c.OVData.HDIngrepen.Any(x => x.Opticom && !string.IsNullOrWhiteSpace(x.OpticomRelatedInput));
+        }
+
         public static bool HasPTorHD(this ControllerModel c)
         {
             return c.OVData.OVIngrepen.Any() ||

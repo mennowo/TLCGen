@@ -10,5 +10,6 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string FaseCyclus { get; set; }
         public int DoseerPercentage { get; set; }
+        //public bool AfkappenOpStartFile
     }
 }

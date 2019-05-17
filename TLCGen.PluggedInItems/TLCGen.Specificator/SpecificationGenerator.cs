@@ -132,6 +132,7 @@ namespace TLCGen.Specificator
                     if (c.HasHD())
                     {
                         body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_HD"]}", c.HasPT() ? 2 : 1));
+                        body.Append(FunctionalityGenerator.GetChapter_HD(c, doc, c.HasHD() ? 2 : 1));
                     }
                 }
 
@@ -144,7 +145,6 @@ namespace TLCGen.Specificator
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"TODO", 1));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk OV: details toevoegen, zoals: " +
                     $"lijnnummers, details rond in/uitmelden, inmelden koplus, .", "TODO")));
-                body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk hulpdiensten.", "TODO")));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Overige punten, zoals: PTP, VA ontruimen, file ingrepen, rateltikkers, " +
                     $"ingangen, selectieve detectie, uitgestelde vaste aanvragen, hard meeverlengen, veiligheidsgroen, RoBuGrover, special van plugins zoals AFM, etc.", "TODO")));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Opnemen verwijzingen naar CCOL benaming van instellingen (?).", "TODO")));

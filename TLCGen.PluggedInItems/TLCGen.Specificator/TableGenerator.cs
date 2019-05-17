@@ -1044,5 +1044,71 @@ namespace TLCGen.Specificator
 
             return items;
         }
+
+        internal static IEnumerable<OpenXmlCompositeElement> GetTable_HD_Instellingen(ControllerModel c)
+        {
+            var items = new List<OpenXmlCompositeElement>();
+
+            UpdateTables("Table_HD_Instellingen");
+
+            items.Add(OpenXmlHelper.GetTextParagraph((string)Texts["Table_HD_Instellingen"] + $" (tabel {NumberOfTables.ToString()})", styleid: "Caption"));
+
+            var l = new List<List<string>>();
+            var ll = new List<string> { "Signaalgroep" };
+            if (c.HasHDKAR())
+            {
+                ll.Add("KAR");
+                ll.Add("KAR inmeld filtertijd");
+                ll.Add("KAR uitmeld filtertijd");
+            }
+            ll.Add("Check sirene");
+            ll.Add("Rijtijd ongehinderd");
+            ll.Add("Rijtijd beperkt gehinderd");
+            ll.Add("Rijtijd gehinderd");
+            ll.Add("Groenbewaking");
+            if (c.HasHDOpticom())
+            {
+                ll.Add("Opticom");
+                ll.Add("Opticom inmeld filtertijd");
+            }
+            if(c.OVData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
+            {
+                ll.Add("Meerealiserende fasen");
+            }
+            l.Add(ll);
+            foreach (var ovcf in c.OVData.HDIngrepen)
+            {
+                ll.Clear();
+                ll.Add(ovcf.FaseCyclus);
+                if (c.HasHDKAR())
+                {
+                    ll.Add(ovcf.KAR.ToCustomString());
+                    ll.Add(ovcf.KARInmeldingFilterTijd.ToString());
+                    ll.Add(ovcf.KARUitmeldingFilterTijd.ToString());
+                }
+                ll.Add(ovcf.Sirene.ToCustomString());
+                ll.Add(ovcf.RijTijdOngehinderd.ToString());
+                ll.Add(ovcf.RijTijdBeperktgehinderd.ToString());
+                ll.Add(ovcf.RijTijdGehinderd.ToString());
+                ll.Add(ovcf.GroenBewaking.ToString());
+                if (c.HasHDOpticom())
+                {
+                    ll.Add(ovcf.Opticom.ToCustomString() + (ovcf.Opticom ? $" [{ovcf.OpticomRelatedInput}]" : ""));
+                    ll.Add(ovcf.OpticomInmeldingFilterTijd.ToString());
+                }
+                if (c.OVData.HDIngrepen.Any(x => x.MeerealiserendeFaseCycli.Any()))
+                {
+                    ll.Add(
+                        ovcf.MeerealiserendeFaseCycli.Any() ?
+                        string.Join(", ", ovcf.MeerealiserendeFaseCycli.Select(x => x.FaseCyclus)) :
+                        "-");
+                }
+                l.Add(ll);
+            }
+
+            items.Add(OpenXmlHelper.GetTable(l, firstRowVerticalText: true));
+
+            return items;
+        }
     }
 }
