@@ -100,7 +100,6 @@
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="Auto" />
-                                                            <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
                                                         </Grid.ColumnDefinitions>
                                                         <Label Padding="1" Content="Opvang storing:" Grid.Column="0" Grid.ColumnSpan="13" />
@@ -113,10 +112,9 @@
                                                         <Label Content="Wisselstand" Grid.Row="1" Grid.Column="7" />
                                                         <Label Content="Geen OV aanw." Grid.Row="1" Grid.Column="8" />
                                                         <Label Content="Alleen bij rood" Grid.Row="1" Grid.Column="9" />
-                                                        <Label Content="Min.roodtijd" Grid.Row="1" Grid.Column="10" />
-                                                        <Label Content="Anti jutter" Grid.Row="1" Grid.Column="11" />
-                                                        <Label Content="Anti jutter tijd" Grid.Row="1" Grid.Column="12" />
-                                                        <Label Content="Opvang storing" Grid.Row="1" Grid.Column="13" />
+                                                        <Label Content="Anti jutter" Grid.Row="1" Grid.Column="10" />
+                                                        <Label Content="Anti jutter tijd" Grid.Row="1" Grid.Column="11" />
+                                                        <Label Content="Opvang storing" Grid.Row="1" Grid.Column="12" />
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="1" Margin="2"
                                                         SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
@@ -147,19 +145,16 @@
                                                         Grid.Row="2" Grid.Column="8"
                                                         Margin="5" IsChecked="{Binding Path=AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" />
                                                         <CheckBox 
-                                                        Grid.Row="2" Grid.Column="8"
-                                                        Margin="5" IsChecked="{Binding Path=AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" />
-                                                        <TextBox 
-                                                        Grid.Row="2" Grid.Column="10" IsEnabled="{Binding AntiJutterTijdToepassen}"
-                                                        Text="{Binding Path=AntiJutterTijd}" Margin="2" />
-                                                        <CheckBox 
                                                         Grid.Row="2" Grid.Column="9"
+                                                        Margin="5" IsChecked="{Binding Path=AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <CheckBox 
+                                                        Grid.Row="2" Grid.Column="10"
                                                         Margin="5" IsChecked="{Binding Path=MinimaleRoodTijd,UpdateSourceTrigger=PropertyChanged}" />
                                                         <TextBox 
-                                                        Grid.Row="2" Grid.Column="10" IsEnabled="{Binding AntiJutterTijdToepassen}"
+                                                        Grid.Row="2" Grid.Column="11" IsEnabled="{Binding AntiJutterTijdToepassen}"
                                                         Text="{Binding Path=AntiJutterTijd}" Margin="2" />
                                                         <CheckBox 
-                                                        Grid.Row="2" Grid.Column="11" IsEnabled="{Binding HasInput1}"
+                                                        Grid.Row="2" Grid.Column="12" IsEnabled="{Binding HasInput1}"
                                                         Margin="5" IsChecked="{Binding Path=OpvangStoring,UpdateSourceTrigger=PropertyChanged}" />
                                                         <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="12" Orientation="Horizontal" x:Name="child">
                                                             <ContentControl Content="{Binding MeldingBijstoring}"/>
@@ -303,21 +298,6 @@
                                                         Binding="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Header="Geen OV aanw." />
                                 <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
                                                         Binding="{Binding AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" Header="Alleen bij rood" />
-                                <DataGridTextColumn 
-                                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
-                                    Binding="{Binding MinimaleRoodTijd,UpdateSourceTrigger=PropertyChanged}" Header="Min.roodtijd">
-                                    <DataGridTextColumn.CellStyle>
-                                        <Style TargetType="DataGridCell">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=AlleenIndienRood,Mode=OneWay}" Value="False">
-                                                    <Setter Property="IsEnabled" Value="False" />
-                                                    <Setter Property="Background" Value="LightGray" />
-                                                    <Setter Property="Foreground" Value="LightGray" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataGridTextColumn.CellStyle>
-                                </DataGridTextColumn>
                                 <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
                                 <DataGridCheckBoxColumn 
                                     Binding="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Anti jutter" 

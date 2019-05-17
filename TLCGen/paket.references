@@ -4,4 +4,5 @@ Extended.Wpf.Toolkit
 Microsoft.WindowsAPICodePack.Core
 Microsoft.WindowsAPICodePack.Shell
 Gu.Wpf.DataGrid2D
+WpfAutoGrid
 gong-wpf-dragdrop

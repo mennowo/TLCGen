@@ -378,7 +378,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyDetectors.Add(ov.DummyKARUitmelding);
                 }
 
-                if (ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood))
+                if (ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus)
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovminrood}{ov.FaseCyclus}", ov.MinimaleRoodtijd, CCOLElementTimeTypeEnum.TE_type, _tovminrood, ov.FaseCyclus));

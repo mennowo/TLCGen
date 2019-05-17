@@ -880,7 +880,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _tkarmelding = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarmelding");
             var _tkarog = CCOLGeneratorSettingsProvider.Default.GetElementName("tkarog");
             var _cvc = CCOLGeneratorSettingsProvider.Default.GetElementName("cvc");
-            
+            var _tovminrood = CCOLGeneratorSettingsProvider.Default.GetElementName("tovminrood");
             var _hwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("hwissel");
             var _schgeenwissel = CCOLGeneratorSettingsProvider.Default.GetElementName("schgeenwissel");
             var _schwisselpol = CCOLGeneratorSettingsProvider.Default.GetElementName("schwisselpol");
@@ -975,7 +975,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
                 foreach (var ov in c.OVData.OVIngrepen.Where(x => x.NoodaanvraagKoplus && !string.IsNullOrWhiteSpace(x.Koplus) && x.Koplus != "NG"))
                 {
-                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{ov.FaseCyclus}] && DB[{_dpf}{ov.Koplus}] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}]");
+                    sb.Append($"{ts}if (!C[{_cpf}{_cvc}{ov.FaseCyclus}] && DB[{_dpf}{ov.Koplus}] && R[{_fcpf}{ov.FaseCyclus}] && !TRG[{_fcpf}{ov.FaseCyclus}] && !T[{_tpf}{_tovminrood}{ov.FaseCyclus}]");
                     if (ov.KoplusKijkNaarWisselstand && ov.HasOVIngreepWissel())
                     {
                         sb.Append($" && IH[{_hpf}{_hwissel}{ov.FaseCyclus}]");

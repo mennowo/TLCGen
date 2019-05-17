@@ -24,3 +24,4 @@ NUGET
     System.Runtime.CompilerServices.Unsafe (4.5.2) - restriction: || (&& (>= net45) (< netstandard1.0)) (&& (>= net45) (< netstandard1.3)) (&& (>= net45) (>= wp8)) (>= net46)
     System.Threading.Tasks.Extensions (4.5.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (>= net46)
       System.Runtime.CompilerServices.Unsafe (>= 4.5) - restriction: || (&& (< monoandroid) (< monotouch) (>= netstandard1.0) (< netstandard2.0) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< netstandard1.0) (>= portable-net45+win8+wp8+wpa81) (< win8)) (>= net45) (&& (< netcoreapp2.1) (>= netstandard2.0)) (&& (< netstandard1.0) (>= win8)) (&& (< netstandard2.0) (>= wpa81)) (>= wp8)
+    WpfAutoGrid (1.4) - restriction: >= net45
