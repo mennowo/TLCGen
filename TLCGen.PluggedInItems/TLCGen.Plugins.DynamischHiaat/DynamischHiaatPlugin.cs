@@ -311,7 +311,7 @@ namespace TLCGen.Plugins.DynamischHiaat
                     {
                         var ofc = c.Fasen.FirstOrDefault(x => x.Naam == sg.SignalGroupName);
                         if (ofc == null) continue;
-                        sb.AppendLine($"{ts}hiaattijden_verlenging(SCH[{_schpf}dynhiaat{sg.SignalGroupName}] && IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
+                        sb.AppendLine($"{ts}hiaattijden_verlenging(!SCH[{_schpf}dynhiaat{sg.SignalGroupName}] || IH[{_hpf}geendynhiaat{sg.SignalGroupName}], SCH[{_schpf}edkop_{sg.SignalGroupName}], {_mpf}{_mmk}{sg.SignalGroupName}, IH[{_hpf}opdrempelen{sg.SignalGroupName}], {_fcpf}{sg.SignalGroupName}, ");
                         for (int i = 0; i < ofc.AantalRijstroken; i++)
                         {
                             foreach(var dd in sg.DynamischHiaatDetectoren)
