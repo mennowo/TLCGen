@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -50,7 +51,8 @@
                 <DataGridTextColumn Header="Commentaar" Width="*" Binding="{Binding Path=Commentaar,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
             </DataGrid.Columns>
         </DataGrid>
-        <WrapPanel Grid.Row="2">
+        <CheckBox Content="Toevoegen #define VERSION in sys.h" IsChecked="{Binding Path=AanmakenVerionSysh}" Margin="5" VerticalAlignment="Center" Grid.Row="2" />
+        <WrapPanel Grid.Row="3">
             <Button Margin="2" Content="Nieuwe versie" Command="{Binding AddVersieCommand}" />
             <Button Margin="2" Content="Versie verwijderen" Command="{Binding RemoveVersieCommand}" />
         </WrapPanel>

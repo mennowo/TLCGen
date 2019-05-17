@@ -74,6 +74,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AanmakenVerionSysh
+        {
+            get => _Controller?.Data?.AanmakenVerionSysh ?? false;
+            set
+            {
+                _Controller.Data.AanmakenVerionSysh = value;
+                RaisePropertyChanged<object>("AanmakenVerionSysh", broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands

@@ -20,6 +20,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.Append(GenerateVersionHeader(c.Data));
             sb.AppendLine();
             sb.AppendLine($"#define SYSTEM \"{c.Data.Naam}\"");
+            if (c.Data.AanmakenVerionSysh)
+            {
+                var ver = c.Data.Versies.LastOrDefault();
+                if (ver!= null)
+                {
+                    sb.AppendLine($"#define VERSION \"{ver.Versie} {ver.Datum.ToString("yyyyMMdd")}\"");
+                }
+            }
             sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();

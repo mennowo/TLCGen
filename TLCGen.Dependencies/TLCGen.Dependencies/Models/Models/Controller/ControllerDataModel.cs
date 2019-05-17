@@ -69,6 +69,8 @@ namespace TLCGen.Models
         public int HuidigeVersieMinor { get; set; }
         public int HuidigeVersieRevision { get; set; }
 
+        public bool AanmakenVerionSysh { get; set; }
+
         [Browsable(false)]
         public string TLCGenVersie { get; set; }
 
