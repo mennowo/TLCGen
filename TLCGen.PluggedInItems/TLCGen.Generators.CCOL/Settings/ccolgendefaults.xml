@@ -263,6 +263,24 @@
             <Type>Schakelaar</Type>
             <Description>Parallele file meldingen per strook file ingreep _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>afkmingroen</Default>
+            <Setting>afkmingroen</Setting>
+            <Type>Timer</Type>
+            <Description>Minimale groentijd fase _E1_ vooraf aan afkappen bij start file ingreep _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>afk</Default>
+            <Setting>afk</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden afkappen fase _E1_ bij start file ingreep _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>minrood</Default>
+            <Setting>minrood</Setting>
+            <Type>Timer</Type>
+            <Description>Minimale roodtijd bij fase _E1_ voor file ingreep _E2_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

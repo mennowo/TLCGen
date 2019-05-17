@@ -1078,8 +1078,7 @@ namespace TLCGen.Specificator
             l.Add(ll);
             foreach (var ovcf in c.OVData.HDIngrepen)
             {
-                ll.Clear();
-                ll.Add(ovcf.FaseCyclus);
+                ll = new List<string> { ovcf.FaseCyclus };
                 if (c.HasHDKAR())
                 {
                     ll.Add(ovcf.KAR.ToCustomString());

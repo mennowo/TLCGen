@@ -22,7 +22,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.FaseCyclus = value;
-                RaisePropertyChanged("FaseCyclus");
+                RaisePropertyChanged();
             }
         }
 
@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<object>("DoseerPercentage", broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
                 Messenger.Default.Send(new FileIngreepTeDoserenSignaalGroepPercentageChangedMessage(_TeDoserenSignaalGroep));
             }
         }
@@ -42,7 +42,47 @@ namespace TLCGen.ViewModels
             set
             {
                 _TeDoserenSignaalGroep.DoseerPercentage = value;
-                RaisePropertyChanged<object>("DoseerPercentage", broadcast: true);
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool AfkappenOpStartFile
+        {
+            get => _TeDoserenSignaalGroep.AfkappenOpStartFile;
+            set
+            {
+                _TeDoserenSignaalGroep.AfkappenOpStartFile = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int AfkappenOpStartFileMinGroentijd
+        {
+            get => _TeDoserenSignaalGroep.AfkappenOpStartFileMinGroentijd;
+            set
+            {
+                _TeDoserenSignaalGroep.AfkappenOpStartFileMinGroentijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public bool MinimaleRoodtijd
+        {
+            get => _TeDoserenSignaalGroep.MinimaleRoodtijd;
+            set
+            {
+                _TeDoserenSignaalGroep.MinimaleRoodtijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int MinimaleRoodtijdTijd
+        {
+            get => _TeDoserenSignaalGroep.MinimaleRoodtijdTijd;
+            set
+            {
+                _TeDoserenSignaalGroep.MinimaleRoodtijdTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
