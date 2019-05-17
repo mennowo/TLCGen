@@ -41,6 +41,7 @@ namespace TLCGen.Models
         [XmlArrayItem(ElementName = "HDIngreep")]
         public List<HDIngreepModel> HDIngrepen { get; set; }
         public List<OVIngreepSignaalGroepParametersModel> OVIngreepSignaalGroepParameters { get; set; }
+        public bool OVIngreepSignaalGroepParametersHard { get; set; }
 
         [Browsable(false)]
         [HasDefault(false)]

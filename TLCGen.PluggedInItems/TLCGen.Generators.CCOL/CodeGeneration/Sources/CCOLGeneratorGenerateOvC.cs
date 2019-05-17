@@ -474,7 +474,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
                     case FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgt}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iInstPercMaxGroenTijdTerugKomen[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.PercMaxGroentijdVoorTerugkomen};");
+                        }
                         break;
                 }
             }
@@ -496,7 +503,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
                     case FaseTypeEnum.Voetganger:
-                        sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmognt}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iInstMinTerugKomGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.OndergrensNaTerugkomen};");
+                        }
                         break;
                 }
             }
@@ -518,7 +532,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmnofm}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iInstAantalMalenNietAfkappen[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.AantalKerenNietAfkappen};");
+                        }
                         break;
 	                default:
 		                throw new ArgumentOutOfRangeException();
@@ -544,7 +565,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmmgcov}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iAfkapGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.MinimumGroentijdConflictOVRealisatie};");
+                        }
                         break;
                 }
             }
@@ -570,7 +598,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmpmgcov}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iPercGroenTijd[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.PercMaxGroentijdConflictOVRealisatie};");
+                        }
                         break;
                 }
             }
@@ -594,7 +629,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     case FaseTypeEnum.OV:
                     case FaseTypeEnum.Auto:
                     case FaseTypeEnum.Fiets:
-                        sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{ovfc.FaseCyclus}];");
+                        if (!c.OVData.OVIngreepSignaalGroepParametersHard)
+                        {
+                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = PRM[{_prmpf}{_prmohpmg}{ovfc.FaseCyclus}];");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}iInstOphoogPercentageMG[{_fcpf}{ovfc.FaseCyclus}] = {ovfc.OphoogpercentageNaAfkappen};");
+                        }
                         break;
                 }
             }

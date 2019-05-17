@@ -25,6 +25,16 @@ namespace TLCGen.ViewModels
             private set;
         }
 
+        public bool OVIngreepSGParametersHard
+        {
+            get => _Controller.OVData.OVIngreepSignaalGroepParametersHard;
+            set
+            {
+                _Controller.OVData.OVIngreepSignaalGroepParametersHard = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region TabItem Overrides

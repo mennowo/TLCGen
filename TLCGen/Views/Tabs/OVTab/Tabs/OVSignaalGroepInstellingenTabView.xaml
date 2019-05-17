@@ -8,21 +8,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="700">
     <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-            <Label Content="Instellingen voor conflicten" />
-            <ct:InfoElement>
-                <ct:InfoElement.InfoPopup>
-                    <TextBlock>
-                        # niet afk. (PRM NOFM##) - aantal malen niet afbreken na ingreep<LineBreak />
-                        Min. groen (PRM MGCOV##) - afkapgarantie bij conflicterend OV<LineBreak />
-                        % groen (PRM PMGCOV##) - percentage maximum groentijd bij conflicterend OV<LineBreak />
-                        % voor terugk. (PRM PMGT##) - indien verkeer en minder dan % groentijd, terugkomen na ingreep<LineBreak />
-                        ondergr. na terugk. (PRM OGNT##) - minimale groentijd bij terugkomen conflictrichting<LineBreak />
-                        % op na afk. (PRM OHPMG##) - ophoogpercentage maximum groentijd bij conflicterend OV
-                    </TextBlock>
-                </ct:InfoElement.InfoPopup>
-            </ct:InfoElement>
-        </StackPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <CheckBox DockPanel.Dock="Right" Content="Niet aanmaken parameters" Margin="5" VerticalAlignment="Center"
+                      IsChecked="{Binding Path=OVIngreepSGParametersHard}"/>
+            <StackPanel Orientation="Horizontal">    
+                <Label Content="Instellingen voor conflicten" />
+                <ct:InfoElement>
+                    <ct:InfoElement.InfoPopup>
+                        <TextBlock>
+                            # niet afk. (PRM NOFM##) - aantal malen niet afbreken na ingreep<LineBreak />
+                            Min. groen (PRM MGCOV##) - afkapgarantie bij conflicterend OV<LineBreak />
+                            % groen (PRM PMGCOV##) - percentage maximum groentijd bij conflicterend OV<LineBreak />
+                            % voor terugk. (PRM PMGT##) - indien verkeer en minder dan % groentijd, terugkomen na ingreep<LineBreak />
+                            ondergr. na terugk. (PRM OGNT##) - minimale groentijd bij terugkomen conflictrichting<LineBreak />
+                            % op na afk. (PRM OHPMG##) - ophoogpercentage maximum groentijd bij conflicterend OV
+                        </TextBlock>
+                    </ct:InfoElement.InfoPopup>
+                </ct:InfoElement>
+            </StackPanel>
+        </DockPanel>
         <DataGrid ItemsSource="{Binding Path=OVIngreepSGParameters}"
                   CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
             <DataGrid.RowHeaderTemplate>
