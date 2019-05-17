@@ -176,6 +176,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool AlleenIndienRood
+        {
+            get => OVIngreepInUitMelding.AlleenIndienRood;
+            set
+            {
+                OVIngreepInUitMelding.AlleenIndienRood = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public bool AntiJutterTijdToepassen
         {
             get => OVIngreepInUitMelding.AntiJutterTijdToepassen;

@@ -73,6 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schgeenwissel;
         private CCOLGeneratorCodeStringSettingModel _hwissel;
 
+        private CCOLGeneratorCodeStringSettingModel _tovminrood;
         private CCOLGeneratorCodeStringSettingModel _thdin;
         private CCOLGeneratorCodeStringSettingModel _thduit;
         private CCOLGeneratorCodeStringSettingModel _schhdin;
@@ -376,6 +377,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _MyDetectors.Add(ov.DummyKARInmelding);
                     _MyDetectors.Add(ov.DummyKARUitmelding);
                 }
+
+                if (ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood))
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tovminrood}{ov.FaseCyclus}", ov.MinimaleRoodtijd, CCOLElementTimeTypeEnum.TE_type, _tovminrood, ov.FaseCyclus));
+                }
             }
 
             /* Variables for HD */
@@ -637,6 +644,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (melding.KijkNaarWisselStand)
             {
                 sb.Append($"IH[{_hpf}{_hwissel}{ov.FaseCyclus}] && ");
+            }
+            if (melding.AlleenIndienRood)
+            {
+                sb.Append($"R[{_fcpf}{ov.FaseCyclus}] && !T[{_tpf}{_tovminrood}{ov.FaseCyclus}] && ");
             }
 
             var extra = "";

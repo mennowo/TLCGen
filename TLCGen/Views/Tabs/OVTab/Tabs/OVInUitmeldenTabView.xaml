@@ -99,6 +99,8 @@
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
+                                                            <ColumnDefinition Width="Auto" />
                                                             <ColumnDefinition Width="*" />
                                                         </Grid.ColumnDefinitions>
                                                         <Label Padding="1" Content="Opvang storing:" Grid.Column="0" Grid.ColumnSpan="13" />
@@ -109,10 +111,12 @@
                                                         <Label Content="Input 2" Grid.Row="1" Grid.Column="5" />
                                                         <Label Content="Input 2 type" Grid.Row="1" Grid.Column="6" />
                                                         <Label Content="Wisselstand" Grid.Row="1" Grid.Column="7" />
-                                                        <Label Content="Geen inm." Grid.Row="1" Grid.Column="8" />
-                                                        <Label Content="Anti jutter" Grid.Row="1" Grid.Column="9" />
-                                                        <Label Content="Anti jutter tijd" Grid.Row="1" Grid.Column="10" />
-                                                        <Label Content="Opvang storing" Grid.Row="1" Grid.Column="11" />
+                                                        <Label Content="Geen OV aanw." Grid.Row="1" Grid.Column="8" />
+                                                        <Label Content="Alleen bij rood" Grid.Row="1" Grid.Column="9" />
+                                                        <Label Content="Min.roodtijd" Grid.Row="1" Grid.Column="10" />
+                                                        <Label Content="Anti jutter" Grid.Row="1" Grid.Column="11" />
+                                                        <Label Content="Anti jutter tijd" Grid.Row="1" Grid.Column="12" />
+                                                        <Label Content="Opvang storing" Grid.Row="1" Grid.Column="13" />
                                                         <ComboBox
                                                         Grid.Row="2" Grid.Column="1" Margin="2"
                                                         SelectedValue="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
@@ -143,8 +147,14 @@
                                                         Grid.Row="2" Grid.Column="8"
                                                         Margin="5" IsChecked="{Binding Path=AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" />
                                                         <CheckBox 
+                                                        Grid.Row="2" Grid.Column="8"
+                                                        Margin="5" IsChecked="{Binding Path=AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" />
+                                                        <TextBox 
+                                                        Grid.Row="2" Grid.Column="10" IsEnabled="{Binding AntiJutterTijdToepassen}"
+                                                        Text="{Binding Path=AntiJutterTijd}" Margin="2" />
+                                                        <CheckBox 
                                                         Grid.Row="2" Grid.Column="9"
-                                                        Margin="5" IsChecked="{Binding Path=AntiJutterTijdToepassen,UpdateSourceTrigger=PropertyChanged}" />
+                                                        Margin="5" IsChecked="{Binding Path=MinimaleRoodTijd,UpdateSourceTrigger=PropertyChanged}" />
                                                         <TextBox 
                                                         Grid.Row="2" Grid.Column="10" IsEnabled="{Binding AntiJutterTijdToepassen}"
                                                         Text="{Binding Path=AntiJutterTijd}" Margin="2" />
@@ -236,12 +246,12 @@
                             </DataGrid.Resources>
                             <DataGrid.Columns>
                                 <DataGridComboBoxColumn 
-                            Header="Type"
-                            SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
+                                    Header="Type"
+                                    SelectedValueBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeTypeEnum}}}" />
                                 <DataGridComboBoxColumn 
-                            Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
-                            SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    Header="Input 1" CellStyle="{StaticResource DisabledIfNoInput1Style}"
+                                    SelectedValueBinding="{Binding Path=RelatedInput1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridComboBoxColumn.ElementStyle>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
@@ -254,9 +264,9 @@
                                     </DataGridComboBoxColumn.EditingElementStyle>
                                 </DataGridComboBoxColumn>
                                 <DataGridComboBoxColumn 
-                            Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
-                            SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
+                                    Header="Input 1 type" CellStyle="{StaticResource DisabledIfNoInput1TypeStyle}"
+                                    SelectedValueBinding="{Binding Path=RelatedInput1Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" >
                                 </DataGridComboBoxColumn>
                                 <DataGridCheckBoxColumn Header="2e input" Binding="{Binding Path=TweedeInput,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
                                     <DataGridCheckBoxColumn.CellStyle>
@@ -272,8 +282,8 @@
                                     </DataGridCheckBoxColumn.CellStyle>
                                 </DataGridCheckBoxColumn>
                                 <DataGridComboBoxColumn 
-                            Header="Input 2" CellStyle="{StaticResource DisabledIfNoInput2Style}"
-                            SelectedValueBinding="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                    Header="Input 2" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                                    SelectedValueBinding="{Binding Path=RelatedInput2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                     <DataGridComboBoxColumn.ElementStyle>
                                         <Style TargetType="{x:Type ComboBox}">
                                             <Setter Property="ItemsSource" Value="{Binding Path=AvailableInputs}" />
@@ -286,17 +296,35 @@
                                     </DataGridComboBoxColumn.EditingElementStyle>
                                 </DataGridComboBoxColumn>
                                 <DataGridComboBoxColumn 
-                            Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
-                            SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
-                                <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" Binding="{Binding AlleenIndienGeenInmelding}" Header="Geen inm." />
-                                <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
-                                <DataGridCheckBoxColumn 
-                                Binding="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Anti jutter" 
-                                Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"/>
+                                    Header="Input 2 type" CellStyle="{StaticResource DisabledIfNoInput2Style}"
+                                    SelectedValueBinding="{Binding Path=RelatedInput2Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:OVIngreepInUitMeldingVoorwaardeInputTypeEnum}}}" />
+                                <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+                                                        Binding="{Binding AlleenIndienGeenInmelding,UpdateSourceTrigger=PropertyChanged}" Header="Geen OV aanw." />
+                                <DataGridCheckBoxColumn Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}" 
+                                                        Binding="{Binding AlleenIndienRood,UpdateSourceTrigger=PropertyChanged}" Header="Alleen bij rood" />
                                 <DataGridTextColumn 
-                                Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
-                                Binding="{Binding AntiJutterTijd}" Header="Anti jutter tijd">
+                                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                                    Binding="{Binding MinimaleRoodTijd,UpdateSourceTrigger=PropertyChanged}" Header="Min.roodtijd">
+                                    <DataGridTextColumn.CellStyle>
+                                        <Style TargetType="DataGridCell">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=AlleenIndienRood,Mode=OneWay}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
+                                                    <Setter Property="Background" Value="LightGray" />
+                                                    <Setter Property="Foreground" Value="LightGray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </DataGridTextColumn.CellStyle>
+                                </DataGridTextColumn>
+                                <DataGridCheckBoxColumn Binding="{Binding KijkNaarWisselStand,UpdateSourceTrigger=PropertyChanged}" Header="Wisselstand" CellStyle="{StaticResource DisabledIfNoWisselStyle}" />
+                                <DataGridCheckBoxColumn 
+                                    Binding="{Binding AntiJutterTijdToepassen,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Anti jutter" 
+                                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"/>
+                                <DataGridTextColumn 
+                                    Visibility="{Binding Path=InUit,Converter={StaticResource IsInmConv}}"
+                                    Binding="{Binding AntiJutterTijd,UpdateSourceTrigger=PropertyChanged}" Header="Anti jutter tijd">
                                     <DataGridTextColumn.CellStyle>
                                         <Style TargetType="DataGridCell">
                                             <Style.Triggers>

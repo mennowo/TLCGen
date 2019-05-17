@@ -24,6 +24,7 @@ namespace TLCGen.Models
 
         public bool KijkNaarWisselStand { get; set; }
         public bool AlleenIndienGeenInmelding { get; set; }
+        public bool AlleenIndienRood { get; set; }
 
         public bool AntiJutterTijdToepassen { get; set; }
         public int AntiJutterTijd { get; set; }

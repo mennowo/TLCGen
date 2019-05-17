@@ -1516,7 +1516,6 @@
             <Type>Parameter</Type>
             <Description>Testen lijnnummer DSI bericht in testomgeving</Description>
           </Setting>
-
           <Setting>
             <Default>testdsicat</Default>
             <Setting>testdsicat</Setting>
@@ -1637,7 +1636,12 @@
             <Type>Timer</Type>
             <Description>Ondergedrag KAR</Description>
           </Setting>
-          
+          <Setting>
+            <Default>ovminrood</Default>
+            <Setting>ovminrood</Setting>
+            <Type>Timer</Type>
+            <Description>Minimale roodtijd vooraf aan inmelden mogelijk bij _E1_ (indien ingesteld per inmelding)</Description>
+          </Setting>
           <Setting>
             <Default>ovin</Default>
             <Setting>ovin</Setting>

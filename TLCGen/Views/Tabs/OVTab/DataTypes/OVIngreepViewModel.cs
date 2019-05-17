@@ -183,6 +183,21 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool HasMinimaleRoodtijd => OVIngreep.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood);
+
+        [Description("Minimale roodtijd\n(t.b.v. inmelden)")]
+        [EnabledCondition("HasMinimaleRoodtijd")]
+        public int MinimaleRoodtijd
+        {
+            get => OVIngreep.MinimaleRoodtijd;
+            set
+            {
+                OVIngreep.MinimaleRoodtijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         [Category("Prioriteitsopties")]
         [Description("Afkappen conflicten")]
         public bool AfkappenConflicten

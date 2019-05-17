@@ -672,6 +672,7 @@
         <OnderMaximum>150</OnderMaximum>
         <GroenBewaking>300</GroenBewaking>
         <BlokkeertijdNaOVIngreep>0</BlokkeertijdNaOVIngreep>
+        <MinimaleRoodtijd>70</MinimaleRoodtijd>
         <AfkappenConflicten>true</AfkappenConflicten>
         <AfkappenConflictenOV>false</AfkappenConflictenOV>
         <VasthoudenGroen>true</VasthoudenGroen>
