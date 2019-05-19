@@ -4,8 +4,8 @@
 	<Product 
 	  Id="*"
     Name="TLCGen"
-    Language="1033" 
-    Version="0.4.8" 
+    Language="1033"
+    Version="0.4.9"
     Manufacturer="CodingConnected e.U." 
     UpgradeCode="DBCBE418-66FF-4822-A5FE-46D29D4C0382">
        
@@ -218,6 +218,7 @@
         <File Id='TLCGen.SpecialsRotterdam' Name='TLCGen.SpecialsRotterdam.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.SpecialsRotterdam.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
+    
     <ComponentGroup Id="TLCGenPluginsDenHaag" Directory="PLUGINSFOLDER">
       <Component Id='TLCGenPluginsDenHaagData' Guid='0B6FF776-639F-45AE-9AB9-F549817FF1E3'>
         <File Id='TLCGen.SpecialsDenHaag' Name='TLCGen.SpecialsDenHaag.dll' Source='$(var.ReleaseDir)/Plugins/TLCGen.SpecialsDenHaag.dll' KeyPath='no' />
