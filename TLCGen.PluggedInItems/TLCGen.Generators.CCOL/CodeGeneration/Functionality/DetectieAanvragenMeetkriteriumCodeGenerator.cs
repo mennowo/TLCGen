@@ -205,7 +205,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     {
                                         sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
                                     }
-                                    else
+                                    else if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.Aanvraag != DetectorAanvraagTypeEnum.Uit)
                                     {
                                         sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
                                     }
@@ -224,7 +224,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     {
                                         sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) PRM[{_prmpf}{_prmda}{dm.Naam}], ");
                                     }
-                                    else
+                                    else if (dm.Aanvraag != DetectorAanvraagTypeEnum.Geen && dm.Aanvraag != DetectorAanvraagTypeEnum.Uit)
                                     {
                                         sb.AppendLine($"{ts}{ts}(va_count) {_dpf}{dm.Naam}, {_tpf}{_tav}{dm.Naam}, (va_mulv) {GetAanvraagSetting(dm)}, ");
                                     }

@@ -126,7 +126,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var ds = new List<string>();
                         foreach (var d in fc.Detectoren)
                         {
-                            if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
+                            if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen ||
+                                d.AanvraagHardOpStraat && d.Aanvraag == DetectorAanvraagTypeEnum.Uit) continue;
 
                             if (d.Rijstrook == str)
                             {
@@ -134,13 +135,29 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (det > 1)
                                 {
                                     sb.AppendLine(" &&");
-                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                                    if (!d.AanvraagHardOpStraat)
+                                    {
+                                        sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                                    }
+                                    else
+                                    {
+                                        sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                    }
                                 }
                                 else
                                 {
-                                    sb.Append(str > 1
+                                    if (!d.AanvraagHardOpStraat)
+                                    {
+                                        sb.Append(str > 1
                                         ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
                                         : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                                    }
+                                    else
+                                    {
+                                        sb.Append(str > 1
+                                        ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
+                                        : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                    }
                                 }
                                 ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                             }
@@ -168,23 +185,44 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (det > 1)
                         {
                             sb.AppendLine(" &&");
-                            sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                            if (!d.AanvraagHardOpStraat)
+                                {
+                                sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                            }
+                            else
+                            {
+                                sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                            }
                         }
                         else
                         {
-                            sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                            if (!d.AanvraagHardOpStraat)
+                                {
+                                sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
+                            }
+                            else
+                            {
+                                sb.Append($"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                            }
+                        }
+                        if (!d.AanvraagHardOpStraat)
+                        {
+
                         }
                         ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                     }
-                    sb.Append(" && !(");
-                    det = 0;
-                    foreach (var d in ds)
+                    if (fc.Detectoren.Any(x => !x.AanvraagHardOpStraat))
                     {
-                        if (det > 0) sb.Append(" && ");
-                        sb.Append(d + " == 0");
-                        det++;
+                        sb.Append(" && !(");
+                        det = 0;
+                        foreach (var d in ds)
+                        {
+                            if (det > 0) sb.Append(" && ");
+                            sb.Append(d + " == 0");
+                            det++;
+                        }
+                        sb.Append(")");
                     }
-                    sb.Append(")");
                 }
                 sb.AppendLine(";");
             }
