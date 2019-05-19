@@ -210,6 +210,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 10;
+                case CCOLCodeTypeEnum.RegCWachtgroen:
+                    return 20;
                 case CCOLCodeTypeEnum.RegCFileVerwerking:
                     return 10;
                 case CCOLCodeTypeEnum.OvCPARCorrecties:
@@ -300,6 +302,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                         }
                         sb.AppendLine();
+                    }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCWachtgroen:
+                    sb.AppendLine($"{ts}/* Niet in wachtgroen vasthouden tijdens file */");
+                    foreach (var fi in c.FileIngrepen)
+                    {
+                        foreach(var tdfc in fi.TeDoserenSignaalGroepen)
+                        {
+                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}]) RW[{_fcpf}{tdfc.FaseCyclus}] &= ~BIT4;");
+                        }
                     }
                     return sb.ToString();
 
