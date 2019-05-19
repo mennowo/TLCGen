@@ -1020,7 +1020,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, NG, NG, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
+                                sb.AppendLine($"{ts}altcor_naloopSG_halfstar({_fcpf}{nl.FaseVan}, {_fcpf}{nl.FaseNaar}, TRUE, {_tpf}{_tnlsg}{nl.FaseVan}{nl.FaseNaar}, TRUE);");
                             }
                         }
                     }
@@ -1226,9 +1226,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}/* kopieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
+					sb.AppendLine($"{ts}{ts}#if defined CCOLTIG");
+					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TRIG)");
+					sb.AppendLine($"{ts}{ts}#else");
 					sb.AppendLine($"{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}copy_signalplan(PL);");
+					sb.AppendLine($"{ts}{ts}#endif");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}copy_signalplan(PL);");
                     if (c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95)
                     {
                         sb.AppendLine($"{ts}{ts}create_trig();        /* creëer nieuwe TIG-tabel na wijzigingen geel-, ontruimingstijden */");

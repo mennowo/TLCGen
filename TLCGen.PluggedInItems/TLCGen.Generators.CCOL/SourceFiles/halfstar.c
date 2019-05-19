@@ -307,7 +307,14 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 	}
 
 	/* meerealisaties */
-	set_special_MR(fc2, fc1, (bool)(a_bui_fc1 && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+	if (dk_bui_fc1 != NG && hd_bui_fc1 != NG)
+	{
+		set_special_MR(fc2, fc1, (bool)(IH[hd_bui_fc1] && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+	}
+	else
+	{
+		set_special_MR(fc2, fc1, (bool)(R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+	}
 }
 
 /**********************************************************************************/

@@ -33,7 +33,7 @@ count geeltimer[FCMAX][FCMAX];
 count groodtimer[FCMAX][FCMAX];
 
 void altcor_kop_halfstar(count fc_aan, count fc_af, count t_nl);
-void altcor_naloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1, count hd_bui_fc1, count tnlsg12, bool voorwaarde);
+void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg12, bool voorwaarde);
 void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void alternatief_halfstar(count fc, mulv altp, bool condition);
@@ -42,7 +42,7 @@ void getrapte_fietser_halfstar(count fc1, count fc2, bool  a_bui_fc1, bool  a_bu
 void mgcor_halfstar(count fcaan, count fcnal, count t_nal);
 void mgcor_halfstar_deelc(count fc1, count fc2);
 void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
-void naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tkopfc1fc2);
+void naloopSG_halfstar(count fc1, count fc2, count dk_bui_fc1, count hd_bui_fc1, count tkopfc1fc2);
 void PercentageMaxGroenTijdenSP(count fc, count percentage);
 bool pl_gebied(mulv tx, mulv s, mulv e);
 void reset_altreal_halfstar(void);
