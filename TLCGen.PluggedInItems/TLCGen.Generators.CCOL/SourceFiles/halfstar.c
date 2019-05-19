@@ -284,11 +284,21 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
 /**********************************************************************************/
 void naloopSG_halfstar(count fc1, /* fc1 */
 	count fc2, /* fc2 */
-	bool  a_bui_fc1, /* buitendrukknopaanvraag fc1 */
+	count dk_bui_fc1, /* buitendrukknopaanvraag fc1 */
+	count hd_bui_fc1, /* onthouden buitendrukknopaanvraag fc1 */
 	count tkopfc1fc2)       /* naloop (SG) fc1 -> fc2 */
 {
 	/* nalopen */
-	RT[tkopfc1fc2] = (bool)(RA[fc1] && a_bui_fc1);
+	if (dk_bui_fc1 != NG && hd_bui_fc1 != NG)
+	{
+		if (SG[fc1]) IH[hd_bui_fc1] = FALSE;
+		IH[hd_bui_fc1] |= D[dk_bui_fc1] && !G[fc1] && A[fc1];
+		RT[tkopfc1fc2] = (bool)(RA[fc1] && IH[hd_bui_fc1]);
+	}
+	else
+	{
+		RT[tkopfc1fc2] = (bool)(RA[fc1]);
+	}
 	AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
 	if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) ||
 		(yv_ar_max_halfstar(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])))
