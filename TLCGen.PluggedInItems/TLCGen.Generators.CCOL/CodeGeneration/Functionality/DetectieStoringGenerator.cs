@@ -116,7 +116,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     for (int str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen).All(x => x.Rijstrook != str)) continue;
+                        if (fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen ||
+                            x.AanvraagHardOpStraat && x.Aanvraag == DetectorAanvraagTypeEnum.Uit).All(x => x.Rijstrook != str)) continue;
 
                         int det = 0;
                         if (str > 1)
@@ -159,7 +160,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                                     }
                                 }
-                                ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
+                                if (!d.AanvraagHardOpStraat)
+                                {
+                                    ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
+                                }
                             }
                         }
                         sb.Append(" && !(");
@@ -207,9 +211,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         if (!d.AanvraagHardOpStraat)
                         {
-
+                            ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                         }
-                        ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
                     }
                     if (fc.Detectoren.Any(x => !x.AanvraagHardOpStraat))
                     {
