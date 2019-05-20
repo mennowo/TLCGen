@@ -3,6 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 
@@ -10,6 +11,32 @@ namespace TLCGen.Integrity
 {
     public static class TLCGenIntegrityChecker
     {
+        public static int CompareDetectors(string d1name, string d2name, string d1fcname, string d2fcname)
+        {
+            var myName = d1fcname == null ? d1name : d1name.Replace(d1fcname, "");
+            var hisName = d2fcname == null ? d2name : d2name.Replace(d2fcname, "");
+            if (Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+                {
+                    hisName = hisName + "0";
+                }
+            }
+            if (Regex.IsMatch(hisName, @".*[a-zA-Z]$"))
+            {
+                if (!Regex.IsMatch(myName, @".*[a-zA-Z]$"))
+                {
+                    myName = myName + "0";
+                }
+            }
+            if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+            else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+            return string.Compare(
+                d1fcname == null ? myName : d1fcname + myName,
+                d1fcname == null ? hisName : d2fcname + hisName,
+                StringComparison.Ordinal);
+        }
+
         /// <summary>
         /// Checks the integrity of the data in the instance of ControllerModel that is parsed in
         /// </summary>

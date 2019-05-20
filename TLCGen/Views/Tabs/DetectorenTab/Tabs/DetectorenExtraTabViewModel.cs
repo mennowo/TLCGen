@@ -166,6 +166,7 @@ namespace TLCGen.ViewModels
             DetectorViewModel dvm1 = new DetectorViewModel(dm);
             Detectoren.Add(dvm1);
             Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { dm }, null));
+            Detectoren.BubbleSort();
         }
 
         bool AddDetectorCommand_CanExecute(object prm)
@@ -354,6 +355,11 @@ namespace TLCGen.ViewModels
             MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
             {
                 Detectoren.BubbleSort();
+            });
+            MessengerInstance.Register<Messaging.Messages.NameChangedMessage>(this, (msg) =>
+            {
+                if(msg.ObjectType == TLCGenObjectTypeEnum.Detector)
+                    Detectoren.BubbleSort();
             });
         }
 
