@@ -29,6 +29,7 @@ namespace TLCGen.Integrity
                     myName = myName + "0";
                 }
             }
+
             if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
             else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
             return string.Compare(

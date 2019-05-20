@@ -16,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schmv; // schakelaar meeverlengen naam
 #pragma warning restore 0649
         private string _hfile;
+        private string _hplact;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -147,6 +148,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     var file = false;
+                    var tts = ts;
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
@@ -159,11 +161,26 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     file = true;
                                     sb.AppendLine();
                                     sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file */");
+                                    if (c.HalfstarData.IsHalfstar)
+                                    {
+                                        tts = ts;
+                                        if (c.HalfstarData.IsHalfstar)
+                                        {
+                                            tts += ts;
+                                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                                            sb.AppendLine($"{ts}{{");
+                                        }
+                                    }
                                 }
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
+                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
                             }
                         }
                     }
+                    if (file && c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"{ts}}}");
+                    }
+
                     var hard = false;
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
@@ -203,6 +220,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _hfile = CCOLGeneratorSettingsProvider.Default.GetElementName("hfile");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }
