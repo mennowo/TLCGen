@@ -1232,21 +1232,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (int.TryParse(ov.FaseCyclus, out var ifc))
                     {
-                        var m = ov.MeldingenData.Inmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
-                        if (done.Any(x => x == m.RelatedInput1)) continue;
-                        var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
-                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                        foreach (var m in ov.MeldingenData.Inmeldingen.Where(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                            if (done.Any(x => x == m.RelatedInput1)) continue;
+                            var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
+                            {
+                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSIN, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                                done.Add(m.RelatedInput1);
+                            }
                         }
-                        m = ov.MeldingenData.Uitmeldingen.FirstOrDefault(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector);
-                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
+                        foreach (var m in ov.MeldingenData.Uitmeldingen.Where(x => x.Type == OVIngreepInUitMeldingVoorwaardeTypeEnum.SelectieveDetector))
                         {
-                            sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
-                        }
-                        if (m != null && !string.IsNullOrWhiteSpace(m.RelatedInput1))
-                        {
-                            done.Add(m.RelatedInput1);
+                            if (done.Any(x => x == m.RelatedInput1)) continue;
+                            var type = ov.Type == OVIngreepVoertuigTypeEnum.Bus ? "CIF_BUS" : "CIF_TRAM";
+                            if (!string.IsNullOrWhiteSpace(m.RelatedInput1))
+                            {
+                                sb.AppendLine($"{ts}if (SD[{_dpf}{m.RelatedInput1}]) set_DSI_message({(_dpf + m.RelatedInput1).ToUpper()}, {type}, {ifc}, CIF_DSUIT, 1, PRM[{_prmpf}{_prmtestdsivert}] - 120, PRM[{_prmpf}{_prmtestdsilyn}], PRM[{_prmpf}{_prmtestdsicat}], NG);");
+                                done.Add(m.RelatedInput1);
+                            }
                         }
                     }
                 }
