@@ -2102,6 +2102,12 @@
             <Type>Schakelaar</Type>
             <Description>Inschakelen automatische simulatie RIS</Description>
           </Setting>
+          <Setting>
+            <Default>rislaneid</Default>
+            <Setting>rislaneid</Setting>
+            <Type>Parameter</Type>
+            <Description>Lane id voor lane met index _E1_ bij fase _E2_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

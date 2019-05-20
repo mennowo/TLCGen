@@ -33,6 +33,7 @@ namespace TLCGen.Plugins.RIS
         private CCOLGeneratorCodeStringSettingModel _prmrisaend;
         private CCOLGeneratorCodeStringSettingModel _prmrisvstart;
         private CCOLGeneratorCodeStringSettingModel _prmrisvend;
+        private CCOLGeneratorCodeStringSettingModel _prmrislaneid;
 #pragma warning restore 0649
 
         #endregion // Fields
@@ -219,6 +220,14 @@ namespace TLCGen.Plugins.RIS
 
             if (_RISModel.RISToepassen)
             {
+                foreach (var l in _RISModel.RISFasen.SelectMany(x => x.LaneData))
+                {
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}",
+                            l.LaneID,
+                            CCOLElementTimeTypeEnum.None,
+                            _prmrislaneid, l.RijstrookIndex.ToString(), l.SignalGroupName));
+                }
                 foreach (var l in _RISModel.RISRequestLanes)
                 {
                     if (l.RISAanvraag)
@@ -352,11 +361,6 @@ namespace TLCGen.Plugins.RIS
                     sb.AppendLine($"/* Definitie lane id in het topologiebestand */");
                     sb.AppendLine($"/* ----------------------------------------- */");
                     sb.AppendLine($"#define ris_conflict_gebied    0 /* connection tussen alle ingress lanes en egress lanes */");
-                    foreach (var l in lanes)
-                    {
-                        sb.AppendLine($"#define ris_lane{l.SignalGroupName}{l.RijstrookIndex}          {l.LaneID,3} /* lane ID van richting {l.SignalGroupName} van strook {l.RijstrookIndex} */");
-                    }
-                    sb.AppendLine();
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -400,7 +404,7 @@ namespace TLCGen.Plugins.RIS
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_aanvraag({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisastart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisaend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) A[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();
@@ -423,7 +427,7 @@ namespace TLCGen.Plugins.RIS
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();

@@ -58,7 +58,7 @@ namespace TLCGen.Plugins.RIS
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
-                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
+                    sb.AppendLine($"{ts}ris_simulation_itsstation_parameters({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Flow}, {s.Snelheid}, 10, {s.Afstand}, 10, 1);");
                 }
             }
             sb.AppendLine($"{ts}#endif // RISSIMULATIE");
@@ -79,7 +79,7 @@ namespace TLCGen.Plugins.RIS
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
-                    sb.AppendLine($"{ts}ris_display_lane_parameters({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, \"{l.SignalGroupName}-{l.RijstrookIndex}\", {tl}, {dl});");
+                    sb.AppendLine($"{ts}ris_display_lane_parameters({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], \"{l.SignalGroupName}-{l.RijstrookIndex}\", {tl}, {dl});");
                 }
             }
             sb.AppendLine($"}}");
@@ -105,7 +105,7 @@ namespace TLCGen.Plugins.RIS
                             sitf = $"SYSTEM_ITF{j + 1}";
                         }
                     }
-                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, ris_lane{l.SignalGroupName}{l.RijstrookIndex}, {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Snelheid}, {s.Afstand}, 1);");
+                    sb.AppendLine($"{ts}if (SIS({_ispf}{s.Naam})) ris_simulation_put_itsstation_pb({sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], {_fcpf}{l.SignalGroupName}, RIF_STATIONTYPE_{s.Type}, 0, 0, {s.Snelheid}, {s.Afstand}, 1);");
                 }
             }
             sb.AppendLine($"");
@@ -114,7 +114,7 @@ namespace TLCGen.Plugins.RIS
             var i = 15;
             foreach (var l in model.RISFasen.SelectMany(x => x.LaneData).Where(x => x.SimulatedStations.Any()))
             {
-                sb.AppendLine($"xyprintf(0, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[ris_lane{l.SignalGroupName}{l.RijstrookIndex}]);");
+                sb.AppendLine($"xyprintf(0, {i}, \"%s\", RIS_DISPLAY_LANE_STRING[PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}]]);");
                 ++i;
             }
             sb.AppendLine($"");
