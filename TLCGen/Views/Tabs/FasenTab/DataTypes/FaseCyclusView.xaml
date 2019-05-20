@@ -91,10 +91,13 @@
                             <ct:InfoElement.InfoPopup>
                                 <TextBlock>
                                     Opties voor meeverlengen:<LineBreak />
-                                    ymmax - de default meeverleng functie<LineBreak />
-                                    ymmax_to - houdt rekening met ontruimingstijden<LineBreak />
-                                    ymmax || MK[fc] &amp;&amp; ymmax_to - default, maar bij MK kijken naar ontruimingstijden<LineBreak />
-                                    ymmax_vtg - meeverleng functie voor voetgangers
+                                    ymmaxV1 - de default TLCGen meeverleng functie<LineBreak />
+                                    ymmax_toV1 - houdt rekening met ontruimingstijden<LineBreak />
+                                    ymmaxV1 || MK[fc] &amp;&amp; ymmax_toV1 - default, maar bij MK kijken naar ontruimingstijden<LineBreak />
+                                    ymmax_vtg - meeverleng functie voor voetgangers<LineBreak/>
+                                    ymmax - de default CCOL meeverleng functie<LineBreak />
+                                    ymmax_to - idem als eerder, nu met default CCOL functies<LineBreak />
+                                    ymmaxV1 || MK[fc] &amp;&amp; ymmax_toV1 - idem als eerder, nu met default CCOL functies
                                 </TextBlock>
                             </ct:InfoElement.InfoPopup>
                         </ct:InfoElement>
@@ -121,6 +124,7 @@
                         <Label Content="Ontruimingstijd verschil" />
                         <TextBox Text="{Binding Path=MeeverlengenVerschil,TargetNullValue={x:Static sys:String.Empty}}" Margin="2" />
                     </StackPanel>
+                    <CheckBox Content="Type instelbaar op straat" VerticalAlignment="Center" Margin="5" IsChecked="{Binding Path=MeeverlengenTypeInstelbaarOpStraat}"/>
                     <StackPanel>
                         <Label Content="Hard meeverlengen met" />
                         <ct:SpecialDataGrid ItemsSource="{Binding Path=HardMeeverlengenFaseCycli}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False"

@@ -13,7 +13,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class MeeverlengenCodeGenerator : CCOLCodePieceGeneratorBase
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _schmv; // schakelaar meeverlengen naam
+        private CCOLGeneratorCodeStringSettingModel _schmv;
+        private CCOLGeneratorCodeStringSettingModel _prmmv;
 #pragma warning restore 0649
         private string _hfile;
         private string _hplact;
@@ -27,12 +28,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit &&
                     fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                 {
-                    _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schmv}{fcm.Naam}", 
-                            (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
-                            CCOLElementTimeTypeEnum.SCH_type, 
-                            _schmv, fcm.Naam));
+                    if (!fcm.MeeverlengenTypeInstelbaarOpStraat)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_schmv}{fcm.Naam}", 
+                                (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
+                                CCOLElementTimeTypeEnum.SCH_type, 
+                                _schmv, fcm.Naam));
+                    }
+                    else
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_prmmv}{fcm.Naam}",
+                                ((int)fcm.MeeverlengenType) + 1,
+                                CCOLElementTimeTypeEnum.None,
+                                _prmmv, fcm.Naam));
+                    }
+
                 }
             }
         }
@@ -79,13 +93,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
 
                     var totigfunc = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_toV1" : "ym_max_toV1";
+                    var totigfuncCCOL = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "ym_max_to" : "ym_max_tig";
 
                     foreach (FaseCyclusModel fcm in c.Fasen)
                     {
                         if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                         {
                             sb.Append($"{ts}YM[{fcm.GetDefine()}] |= ");
-                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                            if (!fcm.MeeverlengenTypeInstelbaarOpStraat && fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                             {
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
@@ -128,22 +143,38 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     }
                                 }
                             }
-                            switch (fcm.MeeverlengenType)
+                            if (!fcm.MeeverlengenTypeInstelbaarOpStraat)
                             {
-                                case MeeVerlengenTypeEnum.Default:
-                                    sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
-                                    break;
-                                case MeeVerlengenTypeEnum.To:
-                                    sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
-                                    break;
-                                case MeeVerlengenTypeEnum.MKTo:
-                                    sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
-                                    break;
-                                case MeeVerlengenTypeEnum.Voetganger:
-                                    sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
-                                    break;
-                                default:
-                                    throw new ArgumentOutOfRangeException();
+                                switch (fcm.MeeverlengenType)
+                                {
+                                    case MeeVerlengenTypeEnum.Default:
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.To:
+                                        sb.AppendLine($"{totigfunc}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.MKTo:
+                                        sb.AppendLine($"(ym_maxV1({fcm.GetDefine()}, {verschil}) || {totigfunc}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.Voetganger:
+                                        sb.AppendLine($"ym_max_vtgV1({fcm.GetDefine()}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.DefaultCCOL:
+                                        sb.AppendLine($"ym_maxV1({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.ToCCOL:
+                                        sb.AppendLine($"{totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    case MeeVerlengenTypeEnum.MKToCCOL:
+                                        sb.AppendLine($"(ym_max({fcm.GetDefine()}, {verschil}) || {totigfuncCCOL}({fcm.GetDefine()}, {verschil}) && MK[{fcm.GetDefine()}]) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
+                                        break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
+                                }
+                            }
+                            else
+                            {
+                                sb.AppendLine($"ym_max_prmV1({fcm.GetDefine()}, {_prmpf}{_prmmv}{fcm.Naam}, {verschil}) && {hf_wsg}({hf_wsg_args}) ? BIT4 : 0;");
                             }
                         }
                     }

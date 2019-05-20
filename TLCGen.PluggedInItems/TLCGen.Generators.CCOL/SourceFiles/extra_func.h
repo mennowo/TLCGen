@@ -7,6 +7,7 @@
 #endif
 
 bool ym_maxV1(count i, mulv to_verschil);
+bool ym_max_prmV1(count i, count prm, mulv to_verschil);
 bool ym_max_toV1(count i, mulv to_verschil);
 bool ym_max_vtgV1(count i);
 void AanvraagSnelV2(count fc1, count dp);

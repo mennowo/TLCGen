@@ -3,21 +3,21 @@
 int Knipper_1Hz = 0;
 
 /** ------------------------------------------------------------------------------
-MAXIMAAL MEEVERLENGEN
-------------------------------------------------------------------------------
-Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
-------  ----------  ---     ----------                      -----------------
-1.0   12-03-2012  psn     basis                            23-10-2012
-------------------------------------------------------------------------------
-Dit is een aangepaste versie van de standaard generator functie ym_max().
-Functie ym_max() wordt gebruikt bij de specificatie van de instructie-
-variabele YM[] (vasthouden meeverlenggroen) van de fasecyclus.
-De functie ym_max() blijft waar (TRUE) zolang de fasecyclus kan meeverlengen
-(met in achtname van ontruimingstijdverschillen).
-
-Ten opzichte van de functie uit de generator is het verschil:
-- De functie kijkt in plaats van alleen naar RA[], ook naar AAPR[]
------------------------------------------------------------------------------- */
+    MAXIMAAL MEEVERLENGEN
+    ------------------------------------------------------------------------------
+    Versie  Datum       Wie     Commentaar                      Vastgesteld in CO
+    ------  ----------  ---     ----------                      -----------------
+    1.0   12-03-2012  psn     basis                            23-10-2012
+    ------------------------------------------------------------------------------
+    Dit is een aangepaste versie van de standaard generator functie ym_max().
+    Functie ym_max() wordt gebruikt bij de specificatie van de instructie-
+    variabele YM[] (vasthouden meeverlenggroen) van de fasecyclus.
+    De functie ym_max() blijft waar (TRUE) zolang de fasecyclus kan meeverlengen
+    (met in achtname van ontruimingstijdverschillen).
+    
+    Ten opzichte van de functie uit de generator is het verschil:
+    - De functie kijkt in plaats van alleen naar RA[], ook naar AAPR[]
+    ------------------------------------------------------------------------------ */
 
 bool ym_maxV1(count i, mulv to_verschil)
 {
@@ -92,9 +92,36 @@ bool ym_maxV1(count i, mulv to_verschil)
 	else ym = FALSE;
 	return ym;
 }
+
+bool ym_max_prmV1(count i, count prm, mulv to_verschil)
+{
+	switch (PRM[prm]) 
+	{
+	case 0:
+		return FALSE;
+	case 1:
+		return ym_maxV1(i, to_verschil);
+	case 2:
+		return ym_max_toV1(i, to_verschil);
+	case 3:
+		return ym_maxV1(i, to_verschil) || MK[i] && ym_max_toV1(i, to_verschil);
+	case 4:
+		return ym_max_vtgV1(i, to_verschil);
+	case 5:
+		return ym_max(i, to_verschil);
+	case 6:
+#if defined CCOLTIG && !defined NO_TIGMAX
+		return ym_max_tig(i, to_verschil);
+#else
+		return ym_max_to(i, to_verschil);
+#endif
+	case 7:
+		return ym_max(i, to_verschil) || MK[i] && ym_max_to(i, to_verschil);
+	}
+}
+
 /* MAXIMUM MEEVERLENGGROEN */
 /* ======================= */
-
 /* ym_max_to() wordt gebruikt bij de specificatie van de instructie-
  * variabele YM[] (vasthouden meeverlenggroen) van de fasecyclus.
  * ym_max_to() blijft waar (TRUE) zolang de fasecyclus kan meeverlengen
@@ -112,8 +139,6 @@ bool ym_maxV1(count i, mulv to_verschil)
  *  YM[fc05]= ym_max_to(fc05,0) || CIF_IS[is_fix];
  *  fc05 blijft meeverlengen met ontruimingstijd van fc32 naar fc08.
  */
-
-
 bool ym_max_toV1(count i, mulv to_verschil)
 {
 	register count n, j, k, m;

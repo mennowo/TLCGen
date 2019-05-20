@@ -772,6 +772,14 @@
             <Description>Meeverlengen fase _E1_</Description>
           </Setting>
         </Settings>
+        <Settings>
+          <Setting>
+            <Default>mv</Default>
+            <Setting>mv</Setting>
+            <Type>Parameter</Type>
+            <Description>Type meeverlengen fase _E1_ (0=uit,1=ymmaxV1,2=ymmaxtoV1,3=ymmaxV1|MK&amp;ymmaxtoV1,4=ymmaxvtg,5=ymmax,6=ymmaxto,7=ymmax|MK&amp;ymmaxto)</Description>
+          </Setting>
+        </Settings>
       </CodePieceData>
     </CodePieceGenerator>
     <CodePieceGenerator CodePiece="NalopenCodeGenerator">

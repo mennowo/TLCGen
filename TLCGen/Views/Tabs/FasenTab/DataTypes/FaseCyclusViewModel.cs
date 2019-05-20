@@ -86,7 +86,7 @@ namespace TLCGen.ViewModels
                     // Apply new defaults
                     var iL = FaseCyclus.AantalRijstroken;
                     DefaultsProvider.Default.SetDefaultsOnModel(this.FaseCyclus, this.Type.ToString());
-                    if(iL != FaseCyclus.AantalRijstroken)
+                    if (iL != FaseCyclus.AantalRijstroken)
                     {
                         MessengerInstance.Send(new FaseAantalRijstrokenChangedMessage(FaseCyclus, FaseCyclus.AantalRijstroken));
                     }
@@ -524,6 +524,18 @@ namespace TLCGen.ViewModels
                 {
                     MeeverlengenType = MeeVerlengenTypeEnum.Voetganger;
                 }
+                else if (value == MeeVerlengenTypeEnum.DefaultCCOL.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.DefaultCCOL;
+                }
+                else if (value == MeeVerlengenTypeEnum.ToCCOL.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.ToCCOL;
+                }
+                else if (value == MeeVerlengenTypeEnum.MKToCCOL.GetDescription())
+                {
+                    MeeverlengenType = MeeVerlengenTypeEnum.MKToCCOL;
+                }
                 else
                 {
                     throw new ArgumentOutOfRangeException("MeeverlengenTypeString",
@@ -531,6 +543,16 @@ namespace TLCGen.ViewModels
                 }
 
                 RaisePropertyChanged("MeeverlengenTypeString");
+            }
+        }
+
+        public bool MeeverlengenTypeInstelbaarOpStraat
+        {
+            get => _faseCyclus.MeeverlengenTypeInstelbaarOpStraat;
+            set
+            {
+                _faseCyclus.MeeverlengenTypeInstelbaarOpStraat = value;
+                RaisePropertyChanged<object>(broadcast: true);
             }
         }
 
@@ -587,6 +609,9 @@ namespace TLCGen.ViewModels
             MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKTo.GetDescription());
             if (_faseCyclus.Type == FaseTypeEnum.Voetganger)
                 MeeverlengenOpties.Add(MeeVerlengenTypeEnum.Voetganger.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.DefaultCCOL.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.ToCCOL.GetDescription());
+            MeeverlengenOpties.Add(MeeVerlengenTypeEnum.MKToCCOL.GetDescription());
 
             _meeverlengenTypeString = MeeverlengenType.GetDescription();
             RaisePropertyChanged("MeeverlengenTypeString");

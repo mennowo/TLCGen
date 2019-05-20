@@ -11,17 +11,19 @@ namespace TLCGen.Models.Enumerations
     [TypeConverter(typeof(EnumDescriptionTypeConverter))]
     public enum MeeVerlengenTypeEnum
     {
-        //[Description("Default")]
-        [Description("ymmax")]
+        [Description("ymmaxV1")]
         Default,
-        //[Description("Tot ontruiming")]
-        [Description("ymmax_to")]
+        [Description("ymmax_toV1")]
         To,
-        //[Description("MK tot ontruiming")]
-        [Description("ymmax || MK[fc] && ymmax_to")]
+        [Description("ymmaxV1 || MK[fc] && ymmax_toV1")]
         MKTo,
-        //[Description("Voetganger")]
         [Description("ymmax_vtg")]
-        Voetganger
+        Voetganger,
+        [Description("ymmax")]
+        DefaultCCOL,
+        [Description("ymmax_to")]
+        ToCCOL,
+        [Description("ymmax || MK[fc] && ymmax_to")]
+        MKToCCOL
     }
 }
