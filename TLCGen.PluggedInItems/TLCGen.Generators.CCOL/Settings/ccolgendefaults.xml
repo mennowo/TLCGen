@@ -1708,18 +1708,23 @@
             <Type>Schakelaar</Type>
             <Description>In- en uitmelden _E1_ via _E2_ HD toestaan</Description>
           </Setting>
-
           <Setting>
             <Default>checksirene</Default>
             <Setting>checksirene</Setting>
             <Type>Schakelaar</Type>
             <Description>Bij HD meldingen bij _E1_ via DSI controleren op CIF_SIR</Description>
           </Setting>
-        <Setting>
+          <Setting>
             <Default>wisselpol</Default>
             <Setting>wisselpol</Setting>
             <Type>Schakelaar</Type>
             <Description>Polariteit van wissel ingang _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>covuber</Default>
+            <Setting>covuber</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Weergeven wijzigingen OV_teller via CIF_UBER</Description>
           </Setting>
         </Settings>
       </CodePieceData>

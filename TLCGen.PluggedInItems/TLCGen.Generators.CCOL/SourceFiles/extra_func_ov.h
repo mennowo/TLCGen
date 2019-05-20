@@ -3,23 +3,14 @@
 
 #define MAX_AANTAL_INMELDINGEN 10
 
-bool DSIMeldingOV_V1(
-	count dslus,
-	count vtgtype,
-	bool checkfcnmr,
-	count fcnmr,
-	bool checktype,
-	count meldingtype,
-	bool extra);
+extern mulv C_counter_old[CTMAX];
 
+bool DSIMeldingOV_V1(count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
 bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax);
 bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax);
-
-bool DSIMelding_HD_V1(count dir, /* 1. fc nummer of richtingnummer (201, 202, 203)  */
-	count meldingtype,           /* 2. Type melding: in of uit */
-	bool check_sirene);          /* 3. Check SIRENE */
-
+bool DSIMelding_HD_V1(count dir, count meldingtype, bool check_sirene);
 void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat);
+void OV_teller(count cov, count scov);
 
 #ifdef CCOL_IS_SPECIAL
 void reset_DSI_message(void);

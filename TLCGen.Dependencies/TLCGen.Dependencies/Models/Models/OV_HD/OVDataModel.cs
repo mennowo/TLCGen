@@ -23,6 +23,7 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioGrensTeLaat { get; set; }
         public bool BlokkeerNietConflictenBijHDIngreep { get; set; }
         public bool BlokkeerNietConflictenAlleenLangzaamVerkeer { get; set; }
+        public NooitAltijdAanUitEnum VerklikkenOVTellerUber { get; set; }
 
         [Browsable(false)]
         [IOElement("karmelding", BitmappedItemTypeEnum.Uitgang, null, "HasAnyKAR")]

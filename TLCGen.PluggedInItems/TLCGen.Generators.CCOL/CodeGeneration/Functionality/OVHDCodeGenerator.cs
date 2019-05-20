@@ -82,6 +82,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         private CCOLGeneratorCodeStringSettingModel _schchecksirene;
         private CCOLGeneratorCodeStringSettingModel _schwisselpol;
+
+        private CCOLGeneratorCodeStringSettingModel _schcovuber;
 #pragma warning restore 0649
 
         private string _tnlfg;
@@ -211,6 +213,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _MyDetectors = new List<DetectorModel>();
             _myBitmapOutputs = new List<CCOLIOElement>();
             _myBitmapInputs = new List<CCOLIOElement>();
+
+            if (c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchAan || c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchUit)
+            {
+                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schcovuber}", c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schcovuber));
+            }
 
             if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
             {
@@ -476,10 +483,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCTop:
+                    return 60;
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return 40;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 40;
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    return 30;
                 case CCOLCodeTypeEnum.OvCInUitMelden:
                     return 10;
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
@@ -713,6 +724,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCTop:
+                    sb.AppendLine("mulv C_counter_old[CTMAX];");
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCPreApplication:
 
                     if (c.OVData.OVIngrepen.Any(ov => ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus))
@@ -801,6 +816,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}{ts}CIF_GUS[{_uspf}{_usmaxwt}] |= iMaximumWachtTijdOverschreden[ov];");
                     }
                     return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    if (c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.Nooit) return "";
+                    sb.AppendLine($"{ts}/* Verklikken wijzigingen OV-teller */");
+                    var sch = c.OVData.VerklikkenOVTellerUber == NooitAltijdAanUitEnum.Altijd ? "NG" : $"{_schpf}{_schcovuber}";
+                    foreach(var ov in c.OVData.OVIngrepen)
+                    {
+                        sb.AppendLine($"{ts}OV_teller({_ctpf}{_cvc}{ov.FaseCyclus}, {sch});");
+                    }
+                    foreach (var hd in c.OVData.HDIngrepen)
+                    {
+                        sb.AppendLine($"{ts}OV_teller({_ctpf}{_cvchd}{hd.FaseCyclus}, {sch});");
+                    }
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.OvCInUitMelden:
                     foreach (var ov in c.OVData.OVIngrepen)
                     {

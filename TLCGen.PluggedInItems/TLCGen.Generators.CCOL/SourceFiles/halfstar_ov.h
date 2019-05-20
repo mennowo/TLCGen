@@ -18,6 +18,7 @@
 #define __OV_PLE__
 
 extern mulv TXB_PL[FCMAX], TXD_PL[FCMAX];
+
 /* -------------------------------------------------------------------------------------- */
 /* Gereserveerde bitwaarde tbv OV ingrepen tijdens signaalplan                            */
 /* -------------------------------------------------------------------------------------- */

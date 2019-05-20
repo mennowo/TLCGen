@@ -125,6 +125,27 @@ void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], c
 	}
 }
 
+/**
+ Functie : OV_teller
+ Functionele omschrijving : Bij wijziging van OV_teller wordt deze in CIF_UBER geschreven.
+ **/
+void OV_teller(count cov, count scov)
+{
+	if (scov == NG || SCH[scov])
+	{
+		if (C_counter[cov] != C_counter_old[cov])
+		{
+			uber_puts(PROMPT_code);
+			uber_puts(C_code[cov]);
+			uber_puts("= ");
+			uber_puti(C_counter[cov]);
+			uber_puts("\n");
+		}
+	}
+	/* onthouden C_counter */
+	/* ------------------- */
+	C_counter_old[cov] = C_counter[cov];
+}
 
 #ifdef CCOL_IS_SPECIAL
 /*  de functie reset_DSI-message()

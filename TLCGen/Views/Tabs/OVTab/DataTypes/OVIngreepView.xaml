@@ -85,17 +85,17 @@
                 <!-- Prioriteitsopties -->
                 <TextBlock Text="Prioriteitsopties" TextDecorations="Underline" Margin="5" Grid.ColumnSpan="2" />
                 <Label Content="Afkappen conflicten" />
-                <CheckBox IsEnabled="{Binding Path=AfkappenConflicten,Mode=OneWay}"
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                <CheckBox
+                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflicten}" />
                 <Label Content="Afkappen conflicterend OV" />
-                <CheckBox IsEnabled="{Binding Path=AfkappenConflictenOV,Mode=OneWay}"
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                <CheckBox
+                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=AfkappenConflictenOV}" />
                 <Label Content="Vasthouden groen" />
-                <CheckBox IsEnabled="{Binding Path=VasthoudenGroen,Mode=OneWay}"
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                <CheckBox
+                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=VasthoudenGroen}" />
                 <Label Content="Tussendoor realiseren" />
-                <CheckBox IsEnabled="{Binding Path=TussendoorRealiseren,Mode=OneWay}"
-                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=NoodaanvraagKoplus}" />
+                <CheckBox
+                    Grid.Row="3" Grid.Column="1" Margin="5" IsChecked="{Binding Path=TussendoorRealiseren}" />
                 
                 <TextBlock Text="Inmelden/aanvragen koplus" Margin="5" Padding="0" TextDecorations="Underline" Grid.ColumnSpan="2" />
                 <Label Content="Koplus" />

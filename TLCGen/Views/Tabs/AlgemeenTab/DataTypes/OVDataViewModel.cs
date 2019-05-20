@@ -138,6 +138,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Verklikken wijzing OV teller via UBER")]
+        public NooitAltijdAanUitEnum VerklikkenOVTellerUber
+        {
+            get { return _Controller == null ? NooitAltijdAanUitEnum.Nooit : _Controller.OVData.VerklikkenOVTellerUber; }
+            set
+            {
+                _Controller.OVData.VerklikkenOVTellerUber = value;
+                RaisePropertyChanged<object>(nameof(VerklikkenOVTellerUber), broadcast: true);
+            }
+        }
+
         #endregion // Properties
     }
 }
