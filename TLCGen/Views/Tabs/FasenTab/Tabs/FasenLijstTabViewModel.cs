@@ -377,7 +377,7 @@ namespace TLCGen.ViewModels
         {
             var fc = Fasen.First(x => x.FaseCyclus == item);
             fc.RaisePropertyChanged("");
-			Messenger.Default.Send(new DetectorenChangedMessage(null, null));
+			Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, null));
         }
 
         #endregion // IAllowTemplates

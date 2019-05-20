@@ -150,7 +150,7 @@ namespace TLCGen.ModelManagement
                 if (!fcm.Detectoren.IsSorted())
                 {
                     fcm.Detectoren.BubbleSort();
-                    MessengerInstance.Send(new DetectorenChangedMessage(null, null));
+                    MessengerInstance.Send(new DetectorenChangedMessage(controller, null, null));
                 }
             }
 
@@ -523,6 +523,42 @@ namespace TLCGen.ModelManagement
             }
         }
 
+        private void OnDetectorenChangedMessage(DetectorenChangedMessage msg)
+        {
+            if (msg.RemovedDetectoren != null && msg.RemovedDetectoren.Any())
+            {
+                foreach (var d in msg.RemovedDetectoren)
+                {
+                    if (d.Type == DetectorTypeEnum.OpticomIngang)
+                    {
+                        foreach (var hd in msg.Controller.OVData.HDIngrepen)
+                        {
+                            if (hd.Opticom && hd.OpticomRelatedInput == d.Naam)
+                            {
+                                hd.Opticom = false;
+                                hd.OpticomRelatedInput = null;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void OnFaseDetectorTypeChangedMessage(FaseDetectorTypeChangedMessage msg)
+        {
+            if(msg.OldType == DetectorTypeEnum.OpticomIngang && msg.NewType != DetectorTypeEnum.OpticomIngang)
+            {
+                foreach (var hd in msg.Controller.OVData.HDIngrepen)
+                {
+                    if (hd.Opticom && hd.OpticomRelatedInput == msg.DetectorDefine)
+                    {
+                        hd.Opticom = false;
+                        hd.OpticomRelatedInput = null;
+                    }
+                }
+            }
+        }
+
         #endregion // TLCGen Messaging
 
         #region Constructor
@@ -536,7 +572,9 @@ namespace TLCGen.ModelManagement
             MessengerInstance.Register(this, new Action<FasenChangingMessage>(OnFasenChanging));
             MessengerInstance.Register(this, new Action<NameChangingMessage>(OnNameChanging));
             MessengerInstance.Register(this, true, new Action<ModelManagerMessageBase>(OnModelManagerMessage));
-            MessengerInstance.Register(this, new Action<TLCGen.Messaging.Requests.PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+            MessengerInstance.Register(this, new Action<PrepareForGenerationRequest>(OnPrepareForGenerationRequest));
+            MessengerInstance.Register(this, new Action<DetectorenChangedMessage>(OnDetectorenChangedMessage));
+            MessengerInstance.Register(this, new Action<FaseDetectorTypeChangedMessage>(OnFaseDetectorTypeChangedMessage));
         }
 
         #endregion // Constructor

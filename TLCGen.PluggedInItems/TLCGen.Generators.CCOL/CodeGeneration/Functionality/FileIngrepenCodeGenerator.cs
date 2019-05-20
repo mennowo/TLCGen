@@ -29,6 +29,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         // read from other objects
         private string _mperiod;
+        private string _hplact;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -307,12 +308,23 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCWachtgroen:
                     sb.AppendLine($"{ts}/* Niet in wachtgroen vasthouden tijdens file */");
+                    var tts = ts;
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        tts += ts;
+                        sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}{{");
+                    }
                     foreach (var fi in c.FileIngrepen)
                     {
                         foreach(var tdfc in fi.TeDoserenSignaalGroepen)
                         {
-                            sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}]) RW[{_fcpf}{tdfc.FaseCyclus}] &= ~BIT4;");
+                            sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fi.Naam}]) RW[{_fcpf}{tdfc.FaseCyclus}] &= ~BIT4;");
                         }
+                    }
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"{ts}}}");
                     }
                     return sb.ToString();
 
@@ -543,9 +555,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}/* percentage MG bij filemelding */");
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}])");
-                        sb.AppendLine($"{ts}{{");
+                        tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            tts += ts;
+                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                        }
+
+                        sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
+                        sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}])");
+                        sb.AppendLine($"{tts}{{");
                         foreach (var ff in fm.TeDoserenSignaalGroepen)
                         {
                             string grfunc = "";
@@ -555,9 +575,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
                             }
                             sb.AppendLine(fm.EerlijkDoseren
-                                ? $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
-                                : $"{ts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
-                            sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
+                                ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
+                                : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
+                            sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
                             var rest = "";
                             var irest = 1;
                             rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
@@ -576,58 +596,71 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine($"{irest}{rest});");
                         }
-                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{tts}}}");
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
                         {
-                            sb.AppendLine($"{ts}/* Eenmalige afkappen op start file ingreep */");
+                            sb.AppendLine($"{tts}/* Eenmalige afkappen op start file ingreep */");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.AfkappenOpStartFile))
                             {
-                                sb.AppendLine($"{ts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
-                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{tts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} */");
+                                sb.AppendLine($"{tts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{tts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
+                                sb.AppendLine($"{tts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
+                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                             }
                             sb.AppendLine();
                         }
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
                         {
-                            sb.AppendLine($"{ts}/* Eenmalige afkappen op start file ingreep */");
+                            sb.AppendLine($"{tts}/* Eenmalige afkappen op start file ingreep */");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
                             {
-                                sb.AppendLine($"{ts}/* Minimale roodtijd tijdens fase {tdfc.FaseCyclus} tijdens file ingreep */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) X[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{tts}/* Minimale roodtijd tijdens fase {tdfc.FaseCyclus} tijdens file ingreep */");
+                                sb.AppendLine($"{tts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{tts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) X[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                             }
                             sb.AppendLine();
+                        }
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
                         }
 
                         first = false;
                     }
                     if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
-                        sb.Append($"{ts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
+                        tts = ts;
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            tts += ts;
+                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                            sb.AppendLine($"{ts}{{");
+                        }
+
+                        sb.Append($"{tts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
                         foreach (var fm in c.FileIngrepen)
                         {
                             sb.AppendLine();
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
-                                sb.AppendLine($"{ts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
-                                sb.AppendLine($"{ts}{{");
+                                sb.AppendLine($"{tts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
+                                sb.AppendLine($"{tts}{{");
                                 if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)
                                 {
                                     if (!c.Data.MultiModuleReeksen)
                                     {
-                                        sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML);");
+                                        sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PRML, ML);");
                                     }
                                     else
                                     {
                                         var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
                                         if (r != null)
                                         {
-                                            sb.AppendLine($"{ts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PR{r.Reeks}, {r.Reeks});");
+                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcmg_{fm.Naam}, nogtedoseren_{fm.Naam}, PR{r.Reeks}, {r.Reeks});");
                                         }
                                     }
                                 }
@@ -635,22 +668,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (!c.Data.MultiModuleReeksen)
                                     {
-                                        sb.AppendLine($"{ts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PRML, ML);");
+                                        sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PRML, ML);");
                                     }
                                     else
                                     {
                                         var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => fm.TeDoserenSignaalGroepen.Any(x4 => x3.FaseCyclus == x4.FaseCyclus))));
                                         if (r != null)
                                         {
-                                            sb.AppendLine($"{ts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PR{r.Reeks}, {r.Reeks});");
+                                            sb.AppendLine($"{tts}{ts}Eerlijk_doseren_VerlengGroenTijden_V1({_hpf}{_hfile}{fm.Naam}, {_prmpf}{_prmfperc}{fm.Naam}, filefcmax{fm.Naam}, filefc_{fm.Naam}, filefcvg_{fm.Naam}, nogtedoseren_{fm.Naam}, &PR{r.Reeks}, {r.Reeks});");
                                         }
                                     }
                                 }
                                     
-                                sb.AppendLine($"{ts}}}");
+                                sb.AppendLine($"{tts}}}");
                             }
                         }
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                        }
                     }
+
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCSystemApplication:
@@ -700,6 +739,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }

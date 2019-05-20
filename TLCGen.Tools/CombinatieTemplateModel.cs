@@ -96,7 +96,7 @@ namespace TLCGen.Plugins.Tools
                     case DetectorModel d:
                         var fc = (FaseCyclusModel)i.Item2;
                         fc.Detectoren.Add(d);
-                        Messenger.Default.Send(new Messaging.Messages.DetectorenChangedMessage(new List<DetectorModel> { d }, null));
+                        Messenger.Default.Send(new Messaging.Messages.DetectorenChangedMessage(c, new List<DetectorModel> { d }, null));
                         break;
                     case NaloopModel nl:
                         c.InterSignaalGroep.Nalopen.Add(nl);

@@ -277,7 +277,7 @@ namespace TLCGen.ViewModels
             _Detectoren.Add(dvm1);
             dvm1.PropertyChanged += Detector_PropertyChanged;
             Detectoren.BubbleSort();
-            Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { _dm }, null));
+            Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { _dm }, null));
         }
 
         bool AddDetectorCommand_CanExecute(object prm)
@@ -308,7 +308,7 @@ namespace TLCGen.ViewModels
             if (changed)
             {
                 SelectedFaseNaam = SelectedFaseNaam;
-                Messenger.Default.Send(new DetectorenChangedMessage(null, remDets));
+                Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
             }
         }
 
@@ -422,7 +422,7 @@ namespace TLCGen.ViewModels
         {
             var d = Detectoren.First(x => x.Detector == item);
             d.RaisePropertyChanged("");
-            Messenger.Default.Send(new DetectorenChangedMessage(new List<DetectorModel> { item }, null));
+            Messenger.Default.Send(new DetectorenChangedMessage(_Controller, new List<DetectorModel> { item }, null));
         }
 
         #endregion // IAllowTemplates

@@ -330,7 +330,7 @@ namespace TLCGen.ViewModels
         public void OnFaseDetectorTypeChanged(FaseDetectorTypeChangedMessage message)
         {
             _DetectorManager = null;
-            if (message.Type != DetectorTypeEnum.File)
+            if (message.NewType != DetectorTypeEnum.File)
             {
                 var d = FileDetectoren.FirstOrDefault(x => x.Detector == message.DetectorDefine);
                 if (d != null)

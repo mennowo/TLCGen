@@ -103,6 +103,7 @@ namespace TLCGen.ViewModels
             get => _detector.Type;
 	        set
             {
+                var old = _detector.Type;
                 _detector.Type = value;
                 if(FaseCyclus != null && TLCGenControllerDataProvider.Default.Controller.Fasen.Any(x => x.Naam == FaseCyclus))
                 {
@@ -115,7 +116,7 @@ namespace TLCGen.ViewModels
                 }
                 RaisePropertyChanged(string.Empty); // Update all properties
                 RaisePropertyChanged<object>(nameof(Type), broadcast: true);
-                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(Naam, value));
+                Messenger.Default.Send(new FaseDetectorTypeChangedMessage(TLCGenControllerDataProvider.Default.Controller, Naam, old, value));
             }
         }
 
