@@ -111,7 +111,10 @@
         <File Id='Gu.Wpf.DataGrid2D' Name='Gu.Wpf.DataGrid2D.dll' Source='$(var.ReleaseDir)/Gu.Wpf.DataGrid2D.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack' Name='Microsoft.WindowsAPICodePack.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.dll' KeyPath='no' />
         <File Id='Microsoft.WindowsAPICodePack.Shell' Name='Microsoft.WindowsAPICodePack.Shell.dll' Source='$(var.ReleaseDir)/Microsoft.WindowsAPICodePack.Shell.dll' KeyPath='no' />
+        <File Id='Newtonsoft.Json' Name='Newtonsoft.Json.dll' Source='$(var.ReleaseDir)/Newtonsoft.Json.dll' KeyPath='no' />
         <File Id='System.Windows.Interactivity' Name='System.Windows.Interactivity.dll' Source='$(var.ReleaseDir)/System.Windows.Interactivity.dll' KeyPath='no' />
+        <File Id='WindowsInput' Name='WindowsInput.dll' Source='$(var.ReleaseDir)/WindowsInput.dll' KeyPath='no' />
+        <File Id='WpfAutoGrid' Name='WpfAutoGrid.dll' Source='$(var.ReleaseDir)/WpfAutoGrid.dll' KeyPath='no' />
         <File Id='Xceed.Wpf.Toolkit' Name='Xceed.Wpf.Toolkit.dll' Source='$(var.ReleaseDir)/Xceed.Wpf.Toolkit.dll' KeyPath='no' />
       </Component>
     </ComponentGroup>
