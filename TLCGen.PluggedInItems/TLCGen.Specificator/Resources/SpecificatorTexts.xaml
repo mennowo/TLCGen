@@ -106,6 +106,9 @@
     <!-- Halfstar -->
     <system:String x:Key="Title_Halfstar">Halfstar regelen</system:String>
     
+    <!-- Opties/specials -->
+    <system:String x:Key="Title_Specials">Specials</system:String>
+    
     <!-- Groentijden -->
     <system:String x:Key="Title_Groentijden">Groentijden</system:String>
     <system:String x:Key="Table_MaxGroentijden">Tabel met maximum groentijden</system:String>

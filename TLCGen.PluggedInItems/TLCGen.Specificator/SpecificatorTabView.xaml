@@ -12,7 +12,52 @@
             <ct:SimplePropertyEditor BoundObject="{Binding SpecificatorVM}" Margin="2" />
         </TabItem>
         <TabItem Header="Specials">
-            
+            <Grid DataContext="{Binding Path=SpecificatorVM}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Label Content="Omschrijving van gebruikersopties en specials" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition Width="5" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <DockPanel>
+                        <Label Content="Paragrafen" DockPanel.Dock="Top" />
+                        <ListView 
+                            DockPanel.Dock="Bottom" Margin="2" Name="ParagrafenLV"
+                            ItemsSource="{Binding Path=SpecialsParagrafen}" SelectedItem="{Binding Path=SelectedSpecialsParagraaf}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Titel}" Margin="5" VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                    <GridSplitter Width="5" Grid.Column="1" HorizontalAlignment="Stretch" />
+                    <Grid Grid.Column="2" DataContext="{Binding ElementName=ParagrafenLV,Path=SelectedItem}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <DockPanel>
+                            <Label Content="Titel" />
+                            <TextBox Text="{Binding Path=Titel,UpdateSourceTrigger=PropertyChanged}" Margin="2" FontWeight="Bold" />
+                        </DockPanel>
+                        <TextBox AcceptsReturn="True" Text="{Binding Path=Text,UpdateSourceTrigger=LostFocus}" Grid.Row="1" Margin="2"
+                                 TextWrapping="Wrap" />
+                    </Grid>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <Button Content="Paragraaf toev." Command="{Binding Path=AddParagraafCommand}" Margin="2" />
+                    <Button Content="Paragraaf verw." Command="{Binding Path=RemoveParagraafCommand}" Margin="2" />
+                    <Button Content="Paragraaf omhoog" Command="{Binding Path=MoveParagraafUpCommand}" Margin="2" />
+                    <Button Content="Paragraaf omlaag" Command="{Binding Path=MoveParagraafDownCommand}" Margin="2" />
+                </StackPanel>
+            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

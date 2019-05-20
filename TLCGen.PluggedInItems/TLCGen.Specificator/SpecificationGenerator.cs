@@ -138,10 +138,24 @@ namespace TLCGen.Specificator
 
                 if (c.HalfstarData.IsHalfstar)
                 {
-                    body.Append(OpenXmlHelper.GetChapterTitleParagraph($"Title_Halfstar", 1));
+                    body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Halfstar"]}", 1));
                     body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk inzake halfstar regelen.", "TODO")));
-
                 }
+
+                if (model.SpecialsParagrafen.Any())
+                {
+                    body.Append(OpenXmlHelper.GetChapterTitleParagraph($"{Texts["Title_Specials"]}", 1));
+                    foreach(var par in model.SpecialsParagrafen)
+                    {
+                        body.Append(OpenXmlHelper.GetChapterTitleParagraph(par.Titel, 2));
+                        foreach(var parpar in par.Text.Split('\n'))
+                        {
+                            if(!string.IsNullOrWhiteSpace(parpar))
+                                body.Append(OpenXmlHelper.GetTextParagraph(parpar));
+                        }
+                    }
+                }
+
                 body.Append(OpenXmlHelper.GetChapterTitleParagraph($"TODO", 1));
                 body.Append((OpenXmlHelper.GetTextParagraph($"TODO: Hoofdstuk OV: details toevoegen, zoals: " +
                     $"lijnnummers, details rond in/uitmelden, inmelden koplus, .", "TODO")));

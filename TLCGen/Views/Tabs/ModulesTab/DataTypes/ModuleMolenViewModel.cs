@@ -245,9 +245,10 @@ namespace TLCGen.ViewModels
         {
             int index = Modules.IndexOf(SelectedModule);
             Modules.Remove(SelectedModule);
-            if(Modules.Count > 0)
+            SelectedModule = null;
+            if (Modules.Count > 0)
             {
-                if(index >= Modules.Count)
+                if (index >= Modules.Count)
                 {
                     SelectedModule = Modules[Modules.Count - 1];
                 }

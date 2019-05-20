@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace TLCGen.Specificator
@@ -14,5 +15,17 @@ namespace TLCGen.Specificator
         public string TelefoonNummer { get; set; }
         public string EMail { get; set; }
         public string Website { get; set; }
+        public List<SpecificatorSpecialsParagraaf> SpecialsParagrafen { get; set; }
+
+        public SpecificatorDataModel()
+        {
+            SpecialsParagrafen = new List<SpecificatorSpecialsParagraaf>();
+        }
+    }
+
+    public class SpecificatorSpecialsParagraaf
+    {
+        public string Titel { get; set; }
+        public string Text { get; set; }
     }
 }

@@ -80,6 +80,8 @@ namespace TLCGen.Specificator
                         _data = new SpecificatorDataModel();
                     }
                     _myVm.Data = _data;
+                    _myVm.SpecialsParagrafen = new ObservableCollectionAroundList<SpecificatorSpecialsParagraafViewModel, SpecificatorSpecialsParagraaf>(_data.SpecialsParagrafen);
+                    _myVm.SelectedSpecialsParagraaf = _myVm.SpecialsParagrafen.FirstOrDefault();
                 }
                 _controller = value;
             }
