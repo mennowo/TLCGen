@@ -109,24 +109,12 @@ namespace TLCGen.ViewModels
         void AddSelectieveDetectorCommand_Executed(object prm)
         {
             SelectieveDetectorModel dm = new SelectieveDetectorModel();
-            string newname = "s001";
-            int inewname = 1;
-            foreach (SelectieveDetectorViewModel ivm in SelectieveDetectoren)
+            int inewname = SelectieveDetectoren.Count + 1;
+            string newname = "s" + inewname.ToString("000");
+            while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.SelectieveDetector, newname))
             {
-                if (Regex.IsMatch(ivm.Naam, @"[0-9]+"))
-                {
-                    Match m = Regex.Match(ivm.Naam, @"[0-9]+");
-                    string next = m.Value;
-                    if (Int32.TryParse(next, out inewname))
-                    {
-                        newname = "s" + inewname.ToString("000");
-                        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.SelectieveDetector, newname))
-                        {
-                            inewname++;
-                            newname = "s" + inewname.ToString("000");
-                        }
-                    }
-                }
+                inewname++;
+                newname = "s" + inewname.ToString("000");
             }
             dm.Naam = newname;
             SelectieveDetectorViewModel dvm1 = new SelectieveDetectorViewModel(dm);
