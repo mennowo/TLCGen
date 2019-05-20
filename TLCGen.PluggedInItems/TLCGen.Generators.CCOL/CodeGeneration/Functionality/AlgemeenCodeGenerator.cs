@@ -94,7 +94,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.SysHBeforeUserDefines:
                     if (!c.Data.PracticeOmgeving) return "";
                     sb.AppendLine($"/* T.b.v. practice */");
-                    sb.AppendLine($"#ifdef _VRIWINTEST");
+                    sb.AppendLine($"#ifdef PRACTICE_TEST");
                     sb.AppendLine($"{ts}#define XTND_DIC");
                     sb.AppendLine($"#endif");
                     sb.AppendLine($"");

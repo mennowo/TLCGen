@@ -7,11 +7,12 @@
              xmlns:local="clr-namespace:TLCGen.Specificator"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>-->
-        <ct:SimplePropertyEditor BoundObject="{Binding SpecificatorVM}" />
-    </Grid>
+    <TabControl>
+        <TabItem Header="Instellingen">
+            <ct:SimplePropertyEditor BoundObject="{Binding SpecificatorVM}" Margin="2" />
+        </TabItem>
+        <TabItem Header="Specials">
+            
+        </TabItem>
+    </TabControl>
 </UserControl>

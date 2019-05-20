@@ -202,7 +202,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 controller.Detectoren.Any() && controller.Detectoren.Where(x => x.Dummy).Any() ||
                 ovdummies.Any())
             {
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined _VRIWINTEST");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined VISSIM || defined PRACTICE_TEST");
                 foreach (var dm in controller.GetAllDetectors(x => x.Dummy))
                 {
                     sb.Append($"{ts}#define {dm.GetDefine()} ".PadRight(pad1));

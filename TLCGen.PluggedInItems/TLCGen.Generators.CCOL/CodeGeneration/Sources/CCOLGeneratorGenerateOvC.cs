@@ -53,7 +53,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("/*------------- */");
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#ifndef _VRIWINTEST");
+                sb.AppendLine("#ifndef PRACTICE_TEST");
             }
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
@@ -81,7 +81,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#endif // _VRIWINTEST");
+                sb.AppendLine("#endif // PRACTICE_TEST");
             }
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCIncludes, true, true, true, true);
@@ -114,7 +114,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#ifndef _VRIWINTEST");
+                sb.AppendLine("#ifndef PRACTICE_TEST");
                 sb.AppendLine("#include \"ov.c\"");
                 sb.AppendLine("#else");
                 sb.AppendLine("#include \"ov.h\"");
@@ -298,7 +298,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (c.Data.PracticeOmgeving)
                 {
                     sb.AppendLine($"{ts}/* Code voor OV-richtingen */");
-                    sb.AppendLine($"{ts}#ifdef _VRIWINTEST");
+                    sb.AppendLine($"{ts}#ifdef PRACTICE_TEST");
                     foreach (var ov in c.OVData.OVIngrepen)
                     {
                         sb.AppendLine($"{ts}{ts}iFC_OV_code[ovFC{ov.FaseCyclus}] = \"ov{ov.FaseCyclus}\";");
@@ -307,7 +307,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         sb.AppendLine($"{ts}{ts}iFC_OV_code[hdFC{hd.FaseCyclus}] = \"hd{hd.FaseCyclus}\";");
                     }
-                    sb.AppendLine($"{ts}#endif // _VRIWINTEST");
+                    sb.AppendLine($"{ts}#endif // PRACTICE_TEST");
                     sb.AppendLine();
                 }
             }
@@ -1204,7 +1204,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine($"{ts}#if !defined AUTOMAAT || defined _VRIWINTEST");
+                sb.AppendLine($"{ts}#if !defined AUTOMAAT || defined PRACTICE_TEST");
             }
 
             if (c.OVData.OVIngrepen.Any())
@@ -1275,7 +1275,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine($"{ts}#endif // !defined AUTOMAAT || defined _VRIWINTEST");
+                sb.AppendLine($"{ts}#endif // !defined AUTOMAAT || defined PRACTICE_TEST");
             }
 
             sb.AppendLine("}");
@@ -1294,7 +1294,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (c.Data.PracticeOmgeving)
             {
                 sb.AppendLine();
-                sb.AppendLine("#ifdef _VRIWINTEST");
+                sb.AppendLine("#ifdef PRACTICE_TEST");
                 sb.AppendLine("#include \"ov.c\"");
                 sb.AppendLine("#endif");
             }

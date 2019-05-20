@@ -8,6 +8,7 @@ using TLCGen.Models.Enumerations;
 using TLCGen.Controls;
 using TLCGen.Dependencies.Providers;
 using System;
+using System.Linq;
 
 namespace TLCGen.ViewModels
 {
@@ -343,6 +344,21 @@ namespace TLCGen.ViewModels
                 _Controller.Data.TypeGroentijden = value;
                 RaisePropertyChanged<object>(nameof(TypeGroentijden), broadcast: true);
                 Messenger.Default.Send(new GroentijdenTypeChangedMessage(value));
+            }
+        }
+
+        [Browsable(false)]
+        public bool HasWTV => _Controller?.Fasen.Any(x => x.WachttijdVoorspeller) == true;
+
+        [Description("Opnemen wtv venster in testomgeving")]
+        [BrowsableCondition(nameof(HasWTV))]
+        public bool WachttijdvoorspellerVensterTestomgeving
+        {
+            get { return _Controller?.Data?.WachttijdvoorspellerVensterTestomgeving ?? false; }
+            set
+            {
+                _Controller.Data.WachttijdvoorspellerVensterTestomgeving = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerVensterTestomgeving), broadcast: true);
             }
         }
 

@@ -49,7 +49,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"/* ------------- */");
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#ifndef _VRIWINTEST");
+                sb.AppendLine("#ifndef PRACTICE_TEST");
             }
             sb.AppendLine($"{ts}#include \"{c.Data.Naam}sys.h\"");
             sb.AppendLine($"{ts}#include \"fcvar.h\"    /* fasecycli                         */");
@@ -100,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             if (c.Data.PracticeOmgeving)
             {
-                sb.AppendLine("#endif // _VRIWINTEST");
+                sb.AppendLine("#endif // PRACTICE_TEST");
             }
 
             sb.AppendLine();
@@ -810,7 +810,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 pad6 = pad1 + pad2;
                 pad7 = "TFL_max[] = ;".Length + defmax + tflmax;
 
-                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined _VRIWINTEST");
+                sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || defined PRACTICE_TEST");
                 foreach(var dm in detectorModels)
                 {
                     AppendDetectorTabString(sb, dm, pad1, pad2, pad3, pad4, pad5, pad6);

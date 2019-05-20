@@ -99,9 +99,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine("/* Include files wachttijdvoorspeller*/");
                     sb.AppendLine("#include \"wtvfunc.c\" /* berekening van de wachttijden voorspelling */");
                     sb.AppendLine("#include \"wtlleds.c\" /* aansturing van de wachttijdlantaarn met leds */");
-                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
-                    sb.AppendLine($"{ts}#include \"wtv_testwin.c\"");
-                    sb.AppendLine("#endif");
+                    if (c.Data.WachttijdvoorspellerVensterTestomgeving)
+                    {
+                        sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
+                        sb.AppendLine($"{ts}#include \"wtv_testwin.c\"");
+                        sb.AppendLine("#endif");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCTop:
@@ -114,21 +117,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
-                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
-                    sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
-                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    if (c.Data.WachttijdvoorspellerVensterTestomgeving)
                     {
-                        if (c.Data.WachttijdvoorspellerAansturenBus)
+                        sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
+                        sb.AppendLine($"{ts}extrawin_init(SYSTEM);");
+                        foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                         {
-                            sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, {_uspf}{_uswtvbus}{fc.Naam}, TYPE_LEDS);");
+                            if (c.Data.WachttijdvoorspellerAansturenBus)
+                            {
+                                sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, {_uspf}{_uswtvbus}{fc.Naam}, TYPE_LEDS);");
+                            }
+                            else
+                            {
+                                sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, NG, TYPE_LEDS);");
+                            }
                         }
-                        else
-                        {
-                            sb.AppendLine($"{ts}extrawin_add_fc({_fcpf}{fc.Naam}, NG, TYPE_LEDS);");
-                        }
+                        sb.AppendLine("#endif");
+                        sb.AppendLine();
                     }
-                    sb.AppendLine("#endif");
-                    sb.AppendLine();
                     sb.AppendLine($"{ts}/* Aansturing hulpelement aansturing wachttijdvoorspellers */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
@@ -319,12 +325,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     #endregion
 
                     #region aansturen test window
-                    sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
-                    foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                    if (c.Data.WachttijdvoorspellerVensterTestomgeving)
                     {
-                        sb.AppendLine($"{ts}extrawin_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam});");
+                        sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) && !defined NO_WTV_WIN");
+                        foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            sb.AppendLine($"{ts}extrawin_wtv({_fcpf}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam});");
+                        }
+                        sb.AppendLine("#endif");
                     }
-                    sb.AppendLine("#endif");
                     #endregion
 
                     return sb.ToString();
