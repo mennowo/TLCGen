@@ -1791,6 +1791,12 @@
             <Description>Tijdsduur toepassen RW na meting peloton bij fase _E1_</Description>
           </Setting>
           <Setting>
+            <Default>pelrwmax</Default>
+            <Setting>pelrwmax</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale tijdsduur toepassen RW vanaf SG voor peloton koppeling bij _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>pelstartrw</Default>
             <Setting>pelstartrw</Setting>
             <Type>Timer</Type>

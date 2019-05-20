@@ -22,6 +22,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _hpelin;
         private CCOLGeneratorCodeStringSettingModel _uspelin;
         private CCOLGeneratorCodeStringSettingModel _tpelrw;
+        private CCOLGeneratorCodeStringSettingModel _tpelrwmax;
         private CCOLGeneratorCodeStringSettingModel _tpelstartrw;
         private CCOLGeneratorCodeStringSettingModel _schpelrw;
         private CCOLGeneratorCodeStringSettingModel _schpelmk;
@@ -58,6 +59,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                 {
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelrw}{pk.GekoppeldeSignaalGroep}", pk.TijdRetourWachtgroen, CCOLElementTimeTypeEnum.TE_type,  _tpelrw, pk.GekoppeldeSignaalGroep));
+                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelrwmax}{pk.GekoppeldeSignaalGroep}", pk.MaxTijdToepassenRetourWachtgroen, CCOLElementTimeTypeEnum.TE_type,  _tpelrwmax, pk.GekoppeldeSignaalGroep));
                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelstartrw}{pk.GekoppeldeSignaalGroep}", pk.TijdTotRetourWachtgroen, CCOLElementTimeTypeEnum.TE_type, _tpelstartrw, pk.GekoppeldeSignaalGroep));
                     if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Altijd)
                         _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpelrw}{pk.GekoppeldeSignaalGroep}", pk.ToepassenRetourWachtgroen == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schpelrw, pk.GekoppeldeSignaalGroep));
@@ -173,7 +175,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend && x.Detectoren.Any()))
                         {
                             if (ff) sb.AppendLine();
-                            sb.AppendLine($"{ts}/* Inkomende peloton koppeling van {pk.KruisingNaam} */");
+                            sb.AppendLine($"{ts}/* Inkomende peloton koppeling van {pk.GekoppeldeSignaalGroep} van kruising {pk.KruisingNaam} */");
                             if (pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit)
                             {
                                 sb.AppendLine($"{ts}/* timer resetten om aanvraag te zetten */");
@@ -181,6 +183,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                             {
+                                sb.AppendLine($"{ts}/* timer resetten maximale tijd toepassen RW vanaf SG */");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}] = SG[{_fcpf}{pk.GekoppeldeSignaalGroep}];");
                                 sb.AppendLine($"{ts}/* timer resetten om gebied open te houden */");
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tpelstartrw}{pk.GekoppeldeSignaalGroep}] = IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] && !T[{_tpf}{_tpelstartrw}{pk.GekoppeldeSignaalGroep}];");
                                 sb.AppendLine();
@@ -228,7 +232,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.Append($" && SCH[{_schpf}{_schpelrw}{pk.GekoppeldeSignaalGroep}]");
                                 }
-                                sb.AppendLine($"/*&& !CIF_GUS[usmaxwto]*/)");
+                                sb.AppendLine($" && T[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}])");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT12;");
                                 sb.AppendLine($"{ts}{ts}PP[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT12;");

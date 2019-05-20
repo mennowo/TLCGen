@@ -22,6 +22,7 @@ namespace TLCGen.Models
         public int TijdTotAanvraag { get; set; }
         public int TijdTotRetourWachtgroen { get; set; }
         public int TijdRetourWachtgroen { get; set; }
+        public int MaxTijdToepassenRetourWachtgroen { get; set; }
         public NooitAltijdAanUitEnum ToepassenAanvraag { get; set; }
         public NooitAltijdAanUitEnum ToepassenMeetkriterium { get; set; }
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen { get; set; }

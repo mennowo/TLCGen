@@ -63,6 +63,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -78,8 +79,9 @@
             <Label Content="Toepassen RW" Grid.Row="6" />
             <Label Content="Tijd tot RW" Grid.Row="7" />
             <Label Content="Tijd RW" Grid.Row="8" />
-            <Label Content="Toepassen MK" Grid.Row="9" />
-            <Label Content="Ingangssignaal FG #" Grid.Row="10" />
+            <Label Content="Max. tijd toep. RW vanaf SG" Grid.Row="9" />
+            <Label Content="Toepassen MK" Grid.Row="10" />
+            <Label Content="Ingangssignaal FG #" Grid.Row="11" />
             
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
                       SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
@@ -93,12 +95,13 @@
                       SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" Grid.Row="6" Grid.Column="1" />
             <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="7" />
             <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="8" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="9" />
             <ComboBox IsEnabled="{Binding Path=HasRetourWachtgroen}" 
                       Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                      SelectedItem="{Binding Path=ToepassenMeetkriterium}" Grid.Row="9" Grid.Column="1" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="10" />
+                      SelectedItem="{Binding Path=ToepassenMeetkriterium}" Grid.Row="10" Grid.Column="1" />
+            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="11" />
             
-            <Grid Grid.Row="11" Grid.ColumnSpan="2">
+            <Grid Grid.Row="12" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />

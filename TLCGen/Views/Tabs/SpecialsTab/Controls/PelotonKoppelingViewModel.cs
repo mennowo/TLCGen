@@ -117,6 +117,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int MaxTijdToepassenRetourWachtgroen
+        {
+            get { return PelotonKoppeling.MaxTijdToepassenRetourWachtgroen; }
+            set
+            {
+                PelotonKoppeling.MaxTijdToepassenRetourWachtgroen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public int IngangsSignaalFG
         {
             get { return PelotonKoppeling.IngangsSignaalFG; }
