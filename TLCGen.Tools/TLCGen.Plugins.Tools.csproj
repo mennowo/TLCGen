@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3EA87140-CB65-4A8D-B93F-0FF1B2520B13}</ProjectGuid>
     <OutputType>library</OutputType>
-    <RootNamespace>TLCGen.Plugins.Toolss</RootNamespace>
+    <RootNamespace>TLCGen.Plugins.Tools</RootNamespace>
     <AssemblyName>TLCGen.Plugins.Tools</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -48,13 +48,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AvalonEditBehaviour.cs" />
     <Compile Include="Models\CombinatieTemplateItemModel.cs" />
     <Compile Include="Models\CombinatieTemplateItemTypeEnum.cs" />
     <Compile Include="Models\CombinatieTemplateModel.cs" />
     <Compile Include="Models\CombinatieTemplateOptieModel.cs" />
     <Compile Include="Models\CombinatieTemplateOptieTypeEnum.cs" />
     <Compile Include="CombinatieTemplateProvider.cs" />
+    <Compile Include="ViewModels\CombinatieTemplateItemViewModel.cs" />
     <Compile Include="ViewModels\CombinatieTemplateOptieViewModel.cs" />
+    <Compile Include="Views\CombinatieTemplatesSettingsWindow.xaml.cs">
+      <DependentUpon>CombinatieTemplatesSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CombinatieTemplateView.xaml.cs">
       <DependentUpon>CombinatieTemplateView.xaml</DependentUpon>
     </Compile>
@@ -86,14 +91,23 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <EmbeddedResource Include="Resources\json.xshd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TLCGen.Dependencies\TLCGen.Dependencies\TLCGen.Dependencies.csproj">
       <Project>{8d6f4bb4-41b7-4757-b6ce-af9737ad3631}</Project>
       <Name>TLCGen.Dependencies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
+      <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
+      <Name>TLCGen.Controls</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\CombinatieTemplatesSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CombinatieTemplateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -108,6 +122,17 @@
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="ICSharpCode.AvalonEdit">
+          <HintPath>..\packages\AvalonEdit\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3')">
       <ItemGroup>

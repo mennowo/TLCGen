@@ -14,10 +14,10 @@ namespace TLCGen.Plugins.Tools
         #region Fields
 
         private RelayCommand _applyTemplateCommand;
+        private RelayCommand _settingsWindowCommand;
         private CombinatieTemplateViewModel _selectedTemplate;
         private ObservableCollection<string> _fasen;
         private ControllerModel _controller;
-        private CombinatieTemplateViewModel _selectedCombinatieTemplate;
 
         #endregion // Fields
 
@@ -29,8 +29,8 @@ namespace TLCGen.Plugins.Tools
             set
             {
                 _controller = value;
-                SelectedTemplate = null;
                 UpdateFasen();
+                SelectedTemplate = null;
             }
         }
 
@@ -56,6 +56,7 @@ namespace TLCGen.Plugins.Tools
                 _selectedTemplate = value;
                 if (value != null)
                 {
+                    _selectedTemplate.SelectedItem?.SetSelectableItems();
                     foreach (var o in _selectedTemplate.Opties)
                     {
                         if (o.Type == CombinatieTemplateOptieTypeEnum.Fase)
@@ -112,27 +113,36 @@ namespace TLCGen.Plugins.Tools
         #region Commands
 
         public ICommand ApplyTemplateCommand => _applyTemplateCommand ?? (_applyTemplateCommand = new RelayCommand(() =>
+        {
+            var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
+            if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
             {
-                var alert = CombinatieTemplateProvider.ApplyCombinatieTemplate(Controller, SelectedTemplate.Template);
-                if (!alert.Item1 || !string.IsNullOrEmpty(alert.Item2))
+                var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
+                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
+                if (alert.Item1)
                 {
-                    var cap = alert.Item1 ? "Template toepassen succesvol" : "Fout bij toepassen template";
-                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox(alert.Item2, cap, System.Windows.MessageBoxButton.OK);
-                    if (alert.Item1)
-                    {
-                        TLCGen.GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
-                    }
-                    else
-                    {
-                        TLCGen.GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
-                    }
+                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
                 }
                 else
                 {
-                    TLCGen.GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+                    GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": fout bij toepassen template \"{SelectedTemplate.Name}\" toegepast.");
                 }
-            },
-            () => SelectedTemplate != null));
+            }
+            else
+            {
+                GuiActions.GuiActionsManager.SetStatusBarMessage(DateTime.Now.ToLongTimeString() + $": template \"{SelectedTemplate.Name}\" toegepast.");
+            }
+        },
+        () => SelectedTemplate != null));
+
+        public ICommand SettingsWindowCommand => _settingsWindowCommand ?? (_settingsWindowCommand = new RelayCommand(() => 
+        {
+            var window = new CombinatieTemplatesSettingsWindow
+            {
+                DataContext = this
+            };
+            window.ShowDialog();
+        }));
 
         #endregion // Commands
 

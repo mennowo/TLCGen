@@ -12,3 +12,4 @@ nuget gong-wpf-dragdrop >= 2 alpha framework: >= net45
 nuget DocumentFormat.OpenXml framework: >= net45
 nuget InputSimulator framework: >= net45
 nuget NewtonSoft.Json framework: >= net45
+nuget AvalonEdit framework: >= net45

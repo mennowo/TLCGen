@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
-using System.Collections.ObjectModel;
+using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows.Input;
 
 namespace TLCGen.Plugins.Tools
 {
@@ -7,10 +8,8 @@ namespace TLCGen.Plugins.Tools
     {
         #region Fields
 
-        private ObservableCollection<string> _fasen;
-        
         #endregion // Fields
-        
+
         #region Properties
 
         public CombinatieTemplateOptieModel Optie { get; }

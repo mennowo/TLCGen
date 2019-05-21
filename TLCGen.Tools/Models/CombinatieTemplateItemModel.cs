@@ -6,6 +6,7 @@ namespace TLCGen.Plugins.Tools
     public class CombinatieTemplateItemModel
     {
         public CombinatieTemplateItemTypeEnum Type { get; set; }
+        public string Description { get; set; }
         public string ObjectJson { get; set; }
 
         public object GetObject()

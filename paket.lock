@@ -1,5 +1,6 @@
 NUGET
   remote: https://api.nuget.org/v3/index.json
+    AvalonEdit (5.0.4) - restriction: >= net45
     Castle.Core (4.3.1) - restriction: || (&& (>= net45) (< netstandard1.3)) (>= net46)
     CommonServiceLocator (2.0.4) - restriction: >= net45
     DocumentFormat.OpenXml (2.8.1) - restriction: >= net45
