@@ -48,10 +48,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CombinatieTemplateModel.cs" />
-    <Compile Include="CombinatieTemplateView.xaml.cs">
+    <Compile Include="Models\CombinatieTemplateItemModel.cs" />
+    <Compile Include="Models\CombinatieTemplateItemTypeEnum.cs" />
+    <Compile Include="Models\CombinatieTemplateModel.cs" />
+    <Compile Include="Models\CombinatieTemplateOptieModel.cs" />
+    <Compile Include="Models\CombinatieTemplateOptieTypeEnum.cs" />
+    <Compile Include="CombinatieTemplateProvider.cs" />
+    <Compile Include="ViewModels\CombinatieTemplateOptieViewModel.cs" />
+    <Compile Include="Views\CombinatieTemplateView.xaml.cs">
       <DependentUpon>CombinatieTemplateView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CombinatieTemplateViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -66,8 +73,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="TLCGenToolsPlugin.cs" />
-    <Compile Include="TLCGenToolsTabViewModel.cs" />
-    <Compile Include="TLCGenToolsTabView.xaml.cs">
+    <Compile Include="ViewModels\TLCGenToolsTabViewModel.cs" />
+    <Compile Include="Views\TLCGenToolsTabView.xaml.cs">
       <DependentUpon>TLCGenToolsTabView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -87,7 +94,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CombinatieTemplateView.xaml">
+    <Page Include="Views\CombinatieTemplateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -95,7 +102,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Page Include="TLCGenToolsTabView.xaml">
+    <Page Include="Views\TLCGenToolsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -553,9 +553,10 @@ namespace TLCGen.ViewModels
 			}));
 			HoofdRichtingen.BubbleSort();
 			UpdateSelectables();
-		}
+            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }
 
-		private bool RemoveHoofdRichtingCommand_CanExecute(object obj)
+        private bool RemoveHoofdRichtingCommand_CanExecute(object obj)
 		{
 			return SelectedHoofdRichtingToRemove != null;
 		}
@@ -565,9 +566,10 @@ namespace TLCGen.ViewModels
 			HoofdRichtingen.Remove(SelectedHoofdRichtingToRemove);
 			HoofdRichtingen.BubbleSort();
 			UpdateSelectables();
-		}
+            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }
 
-		private bool AddGekoppeldeKruisingCommand_CanExecute(object obj)
+        private bool AddGekoppeldeKruisingCommand_CanExecute(object obj)
 		{
 			return Type == HalfstarTypeEnum.Master ||
 				   Type == HalfstarTypeEnum.FallbackMaster ||
@@ -611,9 +613,10 @@ namespace TLCGen.ViewModels
 				});
 			}
 			GekoppeldeKruisingen.Add(new HalfstarGekoppeldeKruisingViewModel(gkk));
-		}
+            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }
 
-		private bool RemoveGekoppeldeKruisingCommand_CanExecute(object obj)
+        private bool RemoveGekoppeldeKruisingCommand_CanExecute(object obj)
 		{
 			return SelectedHalfstarGekoppeldeKruising != null;
 		}
@@ -642,11 +645,12 @@ namespace TLCGen.ViewModels
 					GekoppeldeKruisingen[0].Type = HalfstarGekoppeldTypeEnum.Master;
 				}
 			}
-		}
+            MessengerInstance.Send(new Messaging.Messages.ControllerDataChangedMessage());
+        }
 
-		#endregion // Command functionality
+        #endregion // Command functionality
 
-		#region Private methods
+        #region Private methods
 
         private void UpdateAlternatievenFromController()
         {

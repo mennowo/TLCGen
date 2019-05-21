@@ -25,10 +25,8 @@ namespace TLCGen.Specificator
         TLCGenPluginElems.XMLNodeWriter)]
     public class SpecificatorPlugin : CCOLCodePieceGeneratorBase, ITLCGenGenerator, ITLCGenPlugMessaging, ITLCGenXMLNodeWriter, ITLCGenTabItem
     {
-        #region Fields
 
-        private readonly UserControl _generatorView;
-        private readonly SpecificatorViewModel _myVm;
+        #region Fields
 
         #endregion // Fields
 
@@ -41,13 +39,14 @@ namespace TLCGen.Specificator
             get => _data ?? (_data = new SpecificatorDataModel());
         }
 
-        public SpecificatorViewModel SpecificatorVM => _myVm;
+        public SpecificatorViewModel SpecificatorVM { get; }
+        public SpecificatorTabViewModel SpecificatorTabVM { get; }
 
         #endregion // Properties
 
         #region ITLCGenGenerator
 
-        public UserControl GeneratorView => _generatorView;
+        public UserControl GeneratorView { get; }
 
         public string GetGeneratorName()
         {
@@ -79,9 +78,9 @@ namespace TLCGen.Specificator
                     {
                         _data = new SpecificatorDataModel();
                     }
-                    _myVm.Data = _data;
-                    _myVm.SpecialsParagrafen = new ObservableCollectionAroundList<SpecificatorSpecialsParagraafViewModel, SpecificatorSpecialsParagraaf>(_data.SpecialsParagrafen);
-                    _myVm.SelectedSpecialsParagraaf = _myVm.SpecialsParagrafen.FirstOrDefault();
+                    SpecificatorVM.Data = _data;
+                    SpecificatorTabVM.SpecialsParagrafen = new ObservableCollectionAroundList<SpecificatorSpecialsParagraafViewModel, SpecificatorSpecialsParagraaf>(_data.SpecialsParagrafen);
+                    SpecificatorTabVM.SelectedSpecialsParagraaf = SpecificatorTabVM.SpecialsParagrafen.FirstOrDefault();
                 }
                 _controller = value;
             }
@@ -89,9 +88,9 @@ namespace TLCGen.Specificator
 
         public void GenerateController()
         {
-            if (_myVm.GenerateCommand.CanExecute(null))
+            if (SpecificatorVM.GenerateCommand.CanExecute(null))
             {
-                _myVm.GenerateCommand.Execute(null);
+                SpecificatorVM.GenerateCommand.Execute(null);
             }
         }
 
@@ -112,7 +111,9 @@ namespace TLCGen.Specificator
                 if (_ContentDataTemplate == null)
                 {
                     _ContentDataTemplate = new DataTemplate();
-                    _ContentDataTemplate.VisualTree = new FrameworkElementFactory(typeof(SpecificatorTabView));
+                    var tab = new FrameworkElementFactory(typeof(SpecificatorTabView));
+                    tab.SetValue(SpecificatorTabView.DataContextProperty, SpecificatorTabVM);
+                    _ContentDataTemplate.VisualTree = tab;
                 }
                 return _ContentDataTemplate;
             }
@@ -203,7 +204,7 @@ namespace TLCGen.Specificator
             {
                 _data = new SpecificatorDataModel();
             }
-            _myVm.Data = Data;
+            SpecificatorVM.Data = Data;
         }
 
         public void SetXmlInDocument(XmlDocument document)
@@ -247,12 +248,14 @@ namespace TLCGen.Specificator
 
         public SpecificatorPlugin(bool tester = false)
         {
-            _myVm = new SpecificatorViewModel(this);
-
+            SpecificatorVM = new SpecificatorViewModel(this);
+            SpecificatorTabVM = new SpecificatorTabViewModel();
             if (!tester)
             {
-                _generatorView = new SpecificatorView();
-                _generatorView.DataContext = _myVm;
+                GeneratorView = new SpecificatorView
+                {
+                    DataContext = SpecificatorVM
+                };
             }
         }
 

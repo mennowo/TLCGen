@@ -106,7 +106,7 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
 	case 3:
 		return ym_maxV1(i, to_verschil) || MK[i] && ym_max_toV1(i, to_verschil);
 	case 4:
-		return ym_max_vtgV1(i, to_verschil);
+		return ym_max_vtgV1(i);
 	case 5:
 		return ym_max(i, to_verschil);
 	case 6:
@@ -118,6 +118,7 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
 	case 7:
 		return ym_max(i, to_verschil) || MK[i] && ym_max_to(i, to_verschil);
 	}
+	return FALSE;
 }
 
 /* MAXIMUM MEEVERLENGGROEN */

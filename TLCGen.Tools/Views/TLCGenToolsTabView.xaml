@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:TLCGen.Plugins.Tools"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visConv" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -19,7 +22,7 @@
         <Label Content="Combinatie templates" FontWeight="Bold" />
         <Label Grid.Column="2" Content="Opties voor template" FontWeight="Bold" />
         <ListView ItemsSource="{Binding Path=CombinatieTemplates}" Grid.Row="1" Margin="2" Name="CTList"
-                  SelectedItem="{Binding Path=SelectedTemplate}">
+                  SelectedItem="{Binding Path=SelectedTemplate,UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -38,6 +41,9 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Button Content="Toepassen" Command="{Binding Path=ApplyTemplateCommand}" Margin="2" />
             </StackPanel>
+            <Border Background="LightGray" Visibility="{Binding Path=HasNoSelectedItem,Converter={StaticResource bool2visConv}}" Grid.RowSpan="2">
+                <TextBlock Margin="5" Text="Geen template geselecteerd" />
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

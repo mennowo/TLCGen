@@ -53,9 +53,11 @@
     <Compile Include="FunctionalityGenerator.cs" />
     <Compile Include="SpecificationGeneratorHelper.cs" />
     <Compile Include="SpecificatorDataModel.cs" />
+    <Compile Include="SpecificatorSpecialsParagraafViewModel.cs" />
     <Compile Include="SpecificatorTabView.xaml.cs">
       <DependentUpon>SpecificatorTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SpecificatorTabViewModel.cs" />
     <Compile Include="SpecificatorViewModel.cs" />
     <Compile Include="TableGenerator.cs" />
     <Page Include="SpecificatorTabView.xaml">

@@ -107,18 +107,20 @@ namespace TLCGen.Plugins.Tools
                     new CombinatieTemplateItemModel
                     {
                         Type = CombinatieTemplateItemTypeEnum.Naloop,
-                        ObjectJson = "{\"FaseVan\":\"VAN\",\"FaseNaar\":\"NAAR\",\"Type\":0,\"VasteNaloop\":true,\"InrijdenTijdensGroen\":false,\"DetectieAfhankelijk\":false,\"MaximaleVoorstart\":null,\"Detectoren\":[],\"Tijden\":[{\"Type\":2,\"Waarde\":100}]}"
+                        ObjectJson = "{\"FaseVan\":\"VAN\",\"FaseNaar\":\"NAAR\",\"Type\":0,\"VasteNaloop\":true,\"InrijdenTijdensGroen\":false,\"DetectieAfhankelijk\":false,\"MaximaleVoorstart\":null,\"Detectoren\":[],\"Tijden\":[{\"Type\":2,\"Waarde\":-101}]}"
                     },
                     new CombinatieTemplateItemModel
                     {
                         Type = CombinatieTemplateItemTypeEnum.Naloop,
-                        ObjectJson = "{\"FaseVan\":\"NAAR\",\"FaseNaar\":\"VAN\",\"Type\":0,\"VasteNaloop\":true,\"InrijdenTijdensGroen\":false,\"DetectieAfhankelijk\":false,\"MaximaleVoorstart\":null,\"Detectoren\":[],\"Tijden\":[{\"Type\":2,\"Waarde\":100}]}"
+                        ObjectJson = "{\"FaseVan\":\"NAAR\",\"FaseNaar\":\"VAN\",\"Type\":0,\"VasteNaloop\":true,\"InrijdenTijdensGroen\":false,\"DetectieAfhankelijk\":false,\"MaximaleVoorstart\":null,\"Detectoren\":[],\"Tijden\":[{\"Type\":2,\"Waarde\":-102}]}"
                     },
                 },
                 Opties = new List<CombinatieTemplateOptieModel>
                 {
                      new CombinatieTemplateOptieModel{ Type = CombinatieTemplateOptieTypeEnum.Fase, Description = "Fase 1", Search= "VAN", Replace = "31"},
                      new CombinatieTemplateOptieModel{ Type = CombinatieTemplateOptieTypeEnum.Fase, Description = "Fase 2", Search= "NAAR", Replace = "32"},
+                     new CombinatieTemplateOptieModel{ Type = CombinatieTemplateOptieTypeEnum.Int, Description = "Naloop tijd 1 > 2", Search= "-101", Replace = "100"},
+                     new CombinatieTemplateOptieModel{ Type = CombinatieTemplateOptieTypeEnum.Int, Description = "Naloop tijd 2 > 1", Search= "-102", Replace = "100"},
                 }
             }));
             _combinatieTemplateVM = new TLCGenToolsTabViewModel(templates);
