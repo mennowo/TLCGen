@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
@@ -18,6 +19,7 @@ namespace TLCGen.Plugins.Tools
         private CombinatieTemplateViewModel _selectedTemplate;
         private ObservableCollection<string> _fasen;
         private ControllerModel _controller;
+        private TLCGenToolsPlugin _plugin;
 
         #endregion // Fields
 
@@ -34,7 +36,7 @@ namespace TLCGen.Plugins.Tools
             }
         }
 
-        public List<CombinatieTemplateViewModel> CombinatieTemplates { get; }
+        public ObservableCollection<CombinatieTemplateViewModel> CombinatieTemplates { get; }
 
         public ObservableCollection<string> Fasen
         {
@@ -92,6 +94,11 @@ namespace TLCGen.Plugins.Tools
             }
         }
 
+        private void OnNameChanged(NameChangedMessage obj)
+        {
+            UpdateFasen();
+        }
+
         private void UpdateFasen()
         {
             if (Controller == null)
@@ -139,7 +146,7 @@ namespace TLCGen.Plugins.Tools
         {
             var window = new CombinatieTemplatesSettingsWindow
             {
-                DataContext = this
+                DataContext = new CombinatieTemplatesSettingsWindowViewModel(CombinatieTemplates, _plugin)
             };
             window.ShowDialog();
         }));
@@ -148,10 +155,12 @@ namespace TLCGen.Plugins.Tools
 
         #region Constructor
 
-        public TLCGenToolsTabViewModel(List<CombinatieTemplateViewModel> combinatieTemplates)
+        public TLCGenToolsTabViewModel(ObservableCollection<CombinatieTemplateViewModel> combinatieTemplates, TLCGenToolsPlugin plugin)
         {
+            _plugin = plugin;
             CombinatieTemplates = combinatieTemplates;
             MessengerInstance.Register<Messaging.Messages.FasenChangedMessage>(this, OnFasenChanged);
+            MessengerInstance.Register<Messaging.Messages.NameChangedMessage>(this, OnNameChanged);
         }
 
         #endregion // Constructor

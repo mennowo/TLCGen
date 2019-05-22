@@ -22,9 +22,8 @@
     <Grid>
         <DataGrid ItemsSource="{Binding Path=Opties}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Description}" Header="Item" />
-                <DataGridTextColumn Binding="{Binding Replace}" Header="Instelling" />
-                <DataGridTemplateColumn>
+                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Description}" Header="Omschrijving" Foreground="DarkGray" FontStyle="Italic" Width="*" />
+                <DataGridTemplateColumn Header="Instelling">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Path=Replace}" Margin="5" VerticalAlignment="Center" />

@@ -16,92 +16,167 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <DockPanel>
-            <Label Content="Combinatie templates" FontWeight="Bold" />
-        </DockPanel>
-        <Label Grid.Column="2" Content="Instellingen voor template" FontWeight="Bold" />
-        <ListView ItemsSource="{Binding Path=CombinatieTemplates}" Grid.Row="1" Margin="2" Name="CTList"
-                  SelectedItem="{Binding Path=SelectedTemplate,UpdateSourceTrigger=PropertyChanged}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Label Content="{Binding Path=Name}" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Button Content="Template toev." Command="{Binding Path=AddCombinatieTemplateCommand}" Margin="2" />
-                <Button Content="Template verw." Command="{Binding Path=RemoveCombinatieTemplateCommand}" Margin="2" />
+        <StackPanel>
+            <Label Content="Locatie van combinatie templates" />
+            <ct:FileTextBox 
+                File="{Binding Path=CombinatieTemplatesFileLocation,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                EnsurePathExists="False" />
         </StackPanel>
-        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
-        <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" DataContext="{Binding Path=SelectedTemplate}">
+        <Grid Grid.Row="1" IsEnabled="{Binding Path=HasTemplates}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="5" />
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListView ItemsSource="{Binding Path=Items}" Margin="2" SelectedItem="{Binding Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Margin="5" Text="{Binding Path=Description}" />
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <TabControl Grid.Column="2" DataContext="{Binding Path=SelectedItem}">
-                <TabItem Header="Json">
-                    <ae:TextEditor Name="Editor" FontFamily="Consolas" FontSize="10pt" Margin="2" Background="#F8F8F8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <i:Interaction.Behaviors>
-                            <local:AvalonEditBehaviour GiveMeTheText="{Binding Path=ObjectJson,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                        </i:Interaction.Behaviors>
-                    </ae:TextEditor>
-                </TabItem>
-                <TabItem Header="Settings">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel Orientation="Vertical">
-                            <Label Content="Description" />
-                            <TextBox Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                            <Label Content="Type" />
-                            <ComboBox 
-                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type local:CombinatieTemplateItemTypeEnum}}}"
-                                SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                            <StackPanel Orientation="Vertical">
-                                <Label FontStyle="Italic" Content="Selecteer uit geopende regeling:" />
-                                <ListView ItemsSource="{Binding Path=SelectableItems}" SelectedItem="{Binding Path=SelectedItem}" 
-                                          Margin="2"
-                                          DisplayMemberPath="Description" />
-                                <Button Content="Toepassen" Command="{Binding Path=ApplyItemFromControllerCommand}" Margin="2" />
-                            </StackPanel>
+            <DockPanel Grid.Column="2">
+                <Label Content="Instellingen voor template" FontWeight="Bold" DockPanel.Dock="Top" />
+                <Label Content="Naam" />
+                <TextBox Margin="2" Text="{Binding Path=SelectedTemplate.Name,UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" />
+            </DockPanel>
+            <DockPanel Grid.RowSpan="2">
+                <Label Content="Combinatie templates" FontWeight="Bold" DockPanel.Dock="Top" />
+                <ListView ItemsSource="{Binding Path=CombinatieTemplates}" Margin="2" Name="CTList" DockPanel.Dock="Bottom"
+                          SelectedItem="{Binding Path=SelectedTemplate,UpdateSourceTrigger=PropertyChanged}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Label Content="{Binding Path=Name}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <Button Content="Template toev." Command="{Binding Path=AddCombinatieTemplateCommand}" Margin="2" />
+                    <Button Content="Template verw." Command="{Binding Path=RemoveCombinatieTemplateCommand}" Margin="2" />
+            </StackPanel>
+            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
+            <TabControl Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" DataContext="{Binding Path=SelectedTemplate}">
+                <TabItem Header="Items">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="3*" />
+                        </Grid.ColumnDefinitions>
+                        <ListView ItemsSource="{Binding Path=Items}" Margin="2" SelectedItem="{Binding Path=SelectedItem,UpdateSourceTrigger=PropertyChanged}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="5" Text="{Binding Path=Description}" />
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <TabControl Grid.Column="2" Grid.RowSpan="2" DataContext="{Binding Path=SelectedItem}" Margin="2">
+                            <TabItem Header="Settings">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel Orientation="Vertical">
+                                        <Label Content="Omschrijving (uitsluitend hier gebruikt)" />
+                                        <TextBox Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                        <Label Content="Type (niet wijzigen zonder ook de JSON aan te passen!)" />
+                                        <ComboBox 
+                                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type local:CombinatieTemplateItemTypeEnum}}}"
+                                            SelectedItem="{Binding Path=Type,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </TabItem>
+                            <TabItem>
+                                <TabItem.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="JSON" />
+                                            <Border Width="10" Height="10" VerticalAlignment="Center" Margin="5,2,2,2" CornerRadius="3">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="DarkGray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOK}" Value="False">
+                                                                <Setter Property="Background" Value="DarkRed" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabControl,Mode=FindAncestor},Path=DataContext.IsObjectJsonOK}" Value="True">
+                                                                <Setter Property="Background" Value="ForestGreen" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </TabItem.HeaderTemplate>
+                                <ae:TextEditor Name="Editor" FontFamily="Consolas" FontSize="10pt" Margin="2" Background="#F8F8F8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <i:Interaction.Behaviors>
+                                        <local:AvalonEditBehaviour GiveMeTheText="{Binding Path=ObjectJson,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    </i:Interaction.Behaviors>
+                                </ae:TextEditor>
+                            </TabItem>
+                            <TabItem Header="Import">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Item vervangen door item uit geopende regeling" />
+                                    <Label FontStyle="Italic" Content="Selecteer uit geopende regeling:" Grid.Row="1" />
+                                    <ListView ItemsSource="{Binding Path=SelectableItems}" SelectedItem="{Binding Path=SelectedItem}" 
+                                              Margin="2" Grid.Row="2"
+                                              DisplayMemberPath="Description" />
+                                    <Button 
+                                        Content="Toepassen (JSON wordt vervangen)" Grid.Row="3"
+                                        Command="{Binding Path=ApplyItemFromControllerCommand}" Margin="2" />
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <StackPanel Orientation="Horizontal" Grid.Row="2">
+                            <Button Content="Item toev." Command="{Binding Path=AddTemplateItemCommand}" Margin="2" />
+                            <Button Content="Item verw." Command="{Binding Path=RemoveTemplateItemCommand}" Margin="2" />
                         </StackPanel>
-                    </ScrollViewer>
+                        <!--<TextBox Grid.Column="2"
+                            FontFamily="Consolas" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                            Margin="2" Text="{Binding Path=SelectedItem.ObjectJson,UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Path=SelectedItem.Foreground}" />-->
+                        <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
+                    </Grid>
+                    </TabItem>
+                <TabItem Header="Opties">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <DataGrid ItemsSource="{Binding Path=Opties}" SelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged}"
+                                  AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                            <DataGrid.Columns>
+                                <DataGridComboBoxColumn
+                                    ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type local:CombinatieTemplateOptieTypeEnum}}}"
+                                    SelectedItemBinding="{Binding Path=Type}" Header="Type" />
+                                <DataGridTextColumn Binding="{Binding Path=Search}" Header="Zoeken" />
+                                <DataGridTextColumn Binding="{Binding Path=Replace}" Header="Vervangen (default)"/>
+                                <DataGridTextColumn Binding="{Binding Path=Description}" Header="Omschrijving" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1">
+                            <Button Content="Optie toev." Command="{Binding Path=AddTemplateOptieCommand}" Margin="2" />
+                            <Button Content="Optie verw." Command="{Binding Path=RemoveTemplateOptieCommand}" Margin="2" />
+                        </StackPanel>
+                    </Grid>
                 </TabItem>
             </TabControl>
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Button Content="Item toev." Command="{Binding Path=AddTemplateItemCommand}" Margin="2" />
-                <Button Content="Item verw." Command="{Binding Path=RemoveTemplateItemCommand}" Margin="2" />
-            </StackPanel>
-            <!--<TextBox Grid.Column="2"
-                FontFamily="Consolas" AcceptsReturn="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                Margin="2" Text="{Binding Path=SelectedItem.ObjectJson,UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Path=SelectedItem.Foreground}" />-->
-            <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Width="5" HorizontalAlignment="Stretch" />
-            
+            <Border Grid.Row="3" Height="2" Background="DarkGray" Grid.ColumnSpan="3" Margin="0,2" />
         </Grid>
-        <Border Grid.Row="3" Height="2" Background="DarkGray" Grid.ColumnSpan="3" Margin="0,2" />
         <StackPanel Grid.Row="4" Grid.ColumnSpan="3" Orientation="Horizontal">
-            <Button Content="OK" Margin="2" />
-            <Button Content="Annuleren" Margin="2" />
+            <Button Content="OK" Margin="2" Click="Button_Click" IsDefault="True" />
         </StackPanel>
     </Grid>
 </Window>

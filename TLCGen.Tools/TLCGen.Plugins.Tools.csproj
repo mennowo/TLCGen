@@ -55,8 +55,10 @@
     <Compile Include="Models\CombinatieTemplateOptieModel.cs" />
     <Compile Include="Models\CombinatieTemplateOptieTypeEnum.cs" />
     <Compile Include="CombinatieTemplateProvider.cs" />
+    <Compile Include="Models\CombinatieTemplatesModel.cs" />
     <Compile Include="ViewModels\CombinatieTemplateItemViewModel.cs" />
     <Compile Include="ViewModels\CombinatieTemplateOptieViewModel.cs" />
+    <Compile Include="ViewModels\CombinatieTemplatesSettingsWindowViewModel.cs" />
     <Compile Include="Views\CombinatieTemplatesSettingsWindow.xaml.cs">
       <DependentUpon>CombinatieTemplatesSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -101,6 +103,10 @@
     <ProjectReference Include="..\TLCGen.Parts\TLCGen.Controls\TLCGen.Controls.csproj">
       <Project>{2c677528-ad13-4081-a55f-ce70f9a10b84}</Project>
       <Name>TLCGen.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TLCGen.Parts\TLCGen.Settings\TLCGen.Settings.csproj">
+      <Project>{3C79B172-B6A4-41FB-9A83-8075A1B4A318}</Project>
+      <Name>TLCGen.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -13,10 +13,12 @@ namespace TLCGen.Plugins.Tools
     {
         public object Object { get; set; }
         public string Description { get; set; }
+        public CombinatieTemplateItemTypeEnum Type { get; set; }
 
-        public TemplateObject(object @object, string description)
+        public TemplateObject(object @object, CombinatieTemplateItemTypeEnum type, string description)
         {
             Object = @object;
+            Type = type;
             Description = description;
         }
     }
@@ -73,7 +75,7 @@ namespace TLCGen.Plugins.Tools
         [Browsable(false)]
         public string ObjectJson
         {
-            get => CombinatieTemplateItem.ObjectJson;
+            get => CombinatieTemplateItem.ObjectJson == null ? "" : CombinatieTemplateItem.ObjectJson;
             set
             {
                 CombinatieTemplateItem.ObjectJson = value;
@@ -110,22 +112,38 @@ namespace TLCGen.Plugins.Tools
                 case CombinatieTemplateItemTypeEnum.Detector:
                     foreach(var d in c.GetAllDetectors())
                     {
-                        SelectableItems.Add(new TemplateObject(d, d.Naam));
+                        SelectableItems.Add(new TemplateObject(d, CombinatieTemplateItemTypeEnum.Detector, d.Naam));
                     }
                     break;
                 case CombinatieTemplateItemTypeEnum.Naloop:
                     foreach (var nl in c.InterSignaalGroep.Nalopen)
                     {
-                        SelectableItems.Add(new TemplateObject(nl, $"Naloop van {nl.FaseVan} naar {nl.FaseNaar}"));
+                        SelectableItems.Add(new TemplateObject(nl, CombinatieTemplateItemTypeEnum.Naloop, $"Naloop van {nl.FaseVan} naar {nl.FaseNaar}"));
                     }
                     break;
                 case CombinatieTemplateItemTypeEnum.Meeaanvraag:
+                    foreach (var ma in c.InterSignaalGroep.Meeaanvragen)
+                    {
+                        SelectableItems.Add(new TemplateObject(ma, CombinatieTemplateItemTypeEnum.Meeaanvraag, $"Meeaanvraag van {ma.FaseVan} naar {ma.FaseNaar}"));
+                    }
                     break;
                 case CombinatieTemplateItemTypeEnum.Rateltikker:
+                    foreach (var rt in c.Signalen.Rateltikkers)
+                    {
+                        SelectableItems.Add(new TemplateObject(rt, CombinatieTemplateItemTypeEnum.Rateltikker, $"Rateltikker van {rt.FaseCyclus}"));
+                    }
                     break;
                 case CombinatieTemplateItemTypeEnum.Gelijkstart:
+                    foreach (var gs in c.InterSignaalGroep.Gelijkstarten)
+                    {
+                        SelectableItems.Add(new TemplateObject(gs, CombinatieTemplateItemTypeEnum.Gelijkstart, $"Gelijkstart van {gs.FaseVan} naar {gs.FaseNaar}"));
+                    }
                     break;
                 case CombinatieTemplateItemTypeEnum.LateRelease:
+                    foreach (var lr in c.InterSignaalGroep.LateReleases)
+                    {
+                        SelectableItems.Add(new TemplateObject(lr, CombinatieTemplateItemTypeEnum.LateRelease, $"Late release van {lr.FaseVan} naar {lr.FaseNaar}"));
+                    }
                     break;
             }
         }
@@ -171,6 +189,7 @@ namespace TLCGen.Plugins.Tools
         public ICommand ApplyItemFromControllerCommand => _applyItemFromControllerCommand ?? (_applyItemFromControllerCommand = new RelayCommand(() =>
         {
             ObjectJson = JsonConvert.SerializeObject(SelectedItem.Object, Formatting.Indented);
+            Type = SelectedItem.Type;
         },
         () => SelectedItem != null));
 
@@ -182,6 +201,7 @@ namespace TLCGen.Plugins.Tools
         {
             CombinatieTemplateItem = combinatieTemplateItem;
             SetSelectableItems();
+            CheckTemplateCommand.Execute(null);
         }
 
         #endregion // Constructor

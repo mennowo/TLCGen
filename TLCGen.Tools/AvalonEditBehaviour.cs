@@ -57,7 +57,11 @@ namespace TLCGen.Plugins.Tools
                 {
                     var caretOffset = editor.CaretOffset;
                     editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
-                    editor.CaretOffset = caretOffset;
+                    try
+                    {
+                        editor.CaretOffset = caretOffset;
+                    }
+                    catch { }
                 }
             }
         }

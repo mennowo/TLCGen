@@ -14,9 +14,35 @@ namespace TLCGen.Plugins.Tools
 
         public CombinatieTemplateOptieModel Optie { get; }
 
-        public string Description => Optie.Description;
+        public string Description
+        {
+            get => Optie.Description;
+            set
+            {
+                Optie.Description = value;
+                RaisePropertyChanged();
+            }
+        }
 
-        public CombinatieTemplateOptieTypeEnum Type => Optie.Type;
+        public CombinatieTemplateOptieTypeEnum Type
+        {
+            get => Optie.Type;
+            set
+            {
+                Optie.Type = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Search
+        {
+            get => Optie.Search;
+            set
+            {
+                Optie.Search = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string Replace
         {
@@ -33,7 +59,14 @@ namespace TLCGen.Plugins.Tools
 
         public int ReplaceAsInt
         {
-            get => int.Parse(Replace);
+            get
+            {
+                if(int.TryParse(Replace, out int i))
+                {
+                    return i;
+                }
+                return int.MinValue;
+            }
             set
             {
                 Replace = value.ToString();

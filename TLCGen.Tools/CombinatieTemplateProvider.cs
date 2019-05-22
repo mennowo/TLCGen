@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using TLCGen.Models;
 
 namespace TLCGen.Plugins.Tools
@@ -61,11 +62,12 @@ namespace TLCGen.Plugins.Tools
                 object propValue = property.GetValue(obj);
 
                 // for ints
-                if (property.PropertyType == typeof(string))
+                if (property.PropertyType == typeof(string) && propValue != null)
                 {
-                    if ((string)propValue == oldString)
+                    if (Regex.IsMatch((string)propValue, oldString))
                     {
-                        property.SetValue(obj, newString);
+                        var changed = Regex.Replace((string)propValue, oldString, newString);
+                        property.SetValue(obj, changed);
                         ++i;
                     }
                 }
@@ -112,7 +114,8 @@ namespace TLCGen.Plugins.Tools
                 var ok = true;
                 FaseCyclusModel fc1 = null;
                 FaseCyclusModel fc2 = null;
-                foreach(var opt in t.Opties)
+                FaseCyclusModel fc3 = null;
+                foreach (var opt in t.Opties)
                 {
                     switch (opt.Type)
                     {
@@ -120,11 +123,12 @@ namespace TLCGen.Plugins.Tools
                             var tfc = c.Fasen.FirstOrDefault(x => x.Naam == opt.Replace);
                             if (tfc != null)
                             {
-                                var r = ModelManagement.TLCGenModelManager.Default.ChangeNameOnObject(o, opt.Search, opt.Replace, Models.Enumerations.TLCGenObjectTypeEnum.Fase);
+                                var r = ChangeStringOnObject(o, opt.Search, opt.Replace);
                                 if (r > 0)
                                 {
                                     if (fc1 == null) fc1 = tfc;
-                                    else if (fc2 == null) fc2 = tfc;
+                                    else if (fc2 == null) fc2 = tfc; // as of yet: unused
+                                    else if (fc3 == null) fc3 = tfc; // as of yet: unused
                                 }
                             }
                             break;
@@ -235,6 +239,8 @@ namespace TLCGen.Plugins.Tools
                         break;
                     case RatelTikkerModel rt:
                         c.Signalen.Rateltikkers.Add(rt);
+                        // Trick to force rebuilding list in UI
+                        Messenger.Default.Send(new Messaging.Messages.DetectorenChangedMessage(c, null, null));
                         break;
                 }
             }
