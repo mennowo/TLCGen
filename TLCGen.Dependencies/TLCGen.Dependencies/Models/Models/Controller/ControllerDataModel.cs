@@ -88,6 +88,8 @@ namespace TLCGen.Models
 
         public bool MultiModuleReeksen { get; set; }
 
+        public bool ModulenInParameters { get; set; }
+
         public FixatieModel FixatieData { get; set; }
 
         [XmlIgnore]

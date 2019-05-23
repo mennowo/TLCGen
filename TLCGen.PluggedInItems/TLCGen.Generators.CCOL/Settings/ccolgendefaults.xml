@@ -782,6 +782,26 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="ModulesInParametersCodeGenerator">
+      <CodePieceData>
+        <ClassName>ModulesInParametersCodeGenerator</ClassName>
+        <Description>Modules in parameters</Description>
+        <Settings>
+          <Setting>
+            <Default>mlprm</Default>
+            <Setting>mlprm</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen parametriseerbare modulestructuur</Description>
+          </Setting>
+          <Setting>
+            <Default>prml</Default>
+            <Setting>prml</Setting>
+            <Type>Parameter</Type>
+            <Description>Toewijzen PRML voor fase _E1_ (bitwise BIT0 t/m BIT14; gebruik BIT15 indien niet toegewezen)</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
     <CodePieceGenerator CodePiece="NalopenCodeGenerator">
       <CodePieceData>
         <ClassName>NalopenCodeGenerator</ClassName>
