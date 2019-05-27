@@ -307,6 +307,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCWachtgroen:
+                    if (!c.FileIngrepen.Any()) return "";
                     sb.AppendLine($"{ts}/* Niet in wachtgroen vasthouden tijdens file */");
                     var tts = ts;
                     if (c.HalfstarData.IsHalfstar)

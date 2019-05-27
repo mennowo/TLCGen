@@ -23,7 +23,7 @@ typedef enum
     rtsGehinderd,
 } TRijTijdScenario;
 
-VLOG_MON5 VLOG_mon5[FCMAX];
+VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 
 int iMaximumWachtTijd[FCMAX];
 int iVerstrekenGroenTijd[FCMAX];  /*          voor bepaling afkappen */

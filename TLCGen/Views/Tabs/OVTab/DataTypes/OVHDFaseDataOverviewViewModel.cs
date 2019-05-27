@@ -31,29 +31,40 @@ namespace TLCGen.ViewModels
 				_faseCyclus.OVIngreep = value;
 				if (value)
 				{
-					var ov = new OVIngreepModel();
-					Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
-					Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov.MeldingenData);
-					ov.FaseCyclus = _faseCyclus.Naam;
-					ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
-					{
-						AntiJutterTijdToepassen = true,
-						AntiJutterTijd = 15,
-						InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
-						Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-					});
-					ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel()
-					{
-						AntiJutterTijdToepassen = false,
-						InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
-						Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
-					});
-					_controller.OVData.OVIngrepen.Add(ov);
-					_controller.OVData.OVIngrepen.BubbleSort();
-					OVIngreep = new OVIngreepViewModel(ov);
-					OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
-                    /* Trick to add dummy detectors */
-                    MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                    var ov = _controller.OVData.OVIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
+                    if (ov != null)
+                    {
+                        OVIngreep = new OVIngreepViewModel(ov);
+                        OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
+                        /* Trick to add dummy detectors */
+                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                    }
+                    else
+                    {
+                        ov = new OVIngreepModel();
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov);
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(ov.MeldingenData);
+                        ov.FaseCyclus = _faseCyclus.Naam;
+                        ov.MeldingenData.Inmeldingen.Add(new OVIngreepInUitMeldingModel()
+                        {
+                            AntiJutterTijdToepassen = true,
+                            AntiJutterTijd = 15,
+                            InUit = OVIngreepInUitMeldingTypeEnum.Inmelding,
+                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                        });
+                        ov.MeldingenData.Uitmeldingen.Add(new OVIngreepInUitMeldingModel()
+                        {
+                            AntiJutterTijdToepassen = false,
+                            InUit = OVIngreepInUitMeldingTypeEnum.Uitmelding,
+                            Type = OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding
+                        });
+                        _controller.OVData.OVIngrepen.Add(ov);
+                        _controller.OVData.OVIngrepen.BubbleSort();
+                        OVIngreep = new OVIngreepViewModel(ov);
+                        OVIngreep.PropertyChanged += _overVM.OVIngreep_PropertyChanged;
+                        /* Trick to add dummy detectors */
+                        MessengerInstance.Send(new OVIngreepMeldingChangedMessage(ov.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
+                    }
 				}
 				else
 				{
@@ -88,18 +99,32 @@ namespace TLCGen.ViewModels
 				_faseCyclus.HDIngreep = value;
 				if (value)
 				{
-					var hd = new HDIngreepModel();
-					Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
-					hd.FaseCyclus = _faseCyclus.Naam;
-					_controller.OVData.HDIngrepen.Add(hd);
-					_controller.OVData.HDIngrepen.BubbleSort();
-					HDIngreep = new HDIngreepViewModel(_controller, hd);
-					HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
-					/* Trick to add dummy detectors */
-					if (hd.KAR)
-					{
-						HDIngreep.KAR = true;
-					}
+                    var hd = _controller.OVData.HDIngrepen.FirstOrDefault(x => x.FaseCyclus == _faseCyclus.Naam);
+                    if (hd != null)
+                    {
+                        HDIngreep = new HDIngreepViewModel(_controller, hd);
+                        HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
+                        /* Trick to add dummy detectors */
+                        if (hd.KAR)
+                        {
+                            HDIngreep.KAR = true;
+                        }
+                    }
+                    else
+                    {
+                        hd = new HDIngreepModel();
+                        Settings.DefaultsProvider.Default.SetDefaultsOnModel(hd);
+                        hd.FaseCyclus = _faseCyclus.Naam;
+                        _controller.OVData.HDIngrepen.Add(hd);
+                        _controller.OVData.HDIngrepen.BubbleSort();
+                        HDIngreep = new HDIngreepViewModel(_controller, hd);
+                        HDIngreep.PropertyChanged += _overVM.HDIngreep_PropertyChanged;
+                        /* Trick to add dummy detectors */
+                        if (hd.KAR)
+                        {
+                            HDIngreep.KAR = true;
+                        }
+                    }
 				}
 				else
 				{

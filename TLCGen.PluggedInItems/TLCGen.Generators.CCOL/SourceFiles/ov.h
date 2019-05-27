@@ -23,9 +23,9 @@ typedef struct {
 	bool inmhd;
 	bool uitmhd;
 	bool uitmbewhd;
-} VLOG_MON5;
+} VLOG_MON5_STRUCT;
 
-extern VLOG_MON5 VLOG_mon5[FCMAX];
+extern VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 
 /* Functie declaraties voor functies uit de applicatie */
 void OVInstellingen(void);

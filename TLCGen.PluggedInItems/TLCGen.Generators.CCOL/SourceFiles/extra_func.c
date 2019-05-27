@@ -116,7 +116,11 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
 		return ym_max_to(i, to_verschil);
 #endif
 	case 7:
+#if defined CCOLTIG && !defined NO_TIGMAX
+		return ym_max(i, to_verschil) || MK[i] && ym_max_tig(i, to_verschil);
+#else
 		return ym_max(i, to_verschil) || MK[i] && ym_max_to(i, to_verschil);
+#endif
 	}
 	return FALSE;
 }

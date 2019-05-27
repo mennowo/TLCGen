@@ -140,7 +140,10 @@ namespace TLCGen.ViewModels
 				var l = new ArrayList();
 				foreach (OVHDFaseDataOverviewViewModel fc in SelectedFaseCycli)
 				{
-					l.Add(fc.OVIngreep);
+                    if(fc.FaseCyclusNaam != null)
+                    {
+					    l.Add(fc.OVIngreep);
+                    }
 				}
 				MultiPropertySetter.SetPropertyForAllItems<OVIngreepViewModel>(sender, e.PropertyName, l);
 			}
@@ -158,7 +161,10 @@ namespace TLCGen.ViewModels
 				var l = new ArrayList();
 				foreach (OVHDFaseDataOverviewViewModel fc in SelectedFaseCycli)
 				{
-					l.Add(fc.HDIngreep);
+                    if(fc.FaseCyclusNaam != null)
+                    {
+					    l.Add(fc.HDIngreep);
+                    }
 				}
 				MultiPropertySetter.SetPropertyForAllItems<HDIngreepViewModel>(sender, e.PropertyName, l);
 			}
