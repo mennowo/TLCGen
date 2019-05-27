@@ -73,6 +73,36 @@ namespace TLCGen.ViewModels
             "MLE"
         };
 
+        public bool ModulenInParametersAvailable => !_Controller.Data.MultiModuleReeksen;
+
+        public bool ModulenInParameters
+        {
+            get { return _Controller?.Data == null ? false : _Controller.Data.ModulenInParameters; }
+            set
+            {
+                if (_Controller?.Data != null)
+                {
+                    _Controller.Data.ModulenInParameters = value;
+                    RaisePropertyChanged<object>(nameof(ModulenInParameters), broadcast: true);
+                }
+            }
+        }
+
+        public bool LangstWachtendeAlternatief
+        {
+            get { return _Controller?.ModuleMolen == null ? false : _Controller.ModuleMolen.LangstWachtendeAlternatief; }
+            set
+            {
+                if (_Controller?.ModuleMolen != null)
+                {
+                    _Controller.ModuleMolen.LangstWachtendeAlternatief = value;
+                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
+                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
+                    _ModuleMolenVM.LangstWachtendeAlternatief = value;
+                }
+            }
+        }
+
         public Visibility HasMultiML => _Controller.Data.MultiModuleReeksen ? Visibility.Visible : Visibility.Collapsed;
 
         #endregion // Properties
@@ -103,21 +133,6 @@ namespace TLCGen.ViewModels
             else if (!_Controller.Data.MultiModuleReeksen && SelectedModuleReeks != "ML")
             {
                 SelectedModuleReeks = "ML";
-            }
-        }
-
-        public bool LangstWachtendeAlternatief
-        {
-            get { return _Controller?.ModuleMolen == null ? false : _Controller.ModuleMolen.LangstWachtendeAlternatief; }
-            set
-            {
-                if (_Controller?.ModuleMolen != null)
-                {
-                    _Controller.ModuleMolen.LangstWachtendeAlternatief = value;
-                    RaisePropertyChanged<object>(nameof(LangstWachtendeAlternatief), broadcast: true);
-                    MessengerInstance.Send(new UpdateTabsEnabledMessage());
-                    _ModuleMolenVM.LangstWachtendeAlternatief = value;
-                }
             }
         }
 

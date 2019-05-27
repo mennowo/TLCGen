@@ -737,7 +737,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             if (ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus)
                             {
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tovminrood}{ov.FaseCyclus}] = EGL[{_fcpf}{ov.FaseCyclus}];");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tovminrood}{ov.FaseCyclus}] = !R[{_fcpf}{ov.FaseCyclus}];");
                             }
                         }
                     }

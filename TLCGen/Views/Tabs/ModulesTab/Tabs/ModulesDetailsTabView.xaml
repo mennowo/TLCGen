@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:TLCGen.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2vis" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -30,9 +33,17 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <local:ModuleMolenView DataContext="{Binding ModuleMolenVM}" />
-                <CheckBox 
-                    Grid.Row="1"
-                    Margin="5" Content="Langstwachtende alternatief" IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <CheckBox 
+                        Margin="5" 
+                        Content="Langstwachtende alternatief" 
+                        IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox 
+                        Margin="5" 
+                        Visibility="{Binding ModulenInParametersAvailable,Converter={StaticResource bool2vis}}"
+                        Content="Aanmaken ML parameters" 
+                        IsChecked="{Binding ModulenInParameters,UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
             </Grid>
             <StackPanel Orientation="Vertical" Grid.Row="1" Visibility="{Binding Path=HasMultiML,Mode=OneWay}">
                 <Border BorderBrush="Gray" BorderThickness="0.7" />
