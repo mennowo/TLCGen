@@ -30,6 +30,7 @@ int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 /* -------------------------------------------------------------------------------------- */
 /* Gereserveerde bitwaarde tbv OV ingrepen tijdens signaalplan                            */
 /* -------------------------------------------------------------------------------------- */
+#define OV_PLE_BIT   BIT8
 
 #define OV_PLE_BIT          BIT14  /* FM tbv OV ingrepen tijdens PL             */
 
