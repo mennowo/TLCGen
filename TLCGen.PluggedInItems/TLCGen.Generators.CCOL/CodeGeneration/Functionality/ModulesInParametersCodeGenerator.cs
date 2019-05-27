@@ -10,7 +10,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     public class ModulesInParametersCodeGenerator : CCOLCodePieceGeneratorBase
     {
 #pragma warning disable 0649
-        private CCOLGeneratorCodeStringSettingModel _schmlprl;
+        private CCOLGeneratorCodeStringSettingModel _schmlprm;
         private CCOLGeneratorCodeStringSettingModel _prmprml;
 #pragma warning restore 0649
 
@@ -23,10 +23,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 _myElements.Add(
                     CCOLGeneratorSettingsProvider.Default.CreateElement(
-                        $"{_schmlprl}",
+                        $"{_schmlprm}",
                         0,
                         CCOLElementTimeTypeEnum.SCH_type,
-                        _schmlprl));
+                        _schmlprm));
                 foreach (var fc in c.Fasen)
                 {
                     var def = 0;

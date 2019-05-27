@@ -360,30 +360,31 @@ namespace TLCGen.Plugins.Sumo
                     sb.AppendLine($"{ts}#ifdef SUMO");
                     sb.AppendLine($"{ts}if (sumostart)");
                     sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}	sumostart = FALSE;");
+                    sb.AppendLine($"{ts}{ts}sumostart = FALSE;");
                     if (_MyModel.AutoStartSumo)
                     {
-                        sb.AppendLine($"{ts}STARTUPINFO si;");
-                        sb.AppendLine($"{ts}ZeroMemory(&si, sizeof(si));");
-                        sb.AppendLine($"{ts}si.cb = sizeof(si);");
-                        sb.AppendLine($"{ts}ZeroMemory(&pi, sizeof(pi));");
+                        sb.AppendLine($"{ts}{ts}STARTUPINFO si;");
+                        sb.AppendLine($"{ts}{ts}ZeroMemory(&si, sizeof(si));");
+                        sb.AppendLine($"{ts}{ts}si.cb = sizeof(si);");
+                        sb.AppendLine($"{ts}{ts}ZeroMemory(&pi, sizeof(pi));");
                         sb.AppendLine();
-                        sb.AppendLine($"{ts}// Start SUMO!");
-                        sb.AppendLine($"{ts}if (!CreateProcess(NULL,");
+                        sb.AppendLine($"{ts}{ts}// Start SUMO!");
+                        sb.AppendLine($"{ts}{ts}if (!CreateProcess(NULL,");
                         sb.AppendLine($"{ts}{ts}\"\\\"{System.IO.Path.Combine(_MyModel.SumoHomePath ?? "", "bin", "sumo-gui.exe").Replace(@"\", @"\\")}\\\" \\\"{_MyModel.SumoConfigPath?.Replace(@"\", @"\\") ?? ""}\\\"\",");
                         sb.AppendLine($"{ts}{ts}NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))");
                         sb.AppendLine($"{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}{ts}sprintf(csumotmp, \"CreateProcess failed (%d).\\n\", GetLastError());");
+                        sb.AppendLine($"{ts}{ts}{ts}uber_puts(csumotmp);");
                         sb.AppendLine($"{ts}{ts}}}");
                         sb.AppendLine($"{ts}{ts}else");
                         sb.AppendLine($"{ts}{ts}{{");
                         sb.AppendLine($"{ts}{ts}{ts}atexit(CloseSumo);");
                         sb.AppendLine($"{ts}{ts}}}");
                     }
-                    sb.AppendLine($"{ts}	TraCIConnect(\"127.0.0.1\", \"{_MyModel.SumoPort}\");");
-                    sb.AppendLine($"{ts}	CIF_KLOK[CIF_UUR] = {_MyModel.StartTijdUur};");
-                    sb.AppendLine($"{ts}	CIF_KLOK[CIF_MINUUT] = {_MyModel.StartTijdMinuut};");
-                    sb.AppendLine($"{ts}    TraCISetOrder({_MyModel.SumoOrder});");
+                    sb.AppendLine($"{ts}{ts}TraCIConnect(\"127.0.0.1\", \"{_MyModel.SumoPort}\");");
+                    sb.AppendLine($"{ts}{ts}CIF_KLOK[CIF_UUR] = {_MyModel.StartTijdUur};");
+                    sb.AppendLine($"{ts}{ts}CIF_KLOK[CIF_MINUUT] = {_MyModel.StartTijdMinuut};");
+                    sb.AppendLine($"{ts}{ts}   TraCISetOrder({_MyModel.SumoOrder});");
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine($"{ts}#endif // #ifdef SUMO");
                     return sb.ToString();
