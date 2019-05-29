@@ -174,18 +174,29 @@
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Overige opties">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="Toepassen MK2" IsChecked="{Binding Path=ToepassenMK2,UpdateSourceTrigger=PropertyChanged}"
-                                  Margin="5" IsEnabled="{Binding Path=ToepassenMK2Enabled}" />
-                        <ct:InfoElement>
-                            <ct:InfoElement.InfoPopup>
-                                <TextBlock>
-                                    Dit is uitsluitend beschikbaar voor auto en OV, wanneer<LineBreak />
-                                    de betreffende fase meerdere rijstroken heeft. Aanvinken<LineBreak />
-                                    zorgt voor gebruik van meetkriterium2() binnen CCOL
-                                </TextBlock>
-                            </ct:InfoElement.InfoPopup>
-                        </ct:InfoElement>
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="Toepassen MK2" IsChecked="{Binding Path=ToepassenMK2,UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="5" IsEnabled="{Binding Path=ToepassenMK2Enabled}" />
+                            <ct:InfoElement>
+                                <ct:InfoElement.InfoPopup>
+                                    <TextBlock>
+                                        Dit is uitsluitend beschikbaar voor auto en OV, wanneer<LineBreak />
+                                        de betreffende fase meerdere rijstroken heeft. Aanvinken<LineBreak />
+                                        zorgt voor gebruik van meetkriterium2() binnen CCOL
+                                    </TextBlock>
+                                </ct:InfoElement.InfoPopup>
+                            </ct:InfoElement>
+                        </StackPanel>
+                        <Label Content="Toepassen school ingreep" />
+                        <ComboBox 
+                            ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" 
+                            IsEnabled="{Binding Path=SchoolIngreepEnabled}"
+                            SelectedValue="{Binding Path=SchoolIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <Label Content="School ingreep max. groen" />
+                        <TextBox 
+                            IsEnabled="{Binding Path=SchoolIngreep}"
+                            Text="{Binding Path=SchoolIngreepMaximumGroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

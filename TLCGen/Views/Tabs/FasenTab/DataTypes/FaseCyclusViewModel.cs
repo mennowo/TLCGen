@@ -556,6 +556,28 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool SchoolIngreepEnabled => _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBinnen || x.Type == DetectorTypeEnum.KnopBuiten);
+
+        public NooitAltijdAanUitEnum SchoolIngreep
+        {
+            get => _faseCyclus.SchoolIngreep;
+            set
+            {
+                _faseCyclus.SchoolIngreep = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int SchoolIngreepMaximumGroen
+        {
+            get => _faseCyclus.SchoolIngreepMaximumGroen;
+            set
+            {
+                _faseCyclus.SchoolIngreepMaximumGroen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Overrides

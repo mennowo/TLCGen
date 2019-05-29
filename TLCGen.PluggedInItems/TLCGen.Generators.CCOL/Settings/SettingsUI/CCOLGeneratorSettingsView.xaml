@@ -85,6 +85,10 @@
                     <TextBox Grid.Row="0" Grid.Column="1" AcceptsTab="True" Margin="2" Text="{Binding Path=TabSpace}" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Generator volgorde">
+                <TextBox FontFamily="Consolas" AcceptsReturn="True" IsReadOnly="True" Text="{Binding Path=GeneratorOrder}" Margin="2"
+                         VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
         </TabControl>  
     </Grid>
 </UserControl>

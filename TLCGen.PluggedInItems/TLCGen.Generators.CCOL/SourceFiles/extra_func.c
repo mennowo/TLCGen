@@ -1100,5 +1100,12 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 
 		/* initialiseer nieuwe modulemolen */
 		init_modules(ml_max, prml, yml, mlx, sml);
+
+		{
+			char tmp[256];
+			sprintf(tmp, "%s > Module indeling via PRMs: succesvol toegepast.\n",
+				PROMPT_code);
+			uber_puts(tmp);
+		}
 	}
 }

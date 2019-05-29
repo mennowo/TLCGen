@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GalaSoft.MvvmLight;
 using TLCGen.Generators.CCOL.CodeGeneration;
 using TLCGen.Generators.CCOL.Settings;
@@ -11,6 +12,7 @@ namespace TLCGen.Generators.CCOL
 
         private CCOLGeneratorSettingsModel _Settings;
         private CCOLGenerator _Generator;
+        private string _generatorOrder;
 
         #endregion // Fields
 
@@ -67,11 +69,21 @@ namespace TLCGen.Generators.CCOL
             }
         }
 
+        public string GeneratorOrder
+        {
+            get => _generatorOrder;
+            set
+            {
+                _generatorOrder = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
 
-		/* 
+        /* 
 		 * For potential future use
 		 * 
         RelayCommand _saveSettingsCommand;
@@ -110,6 +122,15 @@ namespace TLCGen.Generators.CCOL
         {
             _Settings = settings;
             _Generator = generator;
+            var t = "";
+            foreach (var cpg in CCOLGenerator.OrderedPieceGenerators)
+            {
+                foreach(var p in cpg.Value)
+                {
+                    t += $"{cpg.Key.ToString()} [{p.Key}] - {p.Value.GetType().Name}" + Environment.NewLine;
+                }
+            }
+            _generatorOrder = t;
         }
 
         #endregion // Constructor

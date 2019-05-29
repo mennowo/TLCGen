@@ -53,6 +53,9 @@ namespace TLCGen.Models
         public int VeiligheidsGroenMaximaal { get; set; }
         public bool WachttijdVoorspeller { get; set; }
         public bool ToepassenMK2 { get; set; }
+        public NooitAltijdAanUitEnum SchoolIngreep { get; set; }
+        public int SchoolIngreepMaximumGroen { get; set; }
+        public int SchoolIngreepBezetTijd { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }
