@@ -73,8 +73,6 @@ namespace TLCGen.ViewModels
             "MLE"
         };
 
-        public bool ModulenInParametersAvailable => !_Controller.Data.MultiModuleReeksen;
-
         public bool ModulenInParameters
         {
             get { return _Controller?.Data == null ? false : _Controller.Data.ModulenInParameters; }

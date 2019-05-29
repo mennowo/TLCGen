@@ -40,7 +40,6 @@
                         IsChecked="{Binding LangstWachtendeAlternatief,UpdateSourceTrigger=PropertyChanged}" />
                     <CheckBox 
                         Margin="5" 
-                        Visibility="{Binding ModulenInParametersAvailable,Converter={StaticResource bool2vis}}"
                         Content="Aanmaken ML parameters" 
                         IsChecked="{Binding ModulenInParameters,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>

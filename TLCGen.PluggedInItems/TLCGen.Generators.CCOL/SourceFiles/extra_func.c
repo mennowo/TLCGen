@@ -1004,3 +1004,101 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 	return (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) && (MM[muit] > 0);
 }
 
+bool IsConflict(count fc1, count fc2)
+{
+	count i;
+	for (i = 0; i < FKFC_MAX[fc1]; ++i) { /* KFC=confl.; GKFC=KFC+groenconfl.; FKFC=GKFC+fictieve confl. */
+		if (TO_pointer[fc1][i] == fc2) {
+			return (bool)TRUE;
+		}
+	}
+	return (bool)FALSE;
+}
+
+void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, bool *prml[], bool yml[], count *mlx, bool *sml)
+{
+	if (fcfirst < fclast)
+	{
+		int fc, ml, fcc;
+		bool PRML_x[FCMAX];        /* bijhouden toedeling */
+		mulv PRML_temp[15][FCMAX]; /* tijdelijke modulemolen */
+
+		/* bepaal nieuwe tijdelijke modulemolen, houdt toedelen bij */
+		for (fc = fcfirst; fc < fclast; ++fc)
+		{
+			PRML_x[fc] = FALSE;
+			/* Bewust niet toegedeeld */
+			if (PRM[prmfcml + fc] & BIT15)
+			{
+				PRML_temp[ml][fc] = FALSE;
+				PRML_x[fc] = TRUE;
+				continue;
+			}
+			/* ML toedeling */
+			for (ml = 0; ml < ml_max; ++ml)
+			{
+				/* Toegedeeld aan dit blok */
+				if (PRM[prmfcml + fc] & (1 << ml))
+				{
+					PRML_temp[ml][fc] = PRIMAIR;
+					PRML_x[fc] = TRUE;
+				}
+				/* Niet toegedeeld aan dit blok */
+				else
+				{
+					PRML_temp[ml][fc] = FALSE;
+				}
+			}
+		}
+
+		/* controleer:
+		   - geen conflicterende fasen in dezelfde module van de tijdelijke modulemolen zitten
+		   - geen fasen zonder toedeling
+		*/
+		for (fc = fcfirst; fc < fclast; ++fc)
+		{
+			/* Check toedeling */
+			if (!PRML_x[fc])
+			{
+				char tmp[256];
+				sprintf(tmp, "%s > Module indeling via PRMs: fase %s is niet toegedeeld.\n",
+					PROMPT_code,
+					FC_code[fc]);
+				uber_puts(tmp);
+				return;
+			}
+			/* Check conflicten */
+			for (ml = 0; ml < ml_max; ++ml)
+			{
+				if (PRML_temp[ml][fc] == PRIMAIR)
+				{
+					for (fcc = fcfirst; fcc < fclast; ++fcc)
+					{
+						if (PRML_temp[ml][fcc] == PRIMAIR && IsConflict(fc, fcc))
+						{
+							char tmp[256];
+							sprintf(tmp, "%s > Module indeling via PRMs: conflicterende fasen %s en %s zijn toegedeeld in hetzelfde blok.\n",
+								PROMPT_code,
+								FC_code[fc],
+								FC_code[fcc]);
+							uber_puts(tmp);
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		/* kopieer tijdelijke modulemolen naar nieuwe modulemolen */
+		for (fc = fcfirst; fc < fclast; ++fc)
+		{
+			for (ml = 0; ml < ml_max; ++ml)
+			{
+				if (PRML_temp[ml][fc] == PRIMAIR) prml[ml][fc] = PRIMAIR;
+			}
+		}
+
+		/* initialiseer nieuwe modulemolen */
+		init_modules(ml_max, prml, yml, mlx, sml);
+	}
+}

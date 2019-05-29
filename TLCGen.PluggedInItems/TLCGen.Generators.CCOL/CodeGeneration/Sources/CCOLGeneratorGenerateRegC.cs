@@ -564,10 +564,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("");
             }
 
-            foreach (var gen in OrderedPieceGenerators[CCOLCodeTypeEnum.RegCInitApplication])
-            {
-                sb.Append(gen.Value.GetCode(controller, CCOLCodeTypeEnum.RegCInitApplication, ts));
-            }
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCInitApplication, false, true, false, true);
+
             sb.AppendLine($"{ts}post_init_application();");
 	        if (controller.HalfstarData.IsHalfstar)
 	        {
