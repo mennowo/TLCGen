@@ -127,6 +127,10 @@ namespace TLCGen.ModelManagement
             controller.Signalen.ControllerHasPeriodRtAltijd = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersAltijd);
             controller.Signalen.ControllerHasPeriodRtDimmen = controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.RateltikkersDimmen);
             controller.Signalen.ControllerHasPeriodBellenDimmen= controller.PeriodenData.Perioden.Any(x => x.Type == PeriodeTypeEnum.BellenDimmen);
+
+            // sort if needed
+            if (!controller.Detectoren.IsSorted()) controller.Detectoren.BubbleSort();
+            if (!controller.SelectieveDetectoren.IsSorted()) controller.SelectieveDetectoren.BubbleSort();
         }
 
         public void CorrectModelByVersion(ControllerModel controller, string filename)
@@ -521,6 +525,8 @@ namespace TLCGen.ModelManagement
             {
                 fcm.Detectoren.BubbleSort();
             }
+            msg.Controller.Detectoren.BubbleSort();
+            msg.Controller.SelectieveDetectoren.BubbleSort();
         }
 
         private void OnDetectorenChangedMessage(DetectorenChangedMessage msg)

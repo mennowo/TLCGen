@@ -120,6 +120,7 @@ namespace TLCGen.ViewModels
             SelectieveDetectorViewModel dvm1 = new SelectieveDetectorViewModel(dm);
             SelectieveDetectoren.Add(dvm1);
             Messenger.Default.Send(new SelectieveDetectorenChangedMessage());
+            SelectedSelectieveDetectoren.BubbleSort();
         }
 
         bool AddSelectieveDetectorCommand_CanExecute(object prm)
@@ -273,10 +274,6 @@ namespace TLCGen.ViewModels
 
         public SelectieveDetectorenTabViewModel() : base()
         {
-            MessengerInstance.Register<Messaging.Requests.PrepareForGenerationRequest>(this, (msg) =>
-            {
-                SelectieveDetectoren.BubbleSort();
-            });
         }
 
         #endregion // Constructor

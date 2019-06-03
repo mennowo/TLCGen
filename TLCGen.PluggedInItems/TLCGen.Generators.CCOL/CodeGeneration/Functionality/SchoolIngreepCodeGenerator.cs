@@ -61,7 +61,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
-        public override bool HasCCOLBitmapInputs() => true;
+        //public override bool HasCCOLBitmapInputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
         {

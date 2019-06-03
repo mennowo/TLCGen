@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
+using TLCGen.Integrity;
 using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
@@ -106,7 +107,8 @@ namespace TLCGen.ViewModels
 
         public int CompareTo(object obj)
         {
-            return this.Naam.CompareTo(((SelectieveDetectorViewModel)obj).Naam);
+            if (!(obj is SelectieveDetectorViewModel d2)) throw new InvalidCastException();
+            return TLCGenIntegrityChecker.CompareDetectors(Naam, d2.Naam, null, null);
         }
     }
 }
