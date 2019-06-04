@@ -124,7 +124,8 @@
                         <Label Content="Ontruimingstijd verschil" />
                         <TextBox Text="{Binding Path=MeeverlengenVerschil,TargetNullValue={x:Static sys:String.Empty}}" Margin="2" />
                     </StackPanel>
-                    <CheckBox Content="Type instelbaar op straat" VerticalAlignment="Center" Margin="5" IsChecked="{Binding Path=MeeverlengenTypeInstelbaarOpStraat}"/>
+                    <CheckBox Content="Type instelbaar op straat" VerticalAlignment="Center" Margin="5" 
+                              IsChecked="{Binding Path=MeeverlengenTypeInstelbaarOpStraat}"/>
                     <StackPanel>
                         <Label Content="Hard meeverlengen met" />
                         <ct:SpecialDataGrid ItemsSource="{Binding Path=HardMeeverlengenFaseCycli}" Margin="2" CanUserAddRows="False" CanUserDeleteRows="False"
