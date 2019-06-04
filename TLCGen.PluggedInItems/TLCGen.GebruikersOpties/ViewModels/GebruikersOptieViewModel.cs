@@ -10,24 +10,23 @@ namespace TLCGen.GebruikersOpties
     public class GebruikersOptieViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
-
-        private GebruikersOptieModel _GebruikersOptie;
-
         #endregion // Fields
 
         #region Properties
 
+        public GebruikersOptieModel GebruikersOptie { get; }
+
         public string Naam
         {
-            get { return _GebruikersOptie.Naam; }
+            get { return GebruikersOptie.Naam; }
             set
             {
                 if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(ObjectType, value))
                     {
-                        string oldname = _GebruikersOptie.Naam;
-                        _GebruikersOptie.Naam = value;
+                        string oldname = GebruikersOptie.Naam;
+                        GebruikersOptie.Naam = value;
 
                         // Notify the messenger
                         Messenger.Default.Send(new NameChangingMessage(ObjectType, oldname, value));
@@ -41,29 +40,29 @@ namespace TLCGen.GebruikersOpties
 
         public CCOLElementTypeEnum Type
         {
-            get { return _GebruikersOptie.Type; }
+            get { return GebruikersOptie.Type; }
             set
             {
-                _GebruikersOptie.Type = value;
+                GebruikersOptie.Type = value;
                 RaisePropertyChanged<object>("Type", broadcast: true);
             }
         }
 
         public int? Instelling
         {
-            get { return _GebruikersOptie.Instelling; }
+            get { return GebruikersOptie.Instelling; }
             set
             {
-                _GebruikersOptie.Instelling = value;
+                GebruikersOptie.Instelling = value;
                 RaisePropertyChanged<object>("Instelling", broadcast: true);
             }
         }
         public string Commentaar
         {
-            get { return _GebruikersOptie.Commentaar; }
+            get { return GebruikersOptie.Commentaar; }
             set
             {
-                _GebruikersOptie.Commentaar = value;
+                GebruikersOptie.Commentaar = value;
                 RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
@@ -90,7 +89,7 @@ namespace TLCGen.GebruikersOpties
 
         public object GetItem()
         {
-            return _GebruikersOptie;
+            return GebruikersOptie;
         }
 
         #endregion // IViewModelWithItem
@@ -99,7 +98,7 @@ namespace TLCGen.GebruikersOpties
 
         public GebruikersOptieViewModel(GebruikersOptieModel gebruikersoptie)
         {
-            _GebruikersOptie = gebruikersoptie;
+            GebruikersOptie = gebruikersoptie;
         }
 
         #endregion // Constructor

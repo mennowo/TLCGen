@@ -25,19 +25,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             foreach (FaseCyclusModel fcm in c.Fasen)
             {
-                if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit &&
-                    fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                // meeverlengen niet hard uit
+                if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                 {
-                    if (!fcm.MeeverlengenTypeInstelbaarOpStraat)
-                    {
-                        _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_schmv}{fcm.Naam}", 
-                                (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
-                                CCOLElementTimeTypeEnum.SCH_type, 
-                                _schmv, fcm.Naam));
-                    }
-                    else
+                    // type instelbaar op straat
+                    if (fcm.MeeverlengenTypeInstelbaarOpStraat)
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -45,6 +37,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 ((int)fcm.MeeverlengenType) + 1,
                                 CCOLElementTimeTypeEnum.None,
                                 _prmmv, fcm.Naam));
+                    }
+                    // anders indien meeverlengen niet hard aan
+                    else if(fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                    {
+                        _myElements.Add(
+                            CCOLGeneratorSettingsProvider.Default.CreateElement(
+                                $"{_schmv}{fcm.Naam}", 
+                                (fcm.Meeverlengen == NooitAltijdAanUitEnum.SchAan ? 1 : 0), 
+                                CCOLElementTimeTypeEnum.SCH_type, 
+                                _schmv, fcm.Naam));
                     }
 
                 }

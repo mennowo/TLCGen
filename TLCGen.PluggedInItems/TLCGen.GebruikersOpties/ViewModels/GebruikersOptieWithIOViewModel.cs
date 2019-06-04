@@ -7,6 +7,7 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.GebruikersOpties
 {
+
     public class GebruikersOptieWithIOViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
@@ -17,7 +18,7 @@ namespace TLCGen.GebruikersOpties
 
         #region Properties
 
-        public GebruikersOptieWithIOModel GebruikersOptieWithOI
+        public GebruikersOptieWithIOModel GebruikersOptieWithIO
         {
             get
             {

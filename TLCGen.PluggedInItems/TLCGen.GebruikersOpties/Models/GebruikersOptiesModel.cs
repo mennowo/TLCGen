@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Xml.Serialization;
-using TLCGen.Helpers;
-using TLCGen.Models;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -38,51 +35,6 @@ namespace TLCGen.GebruikersOpties
             Schakelaars = new List<GebruikersOptieModel>();
             GeheugenElementen = new List<GebruikersOptieModel>();
             Parameters = new List<GebruikersOptieModel>();
-        }
-    }
-
-    [TypeConverter(typeof(EnumDescriptionTypeConverter))]
-    public enum CCOLElementTypeEnum
-    {
-        TE_type,
-        TS_type,
-        TM_type,
-        Geen,
-    }
-
-    [Serializable]
-    public class GebruikersOptieModel
-    {
-        public string Naam { get; set; }
-
-        public CCOLElementTypeEnum Type { get; set; }
-        public int? Instelling { get; set; }
-        public string Commentaar { get; set; }
-
-        public bool ShouldSerializeType()
-        {
-            return Instelling.HasValue;
-        }
-        public bool ShouldSerializeInstelling()
-        {
-            return Instelling.HasValue;
-        }
-        public bool ShouldSerializeCommentaar()
-        {
-            return !string.IsNullOrWhiteSpace(Commentaar);
-        }
-    }
-
-    [Serializable]
-    public class GebruikersOptieWithIOModel : IOElementModel
-    {
-        public override string Naam { get; set; }
-        public override bool Dummy { get; set; }
-        public string Commentaar { get; set; }
-
-        public bool ShouldSerializeCommentaar()
-        {
-            return !string.IsNullOrWhiteSpace(Commentaar);
         }
     }
 }

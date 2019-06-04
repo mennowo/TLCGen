@@ -13,6 +13,7 @@ using System.Collections;
 using GalaSoft.MvvmLight;
 using TLCGen.Models.Enumerations;
 using System.Linq;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.GebruikersOpties
 {
@@ -74,14 +75,28 @@ namespace TLCGen.GebruikersOpties
         public ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel> GeheugenElementen { get; private set; }
         public ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel> Parameters { get; private set; }
 
+        public GebruikersOptiesImportExportTabViewModel ImportExportVM { get; }
+
         public GebruikersOptiesModel MyGebruikersOpties
         {
             get { return _MyGebruikersOpties; }
             set
             {
                 _MyGebruikersOpties = value;
-
+                ImportExportVM.DataModel = value;
                 RaisePropertyChanged("");
+            }
+        }
+
+        public bool IsImportExportNotSelected => !_isImportExportSelected;
+
+        public bool IsImportExportSelected
+        {
+            set
+            {
+                if (value) ImportExportVM.RebuildAllItems(this);
+                _isImportExportSelected = value;
+                RaisePropertyChanged(nameof(IsImportExportNotSelected));
             }
         }
 
@@ -192,7 +207,7 @@ namespace TLCGen.GebruikersOpties
 
         #region Command functionality
 
-        void AddNewGebruikersOptieCommand_Executed(object prm)
+        void AddNewGebruikersOptieCommand_Executed()
         {
             int index = -1;
 
@@ -276,12 +291,12 @@ namespace TLCGen.GebruikersOpties
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
-        bool AddNewGebruikersOptieCommand_CanExecute(object prm)
+        bool AddNewGebruikersOptieCommand_CanExecute()
         {
             return true;
         }
 
-        void RemoveGebruikersOptieCommand_Executed(object prm)
+        void RemoveGebruikersOptieCommand_Executed()
         {
             int index = 0;
             if (SelectedOpties != null && SelectedOpties.Count > 0)
@@ -360,12 +375,12 @@ namespace TLCGen.GebruikersOpties
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
-        bool RemoveGebruikersOptieCommand_CanExecute(object prm)
+        bool RemoveGebruikersOptieCommand_CanExecute()
         {
             return SelectedOptie != null;
         }
 
-        void OmhoogCommand_Executed(object prm)
+        void OmhoogCommand_Executed()
         {
             var optie = SelectedOptie;
 
@@ -432,12 +447,12 @@ namespace TLCGen.GebruikersOpties
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
-        bool OmhoogCommand_CanExecute(object prm)
+        bool OmhoogCommand_CanExecute()
         {
             return SelectedOptie != null;
         }
 
-        void OmlaagCommand_Executed(object prm)
+        void OmlaagCommand_Executed()
         {
             var optie = SelectedOptie;
 
@@ -507,7 +522,7 @@ namespace TLCGen.GebruikersOpties
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
 
-        bool OmlaagCommand_CanExecute(object prm)
+        bool OmlaagCommand_CanExecute()
         {
             return SelectedOptie != null;
         }
@@ -640,6 +655,8 @@ namespace TLCGen.GebruikersOpties
         }
 
         private bool _IsEnabled;
+        private bool _isImportExportSelected;
+
         public bool IsEnabled
         {
             get { return _IsEnabled; }
@@ -657,7 +674,7 @@ namespace TLCGen.GebruikersOpties
                 ResourceDictionary dict = new ResourceDictionary();
                 Uri u = new Uri("pack://application:,,,/" +
                     System.Reflection.Assembly.GetExecutingAssembly().GetName().Name +
-                    ";component/" + "GebruikersOptiesIcon.xaml");
+                    ";component/" + "Resources/GebruikersOptiesIcon.xaml");
                 dict.Source = u;
                 return (DrawingImage)dict["GebruikersOptiesTabDrawingImage"];
             }
@@ -760,7 +777,7 @@ namespace TLCGen.GebruikersOpties
             List<IOElementModel> items = new List<IOElementModel>();
             foreach(var v in Uitgangen)
             {
-                items.Add(v.GebruikersOptieWithOI as IOElementModel);
+                items.Add(v.GebruikersOptieWithIO as IOElementModel);
             }
             return items;
         }
@@ -770,7 +787,7 @@ namespace TLCGen.GebruikersOpties
             List<IOElementModel> items = new List<IOElementModel>();
             foreach (var v in Ingangen)
             {
-                items.Add(v.GebruikersOptieWithOI as IOElementModel);
+                items.Add(v.GebruikersOptieWithIO as IOElementModel);
             }
             return items;
         }
@@ -890,6 +907,7 @@ namespace TLCGen.GebruikersOpties
 
         public GebruikersOptiesTabViewModel()
         {
+            ImportExportVM = new GebruikersOptiesImportExportTabViewModel(this);
             ResetMyGebruikersOpties();
         }
 

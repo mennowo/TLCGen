@@ -51,28 +51,33 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GebruikersOptiesLijst.xaml.cs">
+    <Compile Include="ViewModels\GebruikersOptieGenericViewModel.cs" />
+    <Compile Include="ViewModels\GebruikersOptiesImportExportTabViewModel.cs" />
+    <Compile Include="Views\GebruikersOptiesLijst.xaml.cs">
       <DependentUpon>GebruikersOptiesLijst.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GebruikersOptiesModel.cs" />
-    <Compile Include="GebruikersOptiesTabView.xaml.cs">
+    <Compile Include="Models\CCOLElementTypeEnum.cs" />
+    <Compile Include="Models\GebruikersOptieModel.cs" />
+    <Compile Include="Models\GebruikersOptiesModel.cs" />
+    <Compile Include="Views\GebruikersOptiesTabView.xaml.cs">
       <DependentUpon>GebruikersOptiesTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GebruikersOptiesTabViewModel.cs" />
-    <Compile Include="GebruikersOptieViewModel.cs" />
-    <Compile Include="GebruikersOptieWithIOViewModel.cs" />
+    <Compile Include="ViewModels\GebruikersOptiesTabViewModel.cs" />
+    <Compile Include="ViewModels\GebruikersOptieViewModel.cs" />
+    <Compile Include="ViewModels\GebruikersOptieWithIOViewModel.cs" />
+    <Compile Include="Models\GebruikersOptieWithIOModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="GebruikersOptiesIcon.xaml">
+    <Resource Include="Resources\GebruikersOptiesIcon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
-    <Page Include="GebruikersOptiesLijst.xaml">
+    <Page Include="Views\GebruikersOptiesLijst.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GebruikersOptiesTabView.xaml">
+    <Page Include="Views\GebruikersOptiesTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -187,6 +192,17 @@
         </Reference>
         <Reference Include="System.Windows.Interactivity">
           <HintPath>..\..\packages\MvvmLightLibs\lib\net45\System.Windows.Interactivity.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Choose>
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6' Or $(TargetFrameworkVersion) == 'v4.6.1' Or $(TargetFrameworkVersion) == 'v4.6.2' Or $(TargetFrameworkVersion) == 'v4.6.3' Or $(TargetFrameworkVersion) == 'v4.7' Or $(TargetFrameworkVersion) == 'v4.7.1' Or $(TargetFrameworkVersion) == 'v4.7.2')">
+      <ItemGroup>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\packages\NewtonSoft.Json\lib\net45\Newtonsoft.Json.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

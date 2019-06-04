@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="TLCGen.GebruikersOpties.GebruikersOptiesTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
+             xmlns:ext="clr-namespace:TLCGen.Extensions;assembly=TLCGen.Dependencies"
+             xmlns:local="clr-namespace:TLCGen.GebruikersOpties"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visConv" />
+        <DataGridTextColumn x:Key="ImpExpInstellingColumn" Binding="{Binding Path=Instelling,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Header="Instelling" >
+            <DataGridTextColumn.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=HasInstelling}" Value="false">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGridTextColumn.CellStyle>
+        </DataGridTextColumn>
+        <DataGridComboBoxColumn x:Key="ImpExpTypeColumn" Header="Type" 
+                                SelectedItemBinding="{Binding Path=TimeType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type local:CCOLElementTypeEnum}}}" >
+            <DataGridComboBoxColumn.CellStyle>
+                <Style TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=HasType}" Value="false">
+                            <Setter Property="IsEnabled" Value="False" />
+                            <Setter Property="Background" Value="LightGray" />
+                            <Setter Property="Foreground" Value="LightGray" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGridComboBoxColumn.CellStyle>
+        </DataGridComboBoxColumn>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TabControl TabStripPlacement="Left" SelectedIndex="{Binding Path=SelectedTabIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="0">
+            <TabItem Header="Uitgangen">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Uitgangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Ingangen">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=Ingangen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Hulpelementen">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowInstelling="False" ShowType="False" GridItemsSource="{Binding Path=HulpElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Timers">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridItemsSource="{Binding Path=Timers}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Counters">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" GridItemsSource="{Binding Path=Counters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Schakelaars">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" GridItemsSource="{Binding Path=Schakelaars}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Geheugenelem.">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    ShowType="False" ShowInstelling="False" GridItemsSource="{Binding Path=GeheugenElementen}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Parameters">
+                <local:GebruikersOptiesLijst 
+                    GridSelectedItems="{Binding Path=SelectedOpties,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    GridItemsSource="{Binding Path=Parameters}" GridSelectedItem="{Binding Path=SelectedOptie,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Import/export" Selector.IsSelected="{Binding Path=IsImportExportSelected,Mode=OneWayToSource}">
+                <Grid DataContext="{Binding Path=ImportExportVM}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Exporteren" />
+                    <Label Content="Alle aanwezige elementen" FontStyle="Italic" Grid.Row="1" />
+                    <DataGrid ItemsSource="{Binding Path=ItemsAllPresent}" Grid.Row="2" Margin="2" 
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=ObjectType}" IsReadOnly="True" Header="Type" />
+                            <DataGridTextColumn Binding="{Binding Path=Naam}" IsReadOnly="True" Header="Naam" />
+                            <DataGridTextColumn Binding="{Binding Path=Commentaar}" IsReadOnly="True" Header="Commentaar" Width="*" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Selected}" Header="Export" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <Button Content="Exporteren" Command="{Binding Path=ExportCommand}" Margin="2" />
+                    </StackPanel>
+                    <Label Content="Importeren" Grid.Row="4" />
+                    <Label Content="Items uit externe data" FontStyle="Italic" Grid.Row="5" />
+                    <DataGrid ItemsSource="{Binding Path=ItemsToImport}" Grid.Row="6" Margin="2" 
+                              AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=ObjectType}" IsReadOnly="True" Header="Type" />
+                            <DataGridTextColumn Binding="{Binding Path=Naam}" IsReadOnly="True" Header="Naam" />
+                            <StaticResource ResourceKey="ImpExpTypeColumn" />
+                            <StaticResource ResourceKey="ImpExpInstellingColumn" />
+                            <DataGridTextColumn Binding="{Binding Path=Commentaar}" Header="Commentaar" Width="*" />
+                            <DataGridCheckBoxColumn Binding="{Binding Path=Selected}" Header="Import" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Grid.Row="7" Orientation="Horizontal">
+                        <Button Content="Openen bestand" Command="{Binding Path=OpenExternalDataCommand}" Margin="2" />
+                        <Button Content="Importeren" Command="{Binding Path=ImportCommand}" Margin="2" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1"
+                    Visibility="{Binding Path=IsImportExportNotSelected,Converter={StaticResource bool2visConv}}">
+            <Button Content="Toevoegen" Command="{Binding Path=AddGebruikersOptieCommand}" Margin="2" />
+            <Button Content="Verwijderen" Command="{Binding Path=RemoveGebruikersOptieCommand}" Margin="2" />
+            <Button Content="Omhoog" Command="{Binding Path=OmhoogCommand}" Margin="2" />
+            <Button Content="Omlaag" Command="{Binding Path=OmlaagCommand}" Margin="2" />
+        </StackPanel>
+    </Grid>
+</UserControl>
