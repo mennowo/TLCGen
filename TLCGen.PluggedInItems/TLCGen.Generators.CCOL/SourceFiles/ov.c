@@ -340,19 +340,19 @@ void OVTimers(void)
 		sml = SML;
 #else
 #ifdef MLAMAX
-		if (sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { sml = SMLA; break; }
+		if (sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc] == PRIMAIR) { sml = SMLA; break; }
 #endif
 #ifdef MLBMAX
-		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { sml = SMLB; break; }
+		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc] == PRIMAIR) { sml = SMLB; break; }
 #endif
 #ifdef MLCMAX
-		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { sml = SMLC; break; }
+		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc] == PRIMAIR) { sml = SMLC; break; }
 #endif
 #ifdef MLDMAX
-		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { sml = SMLD; break; }
+		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc] == PRIMAIR) { sml = SMLD; break; }
 #endif
 #ifdef MLEMAX
-		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { sml = SMLE; break; }
+		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc] == PRIMAIR) { sml = SMLE; break; }
 #endif
 #endif
         if (sml && iGerealiseerdeGroenTijd[fc] > 0 && !PG[fc])
@@ -1606,19 +1606,19 @@ void OVAfkappen(void)
 		sml = SML;
 #else
 #ifdef MLAMAX
-		if(sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { sml = SMLA; break; }
+		if(sml == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc] == PRIMAIR) { sml = SMLA; break; }
 #endif
 #ifdef MLBMAX
-		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { sml = SMLB; break; }
+		if (sml == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc] == PRIMAIR) { sml = SMLB; break; }
 #endif
 #ifdef MLCMAX
-		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { sml = SMLC; break; }
+		if (sml == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc] == PRIMAIR) { sml = SMLC; break; }
 #endif
 #ifdef MLDMAX
-		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { sml = SMLD; break; }
+		if (sml == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc] == PRIMAIR) { sml = SMLD; break; }
 #endif
 #ifdef MLEMAX
-		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { sml = SMLE; break; }
+		if (sml == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc] == PRIMAIR) { sml = SMLE; break; }
 #endif
 #endif
         if ((/* SG[fc] */PR[fc] && RA[fc] || sml && PG[fc] && G[fc]) && PR[fc] && iAantalMalenNietAfkappen[fc]>0 && !iNietAfkappen[fc]) 

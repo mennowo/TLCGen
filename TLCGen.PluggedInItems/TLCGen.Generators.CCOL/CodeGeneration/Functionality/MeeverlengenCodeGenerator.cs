@@ -38,8 +38,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 CCOLElementTimeTypeEnum.None,
                                 _prmmv, fcm.Naam));
                     }
-                    // anders indien meeverlengen niet hard aan
-                    else if(fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                    // indien meeverlengen niet hard aan
+                    if(fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                     {
                         _myElements.Add(
                             CCOLGeneratorSettingsProvider.Default.CreateElement(
@@ -102,7 +102,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
                         {
                             sb.Append($"{ts}YM[{fcm.GetDefine()}] |= ");
-                            if (!fcm.MeeverlengenTypeInstelbaarOpStraat && fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
+                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Altijd)
                             {
                                 sb.Append($"SCH[{_schpf}{_schmv}{fcm.Naam}] && ");
                             }
