@@ -208,7 +208,7 @@ void mee_aanvraag_reset(count fcn, count fcv, bool expressie)
 
 #endif
 
-#if MLMAX
+#if (defined MLMAX) || (defined MLAMAX)
 /**************************************************************************
  *  Functie  : WStandRi
  *
