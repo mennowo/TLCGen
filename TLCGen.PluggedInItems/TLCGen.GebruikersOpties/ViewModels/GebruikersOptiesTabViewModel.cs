@@ -14,12 +14,14 @@ using GalaSoft.MvvmLight;
 using TLCGen.Models.Enumerations;
 using System.Linq;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
+using TLCGen.Messaging.Messages;
+using GongSolutions.Wpf.DragDrop;
 
 namespace TLCGen.GebruikersOpties
 {
     [TLCGenTabItem(-1, TabItemTypeEnum.MainWindow)]
     [TLCGenPlugin(TLCGenPluginElems.TabControl | TLCGenPluginElems.XMLNodeWriter | TLCGenPluginElems.IOElementProvider)]
-    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider
+    public class GebruikersOptiesTabViewModel : ViewModelBase, ITLCGenXMLNodeWriter, ITLCGenTabItem, ITLCGenElementProvider, IDropTarget
     {
         #region Constants
 
@@ -33,7 +35,7 @@ namespace TLCGen.GebruikersOpties
         const int ParametersConst = 7;
         const int OptiesMax = 8;
 
-        readonly string[] OptiesNames = { "us", "is", "h", "t", "c", "sch", "m", "prm"};
+        readonly string[] OptiesNames = { "us", "is", "h", "t", "c", "sch", "m", "prm" };
 
         #endregion // Constants
 
@@ -213,14 +215,14 @@ namespace TLCGen.GebruikersOpties
 
             if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
             {
-                if(SelectedOptie != null)
+                if (SelectedOptie != null)
                     index = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
                         SelectedOptie as GebruikersOptieWithIOViewModel) + 1;
 
                 var o = new GebruikersOptieWithIOViewModel(new GebruikersOptieWithIOModel());
                 o.PropertyChanged += Optie_PropertyChanged;
                 int i = 1;
-                while(string.IsNullOrEmpty(o.Naam))
+                while (string.IsNullOrEmpty(o.Naam))
                 {
                     o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]).Count + i);
                     ++i;
@@ -239,7 +241,7 @@ namespace TLCGen.GebruikersOpties
             }
             else
             {
-                if(SelectedOptie != null)
+                if (SelectedOptie != null)
                     index = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).IndexOf(
                         SelectedOptie as GebruikersOptieViewModel) + 1;
 
@@ -251,9 +253,9 @@ namespace TLCGen.GebruikersOpties
                     o.Naam = OptiesNames[SelectedTabIndex] + "_" + (((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]).Count + i);
                     ++i;
                 }
-                if (OptiesNames[SelectedTabIndex] == "sch" || 
-                    OptiesNames[SelectedTabIndex] == "t" || 
-                    OptiesNames[SelectedTabIndex] == "prm" || 
+                if (OptiesNames[SelectedTabIndex] == "sch" ||
+                    OptiesNames[SelectedTabIndex] == "t" ||
+                    OptiesNames[SelectedTabIndex] == "prm" ||
                     OptiesNames[SelectedTabIndex] == "c")
                 {
                     o.Instelling = 0;
@@ -310,7 +312,7 @@ namespace TLCGen.GebruikersOpties
                     {
                         rlist.Add(o as GebruikersOptieWithIOViewModel);
                     }
-                    foreach(var o in rlist)
+                    foreach (var o in rlist)
                     {
                         o.PropertyChanged -= Optie_PropertyChanged;
                         list.Remove(o);
@@ -332,7 +334,7 @@ namespace TLCGen.GebruikersOpties
                     }
                 }
             }
-            else 
+            else
             if (SelectedOptie != null)
             {
                 if (SelectedTabIndex == UitgangenConst || SelectedTabIndex == IngangenConst)
@@ -356,7 +358,7 @@ namespace TLCGen.GebruikersOpties
                 var list = ((ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>)_AlleOpties[SelectedTabIndex]);
                 int c = list.Count;
                 if (index >= c) index = c - 1;
-                if(index >= 0)
+                if (index >= 0)
                     SelectedOptie = list[index];
                 else
                     SelectedOptie = null;
@@ -366,7 +368,7 @@ namespace TLCGen.GebruikersOpties
                 var list = ((ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>)_AlleOpties[SelectedTabIndex]);
                 int c = list.Count;
                 if (index >= c) index = c - 1;
-                if(index >= 0)
+                if (index >= 0)
                     SelectedOptie = list[index];
                 else
                     SelectedOptie = null;
@@ -442,7 +444,7 @@ namespace TLCGen.GebruikersOpties
                 }
                 list.RebuildList();
             }
-            
+
             SelectedOptie = optie;
             Messenger.Default.Send(new Messaging.Messages.ControllerDataChangedMessage());
         }
@@ -561,6 +563,15 @@ namespace TLCGen.GebruikersOpties
 
             MyGebruikersOpties = new GebruikersOptiesModel();
 
+            if (Uitgangen != null) Uitgangen.CollectionChanged -= Uitgangen_CollectionChanged;
+            if (Ingangen != null) Ingangen.CollectionChanged -= Ingangen_CollectionChanged;
+            if (HulpElementen != null) HulpElementen.CollectionChanged -= HulpElementen_CollectionChanged;
+            if (Timers != null) Timers.CollectionChanged -= Timers_CollectionChanged;
+            if (Counters != null) Counters.CollectionChanged -= Counters_CollectionChanged;
+            if (Schakelaars != null) Schakelaars.CollectionChanged -= Schakelaars_CollectionChanged;
+            if (GeheugenElementen != null) GeheugenElementen.CollectionChanged -= GeheugenElementen_CollectionChanged;
+            if (Parameters != null) Parameters.CollectionChanged -= Parameters_CollectionChanged;
+
             Uitgangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Uitgangen);
             Ingangen = new ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel>(_MyGebruikersOpties.Ingangen);
             HulpElementen = new ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel>(_MyGebruikersOpties.HulpElementen);
@@ -588,7 +599,65 @@ namespace TLCGen.GebruikersOpties
             foreach (var sch in Schakelaars) { sch.PropertyChanged += Optie_PropertyChanged; sch.ObjectType = TLCGenObjectTypeEnum.CCOLSchakelaar; }
             foreach (var me in GeheugenElementen) { me.PropertyChanged += Optie_PropertyChanged; me.ObjectType = TLCGenObjectTypeEnum.CCOLMemoryElement; }
             foreach (var prm in Parameters) { prm.PropertyChanged += Optie_PropertyChanged; prm.ObjectType = TLCGenObjectTypeEnum.CCOLParameter; }
+
+            Uitgangen.CollectionChanged += Uitgangen_CollectionChanged;
+            Ingangen.CollectionChanged += Ingangen_CollectionChanged;
+            HulpElementen.CollectionChanged += HulpElementen_CollectionChanged;
+            Timers.CollectionChanged += Timers_CollectionChanged;
+            Counters.CollectionChanged += Counters_CollectionChanged;
+            Schakelaars.CollectionChanged += Schakelaars_CollectionChanged;
+            GeheugenElementen.CollectionChanged += GeheugenElementen_CollectionChanged;
+            Parameters.CollectionChanged += Parameters_CollectionChanged;
         }
+
+        private void Uitgangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Uitgangen.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Ingangen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Ingangen.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void HulpElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            HulpElementen.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Timers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Timers.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Counters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Counters.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Schakelaars_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Schakelaars.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void GeheugenElementen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            GeheugenElementen.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
+        private void Parameters_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Parameters.RebuildList();
+            MessengerInstance.Send(new ControllerDataChangedMessage());
+        }
+
 
         #endregion // Private Methods
 
@@ -619,7 +688,7 @@ namespace TLCGen.GebruikersOpties
             set
             {
                 _Controller = value;
-                if(value == null)
+                if (value == null)
                 {
                     ResetMyGebruikersOpties();
                 }
@@ -687,7 +756,7 @@ namespace TLCGen.GebruikersOpties
 
         public void OnSelected()
         {
-            
+
         }
 
         public bool OnSelectedPreview()
@@ -697,7 +766,7 @@ namespace TLCGen.GebruikersOpties
 
         public void OnDeselected()
         {
-            
+
         }
 
         public bool OnDeselectedPreview()
@@ -717,9 +786,9 @@ namespace TLCGen.GebruikersOpties
         public void GetXmlFromDocument(XmlDocument document)
         {
             bool found = false;
-            foreach(XmlNode node in document.FirstChild.ChildNodes)
+            foreach (XmlNode node in document.FirstChild.ChildNodes)
             {
-                if(node.LocalName == "GebruikersOpties")
+                if (node.LocalName == "GebruikersOpties")
                 {
                     MyGebruikersOpties = XmlNodeConverter.ConvertNode<GebruikersOptiesModel>(node);
                     found = true;
@@ -775,7 +844,7 @@ namespace TLCGen.GebruikersOpties
         public List<IOElementModel> GetOutputItems()
         {
             List<IOElementModel> items = new List<IOElementModel>();
-            foreach(var v in Uitgangen)
+            foreach (var v in Uitgangen)
             {
                 items.Add(v.GebruikersOptieWithIO as IOElementModel);
             }
@@ -794,20 +863,20 @@ namespace TLCGen.GebruikersOpties
 
         public bool IsElementNameUnique(string name, TLCGenObjectTypeEnum type)
         {
-            foreach(var o in Uitgangen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in Ingangen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in HulpElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in Timers) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in Counters) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in Schakelaars) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in GeheugenElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
-            foreach(var o in Parameters) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Uitgangen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Ingangen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in HulpElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Timers) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Counters) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Schakelaars) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in GeheugenElementen) { if (o.Naam == name && o.ObjectType == type) return false; }
+            foreach (var o in Parameters) { if (o.Naam == name && o.ObjectType == type) return false; }
             return true;
         }
 
         public Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum ConvertType(CCOLElementTypeEnum type)
         {
-            switch(type)
+            switch (type)
             {
                 case CCOLElementTypeEnum.TE_type:
                     return Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.TE_type;
@@ -825,13 +894,13 @@ namespace TLCGen.GebruikersOpties
         {
             var AllElements = new List<object>();
 
-            foreach(var elem in Uitgangen)
+            foreach (var elem in Uitgangen)
             {
                 AllElements.Add(
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Uitgang,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in Ingangen)
             {
@@ -839,7 +908,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Ingang,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in HulpElementen)
             {
@@ -847,7 +916,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.HulpElement,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in Timers)
             {
@@ -857,7 +926,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Timer,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in Counters)
             {
@@ -867,7 +936,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.None,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Counter,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in Schakelaars)
             {
@@ -877,7 +946,7 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         Generators.CCOL.CodeGeneration.CCOLElementTimeTypeEnum.SCH_type,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Schakelaar,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in GeheugenElementen)
             {
@@ -885,7 +954,7 @@ namespace TLCGen.GebruikersOpties
                     new Generators.CCOL.CodeGeneration.CCOLElement(
                         elem.Naam,
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.GeheugenElement,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
             foreach (var elem in Parameters)
             {
@@ -895,10 +964,31 @@ namespace TLCGen.GebruikersOpties
                         elem.Instelling.Value,
                         ConvertType(elem.Type),
                         Generators.CCOL.CodeGeneration.CCOLElementTypeEnum.Parameter,
-					    elem.Commentaar));
+                        elem.Commentaar));
             }
 
             return AllElements;
+        }
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.Drop(dropInfo);
+            switch (dropInfo.TargetCollection)
+            {
+                case ObservableCollectionAroundList<GebruikersOptieWithIOViewModel, GebruikersOptieWithIOModel> o1:
+                    o1.RebuildList();
+                    MessengerInstance.Send(new ControllerDataChangedMessage());
+                    break;
+                case ObservableCollectionAroundList<GebruikersOptieViewModel, GebruikersOptieModel> o2:
+                    o2.RebuildList();
+                    MessengerInstance.Send(new ControllerDataChangedMessage());
+                    break;
+            }
         }
 
         #endregion // ITLCGenElementProvider
