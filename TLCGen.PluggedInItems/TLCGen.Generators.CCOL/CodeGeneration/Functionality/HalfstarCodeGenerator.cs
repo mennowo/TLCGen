@@ -83,17 +83,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmaltphst;
         private CCOLGeneratorCodeStringSettingModel _schaltghst;
 
-        private CCOLGeneratorCodeStringSettingModel _cvbhst;
         private CCOLGeneratorCodeStringSettingModel _cvchst;
-        private CCOLGeneratorCodeStringSettingModel _tivhst;
-        private CCOLGeneratorCodeStringSettingModel _tibhst;
-        private CCOLGeneratorCodeStringSettingModel _tgbhst;
-        private CCOLGeneratorCodeStringSettingModel _tblkhst;
-        private CCOLGeneratorCodeStringSettingModel _tnatxdhst;
-        private CCOLGeneratorCodeStringSettingModel _trthst;
-        private CCOLGeneratorCodeStringSettingModel _hpriohst;
-        private CCOLGeneratorCodeStringSettingModel _prmomaxhst;
-        private CCOLGeneratorCodeStringSettingModel _prmmwthst;
         private CCOLGeneratorCodeStringSettingModel _prmpriohst;
 
         private CCOLGeneratorCodeStringSettingModel _schtegenov;
@@ -119,11 +109,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 			{
 				var hsd = c.HalfstarData;
 
+                var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                 if (c.ModuleMolen.LangstWachtendeAlternatief)
                 {
-                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltghst}{fc.FaseCyclus}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, fc.FaseCyclus));
-                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltphst}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, fc.FaseCyclus));
-                    foreach (var fc in hsd.Alternatieven) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schaltghst}{fc.FaseCyclus}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltghst, fc.FaseCyclus));
+                    foreach (var fc in hsd.Alternatieven)
+                    {
+                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
+                        if (hasgs != null)
+                        {
+                            var namealtghst = _prmaltghst + string.Join(string.Empty, hasgs.Item2);
+                            if (!_myElements.Any(i => i.Naam == namealtghst && i.Type == CCOLElementTypeEnum.Parameter))
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtghst}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, "fasen", string.Join(", ", hasgs.Item2)));
+                        }
+                        else
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltghst}{fc.FaseCyclus}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, "fase", fc.FaseCyclus));
+                        }
+                    }
+                    foreach (var fc in hsd.Alternatieven)
+                    {
+                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
+                        if (hasgs != null)
+                        {
+                            var namealtphst = _prmaltphst + string.Join(string.Empty, hasgs.Item2);
+                            if (!_myElements.Any(i => i.Naam == namealtphst))
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtphst}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, "fasen", string.Join(", ", hasgs.Item2)));
+                        }
+                        else
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltphst}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, "fase", fc.FaseCyclus));
+                        }
+                    }
+                    foreach (var fc in hsd.Alternatieven)
+                    {
+                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
+                        if (hasgs != null)
+                        {
+                            var namealtghst = _schaltghst + string.Join(string.Empty, hasgs.Item2);
+                            if (!_myElements.Any(i => i.Naam == namealtghst && i.Type == CCOLElementTypeEnum.Schakelaar))
+                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtghst}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltghst, "fasen", string.Join(", ", hasgs.Item2)));
+                        }
+                        else
+                        {
+                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schaltghst}{fc.FaseCyclus}", fc.AlternatiefToestaan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schaltghst, "fase", fc.FaseCyclus));
+                        }
+                    }
                 }
 
                 foreach(var hr in c.HalfstarData.Hoofdrichtingen)
@@ -135,26 +165,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.OVData.OVIngrepen.Any())
                 {
-                    foreach(var ov in c.OVData.OVIngrepen)
-                    {
-                        // TODO: need this to be settings instead of hard coded values
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvbhst}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvbhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tivhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _tivhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tibhst}{ov.FaseCyclus}", 400, CCOLElementTimeTypeEnum.TE_type, _tibhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tgbhst}{ov.FaseCyclus}", 300, CCOLElementTimeTypeEnum.TE_type, _tgbhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tblkhst}{ov.FaseCyclus}", 100, CCOLElementTimeTypeEnum.TE_type, _tblkhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tnatxdhst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _tnatxdhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_trthst}{ov.FaseCyclus}", 50, CCOLElementTimeTypeEnum.TE_type, _trthst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_hpriohst}{ov.FaseCyclus}", _hpriohst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmomaxhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _prmomaxhst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{ov.FaseCyclus}", 2, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnatxdhst}{ov.FaseCyclus}", 0, CCOLElementTimeTypeEnum.TE_type, _prmnatxdhst, ov.FaseCyclus));
-                    }
-                    foreach(var fc in c.Fasen)
-                    {
-                        _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmmwthst}{fc.Naam}", 60, CCOLElementTimeTypeEnum.TS_type, _prmmwthst, fc.Naam));
-                    }
+                    foreach (var ov in c.OVData.OVIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_cvchst}{ov.FaseCyclus}", 999, CCOLElementTimeTypeEnum.CT_type, _cvchst, ov.FaseCyclus));
+                    foreach (var ov in c.OVData.OVIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpriohst}{ov.FaseCyclus}", ov.HalfstarIngreepData.Prioriteit, CCOLElementTimeTypeEnum.None, _prmpriohst, ov.FaseCyclus));
+                    foreach (var ov in c.OVData.OVIngrepen) _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmnatxdhst}{ov.FaseCyclus}", ov.HalfstarIngreepData.GroenNaTXDTijd, CCOLElementTimeTypeEnum.TE_type, _prmnatxdhst, ov.FaseCyclus));
                 }
                 if (c.OVData.HDIngrepen.Any())
                 {
@@ -372,7 +385,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (c.InterSignaalGroep.Gelijkstarten.Any())
                 {
-                    var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                     var added = new List<string>();
                     foreach (var gs in gelijkstarttuples)
                     {

@@ -196,6 +196,7 @@
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanIngangModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarGekoppeldeKruisingPlanUitgangModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
+    <Compile Include="Models\Models\Halfstar\HalfstarOVIngreepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarPeriodeDataModel.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanFaseModel.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanModel.cs" />

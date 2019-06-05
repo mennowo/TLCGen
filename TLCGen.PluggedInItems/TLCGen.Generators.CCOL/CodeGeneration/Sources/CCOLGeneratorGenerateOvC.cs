@@ -295,6 +295,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
             var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
+            var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
 
             sb.AppendLine("void OVInstellingen(void) ");
             sb.AppendLine("{");
@@ -698,7 +699,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
-                sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep*/");
+                sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep */");
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
                     Tuple<string, List<string>> hasgs = null;
@@ -717,7 +718,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.AppendLine("];");
+                        sb.Append($"]");
+                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
+                        sb.AppendLine($";");
                     }
                     else
                     {

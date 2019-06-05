@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmperc;
 #pragma warning restore 0649
         private string _mperiod;
+        private string _hplact;
         private string _prmda;
 
         public override void CollectCCOLElements(ControllerModel c)
@@ -66,8 +67,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCDetectieStoring:
-                    return 10;
-                case CCOLCodeTypeEnum.HstCDetectieStoring:
                     return 10;
                 default:
                     return 0;
@@ -260,10 +259,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             sb.AppendLine();
         }
 
-        private void PercentageGroen(StringBuilder sb, ControllerModel c, string ts, bool halfstar)
+        private void PercentageGroen(StringBuilder sb, ControllerModel c, string ts1, string ts, bool halfstar)
         {
-            sb.AppendLine($"{ts}/* percentage MG bij defect alle kop/lange lussen */");
-            sb.AppendLine($"{ts}/* ---------------------------------------------- */");
+            sb.AppendLine($"{ts1}/* percentage MG bij defect alle kop/lange lussen */");
+            sb.AppendLine($"{ts1}/* ---------------------------------------------- */");
             foreach (var fc in c.Fasen)
             {
                 if (!fc.PercentageGroenBijDetectieStoring ||
@@ -277,8 +276,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 if (fc.AantalRijstroken.HasValue)
                 {
-                    var pre = "".PadLeft($"{ts}if (".Length);
-                    sb.Append($"{ts}if (");
+                    var pre = "".PadLeft($"{ts1}if (".Length);
+                    sb.Append($"{ts1}if (");
                     for (var str = 1; str <= fc.AantalRijstroken; ++str)
                     {
                         if (fc.Detectoren.Where(x => !x.IsDrukKnop()).All(x => x.Rijstrook != str || x.Verlengen == DetectorVerlengenTypeEnum.Geen)) continue;
@@ -308,8 +307,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                     }
                     sb.AppendLine(")");
-                    sb.AppendLine($"{ts}{{");
-                    sb.AppendLine($"{ts}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
+                    sb.AppendLine($"{ts1}{{");
+                    sb.AppendLine($"{ts1}{ts}MK[{_fcpf}{fc.Naam}] |= BIT5;");
                     var grfunc = "";
                     if (halfstar)
                     {
@@ -329,12 +328,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (halfstar)
                     {
-                        sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
                     }
                     else
                     {
-                        sb.AppendLine($"{ts}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
-                        sb.Append("".PadLeft($"{ts}{ts}{grfunc}(".Length));
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_mpf}{_mperiod}, {_prmpf}{_prmperc}{fc.Naam}, {c.GroentijdenSets.Count}, ");
+                        sb.Append("".PadLeft($"{ts1}{ts}{grfunc}(".Length));
 
                         var defmg = c.GroentijdenSets.FirstOrDefault(
                             x => x.Naam == c.PeriodenData.DefaultPeriodeGroentijdenSet);
@@ -358,7 +357,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         sb.AppendLine(");");
                     }
-                    sb.AppendLine($"{ts}}}");
+                    sb.AppendLine($"{ts1}}}");
                 }
             }
             sb.AppendLine();
@@ -373,7 +372,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCDetectieStoring:
-                case CCOLCodeTypeEnum.HstCDetectieStoring:
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
                 default:
                     return base.GetFunctionLocalVariables(c, type);
@@ -399,24 +397,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     VervangendHiaatKoplus(sb, c, ts);
 
-                    PercentageGroen(sb, c, ts, false);
-
-                    return sb.ToString();
-
-                case CCOLCodeTypeEnum.HstCDetectieStoring:
-                    
-                    sb.AppendLine($"{ts}/* reset MK-bits vooraf, ivm onderlinge verwijzing. */");
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT5;");
-                    sb.AppendLine();
-
-                    AanvraagPerDetector(sb, c, ts);
-
-                    AanvraagAlleDetectoren(sb, c, ts);
-
-                    VervangendHiaatKoplus(sb, c, ts);
-
-                    PercentageGroen(sb, c, ts, true);
+                    if (c.HalfstarData.IsHalfstar)
+                    {
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}{{");
+                        PercentageGroen(sb, c, ts + ts, ts, true);
+                        sb.AppendLine($"{ts}}}");
+                        sb.AppendLine($"{ts}else");
+                        sb.AppendLine($"{ts}{{");
+                        PercentageGroen(sb, c, ts + ts, ts, false);
+                        sb.AppendLine($"{ts}}}");
+                    }
+                    else
+                    {
+                        PercentageGroen(sb, c, ts, ts, false);
+                    }
 
                     return sb.ToString();
 
@@ -429,6 +424,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             _prmda = CCOLGeneratorSettingsProvider.Default.GetElementName("prmda");
             _mperiod = CCOLGeneratorSettingsProvider.Default.GetElementName("mperiod");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }

@@ -26,8 +26,8 @@ namespace TLCGen.Models
 		public List<HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; set; }
 		public List<HalfstarHoofdrichtingModel> Hoofdrichtingen { get; set; }
         public List<HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; set; }
-		
-		[Browsable(false)]
+
+        [Browsable(false)]
 		[IOElement("mlact", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
 		public BitmapCoordinatenDataModel MlActUitgang { get; set; }
 		

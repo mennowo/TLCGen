@@ -21,7 +21,6 @@ typedef enum
 	poBijzonderRealiseren = 8,
 	poAfkappenKonflikterendOV = 16,
 	poNoodDienst = 32,
-
 	poPLGroenVastHoudenNaTXD = 64,
 	poPLTegenhoudenHoofdrichting = 128,
 	poPLAbsolutePrioriteit = 256,
