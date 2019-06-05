@@ -2145,6 +2145,38 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="SchoolIngreepCodeGenerator">
+      <CodePieceData>
+        <ClassName>SchoolIngreepCodeGenerator</ClassName>
+        <Description>Schoolingreep</Description>
+        <Settings>
+          <Setting>
+            <Default>dbsi</Default>
+            <Setting>dbsi</Setting>
+            <Type>Timer</Type>
+            <Description>Bezettijd detector _E1_ t.b.v. schoolingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreep</Default>
+            <Setting>schoolingreep</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden actief zijn schoolingreep voor fase _E1_ via detector _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreep</Default>
+            <Setting>schoolingreep</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Schoolingreep aan/uit voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>schoolingreepmaxg</Default>
+            <Setting>schoolingreepmaxg</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale duur groen vanaf startgroen bij schoolingreep op fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

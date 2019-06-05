@@ -17,6 +17,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _tschoolingreepmaxg;
 #pragma warning restore 0649
         private string _tnlsgd;
+        private string _uswt;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -56,6 +57,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_hschoolingreep}{_dpf}{d.Naam}",
                             _hschoolingreep,
+                            fc.Naam,
                             d.Naam));
                 }
             }
@@ -76,7 +78,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     return 20;
                 case CCOLCodeTypeEnum.RegCPostSystemApplication:
-                    return 0; // Handled where waitsignals are handled TODO
+                    return 90;
             }
             return 0;
         }
@@ -98,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.RegCInitApplication:
+                case CCOLCodeTypeEnum.RegCPreApplication:
                     sb.AppendLine($"{ts}/* School ingreep */");        
                     foreach (var d in dets)
                     {
@@ -141,8 +143,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.DetectieAfhankelijk && x.Detectoren.Any(x2 => x2.Detector == d.Item2.Naam));
                         if (nl != null)
                         {
-                            sb.AppendLine($"HT[{_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}] = T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}] && CV[{_fcpf}{d.Item1.Naam}] && G[{_fcpf}{d.Item1.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
+                            sb.AppendLine($"{ts}HT[{_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}] = T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}] && CV[{_fcpf}{d.Item1.Naam}] && G[{_fcpf}{d.Item1.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
                         }
+                    }
+                    break;
+                case CCOLCodeTypeEnum.RegCPostSystemApplication:
+                    sb.AppendLine($"{ts}/* School ingreep: knipperen wachtlicht */");
+                    foreach (var d in dets)
+                    {
+                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] = CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] && !(IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz) || G[{_fcpf}{d.Item1.Naam}] && D[{_dpf}{d.Item2.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz;");
                     }
                     break;
             }
@@ -153,6 +162,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+            _uswt = CCOLGeneratorSettingsProvider.Default.GetElementName("uswt");
 
             return base.SetSettings(settings);
         }
