@@ -94,6 +94,38 @@ void aanvraag_detectie_reset_prm_va_arg(count fc, ...)
 }
 
 /**************************************************************************
+ *  Functie  : aanvraag_richtinggevoeligV1
+ *
+ *  Functionele omschrijving :
+ *    Deze functie is afgeleid van aanvraag_richtinggevoelig() in STDFUNC
+ *    maar houdt aanvullend rekening met detectie storing. Daarnaast is 
+ *    'zekere' variant verwijderd
+ **************************************************************************/
+void aanvraag_richtinggevoeligV1(count fc, count d1, count d2, count trga,
+	mulv schrga)
+{
+	if ((trga >= 0) && (schrga > 0)) {
+		if (CIF_IS[d1] >= CIF_DET_STORING && CIF_IS[d2] < CIF_DET_STORING && D[d2]) {
+			A[fc] |= BIT1
+			return;
+		}
+		if (CIF_IS[d1] < CIF_DET_STORING && CIF_IS[d2] >= CIF_DET_STORING && D[d1]) {
+			A[fc] |= BIT1;
+			return;
+		}
+		RT[trga] = SD[d2];
+		if (R[fc] && !TRG[fc] && SD[d1] && T[trga]) { /* snelle variant    */
+			A[fc] |= BIT1;
+		}
+	}
+	else {
+		if (R[fc] && !TRG[fc] && SD[d1] && D[d2]) {   /* zekere variant    */
+			A[fc] |= BIT1;
+		}
+	}
+}
+
+/**************************************************************************
  *  Functie  : aanvraag_richtinggevoelig_reset
  *
  *  Functionele omschrijving :

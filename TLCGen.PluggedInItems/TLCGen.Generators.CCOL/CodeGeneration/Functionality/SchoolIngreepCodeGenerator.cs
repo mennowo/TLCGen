@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -15,6 +16,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schschoolingreep;
         private CCOLGeneratorCodeStringSettingModel _tschoolingreepmaxg;
 #pragma warning restore 0649
+        private string _tnlsgd;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -28,19 +30,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 {
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_schschoolingreep}",
+                            $"{_schschoolingreep}{fc.Naam}",
                             fc.SchoolIngreep == Models.Enumerations.NooitAltijdAanUitEnum.SchAan ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             _schschoolingreep,
                             fc.Naam));
                 }
                 _myElements.Add(
-                        CCOLGeneratorSettingsProvider.Default.CreateElement(
-                            $"{_tschoolingreepmaxg}{fc.Naam}",
-                            fc.SchoolIngreepMaximumGroen,
-                            CCOLElementTimeTypeEnum.TE_type,
-                            _tdbsi,
-                            fc.Naam));
+                    CCOLGeneratorSettingsProvider.Default.CreateElement(
+                        $"{_tschoolingreepmaxg}{fc.Naam}",
+                        fc.SchoolIngreepMaximumGroen,
+                        CCOLElementTimeTypeEnum.TE_type,
+                        _tdbsi,
+                        fc.Naam));
                 foreach (var d in fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten))
                 {
                     _myElements.Add(
@@ -83,32 +85,76 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         {
             var sb = new StringBuilder();
 
+
+            var dets = new List<Tuple<FaseCyclusModel, DetectorModel>>();
+            foreach (var fc in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+            {
+                foreach (var d in fc.Detectoren.Where(x2 => x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten))
+                {
+                    dets.Add(new Tuple<FaseCyclusModel, DetectorModel>(fc, d));
+                }
+            }
+            if (!dets.Any()) return "";
+
             switch (type)
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
-                    sb.AppendLine($"{ts}/* School ingreep */");
-                    var dets = c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
-                                      .SelectMany(x => x.Detectoren.Where(x2 => x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen ||
-                                                                                x2.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten)).ToList();
+                    sb.AppendLine($"{ts}/* School ingreep */");        
                     foreach (var d in dets)
                     {
-                        sb.AppendLine($"{ts}RT[{_tpf}{_tdbsi}{_dpf}{d.Naam}] = !D[{_dpf}{d.Naam}];");
+                        sb.AppendLine($"{ts}RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] = !D[{_dpf}{d.Item2.Naam}];");
                     }
                     foreach (var d in dets)
                     {
-                        sb.AppendLine($"{ts}IH[hschmfunctiedr35a] = D[dr35a] && !(RT[tdbdr35a] || T[tdbdr35a]) && !(CIF_IS[dr35a] >= CIF_DET_STORING) && (R[fc35] || FG[fc35] || H[hschmfunctiedr35a]) || TDH[dr35a] && !(CIF_IS[dr35a] >= CIF_DET_STORING) && H[hschmfunctiedr35a];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] = D[{_dpf}{d.Item2.Naam}] && !(RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] || T[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}]) && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && (R[{_fcpf}{d.Item1}] || FG[{_fcpf}{d.Item1}] || H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}]) || TDH[{_dpf}{d.Item2.Naam}] && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
                     }
                     break;
-                case CCOLCodeTypeEnum.RegCMeetkriterium: // TODO
-                    // if (H[hschmfunctiedr35a]||H[hschmfunctiedr35b]) MK[fc35]|=BIT7; else MK[fc35]&=~BIT7;
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
+                    sb.AppendLine($"{ts}/* School ingreep: reset BITs */");
+                    foreach (var fc in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+                    {
+                        sb.AppendLine($"{ts}MK[{_fcpf}{fc.Naam} &= ~BIT8;");
+                    }
+                    sb.AppendLine();
+                    sb.AppendLine($"{ts}/* School ingreep: set MK BIT8 */");
+                    foreach (var d in dets)
+                    {
+                        if(d.Item1.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                        {
+                            sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam} && ");
+                        }
+                        else
+                        {
+                            sb.Append($"{ts}if (");
+                        }
+                        sb.AppendLine($"H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}]) MK[{_fcpf}{d.Item1.Naam}] |= BIT8;");
+                    }
                     break;
-                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:  // TODO
-                    // na nalopen! voor drukknoppen die nalopen zetten voor de richting:
-                    // HT[tnlsg3536] = CV[fc35] && G[fc35] && IH[hschmfunctiedr35a];
+                case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
+                    sb.AppendLine($"{ts}/* School ingreep: bijhouden max groen & vasthouden naloop tijd */");
+                    foreach (var fc in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
+                    {
+                        sb.AppendLine($"{ts}RT[{_tpf}{_tschoolingreepmaxg}{fc.Naam} = SG[{_fcpf}{fc.Naam}];");
+                    }
+                    foreach (var d in dets)
+                    {
+                        var nl = c.InterSignaalGroep.Nalopen.FirstOrDefault(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.DetectieAfhankelijk && x.Detectoren.Any(x2 => x2.Detector == d.Item2.Naam));
+                        if (nl != null)
+                        {
+                            sb.AppendLine($"HT[{_tpf}{_tnlsgd}{nl.FaseVan}{nl.FaseNaar}] = T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}] && CV[{_fcpf}{d.Item1.Naam}] && G[{_fcpf}{d.Item1.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
+                        }
+                    }
                     break;
             }
 
             return sb.ToString();
+        }
+
+        public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
+        {
+            _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
+
+            return base.SetSettings(settings);
         }
     }
 }

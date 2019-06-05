@@ -48,6 +48,7 @@ namespace TLCGen.Models
         public bool HiaatKoplusBijDetectieStoring { get; set; }
         public int? VervangendHiaatKoplus { get; set; }
         public bool AanvraagBijDetectieStoring { get; set; }
+        public bool AanvraagBijDetectieStoringKoplusKnop { get; set; }
         public bool PercentageGroenBijDetectieStoring { get; set; }
         public int? PercentageGroen { get; set; }
         public int VeiligheidsGroenMaximaal { get; set; }

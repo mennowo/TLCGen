@@ -100,24 +100,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private void AanvraagAlleDetectoren(StringBuilder sb, ControllerModel c, string ts)
         {
             sb.AppendLine($"{ts}/* vaste aanvraag bij detectiestoring alle aanvraaglussen */");
-            foreach (var fc in c.Fasen)
+            foreach (var fc in c.Fasen.Where(x => 
+                x.AanvraagBijDetectieStoring &&
+                x.Detectoren.Any(x2 => x2.Aanvraag != DetectorAanvraagTypeEnum.Geen)))
             {
-                if (!fc.AanvraagBijDetectieStoring ||
-                    fc.Detectoren.Count == 0 ||
-                    fc.Detectoren.All(x => x.Aanvraag == DetectorAanvraagTypeEnum.Geen))
-                {
-                    continue;
-                }
-
                 var pre = "".PadLeft($"{ts}A[{_fcpf}{fc.Naam}] |= ".Length);
                 sb.Append($"{ts}A[{_fcpf}{fc.Naam}] |= ");
 
+                // voor niet-voetgangers
                 if (fc.AantalRijstroken.HasValue && fc.Type != FaseTypeEnum.Voetganger)
                 {
                     for (int str = 1; str <= fc.AantalRijstroken; ++str)
                     {
-                        if (fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen ||
-                            x.AanvraagHardOpStraat && x.Aanvraag == DetectorAanvraagTypeEnum.Uit).All(x => x.Rijstrook != str)) continue;
+                        // verzamelen relevante detectoren: op deze rijstrook, met aanvraag functie
+                        var dets = fc.Detectoren.Where(x =>
+                                        x.Rijstrook == str &&
+                                        x.Aanvraag != DetectorAanvraagTypeEnum.Geen &&
+                                        !(x.AanvraagHardOpStraat && x.Aanvraag == DetectorAanvraagTypeEnum.Uit)).ToList();
+
+                        // skip rijstroken zonder detectie met aanvraag functie
+                        if (!dets.Any()) continue;
+
+                        // check alleen kop & knop
+                        var kopKnop = false;
+                        if (fc.AanvraagBijDetectieStoringKoplusKnop &&
+                            dets.Any(x => x.Type == DetectorTypeEnum.Kop) &&
+                            dets.Any(x => x.Type == DetectorTypeEnum.Knop))
+                        {
+                            kopKnop = true;
+                        }
 
                         int det = 0;
                         if (str > 1)
@@ -125,66 +136,66 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine(" ||");
                         }
                         var ds = new List<string>();
-                        foreach (var d in fc.Detectoren)
+                        var rgv = dets.Any(x => (!kopKnop || (x.Type == DetectorTypeEnum.Kop || x.Type == DetectorTypeEnum.Knop)) && c.RichtingGevoeligeAanvragen.Any(x2 => x2.VanDetector == x.Naam || x2.NaarDetector == x.Naam));
+                        foreach (var d in dets)
                         {
-                            if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen ||
-                                d.AanvraagHardOpStraat && d.Aanvraag == DetectorAanvraagTypeEnum.Uit) continue;
+                            det++;
+                            if (kopKnop && !(d.Type == DetectorTypeEnum.Kop || d.Type == DetectorTypeEnum.Knop)) continue;
 
-                            if (d.Rijstrook == str)
+                            if (det > 1)
                             {
-                                det++;
-                                if (det > 1)
+                                sb.AppendLine(" &&");
+                                if (!d.AanvraagHardOpStraat)
                                 {
-                                    sb.AppendLine(" &&");
-                                    if (!d.AanvraagHardOpStraat)
-                                    {
-                                        sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
-                                    }
-                                    else
-                                    {
-                                        sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                                    }
+                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})");
                                 }
                                 else
                                 {
-                                    if (!d.AanvraagHardOpStraat)
-                                    {
-                                        sb.Append(str > 1
-                                        ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)"
-                                        : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING || PRM[{_prmpf}{_prmda}{d.Naam}] == 0)");
-                                    }
-                                    else
-                                    {
-                                        sb.Append(str > 1
-                                        ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
-                                        : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
-                                    }
-                                }
-                                if (!d.AanvraagHardOpStraat)
-                                {
-                                    ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
+                                    sb.Append($"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
                                 }
                             }
+                            else
+                            {
+                                if (!d.AanvraagHardOpStraat)
+                                {
+                                    sb.Append(str > 1
+                                    ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})"
+                                    : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING{(!rgv ? $" || PRM[{_prmpf}{_prmda}{d.Naam}] == 0" : "")})");
+                                }
+                                else
+                                {
+                                    sb.Append(str > 1
+                                    ? $"{pre}(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)"
+                                    : $"(CIF_IS[{_dpf}{d.Naam}] >= CIF_DET_STORING)");
+                                }
+                            }
+                            if (!d.AanvraagHardOpStraat && !rgv)
+                            {
+                                ds.Add($"PRM[{_prmpf}{_prmda}{d.Naam}]");
+                            }
                         }
-                        sb.Append(" && !(");
-                        det = 0;
-                        foreach(var d in ds)
+                        if (!rgv)
                         {
-                            if (det > 0) sb.Append(" && ");
-                            sb.Append(d + " == 0");
-                            det++;
+                            sb.AppendLine(" &&");
+                            sb.Append($"{pre}!(");
+                            det = 0;
+                            foreach (var d in ds)
+                            {
+                                if (det > 0) sb.Append(" && ");
+                                sb.Append(d + " == 0");
+                                det++;
+                            }
+                            sb.Append(")");
                         }
-                        sb.Append(")");
                     }
                 }
+                // voor voetgangers
                 else
                 {
                     var det = 0;
                     var ds = new List<string>();
-                    foreach (var d in fc.Detectoren)
+                    foreach (var d in fc.Detectoren.Where(x => x.Aanvraag != DetectorAanvraagTypeEnum.Geen))
                     {
-                        if (d.Aanvraag == DetectorAanvraagTypeEnum.Geen) continue;
-
                         det++;
                         if (det > 1)
                         {

@@ -342,6 +342,22 @@ namespace TLCGen.ViewModels
             {
                 _faseCyclus.AanvraagBijDetectieStoring = value;
                 RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoring), broadcast: true);
+                RaisePropertyChanged(nameof(AanvraagBijDetectieStoringKoplusKnopVisible));
+            }
+        }
+
+        public bool AanvraagBijDetectieStoringKoplusKnopVisible =>
+            AanvraagBijDetectieStoring &&
+            _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.Kop) &&
+            _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.Knop);
+
+        public bool AanvraagBijDetectieStoringKoplusKnop
+        {
+            get => _faseCyclus.AanvraagBijDetectieStoringKoplusKnop;
+            set
+            {
+                _faseCyclus.AanvraagBijDetectieStoringKoplusKnop = value;
+                RaisePropertyChanged<object>(nameof(AanvraagBijDetectieStoringKoplusKnop), broadcast: true);
             }
         }
 

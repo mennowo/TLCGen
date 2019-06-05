@@ -152,6 +152,9 @@
             <GroupBox Header="Detectie storing">
                 <StackPanel>
                     <CheckBox Content="Aanvraag" IsChecked="{Binding Path=AanvraagBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Aanvraag bij storing op alle aanvraag detectie (op een rijstrook)" Margin="5" />
+                    <CheckBox 
+                        Visibility="{Binding Path=AanvraagBijDetectieStoringKoplusKnopVisible,Converter={StaticResource Bool2VisConverter}}"
+                        Content="Aanvr.: kop &amp; knop" IsChecked="{Binding Path=AanvraagBijDetectieStoringKoplusKnop,UpdateSourceTrigger=PropertyChanged}" ToolTip="T.b.v. aanvraag bij storing: alleen kijken naar knoppen en koplussen (op een rijstrook)" Margin="5" />
                     <CheckBox Content="Hiaat koplus" 
                               IsEnabled="{Binding Path=HasHiaatKoplusBijDetectieStoring}"
                               IsChecked="{Binding Path=HiaatKoplusBijDetectieStoring,UpdateSourceTrigger=PropertyChanged}" ToolTip="Hiaat koplus bij defect lange lus" Margin="5" />

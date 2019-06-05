@@ -111,7 +111,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         if (!rga.ResetAanvraag)
                         {
-                            sb.AppendLine($"{ts}aanvraag_richtinggevoelig({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
+                            sb.AppendLine($"{ts}aanvraag_richtinggevoeligV1({_fcpf}{rga.FaseCyclus}, {_dpf}{rga.NaarDetector}, {_dpf}{rga.VanDetector}, {_tpf}{_trga}{_dpf}{rga.VanDetector}, SCH[{_schpf}{_schrgad}{_dpf}{rga.VanDetector}]);");
                         }
                         else
                         {
