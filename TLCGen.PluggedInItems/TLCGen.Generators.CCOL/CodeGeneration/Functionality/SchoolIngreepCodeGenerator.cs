@@ -108,17 +108,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var d in dets)
                     {
-                        sb.AppendLine($"{ts}IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] = D[{_dpf}{d.Item2.Naam}] && !(RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] || T[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}]) && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && (R[{_fcpf}{d.Item1}] || FG[{_fcpf}{d.Item1}] || H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}]) || TDH[{_dpf}{d.Item2.Naam}] && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
+                        sb.AppendLine($"{ts}IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] = D[{_dpf}{d.Item2.Naam}] && !(RT[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}] || T[{_tpf}{_tdbsi}{_dpf}{d.Item2.Naam}]) && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && (R[{_fcpf}{d.Item1.Naam}] || FG[{_fcpf}{d.Item1.Naam}] || H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}]) || TDH[{_dpf}{d.Item2.Naam}] && !(CIF_IS[{_dpf}{d.Item2.Naam}] >= CIF_DET_STORING) && H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}];");
                     }
                     break;
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}/* School ingreep: reset BITs */");
                     foreach (var fc in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}MK[{_fcpf}{fc.Naam} &= ~BIT8;");
+                        sb.AppendLine($"{ts}RW[{_fcpf}{fc.Naam}] &= ~BIT8;");
                     }
                     sb.AppendLine();
-                    sb.AppendLine($"{ts}/* School ingreep: set MK BIT8 */");
+                    sb.AppendLine($"{ts}/* School ingreep: set RW BIT8 */");
                     foreach (var d in dets)
                     {
                         if(d.Item1.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
@@ -129,14 +129,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             sb.Append($"{ts}if (");
                         }
-                        sb.AppendLine($"H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}]) MK[{_fcpf}{d.Item1.Naam}] |= BIT8;");
+                        sb.AppendLine($"H[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && T[{_tpf}{_tschoolingreepmaxg}{d.Item1.Naam}]) RW[{_fcpf}{d.Item1.Naam}] |= BIT8;");
                     }
                     break;
                 case CCOLCodeTypeEnum.RegCRealisatieAfhandeling:
                     sb.AppendLine($"{ts}/* School ingreep: bijhouden max groen & vasthouden naloop tijd */");
                     foreach (var fc in c.Fasen.Where(x => x.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Nooit))
                     {
-                        sb.AppendLine($"{ts}RT[{_tpf}{_tschoolingreepmaxg}{fc.Naam} = SG[{_fcpf}{fc.Naam}];");
+                        sb.AppendLine($"{ts}RT[{_tpf}{_tschoolingreepmaxg}{fc.Naam}] = SG[{_fcpf}{fc.Naam}];");
                     }
                     foreach (var d in dets)
                     {

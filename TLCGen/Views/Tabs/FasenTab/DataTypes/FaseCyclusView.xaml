@@ -197,10 +197,14 @@
                             ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}" 
                             IsEnabled="{Binding Path=SchoolIngreepEnabled}"
                             SelectedValue="{Binding Path=SchoolIngreep,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-                        <Label Content="School ingreep max. groen" />
-                        <TextBox 
-                            IsEnabled="{Binding Path=SchoolIngreep}"
-                            Text="{Binding Path=SchoolIngreepMaximumGroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        <StackPanel Orientation="Vertical" Visibility="{Binding Path=SchoolIngreepActive,Converter={StaticResource Bool2VisConverter}}">
+                            <Label Content="School ingreep max. groen" />
+                            <TextBox 
+                                Text="{Binding Path=SchoolIngreepMaximumGroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                            <Label Content="School ingreep TDB drukknop" />
+                            <TextBox 
+                                Text="{Binding Path=SchoolIngreepBezetTijd,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

@@ -574,6 +574,8 @@ namespace TLCGen.ViewModels
 
         public bool SchoolIngreepEnabled => _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBinnen || x.Type == DetectorTypeEnum.KnopBuiten);
 
+        public bool SchoolIngreepActive => SchoolIngreep != NooitAltijdAanUitEnum.Nooit;
+
         public NooitAltijdAanUitEnum SchoolIngreep
         {
             get => _faseCyclus.SchoolIngreep;
@@ -581,6 +583,7 @@ namespace TLCGen.ViewModels
             {
                 _faseCyclus.SchoolIngreep = value;
                 RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(SchoolIngreepActive));
             }
         }
 
@@ -590,6 +593,16 @@ namespace TLCGen.ViewModels
             set
             {
                 _faseCyclus.SchoolIngreepMaximumGroen = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int SchoolIngreepBezetTijd
+        {
+            get => _faseCyclus.SchoolIngreepBezetTijd;
+            set
+            {
+                _faseCyclus.SchoolIngreepBezetTijd = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }

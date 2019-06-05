@@ -106,7 +106,7 @@ void aanvraag_richtinggevoeligV1(count fc, count d1, count d2, count trga,
 {
 	if ((trga >= 0) && (schrga > 0)) {
 		if (CIF_IS[d1] >= CIF_DET_STORING && CIF_IS[d2] < CIF_DET_STORING && D[d2]) {
-			A[fc] |= BIT1
+			A[fc] |= BIT1;
 			return;
 		}
 		if (CIF_IS[d1] < CIF_DET_STORING && CIF_IS[d2] >= CIF_DET_STORING && D[d1]) {
