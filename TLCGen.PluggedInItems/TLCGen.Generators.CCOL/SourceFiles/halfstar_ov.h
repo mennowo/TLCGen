@@ -20,10 +20,10 @@
 extern mulv TXB_PL[FCMAX], TXD_PL[FCMAX];
 mulv TVGPL_max[FCMAX];
 
-bool HoofdRichting[FCMAX];             /* Array met hoofdrichtingen                       */
-bool HoofdRichtingTegenhouden[FCMAX];  /* Tegenhouden hoofdrichting (TXC of minimum groen)*/
-bool HoofdRichtingAfkappenYWPL[FCMAX]; /* Afkappen YW_PL hoofdrichting (na minimum groen) */
-bool HoofdRichtingAfkappenYVPL[FCMAX]; /* Afkappen YV_PL hoofdrichting (na minimum groen) */
+boolv HoofdRichting[FCMAX];             /* Array met hoofdrichtingen                       */
+boolv HoofdRichtingTegenhouden[FCMAX];  /* Tegenhouden hoofdrichting (TXC of minimum groen)*/
+boolv HoofdRichtingAfkappenYWPL[FCMAX]; /* Afkappen YW_PL hoofdrichting (na minimum groen) */
+boolv HoofdRichtingAfkappenYVPL[FCMAX]; /* Afkappen YV_PL hoofdrichting (na minimum groen) */
 int iExtraGroenNaTXD[ovOVMAX];
 int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 
@@ -34,7 +34,7 @@ int iMinimumGroenUitgesteldeHoofdrichting[FCMAX];
 
 void BepaalHoofdrichtingOpties(void);
 int  TijdTotLaatsteRealisatieMomentConflict(int, int, int);
-bool StartGroenConflictenUitstellen(count, int);
+boolv StartGroenConflictenUitstellen(count, int);
 void set_pg_primair_fc_ov_ple(void);
 void signaalplan_primair_ov_ple(void);
 

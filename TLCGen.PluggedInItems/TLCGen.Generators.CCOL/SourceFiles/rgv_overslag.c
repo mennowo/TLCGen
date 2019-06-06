@@ -36,20 +36,20 @@
  * rgv_niet_primair(fc03, PRML, ML, ML_MAX, hpri03, PRM[prmmintvg03], PRM[prmtvgomlaag03]);
  */
 
-bool rgv_niet_primair (
+boolv rgv_niet_primair (
     count fc,           /* fasecyclusnummer                             */
-    bool *prml[],       /* primaire module toedeling                    */
+    boolv *prml[],      /* primaire module toedeling                    */
 	count ml,           /* actieve module                               */
-	bool sml,          /* start module                               */
+	boolv sml,          /* start module                                 */
     count ml_max,       /* maxium aantal modulen                        */
     count hpri,         /* hulpelementnummer                            */
     mulv PRM_mintvg,    /* parameter minimum maximum verlenggroentijd   */
     mulv PRM_tvgomlaag, /* parameter verlaag maximum verlenggroentijd   */
-    bool DD_fc)           /* status detectiestoring voor fasecyclus      */
+    boolv DD_fc)        /* status detectiestoring voor fasecyclus       */
 
 {
    register count hml;  /* voorgaande (actieve) module */
-   bool result= FALSE;
+   boolv result= FALSE;
 
    if (PR[fc] && (prml[ml][fc] & PRIMAIR_VERSNELD)) {  /* primair (versneld) gerealiseerd     */
       IH[hpri]= TRUE;                                  /* onthou primaire realisatie          */

@@ -87,7 +87,7 @@ void NaloopFGDet(count fc1, count fc2, count tnl, ...);
 
 #if !defined (CCOLFUNC) || defined (LWMLFUNC2)
 
-bool yml_cv_pr_nl(bool *prml[], count ml, count ml_max);
+boolv yml_cv_pr_nl(boolv *prml[], count ml, count ml_max);
 
 #endif
 mulv TVGTMP_max[FCMAX];  /* t.b.v. onthouden verlenggroentijd vanaf SVG[] */
@@ -98,9 +98,9 @@ void gk_ResetGK(void);
 
 void gk_ControlGK(void);
 
-void gk_NaloopTGK(count fc1, count fc2, count tnl, bool per_herstart, count tgl_nl);
+void gk_NaloopTGK(count fc1, count fc2, count tnl, boolv per_herstart, count tgl_nl);
 
-void gk_NaloopTNL(count fc1, count fc2, count tnl, bool per_herstart);
+void gk_NaloopTNL(count fc1, count fc2, count tnl, boolv per_herstart);
 
 void berekenTGK_max(count fc1, count fc2, count tnl_max);
 void berekenTNL(count fc2, count tnl);

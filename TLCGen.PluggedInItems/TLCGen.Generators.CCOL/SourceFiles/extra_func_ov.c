@@ -1,13 +1,13 @@
 #include "extra_func_ov.h"
 
-bool DSIMeldingOV_V1(
+boolv DSIMeldingOV_V1(
 	count dslus,
 	count vtgtype,
-	bool checkfcnmr,
+	boolv checkfcnmr,
 	count fcnmr,
-	bool checktype,
+	boolv checktype,
 	count meldingtype,
-	bool extra)
+	boolv extra)
 {
 #if !defined (VISSIM) && DSMAX
 	if (!DS_MSG || !extra) return FALSE;
@@ -21,7 +21,7 @@ bool DSIMeldingOV_V1(
 	return TRUE;
 }
 
-bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
+boolv DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;
 	if (PRM[lijnparm]) return TRUE;
@@ -33,7 +33,7 @@ bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax)
 	return FALSE;
 }
 
-bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
+boolv DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;
 	if (PRM[lijnparm]) return TRUE;
@@ -47,9 +47,9 @@ bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 	return FALSE;
 }
 
-bool DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201, 202, 203)  */
-	                  count meldingtype, /* 2. Type melding: in of uit */
-	                  bool check_sirene) /* 3. Check SIRENE */
+boolv DSIMelding_HD_V1(count dir,         /* 1. fc nummer of richtingnummer (201, 202, 203)  */
+	                  count meldingtype,  /* 2. Type melding: in of uit */
+	                  boolv check_sirene) /* 3. Check SIRENE */
 {
 	if ((CIF_DSI[CIF_DSI_VTG] == CIF_POL || 
 		 CIF_DSI[CIF_DSI_VTG] == CIF_BRA || 

@@ -199,10 +199,10 @@ void aanvraag_richtinggevoelig_reset(count fc, count d1, count d2, count trga, c
  *    en reset deze als deze wordt veroorzaakt door tijdelijke aanvragen
  *    die allen ingetrokken worden.
  **************************************************************************/
-void mee_aanvraag_reset(count fcn, count fcv, bool expressie)
+void mee_aanvraag_reset(count fcn, count fcv, boolv expressie)
 {
     register count fc;
-    bool reset_A = TRUE;
+    boolv reset_A = TRUE;
 
     /* 'normale' meeaanvraag */
     if (expressie && (A[fcv] & ~(BIT7 | BIT8)))
@@ -248,7 +248,7 @@ void mee_aanvraag_reset(count fcn, count fcv, bool expressie)
  *    Bepaalt WS[] van een wachtstand-rood richting
  *    Wordt gebruikt door de functie WachtStand
  **************************************************************************/
-bool WStandRi(count fci, bool *prml[], count ml, count ml_max)
+boolv WStandRi(count fci, boolv *prml[], count ml, count ml_max)
 {
     register count hml, hfci;
 
@@ -285,7 +285,7 @@ bool WStandRi(count fci, bool *prml[], count ml, count ml_max)
  *  Functionele omschrijving :
  *    Bepaalt WS[] van alle richtingen (wachtstand-rood)
  **************************************************************************/
-void WachtStand(bool *prml[], count ml, count ml_max)
+void WachtStand(boolv *prml[], count ml, count ml_max)
 {
     register count fci;
 
@@ -786,11 +786,11 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
  *  - fcprim    primaire richting in wiens schaduw fcalt mag komen
  *  - paltg         minimaal gewenste alternatieve groentijd
  **************************************************************************/
-bool AlternatieveRuimte(count fcalt, count fcprim, count paltg)
+boolv AlternatieveRuimte(count fcalt, count fcprim, count paltg)
 {
     return (TVG_max[fcprim] - TVG_timer[fcprim] >= PRM[paltg]);
 }
-bool no_conflict(count fc1par, count fc2ov)
+boolv no_conflict(count fc1par, count fc2ov)
 {
 	count l, c;
 	if (fc1par == fc2ov) return (FALSE);
@@ -810,7 +810,7 @@ bool no_conflict(count fc1par, count fc2ov)
 }
 #if !defined (CCOLFUNC) || defined (LWMLFUNC7)
 
-bool testpri_gk_calw(count i)
+boolv testpri_gk_calw(count i)
 {
     register count n, j;
 
@@ -845,7 +845,7 @@ bool testpri_gk_calw(count i)
  * set_PRIRLW() roept testpri_gk_calw() aan en  kcv().
  * set_PRIRLW() wordt aangeroepen in de procedure OVBijzonderRealiseren() in ov.c
  */
-bool set_PRIRLW(count i, bool period)
+boolv set_PRIRLW(count i, boolv period)
 {
    if (AAPR[i] && !AA[i])  AAPR[i] = FALSE;
    if (!AA[i] && period && (CALW[i] >= PRI_CALW) && A[i] && RV[i]
@@ -873,7 +873,7 @@ bool set_PRIRLW(count i, bool period)
 
 #if !defined (CCOLFUNC) || defined (LWFUNC4)
 
-bool set_ARLW_bit6 (count i)
+boolv set_ARLW_bit6 (count i)
 {
    if (PAR[i] && A[i] && RV[i] && !TRG[i] && !AA[i] && !RR[i]
 	   && !BL[i] && !kcv(i) && !fkaa(i) && testar_fk_calw(i))

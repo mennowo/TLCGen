@@ -50,12 +50,12 @@
 /* -------------------------------------------------------------------------------------- */
 /* definitie globale variabelen                                                           */
 /* -------------------------------------------------------------------------------------- */
-extern bool HoofdRichting[FCMAX];             /* Array met hoofdrichtingen                       */
-extern bool HoofdRichtingTegenhouden[FCMAX];  /* Tegenhouden hoofdrichting (TXC of minimum groen)*/
-extern bool HoofdRichtingAfkappenYWPL[FCMAX]; /* Afkappen YW_PL hoofdrichting (na minimum groen) */
-extern bool HoofdRichtingAfkappenYVPL[FCMAX]; /* Afkappen YV_PL hoofdrichting (na minimum groen) */
+extern boolv HoofdRichting[FCMAX];             /* Array met hoofdrichtingen                       */
+extern boolv HoofdRichtingTegenhouden[FCMAX];  /* Tegenhouden hoofdrichting (TXC of minimum groen)*/
+extern boolv HoofdRichtingAfkappenYWPL[FCMAX]; /* Afkappen YW_PL hoofdrichting (na minimum groen) */
+extern boolv HoofdRichtingAfkappenYVPL[FCMAX]; /* Afkappen YV_PL hoofdrichting (na minimum groen) */
 extern int iMinimumGroenUitgesteldeHoofdrichting[FCMAX]; /* minimum groen na uitstlelen hoofdrichting */
-extern mulv test_pr_fk_totxb(count i, bool fpr);  /* standaard CCOL functie uit plefunc.c */
+extern mulv test_pr_fk_totxb(count i, boolv fpr);  /* standaard CCOL functie uit plefunc.c */
 
 
 /* -------------------------------------------------------------------------------------- */
@@ -219,7 +219,7 @@ void set_pg_fk_totxb_ov_ple(count i)
 /*          fpr   voorwaarde versnelde realisatie                                         */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-bool set_PRPL_ov_ple(count i, bool fpr)
+boolv set_PRPL_ov_ple(count i, boolv fpr)
 {
 	mulv result = 0;
 
@@ -271,9 +271,9 @@ bool set_PRPL_ov_ple(count i, bool fpr)
 			set_pg_fk_totxb_ov_ple(i);  /* set PG voor fictieve conflicten */
 			break;
 		}
-		if (result)  return ((bool)TRUE);
+		if (result)  return ((boolv)TRUE);
 	}
-	return ((bool)FALSE);
+	return ((boolv)FALSE);
 }
 
 
@@ -294,7 +294,7 @@ void signaalplan_primair_ov_ple(void)
 
 	for (i = 0; i < FC_MAX; i++)
 	{
-		set_PRPL_ov_ple(i, (bool)TRUE);  /* TRUE -> versneld primair */
+		set_PRPL_ov_ple(i, (boolv)TRUE);  /* TRUE -> versneld primair */
 	}
 
 }
@@ -436,9 +436,9 @@ int BepaalTO(count fcvan, count fcnaar)
 	return to_max;
 }
 
-bool TXTimerTussen(int start, int eind)
+boolv TXTimerTussen(int start, int eind)
 {
-	bool result = FALSE;
+	boolv result = FALSE;
 
 	start = start % TX_PL_max;
 	eind = eind % TX_PL_max;
@@ -549,10 +549,10 @@ int TijdTotLaatsteRealisatieMomentConflict(int fcov, int k, int prio_opties)
 /*          prio_opties:geldende prioriteitsopties                                        */
 /*                                                                                        */
 /* -------------------------------------------------------------------------------------- */
-bool StartGroenConflictenUitstellen(count fcov, int prio_opties)
+boolv StartGroenConflictenUitstellen(count fcov, int prio_opties)
 {
 	int j, k;
-	bool l_fReturn = TRUE;
+	boolv l_fReturn = TRUE;
 
 	for (j = 0; j < FKFC_MAX[fcov]; j++)
 	{
@@ -673,7 +673,7 @@ void OVHalfstarGroenVasthouden(void)
 	if (IH[hplact])
 	{
 		int ov, fc;
-		bool magUitstellen;
+		boolv magUitstellen;
 		for (ov = 0;
 			ov < ovOVMAX;
 			ov++) {

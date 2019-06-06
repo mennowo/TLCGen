@@ -18,9 +18,9 @@
  *    Fixatie(isFix, 0, FCMAX-1, SCH[schbmfix], PRML, ML);
  *************************************************************************/
 #if defined MLMAX || defined MLAMAX
-void Fixatie(count isFix, count first, count last, bool bijkomen, bool *prml[], count ml);
+void Fixatie(count isFix, count first, count last, boolv bijkomen, boolv *prml[], count ml);
 #else
-void Fixatie(count isFix, count first, count last, bool bijkomen);
+void Fixatie(count isFix, count first, count last, boolv bijkomen);
 #endif
 
 #endif

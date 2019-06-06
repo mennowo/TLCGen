@@ -53,7 +53,7 @@ int iKPrioriteitsOpties[FCMAX];
 int iStartGroen[ovOVMAX];
 int iBijzonderRealiseren[ovOVMAX];
 int iWachtOpKonflikt[ovOVMAX];
-bool bMagEerst[FCMAX];
+boolv bMagEerst[FCMAX];
 int iAantalPrioriteitsInmeldingen[ovOVMAX];
 int iRijTijdScenario[ovOVMAX];
 int iRTSOngehinderd[ovOVMAX];
@@ -613,7 +613,7 @@ void OVInmelden(int ov,
 void OVUitmeldenIndex(int ov,
                       int inm,
                       int iUitmelding,
-                      bool bGeforceerd)
+                      boolv bGeforceerd)
 {
     int i;
     int fc = iFC_OVix[ov];

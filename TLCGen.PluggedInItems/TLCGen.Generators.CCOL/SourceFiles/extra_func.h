@@ -9,18 +9,18 @@
 	#include "nlvar.h"
 #endif
 
-bool ym_maxV1(count i, mulv to_verschil);
-bool ym_max_prmV1(count i, count prm, mulv to_verschil);
-bool ym_max_toV1(count i, mulv to_verschil);
-bool ym_max_vtgV1(count i);
+boolv ym_maxV1(count i, mulv to_verschil);
+boolv ym_max_prmV1(count i, count prm, mulv to_verschil);
+boolv ym_max_toV1(count i, mulv to_verschil);
+boolv ym_max_vtgV1(count i);
 void AanvraagSnelV2(count fc1, count dp);
-bool Rateltikkers(count fc,       /* fase */
+boolv Rateltikkers(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
 	count tnlrt,    /* tijd na EG dat de tikkers nog moeten worden aangestuurd indien niet continu */
 	...);           /* drukknoppen */
-bool Rateltikkers_Accross(count fc,       /* fase */
+boolv Rateltikkers_Accross(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
@@ -31,7 +31,7 @@ void Eerlijk_doseren_V1(count hfile,            /* hulpelement wel/geen file */
 	count fc[],             /* pointer naar array met fasenummers */
 	count fcmg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
 	int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
-	bool *prml[],
+	boolv *prml[],
 	count ml);
 void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            /* hulpelement wel/geen file */
     count _prmperc,         /* indexnummer parameter % doseren */
@@ -39,31 +39,31 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile,            /* hulpelemen
     count fc[],             /* pointer naar array met fasenummers */
     count fcvg[][MPERIODMAX],        /* pointer naar array met mg parameter index nummers */
     int nogtedoseren[],     /* pointer naar array met nog te doseren waarden */
-	bool *prml[], 
+	boolv *prml[], 
 	count ml);
 void FileMeldingV2(count det,     /* filelus                                */
     count tbez,    /* bezettijd  als D langer bezet -> file  */
     count trij,    /* rijtijd    als D korter bezet -> !file */
     count tafval,  /* afvalvertraging filemelding            */
     count hfile);   /* hulpelement filemelding                */
-void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition);
+void mee_aanvraag_prm(count i, count j, count prm, boolv extra_condition);
 void UpdateKnipperSignalen();
-bool hf_wsg_nl(void);
-bool hf_wsg_nl_fcfc(count fc1, count fc2);
+boolv hf_wsg_nl(void);
+boolv hf_wsg_nl_fcfc(count fc1, count fc2);
 void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, count fix);
-bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period);
-bool kcv_primair_fk_gkl(count i);
+boolv set_FPRML_fk_gkl(count i, boolv *prml[], count ml, count ml_max, boolv period);
+boolv kcv_primair_fk_gkl(count i);
 void veiligheidsgroen_V1(count fc, count tmaxvag4, ...);
-bool proc_pel_in_V1(                       /* Dh20130124                                                    */
-	count hfc,                            /* fasecyclus                                                   */
+boolv proc_pel_in_V1(                     /* Dh20130124                                                    */
+	count hfc,                            /* fasecyclus                                                    */
 	count tmeet,                          /* T meetperiode                                                 */
 	count tmaxth,                         /* T max.hiaat                                                   */
 	count grens,                          /* PRM grenswaarde                                               */
 	count mvtg,                           /* MM aantal vtg                                                 */
 	count muit,                           /* MM uitsturing aktief                                          */
 	...);                                 /* va arg list: inkomende signalen koplussen                     */
-bool IsConflict(count fc1, count fc2);
-void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, bool *prml[], bool yml[], count *mlx, bool *sml);
+boolv IsConflict(count fc1, count fc2);
+void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, boolv *prml[], boolv yml[], count *mlx, boolv *sml);
 
 extern mulv FC_type[];
 extern mulv DVG[];

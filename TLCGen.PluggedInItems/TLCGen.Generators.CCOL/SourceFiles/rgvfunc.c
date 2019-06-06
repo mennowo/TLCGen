@@ -77,16 +77,16 @@ void rgv_verlenggroentijd1(
         mulv PRM_tvgverschil, /* parameter grenswaarde voor verlagen         */
         mulv PRM_maxtvg_dd,   /* parameter maximum verlenggroenttijd bij DD  */
 #ifdef TVG_VEVG
-        bool SCH_schrgvwtvs,  /* schakelaar verhogen verlenggroenttijd       */
+        boolv SCH_schrgvwtvs, /* schakelaar verhogen verlenggroenttijd       */
                               /* TVG_VEVG voor einde verlenggroen            */
 #endif
-        bool DD_fc,
-        bool MK_speciaal)           /* status detectiestoring voor fasecyclus      */
+        boolv DD_fc,
+        boolv MK_speciaal)    /* status detectiestoring voor fasecyclus      */
 {
    mulv tvg_verschil;     /* restant verlenggroentijd - tijdelijke variabele */
 	if (DD_fc) 
-	{                               /* detectiestoring voor fasecyclus          */
-		TVG_rgv[fc]= PRM_maxtvg_dd;             /* maximum bij detectiestoring              */
+	{                               /* detectiestoring voor fasecyclus       */
+		TVG_rgv[fc]= PRM_maxtvg_dd; /* maximum bij detectiestoring           */
     }
     else 
 	{
@@ -151,18 +151,18 @@ void rgv_verlenggroentijd2(
         mulv PRM_tvgverschil, /* parameter grenswaarde voor verlagen         */
         mulv PRM_maxtvg_dd,   /* parameter maximum verlenggroenttijd bij DD  */
 #ifdef TVG_VEVG
-        bool SCH_schrgvwtvs,  /* schakelaar verhogen verlenggroenttijd       */
+        boolv SCH_schrgvwtvs, /* schakelaar verhogen verlenggroenttijd       */
                               /* TVG_VEVG voor einde verlenggroen            */
 #endif
-        bool DD_fc,           /* status detectiestoring voor fasecyclus      */
-        bool MK_speciaal)     /* speciaal meetkriterium voor de              */
+        boolv DD_fc,          /* status detectiestoring voor fasecyclus      */
+        boolv MK_speciaal)    /* speciaal meetkriterium voor de              */
                               /* afzonderlijke rijstroken van de fasecyclus  */
 {
-   mulv tvg_verschil;   /* tijdelijke variabele */
+   mulv tvg_verschil;         /* tijdelijke variabele                        */
 
 	if (DD_fc) 
-	{                               /* detectiestoring voor fasecyclus          */
-		TVG_rgv[fc]= PRM_maxtvg_dd;             /* maximum bij detectiestoring              */
+	{                               /* detectiestoring voor fasecyclus       */
+		TVG_rgv[fc]= PRM_maxtvg_dd; /* maximum bij detectiestoring           */
     }
 	else
 	{

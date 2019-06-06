@@ -5,10 +5,10 @@
 
 extern mulv C_counter_old[CTMAX];
 
-bool DSIMeldingOV_V1(count dslus, count vtgtype, bool checkfcnmr, count fcnmr, bool checktype, count meldingtype, bool extra);
-bool DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax);
-bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax);
-bool DSIMelding_HD_V1(count dir, count meldingtype, bool check_sirene);
+boolv DSIMeldingOV_V1(count dslus, count vtgtype, boolv checkfcnmr, count fcnmr, boolv checktype, count meldingtype, boolv extra);
+boolv DSIMeldingOV_LijnNummer_V1(count lijnparm, count lijnmax);
+boolv DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax);
+boolv DSIMelding_HD_V1(count dir, count meldingtype, boolv check_sirene);
 void TrackStiptObvTSTP(count hin, count huit, int * iAantInm, int iKARInSTP[], count cvc, int grensvroeg, int grenslaat);
 void OV_teller(count cov, count scov);
 

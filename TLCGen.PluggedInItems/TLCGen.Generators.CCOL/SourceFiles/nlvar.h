@@ -5,7 +5,7 @@
 
 extern mulv TNL_PAR[FCMAX];
 extern mulv TNL_max[FCMAX];
-extern bool TNL[FCMAX];
+extern boolv TNL[FCMAX];
 extern mulv TNL_timer[FCMAX];
 
 #endif // __NLVAR

@@ -37,17 +37,17 @@
 
 /* declaratie globale functies */
 /* =========================== */
-   bool rgv_niet_primair (count fc, bool *prml[], count ml, bool sml, count ml_max, count hpri, mulv PRM_mintvg, mulv PRM_tvgomlaag, bool DD_fc);
+   boolv rgv_niet_primair (count fc, boolv *prml[], count ml, boolv sml, count ml_max, count hpri, mulv PRM_mintvg, mulv PRM_tvgomlaag, boolv DD_fc);
    void rgv_verlenggroentijd1(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag, mulv PRM_tvgverschil, mulv PRM_maxtvg_dd,
 #ifdef TVG_VEVG
-	   bool SCH_schrgvwtvs,
+	   boolv SCH_schrgvwtvs,
 #endif
-	   bool DD_fc, bool MK_speciaal);
+	   boolv DD_fc, boolv MK_speciaal);
    void rgv_verlenggroentijd2(count fc, mulv PRM_mintvg, mulv PRM_maxtvg, mulv PRM_tvgomhoog, mulv PRM_tvgomlaag, mulv PRM_tvgverschil, mulv PRM_maxtvg_dd,
 #ifdef TVG_VEVG
-	   bool SCH_schrgvwtvs,
+	   boolv SCH_schrgvwtvs,
 #endif
-	   bool DD_fc, bool MK_speciaal);
+	   boolv DD_fc, boolv MK_speciaal);
    mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va_mulv PRM_tcmin, va_mulv PRM_tcmax, ...);
    mulv berekencyclustijd_va_arg(va_count fcnr_first, ...);
    void copy_TVG_max_to_TVG_basis (void);

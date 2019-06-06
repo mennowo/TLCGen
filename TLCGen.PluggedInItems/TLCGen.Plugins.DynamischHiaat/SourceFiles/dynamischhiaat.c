@@ -170,7 +170,7 @@ void InitTDHstdtijden(void) { /*-*/
 
 
 
-void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool opdr, count fc, ...)
+void hiaattijden_verlenging(boolv nietToepassen, boolv vrijkomkop, count mmk, boolv opdr, count fc, ...)
 {
   va_list argpt;                                    /* variabele argumentenlijst                                 */
   count dpnr;                                       /* arraynummer detectie-element                              */
@@ -181,7 +181,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
   count rijstrook_old = -1;                         /* vorige rijstrooknummer                                    */
   count rijstrook;                                  /* rijstrooknummer                                           */
   count max_rijstrook = 1;                          /* hoogste rijstrooknummer                                   */
-  bool svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[5], tdh_saw[5];
+  boolv svw, vvw, evlvw, daft, svwG, hulp_bit3, verlengen[5], tdh_saw[5];
   count dp_teller=0;                                /* telt aantal lussen vanaf stopstreep op bepaalde rijstrook */
 
   if (nietToepassen) {                              /* apart doorlopen ivm snelheid va_arg (1 x per seconde)     */

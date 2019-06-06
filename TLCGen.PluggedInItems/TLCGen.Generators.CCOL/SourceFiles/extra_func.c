@@ -19,10 +19,10 @@ int Knipper_1Hz = 0;
     - De functie kijkt in plaats van alleen naar RA[], ook naar AAPR[]
     ------------------------------------------------------------------------------ */
 
-bool ym_maxV1(count i, mulv to_verschil)
+boolv ym_maxV1(count i, mulv to_verschil)
 {
 	register count n, j, k, m;
-	bool ym;
+	boolv ym;
 
 	if (MG[i])
 	{   /* let op! i.v.m. snelheid alleen in MG[] behandeld */
@@ -93,7 +93,7 @@ bool ym_maxV1(count i, mulv to_verschil)
 	return ym;
 }
 
-bool ym_max_prmV1(count i, count prm, mulv to_verschil)
+boolv ym_max_prmV1(count i, count prm, mulv to_verschil)
 {
 	switch (PRM[prm]) 
 	{
@@ -144,10 +144,10 @@ bool ym_max_prmV1(count i, count prm, mulv to_verschil)
  *  YM[fc05]= ym_max_to(fc05,0) || CIF_IS[is_fix];
  *  fc05 blijft meeverlengen met ontruimingstijd van fc32 naar fc08.
  */
-bool ym_max_toV1(count i, mulv to_verschil)
+boolv ym_max_toV1(count i, mulv to_verschil)
 {
 	register count n, j, k, m;
-	bool ym;
+	boolv ym;
 
 	if (MG[i]) /* let op! i.v.m. snelheid alleen in MG[] behandeld	*/
 	{
@@ -246,10 +246,10 @@ Ten opzichte van de functie uit de generator is het verschil:
 - De functie kijkt of de maximale groentijd voor de fase is bereikt
 t.o.v. de benodigde ontruiming van autorichtingen
 ------------------------------------------------------------------------------ */
-bool ym_max_vtgV1(count i)
+boolv ym_max_vtgV1(count i)
 {
 	register count n, j, k, m;
-	bool ym;
+	boolv ym;
 
 	if (MG[i]) /* let op! i.v.m. snelheid alleen in MG[] behandeld  */
 	{
@@ -358,7 +358,7 @@ Resultaat:   zet BIT4 op van A[fc]
 void AanvraagSnelV2(count fc1, count dp)
 {
 	/* richting mag gelijk realiseren indien er geen conflicten lopen */
-	mee_aanvraag_spec(fc1, (bool)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
+	mee_aanvraag_spec(fc1, (boolv)(!kcv(fc1) && !K[fc1] && R[fc1] && !TRG[fc1] &&
 		D[dp] && (CIF_IS[dp] <= CIF_DET_STORING)));
 }
 
@@ -392,7 +392,7 @@ void AanvraagSnelV2(count fc1, count dp)
     a)  tijdens een aanwezige klokperiode (MM [  mas_dim]);
     b)  tijdens een aanwezige schakelaar  (SCH[schas_dim]).
     ------------------------------------------------------------------------------ */
-bool Rateltikkers(      count fc,       /* fase */
+boolv Rateltikkers(     count fc,       /* fase */
                         count has,      /* hulpelement rateltikkers voor deze fase */
                         count has_aan_, /* hulpelement tikkers werking */
                         count has_cont_,/* hulpelement tikkers continu */
@@ -401,7 +401,7 @@ bool Rateltikkers(      count fc,       /* fase */
 {
 	va_list argpt;
 	count hdkh;
-	bool hdk = FALSE;
+	boolv hdk = FALSE;
 
 	/* verzorgen naloop rateltikker */
 	RT[tnlrt] = (G[fc] || GL[fc]) && IH[has] || EH[has_cont_];
@@ -463,7 +463,7 @@ bool Rateltikkers(      count fc,       /* fase */
     a)  tijdens een aanwezige klokperiode (MM [  mas_dim]);
     b)  tijdens een aanwezige schakelaar  (SCH[schas_dim]).
     ------------------------------------------------------------------------------ */
-bool Rateltikkers_Accross(count fc,       /* fase */
+boolv Rateltikkers_Accross(count fc,       /* fase */
 	count has,      /* hulpelement rateltikkers voor deze fase */
 	count has_aan_, /* hulpelement tikkers werking */
 	count has_cont_,/* hulpelement tikkers continu */
@@ -518,7 +518,7 @@ void Eerlijk_doseren_V1(count hfile,              /* hulpelement wel/geen file  
                         count fc[],               /* pointer naar array met fasenummers                */
                         count fcmg[][MPERIODMAX], /* pointer naar array met mg parameter index nummers */
                         int nogtedoseren[],       /* pointer naar array met nog te doseren waarden     */
-	                    bool *prml[],
+	                    boolv *prml[],
 	                    count ml)
 {
     int i, j, laatstedosering;
@@ -572,7 +572,7 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
                         count fc[],                     /* pointer naar array met fasenummers                */
                         count fcvg[][MPERIODMAX],       /* pointer naar array met mg parameter index nummers */
                         int nogtedoseren[],             /* pointer naar array met nog te doseren waarden     */
-	                    bool *prml[],
+	                    boolv *prml[],
 	                    count ml)
 {
     int i, j, laatstedosering;
@@ -620,7 +620,7 @@ void Eerlijk_doseren_VerlengGroenTijden_V1(count hfile, /* hulpelement wel/geen 
 }
 
 /* Functie om type meeaanvraag op straat instelbaar te maken */
-void mee_aanvraag_prm(count i, count j, count prm, bool extra_condition)
+void mee_aanvraag_prm(count i, count j, count prm, boolv extra_condition)
 {
     if(!extra_condition)
         return;
@@ -683,7 +683,7 @@ void UpdateKnipperSignalen()
     Knipper_1Hz = ((CIF_KLOK[CIF_TSEC_TELLER] % 10) > 4); /* 1 Hz */
 }
 
-bool hf_wsg_nl(void)
+boolv hf_wsg_nl(void)
 {
 	register count i;
 
@@ -695,7 +695,7 @@ bool hf_wsg_nl(void)
 	return (FALSE);
 }
 
-bool hf_wsg_nl_fcfc(count fc1, count fc2)
+boolv hf_wsg_nl_fcfc(count fc1, count fc2)
 {
 	register count i;
 
@@ -721,7 +721,7 @@ void wachttijd_leds_knip(count fc, count mmwtv, count mmwtm, count RR_T_wacht, c
 	else                        MM[mmwtm] = MM[mmwtv];            /* anders berekende aantal leds gewoon overnemen                */
 }
 
-bool kcv_primair_fk_gkl(count i)
+boolv kcv_primair_fk_gkl(count i)
 {
 	register count n, j;
 
@@ -748,7 +748,7 @@ bool kcv_primair_fk_gkl(count i)
 	return (FALSE);
 }
 
-static bool a_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
+static boolv a_pg_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 {
    register count n,j;
 
@@ -779,7 +779,7 @@ static bool a_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
 }
 
 
-static bool a_ag_fkprml_fk_gkl(count i, bool *prml[], count ml)
+static boolv a_ag_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 {
 	register count n, j;
 
@@ -796,7 +796,7 @@ static bool a_ag_fkprml_fk_gkl(count i, bool *prml[], count ml)
 	return (TRUE);
 }
 
-static void set_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
+static void set_pg_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 {
 	register count n, j;
 
@@ -811,7 +811,7 @@ static void set_pg_fkprml_fk_gkl(count i, bool *prml[], count ml)
 	}
 }
 
-bool kcv_fk_gkl(count i)
+boolv kcv_fk_gkl(count i)
 {
 	register count n, k;
 
@@ -836,7 +836,7 @@ bool kcv_fk_gkl(count i)
 	return (FALSE);
 }
 
-bool set_FPRML_fk_gkl(count i, bool *prml[], count ml, count ml_max, bool period)
+boolv set_FPRML_fk_gkl(count i, boolv *prml[], count ml, count ml_max, boolv period)
 {
 	register count hml, m;
 
@@ -909,9 +909,9 @@ void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
     count schvag4;     /* schakelaar per lus                                        */
     count tvgh;        /* hiaattijd waarmee gerekend moet worden bij toekennen vag4 */
    
-    bool vag4     = FALSE;
-    bool bewaking = FALSE;
-    YM[fc]       &= ~BIT2;
+    boolv vag4     = FALSE;
+    boolv bewaking = FALSE;
+    YM[fc]        &= ~BIT2;
    
     va_start(argpt, tmaxvag4);
     dp = va_arg(argpt, va_count);
@@ -956,8 +956,8 @@ void veiligheidsgroen_V1(count fc, count tmaxvag4, ...)
 /* -------------------------------------------------------------------------------------------------------- */
 /* Procedure inkomende pelotonkoppeling                                                                     */
 /* -------------------------------------------------------------------------------------------------------- */
-bool proc_pel_in_V1(                       /* Dh20130124                                                    */
-	 count hfc,                            /* fasecyclus                                                   */
+boolv proc_pel_in_V1(                      /* Dh20130124                                                    */
+	 count hfc,                            /* fasecyclus                                                    */
 	 count tmeet,                          /* T meetperiode                                                 */
 	 count tmaxth,                         /* T max.hiaat                                                   */
 	 count grens,                          /* PRM grenswaarde                                               */
@@ -1004,7 +1004,7 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 	return (CIF_WPS[CIF_PROG_STATUS] == CIF_STAT_REG) && (MM[muit] > 0);
 }
 
-bool IsConflict(count fc1, count fc2)
+boolv IsConflict(count fc1, count fc2)
 {
 	count i;
 	for (i = 0; i < FKFC_MAX[fc1]; ++i) { /* KFC=confl.; GKFC=KFC+groenconfl.; FKFC=GKFC+fictieve confl. */
@@ -1013,18 +1013,18 @@ bool IsConflict(count fc1, count fc2)
 #else
 		if (TO_pointer[fc1][i] == fc2) {
 #endif
-			return (bool)TRUE;
+			return (boolv)TRUE;
 		}
 	}
-	return (bool)FALSE;
+	return (boolv)FALSE;
 }
 
-void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, bool *prml[], bool yml[], count *mlx, bool *sml)
+void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, boolv *prml[], boolv yml[], count *mlx, boolv *sml)
 {
 	if (fcfirst < fclast)
 	{
 		int fc, ml, fcc;
-		bool PRML_x[FCMAX];        /* bijhouden toedeling */
+		boolv PRML_x[FCMAX];       /* bijhouden toedeling    */
 		mulv PRML_temp[15][FCMAX]; /* tijdelijke modulemolen */
 
 		/* bepaal nieuwe tijdelijke modulemolen, houdt toedelen bij */

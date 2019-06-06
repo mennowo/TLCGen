@@ -7,9 +7,9 @@
 #endif
 
 #if defined CCOLTIG
-bool COPY_2_TRIG = FALSE;  /* nieuwe TX-tijden copieren naar TRIG tabel             */
+boolv COPY_2_TRIG = FALSE;  /* nieuwe TX-tijden copieren naar TRIG tabel             */
 #else
-bool COPY_2_TIG = FALSE;  /* nieuwe TX-tijden copieren naar TIG tabel             */
+boolv COPY_2_TIG = FALSE;  /* nieuwe TX-tijden copieren naar TIG tabel             */
 #endif
 char HalfstarOmschakelenToegestaan = 0;
 
@@ -38,7 +38,7 @@ void altcor_kop_halfstar(count fc_aan, count fc_af, count t_nl)
 }
 
 /*****************************************************************************/
-void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg12, bool voorwaarde)
+void altcor_naloopSG_halfstar(count fc1, count fc2, boolv a_bui_fc1, count tnlsg12, boolv voorwaarde)
 {
 	if (voorwaarde)
 	{
@@ -55,7 +55,7 @@ void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg1
 
 /*****************************************************************************/
 /* alternatieve correcties voor tegengestelde richtingen */
-void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde)
+void altcor_parfts_pl_halfstar(count fc1, count fc2, boolv voorwaarde)
 {
 	if (voorwaarde)
 	{
@@ -68,7 +68,7 @@ void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 
 /*****************************************************************************/
 /* alternatieve correcties voor paralelle voetgangsers en fietsers */
-void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde)
+void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, boolv voorwaarde)
 {
 	if (voorwaarde)
 	{
@@ -88,7 +88,7 @@ void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 }
 
 /*****************************************************************************/
-void alternatief_halfstar(count fc, mulv altp, bool condition)
+void alternatief_halfstar(count fc, mulv altp, boolv condition)
 {
 	PAR[fc] = FALSE;
 
@@ -96,9 +96,9 @@ void alternatief_halfstar(count fc, mulv altp, bool condition)
 	kijken naar vastgroentijd. Minimum is altijd vastgroen
 	Let op extra 4 vanwege aantal stappen in ccol (FG->WG->VG->MG->GL)  */
 	if (altp > TFG_max[fc])
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
+		PAR[fc] = (boolv)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
 	else
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
+		PAR[fc] = (boolv)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
 
 	/* afbreken alternatieve realisatie t.b.v. primair realiserend conflict: */
 	FM[fc] = fm_ar_kpr(fc, TFG_max[fc]);
@@ -108,7 +108,7 @@ void alternatief_halfstar(count fc, mulv altp, bool condition)
 /**********************************************************************************/
 void gelijkstart_va_arg_halfstar(count h_x,
 	count h_rr,
-	bool  overslag,
+	boolv  overslag,
 	...)
 {
 	count fc;
@@ -144,24 +144,24 @@ void gelijkstart_va_arg_halfstar(count h_x,
 /**********************************************************************************/
 void getrapte_fietser_halfstar(count fc1, /* fc1 */
 	count fc2, /* fc2 */
-	bool  a_bui_fc1, /* buitendrukknopaanvraag fc1 */
-	bool  a_bui_fc2, /* buitendrukknopaanvraag fc2 */
+	boolv  a_bui_fc1, /* buitendrukknopaanvraag fc1 */
+	boolv  a_bui_fc2, /* buitendrukknopaanvraag fc2 */
 	count tkopfc1fc2, /* naloop (SG) fc1 -> fc2 */
 	count tkopfc2fc1, /* naloop (SG) fc2 -> fc1 */
 	count voorstartfc1fc2, /* maximale voorstart fc1 -> fc2 (mag NG) */
 	count voorstartfc2fc1) /* maximale voorstart fc2 -> fc1 (mag NG) */
 {
 	/* nalopen */
-	RT[tkopfc1fc2] = (bool)((RA[fc1] || TFG[fc1]) && a_bui_fc1);
-	AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
+	RT[tkopfc1fc2] = (boolv)((RA[fc1] || TFG[fc1]) && a_bui_fc1);
+	AT[tkopfc1fc2] = (boolv)((ERA[fc1] && SRV[fc1]));
 	if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) /*||
 																	  (yv_ar_max_halfstar(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])*/))
 	{
 		YV[fc2] |= YV_KOP_HALFSTAR;
 	}
 
-	RT[tkopfc2fc1] = (bool)((RA[fc2] || TFG[fc2]) && a_bui_fc2);
-	AT[tkopfc2fc1] = (bool)((ERA[fc2] && SRV[fc2]));
+	RT[tkopfc2fc1] = (boolv)((RA[fc2] || TFG[fc2]) && a_bui_fc2);
+	AT[tkopfc2fc1] = (boolv)((ERA[fc2] && SRV[fc2]));
 	if ((RT[tkopfc2fc1] || T[tkopfc2fc1]) && ((YV_PL[fc1] && PR[fc1]) /*||
 																	  (yv_ar_max_halfstar(fc1, (mulv)(T_max[tkopfc2fc1] - TFG_max[fc1])) && AR[fc1])*/))
 	{
@@ -169,8 +169,8 @@ void getrapte_fietser_halfstar(count fc1, /* fc1 */
 	}
 
 	/* meerealisaties */
-	set_special_MR(fc1, fc2, (bool)(PR[fc2] && a_bui_fc2 && R[fc2] && (A[fc2] != A_WS_HALFSTAR)));
-	set_special_MR(fc2, fc1, (bool)(PR[fc1] && a_bui_fc1 && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+	set_special_MR(fc1, fc2, (boolv)(PR[fc2] && a_bui_fc2 && R[fc2] && (A[fc2] != A_WS_HALFSTAR)));
+	set_special_MR(fc2, fc1, (boolv)(PR[fc1] && a_bui_fc1 && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
 
 	/* aanvoerende richting niet te snel realiseren (maximale voorstarttijd gelijk aan nalooptijd) */
 	/*if (voorstartfc1fc2 != NG)
@@ -212,7 +212,7 @@ void mgcor_halfstar_deelc(count fc1, count fc2)
 }
 
 /**********************************************************************************/
-void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count tnldet, count tnl)
+void naloopEG_CV_halfstar(boolv period, count fc1, count fc2, count prmxnl, count tnldet, count tnl)
 {
 	/* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
 	if (GL[fc2])
@@ -225,12 +225,12 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
 		groodtimer[fc1][fc2] = 0;
 	}
 
-	RT[tnl] = (bool)(G[fc1] && period);
-	AT[tnl] = (bool)(ERA[fc1] && SRV[fc1]);
+	RT[tnl] = (boolv)(G[fc1] && period);
+	AT[tnl] = (boolv)(ERA[fc1] && SRV[fc1]);
 	if (tnldet != NG)
 	{
 		RT[tnldet] = SG[fc1];
-		AT[tnldet] = (bool)(ERA[fc1] && SRV[fc1]);
+		AT[tnldet] = (boolv)(ERA[fc1] && SRV[fc1]);
 	}
 
 	if (period && (G[fc1] || GL[fc1] || TIMER_ACTIVE(tnl) || ((tnldet != NG) && TIMER_ACTIVE(tnldet))))
@@ -253,7 +253,7 @@ void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count prmxnl, count
 	}
 
 	/* meerealisatie nalooprichting */
-	set_special_MR(fc2, fc1, (bool)(period && ((A[fc1] && R[fc1]) || CV[fc1])));
+	set_special_MR(fc2, fc1, (boolv)(period && ((A[fc1] && R[fc1]) || CV[fc1])));
 
 	if (prmxnl != NG)
 	{
@@ -293,13 +293,13 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 	{
 		if (SG[fc1]) IH[hd_bui_fc1] = FALSE;
 		IH[hd_bui_fc1] |= D[dk_bui_fc1] && !G[fc1] && A[fc1];
-		RT[tkopfc1fc2] = (bool)(RA[fc1] && IH[hd_bui_fc1]);
+		RT[tkopfc1fc2] = (boolv)(RA[fc1] && IH[hd_bui_fc1]);
 	}
 	else
 	{
-		RT[tkopfc1fc2] = (bool)(RA[fc1]);
+		RT[tkopfc1fc2] = (boolv)(RA[fc1]);
 	}
-	AT[tkopfc1fc2] = (bool)((ERA[fc1] && SRV[fc1]));
+	AT[tkopfc1fc2] = (boolv)((ERA[fc1] && SRV[fc1]));
 	if ((RT[tkopfc1fc2] || T[tkopfc1fc2]) && ((YV_PL[fc2] && PR[fc2]) ||
 		(yv_ar_max_halfstar(fc2, (mulv)(T_max[tkopfc1fc2] - TFG_max[fc2])) && AR[fc2])))
 	{
@@ -309,11 +309,11 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 	/* meerealisaties */
 	if (dk_bui_fc1 != NG && hd_bui_fc1 != NG)
 	{
-		set_special_MR(fc2, fc1, (bool)(IH[hd_bui_fc1] && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+		set_special_MR(fc2, fc1, (boolv)(IH[hd_bui_fc1] && R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
 	}
 	else
 	{
-		set_special_MR(fc2, fc1, (bool)(R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
+		set_special_MR(fc2, fc1, (boolv)(R[fc1] && (A[fc1] != A_WS_HALFSTAR)));
 	}
 }
 
@@ -360,7 +360,7 @@ realisaties die over de cyclustijd heen liggen.
 Indien tx=NG dan wordt aangenomen dat de actuele TX in de cyclus moet
 worden getoetst.
 */
-bool pl_gebied(mulv tx,        /* moment in de cyclus afgevraagd (mag NG) */
+boolv pl_gebied(mulv tx,        /* moment in de cyclus afgevraagd (mag NG) */
 	mulv s,         /* startpunt van het gebied                */
 	mulv e)         /* eindpunt van het gebied                 */
 {
@@ -372,17 +372,17 @@ bool pl_gebied(mulv tx,        /* moment in de cyclus afgevraagd (mag NG) */
 	{
 		/* realisatie past binnen de cyclustijd */
 		/* [--------s==========e---------------] */
-		return (bool)(tx >= s && tx < e);
+		return (boolv)(tx >= s && tx < e);
 	}
 	else if (s > e)
 	{
 		/* realisatie ligt over de cyclustijd heen */
 		/* [=====e----------------------s======] */
-		return (bool)(tx >= s || tx < e);
+		return (boolv)(tx >= s || tx < e);
 	}
 	else
 	{
-		return (bool)FALSE;
+		return (boolv)FALSE;
 	}
 }
 
@@ -410,7 +410,7 @@ void reset_fc_halfstar(void)
 
 /*****************************************************************************/
 /* PP bitje opzetten en cyclische aanvraag op TXB moment als PP waar is      */
-void set_pp_halfstar(count fc, bool condition, count value)
+void set_pp_halfstar(count fc, boolv condition, count value)
 {
 	if (!condition)
 		return;
@@ -428,7 +428,7 @@ void set_pp_halfstar(count fc, bool condition, count value)
 /**********************************************************************************/
 /* Deze functie is afgeleid van de ccol functie "set_MRLW()".
 */
-void set_special_MR(count i, count j, bool condition)
+void set_special_MR(count i, count j, boolv condition)
 {
 	if (AA[j] && condition && !AA[i] && !BL[i] && !fkaa(i) && !RR[j] && !BL[j])
 	{
@@ -442,7 +442,7 @@ void set_special_MR(count i, count j, bool condition)
 }
 
 /**********************************************************************************/
-void set_ym_pl_halfstar(count fc, bool condition)
+void set_ym_pl_halfstar(count fc, boolv condition)
 {
 #ifdef CCOLTIG
   if (ym_max_tig(fc, NG)      &&   /* meeverlengen kan volgens ontruimingstijden      */
@@ -471,7 +471,7 @@ void set_yspl(count fc)
 /* dubbele realisatie per richting per plan. Let op, er wordt gebruik gemaakt van baseparameters:
    voor de eerste realisatie de eerste TXA parameter en voor de tweede realisatie de tweede TXA
    parameter meegeven */
-void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, bool condition)
+void set_2real(count fc, count prm_eerste_txa, count prm_tweede_txa, mulv pl, boolv condition)
 {
 	if (prm_tweede_txa != NG && 
 		PRM[prm_tweede_txa + 1] != 0 && PRM[prm_tweede_txa + 3] != 0)
@@ -533,7 +533,7 @@ void SetPlanTijden2R(count fc, mulv plan, mulv ta, mulv tb, mulv tc, mulv td, mu
 void sync_pg(void)
 {
 	register count fc;
-	bool **prml = NULL;
+	boolv **prml = NULL;
 	count ml = -1;
 	count mlx = -1;
 	count mlmax = 0;
@@ -569,7 +569,7 @@ void sync_pg(void)
 
 /**********************************************************************************/
 /* Set functies voor het bepalen waar de plaats tussen TX momenten */
-bool tussen_txa_en_txb(count fc)
+boolv tussen_txa_en_txb(count fc)
 {
     if (TXA_PL[fc] > TXB_PL[fc])
     {
@@ -585,7 +585,7 @@ bool tussen_txa_en_txb(count fc)
     return (FALSE);
 }
 
-bool tussen_txb_en_txc(count fc)
+boolv tussen_txb_en_txc(count fc)
 {
     if (TXB_PL[fc]> TXC[PL][fc])
     {
@@ -601,7 +601,7 @@ bool tussen_txb_en_txc(count fc)
     return (FALSE);
 }
 
-bool tussen_txb_en_txd(count fc)
+boolv tussen_txb_en_txd(count fc)
 {
     if (TXB_PL[fc]> TXD[PL][fc])
     {
@@ -630,7 +630,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 	count ptxc2, /* tweede c realisatie    */
 	count ptxd2, /* tweede d realisatie    */
 	count ptxe2, /* tweede e realisatie    */
-	bool  condition) /* conditie             */
+	boolv  condition) /* conditie             */
 {
 	/* als geen wissel toegepast mag worden of parameters zijn 0 */
 	if ((PRM[ptxb1] == 0) && (PRM[ptxb1] == 0) && (PRM[ptxb2] == 0) && (PRM[ptxb2] == 0))
@@ -641,7 +641,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 	/* als geen tweede realisatie mag worden uitgevoerd, dan eerste realisatie instellen */
 	if (!condition || (PRM[ptxb2] == 0) || (ptxb2 == NG) || (pl != PL))
 	{
-		bool copy = FALSE;
+		boolv copy = FALSE;
 		if (TXA[pl][fc] != PRM[ptxa1])
 		{
 			TXA[pl][fc] = PRM[ptxa1];
@@ -753,7 +753,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 /* is altijd waar behalve wanneer het moment voor het TXB-moment optreedt */
 /* wanneer de langste ontruimingstijd inclusief instelbare marge passeert */
 /* ====================================================================== */
-bool txb_gemist(count i, int marge)
+boolv txb_gemist(count i, int marge)
 {
     register count n, k;
     mulv to_max, to_tmp;
@@ -893,10 +893,10 @@ void tweederealisatie_halfstar(count fc_1,  /* fasecyclus 1e realisatie */
 /**********************************************************************************/
 /* aangepaste functie van ccol bibliotheek (plfunc.c). Naast een aanvraag wordt ook gekeken naar
 PP van een conflicterende richting. De aanvraag van een hoofdrichting wordt pas op TXB moment gezet */
-bool ym_max_halfstar(count i, mulv koppeltijd)
+boolv ym_max_halfstar(count i, mulv koppeltijd)
 {
 	register count n, k;
-	bool ym;
+	boolv ym;
 	if (MG[i] && (YM_PL[i] || !PR[i]))
 	{
 		ym = TRUE;
@@ -938,10 +938,10 @@ bool ym_max_halfstar(count i, mulv koppeltijd)
    PP van een conflicterende richting. De aanvraag van een hoofdrichting wordt pas op TXB moment gezet.
    Tevens ook berekening uitvoeren tijdens WG en MG, want een evt nalooprichting kan door TXC moment 
    worden vastgehouden of kan meeverlengen met andere richtingen */
-bool yv_ar_max_halfstar(count i, mulv koppeltijd)
+boolv yv_ar_max_halfstar(count i, mulv koppeltijd)
 {
   register count n, k;
-  bool yv;
+  boolv yv;
  
   if (WG[i] || VG[i] || MG[i]) 
   {
@@ -982,7 +982,7 @@ bool yv_ar_max_halfstar(count i, mulv koppeltijd)
 
 /*****************************************************************************/
 /* vasthouden groen OV bij signaalplan */
-void yv_ov_pl_halfstar(count fc, bool bit, bool condition)
+void yv_ov_pl_halfstar(count fc, boolv bit, boolv condition)
 {
     RW[fc] &= ~bit;
     YV[fc] &= ~bit;
@@ -994,7 +994,7 @@ void yv_ov_pl_halfstar(count fc, bool bit, bool condition)
 }
 
 /**********************************************************************************/
-bool yws_groen_fk(count i)
+boolv yws_groen_fk(count i)
 {
 	count n, k;
 
@@ -1012,7 +1012,7 @@ bool yws_groen_fk(count i)
 
 /*****************************************************************************/
 /* 'variabel' TXC moment voor bijvoorbeeld gekoppelde richtingen */
-void var_txc(count fc, bool condition)
+void var_txc(count fc, boolv condition)
 {
   YW[fc] &= ~YW_VAR_TXC;
   RW[fc] &= ~RW_VAR_TXC;
@@ -1024,7 +1024,7 @@ void var_txc(count fc, bool condition)
 
 /**********************************************************************************/
 /* Voorstartgroen tijdens voorstart t.o.v. sg-plan */
-void vs_ple(count fc, count prmtotxa, bool condition)
+void vs_ple(count fc, count prmtotxa, boolv condition)
 {
 	/*RS[fc] |= YS_PL[fc] && PR[fc] ||
 	((TOTXA_PL[fc]>0) && (TOTXA_PL[fc]<PRM[prmtotxa])) ? RS_HALFSTAR : 0;*/
@@ -1043,7 +1043,7 @@ void Verlengroen_na_Meeverlenggroen_PL(count fc, count prmvgmg)
 }
 
 /*****************************************************************************/
-void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool condition_ws)
+void wachtstand_halfstar(count fc, boolv condition_hs, boolv condition_a, boolv condition_ws)
 {
   count j, k;
   
@@ -1082,14 +1082,14 @@ void wachtstand_halfstar(count fc, bool condition_hs, bool condition_a, bool con
   }
 
   /* wachtstand opzetten */
-  WS[fc] = (bool)(WG[fc] && yws_groen_fk(fc) && condition_ws);
-  BIT_ACTIVE(YW[fc], (bool)(WS[fc]), YW_WS_HALFSTAR);
+  WS[fc] = (boolv)(WG[fc] && yws_groen_fk(fc) && condition_ws);
+  BIT_ACTIVE(YW[fc], (boolv)(WS[fc]), YW_WS_HALFSTAR);
   
 }
 
 /**********************************************************************************/
 /* Retour wachtgroen bij wachtgroen richtingen */
-void wg_ple(count fc, bool condition)
+void wg_ple(count fc, boolv condition)
 {
 	RW[fc] |= YW[fc] || (TOTXB_PL[fc] <= (TRG_max[fc] + TGL_max[fc])) &&
 		(/*(TOTXB_PL[fc]>0) ||*/ condition && !ka(fc) || (TX_timer == TXB_PL[fc])) ? RW_WG_HALFSTAR : 0;
@@ -1097,7 +1097,7 @@ void wg_ple(count fc, bool condition)
 }
 
 /**********************************************************************************/
-void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl)
+void zachtekoppeling_halfstar(boolv period, count fc1, count fc2, count tvs, count tnldet, count tnl)
 {
   /* geel- en garantieroodtimer tbv tegenhouden aanvoerrichting */
   if (GL[fc2])
@@ -1110,12 +1110,12 @@ void zachtekoppeling_halfstar(bool period, count fc1, count fc2, count tvs, coun
     groodtimer[fc1][fc2] = 0;
   }
   
-  RT[tnl] = (bool)(G[fc1] && period && !WS[fc1]);
-  AT[tnl] = (bool)((ERA[fc1] && SRV[fc1]) || WS[fc1]);
+  RT[tnl] = (boolv)(G[fc1] && period && !WS[fc1]);
+  AT[tnl] = (boolv)((ERA[fc1] && SRV[fc1]) || WS[fc1]);
   if (tnldet != NG)
   {
     RT[tnl] = SG[fc1];
-    AT[tnl] = (bool)(ERA[fc1] && SRV[fc1]);
+    AT[tnl] = (boolv)(ERA[fc1] && SRV[fc1]);
   }
 
   if (period && ((G[fc1] && !WS[fc1]) || GL[fc1] || TIMER_ACTIVE(tnl) || ((tnldet != NG) && TIMER_ACTIVE(tnldet))))
@@ -1152,12 +1152,12 @@ void reset_realisation_timers(void) {
 /**********************************************************************************/
 /* Functie dump_overslag_fc() dumpt op het moment dat een (hoofd)richting 
    geen groen heeft op zijn TXB moment een melding in de UBER_FILE */
-bool txboverslag(count fc       ,  /* (hoofd)richting */
-                       bool  condition)  /* voorwaarde      */
+boolv txboverslag(count fc,          /* (hoofd)richting */
+                  boolv  condition)  /* voorwaarde      */
 {
   if (!condition)
   {
-    return (bool)(FALSE);
+    return (boolv)(FALSE);
   }
   
   if (!waitterm(1000))
@@ -1178,15 +1178,15 @@ bool txboverslag(count fc       ,  /* (hoofd)richting */
       sprintf(tekst,"Overslag TXB fc%s PL=%1d Tx=%3d \n", FC_code[fc], PL+1, TX_timer);
       uber_puts(tekst);
       
-      return (bool)(TRUE);                /* bericht verzonden */
+      return (boolv)(TRUE);                /* bericht verzonden */
     }
   }
   else
   {
-    return (bool)(FALSE);               /* bericht niet verzonden */
+    return (boolv)(FALSE);               /* bericht niet verzonden */
   }
   
-  return (bool)(FALSE);               /* bericht niet verzonden */
+  return (boolv)(FALSE);               /* bericht niet verzonden */
 }
 
 /**********************************************************************************/
@@ -1254,7 +1254,7 @@ void SignalplanPrmsToTx(count pl, count txa1)
 	}
 }
 
-bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
+boolv CheckSignalplanPrms(count pl, count ctijd, count txa1)
 {
 	char temp[1024];
 	short i, cfc, fc, real, tg_min;
@@ -1373,7 +1373,7 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 #endif
 #endif
 				{
-					bool conflict_txb_txd = FALSE;
+					boolv conflict_txb_txd = FALSE;
 
 					// calculate TXB and TXD including amber (or not) and clearing/intergreen times
 					txb_cfc = PRM[txa1 + cfc * 10 + real * 5 + 1];
@@ -1510,27 +1510,27 @@ bool CheckSignalplanPrms(count pl, count ctijd, count txa1)
 	return FALSE;
 }
 
-bool TX_between(int tx_value, int tx_first, int tx_second, int tx_max)
+boolv TX_between(int tx_value, int tx_first, int tx_second, int tx_max)
 {
-	bool fReturn = TRUE;
+	boolv fReturn = TRUE;
 
 	/* check boundaries */
 	if ((tx_value <= tx_max) && (tx_first <= tx_max) && (tx_second <= tx_max))
 	{
 		if (tx_first < tx_second) // b before d, c should be between b and d
 		{
-			fReturn = (bool)((tx_value >= tx_first) && (tx_value <= tx_second));
+			fReturn = (boolv)((tx_value >= tx_first) && (tx_value <= tx_second));
 		}
 		else
 		{
 			// b after d, ie 13 and 3
 			if (tx_value >= tx_first)
 			{
-				fReturn = (bool)(((tx_value + tx_max) >= tx_first) && (tx_value < (tx_second + tx_max)));
+				fReturn = (boolv)(((tx_value + tx_max) >= tx_first) && (tx_value < (tx_second + tx_max)));
 			}
 			else
 			{
-				fReturn = (bool)(((tx_value + tx_max) >= tx_first) && (tx_value < tx_second));
+				fReturn = (boolv)(((tx_value + tx_max) >= tx_first) && (tx_value < tx_second));
 			}
 		}
 	}

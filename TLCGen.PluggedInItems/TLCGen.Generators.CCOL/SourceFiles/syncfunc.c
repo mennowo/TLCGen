@@ -26,9 +26,9 @@
 #include "syncvar.h" /* synchronisatie variabelen           */
 #include "sysdef.c"
 
-bool kcv_primair(count i); /* prototype */
-bool kaa(count i);         /* prototype */
-bool kcv(count i);         /* prototype */
+boolv kcv_primair(count i); /* prototype */
+boolv kaa(count i);         /* prototype */
+boolv kcv(count i);         /* prototype */
 
 #define max(a,b) (((a) > (b)) ? (a) : (b))      /* vergelijken van twee waarden -> return maximum     */
 
@@ -122,7 +122,7 @@ void control_realisation_timers(void)
     }
 }
 
-void correction_realisation_timers(count fcv, count fcn, count tcorrection, bool bit)
+void correction_realisation_timers(count fcv, count fcn, count tcorrection, boolv bit)
 {
     if (tcorrection > R_timer[fcv][fcn])
     {
@@ -157,7 +157,7 @@ void dump_realisation_timers(void)
     char szDump[1024];
     char szTmp[32];
     int len;
-    bool bbreak, bstop;
+    boolv bbreak, bstop;
     register count fc, i;
     bstop = FALSE;
 
@@ -250,7 +250,7 @@ void dump_realisation_timers(void)
     }
 }
 
-void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool bit)
+void FictiefOntruimen(boolv period, count fcv, count fcn, count tftofcvfcn, boolv bit)
 {
     if (period)
     {
@@ -274,7 +274,7 @@ void FictiefOntruimen(bool period, count fcv, count fcn, count tftofcvfcn, bool 
     }
 }
 
-void FictiefOntruimen_correctionKR(bool period, count fcv, count fcn, count tftofcvfcn)
+void FictiefOntruimen_correctionKR(boolv period, count fcv, count fcn, count tftofcvfcn)
 {
     if (period)
     {
@@ -293,7 +293,7 @@ void FictiefOntruimen_correctionKR(bool period, count fcv, count fcn, count tfto
     }
 }
 
-void VoorStarten_correctionKR(bool period, count fcvs, count fcls, count tvs)
+void VoorStarten_correctionKR(boolv period, count fcvs, count fcls, count tvs)
 {
     register count fc;
 
@@ -319,7 +319,7 @@ void VoorStarten_correctionKR(bool period, count fcvs, count fcls, count tvs)
     }
 }
 
-void GelijkStarten_correctionKR(bool period, count fc1, count fc2)
+void GelijkStarten_correctionKR(boolv period, count fc1, count fc2)
 {
     register count fc;
 
@@ -345,7 +345,7 @@ void GelijkStarten_correctionKR(bool period, count fc1, count fc2)
     }
 }
 
-void FietsVoetganger_correctionKR(bool period, count fcfts, count fcvtg) 
+void FietsVoetganger_correctionKR(boolv period, count fcfts, count fcvtg) 
 {
     register count fc;
 
@@ -363,9 +363,9 @@ void FietsVoetganger_correctionKR(bool period, count fcfts, count fcvtg)
     }
 }
 
-void VoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit)
+void VoorStarten(boolv period, count fcvs, count fcls, count tvs, boolv bit)
 {
-    bool xpg;
+    boolv xpg;
 
     if (period)
     {
@@ -396,9 +396,9 @@ void VoorStarten(bool period, count fcvs, count fcls, count tvs, bool bit)
     }
 }
 
-void GelijkStarten(bool period, count fc1, count fc2, bool bit, bool overslag_sg)
+void GelijkStarten(boolv period, count fc1, count fc2, boolv bit, boolv overslag_sg)
 {
-    bool xpg1, xpg2;
+    boolv xpg1, xpg2;
 
     if (period && A[fc1] && A[fc2])
     {
@@ -428,7 +428,7 @@ void GelijkStarten(bool period, count fc1, count fc2, bool bit, bool overslag_sg
     }
 }
 
-void FietsVoetganger(bool period, count fcfts, count fcvtg, bool bit)
+void FietsVoetganger(boolv period, count fcfts, count fcvtg, boolv bit)
 {
     if (period && A[fcfts] && A[fcvtg])
     {
@@ -444,7 +444,7 @@ void FietsVoetganger(bool period, count fcfts, count fcvtg, bool bit)
     }
 }
 
-void realisation_timers(bool bit)
+void realisation_timers(boolv bit)
 {
     register count fc;
     for (fc = 0; fc < FC_MAX; ++fc)

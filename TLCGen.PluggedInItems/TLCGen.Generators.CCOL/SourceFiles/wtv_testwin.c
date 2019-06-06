@@ -58,7 +58,7 @@ int iWTVleds = 0;
 
 void extrawin_init();
 ATOM RegisterMainWinClass(HINSTANCE hInstance);
-BOOL CALLBACK WorkerProc(HWND hwnd, LPARAM lParam);
+boolv CALLBACK WorkerProc(HWND hwnd, LPARAM lParam);
 LRESULT CALLBACK WtvTestWndProc(HWND hWndMir, UINT uMsg, WPARAM wParam, LPARAM lParam);
 void DisplayWTVDigit(HDC hdc, int iNumber, int x, int y);
 void extrawin_wtv(int fc, int mm);
@@ -286,7 +286,7 @@ LRESULT CALLBACK WtvTestWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 void DisplayWTVDigit(HDC hdc, int iNumber, int x, int y)
 {
 	int iSeg;
-	static BOOL fSevenSegment[10][7] =
+	static boolv fSevenSegment[10][7] =
 	{
 		1, 1, 1, 0, 1, 1, 1, // 0
 		0, 0, 1, 0, 0, 1, 0, // 1

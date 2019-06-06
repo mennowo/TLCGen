@@ -140,7 +140,7 @@ void FileMelding(count det,     /* filelus                                */
  *
  *  Functie aanroep: MK[fc] |= RichtingVerlengen(fc, d1, d2, trgr, trgh, hrgh);
  ****************************************************************************/
-bool RichtingVerlengen(count fc,   /* de richting die verlengd wordt                       */
+boolv RichtingVerlengen(count fc,  /* de richting die verlengd wordt                       */
                        count d1,   /* eerste aangereden detector (van)                     */
                        count d2,   /* tweede aangereden detector (naar)                    */
                        count trgr, /* timer richtingsgevoelige rijtijd                     */
@@ -202,7 +202,7 @@ bool RichtingVerlengen(count fc,   /* de richting die verlengd wordt            
 void MeetKriteriumRGprm(count fc, count tkopmaxnr, ...)
 {
     va_list argpt;         /* variabele argumentenlijst             */
-    bool    iRgFunc;       /* bool uit richtinggevoelige functie    */
+    boolv   iRgFunc;       /* bool uit richtinggevoelige functie    */
     mulv    prm;           /* waarde verlengparameter               */
     count   hmk4_6, hmk7;  /* hulpwaarden meetkriterium             */
 
@@ -220,7 +220,7 @@ void MeetKriteriumRGprm(count fc, count tkopmaxnr, ...)
           hmk4_6 &= ~BIT6;                       /* alle bits waar,behalve 4+6 */
           hmk7   = 0;                            /* hulpwaarden worden 0       */
           do
-          {  iRgFunc= (bool) va_arg(argpt, va_mulv); /* lees return uit functie    */
+          {  iRgFunc= (boolv) va_arg(argpt, va_mulv);/* lees return uit functie    */
              if (iRgFunc>=0)
              {  prm= (mulv) va_arg(argpt, va_mulv);  /* lees waarde parameter      */
                  if (prm>END)

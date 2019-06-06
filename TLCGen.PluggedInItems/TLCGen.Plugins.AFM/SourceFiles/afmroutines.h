@@ -41,7 +41,7 @@ struct AFM_fc
 	mulv gmax_afm;       /* Door AFM aangevraagde VG percentage */
 };
 #define AFM_FC_STRUCT struct AFM_fc
-bool AFM_CIF_changed;
+boolv AFM_CIF_changed;
 
 void AFMinit(void);
 void AFM_fc_initfc(AFM_FC_STRUCT * AFM_data_fc, count fc, count prm_fc);
