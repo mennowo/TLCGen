@@ -234,7 +234,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
    mulv TVG_rgv_som;       /* som van de verlenggroentijden */
    mulv TVG_basis_som;     /* som van de verlenggroentijden */
    mulv TGL_som;           /* som van de geeltijden         */
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
    mulv TIG_som;           /* som van de intergroentijden   */
 #else
    mulv TO_som;            /* som van de ontruimingstijden  */
@@ -278,7 +278,7 @@ mulv rgv_verlenggroentijd_correctie_va_arg(va_mulv PRM_rgv, va_mulv DD_anyfc, va
    /* bereken som van de ontruimingstijden */
    /* ------------------------------------ */
    j= 1;
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
    if (TIG_max[fcnr[lastnr]][fcnr[0]]<0)
    {
 	  TIG_som= TIG_ontwerp[fcnr[lastnr]][fcnr[0]];  /* van laatste naar eerste fasecyclus */
@@ -483,7 +483,7 @@ mulv berekencyclustijd_va_arg(va_count fcnr_first, ...)
    mulv TFG_som;           /* som van de vastgroentijden    */
    mulv TVG_som;           /* som van de verlenggroentijden  */
    mulv TGL_som;           /* som van de geeltijden         */
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
    mulv TIG_som;           /* som van de intergroentijden   */
 #else
    mulv TO_som;            /* som van de ontruimingstijden  */
@@ -518,7 +518,7 @@ mulv berekencyclustijd_va_arg(va_count fcnr_first, ...)
       j++;
    }
    
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
    /* bereken som van de ontruimingstijden */
    /* ------------------------------------ */
    j= 1;

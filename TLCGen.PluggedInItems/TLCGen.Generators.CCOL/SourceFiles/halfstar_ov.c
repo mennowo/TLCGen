@@ -28,7 +28,7 @@
 #include "lwmlvar.h"    /* uitgebreide modulen                                            */
 #include "plvar.h"      /* signaalplannen                                                 */
 #include "plevar.h"     /* uitgebreide signaalplannen                                     */
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 #include "trigvar.h"    /* intergroen variabelen                                          */
 #else
 #include "tigvar.h"     /* intergroen variabelen                                          */
@@ -91,12 +91,12 @@ mulv set_pg_primair_ov_ple(count i)
 #ifdef NO_TIG
 		for (n = 0; n < KFC_MAX[i]; n++)
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 			if (TIG[k][i])                                   /* zoek grootste ontruimingstijd */
 			{
 				to_tmp = TIG_max[k][i] - TIG_timer[k];
@@ -112,7 +112,7 @@ mulv set_pg_primair_ov_ple(count i)
 #else
 		for (n = 0; n < FKFC_MAX[i]; n++)
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 			if (TRIG_max[k][i] >= 0)
 			{
@@ -193,7 +193,7 @@ void set_pg_fk_totxb_ov_ple(count i)
 	/* ------------------------------------------------------- */
 	for (n = 0; n < FKFC_MAX[i]; n++)
 	{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		k = KF_pointer[i][n];
 #else
 		k = TO_pointer[i][n];
@@ -421,7 +421,7 @@ int BepaalTO(count fcvan, count fcnaar)
 {
 	int to_max = 0;
 
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 	if (TIG_max[fcvan][fcnaar] >= 0) {                      /* zoek grootste ontruimingstijd      */
 		if (TIG[fcvan][fcnaar])
 			to_max = TIG_max[fcvan][fcnaar] - TIG_timer[fcvan];
@@ -556,7 +556,7 @@ boolv StartGroenConflictenUitstellen(count fcov, int prio_opties)
 
 	for (j = 0; j < FKFC_MAX[fcov]; j++)
 	{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		k = KF_pointer[fcov][j];
 #else
 		k = TO_pointer[fcov][j];

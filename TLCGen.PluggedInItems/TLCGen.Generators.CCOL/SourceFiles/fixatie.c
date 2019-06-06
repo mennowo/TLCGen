@@ -11,7 +11,7 @@ boolv konf_groen(count fc)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         j = KF_pointer[fc][i];
 #else
         j = TO_pointer[fc][i];

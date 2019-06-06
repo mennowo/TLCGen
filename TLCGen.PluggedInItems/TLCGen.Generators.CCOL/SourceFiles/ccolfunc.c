@@ -340,7 +340,7 @@ void WachtStand(boolv *prml[], count ml, count ml_max)
 #include "fcvar.h"
 #include "kfvar.h"
 
-#if !defined CCOLTIG || defined NO_TIGMAX
+#if !defined CCOL_V || defined NO_TIGMAX
 
 mulv max_tar_to(count i)
 {
@@ -368,7 +368,7 @@ mulv max_tar_to(count i)
         }
         for (n = 0; n < FKFC_MAX[i]; n++)
         {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -389,7 +389,7 @@ mulv max_tar_to(count i)
 #endif
                 for (nn = 0; nn < GKFC_MAX[k]; nn++)
                 {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					kk = KF_pointer[k][nn];
 #else
 					kk = TO_pointer[k][nn];
@@ -653,7 +653,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
             if (vb >= 0)
             {
                 h = va_arg(argpt, va_count); /* lees waarde h */
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                 if (h >= 0 && IH[h] && (TIG_max[ov][i] == NG) && T[vb])
 #else
                 if (h >= 0 && IH[h] && (TO_max[ov][i] == NG) && T[vb])
@@ -673,12 +673,12 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                         }
                         for (n = 0; n < FKFC_MAX[i]; ++n)
                         {
-#ifdef CCOLTIG
+#ifdef CCOL_V
                             k = KF_pointer[i][n];
 #else
                             k = TO_pointer[i][n];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                             if (TIG[k][i])               /* zoek grootste ontruimingstijd      */
                             {
                                 to_tmp = TIG_max[k][i] - TIG_timer[k];
@@ -696,7 +696,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 totxb_tmp = 0;
                                 if (G[ov])
                                 {
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                                     totxb_tmp = T_max[vb] + TIG_max[ov][k] - T_timer[vb] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - T_timer[vb] - TGL_max[i] - TO_max[i][k];
@@ -708,7 +708,7 @@ mulv max_tar_ov(count i, ...)            /* i=alt.ri.                        */
                                 }
                                 else if (RA[ov] && !RR[ov] && !BL[ov])
                                 {
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                                     totxb_tmp = T_max[vb] + TIG_max[ov][k] - TIG_max[i][k];
 #else
                                     totxb_tmp = T_max[vb] + TGL_max[ov] + TO_max[ov][k] - TGL_max[i] - TO_max[i][k];
@@ -798,7 +798,7 @@ boolv no_conflict(count fc1par, count fc2ov)
 	{
 		for (l = 0; l < GKFC_MAX[fc1par]; ++l) 
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			c = KF_pointer[fc2ov][l];
 #else
 			c = TO_pointer[fc2ov][l];
@@ -816,7 +816,7 @@ boolv testpri_gk_calw(count i)
 
     for (n = 0; n < GKFC_MAX[i]; ++n)
 	{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 	   j = KF_pointer[i][n];
 #else
 	   j = TO_pointer[i][n];

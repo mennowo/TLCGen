@@ -33,7 +33,7 @@ boolv ym_maxV1(count i, mulv to_verschil)
 		for (n = 0; n<KFC_MAX[i]; ++n)
 #endif
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -42,7 +42,7 @@ boolv ym_maxV1(count i, mulv to_verschil)
 			{
 				ym = FALSE;
 #ifndef NO_GGCONFLICT
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 				if (TIG_max[i][k] < GK)  break;
 #else
 				if (TO_max[i][k] < GK)  break;
@@ -50,12 +50,12 @@ boolv ym_maxV1(count i, mulv to_verschil)
 #endif
 				for (j = 0; j<KFC_MAX[k]; ++j)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 				    if (CV[m] && (((TIG_max[i][k] - to_verschil) <= TIG_max[m][k])
 #else
 					if (CV[m] && (((TO_max[i][k] - to_verschil) <= TO_max[m][k])
@@ -69,12 +69,12 @@ boolv ym_maxV1(count i, mulv to_verschil)
 #ifndef NO_GGCONFLICT
 				for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 					if (CV[m] && (TIG_max[m][k] == GKL || TIG_max[i][k] <= GK))
 #else
 			        if (CV[m] && (TO_max[m][k] == GKL || TO_max[i][k] <= GK))
@@ -110,13 +110,13 @@ boolv ym_max_prmV1(count i, count prm, mulv to_verschil)
 	case 5:
 		return ym_max(i, to_verschil);
 	case 6:
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 		return ym_max_tig(i, to_verschil);
 #else
 		return ym_max_to(i, to_verschil);
 #endif
 	case 7:
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 		return ym_max(i, to_verschil) || MK[i] && ym_max_tig(i, to_verschil);
 #else
 		return ym_max(i, to_verschil) || MK[i] && ym_max_to(i, to_verschil);
@@ -154,7 +154,7 @@ boolv ym_max_toV1(count i, mulv to_verschil)
 		ym = TRUE;
 		for (n = 0; n < GKFC_MAX[i]; ++n)
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -162,20 +162,20 @@ boolv ym_max_toV1(count i, mulv to_verschil)
 			if ((RA[k] || AAPR[k]))
 			{
 				ym = FALSE;
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 				if (TIG_max[i][k] < GK)  break;
 #else
 				if (TO_max[i][k] < GK)  break;
 #endif
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
 #endif
 
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 					if (CV[m] && (((TIG_max[i][k] - to_verschil) <=
 						(TIG_max[m][k])) &&
 						((TIG_max[i][k]) < (TFG_max[m] - TFG_timer[m] +
@@ -203,12 +203,12 @@ boolv ym_max_toV1(count i, mulv to_verschil)
 
 				for (j = KFC_MAX[k]; j < FKFC_MAX[k]; j++)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 					if (CV[m] && (TIG_max[m][k] == GKL || TIG_max[i][k] <= GK))
 #else
 					if (CV[m] && (TO_max[m][k] == GKL || TO_max[i][k] <= GK))
@@ -261,7 +261,7 @@ boolv ym_max_vtgV1(count i)
 		for (n = 0; n < KFC_MAX[i]; ++n)
 #endif
 		{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[i][n];
 #else
 			k = TO_pointer[i][n];
@@ -270,7 +270,7 @@ boolv ym_max_vtgV1(count i)
 			{
 				ym = FALSE;
 #ifndef NO_GGCONFLICT
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 				if (TIG_max[i][k] < GK)  break;
 #else
 				if (TO_max[i][k] < GK)  break;
@@ -278,7 +278,7 @@ boolv ym_max_vtgV1(count i)
 #endif
 				for (j = 0; j < KFC_MAX[k]; ++j)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
@@ -288,7 +288,7 @@ boolv ym_max_vtgV1(count i)
 						/* bereken of max groentijd is bereikt tov benodigde ontruiming */
 						if (CV[m] && PR[m] && !(VG[m] &&
 							((TVG_max[m] - TVG_timer[m]) <
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 							(TIG_max[i][k] - TIG_max[m][k]))) &&
 							 !(WG[m] && (TVG_max[m] < (TIG_max[i][k] - TIG_max[m][k]))))
 #else
@@ -312,12 +312,12 @@ boolv ym_max_vtgV1(count i)
 #ifndef NO_GGCONFLICT
 				for (j = KFC_MAX[k]; j < GKFC_MAX[k]; ++j)
 				{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 					m = KF_pointer[k][j];
 #else
 					m = TO_pointer[k][j];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 					if (CV[m] && (TIG_max[m][k] == GKL))
 #else
 					if (CV[m] && (TO_max[m][k] == GKL))
@@ -731,14 +731,14 @@ boolv kcv_primair_fk_gkl(count i)
 	for (n = 0; n < KFC_MAX[i]; ++n)
 #endif
 	{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		j = KF_pointer[i][n];
 #else
 		j = TO_pointer[i][n];
 #endif
 		if ((((R[j] || GL[j]) && AA[j] || CV[j] ||
 			G[j] && (RS[j] || RW[j])) && PR[j]) &&
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 			!((TIG_max[i][j] == GKL) && (TIG_max[j][i] == FK)))
 #else
 			!((TO_max[i][j] == GKL) && (TO_max[j][i] == FK)))
@@ -754,7 +754,7 @@ static boolv a_pg_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 
    for (n = 0; n < GKFC_MAX[i]; ++n)
    {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 	   j = KF_pointer[i][n];
 #else
 	   j = TO_pointer[i][n];
@@ -765,7 +765,7 @@ static boolv a_pg_fkprml_fk_gkl(count i, boolv *prml[], count ml)
    }
 
    for (n = GKFC_MAX[i]; n < FKFC_MAX[i]; ++n) {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 	   j = KF_pointer[i][n];
 #else
 	   j = TO_pointer[i][n];
@@ -784,7 +784,7 @@ static boolv a_ag_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 	register count n, j;
 
 	for (n = 0; n < FKFC_MAX[i]; ++n) {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		j = KF_pointer[i][n];
 #else
 		j = TO_pointer[i][n];
@@ -802,7 +802,7 @@ static void set_pg_fkprml_fk_gkl(count i, boolv *prml[], count ml)
 
 	for (n = 0; n < FKFC_MAX[i]; ++n)
 	{
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		j = KF_pointer[i][n];
 #else
 		j = TO_pointer[i][n];
@@ -820,13 +820,13 @@ boolv kcv_fk_gkl(count i)
 #else
 	for (n = 0; n < KFC_MAX[i]; ++n) {
 #endif
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		k = KF_pointer[i][n];
 #else
 		k = TO_pointer[i][n];
 #endif
 		if (((R[k] || GL[k]) && AA[k] || CV[k] || G[k] && (RS[k] || RW[k])) && 
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 			!((TIG_max[i][k] == GKL) && (TIG_max[k][i] == FK)))
 #else
 			!((TO_max[i][k] == GKL) && (TO_max[k][i] == FK)))
@@ -1008,7 +1008,7 @@ boolv IsConflict(count fc1, count fc2)
 {
 	count i;
 	for (i = 0; i < FKFC_MAX[fc1]; ++i) { /* KFC=confl.; GKFC=KFC+groenconfl.; FKFC=GKFC+fictieve confl. */
-#ifdef CCOLTIG
+#ifdef CCOL_V
 		if (KF_pointer[fc1][i] == fc2) {
 #else
 		if (TO_pointer[fc1][i] == fc2) {

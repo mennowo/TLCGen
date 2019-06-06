@@ -111,7 +111,7 @@ void OVInit(void)
         for (ov2 = 0; ov2 < ovOVMAX; ++ov2)
         {
             fc2 = iFC_OVix[ov2];
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[fc1][fc2] >= 0)
 #else
             if (TO_max[fc1][fc2] >= 0)
@@ -138,7 +138,7 @@ void OVInit(void)
         for (ov2 = 0; ov2 < ovOVMAX; ++ov2) 
         {
             fc2 = iFC_OVix[ov2];
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[fc1][fc2] == GK || TIG_max[fc1][fc2] == GKL) /* toegevoegd Ane 25-04-2011, GKL */
 #else
             if (TO_max[fc1][fc2] == GK || TO_max[fc1][fc2] == GKL)
@@ -208,12 +208,12 @@ void KonfliktTijden(void)
         {
             for (i = 0; i < GKFC_MAX[fc]; ++i) 
             {
-#ifdef CCOLTIG
+#ifdef CCOL_V
                 k = KF_pointer[fc][i];
 #else
                 k = TO_pointer[fc][i];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                 if (TIG[k][fc])
 #else
                 if (TO[k][fc])
@@ -221,7 +221,7 @@ void KonfliktTijden(void)
                 {
                     iRestGroen = TGG[k] ? TGG_max[k] - TGG_timer[k] : 0;
                     iRestGeel = (TGL_max[k] > 0 ? TGL_max[k] : 1) - TGL_timer[k];
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                     iRestTO = TIG_max[k][fc] - TIG_timer[k];
                     if (TIG_max[k][fc] == GK)
 #else
@@ -396,7 +396,7 @@ void WachtTijdBewaking(void)
         fc = iFC_OVix[ov];
         for (i = 0; i < GKFC_MAX[fc] && !iMaximumWachtTijdOverschreden[ov]; ++i) /* gewijzigd Ane KFC in GKFC */
         {
-#ifdef CCOLTIG
+#ifdef CCOL_V
             k = KF_pointer[fc][i];
 #else
             k = TO_pointer[fc][i];
@@ -429,7 +429,7 @@ void mag_eerst(void)
         {
             for (i = 0; i < GKFC_MAX[fc]; ++i)
             {
-#ifdef CCOLTIG
+#ifdef CCOL_V
                 k = KF_pointer[fc][i];
 #else
                 k = TO_pointer[fc][i];
@@ -448,7 +448,7 @@ int moet_wachten(int ov)
     fc = iFC_OVix[ov];
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
@@ -1102,12 +1102,12 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
         if (TIG[k][fc]
 #else
         if (TO[k][fc]
@@ -1157,7 +1157,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                 }
             }
             iRestGeel = G[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) : GL[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) - TGL_timer[k] : 0;
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             iRestTO = TIG_max[k][fc] >= 0 ? TIG_max[k][fc] - TIG_timer[k] :
 #else
             iRestTO = TO_max[k][fc] >= 0 ? TO_max[k][fc] - TO_timer[k] :
@@ -1166,7 +1166,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                 TGK[k][fc] ? TGK_max[k][fc] - TGK_timer[k] :
 #endif
                 0;
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
             {
                 iStartGroenFC = iRestGroen + iRestTO;
@@ -1178,7 +1178,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
                 iStartGroenFC = iRestGroen + iRestGeel + iRestTO;
             }
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[k][fc] <= GK && iStartGroenFC < iRestGroen + iRestTO)
 #else
             if (TO_max[k][fc] <= GK && iStartGroenFC < iRestGroen + iRestTO)
@@ -1192,7 +1192,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
     for (kov = 0; kov < ovOVMAX; ++kov)
     {
         k = iFC_OVix[kov];
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
         if (TIG[k][fc] && iPrioriteit[kov] && G[k])
 #else
         if (TO[k][fc] && iPrioriteit[kov] && G[k])
@@ -1200,7 +1200,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
         {
             iRestGroen = iGroenBewakingsTijd[kov] - iGroenBewakingsTimer[kov];
             iRestGeel = G[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) : GL[k] ? (TGL_max[k] > 0 ? TGL_max[k] : 1) - TGL_timer[k] : 0;
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             iRestTO = TIG[k][fc] ? TIG_max[k][fc] - TIG_timer[k] : 0;
             if (TIG_max[k][fc] >= 0 && iStartGroenFC < iRestGroen + iRestTO)
 #else
@@ -1210,7 +1210,7 @@ int StartGroenFC(int fc, int iGewenstStartGroen, int iPrioriteitsOptiesFC)
             {
                 iStartGroenFC = iRestGroen + iRestGeel + iRestTO;
             }
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[k][fc] == GK && iStartGroenFC < iRestGroen)
 #else
             if (TO_max[k][fc] == GK && iStartGroenFC < iRestGroen)
@@ -1300,7 +1300,7 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
@@ -1322,7 +1322,7 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
                     iGroenTijd = TFG_max[k] + (TVG_max[k] > 0 ? TVG_max[k] : 0);
                 }
             }
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG_max[k][fc] == GK)
 #else
             if (TO_max[k][fc] == GK)
@@ -1333,7 +1333,7 @@ void RealisatieTijden(int fc, int iPrioriteitsOptiesFC)
             else
             {
                 iRealisatieTijd[fc][k] = iKonfliktTijd[k] + iGroenTijd + (TGL_max[k] > 0 ? TGL_max[k] : 1) +
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                 TIG_max[k][fc];
 #else
                 TO_max[k][fc];
@@ -1352,7 +1352,7 @@ void TegenHoudenStartGroen(int fc, int iStartGroenFC)
     int i, k;
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
@@ -1416,18 +1416,18 @@ void AfkappenStartGroen(int fc, int iStartGr)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
 #endif
         if (G[k] &&
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
 #else
             (TO_max[k][fc] >= 0 && (TGL_max[k] > 0 ? TGL_max[k] : 1) + TO_max[k][fc] >= iStartGr ||
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
              TIG_max[k][fc] == GK && iStartGr <= 0 ||
              TIG_max[k][fc] == GKL 
 #else
@@ -1461,13 +1461,13 @@ void AfkappenMG(int fc, int iStartGr)
 
     for (i = 0; i < GKFC_MAX[fc]; ++i)
     {
-#ifdef CCOLTIG
+#ifdef CCOL_V
         k = KF_pointer[fc][i];
 #else
         k = TO_pointer[fc][i];
 #endif
         if (MG[k] &&
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 			/* TIG_max[k][fc]==GKL toegevoegd */
             (TIG_max[k][fc] >= 0 && TIG_max[k][fc] >= iStartGr ||
              TIG_max[k][fc] == GK && iStartGr <= 0) || TIG_max[k][fc] == GKL 
@@ -1869,7 +1869,7 @@ void OVAlternatieven(void)
                     iH_OVix[ov] >= 0 && iH_OVix[ov] < HEMAX &&
                     iPrioriteitsOpties[ov] & poGroenVastHouden)
                 {
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
                     if (TIG_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #else
                     if (TO_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
@@ -1885,7 +1885,7 @@ void OVAlternatieven(void)
                     iH_OVix[ov]>=0 && iH_OVix[ov]<HEMAX &&
                     iPrioriteitsOpties[ov] & poBijzonderRealiseren) 
 		        {
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
 					if (TIG_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
 #else
 					if (TO_max[fc][iFC_OVix[ov]] == NG) /* voorwaarde toegevoegd Ane 17-01-2012 */
@@ -2127,12 +2127,12 @@ void OVDebug(int ov)
         }
         for (i = 0; i < GKFC_MAX[fc]; ++i)
         {
-#ifdef CCOLTIG
+#ifdef CCOL_V
 			k = KF_pointer[fc][i];
 #else
             k = TO_pointer[fc][i];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (TIG[k][fc] || iTerugKomen[k] || AAPR[k] || AR[k])
 #else
             if (TO[k][fc] || iTerugKomen[k] || AAPR[k] || AR[k])

@@ -78,12 +78,12 @@ void control_realisation_timers(void)
     {
         for (i = 0; i < KFC_MAX[fc]; ++i)
         {
-#ifdef CCOLTIG
+#ifdef CCOL_V
             k = KF_pointer[fc][i];
 #else
             k = TO_pointer[fc][i];
 #endif
-#if defined CCOLTIG && !defined NO_TIGMAX
+#if defined CCOL_V && !defined NO_TIGMAX
             if (CV[fc])
             {
                 R_timer[fc][k] = TFG_max[fc] - TFG_timer[fc] + TVG_max[fc] - TVG_timer[fc] + TIG_max[fc][k];
