@@ -287,7 +287,7 @@
                                                     Instellen prioriteit:<LineBreak />
                                                     1 = vasthouden na TXD moment<LineBreak />
                                                     2 = 1 &amp; tegenhouden hoofdrichtingen<LineBreak />
-                                                    3 = 2 &amp; abs.prio: uistellen &amp; overslaan niet-hoofrichtingen<LineBreak />
+                                                    3 = 2 &amp; abs.prio: uistellen &amp; overslaan niet-hoofrichtingen
                                                 </TextBlock>
                                             </ct:InfoElement.InfoPopup>
                                         </ct:InfoElement>
