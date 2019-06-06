@@ -24,9 +24,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             sb.Append(GenerateOvCIncludes(controller));
             sb.Append(GenerateOvCTop(controller));
+            sb.Append(GenerateOvCInit(controller));
             sb.Append(GenerateOvCInstellingen(controller));
             sb.Append(GenerateOvCRijTijdScenario(controller));
             sb.Append(GenerateOvCInUitMelden(controller));
+            sb.Append(GenerateOvCOndermaximum(controller));
+            sb.Append(GenerateOvCAfkapgroen(controller));
+            sb.Append(GenerateOvCStartGroenMomenten(controller));
+            sb.Append(GenerateOvCAfkappen(controller));
+            sb.Append(GenerateOvCTerugkomGroen(controller));
+            sb.Append(GenerateOvCGroenVasthouden(controller));
+            sb.Append(GenerateOvCMeetkriterium(controller));
             sb.Append(GenerateOvCPrioriteitsOpties(controller));
             sb.Append(GenerateOvCPrioriteitsToekenning(controller));
             sb.Append(GenerateOvCTegenhoudenConflicten(controller));
@@ -236,6 +244,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateOvCInit(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("void OVInitExtra(void) ");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCInitOV, true, false, true, true);
+
+            sb.AppendLine("}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         private string GenerateOvCInstellingen(ControllerModel c)
         {
             var sb = new StringBuilder();
@@ -272,6 +295,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             var _prmaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmaltg");
             var _schaltg = CCOLGeneratorSettingsProvider.Default.GetElementName("schaltg");
             var _prmohpmg = CCOLGeneratorSettingsProvider.Default.GetElementName("prmohpmg");
+            var _hmlact = CCOLGeneratorSettingsProvider.Default.GetElementName("hmlact");
 
             sb.AppendLine("void OVInstellingen(void) ");
             sb.AppendLine("{");
@@ -675,7 +699,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 sb.AppendLine();
 
-                sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep*/");
+                sb.AppendLine($"{ts}/* Richting mag alternatief realiseren tijdens een OV ingreep */");
                 foreach (var fc in c.ModuleMolen.FasenModuleData)
                 {
                     Tuple<string, List<string>> hasgs = null;
@@ -694,7 +718,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             sb.Append(ofc);
                         }
-                        sb.AppendLine("];");
+                        sb.Append($"]");
+                        if (c.HalfstarData.IsHalfstar) sb.Append($" && IH[{_hpf}{_hmlact}]");
+                        sb.AppendLine($";");
                     }
                     else
                     {
@@ -1055,6 +1081,97 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#ifdef OV_ADDFILE");
             sb.AppendLine($"{ts}{ts}PrioriteitsNiveau_Add();");
             sb.AppendLine($"{ts}#endif");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCOndermaximum(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void OnderMaximumExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCOnderMaximum, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCAfkapgroen(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void AfkapGroenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCAfkapGroen, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCStartGroenMomenten(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void StartGroenMomentenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCStartGroenMomenten, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCAfkappen(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void OVAfkappenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCAfkappen, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCTerugkomGroen(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void OVTerugkomGroenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCTerugkomGroen, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCGroenVasthouden(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void OVGroenVasthoudenExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCGroenVasthouden, true, true, false, true);
+
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string GenerateOvCMeetkriterium(ControllerModel c)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("void OVMeetKriteriumExtra(void)");
+            sb.AppendLine("{");
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.OvCMeetkriterium, true, true, false, true);
+
             sb.AppendLine("}");
 
             return sb.ToString();

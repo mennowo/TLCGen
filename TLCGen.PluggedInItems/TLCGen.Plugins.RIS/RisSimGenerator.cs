@@ -29,6 +29,7 @@ namespace TLCGen.Plugins.RIS
             sb.AppendLine("#include \"isvar.h\"            /* declaratie IS[]               */");
             sb.AppendLine("#include \"rissimvar.c\"        /* ris-simulatie variabelen      */");
             sb.AppendLine("#include \"xyprintf.h\"         /* declaratie xyprintf-functie   */");
+            sb.AppendLine("#include \"prmvar.h\"           /* declaratie PRM[]              */");
             sb.AppendLine();
             sb.AppendLine("/* RIS-FI - ObjectID<Intersection, LaneID en ObjectID<SIgnalGroupID> */");
             sb.AppendLine("/* ================================================================= */");

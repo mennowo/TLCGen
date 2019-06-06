@@ -30,6 +30,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         {
             // Build a list of fasen with gelijkstarts belonging to them
             var gss = new List<Tuple<string, List<string>>>();
+
+            if (!c.InterSignaalGroep.Gelijkstarten.Any()) return gss;
+
             foreach(var fc in c.Fasen)
             {
                 if (c.InterSignaalGroep.Gelijkstarten.Any(x => x.FaseVan == fc.Naam || x.FaseNaar == fc.Naam) && !gss.Any(x => x.Item1 == fc.Naam))

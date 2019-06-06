@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using TLCGen.Dialogs;
 using TLCGen.Extensions;
@@ -16,6 +17,64 @@ using TLCGen.Views.Tabs.SpecialsTab.DataTypes;
 
 namespace TLCGen.ViewModels
 {
+    public class HalfstarOVIngreepViewModel : ViewModelBase, IViewModelWithItem
+    {
+        #region Fields
+
+        private HalfstarOVIngreepModel _ovIngreep;
+
+        #endregion // Fields
+
+        #region Properties
+
+        public OVIngreepModel BelongsToOVIngreep { get; set; }
+
+        public string FaseCyclus => BelongsToOVIngreep?.FaseCyclus;
+
+        public int Prioriteit
+        {
+            get => _ovIngreep.Prioriteit;
+            set
+            {
+                _ovIngreep.Prioriteit = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int GroenNaTXDTijd
+        {
+            get => _ovIngreep.GroenNaTXDTijd;
+            set
+            {
+                _ovIngreep.GroenNaTXDTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        #endregion // Properties
+
+        #region Commands
+        #endregion // Commands
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return _ovIngreep;
+        }
+
+        #endregion // IViewModelWithItem
+        
+        #region Constructor
+
+        public HalfstarOVIngreepViewModel(HalfstarOVIngreepModel ovIngreep)
+        {
+            _ovIngreep = ovIngreep;
+        }
+
+        #endregion // Constructor
+    }
+
 	[TLCGenTabItem(index: 5, type: TabItemTypeEnum.SpecialsTab)]
 	public class HalfstarTabViewModel : TLCGenTabItemViewModel
 	{
@@ -40,6 +99,7 @@ namespace TLCGen.ViewModels
 		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; private set; }
+        public ObservableCollection<HalfstarOVIngreepViewModel> OVIngrepenHalfstar { get; } = new ObservableCollection<HalfstarOVIngreepViewModel>();
 
         public bool ShowHalfstarAlert
         {
@@ -758,6 +818,11 @@ namespace TLCGen.ViewModels
                     }
                     HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
                     Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel>(HalfstarData.Alternatieven);
+                    OVIngrepenHalfstar.Clear();
+                    foreach(var ov in Controller.OVData.OVIngrepen)
+                    {
+                        OVIngrepenHalfstar.Add(new HalfstarOVIngreepViewModel(ov.HalfstarIngreepData) { BelongsToOVIngreep = ov });
+                    }
                     UpdateAlternatievenFromController();
 
                     SignaalPlannen.CollectionChanged += (o, e) =>
@@ -949,6 +1014,23 @@ namespace TLCGen.ViewModels
 			}
 		}
 
+        private void OnOVIngrepenChanged(OVIngrepenChangedMessage msg)
+        {
+            var rems = OVIngrepenHalfstar.Where(x => Controller.OVData.OVIngrepen.All(x2 => !ReferenceEquals(x, x2.HalfstarIngreepData)));
+            foreach(var rem in rems)
+            {
+                OVIngrepenHalfstar.Remove(rem);
+            }
+            foreach(var ovi in Controller.OVData.OVIngrepen)
+            {
+                if (OVIngrepenHalfstar.All(x => !ReferenceEquals(x, ovi.HalfstarIngreepData)))
+                {
+                    OVIngrepenHalfstar.Add(new HalfstarOVIngreepViewModel(ovi.HalfstarIngreepData) { BelongsToOVIngreep = ovi });
+                }
+            }
+            OVIngrepenHalfstar.BubbleSort();
+        }
+
 		#endregion // TLCGen Events
 
 		#region Constructor
@@ -960,6 +1042,7 @@ namespace TLCGen.ViewModels
 			Messenger.Default.Register(this, new Action<FasenSortedMessage>(OnFasenSorted));
 			Messenger.Default.Register(this, new Action<PeriodenChangedMessage>(OnPeriodenChanged));
 			Messenger.Default.Register(this, new Action<PTPKoppelingenChangedMessage>(OnPTPKoppelingenChanged));
+			Messenger.Default.Register(this, new Action<OVIngrepenChangedMessage>(OnOVIngrepenChanged));
 
             if (SignaalPlannen?.Any() == true)
             {
@@ -967,6 +1050,6 @@ namespace TLCGen.ViewModels
             }
 		}
 
-		#endregion // Constructor
-	}
+        #endregion // Constructor
+    }
 }

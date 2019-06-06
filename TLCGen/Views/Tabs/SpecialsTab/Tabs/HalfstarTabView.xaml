@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:vm="clr-namespace:TLCGen.ViewModels"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:helpers="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
@@ -263,6 +264,39 @@
                         <Button Content="Multi import" Margin="2" Command="{Binding Path=ImportManySignaalPlanCommand}" />
                     </StackPanel>
                     <local:SignaalPlanView DataContext="{Binding Path=SelectedSignaalPlan}" Grid.Column="2" Grid.RowSpan="2" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="OV" IsEnabled="{Binding Path=IsHalfstar}">
+                <Grid>
+                    <DataGrid ItemsSource="{Binding Path=OVIngrepenHalfstar}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                        <DataGrid.RowHeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                              AncestorType={x:Type DataGridRow}}, 
+                                              Path=Item.FaseCyclus}"/>
+                            </DataTemplate>
+                        </DataGrid.RowHeaderTemplate>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Path=Prioriteit}" >
+                                <DataGridTextColumn.Header>
+                                    <DockPanel>
+                                        <TextBlock Text="Prioriteit" Margin="0,0,5,0" DockPanel.Dock="Left" />
+                                        <ct:InfoElement DockPanel.Dock="Right">
+                                            <ct:InfoElement.InfoPopup>
+                                                <TextBlock>
+                                                    Instellen prioriteit:<LineBreak />
+                                                    1 = vasthouden na TXD moment<LineBreak />
+                                                    2 = 1 &amp; tegenhouden hoofdrichtingen<LineBreak />
+                                                    3 = 2 &amp; abs.prio: uistellen &amp; overslaan niet-hoofrichtingen
+                                                </TextBlock>
+                                            </ct:InfoElement.InfoPopup>
+                                        </ct:InfoElement>
+                                    </DockPanel>
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Tijd na TXD" Binding="{Binding Path=GroenNaTXDTijd}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>   

@@ -52,6 +52,8 @@ namespace TLCGen.Models
         public int GeconditioneerdePrioOpTijd { get; set; }
         public int GeconditioneerdePrioTeLaat { get; set; }
 
+        public HalfstarOVIngreepModel HalfstarIngreepData { get; set; }
+
         [HasDefault(false)]
         [Browsable(false)]
         public bool HasGeconditioneerdePrioriteit => GeconditioneerdePrioriteit != NooitAltijdAanUitEnum.Nooit;
@@ -107,6 +109,7 @@ namespace TLCGen.Models
             GeconditioneerdePrioOpTijdBitmapData = new BitmapCoordinatenDataModel();
             GeconditioneerdePrioTeLaatBitmapData = new BitmapCoordinatenDataModel();
             MeldingenData = new OVIngreepMeldingenDataModel();
+            HalfstarIngreepData = new HalfstarOVIngreepModel();
         }
 
         #endregion // Constructor

@@ -5,24 +5,6 @@
 
 #include "ov.h"
 
-typedef enum
-{
-    poGeenPrioriteit             =0,
-    poAanvraag                   =1,
-    poAfkappenKonfliktRichtingen =2,
-    poGroenVastHouden            =4,
-    poBijzonderRealiseren        =8,
-    poAfkappenKonflikterendOV    =16,
-    poNoodDienst                 =32,
-} TPrioriteitsOpties;
-
-typedef enum
-{
-    rtsOngehinderd,
-    rtsBeperktGehinderd,
-    rtsGehinderd,
-} TRijTijdScenario;
-
 VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 
 int iMaximumWachtTijd[FCMAX];
@@ -2223,7 +2205,8 @@ void AfhandelingOV(void)
     if (init)
     {
         OVInit();
-        init = 0;
+		OVInitExtra();
+		init = 0;
     }
 
     /* ------------------------------------------------------------
@@ -2261,7 +2244,8 @@ void AfhandelingOV(void)
     WachtTijdBewaking_Add();
 #endif
 
-    OnderMaximum();
+	OnderMaximum();
+	OnderMaximumExtra();
 #ifdef OV_ADDFILE
     OnderMaximum_Add();
 #endif
@@ -2276,12 +2260,14 @@ void AfhandelingOV(void)
     PrioriteitsToekenning_Add();
 #endif
 
-    AfkapGroen();
+	AfkapGroen();
+	AfkapGroenExtra();
 #ifdef OV_ADDFILE
     AfkapGroen_Add();
 #endif
 
-    StartGroenMomenten();
+	StartGroenMomenten();
+	StartGroenMomentenExtra();
 #ifdef OV_ADDFILE
     StartGroenMomenten_Add();
 #endif
@@ -2307,7 +2293,8 @@ void AfhandelingOV(void)
        Konflikten worden afgekapt op basis van het
        StartGroenMoment.
        ------------------------------------------- */
-    OVAfkappen();
+	OVAfkappen();
+	OVAfkappenExtra();
 #ifdef OV_ADDFILE
     OVAfkappen_Add();
 #endif
@@ -2315,7 +2302,8 @@ void AfhandelingOV(void)
     /* ----------------------------------------------------------
        TVG_max wordt aangepast op basis van de TerugKomGroenTijd.
        ---------------------------------------------------------- */
-    TerugKomGroen();
+	TerugKomGroen();
+	OVTerugkomGroenExtra();
 
     /* ---------------------------------------------------------
        Bijzonder realiseren als het StartGroenMoment is bereikt.
@@ -2326,13 +2314,15 @@ void AfhandelingOV(void)
        Groen vasthouden tot uitmelding of aanspreken van de
        groenbewaking.
        ---------------------------------------------------- */
-    OVGroenVasthouden();
+	OVGroenVasthouden();
+	OVGroenVasthoudenExtra();
 
     /* ---------------------------------------------------------
        Meetkriterium van een bijzonder gerealiseerde richting
        afzetten zodat, bij uitmelding de richting naar rood gaat.
        --------------------------------------------------------- */
-    OVMeetKriterium();
+	OVMeetKriterium();
+	OVMeetKriteriumExtra();
 
     /* ------------------------------------------
        Kopieer de waarden naar de Ccol-elementen.

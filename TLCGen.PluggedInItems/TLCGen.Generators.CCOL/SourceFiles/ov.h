@@ -12,6 +12,28 @@
 #define  OV_PAR_BIT      BIT6
 #define OV_RTFB_BIT      BIT6
 
+typedef enum
+{
+	poGeenPrioriteit = 0,
+	poAanvraag = 1,
+	poAfkappenKonfliktRichtingen = 2,
+	poGroenVastHouden = 4,
+	poBijzonderRealiseren = 8,
+	poAfkappenKonflikterendOV = 16,
+	poNoodDienst = 32,
+	poPLGroenVastHoudenNaTXD = 64,
+	poPLTegenhoudenHoofdrichting = 128,
+	poPLAbsolutePrioriteit = 256,
+	poPLNoodDienst = 512,
+} TPrioriteitsOpties;
+
+typedef enum
+{
+	rtsOngehinderd,
+	rtsBeperktGehinderd,
+	rtsGehinderd,
+} TRijTijdScenario;
+
 typedef struct {
 	bool voorinov;
 	bool inmov;
@@ -28,6 +50,7 @@ typedef struct {
 extern VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
 
 /* Functie declaraties voor functies uit de applicatie */
+void OVInitExtra(void);
 void OVInstellingen(void);
 void RijTijdScenario(void);
 void InUitMelden(void);
@@ -36,6 +59,13 @@ void PrioriteitsToekenningExtra(void);
 void TegenhoudenConflictenExtra(void);
 void PostAfhandelingOV(void);
 void OVPARCorrecties(void);
+void OnderMaximumExtra(void);
+void AfkapGroenExtra(void);
+void StartGroenMomentenExtra(void);
+void OVAfkappenExtra(void);
+void OVTerugkomGroenExtra(void);
+void OVGroenVasthoudenExtra(void);
+void OVMeetKriteriumExtra(void);
 
 /* Functie declaraties voor functies uit ov.c */
 void AfhandelingOV(void);

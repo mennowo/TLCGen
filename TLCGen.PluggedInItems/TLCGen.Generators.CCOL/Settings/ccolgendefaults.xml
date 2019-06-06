@@ -624,40 +624,10 @@
             <Description>_E1_ realisatie _E2_ fc_E3_ _E4_-moment</Description>
           </Setting>
           <Setting>
-            <Default>vbhst</Default>
-            <Setting>vbhst</Setting>
-            <Type>Counter</Type>
-            <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
             <Default>vchst</Default>
             <Setting>vchst</Setting>
             <Type>Counter</Type>
             <Description>OV inmeldingen fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>ivhst</Default>
-            <Setting>ivhst</Setting>
-            <Type>Timer</Type>
-            <Description>Inmeld vertraging fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>ibhst</Default>
-            <Setting>ibhst</Setting>
-            <Type>Timer</Type>
-            <Description>Inmeld bewaking fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>gbhst</Default>
-            <Setting>gbhst</Setting>
-            <Type>Timer</Type>
-            <Description>Groenbewaking fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>blkhst</Default>
-            <Setting>blkhst</Setting>
-            <Type>Timer</Type>
-            <Description>Blokkeringstijd fase _E1_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
             <Default>natxdhst</Default>
@@ -666,64 +636,52 @@
             <Description>Extra groentijd na TXD fase _E1_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>rthst</Default>
-            <Setting>rthst</Setting>
-            <Type>Timer</Type>
-            <Description>Ongehinderde rijtijd fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>gbhst</Default>
-            <Setting>gbhst</Setting>
-            <Type>HulpElement</Type>
-            <Description>Groenbewaking fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>priohst</Default>
-            <Setting>priohst</Setting>
-            <Type>HulpElement</Type>
-            <Description>Toekenning prioriteit fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>omaxhst</Default>
-            <Setting>omaxhst</Setting>
-            <Type>Parameter</Type>
-            <Description>Ondermaximum fase _E1_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
-            <Default>mwthst</Default>
-            <Setting>mwthst</Setting>
-            <Type>Parameter</Type>
-            <Description>Maximale wachttijd fase _E1_ tbv OV ingreep tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
             <Default>priohst</Default>
             <Setting>priohst</Setting>
             <Type>Parameter</Type>
             <Description>Prioriteit fase _E1_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>mingov</Default>
-            <Setting>mingov</Setting>
-            <Type>Parameter</Type>
-            <Description>Minimale groentijd bij afkappen fase _E1_ tijdens plan _E2_</Description>
-          </Setting>
-          <Setting>
             <Default>altghst</Default>
             <Setting>altghst</Setting>
             <Type>Parameter</Type>
-            <Description>Alternatieve groentijd fase _E1_ tijden halfstar regelen</Description>
+            <Description>Alternatieve groentijd _E1_ _E2_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
             <Default>altphst</Default>
             <Setting>altphst</Setting>
             <Type>Parameter</Type>
-            <Description>Alternatieve ruimte fase _E1_ tijden halfstar regelen</Description>
+            <Description>Alternatieve ruimte _E1_ _E2_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
             <Default>altghst</Default>
             <Setting>altghst</Setting>
             <Type>Schakelaar</Type>
-            <Description>Alternatief realiseren fase _E1_ toestaan tijdens halfstar regelen</Description>
+            <Description>Alternatief realiseren _E1_ _E2_ toestaan tijdens halfstar regelen</Description>
+          </Setting>
+          <Setting>
+            <Default>tegenov</Default>
+            <Setting>tegenov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Tegenhouden hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>afkwgov</Default>
+            <Setting>afkwgov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Afkappen WG hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>afkvgov</Default>
+            <Setting>afkvgov</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Afkappen VG hoofdrichting _E1_ bij OV ingreep</Description>
+          </Setting>
+          <Setting>
+            <Default>natxdhst</Default>
+            <Setting>natxdhst</Setting>
+            <Type>Parameter</Type>
+            <Description>Maximale tijd na TXD tbv. verlengen voor OV ingreep bij fase _E1_</Description>
           </Setting>
         </Settings>
       </CodePieceData>
