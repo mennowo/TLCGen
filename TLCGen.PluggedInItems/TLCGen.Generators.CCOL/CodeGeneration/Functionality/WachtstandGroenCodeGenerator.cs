@@ -73,7 +73,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.Wachtgroen == NooitAltijdAanUitEnum.SchAan ||
                             fcm.Wachtgroen == NooitAltijdAanUitEnum.SchUit)
-                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, (bool) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
+                            sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, (boolv) (SCH[{_schpf}{_schwg}{fcm.Naam}]));");
                         else if (fcm.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
                             sb.AppendLine($"{ts}aanvraag_wachtstand_exp({fcm.GetDefine()}, TRUE);");
                     }

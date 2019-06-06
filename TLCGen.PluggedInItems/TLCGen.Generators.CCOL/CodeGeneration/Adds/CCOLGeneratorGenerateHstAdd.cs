@@ -112,12 +112,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("bool application1_tig_Add()");
+            sb.AppendLine("boolv application1_tig_Add()");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}return 0;");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("bool application2_tig_Add()");
+            sb.AppendLine("boolv application2_tig_Add()");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}return 0;");
             sb.AppendLine("}");

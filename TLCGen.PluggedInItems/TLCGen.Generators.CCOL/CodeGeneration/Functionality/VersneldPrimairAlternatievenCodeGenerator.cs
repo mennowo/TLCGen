@@ -241,7 +241,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}{{");
                     foreach (var r in molens)
                     {
-                        sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, (bool)PFPR[fc]);");
+                        sb.AppendLine($"{ts}{ts}set_FPRML_fk_gkl(fc, PR{r.Reeks}, {r.Reeks}, {r.Reeks}MAX, (boolv)PFPR[fc]);");
                     }
                     sb.AppendLine($"{ts}}}");
                     sb.AppendLine();
@@ -523,7 +523,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                             sb.Append("".PadLeft(pre));
                                         }
                                         ++i;
-                                        sb.Append($"(bool) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
+                                        sb.Append($"(boolv) (CV[{_fcpf}{primarySignalGroup.Item2.FaseCyclus}] && AlternatieveRuimte({_fcpf}{alternativeSignalGroup.Key}, {_fcpf}{primarySignalGroup.Item2.FaseCyclus}, {_prmpf}{_prmaltg}{mlidx}{alternativeSignalGroup.Key}))");
                                     }
                                     sb.AppendLine(");");
                                 }

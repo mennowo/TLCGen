@@ -299,7 +299,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sgv != null && sgv.Type == FaseTypeEnum.Voetganger &&
                                 sgn != null && sgn.Type == FaseTypeEnum.Voetganger)
                             {
-                                sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
+                                sb.Append($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (boolv) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}] && (");
                                 int i = 0;
                                 foreach (var d in nl.Detectoren)
                                 {
@@ -311,7 +311,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (bool) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}]));");
+                                sb.AppendLine($"{ts}set_MRLW({_fcpf}{nl.FaseNaar}, {_fcpf}{nl.FaseVan}, (boolv) (SG[{_fcpf}{nl.FaseVan}] && A[{_fcpf}{nl.FaseNaar}]));");
 							}
                         }
                     }

@@ -426,7 +426,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCKlokPerioden:
                     return new List<Tuple<string, string, string>>
                     {
-                        //new Tuple<string, string, string>("bool", "omschakelmag", "FALSE"),
+                        //new Tuple<string, string, string>("boolv", "omschakelmag", "FALSE"),
                         new Tuple<string, string, string>("char", "volgMaster", "TRUE")
                     };
                 default:
@@ -877,11 +877,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(TRUE), (bool)(TRUE));");
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (boolv)(TRUE), (boolv)(TRUE));");
 							}
 							else
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(SCH[{_schpf}{_schca}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (boolv)(SCH[{_schpf}{_schca}{fc.Naam}]), (boolv)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
@@ -921,7 +921,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine();
 					foreach (var fc in c.Fasen)
 					{
-						sb.AppendLine($"{ts}set_ym_pl_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schmv}{fc.Naam}]));");
+						sb.AppendLine($"{ts}set_ym_pl_halfstar({_fcpf}{fc.Naam}, (boolv)(SCH[{_schpf}{_schmv}{fc.Naam}]));");
 					}
 
 					return sb.ToString();
@@ -1117,7 +1117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (fcpl.B2.HasValue && fcpl.D2.HasValue)
                                 {
-                                    sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, (bool)(IH[{_hpf}{_hplact}]));");
+                                    sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, (boolv)(IH[{_hpf}{_hplact}]));");
                                 }
                             }
                             sb.AppendLine();
@@ -1270,7 +1270,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}/* kopieer signaalplantijden - na wijziging */");
 					sb.AppendLine($"{ts}/* ---------------------------------------- */");
-                    sb.AppendLine($"{ts}#if defined CCOLTIG");
+                    sb.AppendLine($"{ts}#if defined CCOL_V");
 					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TRIG)");
                     sb.AppendLine($"{ts}#else");
 					sb.AppendLine($"{ts}{ts}if (SCH[{_schpf}{_schinst}] || COPY_2_TIG)");
@@ -1289,7 +1289,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     sb.AppendLine($"{ts}{ts}check_signalplans(); /* check signalplans */");
 					sb.AppendLine($"{ts}{ts}SCH[{_schpf}{_schinst}] = 0;");
-					sb.AppendLine($"{ts}{ts}#if defined CCOLTIG");
+					sb.AppendLine($"{ts}{ts}#if defined CCOL_V");
 					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TRIG = FALSE;");
 					sb.AppendLine($"{ts}{ts}#else");
 					sb.AppendLine($"{ts}{ts}{ts}COPY_2_TIG = FALSE;");
