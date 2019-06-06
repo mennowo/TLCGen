@@ -1008,7 +1008,11 @@ bool IsConflict(count fc1, count fc2)
 {
 	count i;
 	for (i = 0; i < FKFC_MAX[fc1]; ++i) { /* KFC=confl.; GKFC=KFC+groenconfl.; FKFC=GKFC+fictieve confl. */
+#ifdef CCOLTIG
+		if (KF_pointer[fc1][i] == fc2) {
+#else
 		if (TO_pointer[fc1][i] == fc2) {
+#endif
 			return (bool)TRUE;
 		}
 	}

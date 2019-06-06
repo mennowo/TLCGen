@@ -1,6 +1,7 @@
 #ifndef EXTRA_FUNC
 #define EXTRA_FUNC
 
+#include <stdio.h>
 #include <stdlib.h>
 
 #ifdef NALOPEN
