@@ -29,6 +29,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
             }
             sb.AppendLine();
+            sb.AppendLine($"#include \"booldef.h\"       /* bool typedef                 */");
+            sb.AppendLine();
             sb.Append(GenerateSysHFasen(c));
             sb.AppendLine();
             sb.Append(GenerateSysHUitgangen(c));

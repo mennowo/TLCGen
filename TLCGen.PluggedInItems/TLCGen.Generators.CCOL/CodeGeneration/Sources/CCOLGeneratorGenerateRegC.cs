@@ -120,15 +120,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}{ts}#include \"fbericht.h\"");
                 sb.AppendLine($"{ts}#endif");
             }
-            sb.AppendLine($"{ts}#include \"prsvar.c\"   /* parameters parser                 */");
-            sb.AppendLine($"{ts}#include \"control.c\"  /* controller interface              */");
-            sb.AppendLine($"{ts}#include \"rtappl.h\"   /* applicatie routines               */");
-            sb.AppendLine($"{ts}#include \"stdfunc.h\"  /* standaard functies                */");
-            sb.AppendLine($"{ts}#include \"extra_func.c\" /* extra standaard functies        */");
+            sb.AppendLine($"{ts}#include \"prsvar.c\"        /* parameters parser            */");
+            sb.AppendLine($"{ts}#include \"control.c\"       /* controller interface         */");
+            sb.AppendLine($"{ts}#include \"rtappl.h\"        /* applicatie routines          */");
+            sb.AppendLine($"{ts}#include \"stdfunc.h\"       /* standaard functies           */");
+            sb.AppendLine($"{ts}#include \"extra_func.c\"    /* extra standaard functies     */");
             if(controller.OVData.OVIngrepen.Count > 0 || controller.OVData.HDIngrepen.Count > 0)
             {
-                sb.AppendLine($"{ts}#include \"ov.h\"       /* ov-afhandeling                    */");
-                sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");
+                sb.AppendLine($"{ts}#include \"ov.h\"            /* ov-afhandeling               */");
+                sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV  */");
             }
             sb.AppendLine();
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST)");
