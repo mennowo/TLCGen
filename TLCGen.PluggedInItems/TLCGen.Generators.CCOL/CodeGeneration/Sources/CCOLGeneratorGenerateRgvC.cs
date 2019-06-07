@@ -64,7 +64,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}mulv TC_rgv[MAX_AANTAL_CONFLICTGROEPEN];");
-            sb.AppendLine($"{ts}string TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
+            sb.AppendLine($"{ts}stringv TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine("#endif");
             sb.AppendLine("");
             sb.AppendLine("/* Robugrover includes */");
