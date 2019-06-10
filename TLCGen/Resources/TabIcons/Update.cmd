@@ -1,2 +1,2 @@
-"..\..\..\..\..\..\..\Personal Applications\SvgToXaml\SvgToXaml.exe" BuildDict /inputdir "." /outputdir ".." /outputname TabIcons
+"C:\Personal Applications\SvgToXaml\SvgToXaml.exe" BuildDict /inputdir "." /outputdir ".." /outputname TabIcons
 pause

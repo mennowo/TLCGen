@@ -1,47 +1,40 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Geometry x:Key="FasenTabGeometry">F0 M16,16z M0,0z M340.41472,498.3837C340.41472,499.58008 339.44486,500.54994 338.24847,500.54994 337.05209,500.54994 336.08223,499.58008 336.08223,498.3837L336.08223,490.68099C336.08223,489.4846 337.05209,488.51474 338.24847,488.51474 339.44486,488.51474 340.41472,489.4846 340.41472,490.68099z</Geometry>
   <DrawingGroup x:Key="FasenTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <DrawingGroup Transform="1.0262926,0,0,1.0262926,-8.8934335,-13.23498">
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FF000000" Opacity="1" Transform="1.2953748,0,0,1.2953748,-99.910075,-137.23208" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="EvenOdd" Transform="1.2953748,0,0,1.2953748,-99.910075,-137.23208" Figures="M16,16z M0,0z M340.41472,498.3837C340.41472,499.58008 339.44486,500.54994 338.24847,500.54994 337.05209,500.54994 336.08223,499.58008 336.08223,498.3837L336.08223,490.68099C336.08223,489.4846 337.05209,488.51474 338.24847,488.51474 339.44486,488.51474 340.41472,489.4846 340.41472,490.68099z" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFFF0000" Opacity="1" Transform="0.8,0,0,0.8,67.649695,99.67674" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,498.3837" Transform="0.8,0,0,0.8,67.649695,99.67674" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFFFFF00" Opacity="1" Transform="0.8,0,0,0.8,67.649695,100.67453" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,503.3726" Transform="0.8,0,0,0.8,67.649695,100.67453" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FF00FF00" Opacity="1" Transform="0.8,0,0,0.8,67.649695,101.67232" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,508.3616" Transform="0.8,0,0,0.8,67.649695,101.67232" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0262926,0,0,1.0262926,-8.8934335,-13.23498">
+        <DrawingGroup Transform="1.2953748,0,0,1.2953748,-99.910075,-137.23208">
+          <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource FasenTabGeometry}" />
+        </DrawingGroup>
+        <DrawingGroup Transform="0.8,0,0,0.8,67.649695,99.67674">
+          <GeometryDrawing Brush="#FFFF0000">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,498.3837" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="0.8,0,0,0.8,67.649695,100.67453">
+          <GeometryDrawing Brush="#FFFFFF00">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,503.3726" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+        <DrawingGroup Transform="0.8,0,0,0.8,67.649695,101.67232">
+          <GeometryDrawing Brush="#FF00FF00">
+            <GeometryDrawing.Geometry>
+              <EllipseGeometry RadiusX="2.1662" RadiusY="2.1662" Center="338.2485,508.3616" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="FasenTabDrawingImage" Drawing="{StaticResource FasenTabDrawingGroup}" />
   <Geometry x:Key="AlgemeenTabGeometry">F1 M16,16z M0,0z M338.23883,502.37265L338.23883,507.37265</Geometry>
   <DrawingGroup x:Key="AlgemeenTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <DrawingGroup Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
         <GeometryDrawing Brush="#FF80E5FF">
           <GeometryDrawing.Pen>
             <Pen Brush="#FF000000" Thickness="1.30692387" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
@@ -67,12 +60,13 @@
   <Geometry x:Key="InterSignaalGroepTabGeometry1">F1 M16,16z M0,0z M331.77032,501.47796L344.72388,501.47797</Geometry>
   <Geometry x:Key="InterSignaalGroepTabGeometry2">F1 M16,16z M0,0z M331.88302,505.8489L343.10842,505.84891</Geometry>
   <Geometry x:Key="InterSignaalGroepTabGeometry3">F1 M16,16z M0,0z M336.34414,509.98326L336.34415,496.90414</Geometry>
-  <Geometry x:Key="InterSignaalGroepTabGeometry4">F1 M16,16z M0,0z M342.45932,500.37604L341.41901,500.37604 341.41901,500.06694 341.768,500.06694 341.768,498.83385Q341.7447,498.91525 341.6866,498.97843 341.6301,499.04163 341.54867,499.08479 341.46887,499.12629 341.36919,499.14959 341.27109,499.17119 341.16644,499.17119L341.16644,498.82719Q341.27945,498.82719 341.38581,498.79059 341.49383,498.75239 341.57858,498.67592 341.66328,498.59952 341.71485,498.48481 341.76805,498.36848 341.76805,498.20728L342.11205,498.20728 342.11205,500.06689 342.45937,500.06689 342.45937,500.37599z</Geometry>
-  <Geometry x:Key="InterSignaalGroepTabGeometry5">F1 M16,16z M0,0z M342.97283,499.29086Q342.97283,499.07315 343.01933,498.87041 343.06583,498.66766 343.16391,498.51311 343.26191,498.35856 343.41983,498.2655 343.57937,498.1708 343.80371,498.1708 344.02806,498.1708 344.18594,498.2655 344.34547,498.3586 344.44518,498.51311 344.54488,498.66766 344.58977,498.87041 344.63467,499.07315 344.63467,499.29086 344.63467,499.50856 344.58977,499.7113 344.54487,499.91238 344.44685,500.07026 344.34875,500.22647 344.18926,500.3212 344.03139,500.4143 343.80371,500.4143 343.57604,500.4143 343.41651,500.3212 343.25863,500.2265 343.15892,500.07026 343.06082,499.91238 343.01766,499.7113 342.97276,499.50856 342.97276,499.29086z M343.31683,499.29086Q343.31683,499.44374,343.33673,499.58666L344.18759,498.73248Q344.13109,498.61947 344.03802,498.54967 343.94662,498.47987 343.8037,498.47987 343.56606,498.47987 343.44142,498.69424 343.31678,498.90862 343.31678,499.29085z M343.80375,500.1035Q343.95,500.1035 344.04306,500.032 344.13776,499.9605 344.19096,499.84587 344.24576,499.72954 344.26736,499.5833 344.29066,499.43706 344.29066,499.29082 344.29066,499.15122 344.27076,499.01827L343.42655,499.86581Q343.48305,499.97383 343.57113,500.03864 343.66083,500.10344 343.80378,500.10344z</Geometry>
-  <Geometry x:Key="InterSignaalGroepTabGeometry6">F1 M16,16z M0,0z M331.10507,510.50641L331.10507,496.23889 345.37259,496.23889</Geometry>
-  <Geometry x:Key="InterSignaalGroepTabGeometry7">F1 M16,16z M0,0z M333.32779,508.03271Q333.32779,507.81501 333.37429,507.61226 333.42079,507.40952 333.51887,507.25497 333.61697,507.10041 333.77479,507.00735 333.93433,506.91265 334.15868,506.91265 334.38303,506.91265 334.5409,507.00735 334.70044,507.10045 334.80015,507.25497 334.89985,507.40952 334.94473,507.61226 334.98963,507.81501 334.98963,508.03271 334.98963,508.25041 334.94473,508.45315 334.89983,508.65424 334.80181,508.81211 334.70371,508.96832 334.54423,509.06305 334.38635,509.15615 334.15868,509.15615 333.93101,509.15615 333.77147,509.06305 333.6136,508.96835 333.51388,508.81211 333.41588,508.65424 333.37263,508.45315 333.32773,508.25041 333.32773,508.03271z M333.67179,508.03271Q333.67179,508.1856,333.69169,508.32851L334.54255,507.47433Q334.48605,507.36132 334.39299,507.29153 334.30159,507.22173 334.15867,507.22173 333.92103,507.22173 333.79639,507.43611 333.67175,507.65048 333.67175,508.03271z M334.15871,508.84535Q334.30495,508.84535 334.39801,508.77385 334.49271,508.70235 334.54592,508.58772 334.60072,508.47139 334.62232,508.32515 334.64562,508.17891 334.64562,508.03267 334.64562,507.89307 334.62572,507.76013L333.7815,508.60766Q333.838,508.71568 333.92608,508.7805 334.01578,508.8453 334.15874,508.8453z</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry4">F1 M16,16z M0,0z M10.476258,12.861905L10.476262,1.3209218</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry5">F1 M16,16z M0,0z M342.45932,500.37604L341.41901,500.37604 341.41901,500.06694 341.768,500.06694 341.768,498.83385Q341.7447,498.91525 341.6866,498.97843 341.6301,499.04163 341.54867,499.08479 341.46887,499.12629 341.36919,499.14959 341.27109,499.17119 341.16644,499.17119L341.16644,498.82719Q341.27945,498.82719 341.38581,498.79059 341.49383,498.75239 341.57858,498.67592 341.66328,498.59952 341.71485,498.48481 341.76805,498.36848 341.76805,498.20728L342.11205,498.20728 342.11205,500.06689 342.45937,500.06689 342.45937,500.37599z</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry6">F1 M16,16z M0,0z M342.97283,499.29086Q342.97283,499.07315 343.01933,498.87041 343.06583,498.66766 343.16391,498.51311 343.26191,498.35856 343.41983,498.2655 343.57937,498.1708 343.80371,498.1708 344.02806,498.1708 344.18594,498.2655 344.34547,498.3586 344.44518,498.51311 344.54488,498.66766 344.58977,498.87041 344.63467,499.07315 344.63467,499.29086 344.63467,499.50856 344.58977,499.7113 344.54487,499.91238 344.44685,500.07026 344.34875,500.22647 344.18926,500.3212 344.03139,500.4143 343.80371,500.4143 343.57604,500.4143 343.41651,500.3212 343.25863,500.2265 343.15892,500.07026 343.06082,499.91238 343.01766,499.7113 342.97276,499.50856 342.97276,499.29086z M343.31683,499.29086Q343.31683,499.44374,343.33673,499.58666L344.18759,498.73248Q344.13109,498.61947 344.03802,498.54967 343.94662,498.47987 343.8037,498.47987 343.56606,498.47987 343.44142,498.69424 343.31678,498.90862 343.31678,499.29085z M343.80375,500.1035Q343.95,500.1035 344.04306,500.032 344.13776,499.9605 344.19096,499.84587 344.24576,499.72954 344.26736,499.5833 344.29066,499.43706 344.29066,499.29082 344.29066,499.15122 344.27076,499.01827L343.42655,499.86581Q343.48305,499.97383 343.57113,500.03864 343.66083,500.10344 343.80378,500.10344z</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry7">F1 M16,16z M0,0z M331.10507,510.50641L331.10507,496.23889 345.37259,496.23889</Geometry>
+  <Geometry x:Key="InterSignaalGroepTabGeometry8">F1 M16,16z M0,0z M333.32779,508.03271Q333.32779,507.81501 333.37429,507.61226 333.42079,507.40952 333.51887,507.25497 333.61697,507.10041 333.77479,507.00735 333.93433,506.91265 334.15868,506.91265 334.38303,506.91265 334.5409,507.00735 334.70044,507.10045 334.80015,507.25497 334.89985,507.40952 334.94473,507.61226 334.98963,507.81501 334.98963,508.03271 334.98963,508.25041 334.94473,508.45315 334.89983,508.65424 334.80181,508.81211 334.70371,508.96832 334.54423,509.06305 334.38635,509.15615 334.15868,509.15615 333.93101,509.15615 333.77147,509.06305 333.6136,508.96835 333.51388,508.81211 333.41588,508.65424 333.37263,508.45315 333.32773,508.25041 333.32773,508.03271z M333.67179,508.03271Q333.67179,508.1856,333.69169,508.32851L334.54255,507.47433Q334.48605,507.36132 334.39299,507.29153 334.30159,507.22173 334.15867,507.22173 333.92103,507.22173 333.79639,507.43611 333.67175,507.65048 333.67175,508.03271z M334.15871,508.84535Q334.30495,508.84535 334.39801,508.77385 334.49271,508.70235 334.54592,508.58772 334.60072,508.47139 334.62232,508.32515 334.64562,508.17891 334.64562,508.03267 334.64562,507.89307 334.62572,507.76013L333.7815,508.60766Q333.838,508.71568 333.92608,508.7805 334.01578,508.8453 334.15874,508.8453z</Geometry>
   <DrawingGroup x:Key="InterSignaalGroepTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing Brush="#FFB3B3B3">
         <GeometryDrawing.Geometry>
           <RectangleGeometry RadiusX="0.8202" RadiusY="0.8202" Rect="340.7151,505.8489,2.3933,2.3933" />
@@ -103,91 +97,75 @@
           <Pen Brush="#FF666666" Thickness="0.60000002" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF666666" Thickness="0.60000002" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M10.476258,12.861905L10.476262,1.3209218" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <DrawingGroup>
-        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry4}" />
-        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry5}" />
+      <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+        <GeometryDrawing Geometry="{StaticResource InterSignaalGroepTabGeometry4}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF666666" Thickness="0.60000002" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
       </DrawingGroup>
-      <GeometryDrawing Geometry="{StaticResource InterSignaalGroepTabGeometry6}">
+      <DrawingGroup Opacity="1">
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry5}" />
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry6}" />
+      </DrawingGroup>
+      <GeometryDrawing Geometry="{StaticResource InterSignaalGroepTabGeometry7}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.7324841" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <DrawingGroup>
-        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry7}" />
+      <DrawingGroup Opacity="1">
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource InterSignaalGroepTabGeometry8}" />
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="InterSignaalGroepTabDrawingImage" Drawing="{StaticResource InterSignaalGroepTabDrawingGroup}" />
-  <Geometry x:Key="BitmapTabGeometry">F1 M16,16z M0,0z M331.23883,504.86102C336.96592,506.44105 338.80928,504.33435 340.10203,503.99919 341.39478,503.66403 345.23883,503.37265 345.23883,503.37265L345.23883,510.37265 331.23883,510.37265z</Geometry>
+  <Geometry x:Key="BitmapTabGeometry1">F1 M16,16z M0,0z M331.23883,504.86102C336.96592,506.44105 338.80928,504.33435 340.10203,503.99919 341.39478,503.66403 345.23883,503.37265 345.23883,503.37265L345.23883,510.37265 331.23883,510.37265z</Geometry>
+  <Geometry x:Key="BitmapTabGeometry2">F1 M16,16z M0,0z M1,6.0889197C4.7879611,6.5916556 5.4822154,7.9083449 6.4398076,8.2435021 7.3973998,8.5786594 12.616277,10.230506 12.616277,10.230506L15,10.422024 15,14.999999 1,14.999999z</Geometry>
+  <Geometry x:Key="BitmapTabGeometry3">F1 M16,16z M0,0z M11.634746,3.0246246C11.634746,4.0030222 10.841598,4.7961702 9.8632002,4.7961702 8.8848025,4.7961702 8.0916545,4.0030222 8.0916545,3.0246246 8.0916545,2.0462269 8.8848025,1.2530789 9.8632002,1.2530789 10.841598,1.2530789 11.634746,2.0462269 11.634746,3.0246246z</Geometry>
   <DrawingGroup x:Key="BitmapTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <DrawingGroup Transform="1.064821,0,0,1.064821,-21.92497,-32.629105">
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFAAEEFF" Opacity="1" Transform="1,0,0,1,330.23883,495.37265" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="1,1,14,14" Transform="1,0,0,1,330.23883,495.37265" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing Brush="#FFE9C6AF" Geometry="{StaticResource BitmapTabGeometry}" />
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFAADE87" Opacity="1" Transform="1,0,0,1,330.23883,495.37265" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M1,6.0889197C4.7879611,6.5916556 5.4822154,7.9083449 6.4398076,8.2435021 7.3973998,8.5786594 12.616277,10.230506 12.616277,10.230506L15,10.422024 15,14.999999 1,14.999999z" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFFFE680" Opacity="1" Transform="1,0,0,1,331.98644,496.52176" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,331.98644,496.52176" Figures="M16,16z M0,0z M11.634746,3.0246246C11.634746,4.0030222 10.841598,4.7961702 9.8632002,4.7961702 8.8848025,4.7961702 8.0916545,4.0030222 8.0916545,3.0246246 8.0916545,2.0462269 8.8848025,1.2530789 9.8632002,1.2530789 10.841598,1.2530789 11.634746,2.0462269 11.634746,3.0246246z" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Pen>
-            <Pen Brush="#FF000000" Thickness="1.02600002" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
-          </GeometryDrawing.Pen>
-          <GeometryDrawing.Geometry>
-            <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="1,1,14,14" Transform="1,0,0,1,330.23883,495.37265" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.064821,0,0,1.064821,-21.92497,-32.629105">
+        <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+          <GeometryDrawing Brush="#FFAAEEFF">
+            <GeometryDrawing.Geometry>
+              <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="1,1,14,14" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
+        <GeometryDrawing Brush="#FFE9C6AF" Geometry="{StaticResource BitmapTabGeometry1}" />
+        <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+          <GeometryDrawing Brush="#FFAADE87" Geometry="{StaticResource BitmapTabGeometry2}" />
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,331.98644,496.52176">
+          <GeometryDrawing Brush="#FFFFE680" Geometry="{StaticResource BitmapTabGeometry3}" />
+        </DrawingGroup>
+        <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+          <GeometryDrawing>
+            <GeometryDrawing.Pen>
+              <Pen Brush="#FF000000" Thickness="1.02600002" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
+            </GeometryDrawing.Pen>
+            <GeometryDrawing.Geometry>
+              <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="1,1,14,14" />
+            </GeometryDrawing.Geometry>
+          </GeometryDrawing>
+        </DrawingGroup>
       </DrawingGroup>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="BitmapTabDrawingImage" Drawing="{StaticResource BitmapTabDrawingGroup}" />
-  <Geometry x:Key="OVTabGeometry">F1 M16,16z M0,0z M335.77464,495.88103L340.75179,495.88103C342.65843,495.88103,344.19338,497.41597,344.19338,499.32261L344.19338,507.67979C344.19338,508.83835,343.45325,509.64861,342.52844,509.64861L334.11488,509.64861C333.09656,509.64861,332.33306,508.74485,332.33306,507.67979L332.33306,499.32261C332.33306,497.41597,333.868,495.88103,335.77464,495.88103z</Geometry>
+  <Geometry x:Key="OVTabGeometry1">F1 M16,16z M0,0z M335.77464,495.88103L340.75179,495.88103C342.65843,495.88103,344.19338,497.41597,344.19338,499.32261L344.19338,507.67979C344.19338,508.83835,343.45325,509.64861,342.52844,509.64861L334.11488,509.64861C333.09656,509.64861,332.33306,508.74485,332.33306,507.67979L332.33306,499.32261C332.33306,497.41597,333.868,495.88103,335.77464,495.88103z</Geometry>
+  <Geometry x:Key="OVTabGeometry2">F1 M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z</Geometry>
+  <Geometry x:Key="OVTabGeometry3">F1 M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z</Geometry>
   <DrawingGroup x:Key="OVTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <DrawingGroup Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
-        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource OVTabGeometry}" />
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.77680202,0,0,0.77680202,330.49661,498.76049" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="0.77680202,0,0,0.77680202,330.49661,498.76049" Figures="M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
-        <GeometryDrawing>
-          <GeometryDrawing.Brush>
-            <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.77680202,0,0,0.77680202,337.51837,498.76049" />
-          </GeometryDrawing.Brush>
-          <GeometryDrawing.Geometry>
-            <PathGeometry FillRule="Nonzero" Transform="0.77680202,0,0,0.77680202,337.51837,498.76049" Figures="M16,16z M0,0z M6.520907,10.962146A1.188707,1.188707,0,1,1,4.1434931,10.962146A1.188707,1.188707,0,1,1,6.520907,10.962146z" />
-          </GeometryDrawing.Geometry>
-        </GeometryDrawing>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Opacity="1" Transform="1.0311281,0,0,1.0311281,-10.528732,-15.669034">
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource OVTabGeometry1}" />
+        <DrawingGroup Transform="0.77680202,0,0,0.77680202,330.49661,498.76049">
+          <GeometryDrawing Brush="#FFFFFFFF" Geometry="{StaticResource OVTabGeometry2}" />
+        </DrawingGroup>
+        <DrawingGroup Transform="0.77680202,0,0,0.77680202,337.51837,498.76049">
+          <GeometryDrawing Brush="#FFFFFFFF" Geometry="{StaticResource OVTabGeometry3}" />
+        </DrawingGroup>
         <GeometryDrawing Brush="#FFFFFFFF">
           <GeometryDrawing.Geometry>
             <RectangleGeometry RadiusX="0.7595" RadiusY="0.5776" Rect="335.1313,496.6044,6.2002,1.4961" />
@@ -227,57 +205,53 @@
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="OVTabDrawingImage" Drawing="{StaticResource OVTabDrawingGroup}" />
-  <Geometry x:Key="KlokPeriodenTabGeometry1">F1 M16,16z M0,0z M338.23883,510.01836L338.23883,508.69402</Geometry>
-  <Geometry x:Key="KlokPeriodenTabGeometry2">F1 M16,16z M0,0z M331.52333,503.37265L332.84767,503.37265</Geometry>
-  <Geometry x:Key="KlokPeriodenTabGeometry3">F1 M16,16z M0,0z M343.5263,503.37265L344.85064,503.37265</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry1">F1 M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,1,1,-15.761716,-2.479255A5.2991977,5.2991977,0,1,1,-5.163321,-2.479255z</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry2">F1 M16,16z M0,0z M8.2528754,8.1364107A0.77857316,0.77857316,0,1,1,6.6957291,8.1364107A0.77857316,0.77857316,0,1,1,8.2528754,8.1364107z</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry3">F1 M16,16z M0,0z M5.4909067,3.6189263L8.0000014,8.0000013 11.38644,9.9551626</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry4">F1 M16,16z M0,0z M8,2.6766499L8,1.3523108</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry5">F1 M16,16z M0,0z M338.23883,510.01836L338.23883,508.69402</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry6">F1 M16,16z M0,0z M331.52333,503.37265L332.84767,503.37265</Geometry>
+  <Geometry x:Key="KlokPeriodenTabGeometry7">F1 M16,16z M0,0z M343.5263,503.37265L344.85064,503.37265</Geometry>
   <DrawingGroup x:Key="KlokPeriodenTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FFFFEEAA" Opacity="1" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1.3141231,0,0,1.3141231,351.98787,506.6307" Figures="M16,16z M0,0z M-5.163321,-2.479255A5.2991977,5.2991977,0,1,1,-15.761716,-2.479255A5.2991977,5.2991977,0,1,1,-5.163321,-2.479255z" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FF000000" Opacity="1" Transform="2.046432,0,0,2.046432,322.94318,486.72204" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="2.046432,0,0,2.046432,322.94318,486.72204" Figures="M16,16z M0,0z M8.2528754,8.1364107A0.77857316,0.77857316,0,1,1,6.6957291,8.1364107A0.77857316,0.77857316,0,1,1,8.2528754,8.1364107z" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.3" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M5.4909067,3.6189263L8.0000014,8.0000013 11.38644,9.9551626" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1,0,0,1,330.23883,495.37265" Figures="M16,16z M0,0z M8,2.6766499L8,1.3523108" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry1}">
+    <DrawingGroup.Transform>
+      <TranslateTransform X="15.761716842651367" Y="7.7810397148132324" />
+    </DrawingGroup.Transform>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
+      <DrawingGroup Transform="1.3141231,0,0,1.3141231,351.98787,506.6307">
+        <GeometryDrawing Brush="#FFFFEEAA" Geometry="{StaticResource KlokPeriodenTabGeometry1}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.17697668" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Transform="2.046432,0,0,2.046432,322.94318,486.72204">
+        <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource KlokPeriodenTabGeometry2}" />
+      </DrawingGroup>
+      <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+        <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry3}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.3" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Transform="1,0,0,1,330.23883,495.37265">
+        <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry4}">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry5}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry2}">
+      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry6}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry3}">
+      <GeometryDrawing Geometry="{StaticResource KlokPeriodenTabGeometry7}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
@@ -288,7 +262,7 @@
   <Geometry x:Key="DetectorenTabGeometry1">F1 M16,16z M0,0z M334.71875,497.46875C333.25976,497.46875,332.0625,498.666,332.0625,500.125L332.0625,505.90625 333.46875,505.90625 333.46875,500.125C333.46875,499.41738,334.01114,498.84375,334.71875,498.84375L338.09375,498.84375 338.09375,497.46875 334.71875,497.46875z</Geometry>
   <Geometry x:Key="DetectorenTabGeometry2">F0 M16,16z M0,0z M336.84453,498.15817L335.87588,500.07353 339.90184,498.15817 335.87588,496.24281z</Geometry>
   <DrawingGroup x:Key="DetectorenTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing>
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
@@ -297,7 +271,7 @@
           <RectangleGeometry RadiusX="1.9554" RadiusY="1.9554" Rect="331.2281,506.201,11.3378,4.3329" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
-      <DrawingGroup>
+      <DrawingGroup Opacity="1">
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource DetectorenTabGeometry1}" />
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource DetectorenTabGeometry2}">
           <GeometryDrawing.Pen>
@@ -321,7 +295,10 @@
   <Geometry x:Key="ModulesTabGeometry3">F1 M16,16z M0,0z M334.71875,497.46875C333.25976,497.46875,332.0625,498.666,332.0625,500.125L332.0625,503.32296 333.46875,503.32296 333.46875,500.125C333.46875,499.41738,334.01114,498.84375,334.71875,498.84375L338.09375,498.84375 338.09375,497.46875z</Geometry>
   <Geometry x:Key="ModulesTabGeometry4">F0 M16,16z M0,0z M336.84453,498.15817L335.87588,500.07353 339.90184,498.15817 335.87588,496.24281z</Geometry>
   <DrawingGroup x:Key="ModulesTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+    <DrawingGroup.Transform>
+      <TranslateTransform X="336.8246" Y="510.6082" />
+    </DrawingGroup.Transform>
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing>
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
@@ -330,7 +307,7 @@
           <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="339.7201,496.1497,5.7236,5.7236" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
-      <DrawingGroup Transform="1,0,0,1,-1.4769919,-0.0106833">
+      <DrawingGroup Opacity="1" Transform="1,0,0,1,-1.4769919,-0.0106833">
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource ModulesTabGeometry1}" />
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource ModulesTabGeometry2}">
           <GeometryDrawing.Pen>
@@ -338,15 +315,17 @@
           </GeometryDrawing.Pen>
         </GeometryDrawing>
       </DrawingGroup>
-      <GeometryDrawing>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="-336.8246,-510.6082,5.7236,5.7236" Transform="-1,0,0,-1,0,0" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <DrawingGroup Transform="-1,0,0,-1,678.02167,1006.7685">
+      <DrawingGroup Transform="-1,0,0,-1,0,0">
+        <GeometryDrawing>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.4" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <RectangleGeometry RadiusX="0.668" RadiusY="0.668" Rect="-336.8246,-510.6082,5.7236,5.7236" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Opacity="1" Transform="-1,0,0,-1,678.02167,1006.7685">
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource ModulesTabGeometry3}" />
         <GeometryDrawing Brush="#FF000000" Geometry="{StaticResource ModulesTabGeometry4}">
           <GeometryDrawing.Pen>
@@ -361,7 +340,7 @@
   <Geometry x:Key="SpecialsTabGeometry2">F1 M16,16z M0,0z M342.50056,507.52255L344.65836,509.64944</Geometry>
   <Geometry x:Key="SpecialsTabGeometry3">F1 M16,16z M0,0z M335.90975,504.31638C335.86865,504.12532 335.84715,503.92706 335.84715,503.72375 335.84715,502.17165 337.10538,500.91343 338.65749,500.91343</Geometry>
   <DrawingGroup x:Key="SpecialsTabDrawingGroup" ClipGeometry="M0,0 V16 H16 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-330.23883,-495.37265">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-330.23883,-495.37265">
       <GeometryDrawing Brush="#FF87AADE">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="0.97317314" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
@@ -370,25 +349,26 @@
           <RectangleGeometry RadiusX="0.3435" RadiusY="0.3435" Rect="331.0473,496.6865,7.1118,7.6102" />
         </GeometryDrawing.Geometry>
       </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FFFFFFFF" Opacity="1" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
+      <DrawingGroup Transform="0.79629303,0,0,0.79629303,189.28252,244.96961">
+        <GeometryDrawing>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
+      <DrawingGroup Transform="0.79629303,0,0,0.79629303,189.28252,244.96961">
+        <GeometryDrawing Brush="#FFFFFFFF">
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
       <GeometryDrawing Geometry="{StaticResource SpecialsTabGeometry1}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="1.25495756" StartLineCap="Square" EndLineCap="Square" LineJoin="Miter" />
@@ -399,17 +379,19 @@
           <Pen Brush="#FF000000" Thickness="2.62776661" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FF44AA00" Opacity="0.64135018" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Pen>
-          <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
-        </GeometryDrawing.Pen>
-        <GeometryDrawing.Geometry>
-          <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" Transform="0.79629303,0,0,0.79629303,189.28252,244.96961" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
+      <DrawingGroup Transform="0.79629303,0,0,0.79629303,189.28252,244.96961">
+        <GeometryDrawing>
+          <GeometryDrawing.Brush>
+            <SolidColorBrush Color="#FF44AA00" Opacity="0.64135018" />
+          </GeometryDrawing.Brush>
+          <GeometryDrawing.Pen>
+            <Pen Brush="#FF000000" Thickness="1.8" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+          </GeometryDrawing.Pen>
+          <GeometryDrawing.Geometry>
+            <EllipseGeometry RadiusX="5.8737" RadiusY="5.8737" Center="187.5,324.8622" />
+          </GeometryDrawing.Geometry>
+        </GeometryDrawing>
+      </DrawingGroup>
       <GeometryDrawing Geometry="{StaticResource SpecialsTabGeometry3}">
         <GeometryDrawing.Pen>
           <Pen Brush="#FF000000" Thickness="0.86123097" StartLineCap="Round" EndLineCap="Round" LineJoin="Miter" />
