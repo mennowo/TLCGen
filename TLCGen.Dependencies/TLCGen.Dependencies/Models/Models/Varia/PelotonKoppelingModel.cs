@@ -4,6 +4,15 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
 
+namespace TLCGen.Models.Enumerations
+{
+    public enum PelotonKoppelingType
+    {
+        DenHaag,
+        RHDHV
+    }
+}
+
 namespace TLCGen.Models
 {
     [Serializable]
@@ -16,6 +25,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string GekoppeldeSignaalGroep { get; set; }
 
+        public PelotonKoppelingType Type { get; set; }
         public int Meetperiode { get; set; }
         public int MaximaalHiaat { get; set; }
         public int MinimaalAantalVoertuigen { get; set; }

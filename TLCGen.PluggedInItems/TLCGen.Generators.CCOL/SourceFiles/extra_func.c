@@ -973,7 +973,7 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 	va_start(argpt, muit);
 	hdp = va_arg(argpt, va_count);
 	do {
-		if (EH[hdp]) ++edpel;
+		if (SH[hdp] || EH[hdp]) ++edpel;
         hdp = va_arg(argpt, va_count);
 	} while (hdp != END);
 	va_end(argpt);
