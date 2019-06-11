@@ -17,4 +17,8 @@ void reset_DSI_message(void);
 void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stiptheid, s_int16 aantalsecvertr, s_int16 PRM_lijnnr, s_int16 PRM_ritcat, s_int16 prio);
 #endif
 
+#ifdef OV_CHECK_WAGENNMR
+void WDNST_cleanup(void);
+bool WDNST_check(count fc);
+#endif
 #endif

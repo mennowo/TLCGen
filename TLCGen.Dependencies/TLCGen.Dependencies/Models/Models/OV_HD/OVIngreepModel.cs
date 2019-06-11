@@ -43,6 +43,7 @@ namespace TLCGen.Models
         public bool VasthoudenGroen { get; set; }
         public bool TussendoorRealiseren { get; set; }
         public bool CheckLijnNummer { get; set; }
+        public bool CheckWagenNummer { get; set; }
         public bool CheckRitCategorie { get; set; }
         public bool AlleLijnen { get; set; }
         public bool AlleRitCategorien { get; set; }

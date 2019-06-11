@@ -304,6 +304,18 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
+        [Description("Check op wagennummers")]
+        public bool CheckWagenNummer
+        {
+            get { return OVIngreep.CheckWagenNummer; }
+            set
+            {
+                OVIngreep.CheckWagenNummer = value;
+                RaisePropertyChanged<object>(nameof(CheckWagenNummer), broadcast: true);
+            }
+        }
+
+        [Browsable(false)]
         [Description("Check op ritcategorie")]
         public bool CheckRitCategorie
         {

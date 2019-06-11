@@ -187,3 +187,148 @@ void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stip
 }
 
 #endif
+
+#ifdef OV_CHECK_WAGENNMR
+
+/* Check op wagendienstnummer openbaar vervoer */
+#define WDNSTlist 10 /* maximaal 10 wagendienstnummers onthouden        */
+static const int WDNSTblock = 5;  /* wagendienstnummers maximaal 5 minuten blokkeren */
+
+static mulv WDNST_fc_in[FCMAX][WDNSTlist];        /* array met wagendienstnummer inmeldingen      */
+static mulv WDNST_fc_uit[FCMAX][WDNSTlist];       /* array met wagendienstnummer uitmeldingen     */
+static mulv WDNST_fc_voor[FCMAX][WDNSTlist];      /* array met wagendienstnummer voormeldingen    */
+static mulv WDNST_cifsect_in[FCMAX][WDNSTlist];   /* array met CIF_SEC_TELLER tijd inmeldingen    */
+static mulv WDNST_cifsect_uit[FCMAX][WDNSTlist];  /* array met CIF_SEC_TELLER tijd uitmeldingen   */
+static mulv WDNST_cifsect_voor[FCMAX][WDNSTlist]; /* array met CIF_SEC_TELLER tijd voormeldingen  */
+
+/* iedere (60 * WDNSTblock) seconde oude wagendienstnummers verwijderen */
+void WDNST_cleanup(void)
+{
+	if (TM) /* ivm snelheid 1 x per minuut */
+	{
+		count fc, listnr;
+		for (fc = 0; fc < FCMAX; ++fc)
+		{
+			for (listnr = 0; listnr < WDNSTlist; ++listnr)
+			{
+				int diff;
+
+				/* inmeldingen */
+				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_in[fc][listnr])
+				{
+					diff = CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_in[fc][listnr];
+				}
+				else
+				{ /* MAX_KLOKTELLER = 32767, zie control.c */
+					diff = MAX_KLOKTELLER + CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_in[fc][listnr];
+				}
+				if (diff > WDNSTblock * 60)
+				{
+					WDNST_fc_in[fc][listnr] = 0;
+					WDNST_cifsect_in[fc][listnr] = 0;
+				}
+
+				/* uitmeldingen */
+				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_uit[fc][listnr])
+				{
+					diff = CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_uit[fc][listnr];
+				}
+				else
+				{ /* MAX_KLOKTELLER = 32767, zie control.c */
+					diff = MAX_KLOKTELLER + CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_uit[fc][listnr];
+				}
+				if (diff > WDNSTblock * 60)
+				{
+					WDNST_fc_uit[fc][listnr] = 0;
+					WDNST_cifsect_uit[fc][listnr] = 0;
+				}
+
+				/* voormeldingen */
+				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_voor[fc][listnr])
+				{
+					diff = CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
+				}
+				else
+				{ /* MAX_KLOKTELLER = 32767, zie control.c */
+					diff = MAX_KLOKTELLER + CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
+				}
+				if (diff > WDNSTblock * 60)
+				{
+					WDNST_fc_voor[fc][listnr] = 0;
+					WDNST_cifsect_voor[fc][listnr] = 0;
+				}
+			}
+		}
+	}
+}
+
+bool WDNST_check(count fc)
+{
+	count listnr;
+	int firstempty = 999;
+	boolv WDNSTbestaatniet = TRUE;
+
+	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSIN])
+	{
+		for (listnr = 0; listnr < WDNSTlist; ++listnr)
+		{
+			if (WDNST_fc_in[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
+			{
+				WDNSTbestaatniet = FALSE;
+			}
+			if (WDNST_fc_in[fc][listnr] == 0)
+			{
+				if (firstempty == 999) firstempty = listnr;
+			}
+			if (WDNSTbestaatniet == TRUE)
+			{
+				WDNST_fc_in[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
+				WDNST_cifsect_in[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+			}
+		}
+	}
+
+	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSUIT])
+	{
+		for (listnr = 0; listnr < WDNSTlist; ++listnr)
+		{
+			if (WDNST_fc_uit[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
+			{
+				WDNSTbestaatniet = FALSE;
+			}
+			if (WDNST_fc_uit[fc][listnr] == 0)
+			{
+				if (firstempty == 999) firstempty = listnr;
+			}
+			if (WDNSTbestaatniet == TRUE)
+			{
+				WDNST_fc_uit[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
+				WDNST_cifsect_uit[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+			}
+		}
+	}
+
+	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSVOOR])
+	{
+		for (listnr = 0; listnr < WDNSTlist; ++listnr)
+		{
+			if (WDNST_fc_voor[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
+			{
+				WDNSTbestaatniet = FALSE;
+			}
+			if (WDNST_fc_voor[fc][listnr] == 0)
+			{
+				if (firstempty == 999) firstempty = listnr;
+			}
+			if (WDNSTbestaatniet == TRUE)
+			{
+				WDNST_fc_voor[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
+				WDNST_cifsect_voor[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+			}
+		}
+	}
+
+	return WDNSTbestaatniet;
+}
+
+#endif // OV_CHECK_WAGENNMR

@@ -680,6 +680,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                              $"{ov.LijnNummers.Count})";
                 }
             }
+            if (ov.CheckWagenNummer)
+            {
+                extra += (extra == "" ? "" : " && ");
+                extra += $"WDNST_check({_fcpf}{ov.FaseCyclus})";
+            }
             if (extra == "") extra = "TRUE";
 
             switch (melding.Type)
@@ -730,8 +735,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                 case CCOLCodeTypeEnum.RegCPreApplication:
 
+                    var start = true;
+                    if(c.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
+                    {
+                        sb.AppendLine("/* Opschonen wagennummer buffers */");
+                        sb.AppendLine("WDNST_cleanup();");
+                        start = false;
+                    }
                     if (c.OVData.OVIngrepen.Any(ov => ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus))
                     {
+                        if (!start) sb.AppendLine();
                         sb.AppendLine($"{ts}/* Herstarting meting roodtijd tbv minimale roodtijd OV */");
                         foreach (var ov in c.OVData.OVIngrepen)
                         {
@@ -740,9 +753,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tovminrood}{ov.FaseCyclus}] = !R[{_fcpf}{ov.FaseCyclus}];");
                             }
                         }
+                        start = false;
                     }
                     if (c.OVData.OVIngrepen.Any(x => x.HasOVIngreepWissel()))
                     {
+                        if (!start) sb.AppendLine();
                         sb.AppendLine($"{ts}/* Onthouden wissel voorwaarden per fasecyclus */");
                         foreach (var ov in c.OVData.OVIngrepen)
                         {
