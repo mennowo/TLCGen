@@ -71,6 +71,7 @@ namespace TLCGen.Models
         public int HuidigeVersieRevision { get; set; }
 
         public bool AanmakenVerionSysh { get; set; }
+        public bool StoreCurrentController { get; set; }
 
         [Browsable(false)]
         public string TLCGenVersie { get; set; }

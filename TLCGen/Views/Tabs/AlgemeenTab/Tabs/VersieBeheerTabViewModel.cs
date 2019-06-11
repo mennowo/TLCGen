@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Plugins;
+using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
@@ -84,6 +87,16 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool StoreCurrentController
+        {
+            get => _Controller?.Data?.StoreCurrentController ?? false;
+            set
+            {
+                _Controller.Data.StoreCurrentController = value;
+                RaisePropertyChanged<object>("StoreCurrentController", broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands
@@ -111,6 +124,19 @@ namespace TLCGen.ViewModels
                     _RemoveVersieCommand = new RelayCommand(RemoveVersieCommand_Executed, RemoveVersieCommand_CanExecute);
                 }
                 return _RemoveVersieCommand;
+            }
+        }
+
+        RelayCommand _RestoreVersieCommand;
+        public ICommand RestoreVersieCommand
+        {
+            get
+            {
+                if (_RestoreVersieCommand == null)
+                {
+                    _RestoreVersieCommand = new RelayCommand(RestoreVersieCommand_Executed, RestoreVersieCommand_CanExecute);
+                }
+                return _RestoreVersieCommand;
             }
         }
 
@@ -149,6 +175,12 @@ namespace TLCGen.ViewModels
             HuidigeVersieRevision = 0;
             vm.Versie = nextver ?? "1.0.0";
             vm.Ontwerper = Environment.UserName;
+            if (StoreCurrentController)
+            {
+                var controller = DeepCloner.DeepClone(Controller);
+                controller.Data.Versies.Clear();
+                vm.Controller = controller;
+            }
             var vvm = new VersieViewModel(vm);
             Versies?.Add(vvm);
         }
@@ -167,6 +199,51 @@ namespace TLCGen.ViewModels
         bool RemoveVersieCommand_CanExecute()
         {
             return Versies != null && Versies.Count > 0 && SelectedVersie != null;
+        }
+
+        void RestoreVersieCommand_Executed()
+        {
+            var c = DeepCloner.DeepClone(SelectedVersie.VersieEntry.Controller);
+
+            var ve = DeepCloner.DeepClone(SelectedVersie.VersieEntry);
+            ve.Controller = null;
+            c.Data.Versies.Add(ve);
+
+            var dlg = new SaveFileDialog();
+            dlg.Filter = "TLCGen files|*.tlc|TLCGen gzipped files|*.tlcgz";
+            dlg.CheckFileExists = false;
+            dlg.CheckPathExists = true;
+            dlg.FileName = c.Data.Naam + "_" + SelectedVersie.Versie + ".tlc";
+            dlg.DefaultExt = ".tlc";
+            if(!string.IsNullOrWhiteSpace(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName))
+            {
+                dlg.InitialDirectory = System.IO.Path.GetDirectoryName(DataAccess.TLCGenControllerDataProvider.Default.ControllerFileName);
+            }
+            dlg.Title = "Selecteer het bestand om de regeling in op te slaan";
+            if (dlg.ShowDialog() == true)
+            {
+                try
+                {
+                    if (dlg.FileName.EndsWith(".tlcgz"))
+                    {
+                        TLCGenSerialization.SerializeGZip(dlg.FileName, c);
+                    }
+                    else if (dlg.FileName.EndsWith(".tlc"))
+                    {
+                        TLCGenSerialization.Serialize(dlg.FileName, c);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox("Fout bij terugzetten van regeling:\n\n" + e.ToString(), "Fout bij opslaan", System.Windows.MessageBoxButton.OK);
+                }
+                Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Versie {SelectedVersie.Versie} is hier opgeslagen:{dlg.FileName}\n\nLET OP! Dit bestand bevat uitsluitend de data van die versie, zonder data van plugins.", $"Data van versie {SelectedVersie.Versie} opgeslagen", System.Windows.MessageBoxButton.OK);
+            }
+        }
+
+        bool RestoreVersieCommand_CanExecute()
+        {
+            return Versies != null && Versies.Count > 0 && SelectedVersie != null && SelectedVersie.VersieEntry.Controller != null;
         }
 
         #endregion // Command Functionality

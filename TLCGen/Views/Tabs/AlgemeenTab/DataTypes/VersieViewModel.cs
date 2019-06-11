@@ -6,55 +6,51 @@ namespace TLCGen.ViewModels
 {
     public class VersieViewModel : ViewModelBase
     {
-        private VersieModel _VersieEntry;
-        public VersieModel VersieEntry
-        {
-            get { return _VersieEntry; }
-        }
+        public VersieModel VersieEntry { get; }
 
         public string Versie
         {
-            get { return _VersieEntry.Versie; }
+            get { return VersieEntry.Versie; }
             set
             {
-                _VersieEntry.Versie = value;
+                VersieEntry.Versie = value;
                 RaisePropertyChanged<object>("Versie", broadcast: true);
             }
         }
 
         public DateTime Datum
         {
-            get { return _VersieEntry.Datum; }
+            get { return VersieEntry.Datum; }
             set
             {
-                _VersieEntry.Datum = value;
+                VersieEntry.Datum = value;
                 RaisePropertyChanged<object>("Datum", broadcast: true);
             }
         }
 
         public string Ontwerper
         {
-            get { return _VersieEntry.Ontwerper; }
+            get { return VersieEntry.Ontwerper; }
             set
             {
-                _VersieEntry.Ontwerper = value;
+                VersieEntry.Ontwerper = value;
                 RaisePropertyChanged<object>("Ontwerper", broadcast: true);
             }
         }
 
         public string Commentaar
         {
-            get { return _VersieEntry.Commentaar; }
+            get { return VersieEntry.Commentaar; }
             set
             {
-                _VersieEntry.Commentaar = value;
+                VersieEntry.Commentaar = value;
                 RaisePropertyChanged<object>("Commentaar", broadcast: true);
             }
         }
 
         public VersieViewModel(VersieModel vm)
         {
-            _VersieEntry = vm;
+            VersieEntry = vm;
         }
     }
 }

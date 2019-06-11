@@ -159,18 +159,21 @@ namespace TLCGen.ModelManagement
             }
 
             // check PostAfhandelingOV_Add in ov.add
-            var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
-            if (File.Exists(ovAddFile))
+            if (filename != null)
             {
-                var ovaddtext = File.ReadAllLines(ovAddFile);
-                if(ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingOV_Add.*")))
+                var ovAddFile = Path.Combine(Path.GetDirectoryName(filename), controller.Data.Naam + "ov.add");
+                if (File.Exists(ovAddFile))
                 {
-                    MessageBox.Show($"Let op! Deze versie van TLCGen maakt een functie\n" +
-                                $"'PostAfhandelingOV' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
-                                $"de functie 'PostAfhandelingOV_Add' aangeroepen, die echter\n" +
-                                $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingOV_Add ontbreekt.\n\n" +
-                                "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingOV'," +
-                                "want die wordt niet aangeroepen.");
+                    var ovaddtext = File.ReadAllLines(ovAddFile);
+                    if (ovaddtext.All(x => !Regex.IsMatch(x, @"^\s*void\s+PostAfhandelingOV_Add.*")))
+                    {
+                        MessageBox.Show($"Let op! Deze versie van TLCGen maakt een functie\n" +
+                                    $"'PostAfhandelingOV' aan in bestand {controller.Data.Naam}ov.c. Hierin wordt\n" +
+                                    $"de functie 'PostAfhandelingOV_Add' aangeroepen, die echter\n" +
+                                    $"ontbreekt in bestand {controller.Data.Naam}ov.add.", "Functie PostAfhandelingOV_Add ontbreekt.\n\n" +
+                                    "Voeg deze dus toe, waarschijnlijk in plaats van 'void post_AfhandelingOV'," +
+                                    "want die wordt niet aangeroepen.");
+                    }
                 }
             }
 

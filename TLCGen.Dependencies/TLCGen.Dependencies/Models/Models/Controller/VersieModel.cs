@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace TLCGen.Models
 {
@@ -16,6 +17,8 @@ namespace TLCGen.Models
         public string Ontwerper { get; set; }
         [HasDefault(false)]
         public string Commentaar { get; set; }
+        [HasDefault(false)]
+        public ControllerModel Controller { get; set; }
 
         public VersieModel()
         {
