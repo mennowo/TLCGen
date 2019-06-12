@@ -10,8 +10,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     public class PelotonKoppelingCodeGenerator : CCOLCodePieceGeneratorBase
     {
-        private string _huks;
-        private string _hiks;
+        // TODO:
+        // - code RHDHV versie afronden
+        // - elementen tbv RHDHV versie maken
+        //   - toevoegen timer verschuiving
+        //   - verder gebruiken bestaande elementen
+        // - UI aanpassen:
+        //   - type keuze toevoegen (dh/rhdhv)
+        //   - obv type keuze andere velden weergeven
 
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tpelmeet;
@@ -28,8 +34,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schpelmk;
         private CCOLGeneratorCodeStringSettingModel _tpela;
         private CCOLGeneratorCodeStringSettingModel _schpela;
-        private CCOLGeneratorCodeStringSettingModel _schpk;
+        private CCOLGeneratorCodeStringSettingModel _schpku;
 #pragma warning restore 0649
+        private string _huks;
+        private string _hiks;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -212,7 +220,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if (!firstsg) sb.AppendLine($" || ");
                                     firstsg = false;
-                                    sb.Append($"SCH[{_schpf}{_schpk}{sg.Key.Naam}] && G[fc{sg.Key.Naam}] && (");
+                                    sb.Append($"SCH[{_schpf}{_schpku}{sg.Key.Naam}] && G[fc{sg.Key.Naam}] && (");
                                     foreach (var d in sg.Value)
                                     {
                                         var firstd = true;
