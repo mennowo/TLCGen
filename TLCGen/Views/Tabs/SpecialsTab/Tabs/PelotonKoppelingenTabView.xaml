@@ -32,8 +32,23 @@
                         Header="Richting" 
                         SelectedItemBinding="{Binding Path=Richting,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingRichtingEnum}}}" />
+                    <DataGridComboBoxColumn
+                        Header="Type" 
+                        SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingRichtingEnum}}}" />
                     <DataGridTemplateColumn 
-                        Header="Fase" Width="Auto" MinWidth="60" >
+                        Header="Fase" Width="Auto" MinWidth="60">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsUitgaand}" Value="false">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=GekoppeldeSignaalGroep,Mode=OneWay}" Margin="2" />

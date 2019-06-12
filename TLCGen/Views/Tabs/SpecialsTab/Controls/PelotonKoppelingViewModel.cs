@@ -204,6 +204,18 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public PelotonKoppelingType Type
+        {
+            get { return PelotonKoppeling.Type; }
+            set
+            {
+                PelotonKoppeling.Type = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(IsInkomend));
+                RaisePropertyChanged(nameof(IsUitgaand));
+            }
+        }
+
         public PelotonKoppelingDetectorViewModel SelectedDetector
         {
             get => _selectedDetector;
