@@ -1769,6 +1769,18 @@
             <Description>Tijdsduur toepassen RW na meting peloton bij fase _E1_</Description>
           </Setting>
           <Setting>
+            <Default>pelnl</Default>
+            <Setting>pelnl</Setting>
+            <Type>Timer</Type>
+            <Description>Naloop tijd tbv peloton bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pelverschuif</Default>
+            <Setting>pelverschuif</Setting>
+            <Type>Parameter</Type>
+            <Description>Aantal seconden verschuiven peloton van _E1_ naar _E2_ bij fase _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>pelrwmax</Default>
             <Setting>pelrwmax</Setting>
             <Type>Timer</Type>

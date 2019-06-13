@@ -35,13 +35,13 @@
                     <DataGridComboBoxColumn
                         Header="Type" 
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingRichtingEnum}}}" />
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingType}}}" />
                     <DataGridTemplateColumn 
                         Header="Fase" Width="Auto" MinWidth="60">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsUitgaand}" Value="false">
+                                    <DataTrigger Binding="{Binding Path=Richting}" Value="Uitgaand">
                                         <Setter Property="IsEnabled" Value="False" />
                                         <Setter Property="Background" Value="LightGray" />
                                         <Setter Property="Foreground" Value="LightGray" />

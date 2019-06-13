@@ -33,6 +33,8 @@ namespace TLCGen.ViewModels
         }
 
         public Visibility IsInkomend => Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendDenHaag => Type == PelotonKoppelingType.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendRHDHV => Type == PelotonKoppelingType.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsUitgaand => Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
 
         public string GekoppeldeSignaalGroepNull
@@ -63,6 +65,16 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.Meetperiode = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int Verschuiving
+        {
+            get { return PelotonKoppeling.Verschuiving; }
+            set
+            {
+                PelotonKoppeling.Verschuiving = value;
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -200,6 +212,8 @@ namespace TLCGen.ViewModels
                 PelotonKoppeling.Richting = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsInkomend));
+                RaisePropertyChanged(nameof(IsInkomendDenHaag));
+                RaisePropertyChanged(nameof(IsInkomendRHDHV));
                 RaisePropertyChanged(nameof(IsUitgaand));
             }
         }
@@ -212,6 +226,8 @@ namespace TLCGen.ViewModels
                 PelotonKoppeling.Type = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsInkomend));
+                RaisePropertyChanged(nameof(IsInkomendDenHaag));
+                RaisePropertyChanged(nameof(IsInkomendRHDHV));
                 RaisePropertyChanged(nameof(IsUitgaand));
             }
         }

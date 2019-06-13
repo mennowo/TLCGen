@@ -6,6 +6,7 @@
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ag="clr-namespace:WpfAutoGrid;assembly=WpfAutoGrid"
              xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -28,7 +29,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Label Content="Ingangssignalen detectoren" />
+                <Label Content="Detectoren t.b.v. uitgaande koppeling" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.RowHeaderTemplate>
@@ -50,58 +51,37 @@
                                      SelectedItemToAdd="{Binding Path=UitgaandeDetectorenManager.SelectedItemToAdd,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </Grid>
-        <Grid Visibility="{Binding Path=IsInkomend,Mode=OneWay}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" MinWidth="135" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Label Content="PTP koppeling" Grid.Row="0" />
-            <Label Content="Meetperiode" Grid.Row="1" />
-            <Label Content="Maximale hiaattijd" Grid.Row="2" />
-            <Label Content="Min. aantal voertuigen" Grid.Row="3" />
-            <Label Content="Toepassen aanvraag" Grid.Row="4" />
-            <Label Content="Tijd tot aanvraag" Grid.Row="5" />
-            <Label Content="Toepassen RW" Grid.Row="6" />
-            <Label Content="Tijd tot RW" Grid.Row="7" />
-            <Label Content="Tijd RW" Grid.Row="8" />
-            <Label Content="Max. tijd toep. RW vanaf SG" Grid.Row="9" />
-            <Label Content="Toepassen MK" Grid.Row="10" />
-            <Label Content="Ingangssignaal FG #" Grid.Row="11" />
-            
+        <ag:AutoGrid Visibility="{Binding Path=IsInkomendDenHaag,Mode=OneWay}" Columns="Auto,*" RowCount="34">
+            <Label Content="PTP koppeling" />
             <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
-                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" Grid.Column="1" Grid.Row="0" />
-            <TextBox Text="{Binding Path=Meetperiode,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="1" />
-            <TextBox Text="{Binding Path=MaximaalHiaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="2" />
-            <TextBox Text="{Binding Path=MinimaalAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="3" />
+                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" />
+            <Label Content="Meetperiode" />
+            <TextBox Text="{Binding Path=Meetperiode,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Maximale hiaattijd" />
+            <TextBox Text="{Binding Path=MaximaalHiaat,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Min. aantal voertuigen" />
+            <TextBox Text="{Binding Path=MinimaalAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Toepassen aanvraag" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                      SelectedItem="{Binding Path=ToepassenAanvraag}" Grid.Row="4" Grid.Column="1" />
-            <TextBox IsEnabled="{Binding Path=HasAanvraag}" Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="5" />
+                      SelectedItem="{Binding Path=ToepassenAanvraag}" />
+            <Label Content="Tijd tot aanvraag" />
+            <TextBox IsEnabled="{Binding Path=HasAanvraag}" Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Toepassen RW" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                      SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" Grid.Row="6" Grid.Column="1" />
-            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="7" />
-            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="8" />
-            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="9" />
+                      SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" />
+            <Label Content="Tijd tot RW" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdTotRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Tijd RW" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Max. tijd toep. RW vanaf SG" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Toepassen MK" />
             <ComboBox IsEnabled="{Binding Path=HasRetourWachtgroen}" 
                       Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
-                      SelectedItem="{Binding Path=ToepassenMeetkriterium}" Grid.Row="10" Grid.Column="1" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" Grid.Column="1" Grid.Row="11" />
-            
-            <Grid Grid.Row="12" Grid.ColumnSpan="2">
+                SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
+            <Label Content="Ingangssignaal FG #" />
+            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Grid Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -118,8 +98,34 @@
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
                                      AddItemCommand="{Binding Path=AddInkomendeDetectorCommand}" RemoveItemCommand="{Binding Path=RemoveInkomendeDetectorCommand}" />
             </Grid>
-        </Grid>
-        <Border Grid.Row="0" Background="LightGray">
+        </ag:AutoGrid>
+        <ag:AutoGrid Visibility="{Binding Path=IsInkomendRHDHV,Mode=OneWay}" Columns="Auto,*" RowCount="34">
+            <Label Content="PTP koppeling" />
+            <ComboBox ItemsSource="{Binding Path=DataContext.PTPKruisingenNames,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=UserControl}}"
+                      SelectedItem="{Binding Path=PTPKruising}" Margin="2" />
+            <Label Content="Verschuiving (sec.)" />
+            <TextBox Text="{Binding Path=Verschuiving,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Min. duur peloton melding (sec.)" />
+            <TextBox Text="{Binding Path=MinimaalAantalVoertuigen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <!--<Label Content="Toepassen aanvraag" />
+            <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenAanvraag}" />
+            <Label Content="Tijd tot aanvraag" />
+            <TextBox IsEnabled="{Binding Path=HasAanvraag}" Text="{Binding Path=TijdTotAanvraag,UpdateSourceTrigger=PropertyChanged}" Margin="2" />-->
+            <Label Content="Toepassen RW" />
+            <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" />
+            <Label Content="Naloop tijd (sec.)" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Max. tijd toep. RW" />
+            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+            <Label Content="Toepassen MK" />
+            <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
+                      SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
+            <Label Content="Ingangssignaal peloton #" />
+            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
+        </ag:AutoGrid>
+        <!--<Border Grid.Row="0" Background="LightGray">
             <Border.Style>
                 <Style TargetType="Border">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -131,6 +137,6 @@
                 </Style>
             </Border.Style>
             <Label>Geen instellingen beschikbaar</Label>
-        </Border>
+        </Border>-->
     </Grid>
 </UserControl>

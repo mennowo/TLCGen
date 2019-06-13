@@ -30,18 +30,6 @@
                 </Style>
             </Label.Style>
         </Label>
-        <!--<ct:SimplePropertyEditor BoundObject="{Binding ElementName=root,Path=DataContext}" CheckBrowsable="True" Grid.Row="1">
-            <ct:SimplePropertyEditor.Style>
-                <Style TargetType="UserControl">
-                    <Setter Property="Visibility" Value="Visible" />
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=root,Path=DataContext,UpdateSourceTrigger=PropertyChanged}" Value="{x:Null}">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </ct:SimplePropertyEditor.Style>
-        </ct:SimplePropertyEditor>-->
         <Grid>
             <ag:AutoGrid Columns="Auto,*" RowCount="34">
                 

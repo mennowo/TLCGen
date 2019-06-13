@@ -29,6 +29,7 @@ namespace TLCGen.Models
         public int Meetperiode { get; set; }
         public int MaximaalHiaat { get; set; }
         public int MinimaalAantalVoertuigen { get; set; }
+        public int Verschuiving { get; set; }
         public int TijdTotAanvraag { get; set; }
         public int TijdTotRetourWachtgroen { get; set; }
         public int TijdRetourWachtgroen { get; set; }
