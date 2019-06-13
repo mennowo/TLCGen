@@ -2153,6 +2153,50 @@
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
+    <CodePieceGenerator CodePiece="SeniorenIngreepCodeGenerator">
+      <CodePieceData>
+        <ClassName>SeniorenIngreepCodeGenerator</ClassName>
+        <Description>Senioreningreep</Description>
+        <Settings>
+          <Setting>
+            <Default>dbsiexgr</Default>
+            <Setting>dbsiexgr</Setting>
+            <Type>Timer</Type>
+            <Description>Bezettijd detector _E1_ t.b.v. Senioreningreep</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgr</Default>
+            <Setting>siexgr</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden actief zijn senioreningreep bij fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgrd</Default>
+            <Setting>siexgrd</Setting>
+            <Type>HulpElement</Type>
+            <Description>Onthouden actief zijn senioreningreep bij fase _E1_ via detector _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>si</Default>
+            <Setting>si</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Senioreningreep aan/uit voor fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgr</Default>
+            <Setting>siexgr</Setting>
+            <Type>Timer</Type>
+            <Description>Meten duur extra groen bij senioreningreep op fase _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>siexgrperc</Default>
+            <Setting>siexgrperc</Setting>
+            <Type>Parameter</Type>
+            <Description>Extra groen percentage tov. TFG voor senioreningreep op fase _E1_</Description>
+          </Setting>
+        </Settings>
+      </CodePieceData>
+    </CodePieceGenerator>
   </CodePieceGeneratorSettings>
   <TabSpaceSerialized>ssss</TabSpaceSerialized>
 </CCOLGeneratorSettings>

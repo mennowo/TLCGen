@@ -606,6 +606,40 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
+        public bool SeniorenIngreepEnabled => _faseCyclus.Detectoren.Any(x => x.Type == DetectorTypeEnum.KnopBinnen || x.Type == DetectorTypeEnum.KnopBuiten);
+
+        public bool SeniorenIngreepActive => SeniorenIngreep != NooitAltijdAanUitEnum.Nooit;
+
+        public NooitAltijdAanUitEnum SeniorenIngreep
+        {
+            get => _faseCyclus.SeniorenIngreep;
+            set
+            {
+                _faseCyclus.SeniorenIngreep = value;
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(SeniorenIngreepActive));
+            }
+        }
+
+        public int SeniorenIngreepExtraGroenPercentage
+        {
+            get => _faseCyclus.SeniorenIngreepExtraGroenPercentage;
+            set
+            {
+                _faseCyclus.SeniorenIngreepExtraGroenPercentage = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int SeniorenIngreepBezetTijd
+        {
+            get => _faseCyclus.SeniorenIngreepBezetTijd;
+            set
+            {
+                _faseCyclus.SeniorenIngreepBezetTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
 
         #endregion // Properties
 

@@ -57,6 +57,9 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum SchoolIngreep { get; set; }
         public int SchoolIngreepMaximumGroen { get; set; }
         public int SchoolIngreepBezetTijd { get; set; }
+        public NooitAltijdAanUitEnum SeniorenIngreep { get; set; }
+        public int SeniorenIngreepBezetTijd { get; set; }
+        public int SeniorenIngreepExtraGroenPercentage { get; set; }
 
         [XmlArrayItem(ElementName = "Detector")]
         public List<DetectorModel> Detectoren { get; set; }

@@ -64,6 +64,8 @@ bool proc_pel_in_V1(                       /* Dh20130124                        
 	...);                                 /* va arg list: inkomende signalen koplussen                     */
 bool IsConflict(count fc1, count fc2);
 void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max, bool *prml[], bool yml[], count *mlx, bool *sml);
+void SeniorenGroen(count fc, count drk1, count drk1timer, count hdrk1, count drk2, count drk2timer, count hdrk2,
+	count exgperc, count verlengen, count meergroen, ...);
 
 extern mulv FC_type[];
 extern mulv DVG[];

@@ -1113,3 +1113,53 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 		}
 	}
 }
+
+/**************************************************************************
+ *  Functie  : seniorengroen
+ *
+ *  Functionele omschrijving :
+ *    Houdt de richting na vastgroen een instelbaar percentage van dat
+ *    vastgroen vast in wachtgroen zodat voetgangers die moeilijk ter been
+ *    zijn meer gelegenheid hebben om de oversteek te maken.
+ *    Zij dienen daartoe een instelbaar aantal seconden achtereen de
+ *    aanvraagknop ingedrukt te houden.
+ *    Er kunnen drie opeenvolgende oversteken bediend worden. Eventuele
+ *    volgoversteken hebben ieder hun eigen instelling voor extra groen.
+ **************************************************************************/
+void SeniorenGroen(count fc, count drk1, count drk1timer, count hdrk1, count drk2, count drk2timer, count hdrk2,
+	count exgperc, count verlengen, count meergroen, ...)
+{
+	va_list argpt;
+	count he;
+	va_start(argpt, meergroen);
+
+	T_max[meergroen] = (TFG_max[fc] * (100 + PRM[exgperc]) / 100);
+
+	if (drk1 != NG) {
+		if (drk1timer != NG) {
+			IT[drk1timer] = SD[drk1];
+			AT[drk1timer] = ED[drk1];
+			if (ET[drk1timer] && D[drk1])                 IH[verlengen] |= TRUE;
+		}
+		if ((hdrk1 != NG) && IH[verlengen] && D[drk1])         IH[hdrk1] |= TRUE;
+	}
+	if (drk2 != NG) {
+		if (drk2timer != NG) {
+			IT[drk2timer] = SD[drk2];
+			AT[drk2timer] = ED[drk2];
+			if (ET[drk2timer] && D[drk2])                 IH[verlengen] |= TRUE;
+		}
+		if ((hdrk2 != NG) && IH[verlengen] && D[drk2])        IH[hdrk2] |= TRUE;
+	}
+
+	while ((he = va_arg(argpt, va_count)) != END)
+	{
+		IH[verlengen] |= (R[fc] && IH[he]);
+	}
+	va_end(argpt);
+
+	if (G[fc] && T[meergroen])                                   RW[fc] |= BIT7;
+	if (G[fc])          		  IH[hdrk1] = IH[hdrk2] = IH[verlengen] = FALSE;
+
+	RT[meergroen] = IH[verlengen];
+}

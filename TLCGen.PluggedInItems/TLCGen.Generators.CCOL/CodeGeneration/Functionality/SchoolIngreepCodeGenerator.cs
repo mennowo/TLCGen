@@ -42,7 +42,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         $"{_tschoolingreepmaxg}{fc.Naam}",
                         fc.SchoolIngreepMaximumGroen,
                         CCOLElementTimeTypeEnum.TE_type,
-                        _tdbsi,
+                        _tschoolingreepmaxg,
                         fc.Naam));
                 foreach (var d in fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten))
                 {
