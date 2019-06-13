@@ -30,8 +30,8 @@ namespace TLCGen.Integrity
                 }
             }
 
-            if (myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
-            else if (hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
+            if (Regex.IsMatch(myName, @"^[0-9]+") && myName.Length < hisName.Length) myName = myName.PadLeft(hisName.Length, '0');
+            else if (Regex.IsMatch(hisName, @"^[0-9]+") && hisName.Length < myName.Length) hisName = hisName.PadLeft(myName.Length, '0');
             return string.Compare(
                 d1fcname == null ? myName : d1fcname + myName,
                 d1fcname == null ? hisName : d2fcname + hisName,

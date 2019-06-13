@@ -311,9 +311,7 @@ namespace TLCGen.Plugins.Sumo
                             new DetectorSumoDataModel
                             {
                                 Naam = d.Naam,
-                                SumoNaam1 = d.Naam,
-                                SumoNaam2 = d.Naam,
-                                SumoNaam3 = d.Naam
+                                SumoNaam1 = d.Naam
                             }));
                 }
             }

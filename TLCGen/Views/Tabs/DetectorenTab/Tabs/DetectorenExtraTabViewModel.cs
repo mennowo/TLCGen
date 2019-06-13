@@ -199,6 +199,7 @@ namespace TLCGen.ViewModels
             if (changed)
             {
                 Messenger.Default.Send(new DetectorenChangedMessage(_Controller, null, remDets));
+                Detectoren.BubbleSort();
             }
         }
 
