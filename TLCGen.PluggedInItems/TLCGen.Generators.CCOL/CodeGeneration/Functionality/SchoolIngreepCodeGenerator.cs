@@ -123,7 +123,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if(d.Item1.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
                         {
-                            sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam} && ");
+                            sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam}] && ");
                         }
                         else
                         {
@@ -151,7 +151,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* School ingreep: knipperen wachtlicht */");
                     foreach (var d in dets)
                     {
-                        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] = CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] && !(IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz) || G[{_fcpf}{d.Item1.Naam}] && D[{_dpf}{d.Item2.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz;");
+                        if (d.Item1.SchoolIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
+                        {
+                            sb.Append($"{ts}if (SCH[{_schpf}{_schschoolingreep}{d.Item1.Naam}]) ");
+                        }
+                        sb.AppendLine($"CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] = CIF_GUS[{_uspf}{_uswt}{d.Item2.Naam}] && !(IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz) || G[{_fcpf}{d.Item1.Naam}] && D[{_dpf}{d.Item2.Naam}] && IH[{_hpf}{_hschoolingreep}{_dpf}{d.Item2.Naam}] && Knipper_1Hz;");
                     }
                     break;
             }

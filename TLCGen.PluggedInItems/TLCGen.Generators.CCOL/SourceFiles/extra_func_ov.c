@@ -37,7 +37,7 @@ bool DSIMeldingOV_LijnNummerEnRitCategorie_V1(count lijnparm, count lijnmax)
 {
 	int index = 0;
 	if (PRM[lijnparm]) return TRUE;
-	if (CIF_DSI[CIF_DSI_LYN] == 0 || CIF_DSI[CIF_DSI_RITC] == 0) return FALSE;
+	if (CIF_DSI[CIF_DSI_LYN] == 0) return FALSE;
 	for (index = 0; index < lijnmax; ++index)
 	{
 		if (PRM[lijnparm + 1 + index] != 0 && CIF_DSI[CIF_DSI_LYN] == PRM[lijnparm + 1 + index] &&

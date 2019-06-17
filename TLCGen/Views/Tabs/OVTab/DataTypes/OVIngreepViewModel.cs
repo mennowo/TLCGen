@@ -312,6 +312,13 @@ namespace TLCGen.ViewModels
             {
                 OVIngreep.CheckWagenNummer = value;
                 RaisePropertyChanged<object>(nameof(CheckWagenNummer), broadcast: true);
+                if(value)
+                {
+                    OVIngreep.MeldingenData.AntiJutterVoorAlleInmeldingen = false;
+                    OVIngreep.MeldingenData.AntiJutterVoorAlleUitmeldingen = false;
+                    foreach (var m in OVIngreep.MeldingenData.Inmeldingen) m.AntiJutterTijdToepassen = false;
+                    foreach (var m in OVIngreep.MeldingenData.Uitmeldingen) m.AntiJutterTijdToepassen = false;
+                }
             }
         }
 
