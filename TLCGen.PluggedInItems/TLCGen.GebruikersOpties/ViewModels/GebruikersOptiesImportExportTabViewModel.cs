@@ -17,6 +17,7 @@ namespace TLCGen.GebruikersOpties
         private RelayCommand _exportCommand;
         private RelayCommand _openExternalDataCommand;
         private RelayCommand _importCommand;
+        private RelayCommand _selectAllCommand;
 
         #endregion // Fields
 
@@ -38,6 +39,16 @@ namespace TLCGen.GebruikersOpties
                 RaisePropertyChanged();
             }
         }
+
+        public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new RelayCommand(
+            () => 
+            {
+                foreach(var i in ItemsAllPresent)
+                {
+                    i.Selected = true;
+                }
+            },
+            () => ItemsAllPresent.Any()));
 
         public ICommand ExportCommand
         {

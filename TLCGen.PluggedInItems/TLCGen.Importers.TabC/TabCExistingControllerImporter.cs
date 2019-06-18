@@ -137,8 +137,12 @@ namespace TLCGen.Importers.TabC
 	                            }
                                 if (newData.Intergroen)
                                 {
-                                    if (fc.TGL_min > newfcm.TGL_min) fc.TGL_min = newfcm.TGL_min;
-                                    if (fc.TGL > fc.TGL_min) fc.TGL = fc.TGL_min;
+                                    if (fc.TGL_min != newfcm.TGL_min)
+                                    {
+                                        fc.TGL_min = newfcm.TGL_min;
+                                        if (fc.TGL > fc.TGL_min) fc.TGL = fc.TGL_min;
+                                    }
+                                    if (fc.TGL != newfcm.TGL && newfcm.TGL >= fc.TGL_min) fc.TGL = newfcm.TGL;
                                 }
                             }
                         }

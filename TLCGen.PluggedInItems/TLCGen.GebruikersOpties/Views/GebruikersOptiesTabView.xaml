@@ -109,6 +109,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <Button Content="Alles selecteren" Command="{Binding Path=SelectAllCommand}" Margin="2" />
                         <Button Content="Exporteren" Command="{Binding Path=ExportCommand}" Margin="2" />
                     </StackPanel>
                     <Label Content="Importeren" Grid.Row="4" />

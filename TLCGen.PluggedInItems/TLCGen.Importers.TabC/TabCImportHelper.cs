@@ -244,12 +244,12 @@ namespace TLCGen.Importers.TabC
                 }
                 if (importG)
                 {
-                    var gm = gconfRegex.Match(l);
-                    if (gm.Success)
+                    m = gconfRegex.Match(l);
+                    if (m.Success)
                     {
-                        var fc1 = gm.Groups["fc1"].Value;
-                        var fc2 = gm.Groups["fc2"].Value;
-                        var conf = gm.Groups["conf"].Value;
+                        var fc1 = m.Groups["fc1"].Value;
+                        var fc2 = m.Groups["fc2"].Value;
+                        var conf = m.Groups["conf"].Value;
                         if (int.TryParse(conf, out var iconf))
                         {
                             var cconf = outcome.Conflicten.FirstOrDefault(x => x.FaseVan == fc1 && x.FaseNaar == fc2);
@@ -269,7 +269,7 @@ namespace TLCGen.Importers.TabC
                         }
                     }
                 }
-                else if (intergroen)
+                if (intergroen)
                 {
                     m = geelRegex.Match(l);
                     if (m.Success)
