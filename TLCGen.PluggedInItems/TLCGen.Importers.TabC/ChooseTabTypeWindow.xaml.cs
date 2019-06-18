@@ -11,6 +11,7 @@ namespace TLCGen.Importers.TabC
         private TabCType _tabType;
         private bool _intergroen;
         private bool _hasIntergroen;
+        private bool _importGarantie;
 
         public ChooseTabTypeWindow()
         {
@@ -41,7 +42,7 @@ namespace TLCGen.Importers.TabC
             {
                 _tabType = value;
                 ImportDetCheck.IsEnabled = ImportTijdCheck.IsEnabled = true;
-                ImportDeelconflictenCheck.IsEnabled = false;
+                ImportGarantieCheck.IsEnabled = ImportDeelconflictenCheck.IsEnabled = false;
                 switch (_tabType)
                 {
                     case TabCType.OTTO:
@@ -49,6 +50,7 @@ namespace TLCGen.Importers.TabC
                         ImportDetCheck.IsChecked = ImportTijdCheck.IsChecked = false;
                         ImportDetCheck.IsEnabled = ImportTijdCheck.IsEnabled = false;
                         ImportDeelconflictenCheck.IsEnabled = true;
+                        ImportGarantieCheck.IsEnabled = true;
                         break;
                     case TabCType.TPA:
                         TPACheck.IsChecked = true;
@@ -90,9 +92,19 @@ namespace TLCGen.Importers.TabC
                 IntergroenCheck.IsChecked = value;
             }
         }
+
         public string ImportDeelconflicten { get; private set; }
         public bool ImportDetectoren { get; private set; }
         public bool ImportTijden { get; private set; }
+        public bool ImportGarantie
+        {
+            get => _importGarantie;
+            set
+            {
+                _importGarantie = value;
+                ImportGarantieCheck.IsChecked = value;
+            }
+        }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
@@ -112,7 +124,8 @@ namespace TLCGen.Importers.TabC
             ImportDetectoren = ImportDetCheck.IsChecked == true;
             ImportTijden = ImportTijdCheck.IsChecked == true;
             Intergroen = IntergroenCheck.IsChecked == true;
-            if(ImportDeelconflictenCheck.IsChecked == true)
+            ImportGarantie = ImportGarantieCheck.IsChecked == true;
+            if (ImportDeelconflictenCheck.IsChecked == true)
             {
                 ImportDeelconflicten = DeelconflictenTypeCB.SelectedValue.ToString();
             }

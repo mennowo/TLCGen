@@ -137,8 +137,8 @@ namespace TLCGen.Importers.TabC
 	                            }
                                 if (newData.Intergroen)
                                 {
-                                    if (fc.TGL_min < newfcm.TGL_min) fc.TGL_min = newfcm.TGL_min;
-                                    if (fc.TGL < fc.TGL_min) fc.TGL = fc.TGL_min;
+                                    if (fc.TGL_min > newfcm.TGL_min) fc.TGL_min = newfcm.TGL_min;
+                                    if (fc.TGL > fc.TGL_min) fc.TGL = fc.TGL_min;
                                 }
                             }
                         }
@@ -168,7 +168,8 @@ namespace TLCGen.Importers.TabC
                             {
                                 FaseVan = cm.FaseVan,
                                 FaseNaar = cm.FaseNaar,
-                                Waarde = cm.Waarde
+                                Waarde = cm.Waarde,
+                                GarantieWaarde = cm.GarantieWaarde
                             };
                             var old = c.InterSignaalGroep.Conflicten.FirstOrDefault(x => x.FaseVan == cm.FaseVan && x.FaseNaar == cm.FaseNaar);
                             if (old != null)
@@ -194,6 +195,23 @@ namespace TLCGen.Importers.TabC
                             }
 
                             c.InterSignaalGroep.Conflicten.Add(_cm);
+                        }
+                        // correct guaranteed
+                        c.Data.GarantieOntruimingsTijden = false;
+                        if (newData.Garantie && !c.Data.GarantieOntruimingsTijden)
+                        {
+                            if(c.InterSignaalGroep.Conflicten.Any(x => x.GarantieWaarde == null))
+                            {
+                                TLCGenDialogProvider.Default.ShowMessageBox(
+                                "Er zijn conflicten zonder garantie tijden gevonden in nieuwe data:\n\n" +
+                                string.Join("\n", c.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde == null).Select(x => x.FaseVan + " => " + x.FaseNaar)) +
+                                "\n\nGarantie tijden worden uitgeschakeld.",
+                                "Fout in garantie tijden", MessageBoxButton.OK);
+                            }
+                            else
+                            {
+                                c.Data.GarantieOntruimingsTijden = true;
+                            }
                         }
                         if (conflictsChanged)
                         {

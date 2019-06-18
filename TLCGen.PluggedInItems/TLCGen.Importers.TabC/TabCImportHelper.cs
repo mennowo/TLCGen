@@ -13,6 +13,7 @@ namespace TLCGen.Importers.TabC
     public class TabCImportHelperOutcome
     {
         public bool Intergroen { get; set; }
+        public bool Garantie { get; set; }
         public List<DetectorModel> Detectoren { get; set; }
         public List<FaseCyclusModel> Fasen { get; set; }
         public List<ConflictModel> Conflicten { get; set; }
@@ -46,6 +47,7 @@ namespace TLCGen.Importers.TabC
 
         private static Regex ReComment = new Regex(@"^\s*/\*.*", RegexOptions.Compiled);
         private static Regex ReIntergreen = new Regex(@"\s*TIG_max\s?\[.*", RegexOptions.Compiled);
+        private static Regex ReGarantie = new Regex(@"\s*(TIG|TO)_min\s?\[.*", RegexOptions.Compiled);
         private static Regex ReTypeOTTO = new Regex(@"\s*/\*\s+Aangemaakt\smet:\s+OTTO.*", RegexOptions.Compiled);
         private static Regex ReTypeTPA = new Regex(@"\s*CCOLGEN:\s+V[0-9].*", RegexOptions.Compiled);
         private static Regex ReTypeATB = new Regex(@"\s*\*\s+Generator\s*:\s*Advanced\s+Traffic\s+Builder.*", RegexOptions.Compiled);
@@ -69,18 +71,21 @@ namespace TLCGen.Importers.TabC
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeFICK.IsMatch(x))) tabCType = TabCType.FICK;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeHUIJSKES.IsMatch(x))) tabCType = TabCType.HUIJSKES;
             if (tabCType == TabCType.UNKNOWN && lines.Any(x => ReTypeGC.IsMatch(x))) tabCType = TabCType.GC;
-            var intergroen = false;
-            intergroen = lines.Any(x => ReIntergreen.IsMatch(x));
+            var intergroen = lines.Any(x => ReIntergreen.IsMatch(x));
+            var garantie = lines.Any(x => ReGarantie.IsMatch(x));
             outcome.Intergroen = intergroen;
+            outcome.Garantie = garantie;
 
             var importD = false;
             var importT = false;
+            var importG = false;
             var importDeelconf = "";
             if (TLCGenDialogProvider.Default.ShowDialogs)
             {
                 var dlg = new ChooseTabTypeWindow
                 {
                     Intergroen = intergroen,
+                    ImportGarantie = garantie,
                     HasIntergroen = intergroen,
                     TabType = tabCType,
                     ImportInExisting = !newReg
@@ -90,6 +95,7 @@ namespace TLCGen.Importers.TabC
                 if (res == false || tabCType == TabCType.UNKNOWN) return null;
                 importD = dlg.ImportDetectoren;
                 importT = dlg.ImportTijden;
+                outcome.Garantie = importG = dlg.ImportGarantie;
                 importDeelconf = dlg.ImportDeelconflicten;
             }
             else
@@ -99,7 +105,7 @@ namespace TLCGen.Importers.TabC
             }
 
             // get meta data
-            if(tabCType == TabCType.OTTO)
+            if (tabCType == TabCType.OTTO)
             {
                 var kNaamRegex = new Regex(@"^\s*/\*\sKruispunt\snaam:\s*(.*)\*/", RegexOptions.Compiled);
                 var kLocatieRegex = new Regex(@"^\s*/\*\sKruispunt\slocatie:\s*(.*)\*/", RegexOptions.Compiled);
@@ -177,6 +183,7 @@ namespace TLCGen.Importers.TabC
 
             // import conflicts
             Regex confRegex = null;
+            Regex gconfRegex = null;
             Regex dconfRegex = null;
             Regex geelRegex = null;
             switch (tabCType)
@@ -188,12 +195,14 @@ namespace TLCGen.Importers.TabC
                     if (intergroen)
                     {
                         dconfRegex = new Regex(@"^\s*\/\*\s*TIG_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL));\s*=\s*deelconflict\s*\*\/.*");
+                        gconfRegex = new Regex(@"^\s*TIG_min\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
                         confRegex = new Regex(@"^\s*TIG_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
                         geelRegex = new Regex(@"^\s*TGL_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s?=\s?(?<geel>[0-9]+).*");
                     }
                     else
                     {
                         dconfRegex = new Regex(@"^\s*\/\*\s*TO_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL));\s*=\s*deelconflict\s*\*\/.*");
+                        gconfRegex = new Regex(@"^\s*TO_min\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
                         confRegex = new Regex(@"^\s*TO_max\s*\[\s*fc(?<fc1>[0-9]+)\s*\]\s*\[\s*fc(?<fc2>[0-9]+)\s*\]\s*=\s*(?<conf>([0-9]+|FK|GK|GKL)).*");
                     }
                     break;
@@ -215,14 +224,49 @@ namespace TLCGen.Importers.TabC
                     var fc1 = m.Groups["fc1"].Value;
                     var fc2 = m.Groups["fc2"].Value;
                     var conf = m.Groups["conf"].Value;
-                    if (int.TryParse(conf, out var iconf) && !outcome.Conflicten.Any(x => x.FaseVan == fc1 && x.FaseNaar == fc2))
+                    if (int.TryParse(conf, out var iconf))
                     {
-                        outcome.Conflicten.Add(new ConflictModel
+                        var cconf = outcome.Conflicten.FirstOrDefault(x => x.FaseVan == fc1 && x.FaseNaar == fc2);
+                        if (cconf != null)
                         {
-                            FaseVan = fc1,
-                            FaseNaar =fc2,
-                            Waarde = iconf
-                        });
+                            cconf.Waarde = iconf;
+                        }
+                        else
+                        {
+                            outcome.Conflicten.Add(new ConflictModel
+                            {
+                                FaseVan = fc1,
+                                FaseNaar = fc2,
+                                Waarde = iconf
+                            });
+                        }
+                    }
+                }
+                if (importG)
+                {
+                    var gm = gconfRegex.Match(l);
+                    if (gm.Success)
+                    {
+                        var fc1 = gm.Groups["fc1"].Value;
+                        var fc2 = gm.Groups["fc2"].Value;
+                        var conf = gm.Groups["conf"].Value;
+                        if (int.TryParse(conf, out var iconf))
+                        {
+                            var cconf = outcome.Conflicten.FirstOrDefault(x => x.FaseVan == fc1 && x.FaseNaar == fc2);
+                            if (cconf != null)
+                            {
+                                cconf.GarantieWaarde = iconf;
+                            }
+                            else
+                            {
+                                outcome.Conflicten.Add(new ConflictModel
+                                {
+                                    FaseVan = fc1,
+                                    FaseNaar = fc2,
+                                    GarantieWaarde = iconf
+                                });
+                            }
+                        }
                     }
                 }
                 else if (intergroen)
@@ -350,7 +394,7 @@ namespace TLCGen.Importers.TabC
                                         {
                                             if (lr != null)
                                             {
-                                                lr.LateReleaseOntruimingstijd= iconf;
+                                                lr.LateReleaseOntruimingstijd = iconf;
                                             }
                                             else
                                             {

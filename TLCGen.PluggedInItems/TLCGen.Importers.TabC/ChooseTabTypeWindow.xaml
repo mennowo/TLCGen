@@ -31,6 +31,7 @@
             <CheckBox Name="ImportDetCheck" Margin="5" Content="Importeer detectoren" />
             <CheckBox Name="ImportTijdCheck" Margin="5" Content="Importeer instellingen" />
             <CheckBox Name="ImportDeelconflictenCheck" Margin="5" Content="Importeer deelconflicten" />
+            <CheckBox Name="ImportGarantieCheck" Margin="5" Content="Importeer garantie tijden" />
             <Label Content="Importeer gemotoriseerd &lt;&gt; langzaam als:" Visibility="{Binding ElementName=ImportDeelconflictenCheck,Path=IsChecked,Converter={StaticResource bool2visConv}}" />
             <ComboBox Name="DeelconflictenTypeCB" Margin="2" Visibility="{Binding ElementName=ImportDeelconflictenCheck,Path=IsChecked,Converter={StaticResource bool2visConv}}" />
         </StackPanel>

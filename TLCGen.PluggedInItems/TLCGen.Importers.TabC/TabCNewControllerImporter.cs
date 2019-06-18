@@ -105,6 +105,11 @@ namespace TLCGen.Importers.TabC
                     {
                         newc.Data.Straat2 = NewData.KruisingStraat2;
                     }
+                    // correct guaranteed
+                    if (NewData.Garantie)
+                    {
+                        newc.Data.GarantieOntruimingsTijden = true;
+                    }
                     return newc;
                 }
                 catch (Exception e)

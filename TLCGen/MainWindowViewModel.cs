@@ -482,19 +482,20 @@ namespace TLCGen.ViewModels
                 }
 
                 // Check data integrity
-                c2.Data.GarantieOntruimingsTijden = false;
+                //c2.Data.GarantieOntruimingsTijden = false;
                 s1 = TLCGenIntegrityChecker.IsConflictMatrixOK(c2);
                 if (s1 != null)
                 {
                     TLCGenDialogProvider.Default.ShowMessageBox("Fout bij importeren:\n\n" + s1, "Error bij importeren: fout in data");
                     return;
                 }
-                if(c1.Data.GarantieOntruimingsTijden)
-                {
-                    TLCGenDialogProvider.Default.ShowMessageBox("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
-                }
+                //if(c1.Data.GarantieOntruimingsTijden)
+                //{
+                //    TLCGenDialogProvider.Default.ShowMessageBox("De bestaande regeling had garantie ontruimingstijden.\nDeze zijn nu uitgeschakeld.", "Garantie ontruimingstijden uitrgeschakeld");
+                //}
                 SetController(c2);
                 ControllerVM.ReloadController();
+                MessengerInstance.Send(new ControllerDataChangedMessage());
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Data in regeling " + TLCGenControllerDataProvider.Default.Controller.Data.Naam + " geïmporteerd");
@@ -523,6 +524,7 @@ namespace TLCGen.ViewModels
                 GuiActionsManager.SetStatusBarMessage(
                     DateTime.Now.ToLongTimeString() +
                     " - Regeling geïmporteerd");
+                MessengerInstance.Send(new ControllerDataChangedMessage());
             }
             Messenger.Default.Send(new UpdateTabsEnabledMessage());
             RaisePropertyChanged("HasController");
