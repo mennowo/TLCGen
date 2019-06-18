@@ -284,7 +284,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                         ipl = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}d{d}", CCOLKoppelSignaalRichtingEnum.Uit);
                                         sb.AppendLine($"{ts}if (G[{_fcpf}{sg.Key.Naam}] && ED[{_dpf}{d}]) IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = !IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}];");
                                     }
-                                    sb.Append($")");
                                 }
                             }
                             else // RHDHV 
@@ -321,6 +320,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                     {
+                        if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x =>
+                            x.Richting == PelotonKoppelingRichtingEnum.Inkomend &&
+                            x.Type == PelotonKoppelingType.DenHaag &&
+                            x.Detectoren.Any()))
+                        {
+                            foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                            {
+                                sb.AppendLine($"{ts}/* Afzetten hulpelementen inkomende peloton koppelingen */");
+                                if (pk.Type == PelotonKoppelingType.DenHaag && pk.Detectoren.Any())
+                                {
+                                    sb.AppendLine($"{ts}IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] = FALSE;");
+                                }
+                            }
+                        }
+
                         foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                         {
                             var isg = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.In);
@@ -329,7 +343,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (pk.Type == PelotonKoppelingType.DenHaag && pk.Detectoren.Any())
                             {
                                 sb.AppendLine($"{ts}/* Inkomende peloton koppeling van {pk.KruisingNaam} */");
-                                sb.Append($"{ts}IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] = proc_pel_in_V1({_hpf}{pk.PTPKruising}{_hiks}{isg:00}, {_tpf}{_tpelmeet}{pk.GekoppeldeSignaalGroep}, {_tpf}{_tpelmaxhiaat}{pk.GekoppeldeSignaalGroep}, {_prmpf}{_prmpelgrens}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelvtg}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelin}{pk.GekoppeldeSignaalGroep}, ");
+                                sb.Append($"{ts}IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] |= proc_pel_in_V1({_hpf}{pk.PTPKruising}{_hiks}{isg:00}, {_tpf}{_tpelmeet}{pk.GekoppeldeSignaalGroep}, {_tpf}{_tpelmaxhiaat}{pk.GekoppeldeSignaalGroep}, {_prmpf}{_prmpelgrens}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelvtg}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelin}{pk.GekoppeldeSignaalGroep}, ");
                                 foreach (var d in pk.Detectoren)
                                 {
                                     var id = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}d{d.DetectorNaam}", CCOLKoppelSignaalRichtingEnum.In);
@@ -337,7 +351,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine("END);");
                             }
-                            else // RHDHV
+                            else if (pk.Type == PelotonKoppelingType.RHDHV)
                             {
                                 sb.AppendLine($"{ts}/* Inkomende vrije koppeling KP017 => KP018 */");
                                 sb.AppendLine($"{ts}/* ---------------------------------------- */");
@@ -495,7 +509,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     sb.AppendLine($"{ts}}}");
                                 }
                             }
-                            else // RHDHV
+                            else if (pk.Type == PelotonKoppelingType.RHDHV)
                             {
                                 sb.AppendLine($"{ts}/* extra verlengen obv vrije koppeling */");
                                 if(pk.ToepassenMeetkriterium != NooitAltijdAanUitEnum.Nooit)

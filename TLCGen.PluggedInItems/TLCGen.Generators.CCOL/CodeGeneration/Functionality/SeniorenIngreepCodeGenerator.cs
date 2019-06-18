@@ -63,7 +63,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     _myElements.Add(
                         CCOLGeneratorSettingsProvider.Default.CreateElement(
                             $"{_tdbsiexgr}{_dpf}{d.Naam}",
-                            fc.SchoolIngreepBezetTijd,
+                            fc.SeniorenIngreepBezetTijd,
                             CCOLElementTimeTypeEnum.TE_type,
                             _tdbsiexgr,
                             d.Naam));
@@ -132,7 +132,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var dk1 = dks.FirstOrDefault();
                         DetectorModel dk2 = ((dks.Count() > 1) ? dks[1] : null);
                         var nl1 = dk1 == null ? false : c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == dk1.Naam));
-                        var nl2 = dk1 == null ? false : c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == dk2.Naam));
+                        var nl2 = dk2 == null ? false : c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == dk2.Naam));
                         var nl_extra = c.InterSignaalGroep.Meeaanvragen.Where(x => x.FaseNaar == fc.Naam && x.Detectoren.Any());
                         var extra_d = "";
                         sb.Append($"{ts}");
