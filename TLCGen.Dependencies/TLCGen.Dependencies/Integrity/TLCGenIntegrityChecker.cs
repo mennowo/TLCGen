@@ -188,9 +188,15 @@ namespace TLCGen.Integrity
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (ignore != null) continue;
+
                 var propValue = property.GetValue(obj);
+
                 if (property.PropertyType == typeof(string))
                 {
+
+
                     var attr = property.GetCustomAttributes(typeof(ModelNameAttribute), true);
                     if (attr.Length != 1) continue;
                     var mnAttr = (ModelNameAttribute)attr.First();

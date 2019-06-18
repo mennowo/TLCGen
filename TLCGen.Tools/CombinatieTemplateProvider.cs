@@ -22,6 +22,9 @@ namespace TLCGen.Plugins.Tools
             PropertyInfo[] properties = objType.GetProperties();
             foreach (PropertyInfo property in properties)
             {
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (ignore != null) continue;
+
                 object propValue = property.GetValue(obj);
 
                 // for ints

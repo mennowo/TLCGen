@@ -163,6 +163,7 @@
     <Compile Include="Models.Enumerations\VLOGMonModeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGTypeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGVersieEnum.cs" />
+    <Compile Include="Models\Attributes\TLCGenIgnoreAttribute.cs" />
     <Compile Include="Models\Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Attributes\IOElementAttribute.cs" />
     <Compile Include="Models\Attributes\IsDocumentedAttribute.cs" />

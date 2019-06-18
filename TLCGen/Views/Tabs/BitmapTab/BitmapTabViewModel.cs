@@ -412,7 +412,8 @@ namespace TLCGen.ViewModels
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
-                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string)) continue;
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string) || ignore != null) continue;
                 var propValue = property.GetValue(obj);
                 var elems = propValue as IList;
                 if (elems != null)

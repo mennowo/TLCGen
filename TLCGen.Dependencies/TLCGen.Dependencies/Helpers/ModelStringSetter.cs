@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TLCGen.Models;
 
 namespace TLCGen.Helpers
 {
@@ -17,6 +18,9 @@ namespace TLCGen.Helpers
             PropertyInfo[] properties = objType.GetProperties();
             foreach (PropertyInfo property in properties)
             {
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (ignore != null) continue;
+
                 object propValue = property.GetValue(obj);
                 if (property.PropertyType == typeof(string))
                 {
@@ -51,6 +55,9 @@ namespace TLCGen.Helpers
             PropertyInfo[] properties = objType.GetProperties();
             foreach (PropertyInfo property in properties)
             {
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (ignore != null) continue;
+
                 object propValue = property.GetValue(obj);
                 if (property.PropertyType == typeof(string))
                 {

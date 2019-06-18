@@ -110,7 +110,10 @@ namespace TLCGen.Integrity
 			PropertyInfo[] properties = objType.GetProperties();
 			foreach (PropertyInfo property in properties)
 			{
-				Type propType = property.PropertyType;
+                var ignore = (TLCGenIgnoreAttributeAttribute)property.GetCustomAttribute(typeof(TLCGenIgnoreAttributeAttribute));
+                if (ignore != null) continue;
+
+                Type propType = property.PropertyType;
 				if (!(propType == typeof(string)) && !propType.IsValueType)
 				{
 					object propValue = property.GetValue(obj);
