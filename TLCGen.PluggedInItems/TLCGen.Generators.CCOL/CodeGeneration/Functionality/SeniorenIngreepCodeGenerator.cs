@@ -144,6 +144,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach(var nl in nl_extra)
                             {
+                                var mafc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
+                                if (mafc == null || mafc.SeniorenIngreep == Models.Enumerations.NooitAltijdAanUitEnum.Nooit) continue;
                                 foreach (var d in nl.Detectoren)
                                 {
                                     if (fc.Detectoren.Any(x => x.Naam == d.MeeaanvraagDetector)) continue;
