@@ -1083,14 +1083,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 							sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
 						}
 						sb.AppendLine($"{ts}}}");
-						sb.AppendLine($"{ts}");
+						sb.AppendLine();
 					}
 
-					sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
+
+                    sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
+					sb.AppendLine();
+
+                    sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
 					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
 					sb.AppendLine($"{ts}reset_altreal_halfstar();");
 					sb.AppendLine($"{ts}");
-					sb.AppendLine($"{ts}signaalplan_alternatief();");
+                    sb.AppendLine($"{ts}signaalplan_alternatief();");
 					
 					return sb.ToString();
 				

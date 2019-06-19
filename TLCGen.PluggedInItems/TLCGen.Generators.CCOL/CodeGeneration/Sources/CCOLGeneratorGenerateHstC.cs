@@ -245,8 +245,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
             AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.HstCAlternatief, true, true, false, true);
 
-            sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
-
             sb.AppendLine("}");
             sb.AppendLine();
 
