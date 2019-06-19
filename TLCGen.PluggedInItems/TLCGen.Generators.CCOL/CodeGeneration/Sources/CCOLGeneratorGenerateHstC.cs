@@ -58,7 +58,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
 			sb.AppendLine("#include \"halfstar.c\"");
 			sb.AppendLine("#include \"tx_synch.h\"");
-			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen)
+			if (c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen && c.HasPTorHD())
 			{
 				sb.AppendLine("#include \"halfstar_ov.c\"");
 			}

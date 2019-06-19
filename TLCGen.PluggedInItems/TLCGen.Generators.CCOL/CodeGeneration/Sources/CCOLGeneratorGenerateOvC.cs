@@ -133,7 +133,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 sb.AppendLine("#include \"ov.c\"");
             }
-            if (c.HalfstarData.IsHalfstar)
+            if (c.HalfstarData.IsHalfstar && c.OVData.OVIngreepType != OVIngreepTypeEnum.Geen && c.HasPTorHD())
             {
                 sb.AppendLine("#include \"halfstar_ov.h\"");
             }
