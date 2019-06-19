@@ -90,6 +90,31 @@ namespace TLCGen.ViewModels
 
                 _naloop.DetectieAfhankelijk = value;
                 SetNaloopTijden();
+                if (value && !Detectoren.Any())
+                {
+                    var fc = TLCGenControllerDataProvider.Default.Controller.Fasen.First(x => x.Naam == _naloop.FaseVan);
+                    switch (fc.Type)
+                    {
+                        case FaseTypeEnum.Auto:
+                        case FaseTypeEnum.Fiets:
+                        case FaseTypeEnum.OV:
+                            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.Kop))
+                            {
+                                DetectorManager.SelectedItemToAdd = d.Naam;
+                                DetectorManager.AddItemCommand.Execute(null);
+                            }
+                            break;
+                        case FaseTypeEnum.Voetganger:
+                            foreach (var d in fc.Detectoren.Where(x => x.Type == DetectorTypeEnum.KnopBuiten))
+                            {
+                                DetectorManager.SelectedItemToAdd = d.Naam;
+                                DetectorManager.AddItemCommand.Execute(null);
+                            }
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
                 RaisePropertyChanged<object>(nameof(DetectieAfhankelijk), broadcast: true);
             }
         }
