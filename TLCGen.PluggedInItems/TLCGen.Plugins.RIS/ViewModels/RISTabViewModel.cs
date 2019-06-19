@@ -53,6 +53,8 @@ namespace TLCGen.Plugins.RIS
                 RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes);
                 RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes);
                 MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
+                _lanesRequestManager = null;
+                _lanesExtendManager = null;
             }
         }
 

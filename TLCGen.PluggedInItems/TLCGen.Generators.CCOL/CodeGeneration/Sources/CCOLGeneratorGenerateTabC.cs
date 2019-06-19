@@ -556,131 +556,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     if (AppendEmptyLine) sb.AppendLine();
                 }
 
-                //if (controller.InterSignaalGroep.Gelijkstarten.Count > 0 || controller.InterSignaalGroep.Voorstarten.Count > 0)
-                //{
-                //    foreach (var gs in controller.InterSignaalGroep.Gelijkstarten)
-                //    {
-                //        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
-                //        {
-                //            if (gs.FaseVan == conflict.FaseVan)
-                //            {
-                //                bool issym = false;
-                //                foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
-                //                {
-                //                    if (conflict.FaseNaar == conflict2.FaseNaar &&
-                //                       gs.FaseNaar == conflict2.FaseVan)
-                //                    {
-                //                        issym = true;
-                //                        break;
-                //                    }
-                //                }
-                //                if (!issym)
-                //                {
-                //                    sb.AppendLine($"{ts}TO_max[{_fcpf}{gs.FaseNaar}][{conflict.GetFaseToDefine()}] = FK;");
-                //                    sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{gs.FaseNaar}] = FK;");
-                //                }
-                //            }
-                //            if (gs.FaseNaar == conflict.FaseVan)
-                //            {
-                //                bool issym = false;
-                //                foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
-                //                {
-                //                    if (conflict.FaseNaar == conflict2.FaseNaar &&
-                //                       gs.FaseVan == conflict2.FaseVan)
-                //                    {
-                //                        issym = true;
-                //                        break;
-                //                    }
-                //                }
-                //                if (!issym)
-                //                {
-                //                    sb.AppendLine($"{ts}TO_max[{_fcpf}{gs.FaseVan}][{conflict.GetFaseToDefine()}] = FK;");
-                //                    sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{gs.FaseVan}] = FK;");
-                //                }
-                //            }
-                //        }
-                //    }
-                //    foreach (var vs in controller.InterSignaalGroep.Voorstarten)
-                //    {
-                //        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
-                //        {
-                //            if (vs.FaseVan == conflict.FaseVan)
-                //            {
-                //                bool issym = false;
-                //                foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
-                //                {
-                //                    if (conflict.FaseNaar == conflict2.FaseNaar &&
-                //                       vs.FaseNaar == conflict2.FaseVan)
-                //                    {
-                //                        issym = true;
-                //                        break;
-                //                    }
-                //                }
-                //                if (!issym)
-                //                {
-                //                    sb.AppendLine($"{ts}TO_max[{_fcpf}{vs.FaseNaar}][{conflict.GetFaseToDefine()}] = FK;");
-                //                    sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{vs.FaseNaar}] = FK;");
-                //                }
-                //            }
-                //        }
-                //    }
-                //    foreach (var nl in controller.InterSignaalGroep.Nalopen)
-                //    {
-                //        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
-                //        {
-                //            if (nl.FaseVan == conflict.FaseVan)
-                //            {
-                //                bool issym = false;
-                //                foreach (ConflictModel conflict2 in controller.InterSignaalGroep.Conflicten)
-                //                {
-                //                    if (conflict.FaseNaar == conflict2.FaseNaar &&
-                //                       nl.FaseNaar == conflict2.FaseVan)
-                //                    {
-                //                        issym = true;
-                //                        break;
-                //                    }
-                //                }
-                //                if (!issym)
-                //                {
-                //                    switch (nl.SynchronisatieType)
-                //                    {
-                //                        case Models.Enumerations.SynchronisatieTypeEnum.FictiefConflict:
-                //                            sb.AppendLine($"{ts}TO_max[{_fcpf}{nl.FaseNaar}][{conflict.GetFaseToDefine()}] = FK;");
-                //                            sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{nl.FaseNaar}] = FK;");
-                //                            break;
-                //                        case Models.Enumerations.SynchronisatieTypeEnum.GroenConflict:
-                //                            sb.AppendLine($"{ts}TO_max[{_fcpf}{nl.FaseNaar}][{conflict.GetFaseToDefine()}] = GK;");
-                //                            sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{nl.FaseNaar}] = GK;");
-                //                            break;
-                //                        case Models.Enumerations.SynchronisatieTypeEnum.GroenGeelConflict:
-                //                            sb.AppendLine($"{ts}TO_max[{_fcpf}{nl.FaseNaar}][{conflict.GetFaseToDefine()}] = GKL;");
-                //                            sb.AppendLine($"{ts}TO_max[{conflict.GetFaseToDefine()}][{_fcpf}{nl.FaseNaar}] = GK;");
-                //                            break;
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
                 if (controller.Data.GarantieOntruimingsTijden)
                 {
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
-                        if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
-                        {
-                            sb.AppendLine($"{ts}default_tig_min(0);");
-                        }
-                        else
-                        {
-                            sb.AppendLine($"{ts}default_to_min(0);");
-                        }
                         string prevfasefrom = "";
                         foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                         {
-                            if (!conflict.GarantieWaarde.HasValue ||
-                                conflict.GarantieWaarde.Value == conflict.Waarde) continue;
-
                             var ff = conflict.GetFaseFromDefine();
                             var ft = conflict.GetFaseToDefine();
                             if (ff == ft) continue;
