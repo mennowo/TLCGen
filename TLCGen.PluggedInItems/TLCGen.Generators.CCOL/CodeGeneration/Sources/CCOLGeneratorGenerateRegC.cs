@@ -130,7 +130,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{ts}#include \"ov.h\"       /* ov-afhandeling                    */");
                 if(controller.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
                 {
-
                     sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
                 }
                 sb.AppendLine($"{ts}#include \"extra_func_ov.c\" /* extra standaard functies OV     */");

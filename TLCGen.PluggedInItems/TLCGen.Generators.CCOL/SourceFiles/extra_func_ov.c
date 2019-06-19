@@ -191,20 +191,25 @@ void set_DSI_message(mulv ds, s_int16 vtg, s_int16 dir, count type, s_int16 stip
 #ifdef OV_CHECK_WAGENNMR
 
 /* Check op wagendienstnummer openbaar vervoer */
-#define WDNSTlist 10 /* maximaal 10 wagendienstnummers onthouden        */
-static const int WDNSTblock = 5;  /* wagendienstnummers maximaal 5 minuten blokkeren */
+#define WDNSTlist 10    /* maximaal 10 wagendienstnummers onthouden (IN, VOOR) */
+#define WDNSTlistuit 30 /* maximaal 30 wagendienstnummers onthouden (UIT)      */
+int WDNSTblock = 5;     /* wagendienstnummers maximaal 5 minuten blokkeren     */
 
-static mulv WDNST_fc_in[FCMAX][WDNSTlist];        /* array met wagendienstnummer inmeldingen      */
-static mulv WDNST_fc_uit[FCMAX][WDNSTlist];       /* array met wagendienstnummer uitmeldingen     */
-static mulv WDNST_fc_voor[FCMAX][WDNSTlist];      /* array met wagendienstnummer voormeldingen    */
-static mulv WDNST_cifsect_in[FCMAX][WDNSTlist];   /* array met CIF_SEC_TELLER tijd inmeldingen    */
-static mulv WDNST_cifsect_uit[FCMAX][WDNSTlist];  /* array met CIF_SEC_TELLER tijd uitmeldingen   */
-static mulv WDNST_cifsect_voor[FCMAX][WDNSTlist]; /* array met CIF_SEC_TELLER tijd voormeldingen  */
+/* Een inmelding ruimt de voormelding van hetzelfde WDNSTnr op */
+/* Een uitmelding ruimt de inmelding van hetzelfde WDNSTnr op  */
+/* Een uitmelding kan niet worden opgeruimd door een volgende melding, daarom een 3 x zo groot array*/
+
+mulv WDNST_fc_in[FCMAX][WDNSTlist];          /* array met wagendienstnummer inmeldingen      */
+mulv WDNST_fc_uit[FCMAX][WDNSTlistuit];      /* array met wagendienstnummer uitmeldingen     */
+mulv WDNST_fc_voor[FCMAX][WDNSTlist];        /* array met wagendienstnummer voormeldingen    */
+mulv WDNST_cifsect_in[FCMAX][WDNSTlist];     /* array met CIF_SEC_TELLER tijd inmeldingen    */
+mulv WDNST_cifsect_uit[FCMAX][WDNSTlistuit]; /* array met CIF_SEC_TELLER tijd uitmeldingen   */
+mulv WDNST_cifsect_voor[FCMAX][WDNSTlist];   /* array met CIF_SEC_TELLER tijd voormeldingen  */
 
 /* iedere (60 * WDNSTblock) seconde oude wagendienstnummers verwijderen */
 void WDNST_cleanup(void)
 {
-	if (TM) /* ivm snelheid 1 x per minuut */
+	if (TM) /* 1 x per minuut is voldoende */
 	{
 		count fc, listnr;
 		for (fc = 0; fc < FCMAX; ++fc)
@@ -212,6 +217,21 @@ void WDNST_cleanup(void)
 			for (listnr = 0; listnr < WDNSTlist; ++listnr)
 			{
 				int diff;
+
+				/* voormeldingen */
+				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_voor[fc][listnr])
+				{
+					diff = CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
+				}
+				else
+				{ /* MAX_KLOKTELLER = 32767, zie control.c */
+					diff = MAX_KLOKTELLER + CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
+				}
+				if (diff > WDNSTblock * 60)
+				{
+					WDNST_fc_voor[fc][listnr] = 0;
+					WDNST_cifsect_voor[fc][listnr] = 0;
+				}
 
 				/* inmeldingen */
 				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_in[fc][listnr])
@@ -228,6 +248,12 @@ void WDNST_cleanup(void)
 					WDNST_cifsect_in[fc][listnr] = 0;
 				}
 
+			}
+
+			for (listnr = 0; listnr < WDNSTlistuit; ++listnr)
+			{
+				int diff;
+
 				/* uitmeldingen */
 				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_uit[fc][listnr])
 				{
@@ -242,21 +268,6 @@ void WDNST_cleanup(void)
 					WDNST_fc_uit[fc][listnr] = 0;
 					WDNST_cifsect_uit[fc][listnr] = 0;
 				}
-
-				/* voormeldingen */
-				if (CIF_KLOK[CIF_SEC_TELLER] >= WDNST_cifsect_voor[fc][listnr])
-				{
-					diff = CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
-				}
-				else
-				{ /* MAX_KLOKTELLER = 32767, zie control.c */
-					diff = MAX_KLOKTELLER + CIF_KLOK[CIF_SEC_TELLER] - WDNST_cifsect_voor[fc][listnr];
-				}
-				if (diff > WDNSTblock * 60)
-				{
-					WDNST_fc_voor[fc][listnr] = 0;
-					WDNST_cifsect_voor[fc][listnr] = 0;
-				}
 			}
 		}
 	}
@@ -264,11 +275,13 @@ void WDNST_cleanup(void)
 
 bool WDNST_check(count fc)
 {
-	count listnr;
+	count listnr, listnr2;
 	int firstempty = 999;
-	boolv WDNSTbestaatniet = TRUE;
+	bool WDNSTbestaatniet = TRUE;
 
-	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSIN])
+	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN)
+		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
+		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
 	{
 		for (listnr = 0; listnr < WDNSTlist; ++listnr)
 		{
@@ -280,17 +293,29 @@ bool WDNST_check(count fc)
 			{
 				if (firstempty == 999) firstempty = listnr;
 			}
-			if (WDNSTbestaatniet == TRUE)
+			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
 			{
 				WDNST_fc_in[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
-				WDNST_cifsect_in[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+				WDNST_cifsect_in[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
+
+				/* opruimen bijbehorende voormelding */
+				for (listnr2 = 0; listnr2 < WDNSTlist; ++listnr2)
+				{
+					if (WDNST_fc_voor[fc][listnr2] == CIF_DSI[CIF_DSI_WDNST])
+					{
+						WDNST_fc_voor[fc][listnr2] = 0;
+						WDNST_cifsect_voor[fc][listnr2] = 0;
+					}
+				}
 			}
 		}
 	}
 
-	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSUIT])
+	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT)
+		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
+		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
 	{
-		for (listnr = 0; listnr < WDNSTlist; ++listnr)
+		for (listnr = 0; listnr < WDNSTlistuit; ++listnr)
 		{
 			if (WDNST_fc_uit[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
 			{
@@ -300,15 +325,27 @@ bool WDNST_check(count fc)
 			{
 				if (firstempty == 999) firstempty = listnr;
 			}
-			if (WDNSTbestaatniet == TRUE)
+			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
 			{
 				WDNST_fc_uit[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
-				WDNST_cifsect_uit[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+				WDNST_cifsect_uit[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
+
+				/* opruimen bijbehorende inmelding */
+				for (listnr2 = 0; listnr2 < WDNSTlist; ++listnr2)
+				{
+					if (WDNST_fc_in[fc][listnr2] == CIF_DSI[CIF_DSI_WDNST])
+					{
+						WDNST_fc_in[fc][listnr2] = 0;
+						WDNST_cifsect_in[fc][listnr2] = 0;
+					}
+				}
 			}
 		}
 	}
 
-	if (CIF_DSI[CIF_DSI_TYPE] == CIF_DSI[CIF_DSVOOR])
+	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSVOOR)
+		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
+		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
 	{
 		for (listnr = 0; listnr < WDNSTlist; ++listnr)
 		{
@@ -320,10 +357,10 @@ bool WDNST_check(count fc)
 			{
 				if (firstempty == 999) firstempty = listnr;
 			}
-			if (WDNSTbestaatniet == TRUE)
+			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
 			{
 				WDNST_fc_voor[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
-				WDNST_cifsect_voor[fc][firstempty] = /*(CIF_KLOK[CIF_SEC_TELLER] == 0) ? 1 :*/ CIF_KLOK[CIF_SEC_TELLER];
+				WDNST_cifsect_voor[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
 			}
 		}
 	}
