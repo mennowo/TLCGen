@@ -1580,7 +1580,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (c.OVData.OVIngrepen.Any())
                     {
                         sb.AppendLine($"{ts}/* tijdens halfstar bedrijf alleen optie aanvraag voor OV richtingen */");
-                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}])");
+                        sb.AppendLine($"{ts}if (IH[{_hpf}{_hplact}] && SCH[{_schpf}{_schovpriople}])");
                         sb.AppendLine($"{ts}{{");
                         foreach (var ov in c.OVData.OVIngrepen)
                         {
@@ -1592,7 +1592,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     sb.AppendLine();
                     sb.AppendLine($"{ts}/* Geen prioriteit indien voorwaarden tegenhouden omschakelen waar zijn */");
-                    sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}] && IH[{_hpf}{_hplact}])");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_homschtegenh}] && IH[{_hpf}{_hplact}] && SCH[{_schpf}{_schovpriople}])");
                     sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}for (fc = 0; fc < ovOVMAX; ++fc)");
                     sb.AppendLine($"{ts}{ts}{ts}iXPrio[fc] |= BIT6;");
@@ -1606,25 +1606,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.OvCOnderMaximum:
-                    sb.AppendLine($"{ts}OVHalfstarOnderMaximum();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarOnderMaximum();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCAfkapGroen:
-                    sb.AppendLine($"{ts}OVHalfstarAfkapGroen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarAfkapGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCStartGroenMomenten:
-                    sb.AppendLine($"{ts}OVHalfstarStartGroenMomenten();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarStartGroenMomenten();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCAfkappen:
-                    sb.AppendLine($"{ts}OVHalfstarAfkappen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarAfkappen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCTerugkomGroen:
-                    sb.AppendLine($"{ts}OVHalfstarTerugkomGroen();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarTerugkomGroen();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCGroenVasthouden:
-                    sb.AppendLine($"{ts}OVHalfstarGroenVasthouden();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarGroenVasthouden();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCMeetkriterium:
-                    sb.AppendLine($"{ts}OVHalfstarMeetKriterium();");
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarMeetKriterium();");
                     return sb.ToString();
 
                 #endregion // ov.c

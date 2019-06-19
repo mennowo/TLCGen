@@ -268,7 +268,13 @@
             </TabItem>
             <TabItem Header="OV" IsEnabled="{Binding Path=IsHalfstar}">
                 <Grid>
-                    <DataGrid ItemsSource="{Binding Path=OVIngrepenHalfstar}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <CheckBox IsChecked="{Binding Path=OVPrioriteitPL,UpdateSourceTrigger=PropertyChanged}" Margin="5" VerticalAlignment="Center"
+                              Content="Prioriteit tijdens halfstar default aan/uit" />
+                    <DataGrid ItemsSource="{Binding Path=OVIngrepenHalfstar}" Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False">
                         <DataGrid.RowHeaderTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
