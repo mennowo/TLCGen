@@ -10,6 +10,7 @@
    * 2.1.0    24-12-2018   ddo         Diverse aanpassingen na Vissim simulatie
    * 2.2.0    01-02-2019   ddo         Correctie veiligheidsgroen verwijderd
    * 2.3.0    15-02-2019   ddo         Veiligstellen hiaattijden aangepast
+   * 2.4.0    20-06-2019   ddo         Niet afzetten MK[fc] BIT3 tijdens MG[fc] tot er een conflictaanvraag is
    *
    ***********************************************************************************************************
 
@@ -385,8 +386,10 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
   hulp_bit3 = FALSE;
   for (rijstrook=1; rijstrook<=max_rijstrook; rijstrook++)   /* voor alle rijstroken van de betreffende signaalgroep */
   {
-    if (verlengen[rijstrook] || detstor[fc]) {
-      hulp_bit3 = TRUE;
+    if ((verlengen[rijstrook] || detstor[fc])      /* zolang er verlengd wordt, of bij een aanwezige detectiestoring */
+       || (!(verlengen[rijstrook] || detstor[fc]) && MG[fc] && !ka(fc)))      /* óf bij MG[] zonder conflictaanvraag */
+    {
+      hulp_bit3 = TRUE;                            /* blijft hulp_bit 3 waar en wordt dus MK[] BIT3 niet af gezet    */
     }
     else
     {

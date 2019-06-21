@@ -2171,12 +2171,6 @@
             <Description>Onthouden actief zijn senioreningreep bij fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>siexgrd</Default>
-            <Setting>siexgrd</Setting>
-            <Type>HulpElement</Type>
-            <Description>Onthouden actief zijn senioreningreep bij fase _E1_ via detector _E2_</Description>
-          </Setting>
-          <Setting>
             <Default>si</Default>
             <Setting>si</Setting>
             <Type>Schakelaar</Type>

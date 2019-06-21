@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Shell;
+using TLCGen.Extensions;
 
 namespace TLCGen
 {

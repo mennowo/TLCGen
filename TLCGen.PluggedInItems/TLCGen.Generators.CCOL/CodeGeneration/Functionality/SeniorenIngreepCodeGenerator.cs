@@ -13,11 +13,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 #pragma warning disable 0649
         private CCOLGeneratorCodeStringSettingModel _tdbsiexgr;
         private CCOLGeneratorCodeStringSettingModel _hsiexgr;
-        private CCOLGeneratorCodeStringSettingModel _hsiexgrd;
         private CCOLGeneratorCodeStringSettingModel _schsi;
         private CCOLGeneratorCodeStringSettingModel _prmsiexgrperc;
         private CCOLGeneratorCodeStringSettingModel _tsiexgr;
 #pragma warning restore 0649
+        private string _tnlsg;
         private string _tnlsgd;
         private string _uswt;
 
@@ -67,15 +67,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type,
                             _tdbsiexgr,
                             d.Naam));
-                    if (c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == d.Naam)))
-                    {
-                        _myElements.Add(
-                            CCOLGeneratorSettingsProvider.Default.CreateElement(
-                                $"{_hsiexgrd}{_dpf}{d.Naam}",
-                                _hsiexgrd,
-                                fc.Naam,
-                                d.Naam));
-                    }
                 }
             }
         }
@@ -131,9 +122,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         var dks = fc.Detectoren.Where(x => x.Type == Models.Enumerations.DetectorTypeEnum.KnopBuiten || x.Type == Models.Enumerations.DetectorTypeEnum.KnopBinnen).ToList();
                         var dk1 = dks.FirstOrDefault();
                         DetectorModel dk2 = ((dks.Count() > 1) ? dks[1] : null);
-                        var nl1 = dk1 == null ? false : c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == dk1.Naam));
-                        var nl2 = dk2 == null ? false : c.InterSignaalGroep.Meeaanvragen.Any(x => x.Detectoren.Any(x2 => x2.MeeaanvraagDetector == dk2.Naam));
-                        var nl_extra = c.InterSignaalGroep.Meeaanvragen.Where(x => x.FaseNaar == fc.Naam && x.Detectoren.Any());
+                        var nl_extra = c.InterSignaalGroep.Nalopen.Where(x => x.Type == Models.Enumerations.NaloopTypeEnum.StartGroen && x.FaseVan == fc.Naam);
                         var extra_d = "";
                         sb.Append($"{ts}");
                         if (fc.SeniorenIngreep != Models.Enumerations.NooitAltijdAanUitEnum.Altijd)
@@ -144,13 +133,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         {
                             foreach(var nl in nl_extra)
                             {
-                                var mafc = c.Fasen.FirstOrDefault(x => x.Naam == nl.FaseVan);
-                                if (mafc == null || mafc.SeniorenIngreep == Models.Enumerations.NooitAltijdAanUitEnum.Nooit) continue;
-                                foreach (var d in nl.Detectoren)
+                                var tnl = _tnlsg;
+                                if (nl.DetectieAfhankelijk)
                                 {
-                                    if (fc.Detectoren.Any(x => x.Naam == d.MeeaanvraagDetector)) continue;
-                                    extra_d += $"{_hpf}{_hsiexgrd}{_dpf}{d.MeeaanvraagDetector}, ";
+                                    tnl = _tnlsgd;
                                 }
+                                extra_d += _tpf + tnl + nl.FaseVan + nl.FaseNaar + ", ";
                             }
                             extra_d += "END";
                         }
@@ -161,10 +149,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"SeniorenGroen({_fcpf}{fc.Naam}, " +
                             $"{(dk1 != null ? $"{_dpf}{dk1.Naam}" : "NG")}, " +
                             $"{(dk1 != null ? $"{_tpf}{_tdbsiexgr}{_dpf}{dk1.Naam}" : "NG")}, " +
-                            $"{(nl1 ? $"{_hpf}{_hsiexgrd}{_dpf}{dk1.Naam}" : "NG")}, " +
                             $"{(dk2 != null ? $"{_dpf}{dk2.Naam}" : "NG")}, " +
                             $"{(dk2 != null ? $"{_tpf}{_tdbsiexgr}{_dpf}{dk2.Naam}" : "NG")}, " +
-                            $"{(nl2 ? $"{_hpf}{_hsiexgrd}{_dpf}{dk2.Naam}" : "NG")}, " +
                             $"{_prmpf}{_prmsiexgrperc}{fc.Naam}, " + 
                             $"{_hpf}{_hsiexgr}{fc.Naam}, " +
                             $"{_tpf}{_tsiexgr}{fc.Naam}, " +
@@ -178,6 +164,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            _tnlsg = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsg");
             _tnlsgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlsgd");
             _uswt = CCOLGeneratorSettingsProvider.Default.GetElementName("uswt");
 

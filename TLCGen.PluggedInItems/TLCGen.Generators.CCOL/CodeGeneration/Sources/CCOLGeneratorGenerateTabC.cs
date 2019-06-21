@@ -560,6 +560,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
+                        sb.AppendLine($"{ts}default_to_min(0);");
+                        sb.AppendLine();
+
                         string prevfasefrom = "";
                         foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
                         {

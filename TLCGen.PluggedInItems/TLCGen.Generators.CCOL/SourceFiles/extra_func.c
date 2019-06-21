@@ -1125,15 +1125,20 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
  *    aanvraagknop ingedrukt te houden.
  *    Er kunnen drie opeenvolgende oversteken bediend worden. Eventuele
  *    volgoversteken hebben ieder hun eigen instelling voor extra groen.
+
+ *    Wanneer het seniorengroen aktief is, worden eventuele nalopen pas
+ *    gestart op het einde (wacht)groen van de voedende richting, zodat
+ *    men ook gelegenheid heeft om in trager tempo de naloop over te steken.
+ *
  **************************************************************************/
-void SeniorenGroen(count fc, count drk1, count drk1timer, count hdrk1, count drk2, count drk2timer, count hdrk2,
-	count exgperc, count verlengen, count meergroen, ...)
+void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2timer, 
+	                 count exgperc, count verlengen, count meergroen, ...) 
 {
-	va_list argpt;
-	count he;
+ 	va_list argpt;
+    count tnl;
 	va_start(argpt, meergroen);
 
-	T_max[meergroen] = (TFG_max[fc] * (100 + PRM[exgperc]) / 100);
+	T_max[meergroen] = (TFG_max[fc] * (100 + PRM[exgperc]) / 100); 
 
 	if (drk1 != NG) {
 		if (drk1timer != NG) {
@@ -1141,7 +1146,6 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count hdrk1, count drk
 			AT[drk1timer] = ED[drk1];
 			if (ET[drk1timer] && D[drk1])                 IH[verlengen] |= TRUE;
 		}
-		if ((hdrk1 != NG) && IH[verlengen] && D[drk1])         IH[hdrk1] |= TRUE;
 	}
 	if (drk2 != NG) {
 		if (drk2timer != NG) {
@@ -1149,17 +1153,18 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count hdrk1, count drk
 			AT[drk2timer] = ED[drk2];
 			if (ET[drk2timer] && D[drk2])                 IH[verlengen] |= TRUE;
 		}
-		if ((hdrk2 != NG) && IH[verlengen] && D[drk2])        IH[hdrk2] |= TRUE;
 	}
+    
+	if (G[fc] && T[meergroen])                                   RW[fc] |= BIT7; 
+	if (G[fc])                                            IH[verlengen] = FALSE;
+	
+    /* extra vasthouden in FG en WG */
+    RT[meergroen] = IH[verlengen];
 
-	while ((he = va_arg(argpt, va_count)) != END)
-	{
-		IH[verlengen] |= (R[fc] && IH[he]);
-	}
-	va_end(argpt);
-
-	if (G[fc] && T[meergroen])                                   RW[fc] |= BIT7;
-	if (G[fc])          		  IH[hdrk1] = IH[hdrk2] = IH[verlengen] = FALSE;
-
-	RT[meergroen] = IH[verlengen];
+    /* tegenhouden start naloop tijdens FG en WG */
+    while ((tnl = va_arg(argpt, va_count)) != END)
+    {
+        RT[tnl] |= (T[meergroen] || RT[meergroen]);
+    }
+    va_end(argpt);
 }
