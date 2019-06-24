@@ -353,8 +353,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else if (pk.Type == PelotonKoppelingType.RHDHV)
                             {
-                                sb.AppendLine($"{ts}/* Inkomende vrije koppeling KP017 => KP018 */");
-                                sb.AppendLine($"{ts}/* ---------------------------------------- */");
+                                sb.AppendLine($"{ts}/* Inkomende vrije koppeling van {pk.KruisingNaam} */");
                                 sb.AppendLine($"{ts}if (iSizeOfArray{pk.KruisingNaam} > 0)");
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}if ((iaTime{pk.KruisingNaam}[0] <= iCounterVkop) &&");

@@ -38,12 +38,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("#define CTMAX  (CTMAX1+0)  /* Totaal aantal gebruikte tellers        */");
             sb.AppendLine("#define SCHMAX (SCHMAX1+0) /* Totaal aantal gebruikte schakelaars    */");
             sb.AppendLine("#define PRMMAX (PRMMAX1+0) /* Totaal aantal gebruikte parameters     */");
-            sb.AppendLine("#define MLMAX  (MLMAX1+0)  /* Totaal aantal gebruikte modulen        */");
-            foreach (var r in c.MultiModuleMolens)
+            if (!c.Data.MultiModuleReeksen)
             {
-                if (r.Modules.Any())
+                sb.AppendLine("#define MLMAX  (MLMAX1+0)  /* Totaal aantal gebruikte modulen        */");
+            }
+            else
+            {
+                foreach(var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                 {
-                    sb.AppendLine($"#define {r.Reeks}MAX  ({r.Reeks}MAX1+0)  /* Totaal aantal gebruikte modulen reeks {r.Reeks} */");
+                    sb.AppendLine($"#define {r.Reeks}MAX  ({r.Reeks}MAX1+0)  /* Totaal aantal gebruikte modulen {r.Reeks}    */");
                 }
             }
             if (c.HalfstarData.IsHalfstar)

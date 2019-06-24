@@ -1164,7 +1164,7 @@ void SeniorenGroen(count fc, count drk1, count drk1timer, count drk2, count drk2
     /* tegenhouden start naloop tijdens FG en WG */
     while ((tnl = va_arg(argpt, va_count)) != END)
     {
-        RT[tnl] |= (T[meergroen] || RT[meergroen]);
+        RT[tnl] |= (T[meergroen] || RT[meergroen]) && (VS[fc] || FG[fc] || WG[fc]);
     }
     va_end(argpt);
 }
