@@ -15,7 +15,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         #endregion // Static Fields
 
-        #region Static Properties
+        #region Static Methods
 
         public static void AddKoppelSignaal(int order, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
@@ -45,7 +45,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             _koppelSignalen.Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
         }
 
-        public static int GetKoppelSignaalCount(string name, CCOLKoppelSignaalRichtingEnum richting)
+        public static int GetKoppelSignaalCount(ControllerModel c, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
             if (!_koppelSignaalCountSet)
             {
@@ -53,11 +53,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _koppelSignaalCountSet = true;
             }
             var ks = _koppelSignalen.FirstOrDefault(x => x.Name == name && x.Richting == richting);
-            if (ks != null) return ks.Count;
-            else return 0;
+            if (ks == null) return 0;
+            var ct = ks.Count;
+            switch (ks.Richting)
+            {
+                case CCOLKoppelSignaalRichtingEnum.In:
+                    if (c.Data.StartIndexInkomendeKoppelSignalen > 1) ct += c.Data.StartIndexInkomendeKoppelSignalen - 1;
+                    break;
+                case CCOLKoppelSignaalRichtingEnum.Uit:
+                    if (c.Data.StartIndexUitgaandeKoppelSignalen > 1) ct += c.Data.StartIndexUitgaandeKoppelSignalen - 1;
+                    break;
+            }
+            return ct;
         }
 
-        #endregion // Static Properties
+        #endregion // Static Methods
 
         #region Static Public Methods
 

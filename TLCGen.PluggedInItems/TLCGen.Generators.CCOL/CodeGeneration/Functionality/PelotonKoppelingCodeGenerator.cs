@@ -38,6 +38,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _schpela;
         private CCOLGeneratorCodeStringSettingModel _schpku;
 #pragma warning restore 0649
+        private string _hplact;
         private string _huks;
         private string _hiks;
 
@@ -145,6 +146,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmpelverschuif}{pk.GekoppeldeSignaalGroep}", pk.Verschuiving,
                                     CCOLElementTimeTypeEnum.TE_type, _prmpelgrens, pk.KruisingNaam, c.Data.Naam, pk.GekoppeldeSignaalGroep));
                                 _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelnl}{pk.GekoppeldeSignaalGroep}", pk.TijdRetourWachtgroen, CCOLElementTimeTypeEnum.TS_type, _tpelnl, pk.GekoppeldeSignaalGroep));
+                                if (pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit && pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Altijd)
+                                {
+                                    _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpela}{pk.GekoppeldeSignaalGroep}", pk.ToepassenAanvraag == NooitAltijdAanUitEnum.SchAan ? 1 : 0, CCOLElementTimeTypeEnum.SCH_type, _schpela, pk.GekoppeldeSignaalGroep));
+                                }
                                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_tpelrwmax}{pk.GekoppeldeSignaalGroep}", pk.MaxTijdToepassenRetourWachtgroen, CCOLElementTimeTypeEnum.TE_type, _tpelrwmax, pk.GekoppeldeSignaalGroep));
@@ -180,10 +185,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingType.RHDHV);
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return c.PelotonKoppelingenData.PelotonKoppelingen.Any();
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingType.RHDHV);
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend);
                 case CCOLCodeTypeEnum.RegCWachtgroen:
                     return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && x.Type == PelotonKoppelingType.RHDHV);
+                case CCOLCodeTypeEnum.RegCPostApplication:
+                    return c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.IsInkomend && (x.Detectoren.Any() || x.Type == PelotonKoppelingType.RHDHV));
                 default:
                     return false;
             }
@@ -197,6 +206,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 70;
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return 50;
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    return 70;
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     return 30;
                 case CCOLCodeTypeEnum.RegCPostApplication:
@@ -274,21 +285,21 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (pk.Type == PelotonKoppelingType.DenHaag)
                             {
                                 if (f) sb.AppendLine();
-                                var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
+                                var ipl = CCOLElementCollector.GetKoppelSignaalCount(c, $"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
                                 sb.AppendLine($"{ts}/* Uitgaande peloton koppeling naar {pk.KruisingNaam} */");
                                 foreach (var sg in sgWithD)
                                 {
                                     sb.AppendLine($"{ts}IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = SCH[{_schpf}{_schpku}{sg.Key.Naam}] && (SG[{_fcpf}{pk.GekoppeldeSignaalGroep}] || FG[{_fcpf}{pk.GekoppeldeSignaalGroep}]);");
                                     foreach (var d in sg.Value)
                                     {
-                                        ipl = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}d{d}", CCOLKoppelSignaalRichtingEnum.Uit);
+                                        ipl = CCOLElementCollector.GetKoppelSignaalCount(c, $"{pk.KruisingNaam}d{d}", CCOLKoppelSignaalRichtingEnum.Uit);
                                         sb.AppendLine($"{ts}if (G[{_fcpf}{sg.Key.Naam}] && ED[{_dpf}{d}]) IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = !IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}];");
                                     }
                                 }
                             }
                             else // RHDHV 
                             {
-                                var ipl = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
+                                var ipl = CCOLElementCollector.GetKoppelSignaalCount(c, $"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
                                 sb.AppendLine($"{ts}/* Uitgaande vrije koppeling {c.Data.Naam} => {pk.KruisingNaam} */");
                                 sb.AppendLine($"{ts}/* ---------------------------------------- */");
                                 var st = $"IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}] = ";
@@ -337,7 +348,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                         foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                         {
-                            var isg = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.In);
+                            var isg = CCOLElementCollector.GetKoppelSignaalCount(c, $"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.In);
 
                             if (f) sb.AppendLine();
                             if (pk.Type == PelotonKoppelingType.DenHaag && pk.Detectoren.Any())
@@ -346,7 +357,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.Append($"{ts}IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] |= proc_pel_in_V1({_hpf}{pk.PTPKruising}{_hiks}{isg:00}, {_tpf}{_tpelmeet}{pk.GekoppeldeSignaalGroep}, {_tpf}{_tpelmaxhiaat}{pk.GekoppeldeSignaalGroep}, {_prmpf}{_prmpelgrens}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelvtg}{pk.GekoppeldeSignaalGroep}, {_mpf}{_mpelin}{pk.GekoppeldeSignaalGroep}, ");
                                 foreach (var d in pk.Detectoren)
                                 {
-                                    var id = CCOLElementCollector.GetKoppelSignaalCount($"{pk.KruisingNaam}d{d.DetectorNaam}", CCOLKoppelSignaalRichtingEnum.In);
+                                    var id = CCOLElementCollector.GetKoppelSignaalCount(c, $"{pk.KruisingNaam}d{d.DetectorNaam}", CCOLKoppelSignaalRichtingEnum.In);
                                     sb.Append($"{_hpf}{pk.PTPKruising}{_hiks}{id:00}, ");
                                 }
                                 sb.AppendLine("END);");
@@ -421,6 +432,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
+                case CCOLCodeTypeEnum.RegCAanvragen:
+                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                    {
+                        foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                        {
+                            if (pk.Type == PelotonKoppelingType.RHDHV && pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit)
+                            {
+                                sb.AppendLine($"{ts}/* Inkomende peloton koppeling voor {pk.GekoppeldeSignaalGroep} van kruising {pk.KruisingNaam} */");
+                                sb.Append($"{ts}if (SH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}]");
+                                if (pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Altijd)
+                                {
+                                    sb.Append($" && SCH[{_schpf}{_schpela}{pk.GekoppeldeSignaalGroep}]");
+                                }
+                                sb.AppendLine($") A[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT12;");
+                                sb.AppendLine();
+                            }
+                        }
+                    }
+                    return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
                     {
@@ -430,7 +460,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             if (ff) sb.AppendLine();
                             if (pk.Type == PelotonKoppelingType.DenHaag && pk.Detectoren.Any())
                             {
-                                sb.AppendLine($"{ts}/* Inkomende peloton koppeling van {pk.GekoppeldeSignaalGroep} van kruising {pk.KruisingNaam} */");
+                                sb.AppendLine($"{ts}/* Inkomende peloton koppeling voor {pk.GekoppeldeSignaalGroep} van kruising {pk.KruisingNaam} */");
                                 if (pk.ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     sb.AppendLine($"{ts}/* timer resetten om aanvraag te zetten */");
@@ -510,7 +540,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             else if (pk.Type == PelotonKoppelingType.RHDHV)
                             {
-                                sb.AppendLine($"{ts}/* extra verlengen obv vrije koppeling */");
+                                sb.AppendLine($"{ts}/* Extra verlengen tbv vrije koppeling */");
                                 if(pk.ToepassenMeetkriterium != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     if(pk.ToepassenMeetkriterium == NooitAltijdAanUitEnum.Altijd)
@@ -546,7 +576,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}RT[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}] = SH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] && bSingleRW{pk.KruisingNaam};");
                                 sb.AppendLine($"");
                                 sb.AppendLine($"{ts}/* RW opzetten */");
-                                sb.AppendLine($"{ts}if (bSingleRW{pk.KruisingNaam} && IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] && !fkaa({_fcpf}{pk.GekoppeldeSignaalGroep}) && !Z[{_fcpf}{pk.GekoppeldeSignaalGroep}] && (T[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}] || RT[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}])) RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT14;");
+                                sb.AppendLine($"{ts}if (bSingleRW{pk.KruisingNaam} && IH[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}] && !fkaa({_fcpf}{pk.GekoppeldeSignaalGroep}) && !Z[{_fcpf}{pk.GekoppeldeSignaalGroep}] && (T[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}] || RT[{_tpf}{_tpelrwmax}{pk.GekoppeldeSignaalGroep}])" +
+                                    $"{(!c.HalfstarData.IsHalfstar ? "" : $" && (!IH[{_hpf}{_hplact}] || TOTXB_PL[{_fcpf}{pk.GekoppeldeSignaalGroep}] == 0 && TOTXD_PL[{_fcpf}{pk.GekoppeldeSignaalGroep}] > 0)")}" +
+                                    $") RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT14;");
                                 sb.AppendLine($"{ts}else if (!H[{_hpf}{_hpelin}{pk.GekoppeldeSignaalGroep}]) RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] &= ~BIT14;");
                                 sb.AppendLine($"");
                                 sb.AppendLine($"{ts}/* Bewaken eenmalig opzetten RW */");
@@ -575,6 +607,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool SetSettings(CCOLGeneratorClassWithSettingsModel settings)
         {
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
             _huks = CCOLGeneratorSettingsProvider.Default.GetElementName("huks");
             _hiks = CCOLGeneratorSettingsProvider.Default.GetElementName("hiks");
 

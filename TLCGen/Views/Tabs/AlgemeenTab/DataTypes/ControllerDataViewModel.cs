@@ -442,6 +442,33 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Browsable(false)]
+        public bool HasKoppelSignalen => _Controller.PTPData.PTPKoppelingen.Any();
+
+        [Description("Inkomende koppel signalen start #")]
+        [BrowsableCondition("HasKoppelSignalen")]
+        public int StartIndexInkomendeKoppelSignalen
+        {
+            get => _Controller?.Data?.StartIndexInkomendeKoppelSignalen ?? 0;
+            set
+            {
+                _Controller.Data.StartIndexInkomendeKoppelSignalen = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBusHD), broadcast: true);
+            }
+        }
+
+        [Description("Uitgaande koppel signalen start #")]
+        [BrowsableCondition("HasKoppelSignalen")]
+        public int StartIndexUitgaandeKoppelSignalen
+        {
+            get => _Controller?.Data?.StartIndexUitgaandeKoppelSignalen ?? 0;
+            set
+            {
+                _Controller.Data.StartIndexUitgaandeKoppelSignalen = value;
+                RaisePropertyChanged<object>(nameof(WachttijdvoorspellerAansturenBusHD), broadcast: true);
+            }
+        }
+
         [Category("Opties ontwikkel omgeving")]
         [Description("VLOG in testomgeving")]
         public bool VLOGInTestOmgeving

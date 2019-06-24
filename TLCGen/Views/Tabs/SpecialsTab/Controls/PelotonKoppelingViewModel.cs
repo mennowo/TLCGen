@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
@@ -11,6 +12,15 @@ namespace TLCGen.ViewModels
 {
     public class PelotonKoppelingViewModel : ViewModelBase
     {
+        #region Fields
+
+        private RelayCommand _addInkomendeDetectorCommand;
+        private RelayCommand _removeInkomendeDetectorCommand;
+        private PelotonKoppelingDetectorViewModel _selectedDetector;
+        private AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string> _uitgaandeDetectorenManager;
+
+        #endregion // Fields
+
         #region Properties
 
         public PelotonKoppelingModel PelotonKoppeling { get; }
@@ -244,11 +254,11 @@ namespace TLCGen.ViewModels
         }
 
         public bool HasAanvraag => ToepassenAanvraag != NooitAltijdAanUitEnum.Nooit;
+
         public bool HasRetourWachtgroen => ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit;
 
         public ObservableCollectionAroundList<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel> Detectoren { get; }
 
-        private AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string> _uitgaandeDetectorenManager;
         public AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string> UitgaandeDetectorenManager =>
             _uitgaandeDetectorenManager ??
             (_uitgaandeDetectorenManager = new AddRemoveItemsManager<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel, string>(
@@ -269,20 +279,15 @@ namespace TLCGen.ViewModels
 
         #region Commands
 
-        RelayCommand _AddInkomendeDetectorCommand;
-        RelayCommand _RemoveInkomendeDetectorCommand;
-        private PelotonKoppelingDetectorViewModel _selectedDetector;
-        private PelotonKoppelingDetectorViewModel _selectedDetectorUit;
-
         public ICommand AddInkomendeDetectorCommand
         {
             get
             {
-                if (_AddInkomendeDetectorCommand == null)
+                if (_addInkomendeDetectorCommand == null)
                 {
-                    _AddInkomendeDetectorCommand = new RelayCommand(AddInkomendeDetectorCommand_Executed, AddInkomendeDetectorCommand_CanExecute);
+                    _addInkomendeDetectorCommand = new RelayCommand(AddInkomendeDetectorCommand_Executed, AddInkomendeDetectorCommand_CanExecute);
                 }
-                return _AddInkomendeDetectorCommand;
+                return _addInkomendeDetectorCommand;
             }
         }
 
@@ -300,11 +305,11 @@ namespace TLCGen.ViewModels
         {
             get
             {
-                if (_RemoveInkomendeDetectorCommand == null)
+                if (_removeInkomendeDetectorCommand == null)
                 {
-                    _RemoveInkomendeDetectorCommand = new RelayCommand(RemoveInkomendeDetectorCommand_Executed, RemoveInkomendeDetectorCommand_CanExecute);
+                    _removeInkomendeDetectorCommand = new RelayCommand(RemoveInkomendeDetectorCommand_Executed, RemoveInkomendeDetectorCommand_CanExecute);
                 }
-                return _RemoveInkomendeDetectorCommand;
+                return _removeInkomendeDetectorCommand;
             }
         }
 
@@ -327,6 +332,12 @@ namespace TLCGen.ViewModels
         {
             PelotonKoppeling = kop;
             Detectoren = new ObservableCollectionAroundList<PelotonKoppelingDetectorViewModel, PelotonKoppelingDetectorModel>(kop.Detectoren);
+            Detectoren.CollectionChanged += Detectoren_CollectionChanged;
+        }
+
+        private void Detectoren_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 
         #endregion // Constructor

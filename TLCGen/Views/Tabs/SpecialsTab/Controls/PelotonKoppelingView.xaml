@@ -32,15 +32,22 @@
                 <Label Content="Detectoren t.b.v. uitgaande koppeling" />
                 <DataGrid ItemsSource="{Binding Path=Detectoren}" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector,UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.RowHeaderTemplate>
+                    <!--<DataGrid.RowHeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
                                           AncestorType={x:Type DataGridRow}}, 
                                           Path=Item.DetectorNaam}"/>
                         </DataTemplate>
-                    </DataGrid.RowHeaderTemplate>
+                    </DataGrid.RowHeaderTemplate>-->
                     <DataGrid.Columns>
                         <!--<DataGridTextColumn Header="Ingang #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />-->
+                        <DataGridTextColumn Header="Detector" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True">
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Background" Value="LightGray" />
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
                 <ct:ItemsManagerView Caption="" Grid.Row="2"

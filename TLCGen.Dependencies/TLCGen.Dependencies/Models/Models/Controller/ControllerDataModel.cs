@@ -85,6 +85,9 @@ namespace TLCGen.Models
         [Browsable(false)]
         public SegmentDisplayTypeEnum SegmentDisplayType { get; set; }
 
+        public int StartIndexInkomendeKoppelSignalen { get; set; }
+        public int StartIndexUitgaandeKoppelSignalen { get; set; }
+
         public bool UitgangPerModule { get; set; }
 
         public bool MultiModuleReeksen { get; set; }
