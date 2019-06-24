@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TLCGen.Views"
+             xmlns:ct="clr-namespace:TLCGen.Controls;assembly=TLCGen.Controls"
              xmlns:helper="clr-namespace:TLCGen.Helpers;assembly=TLCGen.Dependencies"
              xmlns:enums="clr-namespace:TLCGen.Models.Enumerations;assembly=TLCGen.Dependencies"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600">
+             d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="190" />
@@ -37,18 +38,20 @@
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingType}}}" />
                     <DataGridTemplateColumn 
-                        Header="Fase" Width="Auto" MinWidth="60">
-                        <DataGridTemplateColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=Richting}" Value="Uitgaand">
-                                        <Setter Property="IsEnabled" Value="False" />
-                                        <Setter Property="Background" Value="LightGray" />
-                                        <Setter Property="Foreground" Value="LightGray" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTemplateColumn.CellStyle>
+                        Width="Auto" MinWidth="60">
+                        <DataGridTemplateColumn.Header>
+                            <DockPanel>
+                                <ct:InfoElement DockPanel.Dock="Right">
+                                    <ct:InfoElement.InfoPopup>
+                                        <TextBlock>
+                                            Indien Type RHDHV:<LineBreak />
+                                            uitsluitend gebruikt voor naamgeving verklikking
+                                        </TextBlock>
+                                    </ct:InfoElement.InfoPopup>
+                                </ct:InfoElement>
+                                <TextBlock Margin="2,0" Text="Fase" DockPanel.Dock="Left" />
+                            </DockPanel>    
+                        </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=GekoppeldeSignaalGroep,Mode=OneWay}" Margin="2" />

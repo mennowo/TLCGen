@@ -236,9 +236,9 @@ namespace TLCGen.ViewModels
         #region Commands
 
         public ICommand AddInmeldingCommand => _addInmeldingCommand ?? (_addInmeldingCommand = new RelayCommand(AddInmeldingCommand_Executed));
-        public ICommand RemoveInmeldingCommand => _removeInmeldingCommand ?? (_removeInmeldingCommand = new RelayCommand(RemoveInmeldingCommand_Executed));
+        public ICommand RemoveInmeldingCommand => _removeInmeldingCommand ?? (_removeInmeldingCommand = new RelayCommand(RemoveInmeldingCommand_Executed, RemoveInmeldingCommand_CanExecute));
         public ICommand AddUitmeldingCommand => _addUitmeldingCommand ?? (_addUitmeldingCommand = new RelayCommand(AddUitmeldingCommand_Executed));
-        public ICommand RemoveUitmeldingCommand => _removeUitmeldingCommand ?? (_removeUitmeldingCommand = new RelayCommand(RemoveUitmeldingCommand_Executed));
+        public ICommand RemoveUitmeldingCommand => _removeUitmeldingCommand ?? (_removeUitmeldingCommand = new RelayCommand(RemoveUitmeldingCommand_Executed, RemoveUitmeldingCommand_CanExecute));
         //public ICommand AddVoorwaardeCommand => _addVoorwaardeCommand ?? (_addVoorwaardeCommand = new RelayCommand(AddVoorwaardeCommand_Executed));
 
         #endregion // Commands
@@ -286,6 +286,11 @@ namespace TLCGen.ViewModels
             }
         }
 
+        private bool RemoveInmeldingCommand_CanExecute(object prm)
+        {
+            return SelectedInmelding != null;
+        }
+
         private void RemoveUitmeldingCommand_Executed(object prm)
         {
             if (SelectedUitmelding != null)
@@ -297,6 +302,11 @@ namespace TLCGen.ViewModels
 				MessengerInstance.Send(new OVIngreepMeldingChangedMessage(msg.FaseCyclus, OVIngreepInUitMeldingVoorwaardeTypeEnum.KARMelding));
 				SelectedUitmelding = null;
             }
+        }
+
+        private bool RemoveUitmeldingCommand_CanExecute(object prm)
+        {
+            return SelectedUitmelding != null;
         }
 
         #endregion // Command functionality

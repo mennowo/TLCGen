@@ -443,7 +443,7 @@ namespace TLCGen.ViewModels
         }
 
         [Browsable(false)]
-        public bool HasKoppelSignalen => _Controller.PTPData.PTPKoppelingen.Any();
+        public bool HasKoppelSignalen => _Controller?.PTPData.PTPKoppelingen.Any() == true;
 
         [Description("Inkomende koppel signalen start #")]
         [BrowsableCondition("HasKoppelSignalen")]

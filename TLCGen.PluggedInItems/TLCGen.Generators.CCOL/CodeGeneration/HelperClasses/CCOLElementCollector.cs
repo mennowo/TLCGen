@@ -50,11 +50,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (!_koppelSignaalCountSet)
             {
                 _koppelSignalen.Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
+                for (int i = 1; i <= _koppelSignalen.Count; i++)
+                {
+                    _koppelSignalen[i - 1].CountAll = i;
+                }
                 _koppelSignaalCountSet = true;
             }
             var ks = _koppelSignalen.FirstOrDefault(x => x.Name == name && x.Richting == richting);
             if (ks == null) return 0;
-            var ct = ks.Count;
+            var ct = ks.CountAll;
             switch (ks.Richting)
             {
                 case CCOLKoppelSignaalRichtingEnum.In:

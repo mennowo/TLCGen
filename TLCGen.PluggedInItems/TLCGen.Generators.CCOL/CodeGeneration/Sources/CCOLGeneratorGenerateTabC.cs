@@ -560,7 +560,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 {
                     if (controller.InterSignaalGroep.Conflicten?.Count > 0)
                     {
-                        sb.AppendLine($"{ts}default_to_min(0);");
+                        if (controller.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && controller.Data.Intergroen)
+                        {
+                            sb.AppendLine($"{ts}default_tig_min(0);");
+                        }
+                        else
+                        {
+                            sb.AppendLine($"{ts}default_to_min(0);");
+                        }
                         sb.AppendLine();
 
                         string prevfasefrom = "";
