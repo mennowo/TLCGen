@@ -34,6 +34,7 @@ typedef enum
 	rtsGehinderd,
 } TRijTijdScenario;
 
+#if !defined VLOGMON5STRUCTURE
 typedef struct {
 	bool voorinov;
 	bool inmov;
@@ -46,8 +47,9 @@ typedef struct {
 	bool uitmhd;
 	bool uitmbewhd;
 } VLOG_MON5_STRUCT;
-
 extern VLOG_MON5_STRUCT VLOG_mon5[FCMAX];
+#define VLOGMON5STRUCTURE
+#endif
 
 /* Functie declaraties voor functies uit de applicatie */
 void OVInitExtra(void);
