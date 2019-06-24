@@ -28,6 +28,9 @@ namespace TLCGen.Plugins.RIS
         private RelayCommand _addDefaultExtendLanesCommand;
         private RelayCommand _addSystemITFCommand;
         private RelayCommand _removeSystemITFCommand;
+        private ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> _RISFasen;
+        private ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> _RISRequestLanes;
+        private ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> _RISExtendLanes;
 
         #endregion // Fields
 
@@ -49,18 +52,18 @@ namespace TLCGen.Plugins.RIS
             set
             {
                 _RISModel = value;
-                RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen);
-                RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes);
-                RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes);
+                _RISFasen = null;
+                _RISRequestLanes = null;
+                _RISExtendLanes = null;
                 MultiSystemITF = new ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel>(_RISModel.MultiSystemITF);
                 _lanesRequestManager = null;
                 _lanesExtendManager = null;
             }
         }
 
-        public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen { get; private set; }
-        public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes { get; private set; }
-        public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes { get; private set; }
+        public ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel> RISFasen => _RISFasen ?? (_RISFasen = new ObservableCollectionAroundList<RISFaseCyclusDataViewModel, RISFaseCyclusDataModel>(_RISModel.RISFasen));
+        public ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel> RISRequestLanes => _RISRequestLanes ?? (_RISRequestLanes = new ObservableCollectionAroundList<RISLaneRequestDataViewModel, RISLaneRequestDataModel>(_RISModel.RISRequestLanes));
+        public ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel> RISExtendLanes => _RISExtendLanes ?? (_RISExtendLanes = new ObservableCollectionAroundList<RISLaneExtendDataViewModel, RISLaneExtendDataModel>(_RISModel.RISExtendLanes));
         public ObservableCollectionAroundList<RISSystemITFViewModel, RISSystemITFModel> MultiSystemITF { get; private set; }
         public ObservableCollection<RISFaseCyclusLaneDataViewModel> RISLanes { get; } = new ObservableCollection<RISFaseCyclusLaneDataViewModel>();
 
@@ -139,7 +142,7 @@ namespace TLCGen.Plugins.RIS
                 _RISModel.SystemITF = value;
                 if (!HasMultipleSystemITF)
                 {
-                    foreach(var l in RISLanes)
+                    foreach (var l in RISLanes)
                     {
                         l.SystemITF = value;
                     }

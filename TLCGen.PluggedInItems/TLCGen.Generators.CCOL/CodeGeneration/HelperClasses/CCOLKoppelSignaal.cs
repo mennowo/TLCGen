@@ -8,6 +8,7 @@
         public int Count { get; set; }
         public int CountAll { get; set; }
         public string Name { get; set; }
+        public string Koppeling { get; set; }
         public CCOLKoppelSignaalRichtingEnum Richting { get; set; }
     }
 }

@@ -220,6 +220,14 @@ namespace TLCGen.ViewModels
             set
             {
                 PelotonKoppeling.Richting = value;
+                if (value == PelotonKoppelingRichtingEnum.Uitgaand)
+                {
+                    var rems = Detectoren.Where(x => string.IsNullOrWhiteSpace(x.DetectorNaam)).ToList();
+                    foreach (var r in rems)
+                    {
+                        Detectoren.Remove(r);
+                    }
+                }
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(IsInkomend));
                 RaisePropertyChanged(nameof(IsInkomendDenHaag));

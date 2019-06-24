@@ -96,6 +96,25 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public int StartIndexInkomendeKoppelSignalen
+        {
+            get { return _PTPKoppeling.StartIndexInkomendeKoppelSignalen; }
+            set
+            {
+                _PTPKoppeling.StartIndexInkomendeKoppelSignalen = value;
+                RaisePropertyChanged<object>("StartIndexInkomendeKoppelSignalen", broadcast: true);
+            }
+        }
+
+        public int StartIndexUitgaandeKoppelSignalen
+        {
+            get { return _PTPKoppeling.StartIndexUitgaandeKoppelSignalen; }
+            set
+            {
+                _PTPKoppeling.StartIndexUitgaandeKoppelSignalen = value;
+                RaisePropertyChanged<object>("StartIndexUitgaandeKoppelSignalen", broadcast: true);
+            }
+        }
 
         #endregion // Properties
 
