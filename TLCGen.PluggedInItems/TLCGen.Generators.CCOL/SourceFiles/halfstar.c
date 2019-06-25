@@ -543,19 +543,19 @@ void sync_pg(void)
 #ifdef MLMAX
 #else
 #ifdef MLAMAX
-		if (mlx == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { mlx = MLA; break; prml = PRMLA; mlmax = MLAMAX; }
+		if (mlx == -1) for (ml = 0; ml < MLAMAX; ++ml) if (PRMLA[ml][fc]) { mlx = MLA; prml = PRMLA; mlmax = MLAMAX; break; }
 #endif
 #ifdef MLBMAX
-		if (mlx == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { mlx = MLB; break; prml = PRMLB; mlmax = MLBMAX; }
+		if (mlx == -1) for (ml = 0; ml < MLBMAX; ++ml) if (PRMLB[ml][fc]) { mlx = MLB; prml = PRMLB; mlmax = MLBMAX; break; }
 #endif
 #ifdef MLCMAX
-		if (mlx == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { mlx = MLC; break; prml = PRMLC; mlmax = MLCMAX; }
+		if (mlx == -1) for (ml = 0; ml < MLCMAX; ++ml) if (PRMLC[ml][fc]) { mlx = MLC; prml = PRMLC; mlmax = MLCMAX; break; }
 #endif
 #ifdef MLDMAX
-		if (mlx == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { mlx = MLD; break; prml = PRMLD; mlmax = MLDMAX;}
+		if (mlx == -1) for (ml = 0; ml < MLDMAX; ++ml) if (PRMLD[ml][fc]) { mlx = MLD; prml = PRMLD; mlmax = MLDMAX; break; }
 #endif
 #ifdef MLEMAX
-		if (mlx == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { mlx = MLE; break; prml = PRMLE; mlmax = MLEMAX; }
+		if (mlx == -1) for (ml = 0; ml < MLEMAX; ++ml) if (PRMLE[ml][fc]) { mlx = MLE; prml = PRMLE; mlmax = MLEMAX; break; }
 #endif
 #endif
 		if (PG[fc] && !prml[ml][fc] && !prml[(ml + 1 == mlmax ? ML1 : ml + 1)][fc])

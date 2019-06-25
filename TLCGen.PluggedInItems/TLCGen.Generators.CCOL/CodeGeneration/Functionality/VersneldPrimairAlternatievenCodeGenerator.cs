@@ -319,14 +319,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine();
                         }
 
-                        AppendNalopenEG_RRFMCorrection(c, sb, ts);
-
                         foreach (var fc in c.ModuleMolen.FasenModuleData)
                         {
                             sb.AppendLine(
                                 $"{ts}FM[{_fcpf}{fc.FaseCyclus}] |= (fm_ar_kpr({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmaltg}{fc.FaseCyclus}])) ? BIT5 : 0;");
                         }
                         sb.AppendLine();
+
+                        AppendNalopenEG_RRFMCorrection(c, sb, ts);
 
                         var maxtartotig = c.Data.CCOLVersie >= CCOLVersieEnum.CCOL95 && c.Data.Intergroen ? "max_tar_tig" : "max_tar_to";
 
@@ -564,8 +564,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             sb.AppendLine();
 
-                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
-
                             mlidx = 1;
                             foreach (var moduleWithAlternatives in modulesWithAlternatives)
                             {
@@ -577,6 +575,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 ++mlidx;
                             }
+
+                            AppendNalopenEG_RRFMCorrection(c, sb, ts);
                         }
                         sb.AppendLine();
                         sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
