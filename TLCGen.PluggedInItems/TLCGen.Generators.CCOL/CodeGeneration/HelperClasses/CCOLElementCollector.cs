@@ -65,8 +65,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (count == 0)
             {
                 count = _koppelSignaalCountPerFunc[koppelingKey][order];
+                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
             }
-            _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
+            else
+            {
+                _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting, CountSetManually = true });
+            }
             ++_koppelSignaalCountPerFunc[koppelingKey][order];
         }
 
@@ -80,7 +84,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _koppelSignalen[koppelingKey].Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
                 for (int i = 1; i <= _koppelSignalen[koppelingKey].Count; i++)
                 {
-                    _koppelSignalen[koppelingKey][i - 1].CountAll = i;
+                    if(!_koppelSignalen[koppelingKey][i - 1].CountSetManually)
+                        _koppelSignalen[koppelingKey][i - 1].CountAll = i;
+                    else
+                        _koppelSignalen[koppelingKey][i - 1].CountAll = _koppelSignalen[koppelingKey][i - 1].Count;
                 }
                 _koppelSignaalCountSet[koppelingKey] = true;
             }
