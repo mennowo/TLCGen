@@ -19,64 +19,72 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
 
         public static void AddKoppelSignaal(string koppeling, int order, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
-            if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
+            var koppelingKey = koppeling + richting.ToString();
+            if (!_koppelSignaalCountPerFunc.ContainsKey(koppelingKey))
             {
-                _koppelSignaalCountPerFunc.Add(koppeling, new Dictionary<int, int>());
+                _koppelSignaalCountPerFunc.Add(koppelingKey, new Dictionary<int, int>());
             }
-            if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
+            if (!_koppelSignaalCountPerFunc[koppelingKey].ContainsKey(order))
             {
-                _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
+                _koppelSignaalCountPerFunc[koppelingKey].Add(order, 1);
             }
-            if (!_koppelSignalen.ContainsKey(koppeling))
+            if (!_koppelSignalen.ContainsKey(koppelingKey))
             {
-                _koppelSignalen.Add(koppeling, new List<CCOLKoppelSignaal>());
-                _koppelSignaalCountSet.Add(koppeling, false);
+                _koppelSignalen.Add(koppelingKey, new List<CCOLKoppelSignaal>());
+                _koppelSignaalCountSet.Add(koppelingKey, false);
             }
-            _koppelSignalen[koppeling].Add(new CCOLKoppelSignaal() { Count = _koppelSignaalCountPerFunc[koppeling][order], Order = order, Name = name, Richting = richting });
-            ++_koppelSignaalCountPerFunc[koppeling][order];
+            _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = _koppelSignaalCountPerFunc[koppelingKey][order], Order = order, Name = name, Richting = richting });
+            ++_koppelSignaalCountPerFunc[koppelingKey][order];
         }
 
         public static void AddKoppelSignaal(string koppeling, int order, int count, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
-            if (!_koppelSignalen.ContainsKey(koppeling))
+            var koppelingKey = koppeling + richting.ToString();
+            if (!_koppelSignalen.ContainsKey(koppelingKey))
             {
-                _koppelSignalen.Add(koppeling, new List<CCOLKoppelSignaal>());
-                _koppelSignaalCountSet.Add(koppeling, false);
+                _koppelSignalen.Add(koppelingKey, new List<CCOLKoppelSignaal>());
+                _koppelSignaalCountSet.Add(koppelingKey, false);
             }
-            else if (count != 0 && _koppelSignalen[koppeling].Any(x => x.Count == count))
+            else if (count != 0 && _koppelSignalen[koppelingKey].Any(x => x.Count == count))
             {
-                TLCGen.Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Ingangssignaal nummer {count} van koppeling {koppeling} wordt reeds elders gebruikt. Dit kan de juiste werking van de regeling negatief beinvloeden.", "Koppelsignaal dubbel gebruikt", System.Windows.MessageBoxButton.OK);
+                TLCGen.Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"" +
+                    $"{(richting == CCOLKoppelSignaalRichtingEnum.In ? "Ingangssignaal" : "Uitgangssignaal")} " +
+                       $"nummer {count} van koppeling {koppeling} wordt reeds elders gebruikt. Dit kan de juiste werking " +
+                       $"van de regeling negatief beinvloeden.", 
+                    "Koppelsignaal dubbel gebruikt", 
+                    System.Windows.MessageBoxButton.OK);
             }
-            if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
+            if (!_koppelSignaalCountPerFunc.ContainsKey(koppelingKey))
             {
-                _koppelSignaalCountPerFunc.Add(koppeling, new Dictionary<int, int>());
+                _koppelSignaalCountPerFunc.Add(koppelingKey, new Dictionary<int, int>());
             }
-            if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
+            if (!_koppelSignaalCountPerFunc[koppelingKey].ContainsKey(order))
             {
-                _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
+                _koppelSignaalCountPerFunc[koppelingKey].Add(order, 1);
             }
             if (count == 0)
             {
-                count = _koppelSignaalCountPerFunc[koppeling][order];
+                count = _koppelSignaalCountPerFunc[koppelingKey][order];
             }
-            _koppelSignalen[koppeling].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
-            ++_koppelSignaalCountPerFunc[koppeling][order];
+            _koppelSignalen[koppelingKey].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
+            ++_koppelSignaalCountPerFunc[koppelingKey][order];
         }
 
         public static int GetKoppelSignaalCount(string koppeling, ControllerModel c, string name, CCOLKoppelSignaalRichtingEnum richting)
         {
-            if (_koppelSignaalCountSet.ContainsKey(koppeling) && 
-                _koppelSignalen.ContainsKey(koppeling) && 
-                !_koppelSignaalCountSet[koppeling])
+            var koppelingKey = koppeling + richting.ToString();
+            if (_koppelSignaalCountSet.ContainsKey(koppelingKey) && 
+                _koppelSignalen.ContainsKey(koppelingKey) && 
+                !_koppelSignaalCountSet[koppelingKey])
             {
-                _koppelSignalen[koppeling].Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
-                for (int i = 1; i <= _koppelSignalen[koppeling].Count; i++)
+                _koppelSignalen[koppelingKey].Sort((x, y) => (x.Order * 1000 + x.Count).CompareTo(y.Order * 1000 + y.Count));
+                for (int i = 1; i <= _koppelSignalen[koppelingKey].Count; i++)
                 {
-                    _koppelSignalen[koppeling][i - 1].CountAll = i;
+                    _koppelSignalen[koppelingKey][i - 1].CountAll = i;
                 }
-                _koppelSignaalCountSet[koppeling] = true;
+                _koppelSignaalCountSet[koppelingKey] = true;
             }
-            var ks = _koppelSignalen[koppeling].FirstOrDefault(x => x.Name == name && x.Richting == richting);
+            var ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
             if (ks == null) return 0;
             var ct = ks.CountAll;
             switch (ks.Richting)

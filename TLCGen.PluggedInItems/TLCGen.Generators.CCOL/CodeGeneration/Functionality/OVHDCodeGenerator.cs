@@ -738,8 +738,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var start = true;
                     if(c.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
                     {
-                        sb.AppendLine("/* Opschonen wagennummer buffers */");
-                        sb.AppendLine("WDNST_cleanup();");
+                        sb.AppendLine($"{ts}/* Opschonen wagennummer buffers */");
+                        sb.AppendLine($"{ts}WDNST_cleanup();");
                         start = false;
                     }
                     if (c.OVData.OVIngrepen.Any(ov => ov.MeldingenData.Inmeldingen.Any(x => x.AlleenIndienRood) || ov.NoodaanvraagKoplus))

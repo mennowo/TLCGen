@@ -86,6 +86,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine($"{ts}#include \"ccolfunc.h\"");
             sb.AppendLine($"{ts}#include \"ccol_mon.h\"");
             sb.AppendLine($"{ts}#include \"extra_func.h\"");
+            if (c.OVData.OVIngrepen.Any(x => x.CheckWagenNummer))
+            {
+                sb.AppendLine($"{ts}#define OV_CHECK_WAGENNMR /* check op wagendienstnummer          */");
+            }
             sb.AppendLine($"{ts}#include \"extra_func_ov.h\"");
             if (c.Data.PracticeOmgeving)
             {
