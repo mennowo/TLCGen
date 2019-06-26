@@ -43,9 +43,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 _koppelSignalen.Add(koppeling, new List<CCOLKoppelSignaal>());
                 _koppelSignaalCountSet.Add(koppeling, false);
             }
-            else if (_koppelSignalen[koppeling].Any(x => x.Count == count))
+            else if (count != 0 && _koppelSignalen[koppeling].Any(x => x.Count == count))
             {
-                throw new IndexOutOfRangeException();
+                TLCGen.Dependencies.Providers.TLCGenDialogProvider.Default.ShowMessageBox($"Ingangssignaal nummer {count} van koppeling {koppeling} wordt reeds elders gebruikt. Dit kan de juiste werking van de regeling negatief beinvloeden.", "Koppelsignaal dubbel gebruikt", System.Windows.MessageBoxButton.OK);
             }
             if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
             {

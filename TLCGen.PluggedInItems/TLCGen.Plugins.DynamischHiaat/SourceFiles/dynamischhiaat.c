@@ -11,6 +11,7 @@
    * 2.2.0    01-02-2019   ddo         Correctie veiligheidsgroen verwijderd
    * 2.3.0    15-02-2019   ddo         Veiligstellen hiaattijden aangepast
    * 2.4.0    20-06-2019   ddo         Niet afzetten MK[fc] BIT3 tijdens MG[fc] tot er een conflictaanvraag is
+   * 2.5.0    21-06-2019   ddo         Niet afzetten MK[fc] BIT3 tijdens WG[fc] en 'extra verlengen in WG' geselecteerd
    *
    ***********************************************************************************************************
 
@@ -387,7 +388,7 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_w
     if ((verlengen[rijstrook] || detstor[fc])      /* zolang er verlengd wordt, of bij een aanwezige detectiestoring */
        || (!(verlengen[rijstrook] || detstor[fc])  /*       of                                                       */
 		   && !fka(fc) && (MG[fc] ||               /* bij geen (fictieve) conflictaanvraag en MG[]                   */
-		   WG[fc] && EXTRA_IN_WG)))                /* danwel bij geen fict.confl.aanvr en WG[] en meeverlengen in WG */
+		   WG[fc] && extra_in_wg)))                /* danwel bij geen fict.confl.aanvr en WG[] en meeverlengen in WG */
     {
       hulp_bit3 = TRUE;                            /* blijft hulp_bit 3 waar en wordt dus MK[] BIT3 niet af gezet    */
     }
