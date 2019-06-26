@@ -15,8 +15,6 @@ namespace TLCGen.Models
         public int PortnummerAutomaatOmgeving { get; set; }
         public int NummerSource { get; set; }
         public int NummerDestination { get; set; }
-        public int StartIndexInkomendeKoppelSignalen { get; set; }
-        public int StartIndexUitgaandeKoppelSignalen { get; set; }
 
         [IOElement("ptpok", BitmappedItemTypeEnum.Uitgang, nameof(TeKoppelenKruispunt))]
         public BitmapCoordinatenDataModel OkBitmapData { get; set; }

@@ -83,11 +83,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 case CCOLKoppelSignaalRichtingEnum.In:
                     var kop = c.PTPData.PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == koppeling);
-                    if (kop.StartIndexInkomendeKoppelSignalen > 1) ct += kop.StartIndexInkomendeKoppelSignalen - 1;
+                    //if (kop.StartIndexInkomendeKoppelSignalen > 1) ct += kop.StartIndexInkomendeKoppelSignalen - 1;
                     break;
                 case CCOLKoppelSignaalRichtingEnum.Uit:
                     var kop2 = c.PTPData.PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == koppeling);
-                    if (kop2.StartIndexUitgaandeKoppelSignalen > 1) ct += kop2.StartIndexUitgaandeKoppelSignalen - 1;
+                    //if (kop2.StartIndexUitgaandeKoppelSignalen > 1) ct += kop2.StartIndexUitgaandeKoppelSignalen - 1;
                     break;
             }
             return ct;

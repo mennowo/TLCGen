@@ -169,9 +169,7 @@ void InitTDHstdtijden(void) { /*-*/
   }
 }
 
-
-
-void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool opdr, count fc, ...)
+void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, bool extra_in_wg, count mmk, bool opdr, count fc, ...)
 {
   va_list argpt;                                    /* variabele argumentenlijst                                 */
   count dpnr;                                       /* arraynummer detectie-element                              */
@@ -387,7 +385,9 @@ void hiaattijden_verlenging(bool nietToepassen, bool vrijkomkop, count mmk, bool
   for (rijstrook=1; rijstrook<=max_rijstrook; rijstrook++)   /* voor alle rijstroken van de betreffende signaalgroep */
   {
     if ((verlengen[rijstrook] || detstor[fc])      /* zolang er verlengd wordt, of bij een aanwezige detectiestoring */
-       || (!(verlengen[rijstrook] || detstor[fc]) && MG[fc] && !ka(fc)))      /* óf bij MG[] zonder conflictaanvraag */
+       || (!(verlengen[rijstrook] || detstor[fc])  /*       of                                                       */
+		   && !fka(fc) && (MG[fc] ||               /* bij geen (fictieve) conflictaanvraag en MG[]                   */
+		   WG[fc] && EXTRA_IN_WG)))                /* danwel bij geen fict.confl.aanvr en WG[] en meeverlengen in WG */
     {
       hulp_bit3 = TRUE;                            /* blijft hulp_bit 3 waar en wordt dus MK[] BIT3 niet af gezet    */
     }
