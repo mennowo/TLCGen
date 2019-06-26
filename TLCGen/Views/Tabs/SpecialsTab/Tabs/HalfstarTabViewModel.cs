@@ -583,7 +583,7 @@ namespace TLCGen.ViewModels
 			{
 				fc.RaisePropertyChanged("");
 			}
-		}
+        }
 
         private bool ImportManySignaalPlanCommand_CanExecute(object obj)
         {

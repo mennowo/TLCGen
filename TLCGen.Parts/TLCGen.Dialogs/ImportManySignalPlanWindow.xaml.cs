@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using TLCGen.Extensions;
 using TLCGen.Helpers;
 using TLCGen.Models;
 
@@ -114,6 +115,23 @@ namespace TLCGen.Dialogs
                 foreach(var plan in plans)
                 {
                     DataModel.SignaalPlannen.Add(plan);
+                    foreach (var gk in DataModel.GekoppeldeKruisingen)
+                    {
+                        gk.PlanUitgangen.Add(new HalfstarGekoppeldeKruisingPlanUitgangModel
+                        {
+                            Kruising = gk.KruisingNaam,
+                            Plan = plan.Naam,
+                            Type = gk.Type
+                        });
+                        gk.PlanUitgangen.BubbleSort();
+                        gk.PlanIngangen.Add(new HalfstarGekoppeldeKruisingPlanIngangModel
+                        {
+                            Kruising = gk.KruisingNaam,
+                            Plan = plan.Naam,
+                            Type = gk.Type
+                        });
+                        gk.PlanIngangen.BubbleSort();
+                    }
                 }
 			}
 			catch (Exception ee)

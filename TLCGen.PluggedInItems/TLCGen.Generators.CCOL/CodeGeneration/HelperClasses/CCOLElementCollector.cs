@@ -22,10 +22,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
             {
                 _koppelSignaalCountPerFunc.Add(koppeling, new Dictionary<int, int>());
-                if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
-                {
-                    _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
-                }
+            }
+            if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
+            {
+                _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
             }
             if (!_koppelSignalen.ContainsKey(koppeling))
             {
@@ -47,16 +47,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             {
                 throw new IndexOutOfRangeException();
             }
+            if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
+            {
+                _koppelSignaalCountPerFunc.Add(koppeling, new Dictionary<int, int>());
+            }
+            if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
+            {
+                _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
+            }
             if (count == 0)
             {
-                if (!_koppelSignaalCountPerFunc.ContainsKey(koppeling))
-                {
-                    _koppelSignaalCountPerFunc.Add(koppeling, new Dictionary<int, int>());
-                    if (!_koppelSignaalCountPerFunc[koppeling].ContainsKey(order))
-                    {
-                        _koppelSignaalCountPerFunc[koppeling].Add(order, 1);
-                    }
-                }
                 count = _koppelSignaalCountPerFunc[koppeling][order];
             }
             _koppelSignalen[koppeling].Add(new CCOLKoppelSignaal() { Count = count, Order = order, Name = name, Richting = richting });
