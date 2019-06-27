@@ -54,20 +54,13 @@ namespace TLCGen.Models
 	    [IOElement("pelin", BitmappedItemTypeEnum.Uitgang, "GekoppeldeSignaalGroep", "IsInkomend")]
         public BitmapCoordinatenDataModel InkomendVerklikking { get; set; }
 
-        [IOElement("peluit", BitmappedItemTypeEnum.Uitgang, "GekoppeldeSignaalGroep", "IsUitgaand")]
-        public BitmapCoordinatenDataModel UitgaandeVerklikking { get; set; }
-
         [Browsable(false)]
         public bool IsInkomend => Richting == PelotonKoppelingRichtingEnum.Inkomend;
-
-        [Browsable(false)]
-        public bool IsUitgaand => Richting == PelotonKoppelingRichtingEnum.Uitgaand;
 
         public PelotonKoppelingModel()
         {
             Detectoren = new List<PelotonKoppelingDetectorModel>();
             InkomendVerklikking = new BitmapCoordinatenDataModel();
-            UitgaandeVerklikking = new BitmapCoordinatenDataModel();
         }
     }
 }

@@ -136,8 +136,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         switch (pk.Richting)
                         {
                             case PelotonKoppelingRichtingEnum.Uitgaand:
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_uspeluit}{pk.GekoppeldeSignaalGroep}", _uspeluit, pk.KruisingNaam));
-                                _myBitmapOutputs.Add(new CCOLIOElement(pk.UitgaandeVerklikking, $"{_uspf}{_uspeluit}{pk.GekoppeldeSignaalGroep}"));
                                 foreach (var sg in sgWithD)
                                 {
                                     _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_schpku}{sg.Key.Naam}", 1, CCOLElementTimeTypeEnum.SCH_type, _schpku, pk.GekoppeldeSignaalGroep));
@@ -609,16 +607,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         }
                         ff = true;
                     }
-                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Type == PelotonKoppelingType.RHDHV))
-                    {
-                        if (ff) sb.AppendLine();
-                        sb.AppendLine("/* Verklikken uitgaande pelotons */");
-                        foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && (x.Detectoren.Any() && x.Type == PelotonKoppelingType.RHDHV)))
-                        {
-                            var ipl = CCOLElementCollector.GetKoppelSignaalCount(pk.PTPKruising, c, $"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
-                            sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uspeluit}{pk.GekoppeldeSignaalGroep}] = IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}];");
-                        }
-                    }
+                    //if (c.PelotonKoppelingenData.PelotonKoppelingen.Any(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && x.Type == PelotonKoppelingType.RHDHV))
+                    //{
+                    //    if (ff) sb.AppendLine();
+                    //    sb.AppendLine($"{ts}/* Verklikken uitgaande pelotons */");
+                    //    foreach (var pk in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Uitgaand && (x.Detectoren.Any() && x.Type == PelotonKoppelingType.RHDHV)))
+                    //    {
+                    //        var ipl = CCOLElementCollector.GetKoppelSignaalCount(pk.PTPKruising, c, $"{pk.KruisingNaam}g{pk.GekoppeldeSignaalGroep}", CCOLKoppelSignaalRichtingEnum.Uit);
+                    //        sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uspeluit}{pk.GekoppeldeSignaalGroep}] = IH[{_hpf}{pk.PTPKruising}{_huks}{ipl:00}];");
+                    //    }
+                    //}
                     return sb.ToString();
             }
 

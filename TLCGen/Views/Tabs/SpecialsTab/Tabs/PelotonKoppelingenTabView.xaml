@@ -37,21 +37,18 @@
                         Header="Type" 
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingType}}}" />
-                    <DataGridTemplateColumn 
-                        Width="Auto" MinWidth="60">
-                        <DataGridTemplateColumn.Header>
-                            <DockPanel>
-                                <ct:InfoElement DockPanel.Dock="Right">
-                                    <ct:InfoElement.InfoPopup>
-                                        <TextBlock>
-                                            Indien Type RHDHV:<LineBreak />
-                                            uitsluitend gebruikt voor naamgeving verklikking
-                                        </TextBlock>
-                                    </ct:InfoElement.InfoPopup>
-                                </ct:InfoElement>
-                                <TextBlock Margin="2,0" Text="Fase" DockPanel.Dock="Left" />
-                            </DockPanel>    
-                        </DataGridTemplateColumn.Header>
+                    <DataGridTemplateColumn Header="Fase" Width="Auto" MinWidth="60">
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=Richting}" Value="Uitgaand">
+                                        <Setter Property="IsEnabled" Value="False" />
+                                        <Setter Property="Background" Value="LightGray" />
+                                        <Setter Property="Foreground" Value="LightGray" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=GekoppeldeSignaalGroep,Mode=OneWay}" Margin="2" />
