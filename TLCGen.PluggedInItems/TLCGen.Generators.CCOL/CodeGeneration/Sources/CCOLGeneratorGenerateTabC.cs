@@ -571,7 +571,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         sb.AppendLine();
 
                         string prevfasefrom = "";
-                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten)
+                        foreach (ConflictModel conflict in controller.InterSignaalGroep.Conflicten.Where(x => x.GarantieWaarde != null))
                         {
                             var ff = conflict.GetFaseFromDefine();
                             var ft = conflict.GetFaseToDefine();
