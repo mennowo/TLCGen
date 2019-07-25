@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using TLCGen.Extensions;
 using TLCGen.Helpers;
+using TLCGen.Messaging.Messages;
 using TLCGen.Plugins.RIS.Models;
 
 namespace TLCGen.Plugins.RIS
@@ -68,7 +69,8 @@ namespace TLCGen.Plugins.RIS
                     var sg = ModelManagement.TLCGenModelManager.Default.Controller.Fasen.FirstOrDefault(x2 => x2.Naam == _laneData.SignalGroupName);
                     return RISPlugin.GetNewStationForSignalGroup(sg, LaneID, RijstrookIndex, SystemITF);
                 },
-                (x, y) => false
+                (x, y) => false,
+                () => MessengerInstance.Send(new ControllerDataChangedMessage())
                 ));
 
         public object GetItem()
