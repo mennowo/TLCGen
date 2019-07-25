@@ -55,10 +55,8 @@ namespace TLCGen.ViewModels
             get => OVIngreep.Koplus;
             set
             {
-                if(value != null)
-                {
-                    OVIngreep.Koplus = value;
-                }
+                OVIngreep.Koplus = value;
+                if (value == null) OVIngreep.Koplus = "NG";
                 RaisePropertyChanged<object>(nameof(Koplus), broadcast: true);
                 RaisePropertyChanged(nameof(HasKoplus));
                 RaisePropertyChanged(nameof(HasWisselstand));
@@ -516,6 +514,7 @@ namespace TLCGen.ViewModels
             }
             else
             {
+                OVIngreep.Koplus = "NG";
                 RaisePropertyChanged(nameof(Koplus));
             }
         }
