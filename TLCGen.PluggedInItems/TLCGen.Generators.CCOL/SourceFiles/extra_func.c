@@ -1093,6 +1093,15 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 			}
 		}
 
+		/* reset huidige modulemolen */
+		for (fc = fcfirst; fc < fclast; ++fc)
+		{
+			for (ml = 0; ml < ml_max; ++ml)
+			{
+				prml[ml][fc] = FALSE;
+			}
+		}
+
 		/* kopieer tijdelijke modulemolen naar nieuwe modulemolen */
 		for (fc = fcfirst; fc < fclast; ++fc)
 		{

@@ -26,8 +26,6 @@
                 <DataGridTextColumn Header="Poort automaat" Binding="{Binding Path=PortnummerAutomaatOmgeving,UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Source" Binding="{Binding Path=NummerSource,UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Destination" Binding="{Binding Path=NummerDestination,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="In start # TLCGen" Binding="{Binding Path=StartIndexInkomendeKoppelSignalen,UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Uit start # TLCGen" Binding="{Binding Path=StartIndexUitgaandeKoppelSignalen,UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -309,6 +310,17 @@ namespace TLCGen.Plugins.RIS
             return _RISModel.RISFasen.SelectMany(x => x.LaneData).SelectMany(x => x.SimulatedStations).Select(x => x.SimulationData);
         }
 
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCMeetkriterium:
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override int HasCode(CCOLCodeTypeEnum type)
         {
             switch (type)
@@ -349,7 +361,7 @@ namespace TLCGen.Plugins.RIS
                         var i = 1;
                         foreach(var sitf in _RISModel.MultiSystemITF)
                         {
-                            sb.AppendLine($"#define SYSTEM_ITF{i} \"{_RISModel.SystemITF}\"");
+                            sb.AppendLine($"#define SYSTEM_ITF{i} \"{sitf.SystemITF}\"");
                             ++i;
                         }
                     }
@@ -410,6 +422,10 @@ namespace TLCGen.Plugins.RIS
                     return sb.ToString();
                 case CCOLCodeTypeEnum.RegCMeetkriterium:
                     sb.AppendLine($"{ts}#ifndef NO_RIS");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}MK[fc] &= ~BIT10;");
+                    sb.AppendLine($"{ts}}}");
                     foreach (var l in _RISModel.RISExtendLanes.Where(x => x.RISVerlengen))
                     {
                         var sitf = "SYSTEM_ITF";
@@ -427,7 +443,7 @@ namespace TLCGen.Plugins.RIS
                                 }
                             }
                         }
-                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10; else  MK[{_fcpf}{l.SignalGroupName}] &= ~BIT10;");
+                        sb.AppendLine($"{ts}{ts}if (ris_verlengen({_fcpf}{l.SignalGroupName}, {sitf}, PRM[{_prmpf}{_prmrislaneid}{l.SignalGroupName}_{l.RijstrookIndex}], RIS_{l.Type}, PRM[{_prmpf}{_prmrisvstart}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], PRM[{_prmpf}{_prmrisvend}{l.SignalGroupName}{l.Type.GetDescription()}{l.RijstrookIndex}], TRUE)) MK[{_fcpf}{l.SignalGroupName}] |= BIT10;");
                     }
                     sb.AppendLine($"{ts}#endif");
                     return sb.ToString();

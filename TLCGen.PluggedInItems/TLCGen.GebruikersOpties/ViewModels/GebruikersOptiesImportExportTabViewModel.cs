@@ -146,7 +146,7 @@ namespace TLCGen.GebruikersOpties
                     _importCommand = new RelayCommand(
                         () => 
                         {
-                            foreach(var o in ItemsToImport)
+                            foreach(var o in ItemsToImport.Where(x => x.Selected))
                             {
                                 if (Integrity.TLCGenIntegrityChecker.IsElementNaamUnique(_plugin.Controller, o.Naam, o.ObjectType))
                                 {
