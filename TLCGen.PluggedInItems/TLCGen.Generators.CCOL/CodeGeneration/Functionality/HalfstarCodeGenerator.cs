@@ -553,7 +553,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{ts}reset_fc_halfstar();");
 					sb.AppendLine($"{ts}}}");
 					sb.AppendLine();
-                    sb.AppendLine($"{ts}if (!IH[{_hpf}{_hkpact}])");
+                    sb.AppendLine($"{ts}if (IH[{_hpf}{_hkpact}])");
 					sb.AppendLine($"{ts}{{");
                     sb.AppendLine($"{ts}{ts}/* bijhouden verlenggroentijden t.b.v. calculaties diverse functies */");
 					sb.AppendLine($"{ts}{ts}tvga_timer_halfstar();");
