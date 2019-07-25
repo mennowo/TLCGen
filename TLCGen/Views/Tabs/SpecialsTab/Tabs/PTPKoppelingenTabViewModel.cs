@@ -1,4 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -130,6 +134,18 @@ namespace TLCGen.ViewModels
 
         public override void OnSelected()
         {
+            if (Controller == null) return;
+            foreach (var ptp in PTPKoppelingen) ptp.KoppelSignalenAlles.Clear();
+            var signalen = GetAllKoppelSignalen(Controller);
+            foreach (var s in signalen)
+            {
+                var ptp = PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == s.Koppeling);
+                if (ptp != null)
+                {
+                    ptp.KoppelSignalenAlles.Add(new KoppelSignaalViewModel(s));
+                }
+            }
+            foreach (var ptp in PTPKoppelingen) ptp.UpdateSignalen();
         }
 
         public override ControllerModel Controller
@@ -162,6 +178,45 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // TabItem Overrides
+
+        private List<KoppelSignaalModel> GetAllKoppelSignalen(object obj)
+        {
+            var l = new List<KoppelSignaalModel>();
+            if (obj == null) return l;
+
+            var objType = obj.GetType();
+            var attr = objType.GetCustomAttribute<HasKoppelSignalenAttribute>();
+            if (attr != null)
+            {
+                var i = (IHaveKoppelSignalen)obj;
+                var elems2 = i.UpdateKoppelSignalen();
+                l.AddRange(elems2);
+            }
+
+            var properties = objType.GetProperties();
+            foreach (var property in properties)
+            {
+                var hasSignalen = property.GetCustomAttribute<HasKoppelSignalenAttribute>();
+                if (property.PropertyType.IsValueType || property.PropertyType == typeof(string)) continue;
+                var propValue = property.GetValue(obj);
+                var elems = propValue as IList;
+                if (elems != null)
+                {
+                    l.AddRange(from object item in elems from i in GetAllKoppelSignalen(item) select i);
+                }
+                else if(hasSignalen != null)
+                {
+                    var i = (IHaveKoppelSignalen)propValue;
+                    var elems2 = i.UpdateKoppelSignalen();
+                    l.AddRange(elems2);
+                }
+                else
+                {
+                    l.AddRange(GetAllKoppelSignalen(propValue));
+                }
+            }
+            return l;
+        }
 
         #region Collection Changed
 

@@ -5,7 +5,17 @@ using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Models
 {
-	[Serializable]
+    public enum KoppelSignaalRichtingEnum { In, Uit };
+
+    public class KoppelSignaalModel
+    {
+        public int Count { get; set; }
+        public string Description { get; set; }
+        public string Koppeling { get; set; }
+        public KoppelSignaalRichtingEnum Richting { get; set; }
+    }
+
+    [Serializable]
 	public class HalfstarDataModel
 	{
 		#region Properties

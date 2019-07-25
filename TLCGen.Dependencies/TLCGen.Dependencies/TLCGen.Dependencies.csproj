@@ -163,6 +163,7 @@
     <Compile Include="Models.Enumerations\VLOGMonModeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGTypeEnum.cs" />
     <Compile Include="Models.Enumerations\VLOGVersieEnum.cs" />
+    <Compile Include="Models\Attributes\HasKoppelSignalenAttribute.cs" />
     <Compile Include="Models\Attributes\TLCGenIgnoreAttribute.cs" />
     <Compile Include="Models\Attributes\HasDefaultAttribute.cs" />
     <Compile Include="Models\Attributes\IOElementAttribute.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Models\Models\Varia\HardMeeverlengenFaseCyclusModel.cs" />
     <Compile Include="Models\Models\Varia\PelotonKoppelingDetectorModel.cs" />
     <Compile Include="Models\Models\Varia\PelotonKoppelingenDataModel.cs" />
+    <Compile Include="Models.Enumerations\PelotonKoppelingType.cs" />
     <Compile Include="Models\Models\Varia\PTPDataModel.cs" />
     <Compile Include="Models\Models\Varia\PTPKoppelingModel.cs" />
     <Compile Include="Models\Models\Varia\RichtingGevoeligeAanvraagModel.cs" />

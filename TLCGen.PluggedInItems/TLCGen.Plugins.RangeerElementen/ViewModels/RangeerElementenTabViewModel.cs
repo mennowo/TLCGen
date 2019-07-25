@@ -161,9 +161,9 @@ namespace TLCGen.Plugins.RangeerElementen.ViewModels
                 var inserted = false;
                 foreach (var l in lines)
                 {
-                    if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z]+\s+[0-9]+.*"))
+                    if (!inserted && Regex.IsMatch(l, $@"\s*#define\s+{_plugin.Dpf}[0-9a-zA-Z_]+\s+[0-9]+.*"))
                     {
-                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z]+)\s+[0-9]+.*");
+                        var m = Regex.Match(l, $@"\s*#define\s+(?<def>{_plugin.Dpf}[0-9a-zA-Z_]+)\s+[0-9]+.*");
                         if (m.Success)
                         {
                             var rd = RangeerElementen.FirstOrDefault(x => _plugin.Dpf + x.Element == m.Groups["def"].Value);

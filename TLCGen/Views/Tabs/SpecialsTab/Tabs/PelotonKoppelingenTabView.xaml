@@ -36,7 +36,7 @@
                     <DataGridComboBoxColumn
                         Header="Type" 
                         SelectedItemBinding="{Binding Path=Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingType}}}" />
+                        ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:PelotonKoppelingTypeEmum}}}" />
                     <DataGridTemplateColumn Header="Fase" Width="Auto" MinWidth="60">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">

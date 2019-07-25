@@ -43,8 +43,8 @@ namespace TLCGen.ViewModels
         }
 
         public Visibility IsInkomend => Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsInkomendDenHaag => Type == PelotonKoppelingType.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
-        public Visibility IsInkomendRHDHV => Type == PelotonKoppelingType.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendDenHaag => Type == PelotonKoppelingTypeEnum.DenHaag && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
+        public Visibility IsInkomendRHDHV => Type == PelotonKoppelingTypeEnum.RHDHV && Richting == PelotonKoppelingRichtingEnum.Inkomend ? Visibility.Visible : Visibility.Collapsed;
         public Visibility IsUitgaand => Richting == PelotonKoppelingRichtingEnum.Uitgaand ? Visibility.Visible : Visibility.Collapsed;
 
         public string GekoppeldeSignaalGroepNull
@@ -236,7 +236,7 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public PelotonKoppelingType Type
+        public PelotonKoppelingTypeEnum Type
         {
             get { return PelotonKoppeling.Type; }
             set

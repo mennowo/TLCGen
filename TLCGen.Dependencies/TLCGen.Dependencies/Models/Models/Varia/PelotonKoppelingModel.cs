@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml.Serialization;
 using TLCGen.Models.Enumerations;
-
-namespace TLCGen.Models.Enumerations
-{
-    public enum PelotonKoppelingType
-    {
-        DenHaag,
-        RHDHV
-    }
-}
 
 namespace TLCGen.Models
 {
     [Serializable]
-    public class PelotonKoppelingModel
+    [HasKoppelSignalen]
+    public class PelotonKoppelingModel : IHaveKoppelSignalen
     {
+        #region Properties
+
         [HasDefault(false)]
         public string KruisingNaam { get; set; }
 
@@ -25,7 +20,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         public string GekoppeldeSignaalGroep { get; set; }
 
-        public PelotonKoppelingType Type { get; set; }
+        public PelotonKoppelingTypeEnum Type { get; set; }
         public int Meetperiode { get; set; }
         public int MaximaalHiaat { get; set; }
         public int MinimaalAantalVoertuigen { get; set; }
@@ -37,7 +32,6 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum ToepassenAanvraag { get; set; }
         public NooitAltijdAanUitEnum ToepassenMeetkriterium { get; set; }
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen { get; set; }
-        public bool AutoIngangsSignalen { get; set; }
         public int IngangsSignaalFG { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
@@ -57,10 +51,73 @@ namespace TLCGen.Models
         [Browsable(false)]
         public bool IsInkomend => Richting == PelotonKoppelingRichtingEnum.Inkomend;
 
+        [Browsable(false)]
+        public List<KoppelSignaalModel> KoppelSignalen { get; set; }
+
+        #endregion // Properties
+
+        #region Constructor
+
         public PelotonKoppelingModel()
         {
             Detectoren = new List<PelotonKoppelingDetectorModel>();
             InkomendVerklikking = new BitmapCoordinatenDataModel();
+            KoppelSignalen = new List<KoppelSignaalModel>();
         }
+
+        #endregion // Constructor
+
+        #region IHaveKoppelSignalen
+
+        public List<KoppelSignaalModel> UpdateKoppelSignalen()
+        {
+            var signalen = new List<KoppelSignaalModel>();
+            switch (Type)
+            {
+                case PelotonKoppelingTypeEnum.DenHaag:
+                    switch (Richting)
+                    {
+                        case PelotonKoppelingRichtingEnum.Uitgaand:
+                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                            foreach (var d in Detectoren)
+                            {
+                                signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} det. {d.DetectorNaam}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                            }
+                            break;
+                        case PelotonKoppelingRichtingEnum.Inkomend:
+                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                            foreach (var d in Detectoren)
+                            {
+                                signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} det. {d.DetectorNaam}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                            }
+                            break;
+                    }
+                    break;
+                case PelotonKoppelingTypeEnum.RHDHV:
+                    switch (Richting)
+                    {
+                        case PelotonKoppelingRichtingEnum.Uitgaand:
+                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} peloton", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                            break;
+                        case PelotonKoppelingRichtingEnum.Inkomend:
+                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} peloton", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                            break;
+                    }
+                    break;
+            }
+            foreach (var s in KoppelSignalen)
+            {
+                var _s = signalen.FirstOrDefault(x => x.Description == s.Description && x.Richting == s.Richting);
+                if (_s != null)
+                {
+                    _s.Koppeling = PTPKruising;
+                    _s.Count = s.Count;
+                }
+            }
+            KoppelSignalen = signalen;
+            return KoppelSignalen;
+        }
+
+        #endregion // IHaveKoppelSignalen
     }
 }
