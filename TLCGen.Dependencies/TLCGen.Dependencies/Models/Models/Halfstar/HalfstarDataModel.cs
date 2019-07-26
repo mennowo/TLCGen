@@ -10,7 +10,10 @@ namespace TLCGen.Models
     public class KoppelSignaalModel
     {
         public int Count { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
+        [ModelName(TLCGenObjectTypeEnum.PTPKruising)]
         public string Koppeling { get; set; }
         public KoppelSignaalRichtingEnum Richting { get; set; }
     }

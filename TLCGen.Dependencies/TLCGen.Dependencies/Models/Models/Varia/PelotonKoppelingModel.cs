@@ -32,7 +32,6 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum ToepassenAanvraag { get; set; }
         public NooitAltijdAanUitEnum ToepassenMeetkriterium { get; set; }
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen { get; set; }
-        public int IngangsSignaalFG { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
         [HasDefault(false)]
@@ -72,23 +71,52 @@ namespace TLCGen.Models
         public List<KoppelSignaalModel> UpdateKoppelSignalen()
         {
             var signalen = new List<KoppelSignaalModel>();
+            int id = 1;
             switch (Type)
             {
                 case PelotonKoppelingTypeEnum.DenHaag:
                     switch (Richting)
                     {
                         case PelotonKoppelingRichtingEnum.Uitgaand:
-                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                            signalen.Add(new KoppelSignaalModel
+                            {
+                                Id = id++,
+                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}",
+                                Koppeling = PTPKruising,
+                                Richting = KoppelSignaalRichtingEnum.Uit
+                            });
                             foreach (var d in Detectoren)
                             {
-                                signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} det. {d.DetectorNaam}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                                signalen.Add(new KoppelSignaalModel
+                                {
+                                    Id = id++,
+                                    Name = $"{KruisingNaam}d{d.DetectorNaam}",
+                                    Description = $"{KruisingNaam} det. {d.DetectorNaam}",
+                                    Koppeling = PTPKruising,
+                                    Richting = KoppelSignaalRichtingEnum.Uit
+                                });
                             }
                             break;
                         case PelotonKoppelingRichtingEnum.Inkomend:
-                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                            signalen.Add(new KoppelSignaalModel
+                            {
+                                Id = id++,
+                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}",
+                                Koppeling = PTPKruising,
+                                Richting = KoppelSignaalRichtingEnum.In
+                            });
                             foreach (var d in Detectoren)
                             {
-                                signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} det. {d.DetectorNaam}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                                signalen.Add(new KoppelSignaalModel
+                                {
+                                    Id = id++,
+                                    Name = $"{KruisingNaam}d{d.DetectorNaam}",
+                                    Description = $"{KruisingNaam} det. {d.DetectorNaam}",
+                                    Koppeling = PTPKruising,
+                                    Richting = KoppelSignaalRichtingEnum.In
+                                });
                             }
                             break;
                     }
@@ -97,21 +125,39 @@ namespace TLCGen.Models
                     switch (Richting)
                     {
                         case PelotonKoppelingRichtingEnum.Uitgaand:
-                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} peloton", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                            signalen.Add(new KoppelSignaalModel
+                            {
+                                Id = id++,
+                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KruisingNaam} peloton {GekoppeldeSignaalGroep}",
+                                Koppeling = PTPKruising,
+                                Richting = KoppelSignaalRichtingEnum.Uit
+                            });
                             break;
                         case PelotonKoppelingRichtingEnum.Inkomend:
-                            signalen.Add(new KoppelSignaalModel { Description = $"{KruisingNaam} peloton", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                            signalen.Add(new KoppelSignaalModel
+                            {
+                                Id = id++,
+                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KruisingNaam} peloton {GekoppeldeSignaalGroep}",
+                                Koppeling = PTPKruising,
+                                Richting = KoppelSignaalRichtingEnum.In
+                            });
                             break;
                     }
                     break;
             }
+            foreach (var s in signalen)
+            {
+                s.Count = 0;
+                s.Koppeling = PTPKruising;
+            }
             foreach (var s in KoppelSignalen)
             {
-                var _s = signalen.FirstOrDefault(x => x.Description == s.Description && x.Richting == s.Richting);
-                if (_s != null)
+                var ns = signalen.FirstOrDefault(x => x.Id != 0 && x.Id == s.Id);
+                if (ns != null)
                 {
-                    _s.Koppeling = PTPKruising;
-                    _s.Count = s.Count;
+                    ns.Count = s.Count;
                 }
             }
             KoppelSignalen = signalen;

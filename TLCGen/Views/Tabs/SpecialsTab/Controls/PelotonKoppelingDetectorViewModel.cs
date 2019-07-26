@@ -18,17 +18,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-
-        public int KoppelSignaal
-        {
-            get => Detector.KoppelSignaal;
-            set
-            {
-                Detector.KoppelSignaal = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
+        
         public PelotonKoppelingDetectorViewModel(PelotonKoppelingDetectorModel detector)
         {
             Detector = detector;

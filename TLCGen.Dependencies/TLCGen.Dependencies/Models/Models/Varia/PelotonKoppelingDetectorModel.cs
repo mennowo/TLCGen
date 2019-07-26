@@ -8,6 +8,5 @@ namespace TLCGen.Models
     {
         [RefersTo(TLCGenObjectTypeEnum.Detector)]
         public string DetectorNaam { get; set; }
-        public int KoppelSignaal { get; set; }
     }
 }

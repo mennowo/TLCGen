@@ -86,8 +86,6 @@
             <ComboBox IsEnabled="{Binding Path=HasRetourWachtgroen}" 
                       Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                 SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
-            <Label Content="Ingangssignaal FG #" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Grid Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -99,7 +97,6 @@
                           Margin="2" Grid.Row="1" SelectedItem="{Binding Path=SelectedDetector}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Detector naam" Binding="{Binding Path=DetectorNaam,UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Ingangsignaal #" Binding="{Binding Path=KoppelSignaal,UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <ct:ItemsManagerView Grid.Row="2" ShowCaption="False" 
@@ -127,8 +124,6 @@
             <Label Content="Toepassen MK" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                       SelectedItem="{Binding Path=ToepassenMeetkriterium}" />
-            <Label Content="Ingangssignaal peloton #" />
-            <TextBox Text="{Binding Path=IngangsSignaalFG,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
         </ag:AutoGrid>
         <Border Grid.Row="0" Background="LightGray">
             <Border.Style>

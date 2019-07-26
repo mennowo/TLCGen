@@ -140,45 +140,50 @@ namespace TLCGen.Models
         public List<KoppelSignaalModel> UpdateKoppelSignalen()
         {
             var signalen = new List<KoppelSignaalModel>();
-            signalen.Add(new KoppelSignaalModel { Description = "Leven in", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+            var id = 1;
+            signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}leven", Description = "Leven in", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
             if (Type == HalfstarGekoppeldTypeEnum.Master)
             {
-                signalen.Add(new KoppelSignaalModel { Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
-                signalen.Add(new KoppelSignaalModel { Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
-                signalen.Add(new KoppelSignaalModel { Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}kpuls", Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
             }
             else if (Type == HalfstarGekoppeldTypeEnum.Slave)
             {
-                signalen.Add(new KoppelSignaalModel { Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
-                signalen.Add(new KoppelSignaalModel { Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}syncok", Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}txsok", Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
             }
             foreach (var pl in PlanIngangen)
             {
-                signalen.Add(new KoppelSignaalModel { Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
             }
-            signalen.Add(new KoppelSignaalModel { Description = "Leven uit", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+            signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}leven", Description = "Leven uit", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             if (Type == HalfstarGekoppeldTypeEnum.Master)
             {
-                signalen.Add(new KoppelSignaalModel { Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
-                signalen.Add(new KoppelSignaalModel { Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}syncok", Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}txsok", Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             }
             else if (Type == HalfstarGekoppeldTypeEnum.Slave)
             {
-                signalen.Add(new KoppelSignaalModel { Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
-                signalen.Add(new KoppelSignaalModel { Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
-                signalen.Add(new KoppelSignaalModel { Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}kpuls", Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pervar", Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             }
             foreach (var pl in PlanIngangen)
             {
-                signalen.Add(new KoppelSignaalModel { Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             }
-            foreach(var s in KoppelSignalen)
+            foreach (var s in signalen)
             {
-                var _s = signalen.FirstOrDefault(x => x.Description == s.Description && x.Richting == s.Richting);
-                if (_s != null)
+                s.Count = 0;
+                s.Koppeling = PTPKruising;
+            }
+            foreach (var s in KoppelSignalen)
+            {
+                var ns = signalen.FirstOrDefault(x => x.Id != 0 && x.Id == s.Id);
+                if (ns != null)
                 {
-                    _s.Koppeling = PTPKruising;
-                    _s.Count = s.Count;
+                    ns.Count = s.Count;
                 }
             }
             KoppelSignalen = signalen;

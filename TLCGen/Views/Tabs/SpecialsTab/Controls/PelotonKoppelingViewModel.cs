@@ -148,17 +148,7 @@ namespace TLCGen.ViewModels
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
-
-        public int IngangsSignaalFG
-        {
-            get { return PelotonKoppeling.IngangsSignaalFG; }
-            set
-            {
-                PelotonKoppeling.IngangsSignaalFG = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
+        
         public NooitAltijdAanUitEnum ToepassenAanvraag
         {
             get { return PelotonKoppeling.ToepassenAanvraag; }
@@ -275,7 +265,7 @@ namespace TLCGen.ViewModels
                 {
                     var lre = new PelotonKoppelingDetectorViewModel(new PelotonKoppelingDetectorModel()
                     {
-                        DetectorNaam = x, KoppelSignaal = 0
+                        DetectorNaam = x
                     });
                     return lre;
                 },
