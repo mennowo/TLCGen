@@ -32,6 +32,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlfgd;
         private string _tnlcvd;
         private string _tnlegd;
+        private string _hplact;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -216,6 +217,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     #endregion
 
+                    #region Wachttijdvoorspeller aansturing tijdens halfstar regelen
+                    sb.AppendLine($"{ts}/* Berekening wachttijd tijdens halfstar regelen */");
+                    sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
+                    sb.AppendLine();
+                    #endregion
+
                     #region corrigeer waarde i.v.m. gelijkstart fietsers
                     var start = false;
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
@@ -380,6 +387,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlfgd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlfgd");
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
+            _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
 
             return base.SetSettings(settings);
         }

@@ -39,6 +39,7 @@ void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde);
 void alternatief_halfstar(count fc, mulv altp, bool condition);
 void gelijkstart_va_arg_halfstar(count h_x, count h_rr, bool  overslag, ...);
 void getrapte_fietser_halfstar(count fc1, count fc2, bool  a_bui_fc1, bool  a_bui_fc2, count tkopfc1fc2, count tkopfc2fc1, count voorstartfc1fc2,	count voorstartfc2fc1);
+void max_wachttijd_halfstar(mulv twacht[], count h_plact, count pl);
 void mgcor_halfstar(count fcaan, count fcnal, count t_nal);
 void mgcor_halfstar_deelc(count fc1, count fc2);
 void naloopEG_CV_halfstar(bool period, count fc1, count fc2, count tvs, count tnldet, count tnl);
