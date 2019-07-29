@@ -211,71 +211,71 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     WriteAndReviseAdd(Path.Combine(sourcefilepath, $"{c.Data.Naam}hst.add"), c, GenerateHstAdd, GenerateHstAddHeader, Encoding.Default);
                 }
 
-                CopySourceIfNeeded("extra_func.c", sourcefilepath);
-                CopySourceIfNeeded("extra_func.h", sourcefilepath);
-                CopySourceIfNeeded("ccolfunc.c", sourcefilepath);
-                CopySourceIfNeeded("ccolfunc.h", sourcefilepath);
-                CopySourceIfNeeded("detectie.c", sourcefilepath);
-                CopySourceIfNeeded("uitstuur.c", sourcefilepath);
-                CopySourceIfNeeded("uitstuur.h", sourcefilepath);
+                CopySourceIfNeeded(c, "extra_func.c", sourcefilepath);
+                CopySourceIfNeeded(c, "extra_func.h", sourcefilepath);
+                CopySourceIfNeeded(c, "ccolfunc.c", sourcefilepath);
+                CopySourceIfNeeded(c, "ccolfunc.h", sourcefilepath);
+                CopySourceIfNeeded(c, "detectie.c", sourcefilepath);
+                CopySourceIfNeeded(c, "uitstuur.c", sourcefilepath);
+                CopySourceIfNeeded(c, "uitstuur.h", sourcefilepath);
 
                 if (c.Data.FixatieData.FixatieMogelijk)
                 {
-                    CopySourceIfNeeded("fixatie.c", sourcefilepath);
-                    CopySourceIfNeeded("fixatie.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "fixatie.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "fixatie.h", sourcefilepath);
                 }
 
                 if (c.OVData.OVIngrepen.Count > 0 || c.OVData.HDIngrepen.Count > 0)
                 {
-                    CopySourceIfNeeded("extra_func_ov.c", sourcefilepath);
-                    CopySourceIfNeeded("extra_func_ov.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "extra_func_ov.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "extra_func_ov.h", sourcefilepath);
                 }
 
                 if(c.InterSignaalGroep.Nalopen.Any())
                 {
-                    CopySourceIfNeeded("gkvar.c", sourcefilepath);
-                    CopySourceIfNeeded("gkvar.h", sourcefilepath);
-                    CopySourceIfNeeded("nlvar.c", sourcefilepath);
-                    CopySourceIfNeeded("nlvar.h", sourcefilepath);
-                    CopySourceIfNeeded("nalopen.c", sourcefilepath);
-                    CopySourceIfNeeded("nalopen.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "gkvar.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "gkvar.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "nlvar.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "nlvar.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "nalopen.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "nalopen.h", sourcefilepath);
                 }
 
                 if (c.InterSignaalGroep.Voorstarten.Any() || c.InterSignaalGroep.Gelijkstarten.Any())
                 {
-                    CopySourceIfNeeded("syncfunc.c", sourcefilepath);
-                    CopySourceIfNeeded("syncvar.c", sourcefilepath);
-                    CopySourceIfNeeded("syncvar.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "syncfunc.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "syncvar.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "syncvar.h", sourcefilepath);
                 }
 
                 if (c.OVData.OVIngrepen.Any() || c.OVData.HDIngrepen.Any())
                 {
-                    CopySourceIfNeeded("ov.c", sourcefilepath);
-                    CopySourceIfNeeded("ov.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "ov.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "ov.h", sourcefilepath);
                 }
 
                 if (c.RoBuGrover.ConflictGroepen.Any())
                 {
-                    CopySourceIfNeeded("rgv_overslag.c", sourcefilepath);
-                    CopySourceIfNeeded("rgvfunc.c", sourcefilepath);
-                    CopySourceIfNeeded("rgvvar.c", sourcefilepath);
-                    CopySourceIfNeeded("winmg.c", sourcefilepath);
-                    CopySourceIfNeeded("winmg.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "rgv_overslag.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "rgvfunc.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "rgvvar.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "winmg.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "winmg.h", sourcefilepath);
 				}
 
 	            if (c.HalfstarData.IsHalfstar)
 	            {
-                    CopySourceIfNeeded("halfstar.c", sourcefilepath);
-                    CopySourceIfNeeded("halfstar.h", sourcefilepath);
-		            CopySourceIfNeeded("halfstar_ov.c", sourcefilepath);
-					CopySourceIfNeeded("halfstar_ov.h", sourcefilepath);
-		            CopySourceIfNeeded("halfstar_help.c", sourcefilepath);
-					CopySourceIfNeeded("halfstar_help.h", sourcefilepath);
+                    CopySourceIfNeeded(c, "halfstar.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "halfstar.h", sourcefilepath);
+		            CopySourceIfNeeded(c, "halfstar_ov.c", sourcefilepath);
+					CopySourceIfNeeded(c, "halfstar_ov.h", sourcefilepath);
+		            CopySourceIfNeeded(c, "halfstar_help.c", sourcefilepath);
+					CopySourceIfNeeded(c, "halfstar_help.h", sourcefilepath);
 	            }
 
                 if (c.Fasen.Any(x => x.WachttijdVoorspeller))
                 {
-                    CopySourceIfNeeded("wtv_testwin.c", sourcefilepath);
+                    CopySourceIfNeeded(c, "wtv_testwin.c", sourcefilepath);
                 }
 
                 foreach (var pl in PieceGenerators)
@@ -285,7 +285,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                     {
                         foreach (var f in fs)
                         {
-                            CopySourceIfNeeded(f, sourcefilepath);
+                            CopySourceIfNeeded(c, f, sourcefilepath);
                         }
                     }
                 }
@@ -350,7 +350,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return $"Map {sourcefilepath} niet gevonden. Niets gegenereerd.";
         }
 
-        private void CopySourceIfNeeded(string filename, string sourcefilepath)
+        private void CopySourceIfNeeded(ControllerModel c, string filename, string sourcefilepath)
         {
             if ((!File.Exists(Path.Combine(sourcefilepath, filename)) || CCOLGeneratorSettingsProvider.Default.Settings.AlwaysOverwriteSources)
                 && File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename)))
@@ -367,7 +367,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         return;
                     }
                 }
-                File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+                if(c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL100)
+                {
+                    File.Copy(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename), Path.Combine(sourcefilepath, filename));
+                }
+                else // CCOL 10.0
+                {
+                    var text = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SourceFiles\\" + filename));
+                    var rtext = Regex.Replace(text, @"(^|\s|\W)va_bool", "$1va_boolv");
+                    rtext = Regex.Replace(rtext, @"(^|\W)bool(\W)", "$1boolv$2");
+                    File.WriteAllText(Path.Combine(sourcefilepath, filename), rtext, Encoding.Default);
+                }
             }
         }
 

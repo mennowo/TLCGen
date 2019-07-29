@@ -112,12 +112,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("bool application1_tig_Add(void)");
+            var b = "boolv";
+            if (c.Data.CCOLVersie < Models.Enumerations.CCOLVersieEnum.CCOL100)
+            {
+                b = "bool";
+            }
+            sb.AppendLine($"{b} application1_tig_Add(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}return 0;");
             sb.AppendLine("}");
             sb.AppendLine();
-            sb.AppendLine("bool application2_tig_Add(void)");
+            sb.AppendLine($"{b} application2_tig_Add(void)");
             sb.AppendLine("{");
             sb.AppendLine($"{ts}return 0;");
             sb.AppendLine("}");

@@ -34,12 +34,19 @@ namespace TLCGen.Generators.CCOL
             }
         }
 
-
         public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL95
         {
             get
             {
                 return _Settings?.VisualSettingsCCOL95;
+            }
+        }
+
+        public CCOLGeneratorVisualSettingsModel VisualSettingsCCOL100
+        {
+            get
+            {
+                return _Settings?.VisualSettingsCCOL100;
             }
         }
 

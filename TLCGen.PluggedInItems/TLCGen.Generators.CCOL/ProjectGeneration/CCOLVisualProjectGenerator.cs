@@ -28,6 +28,9 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
                 case Models.Enumerations.CCOLVersieEnum.CCOL95:
                     settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL95;
                     break;
+                case Models.Enumerations.CCOLVersieEnum.CCOL100:
+                    settings = CCOLGeneratorSettingsProvider.Default.Settings.VisualSettingsCCOL100;
+                    break;
             }
 
             var _ccolinclpaths = settings.CCOLIncludesPaden;

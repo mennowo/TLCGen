@@ -468,8 +468,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     var result2 = new List<Tuple<string, string, string>>();
                     if (c.OVData.BlokkeerNietConflictenBijHDIngreep)
                     {
-                        result2.Add(new Tuple<string, string, string>("bool", "isHD", "FALSE"));
-                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>("bool", "isWTV", "FALSE"));
+                        result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isHD", "FALSE"));
+                        if (c.Fasen.Any(x => x.WachttijdVoorspeller)) result2.Add(new Tuple<string, string, string>(c.GetBoolV(), "isWTV", "FALSE"));
 
                     }
                     return result2;

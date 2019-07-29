@@ -227,7 +227,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Nooit)
                                 {
                                     sb.AppendLine($"int iOldRW{pk.KruisingNaam};");
-                                    sb.AppendLine($"bool bSingleRW{pk.KruisingNaam};");
+                                    sb.AppendLine($"{c.GetBoolV()} bSingleRW{pk.KruisingNaam};");
                                 }
                             }
                         }
@@ -525,11 +525,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if(pk.ToepassenMeetkriterium == NooitAltijdAanUitEnum.Altijd)
                                     {
-                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, (bool)(T_max[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}] > 0 && T[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}]));");
+                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(T_max[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}] > 0 && T[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}]));");
                                     }
                                     else
                                     {
-                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, (bool)(SCH[{_schpf}{_schpelmk}{pk.GekoppeldeSignaalGroep}] && T_max[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}] > 0 && T[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}]));");
+                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(SCH[{_schpf}{_schpelmk}{pk.GekoppeldeSignaalGroep}] && T_max[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}] > 0 && T[{_tpf}{_tpelnl}{pk.GekoppeldeSignaalGroep}]));");
                                     }
                                 }
                             }

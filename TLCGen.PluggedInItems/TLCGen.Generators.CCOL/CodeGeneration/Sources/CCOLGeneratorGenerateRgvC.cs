@@ -64,7 +64,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine("");
             sb.AppendLine("#if (!defined AUTOMAAT && !defined AUTOMAAT_TEST) || (defined VISSIM)");
             sb.AppendLine($"{ts}mulv TC_rgv[MAX_AANTAL_CONFLICTGROEPEN];");
-            sb.AppendLine($"{ts}string TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
+            sb.AppendLine($"{ts}char * TC_string$[MAX_AANTAL_CONFLICTGROEPEN];");
             sb.AppendLine("#endif");
             sb.AppendLine("");
             sb.AppendLine("/* Robugrover includes */");
@@ -80,22 +80,22 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine("void rgv_add(void)");
             sb.AppendLine("{");
-            sb.AppendLine($"{ts}static bool DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
-            sb.AppendLine($"{ts}static bool MK1[FCMAX];           /* Meetkriterium op rijstrook 1 */");
+            sb.AppendLine($"{ts}static {c.GetBoolV()} DD[FCMAX];            /* Detectie storing (Detection Disabled) */");
+            sb.AppendLine($"{ts}static {c.GetBoolV()} MK1[FCMAX];           /* Meetkriterium op rijstrook 1 */");
             if(c.RoBuGrover.SignaalGroepInstellingen.Any())
             {
                 var rijstrookMax = fasenMetRgv.Max(x => x.AantalRijstroken);
                 if(rijstrookMax > 1)
                 {
-                    sb.AppendLine($"{ts}static bool MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
+                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK2[FCMAX];           /* Meetkriterium op rijstrook 2 */");
                 }
                 if (rijstrookMax > 2)
                 {
-                    sb.AppendLine($"{ts}static bool MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
+                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK3[FCMAX];           /* Meetkriterium op rijstrook 3 */");
                 }
                 if (rijstrookMax > 3)
                 {
-                    sb.AppendLine($"{ts}static bool MK4[FCMAX];           /* Meetkriterium op rijstrook 4 */");
+                    sb.AppendLine($"{ts}static {c.GetBoolV()} MK4[FCMAX];           /* Meetkriterium op rijstrook 4 */");
                 }
             }
             sb.AppendLine($"{ts}static mulv TVG_rgv_old[FCMAX];   /* Opslag 'old' TVG tijden */");
@@ -338,12 +338,12 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 var faseMetRgv = fasenMetRgv.First(x => x.Naam == fc.FaseCyclus);
                 if (faseMetRgv.AantalRijstroken == 1)
                 {
-                    sb.AppendLine($"{ts}rgv_verlenggroentijd1({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], (bool)(MK1[{_fcpf}{fc.FaseCyclus}]));");
+                    sb.AppendLine($"{ts}rgv_verlenggroentijd1({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], ({c.GetBoolV()})!SCH[{_schpf}{_schrgv_snel}], ({c.GetBoolV()})DD[{_fcpf}{fc.FaseCyclus}], ({c.GetBoolV()})(MK1[{_fcpf}{fc.FaseCyclus}]));");
                 }
                 else if (faseMetRgv.AantalRijstroken > 1)
                 {
-                    sb.Append($"{ts}rgv_verlenggroentijd2({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], (bool)!SCH[{_schpf}{_schrgv_snel}], (bool)DD[{_fcpf}{fc.FaseCyclus}], ");
-                    sb.Append("(bool)(");
+                    sb.Append($"{ts}rgv_verlenggroentijd2({_fcpf}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmmaxtvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_omhoog}], PRM[{_prmpf}{_prmtvg_omlaag}], PRM[{_prmpf}{_prmtvg_verschil}], TVG_max[{_fcpf}{fc.FaseCyclus}], ({c.GetBoolV()})!SCH[{_schpf}{_schrgv_snel}], ({c.GetBoolV()})DD[{_fcpf}{fc.FaseCyclus}], ");
+                    sb.Append($"({c.GetBoolV()})(");
                     for (var i = 1; i <= faseMetRgv.AantalRijstroken; ++i)
                     {
                         if (i != 1) sb.Append(" && ");
@@ -363,14 +363,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 }
                 if (!c.Data.MultiModuleReeksen)
                 {
-                    sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PRML, ML, SML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                    sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PRML, ML, SML, ML_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], ({c.GetBoolV()})(DD[{_fcpf}{fc.FaseCyclus}]));");
                 }
                 else
                 {
                     var r = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc.FaseCyclus)));
                     if (r != null)
                     {
-                        sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PR{r.Reeks}, {r.Reeks}, S{r.Reeks}, {r.Reeks}_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], (bool)(DD[{_fcpf}{fc.FaseCyclus}]));");
+                        sb.AppendLine($"{ts}rgv_niet_primair({_fcpf}{fc.FaseCyclus}, PR{r.Reeks}, {r.Reeks}, S{r.Reeks}, {r.Reeks}_MAX, {_hpf}{_hprreal}{fc.FaseCyclus}, PRM[{_prmpf}{_prmmintvg}_{fc.FaseCyclus}], PRM[{_prmpf}{_prmtvg_npr_omlaag}], ({c.GetBoolV()})(DD[{_fcpf}{fc.FaseCyclus}]));");
                     }
                 }
             }

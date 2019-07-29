@@ -32,6 +32,8 @@ extern char HalfstarOmschakelenToegestaan;
 count geeltimer[FCMAX][FCMAX];
 count groodtimer[FCMAX][FCMAX];
 
+mulv max_wachttijd_conflicten(count i);
+
 void altcor_kop_halfstar(count fc_aan, count fc_af, count t_nl);
 void altcor_naloopSG_halfstar(count fc1, count fc2, bool a_bui_fc1, count tnlsg12, bool voorwaarde);
 void altcor_parfts_pl_halfstar(count fc1, count fc2, bool voorwaarde);

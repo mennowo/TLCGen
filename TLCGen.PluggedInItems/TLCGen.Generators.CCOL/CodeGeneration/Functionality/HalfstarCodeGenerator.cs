@@ -415,7 +415,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCKlokPerioden:
                     return new List<Tuple<string, string, string>>
                     {
-                        //new Tuple<string, string, string>("bool", "omschakelmag", "FALSE"),
+                        //new Tuple<string, string, string>($"{c.GetBoolV()}", "omschakelmag", "FALSE"),
                         new Tuple<string, string, string>("char", "volgMaster", "TRUE")
                     };
                 default:
@@ -866,11 +866,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						{
 							if (fc.Wachtgroen == NooitAltijdAanUitEnum.Altijd)
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(TRUE), (bool)(TRUE));");
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], ({c.GetBoolV()})(TRUE), ({c.GetBoolV()})(TRUE));");
 							}
 							else
 							{
-								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], (bool)(SCH[{_schpf}{_schca}{fc.Naam}]), (bool)(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
+								sb.AppendLine($"{ts}wachtstand_halfstar({_fcpf}{fc.Naam}, IH[{_hpf}{_hplact}], ({c.GetBoolV()})(SCH[{_schpf}{_schca}{fc.Naam}]), ({c.GetBoolV()})(SCH[{_schpf}{_schwg}{fc.Naam}]));");								
 							}
 						}
 					}
@@ -910,7 +910,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine();
 					foreach (var fc in c.Fasen)
 					{
-						sb.AppendLine($"{ts}set_ym_pl_halfstar({_fcpf}{fc.Naam}, (bool)(SCH[{_schpf}{_schmv}{fc.Naam}]));");
+						sb.AppendLine($"{ts}set_ym_pl_halfstar({_fcpf}{fc.Naam}, ({c.GetBoolV()})(SCH[{_schpf}{_schmv}{fc.Naam}]));");
 					}
 
 					return sb.ToString();
@@ -1110,7 +1110,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             {
                                 if (fcpl.B2.HasValue && fcpl.D2.HasValue)
                                 {
-                                    sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, (bool)(IH[{_hpf}{_hplact}]));");
+                                    sb.AppendLine($"{ts}set_2real({_fcpf}{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A1{pl.Naam}_{fcpl.FaseCyclus}, {_prmpf}{_prmtx}A2{pl.Naam}_{fcpl.FaseCyclus}, {pl.Naam}, ({c.GetBoolV()})(IH[{_hpf}{_hplact}]));");
                                 }
                             }
                             sb.AppendLine();
