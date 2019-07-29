@@ -1075,13 +1075,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine();
 					}
 
+                    sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
+					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
+					sb.AppendLine($"{ts}reset_altreal_halfstar();");
+                    sb.AppendLine();
 
                     sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
 					sb.AppendLine();
 
-                    sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
-					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
-					sb.AppendLine($"{ts}reset_altreal_halfstar();");
 					sb.AppendLine($"{ts}");
                     sb.AppendLine($"{ts}signaalplan_alternatief();");
 					
