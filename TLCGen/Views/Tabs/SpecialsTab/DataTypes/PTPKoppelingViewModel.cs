@@ -4,7 +4,9 @@ using GalaSoft.MvvmLight.Messaging;
 using GongSolutions.Wpf.DragDrop;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using TLCGen.Messaging.Messages;
 using TLCGen.ModelManagement;
@@ -15,10 +17,11 @@ namespace TLCGen.ViewModels
 {
     public class KoppelSignaalViewModel : ViewModelBase
     {
-        private KoppelSignaalModel KoppelSignaal { get; }
+        public KoppelSignaalModel KoppelSignaal { get; }
 
         public string Description => KoppelSignaal.Description;
         public KoppelSignaalRichtingEnum Richting => KoppelSignaal.Richting;
+        public int Id { get; set; }
         public int Count
         {
             get => KoppelSignaal.Count;
@@ -29,8 +32,9 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public KoppelSignaalViewModel(KoppelSignaalModel koppelSignaal)
+        public KoppelSignaalViewModel(KoppelSignaalModel koppelSignaal, int id)
         {
+            Id = id;
             KoppelSignaal = koppelSignaal;
         }
     }
@@ -62,75 +66,140 @@ namespace TLCGen.ViewModels
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            //KoppelSignaalModel sourceItem = dropInfo.Data as KoppelSignaalModel;
-            if (dropInfo.Data is KoppelSignaalViewModel ks)
+            // Van PTP lijst naar zichzelf
+            if ((dropInfo.Data is List<PTPKoppelSignaalViewModel> ||
+                 dropInfo.Data is PTPKoppelSignaalViewModel) && 
+                dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel>)
             {
                 dropInfo.Effects = System.Windows.DragDropEffects.Move;
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
+                DragDrop.DefaultDropHandler.DragOver(dropInfo);
             }
-            else if (dropInfo.Data is PTPKoppelSignaalViewModel && dropInfo.TargetItem is PTPKoppelSignaalViewModel)
+            // Van PTP lijst terug naar beschikbaar
+            else if ((dropInfo.Data is List<PTPKoppelSignaalViewModel> ||
+                dropInfo.Data is PTPKoppelSignaalViewModel) && 
+                dropInfo.TargetCollection is ObservableCollection<KoppelSignaalViewModel>)
             {
                 dropInfo.Effects = System.Windows.DragDropEffects.Move;
-                dropInfo.DropTargetAdorner = null;
-                GongSolutions.Wpf.DragDrop.DragDrop.DefaultDropHandler.DragOver(dropInfo);
+                DragDrop.DefaultDropHandler.DragOver(dropInfo);
             }
-            else if (!(dropInfo.TargetItem is PTPKoppelSignaalViewModel))
+            // Van beschikbaar naar PTP lijst
+            else if ((dropInfo.Data is List<KoppelSignaalViewModel> ||
+                dropInfo.Data is KoppelSignaalViewModel) && 
+                dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel>)
             {
-                dropInfo.NotHandled = true;
+                dropInfo.Effects = System.Windows.DragDropEffects.Move;
+                DragDrop.DefaultDropHandler.DragOver(dropInfo);
             }
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            KoppelSignaalViewModel sourceItem = dropInfo.Data as KoppelSignaalViewModel;
-            PTPKoppelSignaalViewModel sourceItem2 = dropInfo.Data as PTPKoppelSignaalViewModel;
-            PTPKoppelSignaalViewModel targetItem2 = dropInfo.TargetItem as PTPKoppelSignaalViewModel;
-            if (sourceItem == null && sourceItem2 == null || targetItem2 == null) return;
-            if (sourceItem != null)
+            if (dropInfo.Data is PTPKoppelSignaalViewModel sourcePTPKopItem &&
+                dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc1)
             {
-                if (targetItem2.KoppelSignaal != null)
+                var i = tc1.IndexOf(dropInfo.TargetItem as PTPKoppelSignaalViewModel);
+                if (i == -1) i = dropInfo.InsertIndex;
+                var ti = tc1[i];
+                var oks = ti.KoppelSignaal;
+                ti.KoppelSignaal = sourcePTPKopItem.KoppelSignaal;
+                if (ti.KoppelSignaal != null) ti.KoppelSignaal.Count = ti.Count;
+                if (oks != null)
                 {
-                    targetItem2.KoppelSignaal.Count = 0;
-                    switch (targetItem2.KoppelSignaal.Richting)
-                    {
-                        case KoppelSignaalRichtingEnum.In:
-                            KoppelSignalenInBeschikbaar.Add(targetItem2.KoppelSignaal);
-                            break;
-                        case KoppelSignaalRichtingEnum.Uit:
-                            KoppelSignalenUitBeschikbaar.Add(targetItem2.KoppelSignaal);
-                            break;
-                    }
+                    oks.Count = sourcePTPKopItem.Count;
+                    sourcePTPKopItem.KoppelSignaal = oks;
                 }
-                targetItem2.KoppelSignaal = sourceItem;
-                targetItem2.KoppelSignaal.Count = targetItem2.Count;
-                switch (targetItem2.KoppelSignaal.Richting)
+                else
                 {
-                    case KoppelSignaalRichtingEnum.In:
-                        KoppelSignalenInBeschikbaar.Remove(sourceItem);
-                        break;
-                    case KoppelSignaalRichtingEnum.Uit:
-                        KoppelSignalenUitBeschikbaar.Remove(sourceItem);
-                        break;
+                    sourcePTPKopItem.KoppelSignaal = null;
                 }
             }
-            if (sourceItem2 != null)
+            else if (dropInfo.Data is List<PTPKoppelSignaalViewModel> sourcePTPKopItems && 
+                dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc2)
             {
-                if (targetItem2.KoppelSignaal != null)
+                var i = tc2.IndexOf(dropInfo.TargetItem as PTPKoppelSignaalViewModel);
+                if (i == -1) i = dropInfo.InsertIndex;
+                foreach (var s in sourcePTPKopItems.OrderBy(x => x.Count))
                 {
-                    targetItem2.KoppelSignaal.Count = 0;
-                    switch (targetItem2.KoppelSignaal.Richting)
+                    if (i < 0 || i >= tc2.Count) break;
+                    var ti = tc2[i];
+                    ++i;
+                    if (ti.KoppelSignaal != null && !sourcePTPKopItems.Any(x => ReferenceEquals(x.KoppelSignaal, ti.KoppelSignaal)))
+                    {
+                        ti.KoppelSignaal.Count = 0;
+                        switch (ti.KoppelSignaal.Richting)
+                        {
+                            case KoppelSignaalRichtingEnum.In:
+                                KoppelSignalenInBeschikbaar.Add(ti.KoppelSignaal);
+                                break;
+                            case KoppelSignaalRichtingEnum.Uit:
+                                KoppelSignalenUitBeschikbaar.Add(ti.KoppelSignaal);
+                                break;
+                        }
+                    }
+                    ti.KoppelSignaal = s.KoppelSignaal;
+                    s.KoppelSignaal = null;
+                    if (ti.KoppelSignaal != null) ti.KoppelSignaal.Count = ti.Count;
+                }
+            }
+            else if ((dropInfo.Data is List<KoppelSignaalViewModel> || dropInfo.Data is KoppelSignaalViewModel ) && 
+                dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc3)
+            {
+                var ksSourceItems = dropInfo.Data as List<KoppelSignaalViewModel>;
+                if (dropInfo.Data is KoppelSignaalViewModel ksSourceItem) ksSourceItems = new List<KoppelSignaalViewModel> { ksSourceItem };
+                var i = tc3.IndexOf(dropInfo.TargetItem as PTPKoppelSignaalViewModel);
+                if (i == -1) i = dropInfo.InsertIndex;
+                foreach (var s in ksSourceItems.OrderBy(x => x.Id))
+                {
+                    if (s == null || s.KoppelSignaal == null) continue;
+                    if (i < 0 || i >= tc3.Count) break;
+                    var ti = tc3[i];
+                    ++i;
+                    if (ti.KoppelSignaal != null)
+                    {
+                        ti.KoppelSignaal.Count = 0;
+                        switch (ti.KoppelSignaal.Richting)
+                        {
+                            case KoppelSignaalRichtingEnum.In:
+                                KoppelSignalenInBeschikbaar.Add(ti.KoppelSignaal);
+                                break;
+                            case KoppelSignaalRichtingEnum.Uit:
+                                KoppelSignalenUitBeschikbaar.Add(ti.KoppelSignaal);
+                                break;
+                        }
+                    }
+                    ti.KoppelSignaal = s;
+                    ti.KoppelSignaal.Count = ti.Count;
+                    switch (ti.KoppelSignaal.Richting)
                     {
                         case KoppelSignaalRichtingEnum.In:
-                            KoppelSignalenInBeschikbaar.Add(targetItem2.KoppelSignaal);
+                            KoppelSignalenInBeschikbaar.Remove(s);
                             break;
                         case KoppelSignaalRichtingEnum.Uit:
-                            KoppelSignalenUitBeschikbaar.Add(targetItem2.KoppelSignaal);
+                            KoppelSignalenUitBeschikbaar.Remove(s);
                             break;
                     }
                 }
-                targetItem2.KoppelSignaal = sourceItem2.KoppelSignaal;
-                targetItem2.KoppelSignaal.Count = targetItem2.Count;
-                sourceItem2.KoppelSignaal = null;
+            }
+            else if ((dropInfo.Data is List<PTPKoppelSignaalViewModel> || dropInfo.Data is PTPKoppelSignaalViewModel) &&
+               dropInfo.TargetCollection is ObservableCollection<KoppelSignaalViewModel> tc4)
+            {
+                var ksSourceItems = dropInfo.Data as List<PTPKoppelSignaalViewModel>;
+                if (dropInfo.Data is PTPKoppelSignaalViewModel ksSourceItem) ksSourceItems = new List<PTPKoppelSignaalViewModel> { ksSourceItem };
+                foreach (var s in ksSourceItems)
+                {
+                    if (s == null || s.KoppelSignaal == null) continue;
+                    s.KoppelSignaal.Count = 0;
+                    switch (s.KoppelSignaal.Richting)
+                    {
+                        case KoppelSignaalRichtingEnum.In:
+                            KoppelSignalenInBeschikbaar.Add(s.KoppelSignaal);
+                            break;
+                        case KoppelSignaalRichtingEnum.Uit:
+                            KoppelSignalenUitBeschikbaar.Add(s.KoppelSignaal);
+                            break;
+                    }
+                    s.KoppelSignaal = null;
+                }
             }
         }
 
@@ -319,11 +388,25 @@ namespace TLCGen.ViewModels
 
         #endregion // Properties
 
+        public int KoppelSignalenAllesId { get; set; }
+
         #region Constructor
 
         public PTPKoppelingViewModel(PTPKoppelingModel kop)
         {
             _PTPKoppeling = kop;
+            ICollectionView ksIn = CollectionViewSource.GetDefaultView(KoppelSignalenInBeschikbaar);
+            if (ksIn != null && ksIn.CanSort == true)
+            {
+                ksIn.SortDescriptions.Clear();
+                ksIn.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
+            }
+            ICollectionView ksUit = CollectionViewSource.GetDefaultView(KoppelSignalenUitBeschikbaar);
+            if (ksUit != null && ksUit.CanSort == true)
+            {
+                ksUit.SortDescriptions.Clear();
+                ksUit.SortDescriptions.Add(new SortDescription("Id", ListSortDirection.Ascending));
+            }
         }
 
         #endregion // Constructor

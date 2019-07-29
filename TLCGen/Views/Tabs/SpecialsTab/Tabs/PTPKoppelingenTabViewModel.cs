@@ -94,7 +94,9 @@ namespace TLCGen.ViewModels
 		        ptp.TeKoppelenKruispunt = "ptpkruising" + (inewname < 10 ? "0" : "") + inewname;
 	        }
 	        while (!TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PTPKruising, ptp.TeKoppelenKruispunt));
-			PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
+            var vm = new PTPKoppelingViewModel(ptp);
+            PTPKoppelingen.Add(vm);
+            SelectedPTPKoppeling = vm;
 			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
         }
 
@@ -106,7 +108,7 @@ namespace TLCGen.ViewModels
         private void RemovePTPKoppelingCommand_Executed(object obj)
         {
             PTPKoppelingen.Remove(SelectedPTPKoppeling);
-            SelectedPTPKoppeling = null;
+            SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
 			MessengerInstance.Send(new PTPKoppelingenChangedMessage());
         }
 
@@ -135,14 +137,19 @@ namespace TLCGen.ViewModels
         public override void OnSelected()
         {
             if (Controller == null) return;
-            foreach (var ptp in PTPKoppelingen) ptp.KoppelSignalenAlles.Clear();
+            foreach (var ptp in PTPKoppelingen)
+            {
+                ptp.KoppelSignalenAlles.Clear();
+                ptp.KoppelSignalenAllesId = 0;
+            }
             var signalen = GetAllKoppelSignalen(Controller);
             foreach (var s in signalen)
             {
                 var ptp = PTPKoppelingen.FirstOrDefault(x => x.TeKoppelenKruispunt == s.Koppeling);
                 if (ptp != null)
                 {
-                    ptp.KoppelSignalenAlles.Add(new KoppelSignaalViewModel(s));
+                    ptp.KoppelSignalenAlles.Add(new KoppelSignaalViewModel(s, ptp.KoppelSignalenAllesId));
+                    ++ptp.KoppelSignalenAllesId;
                 }
             }
             foreach (var ptp in PTPKoppelingen) ptp.UpdateSignalen();
@@ -167,6 +174,7 @@ namespace TLCGen.ViewModels
                     {
                         PTPKoppelingen.Add(new PTPKoppelingViewModel(ptp));
                     }
+                    SelectedPTPKoppeling = PTPKoppelingen.FirstOrDefault();
                     PTPKoppelingen.CollectionChanged += PTPKoppelingen_CollectionChanged;
                 }
                 else

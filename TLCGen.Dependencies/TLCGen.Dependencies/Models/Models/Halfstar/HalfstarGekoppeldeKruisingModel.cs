@@ -146,7 +146,7 @@ namespace TLCGen.Models
             {
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}kpuls", Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
-                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pervar", Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
             }
             else if (Type == HalfstarGekoppeldTypeEnum.Slave)
             {

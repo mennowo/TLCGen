@@ -43,10 +43,15 @@
                         <ColumnDefinition Width="5" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <ListView Grid.Row="0" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Kruispunt" />
+                    <ListView Grid.Row="1" ItemsSource="{Binding Path=PTPKoppelingen}" Margin="2"
                               SelectedItem="{Binding Path=SelectedPTPKoppeling,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TeKoppelenKruispunt" />
-                    <GridSplitter Width="5" Grid.Column="1" HorizontalAlignment="Stretch" />
-                    <TabControl Grid.Column="2">
+                    <GridSplitter Width="5" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" HorizontalAlignment="Stretch" />
+                    <TabControl Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
                         <TabItem Header="Inkomend">
                             <Grid DataContext="{Binding Path=SelectedPTPKoppeling}" Grid.Column="2">
                                 <Grid.ColumnDefinitions>
@@ -87,12 +92,7 @@
                                     </ListView.ItemContainerStyle>
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid
-                                            dd:DragDrop.IsDragSource="True"
-                                            dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                                            dd:DragDrop.UseDefaultDragAdorner="True"
-                                            dd:DragDrop.DropHandler="{Binding RelativeSource={RelativeSource AncestorType=ListView},Path=DataContext}" 
-                                            Height="20" HorizontalAlignment="Stretch">
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="25" />
                                                     <ColumnDefinition Width="*" />
@@ -105,6 +105,11 @@
                                 </ListView>
                                 <ListView
                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.DropHandler="{Binding}" 
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
                                     ItemsSource="{Binding Path=KoppelSignalenInBeschikbaar}" Margin="2" Grid.Row="1" Grid.Column="2" AlternationCount="2">
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="ListViewItem">
@@ -124,18 +129,7 @@
                                     </ListView.ItemContainerStyle>
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid
-                                            dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
-                                            dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                                            dd:DragDrop.UseDefaultDragAdorner="True"
-                                            dd:DragDrop.DropHandler="{Binding}" 
-                                            Height="20" HorizontalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="25" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Background="Beige" Text="{Binding Path=Description}" Grid.Column="1" />
-                                            </Grid>
+                                            <TextBlock Background="Beige" Text="{Binding Path=Description}" />
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -184,12 +178,7 @@
                                     </ListView.ItemContainerStyle>
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid
-                                            dd:DragDrop.IsDragSource="True"
-                                            dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                                            dd:DragDrop.UseDefaultDragAdorner="True"
-                                            dd:DragDrop.DropHandler="{Binding RelativeSource={RelativeSource AncestorType=ListView},Path=DataContext}" 
-                                            Height="20" HorizontalAlignment="Stretch">
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="25" />
                                                     <ColumnDefinition Width="*" />
@@ -202,6 +191,11 @@
                                 </ListView>
                                 <ListView
                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    dd:DragDrop.IsDropTarget="True"
+                                    dd:DragDrop.IsDragSource="True"
+                                    dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                    dd:DragDrop.UseDefaultDragAdorner="True"
+                                    dd:DragDrop.DropHandler="{Binding}" 
                                     ItemsSource="{Binding Path=KoppelSignalenUitBeschikbaar}" Margin="2" Grid.Row="1" Grid.Column="2" AlternationCount="2">
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="ListViewItem">
@@ -221,12 +215,7 @@
                                     </ListView.ItemContainerStyle>
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid
-                                            dd:DragDrop.IsDropTarget="True" dd:DragDrop.IsDragSource="True"
-                                            dd:DragDrop.UseDefaultEffectDataTemplate="True"
-                                            dd:DragDrop.UseDefaultDragAdorner="True"
-                                            dd:DragDrop.DropHandler="{Binding}" 
-                                            Height="20" HorizontalAlignment="Stretch">
+                                            <Grid Height="20" HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="25" />
                                                     <ColumnDefinition Width="*" />
