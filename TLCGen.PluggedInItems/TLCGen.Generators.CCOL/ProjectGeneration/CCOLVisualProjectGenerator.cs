@@ -127,7 +127,7 @@ namespace TLCGen.Generators.CCOL.ProjectGeneration
 							case "HS":
 								result = plugin.Controller.HalfstarData.IsHalfstar;
 								break;
-							default:
+                            default:
 								result = false;
 								break;
 						}
