@@ -69,8 +69,7 @@
                           SelectedValue="{Binding Path=OpticomRelatedInput}" />
                 <Label Content="Opticom inmeld filtertijd" IsEnabled="{Binding Path=Opticom}" 
                        Grid.Row="2" />
-                <TextBox 
-                    Text="{Binding Path=OpticomInmeldingFilterTijd}" Grid.Row="2" Grid.Column="1" Margin="2" />
+                <TextBox Text="{Binding Path=OpticomInmeldingFilterTijd}" Grid.Row="2" Grid.Column="1" Margin="2" />
             </Grid>
             <Label Content="Meerealiserende fasen" />
             <ListView Height="Auto" ItemsSource="{Binding MeerealiserendeFasen}" SelectedItem="{Binding SelectedMeerealiserendeFase,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Margin="2" MinHeight="24" >

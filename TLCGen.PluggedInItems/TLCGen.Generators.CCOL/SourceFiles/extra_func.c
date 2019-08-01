@@ -1036,6 +1036,7 @@ void ModuleStructuurPRM(count prmfcml, count fcfirst, count fclast, count ml_max
 			{
 				PRML_temp[ml][fc] = FALSE;
 				PRML_x[fc] = TRUE;
+				BL[fc] |= BIT15;
 				continue;
 			}
 			/* ML toedeling */
