@@ -27,7 +27,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _mpelin;
         private CCOLGeneratorCodeStringSettingModel _hpelin;
         private CCOLGeneratorCodeStringSettingModel _uspelin;
-        private CCOLGeneratorCodeStringSettingModel _uspeluit;
         private CCOLGeneratorCodeStringSettingModel _tpelnl;
         private CCOLGeneratorCodeStringSettingModel _tpelrw;
         private CCOLGeneratorCodeStringSettingModel _prmpelverschuif;

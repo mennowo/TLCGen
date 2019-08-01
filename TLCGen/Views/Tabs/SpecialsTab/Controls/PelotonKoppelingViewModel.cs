@@ -30,6 +30,7 @@ namespace TLCGen.ViewModels
             get { return PelotonKoppeling.KruisingNaam; }
             set
             {
+                // TODO: check unicity of this name in the model
                 if (NameSyntaxChecker.IsValidName(value))
                 {
                     PelotonKoppeling.KruisingNaam = value;

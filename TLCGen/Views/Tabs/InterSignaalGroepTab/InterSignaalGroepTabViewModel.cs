@@ -754,6 +754,7 @@ namespace TLCGen.ViewModels
                                 svm_opp.HasGelijkstart = true;
                                 svm_opp.Gelijkstart.GelijkstartOntruimingstijdFaseNaar = svm.Gelijkstart.GelijkstartOntruimingstijdFaseVan;
                                 svm_opp.Gelijkstart.GelijkstartOntruimingstijdFaseVan = svm.Gelijkstart.GelijkstartOntruimingstijdFaseNaar;
+                                svm_opp.Gelijkstart.Schakelbaar = svm.Gelijkstart.Schakelbaar;
                                 svm_opp.Gelijkstart.DeelConflict = svm.Gelijkstart.DeelConflict;
                                 break;
                             }

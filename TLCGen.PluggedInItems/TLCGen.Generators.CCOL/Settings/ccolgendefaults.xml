@@ -1763,12 +1763,6 @@
             <Description>Verklikken inkomend peloton gezien tbv peloton koppeling fase _E1_</Description>
           </Setting>
           <Setting>
-            <Default>peluit</Default>
-            <Setting>peluit</Setting>
-            <Type>Uitgang</Type>
-            <Description>Verklikken uitgaand peloton richting _E1_</Description>
-          </Setting>
-          <Setting>
             <Default>pelrw</Default>
             <Setting>pelrw</Setting>
             <Type>Timer</Type>
