@@ -683,7 +683,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             if (ov.CheckWagenNummer)
             {
                 extra += (extra == "" ? "" : " && ");
-                extra += $"WDNST_check({_fcpf}{ov.FaseCyclus})";
+                extra += ((melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"WDNST_check_in({_fcpf}{ov.FaseCyclus})" : $"WDNST_check_uit({_fcpf}{ov.FaseCyclus})";
             }
             if (extra == "") extra = "TRUE";
 

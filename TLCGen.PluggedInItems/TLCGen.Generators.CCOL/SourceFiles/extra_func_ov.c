@@ -273,15 +273,15 @@ void WDNST_cleanup(void)
 	}
 }
 
-bool WDNST_check(count fc)
+bool WDNST_check_in(count fc)
 {
-	count listnr, listnr2;
+	count listnr;
 	int firstempty = 999;
-	bool WDNSTbestaatniet = TRUE;
+	boolv WDNSTbestaatniet = TRUE;
+	int richting = atoi(FC_code[fc]) < 201 ? atoi(FC_code[fc]) : atoi(FC_code[fc]) - 200;
 
-	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN)
-		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
-		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
+	if ((CIF_DSIWIJZ == 1) && (CIF_DSI[CIF_DSI_WDNST] != 0) && (CIF_DSI[CIF_DSI_TYPE] == CIF_DSIN) &&
+		(CIF_DSI[CIF_DSI_DIR] == richting))
 	{
 		for (listnr = 0; listnr < WDNSTlist; ++listnr)
 		{
@@ -293,28 +293,30 @@ bool WDNST_check(count fc)
 			{
 				if (firstempty == 999) firstempty = listnr;
 			}
-			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
+		}
+		if (WDNSTbestaatniet == TRUE)
+		{
+			if (firstempty != 999)
 			{
 				WDNST_fc_in[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
 				WDNST_cifsect_in[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
-
-				/* opruimen bijbehorende voormelding */
-				for (listnr2 = 0; listnr2 < WDNSTlist; ++listnr2)
-				{
-					if (WDNST_fc_voor[fc][listnr2] == CIF_DSI[CIF_DSI_WDNST])
-					{
-						WDNST_fc_voor[fc][listnr2] = 0;
-						WDNST_cifsect_voor[fc][listnr2] = 0;
-					}
-				}
 			}
 		}
 	}
+	return WDNSTbestaatniet;
+}
 
-	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT)
-		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
-		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
+bool WDNST_check_uit(count fc)
+{
+	count listnr, listnr2;
+	int firstempty = 999;
+	boolv WDNSTbestaatniet = TRUE;
+	int richting = atoi(FC_code[fc]) < 201 ? atoi(FC_code[fc]) : atoi(FC_code[fc]) - 200;
+
+	if ((CIF_DSIWIJZ == 1) && (CIF_DSI[CIF_DSI_WDNST] != 0) && (CIF_DSI[CIF_DSI_TYPE] == CIF_DSUIT) &&
+		(CIF_DSI[CIF_DSI_DIR] == richting))
 	{
+		firstempty = 999;
 		for (listnr = 0; listnr < WDNSTlistuit; ++listnr)
 		{
 			if (WDNST_fc_uit[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
@@ -325,7 +327,10 @@ bool WDNST_check(count fc)
 			{
 				if (firstempty == 999) firstempty = listnr;
 			}
-			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
+		}
+		if (WDNSTbestaatniet == TRUE)
+		{
+			if (firstempty != 999)
 			{
 				WDNST_fc_uit[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
 				WDNST_cifsect_uit[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
@@ -342,29 +347,6 @@ bool WDNST_check(count fc)
 			}
 		}
 	}
-
-	if ((CIF_DSI[CIF_DSI_TYPE] == CIF_DSVOOR)
-		&& (CIF_DSI[CIF_DSI_WDNST] != 0)
-		&& (CIF_DSI[CIF_DSI_DIR] == atoi(FC_code[fc])))
-	{
-		for (listnr = 0; listnr < WDNSTlist; ++listnr)
-		{
-			if (WDNST_fc_voor[fc][listnr] == CIF_DSI[CIF_DSI_WDNST])
-			{
-				WDNSTbestaatniet = FALSE;
-			}
-			if (WDNST_fc_voor[fc][listnr] == 0)
-			{
-				if (firstempty == 999) firstempty = listnr;
-			}
-			if ((WDNSTbestaatniet == TRUE) && (firstempty != 999))
-			{
-				WDNST_fc_voor[fc][firstempty] = CIF_DSI[CIF_DSI_WDNST];
-				WDNST_cifsect_voor[fc][firstempty] = CIF_KLOK[CIF_SEC_TELLER];
-			}
-		}
-	}
-
 	return WDNSTbestaatniet;
 }
 
