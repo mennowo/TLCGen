@@ -19,6 +19,7 @@
         SignaalPlan,
         WaarschuwingsGroep,
         Module,
-        SelectieveDetector
+        SelectieveDetector,
+        PelotonKoppeling
     }
 }

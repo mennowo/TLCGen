@@ -28,7 +28,7 @@
                       CanUserDeleteRows="False"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Koppeling naam" Binding="{Binding Path=KruisingNaam,UpdateSourceTrigger=PropertyChanged}" Width="*" />
+                    <DataGridTextColumn Header="Koppeling naam" Binding="{Binding Path=KoppelingNaam,UpdateSourceTrigger=PropertyChanged}" Width="*" />
                     <DataGridComboBoxColumn
                         Header="Richting" 
                         SelectedItemBinding="{Binding Path=Richting,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

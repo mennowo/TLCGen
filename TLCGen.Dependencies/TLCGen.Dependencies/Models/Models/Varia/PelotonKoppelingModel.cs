@@ -14,6 +14,11 @@ namespace TLCGen.Models
         #region Properties
 
         [HasDefault(false)]
+        [ModelName(TLCGenObjectTypeEnum.PelotonKoppeling)]
+        public string KoppelingNaam { get; set; }
+        /// <summary>
+        /// Deze property is obsolete: KoppelingNaam wordt nu gebruikt
+        /// </summary>
         public string KruisingNaam { get; set; }
 
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
@@ -81,8 +86,8 @@ namespace TLCGen.Models
                             signalen.Add(new KoppelSignaalModel
                             {
                                 Id = id++,
-                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
-                                Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}",
+                                Name = $"{KoppelingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KoppelingNaam} groen {GekoppeldeSignaalGroep}",
                                 Koppeling = PTPKruising,
                                 Richting = KoppelSignaalRichtingEnum.Uit
                             });
@@ -91,8 +96,8 @@ namespace TLCGen.Models
                                 signalen.Add(new KoppelSignaalModel
                                 {
                                     Id = id++,
-                                    Name = $"{KruisingNaam}d{d.DetectorNaam}",
-                                    Description = $"{KruisingNaam} det. {d.DetectorNaam}",
+                                    Name = $"{KoppelingNaam}d{d.DetectorNaam}",
+                                    Description = $"{KoppelingNaam} det. {d.DetectorNaam}",
                                     Koppeling = PTPKruising,
                                     Richting = KoppelSignaalRichtingEnum.Uit
                                 });
@@ -102,8 +107,8 @@ namespace TLCGen.Models
                             signalen.Add(new KoppelSignaalModel
                             {
                                 Id = id++,
-                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
-                                Description = $"{KruisingNaam} groen {GekoppeldeSignaalGroep}",
+                                Name = $"{KoppelingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KoppelingNaam} groen {GekoppeldeSignaalGroep}",
                                 Koppeling = PTPKruising,
                                 Richting = KoppelSignaalRichtingEnum.In
                             });
@@ -112,8 +117,8 @@ namespace TLCGen.Models
                                 signalen.Add(new KoppelSignaalModel
                                 {
                                     Id = id++,
-                                    Name = $"{KruisingNaam}d{d.DetectorNaam}",
-                                    Description = $"{KruisingNaam} det. {d.DetectorNaam}",
+                                    Name = $"{KoppelingNaam}d{d.DetectorNaam}",
+                                    Description = $"{KoppelingNaam} det. {d.DetectorNaam}",
                                     Koppeling = PTPKruising,
                                     Richting = KoppelSignaalRichtingEnum.In
                                 });
@@ -128,8 +133,8 @@ namespace TLCGen.Models
                             signalen.Add(new KoppelSignaalModel
                             {
                                 Id = id++,
-                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
-                                Description = $"{KruisingNaam} peloton {GekoppeldeSignaalGroep}",
+                                Name = $"{KoppelingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KoppelingNaam} peloton {GekoppeldeSignaalGroep}",
                                 Koppeling = PTPKruising,
                                 Richting = KoppelSignaalRichtingEnum.Uit
                             });
@@ -138,8 +143,8 @@ namespace TLCGen.Models
                             signalen.Add(new KoppelSignaalModel
                             {
                                 Id = id++,
-                                Name = $"{KruisingNaam}g{GekoppeldeSignaalGroep}",
-                                Description = $"{KruisingNaam} peloton {GekoppeldeSignaalGroep}",
+                                Name = $"{KoppelingNaam}g{GekoppeldeSignaalGroep}",
+                                Description = $"{KoppelingNaam} peloton {GekoppeldeSignaalGroep}",
                                 Koppeling = PTPKruising,
                                 Richting = KoppelSignaalRichtingEnum.In
                             });

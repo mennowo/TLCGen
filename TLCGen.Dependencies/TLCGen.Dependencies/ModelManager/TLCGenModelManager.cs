@@ -250,6 +250,22 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
+            // In version 0.5.4.0, the KruisingNaam property was changed to KoppelingNaam
+            checkVer = Version.Parse("0.5.4.0");
+            if (v < checkVer)
+            {
+                foreach (var p in controller.PelotonKoppelingenData.PelotonKoppelingen.Where(x => string.IsNullOrWhiteSpace(x.KoppelingNaam)))
+                {
+                    var kn = p.KruisingNaam;
+                    int i = 1;
+                    while (i < 100 && !TLCGenIntegrityChecker.IsElementNaamUnique(controller, kn, TLCGenObjectTypeEnum.PelotonKoppeling))
+                    {
+                        kn = p.KruisingNaam + "_" + i.ToString();
+                        ++i;
+                    }
+                    p.KoppelingNaam = kn;
+                }
+            }
         }
 
         public bool IsElementIdentifierUnique(TLCGenObjectTypeEnum objectType, string identifier, bool vissim = false)

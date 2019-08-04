@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
+using TLCGen.ModelManagement;
 using TLCGen.Models;
 using TLCGen.Models.Enumerations;
 using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
@@ -25,15 +26,15 @@ namespace TLCGen.ViewModels
 
         public PelotonKoppelingModel PelotonKoppeling { get; }
 
-        public string KruisingNaam
+        public string KoppelingNaam
         {
-            get { return PelotonKoppeling.KruisingNaam; }
+            get { return PelotonKoppeling.KoppelingNaam; }
             set
             {
                 // TODO: check unicity of this name in the model
-                if (NameSyntaxChecker.IsValidName(value))
+                if (NameSyntaxChecker.IsValidName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
                 {
-                    PelotonKoppeling.KruisingNaam = value;
+                    PelotonKoppeling.KoppelingNaam = value;
                     RaisePropertyChanged<object>(broadcast: true);
                 }
                 else
