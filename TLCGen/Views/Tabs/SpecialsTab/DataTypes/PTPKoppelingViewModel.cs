@@ -28,7 +28,7 @@ namespace TLCGen.ViewModels
             set
             {
                 KoppelSignaal.Count = value;
-                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged();
             }
         }
 

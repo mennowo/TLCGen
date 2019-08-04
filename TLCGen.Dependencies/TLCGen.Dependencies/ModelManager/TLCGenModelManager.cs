@@ -250,7 +250,7 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-            // In version 0.5.4.0, the KruisingNaam property was changed to KoppelingNaam
+            // In version 0.5.4.0, the KruisingNaam property was changed to KoppelingNaam for peloton koppelingen
             checkVer = Version.Parse("0.5.4.0");
             if (v < checkVer)
             {
