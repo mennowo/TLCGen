@@ -826,6 +826,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}{{");
 					sb.AppendLine($"{ts}{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}{ts}A[fc] &= ~BIT2;");
+                    if(c.HalfstarData.FaseCyclusInstellingen.Any(x => x.AanvraagOpTxB))
+                    {
+                        sb.AppendLine();
+                        sb.AppendLine($"{ts}/* Aanvragen op TXB */");
+                        foreach(var sg in c.HalfstarData.FaseCyclusInstellingen.Where(x => x.AanvraagOpTxB))
+                        {
+                            sb.Append($"{ts}if (aanvraag_txb({_fcpf}{sg.FaseCyclus})");
+                            if (sg.PrivilegePeriodeOpzetten) sb.Append(" && PP[{_fcpf}{sg.FaseCyclus}]");
+                            sb.AppendLine(") A[{_fcpf}{sg.FaseCyclus}] |= TRUE;");
+                        }
+                    }
 					sb.AppendLine($"{ts}}}");
 					return sb.ToString();
 
@@ -1105,16 +1116,16 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     #endregion // Dubbele realisaties
 
-                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
-					sb.AppendLine($"{ts}{{");
-					sb.AppendLine($"{ts}{ts}/* PP opzetten en cyclische aanvraag op TXB moment bij PP ");
-					sb.AppendLine($"{ts}{ts}{ts} Iedere richting met een C moment is onderdeel van een coordinatie en");
-					sb.AppendLine($"{ts}{ts}{ts} dient iedere cyclus op zijn B moment groen te worden */");
-					sb.AppendLine($"{ts}{ts}if (TXC_PL[fc] > 0)");
-					sb.AppendLine($"{ts}{ts}{{");
-					sb.AppendLine($"{ts}{ts}{ts}set_pp_halfstar(fc, IH[{_hpf}{_hkpact}], BIT4);");
-					sb.AppendLine($"{ts}{ts}}}");
-					sb.AppendLine($"");
+                    if (c.HalfstarData.FaseCyclusInstellingen.Any(x => x.PrivilegePeriodeOpzetten))
+                    {
+                        sb.AppendLine($"{ts}/* PP opzetten */");
+                        foreach (var sg in c.HalfstarData.FaseCyclusInstellingen.Where(x => x.PrivilegePeriodeOpzetten))
+                        {
+                            sb.AppendLine($"{ts}set_pp_halfstar({_fcpf}{sg.FaseCyclus}, IH[{_hpf}{_hkpact}], BIT4);");
+                        }
+                        sb.AppendLine();
+                    }
+
 					sb.AppendLine($"{ts}{ts}/* Voorstartgroen tijdens voorstart t.o.v. sg-plan, alleen als gekoppeld wordt geregeld */");
 #warning TODO: functie vs_ple() moet worden nagelopen en mogelijk herzien
                     sb.AppendLine($"{ts}{ts}vs_ple(fc, {_prmpf}{_prmrstotxa}, IH[{_hpf}{_hkpact}]);");

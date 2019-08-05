@@ -16,7 +16,6 @@ namespace TLCGen.Models
         public int AlternatieveRuimte { get; set; }
         public bool AanvraagOpTxB { get; set; }
         public bool PrivilegePeriodeOpzetten { get; set; }
-        public bool GroenUitsluitendTussenAenE { get; set; }
 
         public int CompareTo(object obj)
         {

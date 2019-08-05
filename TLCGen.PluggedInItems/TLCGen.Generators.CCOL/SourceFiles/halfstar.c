@@ -458,10 +458,6 @@ void set_pp_halfstar(count fc, bool condition, count value)
 
 	if (PP[fc])
 		PG[fc] &= ~PRIMAIR_OVERSLAG;
-
-	/* Vaste aanvragen (half)starre programma: */
-	if (aanvraag_txb(fc) && PP[fc])
-		A[fc] |= TRUE;
 }
 
 /**********************************************************************************/

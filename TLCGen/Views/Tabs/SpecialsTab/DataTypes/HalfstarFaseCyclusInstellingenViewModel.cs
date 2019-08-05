@@ -53,16 +53,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public bool GroenUitsluitendTussenAenE
-        {
-            get => Model.GroenUitsluitendTussenAenE;
-            set
-            {
-                Model.GroenUitsluitendTussenAenE = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
         #endregion // Properties
 
         #region IComparable
