@@ -79,7 +79,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 		private CCOLGeneratorCodeStringSettingModel _txmarge;
 		private CCOLGeneratorCodeStringSettingModel _uspl;
 
-        private CCOLGeneratorCodeStringSettingModel _prmaltghst;
         private CCOLGeneratorCodeStringSettingModel _prmaltphst;
         private CCOLGeneratorCodeStringSettingModel _schaltghst;
 
@@ -112,20 +111,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                 if (c.ModuleMolen.LangstWachtendeAlternatief)
                 {
-                    foreach (var fc in hsd.Alternatieven)
-                    {
-                        Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
-                        if (hasgs != null)
-                        {
-                            var namealtghst = _prmaltghst + string.Join(string.Empty, hasgs.Item2);
-                            if (!_myElements.Any(i => i.Naam == namealtghst && i.Type == CCOLElementTypeEnum.Parameter))
-                                _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{namealtghst}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, "fasen", string.Join(", ", hasgs.Item2)));
-                        }
-                        else
-                        {
-                            _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltghst}{fc.FaseCyclus}", fc.AlternatieveGroenTijd, CCOLElementTimeTypeEnum.TE_type, _prmaltghst, "fase", fc.FaseCyclus));
-                        }
-                    }
                     foreach (var fc in hsd.Alternatieven)
                     {
                         Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);

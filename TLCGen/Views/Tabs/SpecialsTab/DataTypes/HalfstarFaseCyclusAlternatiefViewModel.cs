@@ -33,16 +33,6 @@ namespace TLCGen.ViewModels
             }
         }
 
-        public int AlternatieveGroenTijd
-        {
-            get => Model.AlternatieveGroenTijd;
-            set
-            {
-                Model.AlternatieveGroenTijd = value;
-                RaisePropertyChanged<object>(broadcast: true);
-            }
-        }
-
         #endregion // Properties
 
         #region IComparable

@@ -235,7 +235,6 @@
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan,UpdateSourceTrigger=PropertyChanged}" Header="Alt. toestaan" />
                             <DataGridTextColumn Binding="{Binding AlternatieveRuimte,UpdateSourceTrigger=PropertyChanged}" Header="Alt. ruimte" />
-                            <DataGridTextColumn Binding="{Binding AlternatieveGroenTijd,UpdateSourceTrigger=PropertyChanged}" Header="Alt. groentijd" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

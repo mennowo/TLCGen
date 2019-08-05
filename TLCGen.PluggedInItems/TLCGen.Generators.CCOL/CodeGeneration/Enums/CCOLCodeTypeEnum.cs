@@ -58,7 +58,8 @@
 		OvCBottom,
 
 		// TAB
-	    TabCControlIncludes,
+	    TabCBeforeIncludes,
+	    TabCIncludes,
         TabCControlDefaults,
 	    TabCControlParameters,
 

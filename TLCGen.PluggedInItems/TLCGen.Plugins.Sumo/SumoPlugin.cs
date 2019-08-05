@@ -238,7 +238,7 @@ namespace TLCGen.Plugins.Sumo
         {
             switch (type)
             {
-                case CCOLCodeTypeEnum.TabCControlIncludes:
+                case CCOLCodeTypeEnum.TabCIncludes:
                     return 201;
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     return 201;
@@ -263,7 +263,7 @@ namespace TLCGen.Plugins.Sumo
 
             switch (type)
             {
-                case CCOLCodeTypeEnum.TabCControlIncludes:
+                case CCOLCodeTypeEnum.TabCIncludes:
                     if (!_MyModel.GenererenSumoCode)
                     {
                         return "";

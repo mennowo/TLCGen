@@ -14,6 +14,5 @@ namespace TLCGen.Models
 
         public bool AlternatiefToestaan { get; set; }
         public int AlternatieveRuimte { get; set; }
-        public int AlternatieveGroenTijd { get; set; }
     }
 }

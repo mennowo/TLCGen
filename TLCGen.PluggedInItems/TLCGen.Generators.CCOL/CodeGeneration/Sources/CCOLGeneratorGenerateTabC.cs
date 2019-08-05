@@ -27,6 +27,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.Append(GenerateVersionHeader(controller.Data));
             sb.AppendLine();
+
+            sb.Append(GenerateTabCBeforeIncludes(controller));
+
             sb.Append(GenerateTabCIncludes(controller));
             sb.AppendLine();
             sb.Append(GenerateTabCControlDefaults(controller));
@@ -41,6 +44,14 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             return sb.ToString();
         }
 
+        private string GenerateTabCBeforeIncludes(ControllerModel c)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCBeforeIncludes, false, true, false, true);
+
+            return sb.ToString();
+        }
         private string GenerateTabCIncludes(ControllerModel c)
         {
             StringBuilder sb = new StringBuilder();
@@ -106,7 +117,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             sb.AppendLine();
             sb.AppendLine($"{ts}mulv FC_type[FCMAX];");
 
-            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCControlIncludes, true, true, true, true);
+            AddCodeTypeToStringBuilder(c, sb, CCOLCodeTypeEnum.TabCIncludes, true, true, true, true);
 
             return sb.ToString();
         }

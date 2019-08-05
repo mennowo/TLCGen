@@ -642,12 +642,6 @@
             <Description>Prioriteit fase _E1_ tijdens halfstar regelen</Description>
           </Setting>
           <Setting>
-            <Default>altghst</Default>
-            <Setting>altghst</Setting>
-            <Type>Parameter</Type>
-            <Description>Alternatieve groentijd _E1_ _E2_ tijdens halfstar regelen</Description>
-          </Setting>
-          <Setting>
             <Default>altphst</Default>
             <Setting>altphst</Setting>
             <Type>Parameter</Type>
