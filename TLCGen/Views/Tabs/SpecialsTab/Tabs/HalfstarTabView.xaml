@@ -69,7 +69,22 @@
                                 <RowDefinition Height="Auto" MinHeight="30" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <ListView Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
+                            <DataGrid Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
+                                      ItemsSource="{Binding Path=HoofdRichtingen}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                                <DataGrid.RowHeaderTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, 
+                                              AncestorType={x:Type DataGridRow}}, 
+                                              Path=Item.FaseCyclus}"/>
+                                    </DataTemplate>
+                                </DataGrid.RowHeaderTemplate>
+                                <DataGrid.Columns>
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=Tegenhouden}" Header="Tegenhouden door OV" />
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=AfkappenWG}" Header="Afkappen WG door OV" />
+                                    <DataGridCheckBoxColumn Binding="{Binding Path=AfkappenVG}" Header="Afkappen VG door OV" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--<ListView Margin="2" SelectedItem="{Binding Path=SelectedHoofdRichtingToRemove}"
                                       ItemsSource="{Binding Path=HoofdRichtingen}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate DataType="ListViewItem">
@@ -83,7 +98,7 @@
                                         <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
-                            </ListView>
+                            </ListView>-->
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <ComboBox 
                                     MinWidth="50"
