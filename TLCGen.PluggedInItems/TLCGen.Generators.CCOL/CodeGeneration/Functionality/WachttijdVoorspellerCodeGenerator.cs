@@ -89,6 +89,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             }
         }
 
+        private string GetFaseReeks(ControllerModel c, string fc)
+        {
+            if (!c.Data.MultiModuleReeksen) return "";
+            var reeks = "";
+            var mlr = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc)));
+            if (mlr != null) reeks = "_" + mlr.Reeks;
+            return reeks;
+        }
+
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
             StringBuilder sb = new StringBuilder();
@@ -112,8 +121,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     if (!c.Fasen.Any(x => x.WachttijdVoorspeller)) return "";
                     sb.AppendLine("/* tijden t.b.v. wachttijdvoorspellers */");
                     sb.AppendLine("/* ----------------------------------- */");
-                    sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
-                    sb.AppendLine("mulv rr_twacht[FCMAX]; /* halteren wachttijd */");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"mulv t_wacht_{r.Reeks}[FCMAX]; /* berekende wachttijd {r.Reeks} */");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine("mulv t_wacht[FCMAX]; /* berekende wachttijd */");
+                    }
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach(var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"mulv rr_twacht_{r.Reeks}[FCMAX]; /* halteren wachttijd {r.Reeks} */");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine("mulv rr_twacht[FCMAX]; /* halteren wachttijd */");
+                    }
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCInitApplication:
@@ -202,7 +231,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                         {
-                            sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, t_wacht);");
+                            sb.AppendLine($"{ts}max_wachttijd_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, t_wacht_{r.Reeks});");
                         }
                     }
                     sb.AppendLine();
@@ -212,14 +241,24 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* bereken de alternatieve wachttijd van de richtingen met wachttijdvoorspeller */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{ts}max_wachttijd_alternatief({_fcpf}{fc.Naam}, t_wacht);");
+                        sb.AppendLine($"{ts}max_wachttijd_alternatief({_fcpf}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)});");
                     }
                     sb.AppendLine();
                     #endregion
 
                     #region Wachttijdvoorspeller aansturing tijdens halfstar regelen
                     sb.AppendLine($"{ts}/* Berekening wachttijd tijdens halfstar regelen */");
-                    sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
+                    if (c.Data.MultiModuleReeksen)
+                    {
+                        foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
+                        {
+                            sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht_{r.Reeks}, {_hpf}{_hplact}, PL);");
+                        }
+                    }
+                    else
+                    {
+                        sb.AppendLine($"{ts}max_wachttijd_halfstar(t_wacht, {_hpf}{_hplact}, PL);");
+                    }
                     sb.AppendLine();
                     #endregion
 
@@ -237,7 +276,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             }
                             foreach (var gs in gss)
                             {
-                                sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht);");
+                                sb.AppendLine($"{ts}wachttijd_correctie_gelijkstart({_fcpf}{gs.FaseVan}, {_fcpf}{gs.FaseNaar}, t_wacht{GetFaseReeks(c, fc.Naam)});");
                             }
                         }
                     }
@@ -260,7 +299,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         foreach (var r in c.MultiModuleMolens.Where(x => x.Modules.Any(x2 => x2.Fasen.Any())))
                         {
-                            sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht);");
+                            sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht_{r.Reeks});");
                         }
                     }
                     sb.AppendLine();
@@ -277,11 +316,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht[{_fcpf}{fc.Naam}] = 0;");
+                        sb.AppendLine($"{tts}if (!MM[{_mpf}{_mwtv}{fc.Naam}] || MM[{_mpf}{_mwtv}{fc.Naam}] >= PRM[{_prmpf}{_prmwtvnhaltmax}] || MM[{_mpf}{_mwtv}{fc.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] = 0;");
                     }
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.AppendLine($"{tts}if (rr_twacht[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
+                        sb.AppendLine($"{tts}if (rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}] < 1) wachttijd_leds_mm({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_tpf}{_twtv}{fc.Naam}, t_wacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], PRM[{_prmpf}{_prmminwtv}]);");
                     }
                     if (c.Data.FixatieMogelijk)
                     {
@@ -292,7 +331,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"{ts}/* laatste ledje laten knipperen bij ov/hd-ingreep of fixatie */");
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
-                        sb.Append($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht[{_fcpf}{fc.Naam}], ");
+                        sb.Append($"{ts}wachttijd_leds_knip({_fcpf}{fc.Naam}, {_mpf}{_mwtv}{fc.Naam}, {_mpf}{_mwtvm}{fc.Naam}, rr_twacht{GetFaseReeks(c, fc.Naam)}[{_fcpf}{fc.Naam}], ");
                         if (c.Data.FixatieData.FixatieMogelijk) sb.Append($"{_ispf}{_isfix}");
                         else sb.Append("NG");
                         sb.AppendLine($");");
@@ -308,17 +347,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
                     foreach (var fc in c.Fasen.Where(x => x.WachttijdVoorspeller))
                     {
+                        var reeks = GetFaseReeks(c, fc.Naam);
                         sb.AppendLine($"{ts}/* Aansturen wachttijdlantaarn fase {fc.Naam} */");
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}]= MM[{_mpf}{_mwtvm}{fc.Naam}];");
                         if (c.Data.WachttijdvoorspellerAansturenBus)
                         {
                             if (!c.Data.WachttijdvoorspellerAansturenBusHD)
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}] && !(RTFB & OV_RTFB_BIT);");
                             }
                             else
                             {
-                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht[{_fcpf}{fc.Naam}];");
+                                sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtvbus}{fc.Naam}]= CIF_GUS[{_uspf}{_uswtv}{fc.Naam}] && (RR[{_fcpf}{fc.Naam}] & BIT6) && rr_twacht{reeks}[{_fcpf}{fc.Naam}];");
                             }
                         }
                         sb.AppendLine($"{ts}CIF_GUS[{_uspf}{_uswtv}{fc.Naam}0]= (MM[{_mpf}{_mwtvm}{fc.Naam}] & BIT0) && IH[{_hpf}{_hwtv}{fc.Naam}] ? TRUE : FALSE;");
