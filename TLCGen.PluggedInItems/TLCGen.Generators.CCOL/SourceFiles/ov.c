@@ -293,7 +293,8 @@ void OVTimers(void)
         RW[fc] &= ~OV_RW_BIT;
         RR[fc] &= ~OV_RR_BIT;
         YV[fc] &= ~OV_YV_BIT;
-        MK[fc] &= ~OV_MK_BIT;
+		YM[fc] &= ~OV_YM_BIT;
+		MK[fc] &= ~OV_MK_BIT;
         PP[fc] &= ~OV_PP_BIT;
         RTFB &= ~OV_RTFB_BIT;
 
@@ -1777,7 +1778,7 @@ void OVGroenVasthouden(void)
             fc = iFC_OVix[ov];
             if (iGroenBewakingsTimer[ov] < iGroenBewakingsTijd[ov])
             {
-                if(MG[fc]) RW[fc]|=OV_RW_BIT; /* toevoeging Ane */
+				if (MG[fc]) YM[fc] |= OV_YM_BIT; /* toevoeging Ane, 2019-08-05: aangepast van RW naar YM door Menno */
                 YV[fc] |= OV_YV_BIT;
                 /* 15-02-2017 Werner : FM bit van alternatieven intrekken, om 'flipperen' te voorkomen */ 
                 /*                     we willen het groen vasthouden en niet be?indigen!              */

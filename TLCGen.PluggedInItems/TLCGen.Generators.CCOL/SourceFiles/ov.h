@@ -7,6 +7,7 @@
 #define   OV_RW_BIT      BIT6
 #define   OV_RR_BIT      BIT6
 #define   OV_YV_BIT      BIT6
+#define   OV_YM_BIT      BIT6
 #define   OV_MK_BIT      BIT6
 #define   OV_PP_BIT      BIT6
 #define  OV_PAR_BIT      BIT6
