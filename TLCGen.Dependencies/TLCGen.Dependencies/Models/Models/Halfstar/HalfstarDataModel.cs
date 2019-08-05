@@ -38,7 +38,7 @@ namespace TLCGen.Models
 		public List<SignaalPlanModel> SignaalPlannen { get; set; }
 		public List<HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; set; }
 		public List<HalfstarHoofdrichtingModel> Hoofdrichtingen { get; set; }
-        public List<HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; set; }
+        public List<HalfstarFaseCyclusInstellingenModel> FaseCyclusInstellingen { get; set; }
 
         [Browsable(false)]
 		[IOElement("mlact", BitmappedItemTypeEnum.Uitgang, conditionprop:"IsHalfstar")]
@@ -89,7 +89,7 @@ namespace TLCGen.Models
 			HalfstarPeriodenData = new List<HalfstarPeriodeDataModel>();
 			GekoppeldeKruisingen = new List<HalfstarGekoppeldeKruisingModel>();
 			Hoofdrichtingen = new List<HalfstarHoofdrichtingModel>();
-            Alternatieven = new List<HalfstarFaseCyclusAlternatiefModel>();
+            FaseCyclusInstellingen = new List<HalfstarFaseCyclusInstellingenModel>();
 
 			MlActUitgang = new BitmapCoordinatenDataModel();
 			PlActUitgang = new BitmapCoordinatenDataModel();

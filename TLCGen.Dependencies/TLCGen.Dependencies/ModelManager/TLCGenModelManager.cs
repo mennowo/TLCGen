@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Xml;
 using TLCGen.Extensions;
 using TLCGen.Integrity;
-using TLCGen.Messaging;
 using TLCGen.Messaging.Messages;
 using TLCGen.Messaging.Requests;
 using TLCGen.Models;
@@ -250,20 +250,70 @@ namespace TLCGen.ModelManagement
                     }
                 }
             }
-            // In version 0.5.4.0, the KruisingNaam property was changed to KoppelingNaam for peloton koppelingen
+
+            // Sort controller.HalfstarData.FaseCyclusInstellingen after renaming
             checkVer = Version.Parse("0.5.4.0");
             if (v < checkVer)
             {
-                foreach (var p in controller.PelotonKoppelingenData.PelotonKoppelingen.Where(x => string.IsNullOrWhiteSpace(x.KoppelingNaam)))
+                controller.HalfstarData.FaseCyclusInstellingen.BubbleSort();
+            }
+        }
+
+        private static void RenameXMLNode(XmlDocument doc, XmlNode oldRoot, string newname)
+        {
+            XmlNode newRoot = doc.CreateElement(newname);
+
+            foreach (XmlNode childNode in oldRoot.ChildNodes)
+            {
+                newRoot.AppendChild(childNode.CloneNode(true));
+            }
+            XmlNode parent = oldRoot.ParentNode;
+            parent.AppendChild(newRoot);
+            parent.RemoveChild(oldRoot);
+        }
+
+        public void CorrectXmlDocumentByVersion(XmlDocument doc)
+        {
+            // get version
+            var vi = doc.SelectSingleNode("//Data//TLCGenVersie");
+            var v = Version.Parse(vi.InnerText);
+
+            var checkVer = Version.Parse("0.5.4.0");
+            if (v < checkVer)
+            {
+                // V0.5.4.0: property KruisingNaam on PelotonKoppelingModel changed to KoppelingNaam
+                var item = doc.SelectSingleNode("//PelotonKoppelingenData//PelotonKoppelingen");
+                XmlNodeList rowList = item.ChildNodes;
+                foreach (XmlNode n in rowList)
                 {
-                    var kn = p.KruisingNaam;
-                    int i = 1;
-                    while (i < 100 && !TLCGenIntegrityChecker.IsElementNaamUnique(controller, kn, TLCGenObjectTypeEnum.PelotonKoppeling))
+                    var c = n.SelectSingleNode("KruisingNaam");
+                    if (c != null)
                     {
-                        kn = p.KruisingNaam + "_" + i.ToString();
-                        ++i;
+                        RenameXMLNode(doc, c, "KoppelingNaam");
                     }
-                    p.KoppelingNaam = kn;
+                }
+
+                // V0.5.4.0: property HalfstarFaseCyclusAlternatiefModel in HalfstarDataModel changed to HalfstarFaseCyclusInstellingenModel
+                item = doc.SelectSingleNode("//HalfstarData//Alternatieven");
+                if (item != null)
+                {
+                    rowList = item.ChildNodes;
+                    var newNodes = new List<XmlNode>();
+                    for (var i = 0; i < rowList.Count; ++i)
+                    {
+                        XmlNode newRoot = doc.CreateElement("HalfstarFaseCyclusInstellingenModel");
+                        foreach (XmlNode childNode in rowList[i].ChildNodes)
+                        {
+                            newRoot.AppendChild(childNode.CloneNode(true));
+                        }
+                        newNodes.Add(newRoot);
+                    }
+                    item.RemoveAll();
+                    for (var i = 0; i < newNodes.Count; ++i)
+                    {
+                        item.AppendChild(newNodes[i]);
+                    }
+                    RenameXMLNode(doc, item, "FaseCyclusInstellingen");
                 }
             }
         }

@@ -216,13 +216,13 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Alternatieven" IsEnabled="{Binding Path=IsHalfstarWithAltenatieven}">
+            <TabItem Header="Signaalgroep instellingen" IsEnabled="{Binding Path=IsHalfstarWithAltenatieven}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label Content="Instellingen langstwachtende alternatief halfstar" />
+                    <Label Content="Instellingen signaalgroepen voor halfstar" />
                     <DataGrid Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False"
                   ItemsSource="{Binding Alternatieven}">
                         <DataGrid.RowHeaderTemplate>
@@ -235,6 +235,9 @@
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Binding="{Binding AlternatiefToestaan,UpdateSourceTrigger=PropertyChanged}" Header="Alt. toestaan" />
                             <DataGridTextColumn Binding="{Binding AlternatieveRuimte,UpdateSourceTrigger=PropertyChanged}" Header="Alt. ruimte" />
+                            <DataGridCheckBoxColumn Binding="{Binding AanvraagOpTxB,UpdateSourceTrigger=PropertyChanged}" Header="Aanvr. bij B moment" />
+                            <DataGridCheckBoxColumn Binding="{Binding PrivilegePeriodeOpzetten,UpdateSourceTrigger=PropertyChanged}" Header="PP opzetten" />
+                            <DataGridCheckBoxColumn Binding="{Binding GroenUitsluitendTussenAenE,UpdateSourceTrigger=PropertyChanged}" Header="Groen uitsl. A tot E" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

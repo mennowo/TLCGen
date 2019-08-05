@@ -111,7 +111,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 var gelijkstarttuples = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
                 if (c.ModuleMolen.LangstWachtendeAlternatief)
                 {
-                    foreach (var fc in hsd.Alternatieven)
+                    foreach (var fc in hsd.FaseCyclusInstellingen)
                     {
                         Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
                         if (hasgs != null)
@@ -125,7 +125,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             _myElements.Add(CCOLGeneratorSettingsProvider.Default.CreateElement($"{_prmaltphst}{fc.FaseCyclus}", fc.AlternatieveRuimte, CCOLElementTimeTypeEnum.TE_type, _prmaltphst, "fase", fc.FaseCyclus));
                         }
                     }
-                    foreach (var fc in hsd.Alternatieven)
+                    foreach (var fc in hsd.FaseCyclusInstellingen)
                     {
                         Tuple<string, List<string>> hasgs = gelijkstarttuples.FirstOrDefault(x => x.Item1 == fc.FaseCyclus && x.Item2.Count > 1);
                         if (hasgs != null)

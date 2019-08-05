@@ -98,7 +98,7 @@ namespace TLCGen.ViewModels
 		public ObservableCollectionAroundList<HalfstarPeriodeDataViewModel, HalfstarPeriodeDataModel> HalfstarPeriodenData { get; private set; }
 		public ObservableCollectionAroundList<HalfstarGekoppeldeKruisingViewModel, HalfstarGekoppeldeKruisingModel> GekoppeldeKruisingen { get; private set; }
 		public ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel> HoofdRichtingen { get; private set; }
-		public ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel> Alternatieven { get; private set; }
+		public ObservableCollectionAroundList<HalfstarFaseCyclusInstellingenViewModel, HalfstarFaseCyclusInstellingenModel> Alternatieven { get; private set; }
         public ObservableCollection<HalfstarOVIngreepViewModel> OVIngrepenHalfstar { get; } = new ObservableCollection<HalfstarOVIngreepViewModel>();
 
         public bool ShowHalfstarAlert
@@ -718,7 +718,7 @@ namespace TLCGen.ViewModels
             {
                 if (Alternatieven.All(x => fc.Naam != x.Model.FaseCyclus))
                 {
-                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel()
+                    Alternatieven.Add(new HalfstarFaseCyclusInstellingenViewModel(new HalfstarFaseCyclusInstellingenModel()
                     {
                         FaseCyclus = fc.Naam
                     }));
@@ -817,7 +817,7 @@ namespace TLCGen.ViewModels
                         k.TypeChanged += GekoppeldeKruising_TypeChanged;
                     }
                     HoofdRichtingen = new ObservableCollectionAroundList<HalfstarHoofdrichtingViewModel, HalfstarHoofdrichtingModel>(HalfstarData.Hoofdrichtingen);
-                    Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusAlternatiefViewModel, HalfstarFaseCyclusAlternatiefModel>(HalfstarData.Alternatieven);
+                    Alternatieven = new ObservableCollectionAroundList<HalfstarFaseCyclusInstellingenViewModel, HalfstarFaseCyclusInstellingenModel>(HalfstarData.FaseCyclusInstellingen);
                     OVIngrepenHalfstar.Clear();
                     foreach(var ov in Controller.OVData.OVIngrepen)
                     {
@@ -911,7 +911,7 @@ namespace TLCGen.ViewModels
 						}));
 						pl.Fasen.BubbleSort();
 					}
-                    Alternatieven.Add(new HalfstarFaseCyclusAlternatiefViewModel(new HalfstarFaseCyclusAlternatiefModel() { FaseCyclus = fc.Naam }));
+                    Alternatieven.Add(new HalfstarFaseCyclusInstellingenViewModel(new HalfstarFaseCyclusInstellingenModel() { FaseCyclus = fc.Naam }));
 				}
 			}
 

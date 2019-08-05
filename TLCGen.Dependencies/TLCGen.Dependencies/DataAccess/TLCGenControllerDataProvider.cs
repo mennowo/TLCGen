@@ -202,6 +202,7 @@ namespace TLCGen.DataAccess
                                 writer.GetXmlFromDocument(doc);
                             }
                         }
+                        TLCGenModelManager.Default.CorrectXmlDocumentByVersion(doc);
                         var c = TLCGenSerialization.SerializeFromXmlDocument<ControllerModel>(doc);
                         if (!TLCGenModelManager.Default.CheckVersionOrder(c))
                         {

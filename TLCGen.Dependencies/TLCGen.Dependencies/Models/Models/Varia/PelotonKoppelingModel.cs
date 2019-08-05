@@ -16,11 +16,7 @@ namespace TLCGen.Models
         [HasDefault(false)]
         [ModelName(TLCGenObjectTypeEnum.PelotonKoppeling)]
         public string KoppelingNaam { get; set; }
-        /// <summary>
-        /// Deze property is obsolete: KoppelingNaam wordt nu gebruikt
-        /// </summary>
-        public string KruisingNaam { get; set; }
-
+        
         [RefersTo(TLCGenObjectTypeEnum.Fase)]
         [HasDefault(false)]
         public string GekoppeldeSignaalGroep { get; set; }
