@@ -36,7 +36,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.TabCControlParameters:
                     return 0;
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.RegCBeforeIncludes:
                     return 20;
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                 case CCOLCodeTypeEnum.RegCSystemApplication2:
@@ -95,7 +95,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     // lijst met CCOL uitgangen nodig hebben
                     return null;
 
-                case CCOLCodeTypeEnum.RegCTop:
+                case CCOLCodeTypeEnum.RegCBeforeIncludes:
                     if ((c.Data.CCOLVersie <= Models.Enumerations.CCOLVersieEnum.CCOL8 &&
                          c.Data.VLOGType != Models.Enumerations.VLOGTypeEnum.Geen ||
                          c.Data.CCOLVersie > Models.Enumerations.CCOLVersieEnum.CCOL8 &&

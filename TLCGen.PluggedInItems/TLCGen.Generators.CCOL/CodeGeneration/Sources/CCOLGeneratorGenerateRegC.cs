@@ -30,6 +30,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine("#define OV_ADDFILE");
             }
             sb.AppendLine();
+            sb.Append(GenerateRegCBeforeIncludes(controller));
             sb.Append(GenerateRegCIncludes(controller));
             sb.Append(GenerateRegCTop(controller));
             if (controller.Data.KWCType != KWCTypeEnum.Geen && controller.Data.KWCUitgebreid)
@@ -58,6 +59,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
             sb.Append(GenerateRegCDumpApplication(controller));
             sb.Append(GenerateRegCSpecialSignals(controller));
+
+            return sb.ToString();
+        }
+
+        private string GenerateRegCBeforeIncludes(ControllerModel controller)
+        {
+            var sb = new StringBuilder();
+
+            AddCodeTypeToStringBuilder(controller, sb, CCOLCodeTypeEnum.RegCBeforeIncludes, false, true, false, true);
 
             return sb.ToString();
         }

@@ -3,6 +3,7 @@
     public enum CCOLCodeTypeEnum
     {
 		// REG
+        RegCBeforeIncludes,
         RegCIncludes,
         RegCTop,
         RegCKwcApplication,

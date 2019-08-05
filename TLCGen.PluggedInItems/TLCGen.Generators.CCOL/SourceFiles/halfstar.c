@@ -720,6 +720,7 @@ void set_tx_change(count fc, /* signaalgroep         */
 
 	if (PL == pl)
 	{
+		bool change = FALSE;
 		if (pl_gebied(NG, (mulv)(PRM[ptxd1] + 1), (mulv)(PRM[ptxd2])) ||
 			(pl_gebied(NG, (mulv)(TXB_PL[fc]), (mulv)(TXD_PL[fc])) && EG[fc]))
 		{
@@ -727,23 +728,26 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXA[PL][fc] = PRM[ptxa2];
 				TXA_PL[fc] = PRM[ptxa2];
+				change = TRUE;
 			}
 			if (TXB_PL[fc] != PRM[ptxb2])
 			{
 				TXB[PL][fc] = PRM[ptxb2];
 				TXB_PL[fc] = PRM[ptxb2];
+				change = TRUE;
 			}
 			if (TXC_PL[fc] != PRM[ptxc2])
 			{
 				TXC[PL][fc] = PRM[ptxc2];
 				TXC_PL[fc] = PRM[ptxc2];
+				change = TRUE;
 			}
 			if (TXD_PL[fc] != PRM[ptxd2])
 			{
 				TXD[PL][fc] = PRM[ptxd2];
 				TXD_PL[fc] = PRM[ptxd2];
+				change = TRUE;
 			}
-			check_signalplans();
 		}
 
 		if (pl_gebied(NG, (mulv)(PRM[ptxd2] + 1), (mulv)(PRM[ptxd1])) ||
@@ -753,23 +757,26 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXA[PL][fc] = PRM[ptxa1];
 				TXA_PL[fc] = PRM[ptxa1];
+				change = TRUE;
 			}
 			if (TXB_PL[fc] != PRM[ptxb1])
 			{
 				TXB[PL][fc] = PRM[ptxb1];
 				TXB_PL[fc] = PRM[ptxb1];
+				change = TRUE;
 			}
 			if (TXC_PL[fc] != PRM[ptxc1])
 			{
 				TXC[PL][fc] = PRM[ptxc1];
 				TXC_PL[fc] = PRM[ptxc1];
+				change = TRUE;
 			}
 			if (TXD_PL[fc] != PRM[ptxd1])
 			{
 				TXD[PL][fc] = PRM[ptxd1];
 				TXD_PL[fc] = PRM[ptxd1];
+				change = TRUE;
 			}
-			check_signalplans();
 		}
 		if ((PRM[ptxe1] > 0) && (PRM[ptxe2] > 0))
 		{
@@ -777,13 +784,16 @@ void set_tx_change(count fc, /* signaalgroep         */
 			{
 				TXE[PL][fc] = PRM[ptxe2];
 				TXE_PL[fc] = PRM[ptxe2];
+				change = TRUE;
 			}
 			if (TX_timer == PRM[ptxe2])
 			{
 				TXE[PL][fc] = PRM[ptxe1];
 				TXE_PL[fc] = PRM[ptxe1];
+				change = TRUE;
 			}
 		}
+		if (change) check_signalplans();
 	}
 }
 
