@@ -833,8 +833,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         foreach(var sg in c.HalfstarData.FaseCyclusInstellingen.Where(x => x.AanvraagOpTxB))
                         {
                             sb.Append($"{ts}if (aanvraag_txb({_fcpf}{sg.FaseCyclus})");
-                            if (sg.PrivilegePeriodeOpzetten) sb.Append(" && PP[{_fcpf}{sg.FaseCyclus}]");
-                            sb.AppendLine(") A[{_fcpf}{sg.FaseCyclus}] |= TRUE;");
+                            if (sg.PrivilegePeriodeOpzetten) sb.Append($" && PP[{_fcpf}{sg.FaseCyclus}]");
+                            sb.AppendLine($") A[{_fcpf}{sg.FaseCyclus}] |= TRUE;");
                         }
                     }
 					sb.AppendLine($"{ts}}}");
@@ -1071,13 +1071,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine();
 					}
 
+                    sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
+					sb.AppendLine();
+
                     sb.AppendLine($"{ts}/* retour rood wanneer richting AR heeft maar geen PAR meer */");
 					sb.AppendLine($"{ts}/* -------------------------------------------------------- */");
 					sb.AppendLine($"{ts}reset_altreal_halfstar();");
                     sb.AppendLine();
-
-                    sb.AppendLine($"{ts}Alternatief_halfstar_Add();");
-					sb.AppendLine();
 
 					sb.AppendLine($"{ts}");
                     sb.AppendLine($"{ts}signaalplan_alternatief();");
