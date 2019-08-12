@@ -96,7 +96,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCPreApplication:
                     return 80;
                 case CCOLCodeTypeEnum.RegCMaxgroen:
-                    return 40;
+                    return 50;
             }
             return 0;
         }

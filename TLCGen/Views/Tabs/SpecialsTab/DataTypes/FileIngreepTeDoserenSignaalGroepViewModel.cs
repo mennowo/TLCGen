@@ -86,6 +86,26 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public bool MaximaleGroentijd
+        {
+            get => _TeDoserenSignaalGroep.MaximaleGroentijd;
+            set
+            {
+                _TeDoserenSignaalGroep.MaximaleGroentijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
+        public int MaximaleGroentijdTijd
+        {
+            get => _TeDoserenSignaalGroep.MaximaleGroentijdTijd;
+            set
+            {
+                _TeDoserenSignaalGroep.MaximaleGroentijdTijd = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         #endregion // Properties
 
         #region Commands

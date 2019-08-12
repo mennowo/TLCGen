@@ -240,6 +240,18 @@
             <Description>Toepassen afval vertraging file ingreep _E1_</Description>
           </Setting>
           <Setting>
+            <Default>filedoseren</Default>
+            <Setting>filedoseren</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen doseerpercentages voor fileingreep _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>filealtgset</Default>
+            <Setting>filealtgset</Setting>
+            <Type>Schakelaar</Type>
+            <Description>Toepassen alternatieve groentijdenset voor fileingreep _E1_</Description>
+          </Setting>
+          <Setting>
             <Default>eerlijkdoseren</Default>
             <Setting>eerlijkdoseren</Setting>
             <Type>Schakelaar</Type>
@@ -280,6 +292,12 @@
             <Setting>minrood</Setting>
             <Type>Timer</Type>
             <Description>Minimale roodtijd bij fase _E1_ voor file ingreep _E2_</Description>
+          </Setting>
+          <Setting>
+            <Default>maxgroen</Default>
+            <Setting>maxgroen</Setting>
+            <Type>Timer</Type>
+            <Description>Maximale groentijd bij fase _E1_ voor file ingreep _E2_</Description>
           </Setting>
         </Settings>
       </CodePieceData>

@@ -21,10 +21,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _prmfperc;
         private CCOLGeneratorCodeStringSettingModel _schparlus;
         private CCOLGeneratorCodeStringSettingModel _schparstrook;
+        private CCOLGeneratorCodeStringSettingModel _schfiledoseren;
+        private CCOLGeneratorCodeStringSettingModel _schfilealtgset;
         private CCOLGeneratorCodeStringSettingModel _scheerlijkdoseren;
         private CCOLGeneratorCodeStringSettingModel _hafk;
         private CCOLGeneratorCodeStringSettingModel _tafkmingroen;
         private CCOLGeneratorCodeStringSettingModel _tminrood;
+        private CCOLGeneratorCodeStringSettingModel _tmaxgroen;
 #pragma warning restore 0649
 
         // read from other objects
@@ -69,6 +72,27 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             fm.EerlijkDoseren ? 1 : 0,
                             CCOLElementTimeTypeEnum.SCH_type,
                             _scheerlijkdoseren, fm.Naam));
+                }
+
+                if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit && fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schfiledoseren}{fm.Naam}",
+                            fm.ToepassenDoseren == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
+                            CCOLElementTimeTypeEnum.SCH_type,
+                            _schfiledoseren, fm.Naam));
+                }
+
+                if (fm.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit && fm.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Altijd &&
+                    !string.IsNullOrWhiteSpace(fm.AlternatieveGroentijdenSet) && fm.AlternatieveGroentijdenSet != "NG")
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_schfilealtgset}{fm.Naam}",
+                            fm.ToepassenAlternatieveGroentijdenSet == NooitAltijdAanUitEnum.SchAan ? 1 : 0,
+                            CCOLElementTimeTypeEnum.SCH_type,
+                            _schfilealtgset, fm.Naam));
                 }
 
                 var detectorDict = new Dictionary<int, List<string>>();
@@ -179,6 +203,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             CCOLElementTimeTypeEnum.TE_type,
                             _tminrood, ff.FaseCyclus));
                 }
+                foreach (var ff in fm.TeDoserenSignaalGroepen.Where(x => x.MaximaleGroentijd))
+                {
+                    _myElements.Add(
+                        CCOLGeneratorSettingsProvider.Default.CreateElement(
+                            $"{_tmaxgroen}{ff.FaseCyclus}{_hfile}{fm.Naam}",
+                            ff.MaximaleGroentijdTijd,
+                            CCOLElementTimeTypeEnum.TE_type,
+                            _tmaxgroen, ff.FaseCyclus));
+                }
             }
         }
 
@@ -217,6 +250,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.OvCPARCorrecties:
                     return 10;
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                    return 40;
                 default:
                     return 0;
             }
@@ -224,10 +260,51 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override string GetCode(ControllerModel c, CCOLCodeTypeEnum type, string ts)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
+            var first = true;
 
             switch (type)
             {
+                case CCOLCodeTypeEnum.RegCVerlenggroen:
+                case CCOLCodeTypeEnum.RegCMaxgroen:
+                    if (c.FileIngrepen.Any(x => x.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit && 
+                                                !string.IsNullOrWhiteSpace(x.AlternatieveGroentijdenSet) && 
+                                                x.AlternatieveGroentijdenSet != "NG") && 
+                        c.Fasen.Any())
+                    {
+                        first = true;
+                        foreach (var fi in c.FileIngrepen.Where(x => x.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Nooit &&
+                                                                     !string.IsNullOrWhiteSpace(x.AlternatieveGroentijdenSet) &&
+                                                                     x.AlternatieveGroentijdenSet != "NG"))
+                        {
+                            if (!first) sb.AppendLine();
+                            first = false;
+
+                            var set = c.GroentijdenSets.FirstOrDefault(x => x.Naam == fi.AlternatieveGroentijdenSet);
+                            if (set == null)
+                            {
+                                sb.AppendLine($"{ts}{ts}!!! Groentijden set {fi.AlternatieveGroentijdenSet} niet gevonden (file ingreep {fi.Naam}) !!!");
+                                continue;
+                            }
+
+                            sb.AppendLine($"{ts}/* Alternatieve groentijdenset tijdens file ingreep {fi.Naam} ({set.Naam}) */");
+                            sb.Append($"{ts}if (IH[{_hpf}{_hfile}{fi.Naam}]");
+                            if (fi.ToepassenAlternatieveGroentijdenSet != NooitAltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($" && SCH[{_schpf}{_schfilealtgset}{fi.Naam}]");
+                            }
+                            sb.AppendLine($")");
+                            sb.AppendLine($"{ts}{{");
+                            foreach (var g in set.Groentijden.Where(x => x.Waarde.HasValue))
+                            {
+                                sb.AppendLine($"{ts}{ts}max_star_groentijden_va_arg((count){_fcpf}{g.FaseCyclus}, (mulv)FALSE, (mulv)FALSE, (va_mulv)PRM[{_prmpf}{set.Naam.ToLower()}_{g.FaseCyclus}], (va_mulv)NG, (va_count)END);");
+
+                            }
+                            sb.AppendLine($"{ts}}}");
+                        }
+                    }
+                    return sb.ToString();
+
                 case CCOLCodeTypeEnum.RegCTop:
                     if (c.FileIngrepen.Any(x => x.EerlijkDoseren))
                     {
@@ -235,7 +312,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine("");
 
                         foreach (var fi in c.FileIngrepen)
-                        {
+                            {
                             if (fi.EerlijkDoseren)
                             {
                                 sb.AppendLine($"/* File ingreep {fi.Naam} */");
@@ -345,11 +422,13 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
                         if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MinimaleRoodtijd)))
                             sb.AppendLine($"{ts}{ts}X[fc] &= ~BIT5;");
+                        if (c.FileIngrepen.Any(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.MaximaleGroentijd)))
+                            sb.AppendLine($"{ts}{ts}Z[fc] &= ~BIT5;");
                         sb.AppendLine($"{ts}}}");
                         sb.AppendLine();
                     }
 
-                    var first = true;
+                    first = true;
                     foreach (var fm in c.FileIngrepen)
                     {
                         if (!first) sb.AppendLine();
@@ -564,70 +643,90 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}{{");
                         }
 
-                        sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
-                        sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}])");
-                        sb.AppendLine($"{tts}{{");
-                        foreach (var ff in fm.TeDoserenSignaalGroepen)
+                        if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Nooit)
                         {
-                            string grfunc = "";
-                            switch (c.Data.TypeGroentijden)
+                            sb.AppendLine($"{tts}/* percentage MG bij filemelding */");
+                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
                             {
-                                case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
-                                case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
+                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
                             }
-                            sb.AppendLine(fm.EerlijkDoseren
-                                ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
-                                : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
-                            sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
-                            var rest = "";
-                            var irest = 1;
-                            rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
-
-                            foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                            sb.AppendLine(")");
+                            sb.AppendLine($"{tts}{{");
+                            foreach (var ff in fm.TeDoserenSignaalGroepen)
                             {
-                                foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
+                                string grfunc = "";
+                                switch (c.Data.TypeGroentijden)
                                 {
-                                    foreach (var mgm in mgsm.Groentijden.Where(
-                                        x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
+                                    case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden"; break;
+                                    case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden"; break;
+                                }
+                                sb.AppendLine(fm.EerlijkDoseren
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam},"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_mpf}{_mperiod}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus},");
+                                sb.Append("".PadLeft($"{tts}{ts}{grfunc}(".Length));
+                                var rest = "";
+                                var irest = 1;
+                                rest += $", {_prmpf}{(c.PeriodenData.DefaultPeriodeGroentijdenSet == null ? "NG" : c.PeriodenData.DefaultPeriodeGroentijdenSet.ToLower())}_{ff.FaseCyclus}";
+
+                                foreach (var per in c.PeriodenData.Perioden.Where(x => x.Type == PeriodeTypeEnum.Groentijden))
+                                {
+                                    foreach (var mgsm in c.GroentijdenSets.Where(x => x.Naam == per.GroentijdenSet))
                                     {
-                                        ++irest;
-                                        rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
+                                        foreach (var mgm in mgsm.Groentijden.Where(
+                                            x => x.FaseCyclus == ff.FaseCyclus && x.Waarde.HasValue))
+                                        {
+                                            ++irest;
+                                            rest += $", {_prmpf}{per.GroentijdenSet.ToLower()}_{ff.FaseCyclus}";
+                                        }
                                     }
                                 }
+                                sb.AppendLine($"{irest}{rest});");
                             }
-                            sb.AppendLine($"{irest}{rest});");
+                            sb.AppendLine($"{tts}}}");
                         }
-                        sb.AppendLine($"{tts}}}");
+
+                        if (c.HalfstarData.IsHalfstar)
+                        {
+                            sb.AppendLine($"{ts}}}");
+                        }
+                        sb.AppendLine();
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
                         {
-                            sb.AppendLine($"{tts}/* Eenmalige afkappen op start file ingreep */");
+                            sb.AppendLine($"{ts}/* Eenmalige afkappen op start file ingreep {fm.Naam} */");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.AfkappenOpStartFile))
                             {
-                                sb.AppendLine($"{tts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} */");
-                                sb.AppendLine($"{tts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{tts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
-                                sb.AppendLine($"{tts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
-                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}/* Eenmalige afkappen fase {tdfc.FaseCyclus} */");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = ER[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{ts}if (SH[{_hpf}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = TRUE;");
+                                sb.AppendLine($"{ts}if (EG[{_fcpf}{tdfc.FaseCyclus}]) IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = FALSE;");
+                                sb.AppendLine($"{ts}if (IH[{_hpf}{_hafk}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && G[{_fcpf}{tdfc.FaseCyclus}] && !T[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && T_max[{_tpf}{_tafkmingroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                            }
+                            sb.AppendLine();
+                        }
+
+                        if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
+                        {
+                            sb.AppendLine($"{ts}/* Afkappen op bereiken maximaal groen tijdens file ingreep {fm.Naam} */");
+                            foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.AfkappenOpStartFile))
+                            {
+                                sb.AppendLine($"{ts}/* Maximale groentijd fase {tdfc.FaseCyclus} */");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = SG[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{ts}if (G[{_fcpf}{tdfc.FaseCyclus}] && ET[{_tpf}{_tmaxgroen}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) Z[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                             }
                             sb.AppendLine();
                         }
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.MinimaleRoodtijd))
                         {
-                            sb.AppendLine($"{tts}/* Eenmalige afkappen op start file ingreep */");
+                            sb.AppendLine($"{ts}/* Minimale roodtijden tijdens file ingreep {fm.Naam} */");
                             foreach (var tdfc in fm.TeDoserenSignaalGroepen.Where(x => x.MinimaleRoodtijd))
                             {
-                                sb.AppendLine($"{tts}/* Minimale roodtijd tijdens fase {tdfc.FaseCyclus} tijdens file ingreep */");
-                                sb.AppendLine($"{tts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
-                                sb.AppendLine($"{tts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) X[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
+                                sb.AppendLine($"{ts}/* Minimale roodtijd fase {tdfc.FaseCyclus} */");
+                                sb.AppendLine($"{ts}RT[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] = EGL[{_fcpf}{tdfc.FaseCyclus}] && T_max[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}] && IH[{_hpf}{_hfile}{fm.Naam}];");
+                                sb.AppendLine($"{ts}if (R[{_fcpf}{tdfc.FaseCyclus}] && T[{_tpf}{_tminrood}{tdfc.FaseCyclus}{_hfile}{fm.Naam}]) X[{_fcpf}{tdfc.FaseCyclus}] |= BIT5;");
                             }
-                            sb.AppendLine();
-                        }
-
-                        if (c.HalfstarData.IsHalfstar)
-                        {
-                            sb.AppendLine($"{ts}}}");
                         }
 
                         first = false;

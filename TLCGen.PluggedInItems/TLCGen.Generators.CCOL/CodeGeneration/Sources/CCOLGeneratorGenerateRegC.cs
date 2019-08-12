@@ -626,6 +626,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 sb.AppendLine($"{hsts}Synchronisaties_halfstar();");
                 sb.AppendLine($"{hsts}RealisatieAfhandeling_halfstar();");
                 sb.AppendLine($"{hsts}Alternatief_halfstar();");
+                sb.AppendLine($"{hsts}FileVerwerking();");
                 sb.AppendLine($"{hsts}FileVerwerking_halfstar();");
                 sb.AppendLine($"{hsts}DetectieStoring();");
                 sb.AppendLine($"{hsts}DetectieStoring_halfstar();");

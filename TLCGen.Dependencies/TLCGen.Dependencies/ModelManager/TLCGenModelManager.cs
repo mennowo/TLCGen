@@ -251,11 +251,14 @@ namespace TLCGen.ModelManagement
                 }
             }
 
+            // Version 0.5.4.0
             // Sort controller.HalfstarData.FaseCyclusInstellingen after renaming
+            // Set file ingrepen doseren to default 'Doseren toepassen'
             checkVer = Version.Parse("0.5.4.0");
             if (v < checkVer)
             {
                 controller.HalfstarData.FaseCyclusInstellingen.BubbleSort();
+                foreach (var fm in controller.FileIngrepen) fm.ToepassenDoseren = NooitAltijdAanUitEnum.Altijd;
             }
         }
 

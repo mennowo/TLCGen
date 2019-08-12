@@ -14,6 +14,8 @@ namespace TLCGen.Models
         public int AfkappenOpStartFileMinGroentijd { get; set; }
         public bool MinimaleRoodtijd { get; set; }
         public int MinimaleRoodtijdTijd { get; set; }
+        public bool MaximaleGroentijd { get; set; }
+        public int MaximaleGroentijdTijd { get; set; }
 
         public int CompareTo(object obj)
         {
