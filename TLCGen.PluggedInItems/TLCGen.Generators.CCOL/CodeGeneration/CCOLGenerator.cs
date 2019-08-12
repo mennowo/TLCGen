@@ -499,7 +499,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
             }
         }
 
-	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool includevars, bool includecode, bool addnewlinebefore, bool addnewlineatend)
+	    private void AddCodeTypeToStringBuilder(ControllerModel c, StringBuilder sb, CCOLCodeTypeEnum type, bool includevars, bool includecode, bool addnewlinebefore, bool addnewlineatend, List<string> varsBefore = null)
 	    {
 			if (OrderedPieceGenerators[type].Any())
 			{
@@ -507,6 +507,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                 if (includevars)
                 {
                     var vars = new List<string>();
+                    var added = false;
+                    if (varsBefore != null) vars = varsBefore;
                     foreach (var gen in OrderedPieceGenerators[type])
                     {
                         var lv = gen.Value.GetFunctionLocalVariables(c, type);
@@ -514,9 +516,10 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                         {
                             foreach (var i in lv)
                             {
-                                if (!vars.Contains(i.Item2))
+                                if (!vars.Any(x => x == i.Item2))
                                 {
                                     vars.Add(i.Item2);
+                                    added = true;
                                     if (!string.IsNullOrWhiteSpace(i.Item3))
                                     {
                                         sb.AppendLine($"{ts}{i.Item1} {i.Item2} = {i.Item3};");
@@ -532,9 +535,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
                                     //MessageBox.Show($"Function local variable with name {i.Item2} (now from {gen.Value.GetType().Name}) already exists!", "Error while generating function local variables");
                                 }
                             }
-                            if (addnewlineatend) sb.AppendLine();
                         }
                     }
+                    if (added && addnewlineatend) sb.AppendLine();
                 }
                 if (includecode)
                 {

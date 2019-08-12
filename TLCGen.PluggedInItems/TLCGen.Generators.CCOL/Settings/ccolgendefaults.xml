@@ -1739,6 +1739,12 @@
             <Description>Bijhouden aanwezigheid peloton tbv peloton koppeling _E1_ fase _E2_</Description>
           </Setting>
           <Setting>
+            <Default>peltegenh</Default>
+            <Setting>peltegenh</Setting>
+            <Type>HulpElement</Type>
+            <Description>Tegenhouden opzetten RW voor peloton koppeling _E1_ fase _E2_</Description>
+          </Setting>
+          <Setting>
             <Default>pelmeet</Default>
             <Setting>pelmeet</Setting>
             <Type>Timer</Type>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TLCGen.Generators.CCOL.Settings;
@@ -33,6 +34,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private string _tnlcvd;
         private string _tnlegd;
         private string _hplact;
+        private string _hpeltegenh;
 
         public override void CollectCCOLElements(ControllerModel c)
         {
@@ -68,6 +70,19 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 
         public override bool HasCCOLElements() => true;
 
+        public override bool HasFunctionLocalVariables() => true;
+
+        public override IEnumerable<Tuple<string, string, string>> GetFunctionLocalVariables(ControllerModel c, CCOLCodeTypeEnum type)
+        {
+            switch (type)
+            {
+                case CCOLCodeTypeEnum.RegCSystemApplication:
+                    return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                default:
+                    return base.GetFunctionLocalVariables(c, type);
+            }
+        }
+
         public override bool HasCCOLBitmapOutputs() => true;
 
         public override int HasCode(CCOLCodeTypeEnum type)
@@ -76,6 +91,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             {
                 case CCOLCodeTypeEnum.RegCInitApplication:
                     return 20;
+                case CCOLCodeTypeEnum.RegCPreApplication:
+                    return 90;
                 case CCOLCodeTypeEnum.RegCTop:
                     return 50;
                 case CCOLCodeTypeEnum.RegCIncludes:
@@ -115,6 +132,31 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.AppendLine($"{ts}#include \"wtv_testwin.c\"");
                         sb.AppendLine("#endif");
                     }
+                    return sb.ToString();
+
+                case CCOLCodeTypeEnum.RegCPreApplication:
+
+                    #region check de combinatie van de wtv met peloton koppelingen
+                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any())
+                    {
+                        var com = false;
+                        foreach (var sg in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            foreach (var sgpl in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                            {
+                                if (TLCGenIntegrityChecker.IsFasenConflicting(c, sg.Naam, sgpl.GekoppeldeSignaalGroep))
+                                {
+                                    if (!com)
+                                    {
+                                        sb.AppendLine($"{ts}/* tegenhouden aansturing RW voor pelotonkoppelingen bij minimaal aantal leds */");
+                                        com = true;
+                                    }
+                                    sb.AppendLine($"{ts}{ts}if (MM[{_mpf}{_mwtvm}{sg.Naam}] && MM[{_mpf}{_mwtvm}{sg.Naam}] <= PRM[{_prmpf}{_prmwtvnhaltmin}]) IH[{_hpf}{_hpeltegenh}{sgpl.KoppelingNaam}] = TRUE;");
+                                }
+                            }
+                        }
+                    }
+                    #endregion
                     return sb.ToString();
 
                 case CCOLCodeTypeEnum.RegCTop:
@@ -283,12 +325,6 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine();
                     #endregion
 
-                    #region Eventuele correctie op berekende wachttijd door gebruiker
-                    sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
-                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
-                    sb.AppendLine();
-                    #endregion
-
                     #region check of richting wordt tegengehouden door OV/HD
                     sb.AppendLine($"{ts}/* check of richting wordt tegengehouden door OV/HD */");
                     if (!c.Data.MultiModuleReeksen)
@@ -302,6 +338,35 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                             sb.AppendLine($"{ts}rr_modulen_primair(PR{r.Reeks}, {r.Reeks}, {r.Reeks}_MAX, rr_twacht_{r.Reeks});");
                         }
                     }
+                    sb.AppendLine();
+                    #endregion
+
+                    #region check de combinatie van de wtv met peloton koppelingen
+                    if (c.PelotonKoppelingenData.PelotonKoppelingen.Any())
+                    {
+                        var com = false;
+                        foreach (var sg in c.Fasen.Where(x => x.WachttijdVoorspeller))
+                        {
+                            foreach (var sgpl in c.PelotonKoppelingenData.PelotonKoppelingen.Where(x => x.Richting == PelotonKoppelingRichtingEnum.Inkomend))
+                            {
+                                if (TLCGenIntegrityChecker.IsFasenConflicting(c, sg.Naam, sgpl.GekoppeldeSignaalGroep))
+                                {
+                                    if (!com)
+                                    {
+                                        sb.AppendLine($"{ts}/* halteren wachttijdvoorspellers tijdens RW BIT14 bij conflicten (peloton koppeling) */");
+                                        com = true;
+                                    }
+                                    sb.AppendLine($"{ts}if (RW[{_fcpf}{sgpl.GekoppeldeSignaalGroep}] & BIT14) rr_twacht{GetFaseReeks(c, sg.Naam)}[{_fcpf}{sg.Naam}] = TRUE;");
+                                }
+                            }
+                        }
+                        if (com) sb.AppendLine();
+                    }
+                    #endregion
+
+                    #region Eventuele correctie op berekende wachttijd door gebruiker
+                    sb.AppendLine($"{ts}/* Eventuele correctie op berekende wachttijd door gebruiker */");
+                    sb.AppendLine($"{ts}WachtijdvoorspellersWachttijd_Add();");
                     sb.AppendLine();
                     #endregion
 
@@ -428,6 +493,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
             _tnlegd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlegd");
             _tnlcvd = CCOLGeneratorSettingsProvider.Default.GetElementName("tnlcvd");
             _hplact = CCOLGeneratorSettingsProvider.Default.GetElementName("hplact");
+            _hpeltegenh = CCOLGeneratorSettingsProvider.Default.GetElementName("hpeltegenh");
 
             return base.SetSettings(settings);
         }
