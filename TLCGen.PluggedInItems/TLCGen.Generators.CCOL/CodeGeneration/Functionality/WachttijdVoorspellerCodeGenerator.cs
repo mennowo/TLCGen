@@ -12,7 +12,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
     [CCOLCodePieceGenerator]
     class WachttijdVoorspellerCodeGenerator : CCOLCodePieceGeneratorBase
     {
-#pragma warning disable 0649
+#pragma warning disable IDE0044 // Add readonly modifier
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmax;
         private CCOLGeneratorCodeStringSettingModel _prmwtvnhaltmin;
         private CCOLGeneratorCodeStringSettingModel _uswtv;
@@ -23,7 +23,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
         private CCOLGeneratorCodeStringSettingModel _mwtv;
         private CCOLGeneratorCodeStringSettingModel _mwtvm;
         private CCOLGeneratorCodeStringSettingModel _prmminwtv;
-#pragma warning restore 0649
+#pragma warning restore IDE0044 // Add readonly modifier
         private string _isfix;
         private string _tnlsg;
         private string _tnlfg;

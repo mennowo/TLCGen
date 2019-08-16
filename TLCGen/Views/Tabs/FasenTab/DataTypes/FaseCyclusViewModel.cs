@@ -38,7 +38,7 @@ namespace TLCGen.ViewModels
             get => _faseCyclus.Naam;
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Fase, value))
                     {

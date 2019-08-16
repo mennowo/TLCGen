@@ -32,7 +32,7 @@ namespace TLCGen.ViewModels
             set
             {
                 // TODO: check unicity of this name in the model
-                if (NameSyntaxChecker.IsValidName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
+                if (NameSyntaxChecker.IsValidCName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
                 {
                     PelotonKoppeling.KoppelingNaam = value;
                     RaisePropertyChanged<object>(broadcast: true);

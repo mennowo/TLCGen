@@ -94,7 +94,7 @@ namespace TLCGen.ViewModels
             get { return _FileIngreep.Naam; }
             set
             {
-	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+	            if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
 	            {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.FileIngreep, value))
                     {

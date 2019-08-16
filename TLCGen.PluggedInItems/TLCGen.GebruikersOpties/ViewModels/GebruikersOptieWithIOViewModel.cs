@@ -31,7 +31,7 @@ namespace TLCGen.GebruikersOpties
             get { return _GebruikersOptieWithOI.Naam; }
             set
             {
-                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(ObjectType, value))
                     {

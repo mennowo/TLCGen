@@ -67,7 +67,7 @@ namespace TLCGen.ViewModels
             get => _detector.Naam;
 	        set
             {
-                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidName(value))
+                if (!string.IsNullOrWhiteSpace(value) && NameSyntaxChecker.IsValidCName(value))
                 {
                     if (TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.Detector, value))
                     {
