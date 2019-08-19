@@ -617,11 +617,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     if(pk.ToepassenMeetkriterium == NooitAltijdAanUitEnum.Altijd)
                                     {
-                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]));");
+                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(!IH[{_hpf}{_hpeltegenh}{pk.KoppelingNaam}] && T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]));");
                                     }
                                     else
                                     {
-                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(SCH[{_schpf}{_schpelmk}{pk.KoppelingNaam}] && T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]));");
+                                        sb.AppendLine($"{ts}meetkriterium_exp((count){_fcpf}{pk.GekoppeldeSignaalGroep}, ({c.GetBoolV()})(!IH[{_hpf}{_hpeltegenh}{pk.KoppelingNaam}] && SCH[{_schpf}{_schpelmk}{pk.KoppelingNaam}] && T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]));");
                                     }
                                 }
                             }
