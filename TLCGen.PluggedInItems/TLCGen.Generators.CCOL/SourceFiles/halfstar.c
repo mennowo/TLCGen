@@ -357,7 +357,7 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 }
 
 /**********************************************************************************/
-void PercentageMaxGroenTijden_halfstar(count fc, count percentage)
+void PercentageMaxGroenTijden_halfstar(count fc, count percentage, mulv bit)
 {
 	mulv maxg;
 
@@ -369,13 +369,13 @@ void PercentageMaxGroenTijden_halfstar(count fc, count percentage)
 
 	if (G[fc] && CV[fc] && !(MK[fc] & ~BIT5)) {
 		if ((TFG_timer[fc] + TVGA_timer[fc])>(mulv)(((long)PRM[percentage] * (long)maxg) / 100)) {
-			MK[fc] &= ~BIT5;
+			MK[fc] &= ~bit;
 		}
 	}
 }
 
 /**********************************************************************************/
-void PercentageVerlengGroenTijden_halfstar(count fc, count percentage)
+void PercentageVerlengGroenTijden_halfstar(count fc, count percentage, mulv bit)
 {
 	mulv maxg;
 
@@ -387,7 +387,7 @@ void PercentageVerlengGroenTijden_halfstar(count fc, count percentage)
 
 	if (G[fc] && CV[fc] && !(MK[fc] & ~BIT5)) {
 		if ((TVGA_timer[fc])>(mulv)(((long)PRM[percentage] * (long)maxg) / 100)) {
-			MK[fc] &= ~BIT5;
+			MK[fc] &= ~bit;
 		}
 	}
 }

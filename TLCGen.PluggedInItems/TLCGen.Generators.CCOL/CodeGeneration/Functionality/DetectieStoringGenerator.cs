@@ -325,8 +325,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         switch (c.Data.TypeGroentijden)
                         {
-                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijdenSP"; break;
-                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijdenSP"; break;
+                            case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;
+                            case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
                         }
                     }
                     else
@@ -339,7 +339,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     if (halfstar)
                     {
-                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam});");
+                        sb.AppendLine($"{ts1}{ts}{grfunc}({_fcpf}{fc.Naam}, {_prmpf}{_prmperc}{fc.Naam}, BIT5);");
                     }
                     else
                     {

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using TLCGen.Helpers;
 using TLCGen.Messaging.Messages;
@@ -18,8 +20,7 @@ namespace TLCGen.ViewModels
         RelayCommand _removePelotonKoppelingCommand;
         private PelotonKoppelingViewModel _selectedPelotonKoppeling;
         private ObservableCollection<PelotonKoppelingViewModel> _pelotonKoppelingen;
-        private ObservableCollection<string> _controllerFasen;
-        private string _selectedControllerDetector;
+        private ObservableCollection<string> _interneKoppelingenUit;
 
         #endregion // Fields
 
@@ -30,8 +31,22 @@ namespace TLCGen.ViewModels
             get
             {
                 if (_pelotonKoppelingen == null)
+                {
                     _pelotonKoppelingen = new ObservableCollection<PelotonKoppelingViewModel>();
+                }
                 return _pelotonKoppelingen;
+            }
+        }
+
+        public ObservableCollection<string> InterneKoppelingenUit
+        {
+            get
+            {
+                if (_interneKoppelingenUit == null)
+                {
+                    _interneKoppelingenUit = new ObservableCollection<string>();
+                }
+                return _interneKoppelingenUit;
             }
         }
 
@@ -45,6 +60,8 @@ namespace TLCGen.ViewModels
             {
                 _selectedPelotonKoppeling = value;
                 value?.UitgaandeDetectorenManager.UpdateSelectables(ControllerDetectoren);
+                InterneKoppelingenUit.Clear();
+                foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
                 RaisePropertyChanged();
             }
         }

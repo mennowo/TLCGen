@@ -34,6 +34,11 @@ namespace TLCGen.Models
         public NooitAltijdAanUitEnum ToepassenMeetkriterium { get; set; }
         public NooitAltijdAanUitEnum ToepassenRetourWachtgroen { get; set; }
 
+        public bool IsIntern { get; set; }
+        [RefersTo(TLCGenObjectTypeEnum.PelotonKoppeling)]
+        [HasDefault(false)]
+        public string GerelateerdePelotonKoppeling { get; set; }
+
         [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
         [HasDefault(false)]
         public string PTPKruising { get; set; }
@@ -72,6 +77,7 @@ namespace TLCGen.Models
         public List<KoppelSignaalModel> UpdateKoppelSignalen()
         {
             var signalen = new List<KoppelSignaalModel>();
+            if (IsIntern) return signalen;
             int id = 1;
             switch (Type)
             {

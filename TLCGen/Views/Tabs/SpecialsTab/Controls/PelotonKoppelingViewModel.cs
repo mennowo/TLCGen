@@ -31,11 +31,14 @@ namespace TLCGen.ViewModels
             get { return PelotonKoppeling.KoppelingNaam; }
             set
             {
-                // TODO: check unicity of this name in the model
                 if (NameSyntaxChecker.IsValidCName(value) && TLCGenModelManager.Default.IsElementIdentifierUnique(TLCGenObjectTypeEnum.PelotonKoppeling, value))
                 {
+                    var oldname = PelotonKoppeling.KoppelingNaam;
                     PelotonKoppeling.KoppelingNaam = value;
                     RaisePropertyChanged<object>(broadcast: true);
+
+                    // Notify the messenger
+                    MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
                 }
                 else
                 {
@@ -180,6 +183,38 @@ namespace TLCGen.ViewModels
                 PelotonKoppeling.ToepassenRetourWachtgroen = value;
                 RaisePropertyChanged<object>(broadcast: true);
                 RaisePropertyChanged(nameof(HasRetourWachtgroen));
+            }
+        }
+
+        public bool IsIntern
+        {
+            get => PelotonKoppeling.IsIntern;
+            set
+            {
+                PelotonKoppeling.IsIntern = value;
+                PelotonKoppeling.PTPKruising = null;
+                RaisePropertyChanged(nameof(PTPKruising));
+                RaisePropertyChanged<object>(broadcast: true);
+                RaisePropertyChanged(nameof(IsNotIntern));
+                RaisePropertyChanged(nameof(IsInternIn));
+                RaisePropertyChanged(nameof(IsInternUit));
+            }
+        }
+
+        public bool IsInternIn => IsIntern && Richting == PelotonKoppelingRichtingEnum.Inkomend;
+        public bool IsInternUit => IsIntern && Richting == PelotonKoppelingRichtingEnum.Uitgaand;
+        public bool IsNotIntern => !IsIntern;
+
+        public string GerelateerdePelotonKoppeling
+        {
+            get => PelotonKoppeling.GerelateerdePelotonKoppeling;
+            set
+            {
+                if (value != null)
+                {
+                    PelotonKoppeling.GerelateerdePelotonKoppeling = value;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
             }
         }
 

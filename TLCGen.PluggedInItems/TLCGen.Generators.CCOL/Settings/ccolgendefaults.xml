@@ -1840,6 +1840,18 @@
             <Type>Schakelaar</Type>
             <Description>Toepassen uitgaande koppeling vanaf fase _E2_ voor koppeling _E1_</Description>
           </Setting>
+          <Setting>
+            <Default>pku</Default>
+            <Setting>pku</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden uitgaande status voor koppeling _E1_</Description>
+          </Setting>
+          <Setting>
+            <Default>pkud</Default>
+            <Setting>pkud</Setting>
+            <Type>HulpElement</Type>
+            <Description>Bijhouden uitgaande status _E1_ voor koppeling _E2_</Description>
+          </Setting>
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>

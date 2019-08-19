@@ -708,8 +708,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                     case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
                                 }
                                 sb.AppendLine(fm.EerlijkDoseren
-                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam});"
-                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus});");
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}, BIT3);"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus}, BIT3);");
                             }
                             sb.AppendLine($"{tts}}}");
                             sb.AppendLine($"{ts}}}");

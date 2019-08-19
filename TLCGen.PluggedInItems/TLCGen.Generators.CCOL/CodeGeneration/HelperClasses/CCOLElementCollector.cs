@@ -44,7 +44,11 @@ namespace TLCGen.Generators.CCOL.CodeGeneration
         public static int GetKoppelSignaalCount(string koppeling, string name, KoppelSignaalRichtingEnum richting)
         {
             var koppelingKey = koppeling + richting.ToString();
-            var ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
+            CCOLKoppelSignaal ks = null;
+            if (_koppelSignalen.ContainsKey(koppelingKey))
+            {
+                ks = _koppelSignalen[koppelingKey].FirstOrDefault(x => x.Name == name && x.Richting == richting);
+            }
             if (ks == null) return 0;
             return ks.Count;
         }

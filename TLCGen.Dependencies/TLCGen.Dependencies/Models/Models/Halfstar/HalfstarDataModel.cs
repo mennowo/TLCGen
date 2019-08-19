@@ -13,7 +13,7 @@ namespace TLCGen.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [ModelName(TLCGenObjectTypeEnum.PTPKruising)]
+        [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
         public string Koppeling { get; set; }
         public KoppelSignaalRichtingEnum Richting { get; set; }
     }
