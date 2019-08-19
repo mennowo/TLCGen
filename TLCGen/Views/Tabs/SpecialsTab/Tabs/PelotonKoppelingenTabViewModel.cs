@@ -18,24 +18,18 @@ namespace TLCGen.ViewModels
 
         RelayCommand _addPelotonKoppelingCommand;
         RelayCommand _removePelotonKoppelingCommand;
+        RelayCommand _moveUpPelotonKoppelingCommand;
+        RelayCommand _moveDownPelotonKoppelingCommand;
         private PelotonKoppelingViewModel _selectedPelotonKoppeling;
-        private ObservableCollection<PelotonKoppelingViewModel> _pelotonKoppelingen;
         private ObservableCollection<string> _interneKoppelingenUit;
 
         #endregion // Fields
 
         #region Properties
 
-        public ObservableCollection<PelotonKoppelingViewModel> PelotonKoppelingen
+        public ObservableCollectionAroundList<PelotonKoppelingViewModel, PelotonKoppelingModel> PelotonKoppelingen
         {
-            get
-            {
-                if (_pelotonKoppelingen == null)
-                {
-                    _pelotonKoppelingen = new ObservableCollection<PelotonKoppelingViewModel>();
-                }
-                return _pelotonKoppelingen;
-            }
+            get; private set;
         }
 
         public ObservableCollection<string> InterneKoppelingenUit
@@ -96,6 +90,30 @@ namespace TLCGen.ViewModels
             }
         }
 
+        public ICommand MoveUpPelotonKoppelingCommand
+        {
+            get
+            {
+                if (_moveUpPelotonKoppelingCommand == null)
+                {
+                    _moveUpPelotonKoppelingCommand = new RelayCommand(MoveUpPelotonKoppelingCommand_Executed, MoveUpPelotonKoppelingCommand_CanExecute);
+                }
+                return _moveUpPelotonKoppelingCommand;
+            }
+        }
+
+        public ICommand MoveDownPelotonKoppelingCommand
+        {
+            get
+            {
+                if (_moveDownPelotonKoppelingCommand == null)
+                {
+                    _moveDownPelotonKoppelingCommand = new RelayCommand(MoveDownPelotonKoppelingCommand_Executed, MoveDownPelotonKoppelingCommand_CanExecute);
+                }
+                return _moveDownPelotonKoppelingCommand;
+            }
+        }
+
         #endregion // Commands
 
         #region Command Functionality
@@ -132,6 +150,28 @@ namespace TLCGen.ViewModels
         {
             PelotonKoppelingen.Remove(SelectedPelotonKoppeling);
             SelectedPelotonKoppeling = PelotonKoppelingen.Any() ? PelotonKoppelingen[0] : null;
+        }
+
+        private bool MoveUpPelotonKoppelingCommand_CanExecute(object obj)
+        {
+            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) > 0;
+        }
+
+        private void MoveUpPelotonKoppelingCommand_Executed(object obj)
+        {
+            PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) - 1);
+            PelotonKoppelingen.RebuildList();
+        }
+
+        private bool MoveDownPelotonKoppelingCommand_CanExecute(object obj)
+        {
+            return SelectedPelotonKoppeling != null && PelotonKoppelingen != null && PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) < (PelotonKoppelingen.Count - 1);
+        }
+
+        private void MoveDownPelotonKoppelingCommand_Executed(object obj)
+        {
+            PelotonKoppelingen.Move(PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling), PelotonKoppelingen.IndexOf(SelectedPelotonKoppeling) + 1);
+            PelotonKoppelingen.RebuildList();
         }
 
         #endregion // Command Functionality
@@ -183,13 +223,7 @@ namespace TLCGen.ViewModels
                 if (base.Controller != null)
                 {
 
-                    PelotonKoppelingen.CollectionChanged -= PelotonKoppelingen_CollectionChanged;
-                    PelotonKoppelingen.Clear();
-                    foreach (PelotonKoppelingModel Peloton in _Controller.PelotonKoppelingenData.PelotonKoppelingen)
-                    {
-                        PelotonKoppelingen.Add(new PelotonKoppelingViewModel(Peloton));
-                    }
-                    PelotonKoppelingen.CollectionChanged += PelotonKoppelingen_CollectionChanged;
+                    PelotonKoppelingen = new ObservableCollectionAroundList<PelotonKoppelingViewModel, PelotonKoppelingModel>(Controller.PelotonKoppelingenData.PelotonKoppelingen);
                     PTPKruisingenNames.Clear();
                     foreach (var kr in Controller.PTPData.PTPKoppelingen)
                     {
@@ -198,8 +232,7 @@ namespace TLCGen.ViewModels
                 }
                 else
                 {
-                    PelotonKoppelingen.CollectionChanged -= PelotonKoppelingen_CollectionChanged;
-                    PelotonKoppelingen.Clear();
+                    PelotonKoppelingen = null;
                 }
             }
         }
@@ -210,20 +243,6 @@ namespace TLCGen.ViewModels
 
         private void PelotonKoppelingen_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
-                foreach (PelotonKoppelingViewModel Peloton in e.NewItems)
-                {
-                    _Controller.PelotonKoppelingenData.PelotonKoppelingen.Add(Peloton.PelotonKoppeling);
-                }
-            }
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (PelotonKoppelingViewModel Peloton in e.OldItems)
-                {
-                    _Controller.PelotonKoppelingenData.PelotonKoppelingen.Remove(Peloton.PelotonKoppeling);
-                }
-            };
             MessengerInstance.Send(new ControllerDataChangedMessage());
         }
 

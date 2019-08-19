@@ -68,6 +68,8 @@
             <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <Button Content="Toevoegen" Command="{Binding AddPelotonKoppelingCommand}" Margin="2" />
                 <Button Content="Verwijderen" Command="{Binding RemovePelotonKoppelingCommand}" Margin="2" />
+                <Button Content="Omhoog" Command="{Binding MoveUpPelotonKoppelingCommand}" Margin="2" />
+                <Button Content="Omlaag" Command="{Binding MoveDownPelotonKoppelingCommand}" Margin="2" />
             </StackPanel>
         </Grid>
         <GridSplitter Width="5" HorizontalAlignment="Stretch" Grid.Column="1" />

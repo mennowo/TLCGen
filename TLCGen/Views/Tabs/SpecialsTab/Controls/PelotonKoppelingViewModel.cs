@@ -11,7 +11,7 @@ using RelayCommand = GalaSoft.MvvmLight.CommandWpf.RelayCommand;
 
 namespace TLCGen.ViewModels
 {
-    public class PelotonKoppelingViewModel : ViewModelBase
+    public class PelotonKoppelingViewModel : ViewModelBase, IViewModelWithItem
     {
         #region Fields
 
@@ -35,10 +35,10 @@ namespace TLCGen.ViewModels
                 {
                     var oldname = PelotonKoppeling.KoppelingNaam;
                     PelotonKoppeling.KoppelingNaam = value;
-                    RaisePropertyChanged<object>(broadcast: true);
 
                     // Notify the messenger
                     MessengerInstance.Send(new NameChangingMessage(TLCGenObjectTypeEnum.PelotonKoppeling, oldname, PelotonKoppeling.KoppelingNaam));
+                    RaisePropertyChanged<object>(broadcast: true);
                 }
                 else
                 {
@@ -360,6 +360,15 @@ namespace TLCGen.ViewModels
         }
 
         #endregion // Commands
+
+        #region IViewModelWithItem
+
+        public object GetItem()
+        {
+            return PelotonKoppeling;
+        }
+
+        #endregion // IViewModelWithItem
 
         #region Constructor
 
