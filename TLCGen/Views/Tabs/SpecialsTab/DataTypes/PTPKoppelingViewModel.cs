@@ -28,6 +28,7 @@ namespace TLCGen.ViewModels
             set
             {
                 KoppelSignaal.Count = value;
+                RaisePropertyChanged("");
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
@@ -54,6 +55,7 @@ namespace TLCGen.ViewModels
             {
                 _koppelSignaal = value;
                 if(_koppelSignaal != null) _koppelSignaal.Count = Count;
+                RaisePropertyChanged("");
                 RaisePropertyChanged<object>(broadcast: true);
             }
         }
