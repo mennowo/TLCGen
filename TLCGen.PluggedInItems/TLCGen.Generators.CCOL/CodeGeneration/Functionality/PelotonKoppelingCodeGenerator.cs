@@ -637,7 +637,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{ts}/* Vasthouden {_fcpf}{pk.GekoppeldeSignaalGroep} tbv peloton koppeling {pk.KoppelingNaam} */");
                                 }
-                                sb.AppendLine($"{ts}IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] = T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]");
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] = T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}];");
                                 sb.AppendLine();
                                 sb.AppendLine($"{ts}/* Bewaken RW duur */");
                                 sb.Append($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && bSingleRW{pk.KoppelingNaam}");
