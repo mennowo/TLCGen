@@ -689,7 +689,32 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         if (c.HalfstarData.IsHalfstar)
                         {
                             sb.AppendLine($"{ts}}}");
+                            sb.AppendLine($"{ts}else");
+                            sb.AppendLine($"{ts}{{");
+                            sb.AppendLine($"{tts}/* percentage MG bij filemelding tijdens halfstar */");
+                            sb.Append($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}] && SCH[{_schpf}{_schfile}{fm.Naam}]");
+                            if (fm.ToepassenDoseren != NooitAltijdAanUitEnum.Altijd)
+                            {
+                                sb.Append($" && SCH[{_schpf}{_schfiledoseren}{fm.Naam}]");
+                            }
+                            sb.AppendLine(")");
+                            sb.AppendLine($"{tts}{{");
+                            foreach (var ff in fm.TeDoserenSignaalGroepen)
+                            {
+                                string grfunc = "";
+                                switch (c.Data.TypeGroentijden)
+                                {
+                                    case GroentijdenTypeEnum.MaxGroentijden: grfunc = "PercentageMaxGroenTijden_halfstar"; break;
+                                    case GroentijdenTypeEnum.VerlengGroentijden: grfunc = "PercentageVerlengGroenTijden_halfstar"; break;
+                                }
+                                sb.AppendLine(fm.EerlijkDoseren
+                                    ? $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam});"
+                                    : $"{tts}{ts}{grfunc}({_fcpf}{ff.FaseCyclus}, {_prmpf}{_prmfperc}{fm.Naam}{ff.FaseCyclus});");
+                            }
+                            sb.AppendLine($"{tts}}}");
+                            sb.AppendLine($"{ts}}}");
                         }
+
                         sb.AppendLine();
 
                         if (fm.TeDoserenSignaalGroepen.Any(x => x.AfkappenOpStartFile))
@@ -744,9 +769,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         sb.Append($"{tts}/* Eerlijk doseren: deze functie compenseert zodanig, dat voor alle richtingen gelijk wordt gedoseerd. */");
                         foreach (var fm in c.FileIngrepen)
                         {
-                            sb.AppendLine();
                             if (fm.EerlijkDoseren && fm.TeDoserenSignaalGroepen.Count > 0)
                             {
+                                sb.AppendLine();
                                 sb.AppendLine($"{tts}if(SCH[{_schpf}{_scheerlijkdoseren}{fm.Naam}])");
                                 sb.AppendLine($"{tts}{{");
                                 if (c.Data.TypeGroentijden == GroentijdenTypeEnum.MaxGroentijden)

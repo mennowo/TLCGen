@@ -357,7 +357,7 @@ void naloopSG_halfstar(count fc1, /* fc1 */
 }
 
 /**********************************************************************************/
-void PercentageMaxGroenTijdenSP(count fc, count percentage)
+void PercentageMaxGroenTijden_halfstar(count fc, count percentage)
 {
 	mulv maxg;
 
@@ -375,7 +375,7 @@ void PercentageMaxGroenTijdenSP(count fc, count percentage)
 }
 
 /**********************************************************************************/
-void PercentageVerlengGroenTijdenSP(count fc, count percentage)
+void PercentageVerlengGroenTijden_halfstar(count fc, count percentage)
 {
 	mulv maxg;
 
