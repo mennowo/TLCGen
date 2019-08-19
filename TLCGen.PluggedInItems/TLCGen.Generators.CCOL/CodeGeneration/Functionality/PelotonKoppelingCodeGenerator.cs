@@ -452,16 +452,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 sb.AppendLine($"{ts}{{");
                                 sb.AppendLine($"{ts}{ts}iaTime{pk.KoppelingNaam}[iSizeOfArray{pk.KoppelingNaam}] = (CIF_KLOK[CIF_MINUUT] * 60 + CIF_KLOK[CIF_SECONDE] + PRM[{_prmpf}{_prmpelverschuif}{pk.KoppelingNaam}]) % 3600;");
                                 sb.AppendLine($"");
-                                sb.AppendLine($"{ts}{ts}if ((TVG_max[{_fcpf}{pk.GekoppeldeSignaalGroep}] - TVG_timer[{_fcpf}{pk.GekoppeldeSignaalGroep}]) < (PRM[{_prmpf}{_prmpelverschuif}{pk.KoppelingNaam}] + T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}]) * 10)");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.AppendLine($"{ts}{ts}{ts}iaStatus{pk.KoppelingNaam}[iSizeOfArray{pk.KoppelingNaam}] = 0;");
-                                sb.AppendLine($"{ts}{ts}{ts}iSizeOfArray{pk.KoppelingNaam}++;");
-                                sb.AppendLine($"{ts}{ts}}}");
-                                sb.AppendLine($"{ts}{ts}else");
-                                sb.AppendLine($"{ts}{ts}{{");
-                                sb.AppendLine($"{ts}{ts}{ts}iaStatus{pk.KoppelingNaam}[iSizeOfArray{pk.KoppelingNaam}] = 1;");
-                                sb.AppendLine($"{ts}{ts}{ts}iSizeOfArray{pk.KoppelingNaam}++;");
-                                sb.AppendLine($"{ts}{ts}}}");
+                                sb.AppendLine($"{ts}{ts}iaStatus{pk.KoppelingNaam}[iSizeOfArray{pk.KoppelingNaam}] = 1;");
+                                sb.AppendLine($"{ts}{ts}iSizeOfArray{pk.KoppelingNaam}++;");
                                 sb.AppendLine($"{ts}}}");
                                 sb.AppendLine($"");
                                 sb.AppendLine($"{ts}/* eindtijd noteren bij eind hulpelement alleen als er nog een starttijd is */");
@@ -645,15 +637,15 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 {
                                     sb.AppendLine($"{ts}/* Vasthouden {_fcpf}{pk.GekoppeldeSignaalGroep} tbv peloton koppeling {pk.KoppelingNaam} */");
                                 }
-                                sb.Append($"{ts}IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] = T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]");
-                                if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Altijd)
-                                {
-                                    sb.Append($" && SCH[{_schpf}{_schpelrw}{pk.KoppelingNaam}];");
-                                }
-                                sb.AppendLine();
+                                sb.AppendLine($"{ts}IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] = T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}]");
                                 sb.AppendLine();
                                 sb.AppendLine($"{ts}/* Bewaken RW duur */");
-                                sb.AppendLine($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && bSingleRW{pk.KoppelingNaam};");
+                                sb.Append($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && bSingleRW{pk.KoppelingNaam}");
+                                if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Altijd)
+                                {
+                                    sb.Append($" && SCH[{_schpf}{_schpelrw}{pk.KoppelingNaam}]");
+                                }
+                                sb.AppendLine(";");
                                 sb.AppendLine();
                                 sb.AppendLine($"{ts}/* RW opzetten */");
                                 sb.AppendLine($"{ts}if (bSingleRW{pk.KoppelingNaam} && IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && !IH[{_hpf}{_hpeltegenh}{pk.KoppelingNaam}] && !fkaa({_fcpf}{pk.GekoppeldeSignaalGroep}) && !Z[{_fcpf}{pk.GekoppeldeSignaalGroep}] && (T[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] || RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}])" +
