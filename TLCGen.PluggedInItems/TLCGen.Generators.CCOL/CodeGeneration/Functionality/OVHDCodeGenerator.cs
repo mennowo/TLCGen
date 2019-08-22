@@ -693,7 +693,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     sb.AppendLine($"DSIMeldingOV_V1(0, " +
                                                     $"{vtgType}, " +
                                                     "TRUE, " + 
-                                                    $"{(fcNmr == -1 ? "NG" : fcNmr.ToString())}," +
+                                                    $"{(fcNmr == -1 ? "NG" : (fcNmr > 200 && c.OVData.VerlaagHogeSignaalGroepNummers ? (fcNmr - 200).ToString() : fcNmr.ToString()))}," +
                                                     "TRUE, " +
                                                     (melding.InUit == OVIngreepInUitMeldingTypeEnum.Inmelding ? $"CIF_DSIN, " : $"CIF_DSUIT, ") +
                                                     $"{extra});");

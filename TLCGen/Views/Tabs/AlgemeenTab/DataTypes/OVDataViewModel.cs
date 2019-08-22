@@ -149,6 +149,17 @@ namespace TLCGen.ViewModels
             }
         }
 
+        [Description("Check signaalgroepnmrs hoger dan 2## als ## in DSI")]
+        public bool VerlaagHogeSignaalGroepNummers
+        {
+            get { return _Controller == null ? false : _Controller.OVData.VerlaagHogeSignaalGroepNummers; }
+            set
+            {
+                _Controller.OVData.VerlaagHogeSignaalGroepNummers = value;
+                RaisePropertyChanged<object>(nameof(VerlaagHogeSignaalGroepNummers), broadcast: true);
+            }
+        }
+
         #endregion // Properties
     }
 }
