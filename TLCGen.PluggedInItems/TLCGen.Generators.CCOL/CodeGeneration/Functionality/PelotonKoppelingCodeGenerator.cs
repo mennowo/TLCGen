@@ -639,19 +639,18 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                                 }
                                 sb.AppendLine($"{ts}IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] = T_max[{_tpf}{_tpelnl}{pk.KoppelingNaam}] > 0 && T[{_tpf}{_tpelnl}{pk.KoppelingNaam}];");
                                 sb.AppendLine();
-                                sb.AppendLine($"{ts}/* Bewaken RW duur */");
-                                sb.Append($"{ts}RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] = SH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && bSingleRW{pk.KoppelingNaam}");
-                                if (pk.ToepassenRetourWachtgroen != NooitAltijdAanUitEnum.Altijd)
-                                {
-                                    sb.Append($" && SCH[{_schpf}{_schpelrw}{pk.KoppelingNaam}]");
-                                }
-                                sb.AppendLine(";");
-                                sb.AppendLine();
                                 sb.AppendLine($"{ts}/* RW opzetten */");
-                                sb.AppendLine($"{ts}if (bSingleRW{pk.KoppelingNaam} && IH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && !IH[{_hpf}{_hpeltegenh}{pk.KoppelingNaam}] && !fkaa({_fcpf}{pk.GekoppeldeSignaalGroep}) && !Z[{_fcpf}{pk.GekoppeldeSignaalGroep}] && (T[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}] || RT[{_tpf}{_tpelrwmax}{pk.KoppelingNaam}])" +
+                                sb.AppendLine($"{ts}if (" +
+                                    $"SCH[{_schpf}{_schpelrw}{pk.KoppelingNaam}] && " +
+                                    $"bSingleRW{pk.KoppelingNaam} && " +
+                                    $"SH[{_hpf}{_hpelin}{pk.KoppelingNaam}] && " +
+                                    $"!IH[{_hpf}{_hpeltegenh}{pk.KoppelingNaam}] && " +
+                                    $"!fkaa({_fcpf}{pk.GekoppeldeSignaalGroep}) && " +
+                                    $"!Z[{_fcpf}{pk.GekoppeldeSignaalGroep}] && " +
+                                    $"CG[{_fcpf}{pk.GekoppeldeSignaalGroep}] <= CG_VG" +
                                     $"{(!c.HalfstarData.IsHalfstar ? "" : $" && (!IH[{_hpf}{_hplact}] || TOTXB_PL[{_fcpf}{pk.GekoppeldeSignaalGroep}] == 0 && TOTXD_PL[{_fcpf}{pk.GekoppeldeSignaalGroep}] > 0)")}" +
                                     $") RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] |= BIT14;");
-                                sb.AppendLine($"{ts}else if (!H[{_hpf}{_hpelin}{pk.KoppelingNaam}]) RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] &= ~BIT14;");
+                                sb.AppendLine($"{ts}else RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] &= ~BIT14;");
                                 sb.AppendLine();
                                 sb.AppendLine($"{ts}/* Bewaken eenmalig opzetten RW */");
                                 sb.AppendLine($"{ts}if (!(RW[{_fcpf}{pk.GekoppeldeSignaalGroep}] & BIT14) && (iOldRW{pk.KoppelingNaam} & BIT14)) bSingleRW{pk.KoppelingNaam} = FALSE;");

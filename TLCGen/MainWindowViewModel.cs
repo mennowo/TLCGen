@@ -779,6 +779,10 @@ namespace TLCGen.ViewModels
                 {
                     ShowAlertMessage = true;
                 }
+                else
+                {
+                    ShowAlertMessage = false;
+                }
                 return true;
             }
             if (filename != null) FileOpenFailed?.Invoke(this, filename);

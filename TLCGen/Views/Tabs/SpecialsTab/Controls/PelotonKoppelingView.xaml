@@ -125,8 +125,6 @@
                       SelectedItem="{Binding Path=ToepassenRetourWachtgroen}" />
             <Label Content="Naloop tijd (sec.)" />
             <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=TijdRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
-            <Label Content="Max. tijd toep. RW" />
-            <TextBox IsEnabled="{Binding Path=HasRetourWachtgroen}" Text="{Binding Path=MaxTijdToepassenRetourWachtgroen,UpdateSourceTrigger=PropertyChanged}" Margin="2" />
             <Label Content="Toepassen aanvraag" />
             <ComboBox Margin="2" ItemsSource="{Binding Source={helper:EnumBindingSource {x:Type enums:NooitAltijdAanUitEnum}}}"
                       SelectedItem="{Binding Path=ToepassenAanvraag}" />
