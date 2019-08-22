@@ -6,17 +6,23 @@
              xmlns:local="clr-namespace:TLCGen.Dialogs"
              mc:Ignorable="d" 
              Title="TLCGen versie informatie"
-             SizeToContent="WidthAndHeight" Width="600" Height="Auto">
+             SizeToContent="Height" Width="600" Height="Auto">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Label Content="TCLGen versie:" />
-            <Label Content="x.x.x.x" FontWeight="Bold" Name="VersionLabel" />
-        </StackPanel>
+        <DockPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                <Label Content="Informatie bij TLCGen versie:" />
+                <Label Content="x.x.x.x" FontWeight="Bold" Name="VersionLabel" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                <Label Content="TLCGen versie geopende regeling:" />
+                <Label Content="x.x.x.x" FontWeight="Bold" Name="ControllerVersionLabel" />
+            </StackPanel>
+        </DockPanel>
         <RichTextBox Height="300" Name="VersionInfoTB" Margin="2" Grid.Row="1" 
                      HorizontalScrollBarVisibility="Disabled" IsReadOnly="True" 
                      VerticalScrollBarVisibility="Auto" />

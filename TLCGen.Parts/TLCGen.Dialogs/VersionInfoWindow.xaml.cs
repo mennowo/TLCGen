@@ -12,17 +12,17 @@ namespace TLCGen.Dialogs
     /// </summary>
     public partial class VersionInfoWindow : Window
     {
-        private Version _selectedVersion;
         private List<Tuple<Version, string>> _versionData;
         private int _index;
 
-        public VersionInfoWindow(List<Tuple<Version, string>> versionData)
+        public VersionInfoWindow(string cVer, List<Tuple<Version, string>> versionData)
         {
             InitializeComponent();
 
             _versionData = versionData;
-
             _index = _versionData.Count - 1;
+            LoadVersionInfo();
+            this.ControllerVersionLabel.Content = cVer;
         }
 
         private void LoadVersionInfo()
