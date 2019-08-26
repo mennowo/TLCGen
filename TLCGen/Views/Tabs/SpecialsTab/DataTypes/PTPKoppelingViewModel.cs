@@ -54,9 +54,12 @@ namespace TLCGen.ViewModels
             set
             {
                 _koppelSignaal = value;
-                if(_koppelSignaal != null) _koppelSignaal.Count = Count;
+                if (_koppelSignaal != null && _koppelSignaal.Count != Count)
+                {
+                    _koppelSignaal.Count = Count;
+                    RaisePropertyChanged<object>(broadcast: true);
+                }
                 RaisePropertyChanged("");
-                RaisePropertyChanged<object>(broadcast: true);
             }
         }
     }

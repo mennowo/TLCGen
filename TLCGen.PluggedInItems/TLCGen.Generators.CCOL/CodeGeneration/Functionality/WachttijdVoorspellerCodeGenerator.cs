@@ -100,7 +100,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.RegCSystemApplication:
                     return 90;
                 case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
-                    return 10;
+                    return 20;
                 default:
                     return 0;
             }

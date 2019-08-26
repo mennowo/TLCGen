@@ -46,6 +46,7 @@ void OVHalfstarSettings(void);
 void OVHalfstarOnderMaximum(void);
 void OVHalfstarAfkapGroen(void);
 void OVHalfstarStartGroenMomenten(void);
+void OVHalfstarTegenhouden(void);
 void OVHalfstarAfkappen(void);
 void OVHalfstarTerugkomGroen(void);
 void OVHalfstarGroenVasthouden(void);

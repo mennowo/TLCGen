@@ -653,6 +653,45 @@ void OVHalfstarStartGroenMomenten(void)
 	}
 }
 
+void OVHalfstarTegenhouden(void)
+{
+	// placeholder for future use
+	if (FALSE == TRUE/*IH[hplact]*/)
+	{
+		int ov, fc;
+		boolv magUitstellen;
+
+		for (ov = 0; ov < ovOVMAX; ++ov)
+		{
+			if (iPrioriteit[ov] && iPrioriteitsOpties[ov] >= poPLGroenVastHoudenNaTXD)
+			{
+				int i, k;
+				fc = iFC_OVix[ov];
+				magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
+				for (i = 0; i < GKFC_MAX[fc]; ++i)
+				{
+#ifdef CCOLTIG
+					k = KF_pointer[fc][i];
+#else
+					k = TO_pointer[fc][i];
+#endif
+					if (magUitstellen)
+					{
+						if (iStartGroen[ov] <= iRealisatieTijd[fc][k])
+						{
+							RR[k] |= OV_RR_BIT;
+						}
+					}
+					else
+					{
+						RR[k] &= ~OV_RR_BIT;
+					}
+				}
+			}
+		}
+	}
+}
+
 void OVHalfstarAfkappen(void)
 {
 	if (IH[hplact])

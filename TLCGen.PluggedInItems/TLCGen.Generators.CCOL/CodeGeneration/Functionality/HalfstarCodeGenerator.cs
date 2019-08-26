@@ -458,6 +458,8 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return 10;
                 case CCOLCodeTypeEnum.OvCStartGroenMomenten:
                     return 10;
+                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                    return 10;
                 case CCOLCodeTypeEnum.OvCAfkappen:
                     return 10;
                 case CCOLCodeTypeEnum.OvCTerugkomGroen:
@@ -1601,6 +1603,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCStartGroenMomenten:
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarStartGroenMomenten();");
+                    return sb.ToString();
+                case CCOLCodeTypeEnum.OvCTegenhoudenConflicten:
+                    sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarTegenhouden();");
                     return sb.ToString();
                 case CCOLCodeTypeEnum.OvCAfkappen:
                     sb.AppendLine($"{ts}if (SCH[{_schpf}{_schovpriople}]) OVHalfstarAfkappen();");

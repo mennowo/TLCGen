@@ -2285,7 +2285,7 @@ void AfhandelingOV(void)
        Konflikten worden tegengehouden op basis van het
        StartGroenMoment.
        ------------------------------------------------ */
-    OVTegenhouden();
+	OVTegenhouden();
 #ifdef OV_ADDFILE
     OVTegenhouden_Add();
 #endif

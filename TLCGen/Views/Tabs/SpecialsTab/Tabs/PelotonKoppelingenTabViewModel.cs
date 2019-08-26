@@ -55,7 +55,10 @@ namespace TLCGen.ViewModels
                 _selectedPelotonKoppeling = value;
                 value?.UitgaandeDetectorenManager.UpdateSelectables(ControllerDetectoren);
                 InterneKoppelingenUit.Clear();
-                foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
+                if(PelotonKoppelingen != null)
+                {
+                    foreach (var k in PelotonKoppelingen.Where(x => x.IsInternUit)) InterneKoppelingenUit.Add(k.KoppelingNaam);
+                }
                 RaisePropertyChanged();
             }
         }
