@@ -51,6 +51,9 @@
     <Compile Include="AddNewTemplateFileWindow.xaml.cs">
       <DependentUpon>AddNewTemplateFileWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ImportGroentijdenDataWindow.xaml.cs">
+      <DependentUpon>ImportGroentijdenDataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ImportDplCWindow.xaml.cs">
       <DependentUpon>ImportDplCWindow.xaml</DependentUpon>
     </Compile>
@@ -86,6 +89,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AddNewTemplateFileWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ImportGroentijdenDataWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

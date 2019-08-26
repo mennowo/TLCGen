@@ -109,6 +109,7 @@ namespace TLCGen.Specificator
                 RaisePropertyChanged();
             }
         }
+
         public ObservableCollectionAroundList<SpecificatorSpecialsParagraafViewModel, SpecificatorSpecialsParagraaf> SpecialsParagrafen { get; set; }
 
         #endregion // Properties
@@ -188,5 +189,13 @@ namespace TLCGen.Specificator
         () => SelectedSpecialsParagraaf != null));
 
         #endregion // Commands
+
+        #region Constructor
+
+        public SpecificatorTabViewModel()
+        {
+        }
+
+        #endregion // Constructor
     }
 }

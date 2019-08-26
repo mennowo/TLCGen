@@ -200,6 +200,8 @@
     <Compile Include="Models\Models\Halfstar\HalfstarHoofdrichtingModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarOVIngreepModel.cs" />
     <Compile Include="Models\Models\Halfstar\HalfstarPeriodeDataModel.cs" />
+    <Compile Include="Models\Models\Halfstar\KoppelSignaalModel.cs" />
+    <Compile Include="Models.Enumerations\KoppelSignaalRichtingEnum.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanFaseModel.cs" />
     <Compile Include="Models\Models\Halfstar\SignaalPlanModel.cs" />
     <Compile Include="Models\Models\InterSignaalGroep\ConflictModel.cs" />

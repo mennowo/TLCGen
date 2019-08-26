@@ -1,4 +1,4 @@
-﻿using TLCGen.Models;
+﻿using TLCGen.Models.Enumerations;
 
 namespace TLCGen.Generators.CCOL.CodeGeneration
 {
