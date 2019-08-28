@@ -723,6 +723,7 @@ void OVHalfstarGroenVasthouden(void)
 			magUitstellen = StartGroenConflictenUitstellen(fc, iPrioriteitsOpties[ov]);
 			// Reset OV_YV_BIT, will determine YV according to signalplan structure
 			YV[fc] &= ~OV_YV_BIT;
+			YM[fc] &= ~OV_YM_BIT;
 
 			if (iPrioriteit[ov] &&
 				(iPrioriteitsOpties[ov] & poGroenVastHouden) || (iPrioriteitsOpties[ov] & poPLGroenVastHoudenNaTXD)) {
