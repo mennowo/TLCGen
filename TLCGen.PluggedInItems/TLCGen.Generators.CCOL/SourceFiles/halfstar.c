@@ -90,15 +90,15 @@ void altcor_parftsvtg_pl_halfstar(count fc1, count fc2, bool voorwaarde)
 /*****************************************************************************/
 void alternatief_halfstar(count fc, mulv altp, bool condition)
 {
-	PAR[fc] = FALSE;
+	PAR[fc] &= ~BIT0;
 
 	/* als een alternatieve ruimte wordt opgegeven, dan PAR opzetten bij voldoende ruimte, anders
 	kijken naar vastgroentijd. Minimum is altijd vastgroen
 	Let op extra 4 vanwege aantal stappen in ccol (FG->WG->VG->MG->GL)  */
 	if (altp > TFG_max[fc])
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
+		PAR[fc] |= (bool)((tar_max_ple(fc) >= (mulv)(altp + 11)) && condition);
 	else
-		PAR[fc] = (bool)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
+		PAR[fc] |= (bool)((tar_max_ple(fc) >= (mulv)(TFG_max[fc] + 11)) && condition);
 
 	/* afbreken alternatieve realisatie t.b.v. primair realiserend conflict: */
 	FM[fc] = fm_ar_kpr(fc, TFG_max[fc]);

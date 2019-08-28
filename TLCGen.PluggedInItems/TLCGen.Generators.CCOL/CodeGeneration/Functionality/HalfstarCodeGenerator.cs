@@ -1067,7 +1067,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{ts}{{");
 						foreach (var hfc in c.HalfstarData.Hoofdrichtingen)
 						{
-							sb.AppendLine($"{ts}{ts}PAR[{_fcpf}{hfc.FaseCyclus}] = FALSE;");
+							sb.AppendLine($"{ts}{ts}if (!tussen_txa_en_txb({_fcpf}{hfc.FaseCyclus}) && !tussen_txb_en_txd({_fcpf}{hfc.FaseCyclus})) PAR[{_fcpf}{hfc.FaseCyclus}] &= ~BIT0   ;");
 						}
 						sb.AppendLine($"{ts}}}");
 						sb.AppendLine();
@@ -1543,7 +1543,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     }
                     return sb.ToString();
 
-                #endregion // hst.c
+                #endregion // hst.c     
 
                 #region ov.c
 

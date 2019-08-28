@@ -655,11 +655,17 @@ void OVHalfstarStartGroenMomenten(void)
 
 void OVHalfstarTegenhouden(void)
 {
-	// placeholder for future use
-	if (FALSE == TRUE/*IH[hplact]*/)
+	/* placeholder for future use */
+	/* if (FALSE == TRUE) */
+	if (IH[hplact])
 	{
 		int ov, fc;
 		boolv magUitstellen;
+
+		for (fc = 0; fc < FCMAX; ++fc)
+		{
+			RR[fc] &= ~OV_RR_BIT;
+		}
 
 		for (ov = 0; ov < ovOVMAX; ++ov)
 		{
@@ -681,10 +687,6 @@ void OVHalfstarTegenhouden(void)
 						{
 							RR[k] |= OV_RR_BIT;
 						}
-					}
-					else
-					{
-						RR[k] &= ~OV_RR_BIT;
 					}
 				}
 			}
