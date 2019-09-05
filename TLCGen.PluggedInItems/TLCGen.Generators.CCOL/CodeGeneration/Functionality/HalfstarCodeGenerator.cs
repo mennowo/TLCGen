@@ -391,12 +391,17 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                 case CCOLCodeTypeEnum.HstCMeetkriterium:
                 case CCOLCodeTypeEnum.HstCMeeverlengen:
                 case CCOLCodeTypeEnum.HstCSynchronisaties:
-                case CCOLCodeTypeEnum.HstCAlternatief:
                 case CCOLCodeTypeEnum.HstCRealisatieAfhandeling:
                 case CCOLCodeTypeEnum.HstCPreSystemApplication:
                 case CCOLCodeTypeEnum.OvCPrioriteitsOpties:
                 case CCOLCodeTypeEnum.OvCPostAfhandelingOV:
                     return new List<Tuple<string, string, string>> { new Tuple<string, string, string>("int", "fc", "") };
+                case CCOLCodeTypeEnum.HstCAlternatief:
+                    return new List<Tuple<string, string, string>>
+                    {
+                        new Tuple<string, string, string>("int", "ov", ""),
+                        new Tuple<string, string, string>("int", "fc", "")
+                    };
                 case CCOLCodeTypeEnum.HstCKlokPerioden:
                     return new List<Tuple<string, string, string>>
                     {
@@ -999,6 +1004,25 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 				
 				case CCOLCodeTypeEnum.HstCAlternatief:
                     var gelijkstarttuples2 = CCOLCodeHelper.GetFasenWithGelijkStarts(c);
+
+                    sb.AppendLine($"{ts}/* PAR correctie: OV alternatieven enkel voor richtingen met actieve OV ingreep */");
+                    sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
+                    sb.AppendLine($"{ts}{{");
+                    sb.AppendLine($"{ts}{ts}char hasOV = FALSE;");
+                    sb.AppendLine($"{ts}{ts}for (ov = 0; ov < ovOVMAX; ++ov)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}if (iAantalInmeldingen[ov] > 0 && iFC_OVix[ov] == fc)");
+                    sb.AppendLine($"{ts}{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}hasOV = TRUE;");
+                    sb.AppendLine($"{ts}{ts}{ts}{ts}break;");
+                    sb.AppendLine($"{ts}{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}{ts}if (!hasOV)");
+                    sb.AppendLine($"{ts}{ts}{{");
+                    sb.AppendLine($"{ts}{ts}{ts}PAR[fc] &= ~OV_PAR_BIT;");
+                    sb.AppendLine($"{ts}{ts}}}");
+                    sb.AppendLine($"{ts}}}");
+
                     foreach (var fc in c.ModuleMolen.FasenModuleData)
                     {
                         Tuple<string, List<string>> hasgs = null;
@@ -1067,7 +1091,7 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 						sb.AppendLine($"{ts}{{");
 						foreach (var hfc in c.HalfstarData.Hoofdrichtingen)
 						{
-							sb.AppendLine($"{ts}{ts}if (!tussen_txa_en_txb({_fcpf}{hfc.FaseCyclus}) && !tussen_txb_en_txd({_fcpf}{hfc.FaseCyclus})) PAR[{_fcpf}{hfc.FaseCyclus}] &= ~BIT0   ;");
+							sb.AppendLine($"{ts}{ts}if (!tussen_txa_en_txb({_fcpf}{hfc.FaseCyclus}) && !tussen_txb_en_txd({_fcpf}{hfc.FaseCyclus})) PAR[{_fcpf}{hfc.FaseCyclus}] &= ~BIT0;");
 						}
 						sb.AppendLine($"{ts}}}");
 						sb.AppendLine();

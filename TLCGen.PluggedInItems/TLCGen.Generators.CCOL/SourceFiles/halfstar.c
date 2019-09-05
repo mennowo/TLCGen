@@ -1220,7 +1220,7 @@ bool txboverslag(count fc       ,  /* (hoofd)richting */
         A[fc]                         )  /* als de richting een aanvraag (aanvraag_txb) heeft */
     {
       /* tijdstempel: */
-      sprintf(tekst,"Overslag TXB fc%s PL=%1d Tx=%3d \n", FC_code[fc], PL+1, TX_timer);
+      sprintf(tekst,"%sOverslag TXB fc%s PL=%1d Tx=%3d \n", PROMPT_code, FC_code[fc], PL+1, TX_timer);
       uber_puts(tekst);
       
       return (bool)(TRUE);                /* bericht verzonden */
