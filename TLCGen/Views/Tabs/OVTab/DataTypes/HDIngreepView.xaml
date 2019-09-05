@@ -74,7 +74,7 @@
                 <TextBox Text="{Binding Path=OpticomInmeldingFilterTijd}" Grid.Row="2" Grid.Column="1" Margin="2" />
                 <Label Content="Inmelding ook door andere fase" Grid.Row="3" />
                 <CheckBox IsChecked="{Binding Path=InmeldingOokDoorToepassen}" Grid.Column="1" Margin="5" VerticalAlignment="Center" Grid.Row="3" />
-                <Label Content="Opticom inmeld filtertijd" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" 
+                <Label Content="Inmelding ook door fase" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" 
                        Grid.Row="4" />
                 <TextBox Text="{Binding Path=InmeldingOokDoorFase}" Grid.Row="4" Grid.Column="1" Margin="2" IsEnabled="{Binding Path=InmeldingOokDoorToepassen}" />
             </Grid>
