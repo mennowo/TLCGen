@@ -193,6 +193,10 @@ namespace TLCGen.ViewModels
             if (obj == null) return l;
 
             var objType = obj.GetType();
+
+            var ignore = objType.GetCustomAttribute<TLCGenIgnoreAttributeAttribute>();
+            if (ignore != null) return l;
+
             var attr = objType.GetCustomAttribute<HasKoppelSignalenAttribute>();
             if (attr != null)
             {
@@ -204,6 +208,9 @@ namespace TLCGen.ViewModels
             var properties = objType.GetProperties();
             foreach (var property in properties)
             {
+                var ignoreP = property.GetCustomAttribute<TLCGenIgnoreAttributeAttribute>();
+                if (ignoreP != null) continue;
+
                 var hasSignalen = property.GetCustomAttribute<HasKoppelSignalenAttribute>();
                 if (property.PropertyType.IsValueType || property.PropertyType == typeof(string)) continue;
                 var propValue = property.GetValue(obj);

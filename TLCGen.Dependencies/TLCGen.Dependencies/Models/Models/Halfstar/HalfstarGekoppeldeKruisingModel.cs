@@ -45,6 +45,7 @@ namespace TLCGen.Models
 
         public HalfstarGekoppeldWijzeEnum KoppelWijze { get; set; }
         [HasDefault(false)]
+        [RefersTo(TLCGenObjectTypeEnum.PTPKruising)]
         public string PTPKruising { get; set; }
 
         [Browsable(false)]
@@ -152,26 +153,26 @@ namespace TLCGen.Models
             {
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}syncok", Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}txsok", Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
-            }
-            foreach (var pl in PlanIngangen)
-            {
-                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                foreach (var pl in PlanIngangen)
+                {
+                    signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.In, Id = id++ });
+                }
             }
             signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}leven", Description = "Leven uit", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             if (Type == HalfstarGekoppeldTypeEnum.Master)
             {
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}syncok", Description = "Sync OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}txsok", Description = "TXS OK", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
+                foreach (var pl in PlanIngangen)
+                {
+                    signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
+                }
             }
             else if (Type == HalfstarGekoppeldTypeEnum.Slave)
             {
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}kpuls", Description = "Koppelpuls", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}perarh", Description = "Periode alt.hoofdr.", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
                 signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pervar", Description = "Periode VA regelen", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
-            }
-            foreach (var pl in PlanIngangen)
-            {
-                signalen.Add(new KoppelSignaalModel { Name = $"{KruisingNaam}pl{pl.Plan}", Description = $"{pl.Plan}", Koppeling = PTPKruising, Richting = KoppelSignaalRichtingEnum.Uit, Id = id++ });
             }
             foreach (var s in signalen)
             {
