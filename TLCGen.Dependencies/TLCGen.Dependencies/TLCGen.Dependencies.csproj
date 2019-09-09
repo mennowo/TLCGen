@@ -126,6 +126,7 @@
     <Compile Include="Models.Enumerations\DetectorAanvraagTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorTypeEnum.cs" />
     <Compile Include="Models.Enumerations\DetectorVerlengenTypeEnum.cs" />
+    <Compile Include="Models.Enumerations\FileMetingLocatieEnum.cs" />
     <Compile Include="Models.Enumerations\FaseTypeEnum.cs" />
     <Compile Include="Models.Enumerations\GroentijdenTypeEnum.cs" />
     <Compile Include="Models.Enumerations\HalfstarGekoppeldTypeEnum.cs" />

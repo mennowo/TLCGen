@@ -186,26 +186,28 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                     {
                         if (fcm.Meeverlengen != Models.Enumerations.NooitAltijdAanUitEnum.Nooit)
                         {
-                            var fm = c.FileIngrepen.FirstOrDefault(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam));
-                            if (fm != null)
+                            foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                             {
-                                if (!file)
+                                if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
                                 {
-                                    file = true;
-                                    sb.AppendLine();
-                                    sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file */");
-                                    if (c.HalfstarData.IsHalfstar)
+                                    if (!file)
                                     {
-                                        tts = ts;
+                                        file = true;
+                                        sb.AppendLine();
+                                        sb.AppendLine($"{ts}/* Niet meeverlengen tijdens file (meting na ss) */");
                                         if (c.HalfstarData.IsHalfstar)
                                         {
-                                            tts += ts;
-                                            sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
-                                            sb.AppendLine($"{ts}{{");
+                                            tts = ts;
+                                            if (c.HalfstarData.IsHalfstar)
+                                            {
+                                                tts += ts;
+                                                sb.AppendLine($"{ts}if (!IH[{_hpf}{_hplact}])");
+                                                sb.AppendLine($"{ts}{{");
+                                            }
                                         }
                                     }
+                                    sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
                                 }
-                                sb.AppendLine($"{tts}if (IH[{_hpf}{_hfile}{fm.Naam}]) YM[{_fcpf}{fcm.Naam}] &= ~BIT4;");
                             }
                         }
                     }

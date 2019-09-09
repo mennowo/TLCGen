@@ -430,11 +430,9 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
                         yes = false;
                         foreach (var fcm in c.Fasen)
                         {
-                            if (fcm.Meeverlengen != NooitAltijdAanUitEnum.Nooit)
+                            foreach (var fm in c.FileIngrepen.Where(x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam)))
                             {
-                                var fm = c.FileIngrepen.FirstOrDefault(
-                                    x => x.TeDoserenSignaalGroepen.Any(x2 => x2.FaseCyclus == fcm.Naam && c.ModuleMolen.FasenModuleData.Any(x3 => x3.FaseCyclus == x2.FaseCyclus)));
-                                if (fm != null)
+                                if (fm != null && fm.FileMetingLocatie == FileMetingLocatieEnum.NaStopstreep)
                                 {
                                     if (!yes)
                                     {
