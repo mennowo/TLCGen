@@ -606,11 +606,12 @@ void OVHalfstarOnderMaximum(void)
 					/* ExtraGroenNaTXD gebied */
 					iMaxResterendeGroenTijd = (iLatestTXD - TX_PL_timer + TX_PL_max) % TX_PL_max;
 				}
+				/* TODO herzien
 				else
-				{
+				{*/
 					/* bijzondere realisatie */
-					iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
-				}
+					/* iMaxResterendeGroenTijd = iGroenBewakingsTijd[ov] - iGroenBewakingsTimer[ov];
+				}*/
 			}
 			else // !G[fc]
 			{

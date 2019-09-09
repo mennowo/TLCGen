@@ -189,6 +189,13 @@
             <Type>Parameter</Type>
             <Description>Percentage groentijd fase _E1_ bij defect kop en lange lus</Description>
           </Setting>
+          <Setting>
+            <Default>dstvert</Default>
+            <Setting>dstvert</Setting>
+            <Type>Timer</Type>
+            <Description>Vertraging vaste aanvraag bij storing op alle detectie voor fase _E1_</Description>
+          </Setting>
+          dstvert
         </Settings>
       </CodePieceData>
     </CodePieceGenerator>
