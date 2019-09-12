@@ -128,6 +128,16 @@ namespace TLCGen.Plugins.RIS
             }
         }
 
+        public bool NietCheckenOpSignaalgroep
+        {
+            get => _RISModel.NietCheckenOpSignaalgroep;
+            set
+            {
+                _RISModel.NietCheckenOpSignaalgroep = value;
+                RaisePropertyChanged<object>(broadcast: true);
+            }
+        }
+
         public bool HasMultipleSystemITF
         {
             get => _RISModel.HasMultipleSystemITF;
