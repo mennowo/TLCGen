@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -99,6 +100,7 @@ namespace TLCGen.ViewModels
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
+            // drag single item from assigned items list to somewhere else on the list
             if (dropInfo.Data is PTPKoppelSignaalViewModel sourcePTPKopItem &&
                 dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc1)
             {
@@ -118,34 +120,74 @@ namespace TLCGen.ViewModels
                     sourcePTPKopItem.KoppelSignaal = null;
                 }
             }
+            // drag multiple items from assigned items list to somewhere else on the list
             else if (dropInfo.Data is List<PTPKoppelSignaalViewModel> sourcePTPKopItems && 
                 dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc2)
             {
                 var i = tc2.IndexOf(dropInfo.TargetItem as PTPKoppelSignaalViewModel);
                 if (i == -1) i = dropInfo.InsertIndex;
+                var startI = i;
+                var moving = new Dictionary<int, KoppelSignaalViewModel>();
+                var handled = new List<KoppelSignaalViewModel>();
+                // check each signal in the list of signals being moved
                 foreach (var s in sourcePTPKopItems.OrderBy(x => x.Count))
                 {
                     if (i < 0 || i >= tc2.Count) break;
-                    var ti = tc2[i];
+                    
+                    // skip if this item has been handled 
+                    if (handled.Any(x => ReferenceEquals(x, s.KoppelSignaal))) continue;
+
+                    var targetItem = tc2[i];
                     ++i;
-                    if (ti.KoppelSignaal != null && !sourcePTPKopItems.Any(x => ReferenceEquals(x.KoppelSignaal, ti.KoppelSignaal)))
+                    // remove existing items that are currently in this place, unless they are being moved also
+                    if (targetItem.KoppelSignaal != null && !sourcePTPKopItems.Any(x => x.KoppelSignaal != null && ReferenceEquals(x.KoppelSignaal, targetItem.KoppelSignaal)))
                     {
-                        ti.KoppelSignaal.Count = 0;
-                        switch (ti.KoppelSignaal.Richting)
+                        targetItem.KoppelSignaal.Count = 0;
+                        switch (targetItem.KoppelSignaal.Richting)
                         {
                             case KoppelSignaalRichtingEnum.In:
-                                KoppelSignalenInBeschikbaar.Add(ti.KoppelSignaal);
+                                KoppelSignalenInBeschikbaar.Add(targetItem.KoppelSignaal);
                                 break;
                             case KoppelSignaalRichtingEnum.Uit:
-                                KoppelSignalenUitBeschikbaar.Add(ti.KoppelSignaal);
+                                KoppelSignalenUitBeschikbaar.Add(targetItem.KoppelSignaal);
                                 break;
                         }
                     }
-                    ti.KoppelSignaal = s.KoppelSignaal;
+                    // If the target item is also being moved, store it
+                    if (sourcePTPKopItems.Any(x => x.KoppelSignaal != null && ReferenceEquals(x.KoppelSignaal, targetItem.KoppelSignaal)))
+                    {
+                        var movingItem = sourcePTPKopItems.First(x => x.KoppelSignaal != null && ReferenceEquals(x.KoppelSignaal, targetItem.KoppelSignaal));
+                        moving.Add(startI + sourcePTPKopItems.IndexOf(movingItem), movingItem.KoppelSignaal);
+                        handled.Add(movingItem.KoppelSignaal);
+                        targetItem.KoppelSignaal = null;
+                    }
+                    targetItem.KoppelSignaal = s.KoppelSignaal;
+                    handled.Add(targetItem.KoppelSignaal);
+                    if (targetItem.KoppelSignaal != null) targetItem.KoppelSignaal.Count = targetItem.Count;
                     s.KoppelSignaal = null;
-                    if (ti.KoppelSignaal != null) ti.KoppelSignaal.Count = ti.Count;
+                }
+                foreach(var m in moving)
+                {
+                    if (m.Key >= tc2.Count) continue;
+                    // remove existing items that are currently in this place, unless they are being moved also
+                    if (tc2[m.Key].KoppelSignaal != null)
+                    {
+                        tc2[m.Key].KoppelSignaal.Count = 0;
+                        switch (tc2[m.Key].KoppelSignaal.Richting)
+                        {
+                            case KoppelSignaalRichtingEnum.In:
+                                KoppelSignalenInBeschikbaar.Add(tc2[m.Key].KoppelSignaal);
+                                break;
+                            case KoppelSignaalRichtingEnum.Uit:
+                                KoppelSignalenUitBeschikbaar.Add(tc2[m.Key].KoppelSignaal);
+                                break;
+                        }
+                    }
+                    tc2[m.Key].KoppelSignaal = m.Value;
+                    if (tc2[m.Key].KoppelSignaal != null) tc2[m.Key].KoppelSignaal.Count = tc2[m.Key].Count;
                 }
             }
+            // drag single item or multiple items from non-assigned items list to somewhere else on the assigned items list
             else if ((dropInfo.Data is List<KoppelSignaalViewModel> || dropInfo.Data is KoppelSignaalViewModel ) && 
                 dropInfo.TargetCollection is ObservableCollection<PTPKoppelSignaalViewModel> tc3)
             {
@@ -185,6 +227,7 @@ namespace TLCGen.ViewModels
                     }
                 }
             }
+            // drag single or more items from assigned to non-assigned
             else if ((dropInfo.Data is List<PTPKoppelSignaalViewModel> || dropInfo.Data is PTPKoppelSignaalViewModel) &&
                dropInfo.TargetCollection is ObservableCollection<KoppelSignaalViewModel> tc4)
             {
