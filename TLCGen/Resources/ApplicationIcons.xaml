@@ -1,48 +1,53 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <Color x:Key="Color1">#FFDE8787</Color>
-  <Color x:Key="Color2">#FF8DD35F</Color>
-  <SolidColorBrush x:Key="Color1Brush" Color="{DynamicResource Color1}" />
-  <SolidColorBrush x:Key="Color2Brush" Color="{DynamicResource Color2}" />
-  <Geometry x:Key="RemoveIconGeometry">F1 M32,32z M0,0z M365.94186,490.64359L358.99999,497.58546 352.05812,490.64359 349.28137,493.42034 356.22324,500.36221 349.28137,507.30408 352.05812,510.08083 358.99999,503.13896 365.94186,510.08083 368.71861,507.30408 361.77674,500.36221 368.71861,493.42034z</Geometry>
-  <SolidColorBrush x:Key="RemoveIconColor1Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <SolidColorBrush x:Key="RemoveIconColor2Brush" Color="{Binding Color, Source={StaticResource Color1Brush}}" />
-  <DrawingGroup x:Key="RemoveIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FFFFF6D5" Opacity="1" Transform="1.2124875,0,0,1.2124875,336.58822,478.90957" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1.2124875,0,0,1.2124875,336.58822,478.90957" Figures="M32,32z M0,0z M31.329021,17.693081A12.844898,12.844898,0,1,1,5.639225,17.693081A12.844898,12.844898,0,1,1,31.329021,17.693081z" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing Brush="{DynamicResource RemoveIconColor1Brush}" Geometry="{StaticResource RemoveIconGeometry}">
-        <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource RemoveIconColor2Brush}" Thickness="1.9634577" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
-        </GeometryDrawing.Pen>
-      </GeometryDrawing>
-    </DrawingGroup>
-  </DrawingGroup>
-  <DrawingImage x:Key="RemoveIconDrawingImage" Drawing="{StaticResource RemoveIconDrawingGroup}" />
-  <Geometry x:Key="AddIconGeometry">F1 M32,32z M0,0z M357.03653,488.58146L357.03653,498.39875 347.21924,498.39875 347.21924,502.32567 357.03653,502.32567 357.03653,512.14296 360.96345,512.14296 360.96345,502.32567 370.78074,502.32567 370.78074,498.39875 360.96345,498.39875 360.96345,488.58146z</Geometry>
-  <SolidColorBrush x:Key="AddIconColor1Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
-  <SolidColorBrush x:Key="AddIconColor2Brush" Color="{Binding Color, Source={StaticResource Color2Brush}}" />
+  <Geometry x:Key="AddIconGeometry1">F1 M32,32z M0,0z M31.329021,17.693081A12.844898,12.844898,0,1,1,5.639225,17.693081A12.844898,12.844898,0,1,1,31.329021,17.693081z</Geometry>
+  <Geometry x:Key="AddIconGeometry2">F1 M32,32z M0,0z M357.03653,488.58146L357.03653,498.39875 347.21924,498.39875 347.21924,502.32567 357.03653,502.32567 357.03653,512.14296 360.96345,512.14296 360.96345,502.32567 370.78074,502.32567 370.78074,498.39875 360.96345,498.39875 360.96345,488.58146z</Geometry>
   <DrawingGroup x:Key="AddIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
-    <DrawingGroup Transform="1,0,0,1,-343,-484.36221">
-      <GeometryDrawing>
-        <GeometryDrawing.Brush>
-          <SolidColorBrush Color="#FFFFF6D5" Opacity="1" Transform="1.2124875,0,0,1.2124875,336.58822,478.90957" />
-        </GeometryDrawing.Brush>
-        <GeometryDrawing.Geometry>
-          <PathGeometry FillRule="Nonzero" Transform="1.2124875,0,0,1.2124875,336.58822,478.90957" Figures="M32,32z M0,0z M31.329021,17.693081A12.844898,12.844898,0,1,1,5.639225,17.693081A12.844898,12.844898,0,1,1,31.329021,17.693081z" />
-        </GeometryDrawing.Geometry>
-      </GeometryDrawing>
-      <GeometryDrawing Brush="{DynamicResource AddIconColor1Brush}" Geometry="{StaticResource AddIconGeometry}">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.2124875,0,0,1.2124875,336.58822,478.90957">
+        <GeometryDrawing Brush="#FFFFF6D5" Geometry="{StaticResource AddIconGeometry1}" />
+      </DrawingGroup>
+      <GeometryDrawing Brush="#FF8DD35F" Geometry="{StaticResource AddIconGeometry2}">
         <GeometryDrawing.Pen>
-          <Pen Brush="{DynamicResource AddIconColor2Brush}" Thickness="1.9634577" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
+          <Pen Brush="#FF8DD35F" Thickness="1.9634577" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
         </GeometryDrawing.Pen>
       </GeometryDrawing>
     </DrawingGroup>
   </DrawingGroup>
   <DrawingImage x:Key="AddIconDrawingImage" Drawing="{StaticResource AddIconDrawingGroup}" />
+  <Geometry x:Key="DuplicateIconGeometry1">F1 M32,32z M0,0z M31.329021,17.693081A12.844898,12.844898,0,0,1,18.484123,30.537979A12.844898,12.844898,0,0,1,5.639225,17.693081A12.844898,12.844898,0,0,1,18.484123,4.8481827A12.844898,12.844898,0,0,1,31.329021,17.693081z</Geometry>
+  <Geometry x:Key="DuplicateIconGeometry2">F1 M32,32z M0,0z M349.99537,490.05118L349.99537,505.52892 361.62874,505.52892 361.62874,490.05118z</Geometry>
+  <Geometry x:Key="DuplicateIconGeometry3">F1 M32,32z M0,0z M355.52041,494.60824L355.52041,510.93204 367.7897,510.93204 367.7897,494.60824z</Geometry>
+  <DrawingGroup x:Key="DuplicateIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.2124875,0,0,1.2124875,336.58822,478.90957">
+        <GeometryDrawing Brush="#FFFFF6D5" Geometry="{StaticResource DuplicateIconGeometry1}" />
+      </DrawingGroup>
+      <GeometryDrawing Brush="#FF5FBCD3" Geometry="{StaticResource DuplicateIconGeometry2}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF5FBCD3" Thickness="1.2830615" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+      <GeometryDrawing Brush="#FF216778" Geometry="{StaticResource DuplicateIconGeometry3}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FF216778" Thickness="1.35319781" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="DuplicateIconDrawingImage" Drawing="{StaticResource DuplicateIconDrawingGroup}" />
+  <Geometry x:Key="RemoveIconGeometry1">F1 M32,32z M0,0z M31.329021,17.693081A12.844898,12.844898,0,1,1,5.639225,17.693081A12.844898,12.844898,0,1,1,31.329021,17.693081z</Geometry>
+  <Geometry x:Key="RemoveIconGeometry2">F1 M32,32z M0,0z M365.94186,490.64359L358.99999,497.58546 352.05812,490.64359 349.28137,493.42034 356.22324,500.36221 349.28137,507.30408 352.05812,510.08083 358.99999,503.13896 365.94186,510.08083 368.71861,507.30408 361.77674,500.36221 368.71861,493.42034z</Geometry>
+  <DrawingGroup x:Key="RemoveIconDrawingGroup" ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+    <DrawingGroup Opacity="1" Transform="1,0,0,1,-343,-484.36221">
+      <DrawingGroup Transform="1.2124875,0,0,1.2124875,336.58822,478.90957">
+        <GeometryDrawing Brush="#FFFFF6D5" Geometry="{StaticResource RemoveIconGeometry1}" />
+      </DrawingGroup>
+      <GeometryDrawing Brush="#FFDE8787" Geometry="{StaticResource RemoveIconGeometry2}">
+        <GeometryDrawing.Pen>
+          <Pen Brush="#FFDE8787" Thickness="1.9634577" StartLineCap="Square" EndLineCap="Square" LineJoin="Round" />
+        </GeometryDrawing.Pen>
+      </GeometryDrawing>
+    </DrawingGroup>
+  </DrawingGroup>
+  <DrawingImage x:Key="RemoveIconDrawingImage" Drawing="{StaticResource RemoveIconDrawingGroup}" />
 </ResourceDictionary>
