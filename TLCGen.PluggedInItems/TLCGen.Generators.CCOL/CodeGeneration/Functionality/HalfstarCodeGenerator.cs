@@ -911,10 +911,37 @@ namespace TLCGen.Generators.CCOL.CodeGeneration.Functionality
 					sb.AppendLine($"{ts}for (fc = 0; fc < FCMAX; ++fc)");
 					sb.AppendLine($"{ts}{ts}YM[fc] &= ~YM_HALFSTAR;");
 					sb.AppendLine();
-					foreach (var fc in c.Fasen)
-					{
-						sb.AppendLine($"{ts}set_ym_pl_halfstar({_fcpf}{fc.Naam}, ({c.GetBoolV()})(SCH[{_schpf}{_schmv}{fc.Naam}]));");
-					}
+
+                    foreach (var fc in c.Fasen)
+                    {
+                        var set_ym_pl_halfstar = "set_ym_pl_halfstar";
+                        var set_ym_pl_halfstar_args = "";
+                        if (c.Data.MultiModuleReeksen)
+                        {
+                            set_ym_pl_halfstar = "set_ym_pl_halfstar_fcfc";
+                            var reeks = c.MultiModuleMolens.FirstOrDefault(x => x.Modules.Any(x2 => x2.Fasen.Any(x3 => x3.FaseCyclus == fc.Naam)));
+                            if (reeks != null)
+                            {
+                                var rfc1 = c.Fasen.FirstOrDefault(x => reeks.Modules.SelectMany(x2 => x2.Fasen).Any(x3 => x3.FaseCyclus == x.Naam));
+                                var rfc2 = c.Fasen.LastOrDefault(x => reeks.Modules.SelectMany(x2 => x2.Fasen).Any(x3 => x3.FaseCyclus == x.Naam));
+                                if (rfc1 == null || rfc2 == null)
+                                {
+                                    set_ym_pl_halfstar_args = ", 0, FCMAX";
+                                }
+                                else
+                                {
+                                    var id2 = c.Fasen.IndexOf(rfc2);
+                                    ++id2;
+                                    set_ym_pl_halfstar_args = $", {_fcpf}{rfc1.Naam}, {(id2 == c.Fasen.Count ? "FCMAX" : $"{_fcpf}{c.Fasen[id2].Naam}")}";
+                                }
+                            }
+                            else
+                            {
+                                set_ym_pl_halfstar_args = ", 0, FCMAX";
+                            }
+                        }
+                        sb.AppendLine($"{ts}{set_ym_pl_halfstar}({_fcpf}{fc.Naam}, ({c.GetBoolV()})(SCH[{_schpf}{_schmv}{fc.Naam}]){set_ym_pl_halfstar_args});");
+                    }
 
 					return sb.ToString();
 				

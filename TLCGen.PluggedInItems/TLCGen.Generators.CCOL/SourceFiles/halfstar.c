@@ -494,6 +494,23 @@ void set_ym_pl_halfstar(count fc, bool condition)
   }
 }
 
+void set_ym_pl_halfstar_fcfc(count fc, bool condition, count fc_from, count fc_until)
+{
+#ifdef CCOLTIG
+	if (ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+		ym_max_trig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#else
+	if (ym_max_to(fc, NG) &&   /* meeverlengen kan volgens ontruimingstijden      */
+		ym_max_tig(fc, NG) &&   /* meeverlengen kan volgens intergroentijdentabel  */
+#endif
+		ym_max_halfstar(fc, 10) &&   /* meeverlengen kan volgens signaalplan            */
+		hf_wsg_fcfc(fc_from, fc_until) &&   /* minimaal 1 richting actief                      */
+		condition)
+	{
+		YM[fc] |= YM_HALFSTAR;
+	}
+}
+
 /**********************************************************************************/
 /* YS_PL[] zelf opzetten bij primair startgroen, dit gebeurt nl.
    niet als een fasecyclus voor zijn TXA-moment primair groen krijgt */
